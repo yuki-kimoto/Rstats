@@ -46,4 +46,18 @@ my $r = Data::R->new;
     my $v3 = $v1 / $v2;
     is_deeply($v3->values, [3, 1, 3]);
   }
+  
+  # max
+  {
+    my $v = $r->c([1, 2, 3]);
+    my $max = $r->max($v);
+    is($max, 3);
+  }
+  
+  # min
+  {
+    my $v = $r->c([1, 2, 3]);
+    my $min = $r->min($v);
+    is($min, 1);
+  }
 }

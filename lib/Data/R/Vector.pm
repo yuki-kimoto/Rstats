@@ -6,7 +6,10 @@ use overload
   '-' => \&subtract,
   '*' => \&multiply,
   '/' => \&divide,
-  'neg' => \&negation;
+  'neg' => \&negation,
+  '**' => \&raise;
+use Carp 'croak';
+use List::Util;
 
 has values => sub { [] };
 
@@ -121,6 +124,23 @@ sub divide {
   }
   
   return $v3;
+}
+
+sub raise {
+  my ($self, $v2) = @_;
+  
+  my $v3 = Data::R::Vector->new;
+  if (ref $v2) {
+    croak 'Not implemented';
+  }
+  else {
+    my $v1_values = $self->values;
+    my $v3_values = $v3->values;
+    
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v3_values->[$i] = $v1_values->[$i] ^ $v2;
+    }
+  }
 }
 
 1;

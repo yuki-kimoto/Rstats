@@ -73,7 +73,7 @@ my $r = Data::R->new;
         log $v1->values->[1],
         log $v1->values->[2]
       ]
-    )
+    );
   }
 
   # exp
@@ -87,7 +87,7 @@ my $r = Data::R->new;
         exp $v1->values->[1],
         exp $v1->values->[2]
       ]
-    )
+    );
   }
 
   # sin
@@ -101,7 +101,7 @@ my $r = Data::R->new;
         sin $v1->values->[1],
         sin $v1->values->[2]
       ]
-    )
+    );
   }
 
   # cos
@@ -115,7 +115,7 @@ my $r = Data::R->new;
         cos $v1->values->[1],
         cos $v1->values->[2]
       ]
-    )
+    );
   }
 
   # tan
@@ -129,7 +129,7 @@ my $r = Data::R->new;
         Math::Trig::tan($v1->values->[1]),
         Math::Trig::tan($v1->values->[2])
       ]
-    )
+    );
   }
 
   # sqrt
@@ -143,6 +143,20 @@ my $r = Data::R->new;
         sqrt $v1->values->[1],
         sqrt $v1->values->[2]
       ]
-    )
+    );
+  }
+  
+  # range
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $r->range($v1);
+    is_deeply($v2->values, [1, 3]);
+  }
+  
+  # length
+  {
+    my $v1 = $r->c([1, 2, 4]);
+    my $length = $r->length($v1);
+    is($length, 3);
   }
 }

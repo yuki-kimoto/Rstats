@@ -20,33 +20,46 @@ sub c {
 sub max {
   my ($self, $value) = @_;
   
-  my $max;
   if (ref $value eq 'Data::R::Vector') {
+    my $max;
     my $v = $value;
     my $v_values = $v->values;
     $max = List::Util::max(@$v_values);
+    return $max;
   }
   else {
     croak 'Not implemented';
   }
-  
-  return $max;
 }
 
 sub min {
   my ($self, $value) = @_;
   
-  my $min;
   if (ref $value eq 'Data::R::Vector') {
+    my $min;
     my $v = $value;
     my $v_values = $v->values;
     $min = List::Util::min(@$v_values);
+    return $min;
   }
   else {
     croak 'Not implemented';
   }
+}
+
+sub length {
+  my ($self, $value) = @_;
   
-  return $min;
+  my $length;
+  if (ref $value eq 'Data::R::Vector') {
+    my $v = $value;
+    my $v_values = $v->values;
+    $length = @$v_values;
+    return $length;
+  }
+  else {
+    croak 'Not implemented';
+  }
 }
 
 sub log {
@@ -150,6 +163,25 @@ sub sqrt {
     for (my $i = 0; $i < @$v1_values; $i++) {
       $v2_values->[$i] = sqrt $v1_values->[$i];
     }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub range {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    my $min = $self->min($v1);
+    my $max = $self->max($v1);
+    $v2->values([$min, $max]);
+
     return $v2;
   }
   else {

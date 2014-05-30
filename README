@@ -1,0 +1,7 @@
+NAME
+
+Data::R - R-like statistical library
+
+INSTALLATION
+
+cpan Data::R

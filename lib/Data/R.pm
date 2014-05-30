@@ -6,6 +6,7 @@ use Object::Simple -base;
 
 use Data::R::Vector;
 use List::Util;
+use Math::Trig ();
 use Carp 'croak';
 
 sub c {
@@ -46,6 +47,114 @@ sub min {
   }
   
   return $min;
+}
+
+sub log {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = log $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub exp {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = exp $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub sin {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = sin $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub cos {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = cos $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub tan {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = Math::Trig::tan $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub sqrt {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $v1 = $value;
+    my $v2 = Data::R::Vector->new;
+    my $v1_values = $v1->values;
+    my $v2_values = $v2->values;
+    for (my $i = 0; $i < @$v1_values; $i++) {
+      $v2_values->[$i] = sqrt $v1_values->[$i];
+    }
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
 }
 
 1;

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Data::R;
+use Math::Trig ();
 
 my $r = Data::R->new;
 
@@ -59,5 +60,89 @@ my $r = Data::R->new;
     my $v = $r->c([1, 2, 3]);
     my $min = $r->min($v);
     is($min, 1);
+  }
+  
+  # log
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->log($v1);
+    is_deeply(
+      $v2->values,
+      [
+        log $v1->values->[0],
+        log $v1->values->[1],
+        log $v1->values->[2]
+      ]
+    )
+  }
+
+  # exp
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->exp($v1);
+    is_deeply(
+      $v2->values,
+      [
+        exp $v1->values->[0],
+        exp $v1->values->[1],
+        exp $v1->values->[2]
+      ]
+    )
+  }
+
+  # sin
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->sin($v1);
+    is_deeply(
+      $v2->values,
+      [
+        sin $v1->values->[0],
+        sin $v1->values->[1],
+        sin $v1->values->[2]
+      ]
+    )
+  }
+
+  # cos
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->cos($v1);
+    is_deeply(
+      $v2->values,
+      [
+        cos $v1->values->[0],
+        cos $v1->values->[1],
+        cos $v1->values->[2]
+      ]
+    )
+  }
+
+  # tan
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->tan($v1);
+    is_deeply(
+      $v2->values,
+      [
+        Math::Trig::tan($v1->values->[0]),
+        Math::Trig::tan($v1->values->[1]),
+        Math::Trig::tan($v1->values->[2])
+      ]
+    )
+  }
+
+  # sqrt
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $v2 = $r->sqrt($v1);
+    is_deeply(
+      $v2->values,
+      [
+        sqrt $v1->values->[0],
+        sqrt $v1->values->[1],
+        sqrt $v1->values->[2]
+      ]
+    )
   }
 }

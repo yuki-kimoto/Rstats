@@ -18,7 +18,7 @@
 #     LICENSE => q[perl]
 #     NAME => q[Data::R]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Test::More=>q[0] }
+#     PREREQ_PM => { Test::More=>q[0], Object::Simple=>q[3.10] }
 #     VERSION_FROM => q[lib/Data/R.pm]
 #     clean => { FILES=>q[Data-R-*] }
 #     dist => { COMPRESS=>q[gzip -9f], SUFFIX=>q[gz] }
@@ -186,9 +186,12 @@ PERL_ARCHIVE       =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = lib/Data/R.pm
+TO_INST_PM = lib/Data/R.pm \
+	lib/Data/R/Vector.pm
 
-PM_TO_BLIB = lib/Data/R.pm \
+PM_TO_BLIB = lib/Data/R/Vector.pm \
+	blib/lib/Data/R/Vector.pm \
+	lib/Data/R.pm \
 	blib/lib/Data/R.pm
 
 
@@ -498,6 +501,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '    - t' >> META_new.yml
 	$(NOECHO) $(ECHO) '    - inc' >> META_new.yml
 	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  Object::Simple: 3.10' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) 'version: 0.01' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
@@ -536,6 +540,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      },' >> META_new.json
 	$(NOECHO) $(ECHO) '      "runtime" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "Object::Simple" : "3.10",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "Test::More" : "0"' >> META_new.json
 	$(NOECHO) $(ECHO) '         }' >> META_new.json
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
@@ -841,6 +846,7 @@ ppd :
 	$(NOECHO) $(ECHO) '    <ABSTRACT>R-like statistical library</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Yuki Kimoto &lt;kimoto.yuki@gmail.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Object::Simple" VERSION="3.1" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::More" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-5.16" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
@@ -852,6 +858,7 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/Data/R/Vector.pm blib/lib/Data/R/Vector.pm \
 	  lib/Data/R.pm blib/lib/Data/R.pm 
 	$(NOECHO) $(TOUCH) pm_to_blib
 

@@ -1,0 +1,13 @@
+*.bak
+*.BAK
+Build
+MANIFEST
+META.yml
+MYMETA.yml
+_build/*
+blib/*
+*.tar.gz
+cover_db/*
+Makefile
+pm_to_blib
+MYMETA.json

@@ -47,7 +47,14 @@ my $r = Data::R->new;
     my $v3 = $v1 / $v2;
     is_deeply($v3->values, [3, 1, 3]);
   }
-  
+
+  # raise
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $v1 ** 2;
+    is_deeply($v2->values, [1, 4, 9]);
+  }
+
   # max
   {
     my $v = $r->c([1, 2, 3]);
@@ -179,5 +186,12 @@ my $r = Data::R->new;
     my $v1 = $r->c([1, 2, 3]);
     my $mean = $r->mean($v1);
     is($mean, 2);
+  }
+
+  # var
+  {
+    my $v1 = $r->c([2, 3, 4, 7, 9]);
+    my $var = $r->var($v1);
+    is($var, 8.5);
   }
 }

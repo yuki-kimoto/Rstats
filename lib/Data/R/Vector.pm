@@ -138,8 +138,10 @@ sub raise {
     my $v3_values = $v3->values;
     
     for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] ^ $v2;
+      $v3_values->[$i] = $v1_values->[$i] ** $v2;
     }
+    
+    return $v3;
   }
 }
 

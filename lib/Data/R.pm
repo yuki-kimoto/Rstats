@@ -90,6 +90,20 @@ sub mean {
   }
 }
 
+sub var {
+  my ($self, $data) = @_;
+
+  if (ref $data eq 'Data::R::Vector') {
+    my $v = $data;
+    
+    my $var = $self->sum(($v - $self->mean($v)) ** 2) / ($self->length($v) - 1);
+    return $var;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub length {
   my ($self, $data) = @_;
   

@@ -77,6 +77,19 @@ sub prod {
   }
 }
 
+sub mean {
+  my ($self, $data) = @_;
+  
+  if (ref $data eq 'Data::R::Vector') {
+    my $v = $data;
+    my $mean = $self->sum($v) / $self->length($v);
+    return $mean;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub length {
   my ($self, $data) = @_;
   

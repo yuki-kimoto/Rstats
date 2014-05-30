@@ -173,4 +173,11 @@ my $r = Data::R->new;
     my $prod = $r->prod($v1);
     is($prod, 24);
   }
+  
+  # mean
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $mean = $r->mean($v1);
+    is($mean, 2);
+  }
 }

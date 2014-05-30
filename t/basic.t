@@ -194,4 +194,11 @@ my $r = Data::R->new;
     my $var = $r->var($v1);
     is($var, 8.5);
   }
+  
+  # sort
+  {
+    my $v1 = $r->c([2, 1, 5]);
+    my $v1_sorted = $r->sort($v1);
+    is_deeply($v1_sorted->values, [1, 2, 5]);
+  }
 }

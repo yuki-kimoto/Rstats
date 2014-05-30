@@ -119,6 +119,23 @@ sub length {
   }
 }
 
+sub sort {
+  my ($self, $data) = @_;
+  
+  if (ref $data eq 'Data::R::Vector') {
+    my $v2 = Data::R::Vector->new;
+    my $sort;
+    my $v1 = $data;
+    my $v1_values = $v1->values;
+    my $v1_values_sorted = [sort(@$v1_values)];
+    $v2->values($v1_values_sorted);
+    return $v2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub log {
   my ($self, $data) = @_;
   

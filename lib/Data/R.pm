@@ -8,6 +8,7 @@ use Data::R::Vector;
 use List::Util;
 use Math::Trig ();
 use Carp 'croak';
+use Data::R::Complex;
 
 sub c {
   my ($self, $values) = @_;
@@ -282,6 +283,15 @@ sub range {
     croak 'Not implemented';
   }
 }
+
+sub i {
+  my $self = shift;
+  
+  my $i = Data::R::Complex->new(re => 0, im => 1);
+  
+  return $i;
+}
+
 
 1;
 

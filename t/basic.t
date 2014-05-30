@@ -4,6 +4,7 @@ use warnings;
 
 use Data::R;
 use Math::Trig ();
+use Data::R::Complex;
 
 my $r = Data::R->new;
 
@@ -232,5 +233,57 @@ my $r = Data::R->new;
     my $v1 = $r->c([2, 1, 5]);
     my $v1_sorted = $r->sort($v1);
     is_deeply($v1_sorted->values, [1, 2, 5]);
+  }
+}
+
+# Complex
+{
+  # new
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    is($c1->re, 1);
+    is($c1->im, 2);
+  }
+  
+  # negation
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = - $c1;
+    is($c2->re, -1);
+    is($c2->im, -2);
+  }
+  
+  # add
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = Data::R::Complex->new(re => 3, im => 4);
+    my $c3 = $c1 + $c2;
+    is($c3->re, 4);
+    is($c3->im, 6);
+  }
+  
+  # add(real number)
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = $c1 + 3;
+    is($c2->re, 4);
+    is($c2->im, 2);
+  }
+
+  # sub
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = Data::R::Complex->new(re => 3, im => 4);
+    my $c3 = $c1 - $c2;
+    is($c3->re, -2);
+    is($c3->im, -2);
+  }
+  
+  # sub(real number)
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = $c1 - 3;
+    is($c2->re, -2);
+    is($c2->im, 2);
   }
 }

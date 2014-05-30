@@ -47,6 +47,21 @@ sub min {
   }
 }
 
+sub sum {
+  my ($self, $value) = @_;
+  
+  if (ref $value eq 'Data::R::Vector') {
+    my $sum;
+    my $v = $value;
+    my $v_values = $v->values;
+    $sum = List::Util::sum(@$v_values);
+    return $sum;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub length {
   my ($self, $value) = @_;
   
@@ -188,6 +203,7 @@ sub range {
     croak 'Not implemented';
   }
 }
+
 
 1;
 

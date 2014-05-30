@@ -159,4 +159,11 @@ my $r = Data::R->new;
     my $length = $r->length($v1);
     is($length, 3);
   }
+
+  # sum
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $sum = $r->sum($v1);
+    is($sum, 6);
+  }
 }

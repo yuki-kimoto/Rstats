@@ -62,10 +62,26 @@ my $r = Data::R->new;
     is($max, 3);
   }
   
+  # max - multiple vectors
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $r->c([4, 5, 6]);
+    my $max = $r->max($v1, $v2);
+    is($max, 6);
+  }
+  
   # min
   {
     my $v = $r->c([1, 2, 3]);
     my $min = $r->min($v);
+    is($min, 1);
+  }
+
+  # min - multiple vectors
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $r->c([4, 5, 6]);
+    my $min = $r->min($v1, $v2);
     is($min, 1);
   }
   

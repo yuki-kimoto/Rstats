@@ -18,33 +18,29 @@ sub c {
 }
 
 sub max {
-  my ($self, $data) = @_;
+  my ($self, @vs) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
-    my $max;
-    my $v = $data;
-    my $v_values = $v->values;
-    $max = List::Util::max(@$v_values);
-    return $max;
+  my @all_v_values;
+  for my $v (@vs) {
+    push @all_v_values, @{$v->values};
   }
-  else {
-    croak 'Not implemented';
-  }
+  
+  my $max;
+  $max = List::Util::max(@all_v_values);
+  return $max;
 }
 
 sub min {
-  my ($self, $data) = @_;
+  my ($self, @vs) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
-    my $min;
-    my $v = $data;
-    my $v_values = $v->values;
-    $min = List::Util::min(@$v_values);
-    return $min;
+  my @all_v_values;
+  for my $v (@vs) {
+    push @all_v_values, @{$v->values};
   }
-  else {
-    croak 'Not implemented';
-  }
+  
+  my $min;
+  $min = List::Util::min(@all_v_values);
+  return $min;
 }
 
 sub sum {

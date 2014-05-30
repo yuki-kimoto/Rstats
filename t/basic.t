@@ -76,6 +76,14 @@ my $r = Data::R->new;
     my $min = $r->min($v);
     is($min, 1);
   }
+  
+  # pmax
+  {
+    my $v1 = $r->c([1, 6, 3, 8]);
+    my $v2 = $r->c([5, 2, 7, 4]);
+    my $pmax = $r->pmax($v1, $v2);
+    is_deeply($pmax->values, [5, 6, 7, 8]);
+  }
 
   # min - multiple vectors
   {
@@ -83,6 +91,14 @@ my $r = Data::R->new;
     my $v2 = $r->c([4, 5, 6]);
     my $min = $r->min($v1, $v2);
     is($min, 1);
+  }
+  
+  # pmin
+  {
+    my $v1 = $r->c([1, 6, 3, 8]);
+    my $v2 = $r->c([5, 2, 7, 4]);
+    my $pmin = $r->pmin($v1, $v2);
+    is_deeply($pmin->values, [1, 2, 3, 4]);
   }
   
   # log

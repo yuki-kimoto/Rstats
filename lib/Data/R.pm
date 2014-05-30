@@ -33,6 +33,40 @@ sub min {
   return $min;
 }
 
+sub pmax {
+  my ($self, @vs) = @_;
+  
+  my @maxs;
+  for my $v (@vs) {
+    my $values = $v->values;
+    for (my $i = 0; $i <@$values; $i++) {
+      $maxs[$i] = $values->[$i]
+        if !defined $maxs[$i] || $values->[$i] > $maxs[$i]
+    }
+  }
+  
+  my $v_max = Data::R::Vector->new(values => \@maxs);
+  
+  return $v_max;
+}
+
+sub pmin {
+  my ($self, @vs) = @_;
+  
+  my @mins;
+  for my $v (@vs) {
+    my $values = $v->values;
+    for (my $i = 0; $i <@$values; $i++) {
+      $mins[$i] = $values->[$i]
+        if !defined $mins[$i] || $values->[$i] < $mins[$i]
+    }
+  }
+  
+  my $v_min = Data::R::Vector->new(values => \@mins);
+  
+  return $v_min;
+}
+
 sub sum {
   my ($self, $data) = @_;
   

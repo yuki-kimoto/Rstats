@@ -18,11 +18,11 @@ sub c {
 }
 
 sub max {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Vector') {
     my $max;
-    my $v = $value;
+    my $v = $data;
     my $v_values = $v->values;
     $max = List::Util::max(@$v_values);
     return $max;
@@ -33,11 +33,11 @@ sub max {
 }
 
 sub min {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Vector') {
     my $min;
-    my $v = $value;
+    my $v = $data;
     my $v_values = $v->values;
     $min = List::Util::min(@$v_values);
     return $min;
@@ -48,11 +48,11 @@ sub min {
 }
 
 sub sum {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Vector') {
     my $sum;
-    my $v = $value;
+    my $v = $data;
     my $v_values = $v->values;
     $sum = List::Util::sum(@$v_values);
     return $sum;
@@ -62,12 +62,27 @@ sub sum {
   }
 }
 
+sub prod {
+  my ($self, $data) = @_;
+  
+  if (ref $data eq 'Data::R::Vector') {
+    my $prod;
+    my $v = $data;
+    my $v_values = $v->values;
+    $prod = List::Util::product(@$v_values);
+    return $prod;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub length {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
   my $length;
-  if (ref $value eq 'Data::R::Vector') {
-    my $v = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v = $data;
     my $v_values = $v->values;
     $length = @$v_values;
     return $length;
@@ -78,10 +93,10 @@ sub length {
 }
 
 sub log {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -96,10 +111,10 @@ sub log {
 }
 
 sub exp {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -114,10 +129,10 @@ sub exp {
 }
 
 sub sin {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -132,10 +147,10 @@ sub sin {
 }
 
 sub cos {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -150,10 +165,10 @@ sub cos {
 }
 
 sub tan {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -168,10 +183,10 @@ sub tan {
 }
 
 sub sqrt {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -186,10 +201,10 @@ sub sqrt {
 }
 
 sub range {
-  my ($self, $value) = @_;
+  my ($self, $data) = @_;
   
-  if (ref $value eq 'Data::R::Vector') {
-    my $v1 = $value;
+  if (ref $data eq 'Data::R::Vector') {
+    my $v1 = $data;
     my $v2 = Data::R::Vector->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
@@ -203,7 +218,6 @@ sub range {
     croak 'Not implemented';
   }
 }
-
 
 1;
 

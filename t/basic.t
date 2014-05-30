@@ -166,4 +166,11 @@ my $r = Data::R->new;
     my $sum = $r->sum($v1);
     is($sum, 6);
   }
+
+  # prod
+  {
+    my $v1 = $r->c([2, 3, 4]);
+    my $prod = $r->prod($v1);
+    is($prod, 24);
+  }
 }

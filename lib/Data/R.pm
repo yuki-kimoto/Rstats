@@ -20,26 +20,16 @@ sub c {
 sub max {
   my ($self, @vs) = @_;
   
-  my @all_v_values;
-  for my $v (@vs) {
-    push @all_v_values, @{$v->values};
-  }
-  
-  my $max;
-  $max = List::Util::max(@all_v_values);
+  my @all_values = map { @{$_->values} } @vs;
+  my $max = List::Util::max(@all_values);
   return $max;
 }
 
 sub min {
   my ($self, @vs) = @_;
   
-  my @all_v_values;
-  for my $v (@vs) {
-    push @all_v_values, @{$v->values};
-  }
-  
-  my $min;
-  $min = List::Util::min(@all_v_values);
+  my @all_values = map { @{$_->values} } @vs;
+  my $min = List::Util::min(@all_values);
   return $min;
 }
 

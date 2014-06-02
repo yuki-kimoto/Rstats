@@ -18,6 +18,83 @@ sub c {
   return $vector;
 }
 
+sub seq {
+  my $self = shift;
+  
+  # Option
+  my $opt;
+  if (ref $_[-1] eq 'HASH') {
+    $opt = pop @_;
+  }
+  $opt ||= {};
+  
+  # From
+  my $from = shift;
+  $from = $opt->{from} unless defined $from;
+  croak "seq function need from option" unless defined $from;
+  
+  # To
+  my $to = shift;
+  $to = $opt->{to} unless defined $to;
+  
+  # By
+  my $by = $opt->{by};
+  unless (defined $by) {
+    if ($to >= $from) {
+      $by = 1;
+    }
+    else {
+      $by = -1;
+    }
+  }
+  croak "by option should be except for 0" if $by == 0;
+  
+  # Length
+  my $length = $opt->{length};
+  
+  if (defined $length) {
+    my $values = [];
+    for my $num (0 .. $length - 1) {
+      my $value = $from + $num * $by;
+      push @$values, $value;
+    }
+    return Data::R::Vector->new(values => $values);
+  }
+  elsif (defined $to) {
+    my $values = [];
+    if ($to == $from) {
+      return Data::R::Vector->new(values => [$to]);
+    }
+    elsif ($to > $from) {
+      if ($by < 0) {
+        croak "by option is invalid number(seq function)";
+      }
+      
+      my $value = $from;
+      while ($value <= $to) {
+        push @$values, $value;
+        $value += $by;
+      }
+      return Data::R::Vector->new(values => $values);
+    }
+    else {
+      if ($by > 0) {
+        croak "by option is invalid number(seq function)";
+      }
+      
+      my $value = $from;
+      while ($value >= $to) {
+        push @$values, $value;
+        $value += $by;
+      }
+      return Data::R::Vector->new(values => $values);
+    }
+  }
+  else {
+    croak "seq function need to option or length option";
+  }
+}
+
 sub max {
   my ($self, @vs) = @_;
   

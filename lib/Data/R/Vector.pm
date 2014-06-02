@@ -67,12 +67,18 @@ sub subtract {
     }
   }
   else {
-  
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
-    
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] - $data;
+
+    if ($reverse) {
+      for (my $i = 0; $i < @$v1_values; $i++) {
+        $v3_values->[$i] = $data - $v1_values->[$i];
+      }
+    }
+    else {
+      for (my $i = 0; $i < @$v1_values; $i++) {
+        $v3_values->[$i] = $v1_values->[$i] - $data;
+      }
     }
   }
   
@@ -106,7 +112,7 @@ sub multiply {
 }
 
 sub divide {
-  my ($self, $data) = @_;
+  my ($self, $data, $reverse) = @_;
 
   my $v3 = Data::R::Vector->new;
   if (ref $data eq 'Data::R::Vector') {
@@ -123,8 +129,15 @@ sub divide {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] / $data;
+    if ($reverse) {
+      for (my $i = 0; $i < @$v1_values; $i++) {
+        $v3_values->[$i] = $data / $v1_values->[$i];
+      }
+    }
+    else {
+      for (my $i = 0; $i < @$v1_values; $i++) {
+        $v3_values->[$i] = $v1_values->[$i] / $data;
+      }
     }
   }
   

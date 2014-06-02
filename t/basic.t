@@ -286,4 +286,21 @@ my $r = Data::R->new;
     is($c2->re, -2);
     is($c2->im, 2);
   }
+  
+  # multiply
+  {
+    my $c1 = 1 + $r->i * 2;
+    my $c2 = 3 + $r->i * 4;
+    my $c3 = $c1 * $c2;
+    is($c3->re, -5);
+    is($c3->im, 10);
+  }
+
+  # multiply(real number)
+  {
+    my $c1 = 1 + $r->i * 2;
+    my $c2 = $c1 * 3;
+    is($c2->re, 3);
+    is($c2->im, 6);
+  }
 }

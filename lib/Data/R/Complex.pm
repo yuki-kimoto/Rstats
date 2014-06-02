@@ -55,7 +55,23 @@ sub subtract {
 }
 
 sub multiply {
+  my ($self, $data) = @_;
 
+  my $c3 = Data::R::Complex->new;
+  if (ref $data eq 'Data::R::Complex') {
+    my $c2 = $data;
+    
+    my $re = $self->re * $c2->re - $self->im * $c2->im;
+    my $im = $self->re * $c2->im + $c2->re * $self->im;
+    $c3->re($re);
+    $c3->im($im);
+  }
+  else {
+    $c3->re($self->re * $data);
+    $c3->im($self->im * $data);
+  }
+  
+  return $c3;
 }
 
 sub divide {

@@ -6,6 +6,23 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
+# _parse_seq_expression
+{
+  my $r = Data::R->new;
+  
+  # c('1:3')
+  {
+    my $v = $r->c('1:3');
+    is_deeply($v->values, [1, 2, 3]);
+  }
+  
+  # c('0.5*1:3')
+  {
+    my $v = $r->c('0.5*1:3');
+    is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
+  }
+}
+
 # rep function
 {
   my $r = Data::R->new;

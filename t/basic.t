@@ -6,47 +6,59 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
+# rep function
+{
+  my $r = Data::R->new;
+  
+  # req($v, {times => $times});
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $r->rep($v1, {times => 3});
+    is_deeply($v2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
+  }
+}
+
 # seq function
 {
   my $r = Data::R->new;
   
-  # seq(from, to),  n > m
+  # seq($from, $to),  n > m
   {
     my $v = $r->seq(1, 3);
     is_deeply($v->values, [1, 2, 3]);
   }
 
-  # seq({from => f, to => t}),  n > m
+  # seq({from => $from, to => $to}),  n > m
   {
     my $v = $r->seq({from => 1, to => 3});
     is_deeply($v->values, [1, 2, 3]);
   }
   
-  # seq(from, to),  n < m
+  # seq($from, $to),  n < m
   {
     my $v = $r->seq(3, 1);
     is_deeply($v->values, [3, 2, 1]);
   }
   
-  # seq(from, to), n = m
+  # seq($from, $to), n = m
   {
     my $v = $r->seq(2, 2);
     is_deeply($v->values, [2]);
   }
   
-  # seq(n, m, {by => p}) n > m
+  # seq($from, $to, {by => p}) n > m
   {
     my $v = $r->seq(1, 3, {by => 0.5});
     is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 
-  # seq(n, m, {by => p}) n > m
+  # seq($from, $to, {by => p}) n > m
   {
     my $v = $r->seq(3, 1, {by => -0.5});
     is_deeply($v->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
   }
   
-  # seq(n, {by => p, length => l})
+  # seq($from, {by => p, length => l})
   {
     my $v = $r->seq(1, {by => 0.5, length => 3});
     is_deeply($v->values, [1, 1.5, 2.0]);

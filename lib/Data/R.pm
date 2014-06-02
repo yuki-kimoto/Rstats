@@ -95,6 +95,26 @@ sub seq {
   }
 }
 
+sub rep {
+  my $self = shift;
+
+  # Option
+  my $opt;
+  if (ref $_[-1] eq 'HASH') {
+    $opt = pop @_;
+  }
+  $opt ||= {};
+  
+  my $v1 = shift;
+  my $times = $opt->{times} || 1;
+  
+  my $values = [];
+  push @$values, @{$v1->values} for 1 .. $times;
+  my $v2 = Data::R::Vector->new(values => $values);
+  
+  return $v2;
+}
+
 sub max {
   my ($self, @vs) = @_;
   

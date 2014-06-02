@@ -11,36 +11,30 @@ use Carp 'croak';
 use Data::R::Complex;
 
 sub c {
-  my ($self, $expression) = @_;
+  my ($self, $data) = @_;
   
-  my $vector;
-  if (ref $expression eq 'ARRAY') {
-    my $values = $expression;
-    $vector = Data::R::Vector->new(values => $values);
+  if (ref $data eq 'Data::R::Vector') {
+    return $data;
+  }
+  elsif (ref $data eq 'ARRAY') {
+    return Data::R::Vector->new(values => $data);
   }
   else {
-    $vector = $self->_parse_seq_expression($expression);
+    my $str = $data;
+    my $by;
+    if ($str =~ s/^(.+)\*//) {
+      $by = $1;
+    }
+    
+    my $from;
+    my $to;
+    if ($str =~ /(.+?):(.+)/) {
+      $from = $1;
+      $to = $2;
+    }
+    
+    return $self->seq({from => $from, to => $to, by => $by});
   }
-  
-  return $vector;
-}
-
-sub _parse_seq_expression {
-  my ($self, $exp) = @_;
-  
-  my $by;
-  if ($exp =~ s/^(.+)\*//) {
-    $by = $1;
-  }
-  
-  my $from;
-  my $to;
-  if ($exp =~ /(.+?):(.+)/) {
-    $from = $1;
-    $to = $2;
-  }
-  
-  return $self->seq({from => $from, to => $to, by => $by});
 }
 
 sub seq {

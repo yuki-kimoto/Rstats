@@ -6,9 +6,21 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
-# _parse_seq_expression
+# c
 {
   my $r = Data::R->new;
+  
+  # c($array)
+  {
+    my $v = $r->c([1, 2, 3]);
+    is_deeply($v->values, [1, 2, 3]);
+  }
+  
+  # c($vector)
+  {
+    my $v = $r->c(Data::R::Vector->new(values => [1, 2, 3]));
+    is_deeply($v->values, [1, 2, 3]);
+  }
   
   # c('1:3')
   {

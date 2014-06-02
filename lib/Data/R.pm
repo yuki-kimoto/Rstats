@@ -10,6 +10,32 @@ use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
 
+sub paste {
+  my $self = shift;
+
+  # Option
+  my $opt;
+  if (ref $_[-1] eq 'HASH') {
+    $opt = pop @_;
+  }
+  $opt ||= {};
+  
+  my $sep = $opt->{sep};
+  $sep = ' ' unless defined $sep;
+  
+  my $str = shift;
+  my $v1 = shift;
+  
+  my $v1_values = $v1->values;
+  my $v2 = Data::R::Vector->new;
+  my $v2_values = $v2->values;
+  for my $v1_value (@$v1_values) {
+    push @$v2_values, "$str$sep$v1_value";
+  }
+  
+  return $v2;
+}
+
 sub c {
   my ($self, $data) = @_;
   

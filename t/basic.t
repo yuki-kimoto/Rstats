@@ -6,6 +6,22 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
+# paste
+{
+  my $r = Data::R->new;
+  
+  # paste($str, $vector);
+  {
+    my $v = $r->paste('x', $r->c('1:3'));
+    is_deeply($v->values, ['x 1', 'x 2', 'x 3']);
+  }
+  # paste($str, $vector, {sep => ''});
+  {
+    my $v = $r->paste('x', $r->c('1:3'), {sep => ''});
+    is_deeply($v->values, ['x1', 'x2', 'x3']);
+  }
+}
+
 # c
 {
   my $r = Data::R->new;

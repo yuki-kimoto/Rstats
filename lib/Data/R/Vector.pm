@@ -27,11 +27,12 @@ sub negation {
 }
 
 sub add {
-  my ($self, $v2) = @_;
+  my ($self, $data) = @_;
 
   my $v3 = Data::R::Vector->new;
-  if (ref $v2) {
+  if (ref $data eq 'Data::R::Vector') {
     my $v1_values = $self->values;
+    my $v2 = $data;
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
@@ -44,7 +45,7 @@ sub add {
     my $v3_values = $v3->values;
     
     for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] + $v2;
+      $v3_values->[$i] = $v1_values->[$i] + $data;
     }
   }
   
@@ -52,11 +53,12 @@ sub add {
 }
 
 sub subtract {
-  my ($self, $v2) = @_;
+  my ($self, $data, $reverse) = @_;
 
   my $v3 = Data::R::Vector->new;
-  if (ref $v2) {
+  if (ref $data eq 'Data::R::Vector') {
     my $v1_values = $self->values;
+    my $v2 = $data;
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
@@ -65,11 +67,12 @@ sub subtract {
     }
   }
   else {
+  
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
     
     for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] - $v2;
+      $v3_values->[$i] = $v1_values->[$i] - $data;
     }
   }
   
@@ -77,11 +80,12 @@ sub subtract {
 }
 
 sub multiply {
-  my ($self, $v2) = @_;
+  my ($self, $data) = @_;
 
   my $v3 = Data::R::Vector->new;
-  if (ref $v2) {
+  if (ref $data eq 'Data::R::Vector') {
     my $v1_values = $self->values;
+    my $v2 = $data;
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
@@ -94,7 +98,7 @@ sub multiply {
     my $v3_values = $v3->values;
     
     for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] * $v2;
+      $v3_values->[$i] = $v1_values->[$i] * $data;
     }
   }
   
@@ -102,11 +106,12 @@ sub multiply {
 }
 
 sub divide {
-  my ($self, $v2) = @_;
+  my ($self, $data) = @_;
 
   my $v3 = Data::R::Vector->new;
-  if (ref $v2) {
+  if (ref $data eq 'Data::R::Vector') {
     my $v1_values = $self->values;
+    my $v2 = $data;
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
@@ -119,7 +124,7 @@ sub divide {
     my $v3_values = $v3->values;
     
     for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] / $v2;
+      $v3_values->[$i] = $v1_values->[$i] / $data;
     }
   }
   
@@ -127,18 +132,23 @@ sub divide {
 }
 
 sub raise {
-  my ($self, $v2) = @_;
+  my ($self, $data, $reverse) = @_;
   
   my $v3 = Data::R::Vector->new;
-  if (ref $v2) {
+  if (ref $data eq 'Data::R::Vector') {
     croak 'Not implemented';
   }
   else {
-    my $v1_values = $self->values;
-    my $v3_values = $v3->values;
-    
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] ** $v2;
+    if ($reverse) {
+      croak "Not implemented";
+    }
+    else {
+      my $v1_values = $self->values;
+      my $v3_values = $v3->values;
+      
+      for (my $i = 0; $i < @$v1_values; $i++) {
+        $v3_values->[$i] = $v1_values->[$i] ** $data;
+      }
     }
     
     return $v3;

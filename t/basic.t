@@ -270,7 +270,7 @@ my $r = Data::R->new;
     is($c2->im, 2);
   }
 
-  # sub
+  # subtract
   {
     my $c1 = Data::R::Complex->new(re => 1, im => 2);
     my $c2 = Data::R::Complex->new(re => 3, im => 4);
@@ -279,12 +279,20 @@ my $r = Data::R->new;
     is($c3->im, -2);
   }
   
-  # sub(real number)
+  # subtract(real number)
   {
     my $c1 = Data::R::Complex->new(re => 1, im => 2);
     my $c2 = $c1 - 3;
     is($c2->re, -2);
     is($c2->im, 2);
+  }
+  
+  # subtract(real number, reverse)
+  {
+    my $c1 = Data::R::Complex->new(re => 1, im => 2);
+    my $c2 = 3 - $c1;
+    is($c2->re, 2);
+    is($c2->im, -2);
   }
   
   # multiply
@@ -302,5 +310,30 @@ my $r = Data::R->new;
     my $c2 = $c1 * 3;
     is($c2->re, 3);
     is($c2->im, 6);
+  }
+  
+  # divide
+  {
+    my $c1 = 5 - $r->i * 6;
+    my $c2 = 3 + $r->i * 2;
+    my $c3 = $c1 / $c2;
+    is($c3->re, 3/13);
+    is($c3->im, -28/13);
+  }
+
+  # divide(real number)
+  {
+    my $c1 = 2 + $r->i * 4;
+    my $c2 = $c1 / 2;
+    is($c2->re, 1);
+    is($c2->im, 2);
+  }
+
+  # divide(real number, reverse)
+  {
+    my $c1 = 3 + $r->i * 2;
+    my $c2 = 5 / $c1;
+    is($c2->re, 15 / 13);
+    is($c2->im, -10 / 13);
   }
 }

@@ -1,12 +1,13 @@
 package Data::R::Complex;
 use Object::Simple -base;
+use Carp 'croak';
 
 use overload
+  'neg' => \&negation,
   '+' => \&add,
   '-' => \&subtract,
   '*' => \&multiply,
   '/' => \&divide,
-  'neg' => \&negation,
   '**' => \&raise;
 
 has 're';
@@ -111,7 +112,26 @@ sub divide {
 }
 
 sub raise {
+  my ($self, $data, $reverse) = @_;
   
+  if (ref $data eq 'Data::R::Complex') {
+    croak 'Not implemented';
+  }
+  else {
+    if ($reverse) {
+      croak 'Not implemented';
+    }
+    else {
+      my $c2 = $self;
+      if ($data > 1) {
+        for (1 .. $data - 1) {
+          $c2 = $c2 * $self;
+        }
+      }
+      
+      return $c2;
+    }
+  }
 }
 
 1;

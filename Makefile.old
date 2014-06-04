@@ -18,7 +18,7 @@
 #     LICENSE => q[perl]
 #     NAME => q[Data::R]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Test::More=>q[0], List::Util=>q[1.38], Object::Simple=>q[3.10] }
+#     PREREQ_PM => { Test::More=>q[0], List::Util=>q[1.38], Object::Simple=>q[3.10], Math::Complex=>q[1.59] }
 #     VERSION_FROM => q[lib/Data/R.pm]
 #     clean => { FILES=>q[Data-R-*] }
 #     dist => { COMPRESS=>q[gzip -9f], SUFFIX=>q[gz] }
@@ -505,6 +505,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '    - inc' >> META_new.yml
 	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  List::Util: 1.38' >> META_new.yml
+	$(NOECHO) $(ECHO) '  Math::Complex: 1.59' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Object::Simple: 3.10' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) 'version: 0.01' >> META_new.yml
@@ -545,6 +546,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      "runtime" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '            "List::Util" : "1.38",' >> META_new.json
+	$(NOECHO) $(ECHO) '            "Math::Complex" : "1.59",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "Object::Simple" : "3.10",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "Test::More" : "0"' >> META_new.json
 	$(NOECHO) $(ECHO) '         }' >> META_new.json
@@ -852,6 +854,7 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Yuki Kimoto &lt;kimoto.yuki@gmail.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="List::Util" VERSION="1.38" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Math::Complex" VERSION="1.59" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Object::Simple" VERSION="3.1" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Test::More" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="x86_64-linux-5.16" />' >> $(DISTNAME).ppd

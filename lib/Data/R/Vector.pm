@@ -19,9 +19,7 @@ sub negation {
   my $v2 = Data::R::Vector->new;
   my $v1_values = $self->values;
   my $v2_values = $v2->values;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    $v2_values->[$i] = -$v1_values->[$i];
-  }
+  $v2_values->[$_] = -$v1_values->[$_] for (0 .. @$v1_values - 1);
   
   return $v2;
 }
@@ -36,17 +34,13 @@ sub add {
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] + $v2_values->[$i];
-    }
+    $v3_values->[$_] = $v1_values->[$_] + $v2_values->[$_] for (0 .. @$v1_values - 1);
   }
   else {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] + $data;
-    }
+    $v3_values->[$_] = $v1_values->[$_] + $data for (0 .. @$v1_values - 1);
   }
   
   return $v3;
@@ -62,23 +56,17 @@ sub subtract {
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] - $v2_values->[$i];
-    }
+    $v3_values->[$_] = $v1_values->[$_] - $v2_values->[$_] for (0 .. @$v1_values - 1);
   }
   else {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
 
     if ($reverse) {
-      for (my $i = 0; $i < @$v1_values; $i++) {
-        $v3_values->[$i] = $data - $v1_values->[$i];
-      }
+      $v3_values->[$_] = $data - $v1_values->[$_] for (0 .. @$v1_values - 1);
     }
     else {
-      for (my $i = 0; $i < @$v1_values; $i++) {
-        $v3_values->[$i] = $v1_values->[$i] - $data;
-      }
+      $v3_values->[$_] = $v1_values->[$_] - $data for (0 .. @$v1_values - 1);
     }
   }
   
@@ -95,17 +83,13 @@ sub multiply {
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] * $v2_values->[$i];
-    }
+    $v3_values->[$_] = $v1_values->[$_] * $v2_values->[$_] for (0 .. @$v1_values - 1);
   }
   else {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] * $data;
-    }
+    $v3_values->[$_] = $v1_values->[$_] * $data for (0 .. @$v1_values - 1);
   }
   
   return $v3;
@@ -121,23 +105,17 @@ sub divide {
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v3_values->[$i] = $v1_values->[$i] / $v2_values->[$i];
-    }
+    $v3_values->[$_] = $v1_values->[$_] / $v2_values->[$_] for (0 .. @$v1_values - 1);
   }
   else {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
     
     if ($reverse) {
-      for (my $i = 0; $i < @$v1_values; $i++) {
-        $v3_values->[$i] = $data / $v1_values->[$i];
-      }
+      $v3_values->[$_] = $data / $v1_values->[$_] for (0 .. @$v1_values - 1);
     }
     else {
-      for (my $i = 0; $i < @$v1_values; $i++) {
-        $v3_values->[$i] = $v1_values->[$i] / $data;
-      }
+      $v3_values->[$_] = $v1_values->[$_] / $data for (0 .. @$v1_values - 1);
     }
   }
   
@@ -159,9 +137,7 @@ sub raise {
       my $v1_values = $self->values;
       my $v3_values = $v3->values;
       
-      for (my $i = 0; $i < @$v1_values; $i++) {
-        $v3_values->[$i] = $v1_values->[$i] ** $data;
-      }
+      $v3_values->[$_] = $v1_values->[$_] ** $data for (0 .. @$v1_values - 1);
     }
     
     return $v3;

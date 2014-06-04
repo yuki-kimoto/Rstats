@@ -1,6 +1,7 @@
 package Data::R::Complex;
 use Object::Simple -base;
 use Carp 'croak';
+use Math::Complex ();
 
 use overload
   'neg' => \&negation,
@@ -10,128 +11,115 @@ use overload
   '/' => \&divide,
   '**' => \&raise;
 
-has 're';
-has 'im';
+has data => sub { Math::Complex->make(0, 0) };
+
+sub make {
+  my $self = shift->SUPER::new;
+  my ($re, $im) = @_;
+  
+  $re = 0 unless defined $re;
+  $im = 0 unless defined $im;
+  
+  $self->data(Math::Complex->make($re, $im));
+  
+  return $self;
+}
+
+sub re { Math::Complex::Re(shift->data) }
+
+sub im { Math::Complex::Im(shift->data) }
 
 sub negation {
   my $self = shift;
   
-  my $c2 = Data::R::Complex->new(re => - $self->re, im => - $self->im);
+  my $data1 = $self->data;
+  my $data2 = -$data1;
   
-  return $c2;
+  my $z = Data::R::Complex->new(data => $data2);
+  
+  return $z;
 }
 
 sub add {
-  my ($self, $data) = @_;
-
-  my $c3 = Data::R::Complex->new;
-  if (ref $data eq 'Data::R::Complex') {
-    my $c2 = $data;
-    $c3->re($self->re + $c2->re);
-    $c3->im($self->im + $c2->im);
-  }
-  else {
-    $c3->re($self->re + $data);
-    $c3->im($self->im);
-  }
+  my ($self, $z2) = @_;
   
-  return $c3;
+  my $data1 = $self->data;
+  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
+  
+  my $data3 = $data1 + $data2;
+  my $z3 = Data::R::Complex->new(data => $data3);
+  
+  return $z3;
 }
 
 sub subtract {
-  my ($self, $data, $reverse) = @_;
-
-  my $c3 = Data::R::Complex->new;
-  if (ref $data eq 'Data::R::Complex') {
-    my $c2 = $data;
-    $c3->re($self->re - $c2->re);
-    $c3->im($self->im - $c2->im);
+  my ($self, $z2, $reverse) = @_;
+  
+  my $data1 = $self->data;
+  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
+  
+  my $data3;
+  if ($reverse) {
+    $data3 = $data2 - $data1;
   }
   else {
-    if ($reverse) {
-      $c3->re($data - $self->re);
-      $c3->im(-$self->im);
-    }
-    else {
-      $c3->re($self->re - $data);
-      $c3->im($self->im);
-    }
+    $data3 = $data1 - $data2;
   }
   
-  return $c3;
+  my $z3 = Data::R::Complex->new(data => $data3);
+  
+  return $z3;
 }
 
 sub multiply {
-  my ($self, $data) = @_;
-
-  my $c3 = Data::R::Complex->new;
-  if (ref $data eq 'Data::R::Complex') {
-    my $c2 = $data;
-    
-    my $re = $self->re * $c2->re - $self->im * $c2->im;
-    my $im = $self->re * $c2->im + $c2->re * $self->im;
-    $c3->re($re);
-    $c3->im($im);
-  }
-  else {
-    $c3->re($self->re * $data);
-    $c3->im($self->im * $data);
-  }
+  my ($self, $z2) = @_;
   
-  return $c3;
+  my $data1 = $self->data;
+  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
+  
+  my $data3 = $data1 * $data2;
+  my $z3 = Data::R::Complex->new(data => $data3);
+  
+  return $z3;
 }
 
 sub divide {
-  my ($self, $data, $reverse) = @_;
-
-  my $c3 = Data::R::Complex->new;
-  if (ref $data eq 'Data::R::Complex') {
-    my $c2 = $data;
-    
-    my $re = ($self->re * $c2->re + $self->im * $c2->im)
-      / ($c2->re ** 2 + $c2->im ** 2);
-    
-    my $im = ($self->im * $c2->re - $self->re * $c2->im)
-      / ($c2->re ** 2 + $c2->im ** 2);
-    
-    $c3->re($re);
-    $c3->im($im);
+  my ($self, $z2, $reverse) = @_;
+  
+  my $data1 = $self->data;
+  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
+  
+  my $data3;
+  if ($reverse) {
+    $data3 = $data2 / $data1;
   }
   else {
-    if ($reverse) {
-      $c3->re(($data * $self->re) / ($self->re ** 2 + $self->im ** 2));
-      $c3->im((-$data * $self->im) / ($self->re ** 2 + $self->im ** 2));
-    }
-    else {
-      $c3->re($self->re / $data);
-      $c3->im($self->im / $data);
-    }
+    $data3 = $data1 / $data2;
   }
   
-  return $c3;
+  my $z3 = Data::R::Complex->new(data => $data3);
+  
+  return $z3;
 }
 
 sub raise {
-  my ($self, $data, $reverse) = @_;
+  my ($self, $z2, $reverse) = @_;
   
-  if (ref $data eq 'Data::R::Complex') {
-    croak 'Not implemented';
+  my $data1 = $self->data;
+  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
+  
+  my $data3;
+  if ($reverse) {
+    $data3 = $data2 ** $data1;
   }
   else {
-    if ($reverse) {
-      croak 'Not implemented';
-    }
-    else {
-      my $c2 = $self;
-      if ($data > 1) {
-        for (1 .. $data - 1) {
-          $c2 = $c2 * $self;
-        }
-      }
-      
-      return $c2;
-    }
+    $data3 = $data1 ** $data2;
   }
+  
+  my $z3 = Data::R::Complex->new(data => $data3);
+  
+  return $z3;
 }
+
 
 1;

@@ -388,108 +388,108 @@ use Data::R::Complex;
 
   # new
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    is($c1->re, 1);
-    is($c1->im, 2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    is($z1->re, 1);
+    is($z1->im, 2);
   }
   
   # negation
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = - $c1;
-    is($c2->re, -1);
-    is($c2->im, -2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = - $z1;
+    is($z2->re, -1);
+    is($z2->im, -2);
   }
   
   # add
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = Data::R::Complex->new(re => 3, im => 4);
-    my $c3 = $c1 + $c2;
-    is($c3->re, 4);
-    is($c3->im, 6);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = Data::R::Complex->make(3, 4);
+    my $z3 = $z1 + $z2;
+    is($z3->re, 4);
+    is($z3->im, 6);
   }
   
   # add(real number)
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = $c1 + 3;
-    is($c2->re, 4);
-    is($c2->im, 2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = $z1 + 3;
+    is($z2->re, 4);
+    is($z2->im, 2);
   }
 
   # subtract
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = Data::R::Complex->new(re => 3, im => 4);
-    my $c3 = $c1 - $c2;
-    is($c3->re, -2);
-    is($c3->im, -2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = Data::R::Complex->make(3, 4);
+    my $z3 = $z1 - $z2;
+    is($z3->re, -2);
+    is($z3->im, -2);
   }
   
   # subtract(real number)
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = $c1 - 3;
-    is($c2->re, -2);
-    is($c2->im, 2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = $z1 - 3;
+    is($z2->re, -2);
+    is($z2->im, 2);
   }
   
   # subtract(real number, reverse)
   {
-    my $c1 = Data::R::Complex->new(re => 1, im => 2);
-    my $c2 = 3 - $c1;
-    is($c2->re, 2);
-    is($c2->im, -2);
+    my $z1 = Data::R::Complex->make(1, 2);
+    my $z2 = 3 - $z1;
+    is($z2->re, 2);
+    is($z2->im, -2);
   }
   
   # multiply
   {
-    my $c1 = 1 + $r->i * 2;
-    my $c2 = 3 + $r->i * 4;
-    my $c3 = $c1 * $c2;
-    is($c3->re, -5);
-    is($c3->im, 10);
+    my $z1 = 1 + $r->i * 2;
+    my $z2 = 3 + $r->i * 4;
+    my $z3 = $z1 * $z2;
+    is($z3->re, -5);
+    is($z3->im, 10);
   }
 
   # multiply(real number)
   {
-    my $c1 = 1 + $r->i * 2;
-    my $c2 = $c1 * 3;
-    is($c2->re, 3);
-    is($c2->im, 6);
+    my $z1 = 1 + $r->i * 2;
+    my $z2 = $z1 * 3;
+    is($z2->re, 3);
+    is($z2->im, 6);
   }
   
   # divide
   {
-    my $c1 = 5 - $r->i * 6;
-    my $c2 = 3 + $r->i * 2;
-    my $c3 = $c1 / $c2;
-    is($c3->re, 3/13);
-    is($c3->im, -28/13);
+    my $z1 = 5 - $r->i * 6;
+    my $z2 = 3 + $r->i * 2;
+    my $z3 = $z1 / $z2;
+    is($z3->re, 3/13);
+    is($z3->im, -28/13);
   }
 
   # divide(real number)
   {
-    my $c1 = 2 + $r->i * 4;
-    my $c2 = $c1 / 2;
-    is($c2->re, 1);
-    is($c2->im, 2);
+    my $z1 = 2 + $r->i * 4;
+    my $z2 = $z1 / 2;
+    is($z2->re, 1);
+    is($z2->im, 2);
   }
 
   # divide(real number, reverse)
   {
-    my $c1 = 3 + $r->i * 2;
-    my $c2 = 5 / $c1;
-    is($c2->re, 15 / 13);
-    is($c2->im, -10 / 13);
+    my $z1 = 3 + $r->i * 2;
+    my $z2 = 5 / $z1;
+    is($z2->re, 15 / 13);
+    is($z2->im, -10 / 13);
   }
 
   # raise
   {
-    my $c1 = 1 + $r->i * 2;
-    my $c2 = $c1 ** 3;
-    is($c2->re, -11);
-    is($c2->im, -2);
+    my $z1 = 1 + $r->i * 2;
+    my $z2 = $z1 ** 3;
+    is($z2->re, -11);
+    is($z2->im, -2);
   }
 }

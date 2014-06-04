@@ -14,7 +14,8 @@ WriteMakefile(
     PREREQ_PM => {
         'Test::More' => 0,
         'Object::Simple' => '3.10',
-        'List::Util' => '1.38'
+        'List::Util' => '1.38',
+        'Math::Complex' => '1.59'
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Data-R-*' },

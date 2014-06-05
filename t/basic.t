@@ -6,6 +6,26 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
+# grep
+{
+  my $r = Data::R->new;
+  
+  # callback
+  {
+    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    my $v2 = $v1->grep(sub { $_[0] % 2 == 0 });
+    is_deeply($v2->values, [2, 4]);
+  }
+  
+  # names
+  {
+    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    $v1->names($r->c(['a', 'b', 'c', 'd']));
+    my $v2 = $v1->grep($r->c(['b', 'd']));
+    is_deeply($v2->values, [2, 4]);
+  }
+}
+
 # paste
 {
   my $r = Data::R->new;

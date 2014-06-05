@@ -6,6 +6,14 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 
+# abs
+{
+  my $r = Data::R->new;
+  my $v1 = $r->c([3, 4]);
+  my $abs = $r->abs($v1);
+  is($abs, 5);
+}
+
 # grep
 {
   my $r = Data::R->new;

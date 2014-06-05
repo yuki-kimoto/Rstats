@@ -210,6 +210,20 @@ sub pmin {
   return $v_min;
 }
 
+sub abs {
+  my ($self, $data) = @_;
+  
+  if (ref $data eq 'Data::R::Vector') {
+    my $tmp_v = $data * $data;
+    my $abs = sqrt $self->sum($tmp_v);
+
+    return $abs;
+  }
+  else {
+    croak 'Not implemented';
+  }  
+}
+
 sub sum {
   my ($self, $data) = @_;
   

@@ -10,6 +10,48 @@ use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
 
+sub array {
+  my ($self, $data) = @_;
+  
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  my $array;
+  if (ref $data eq 'Data::R::Array') {
+    $array = $data;
+  }
+  elsif (ref $data eq 'ARRAY') {
+    $array = Data::R::Array->new(values => $data);
+  }
+  else {
+    my $str = $data;
+    my $by;
+    if ($str =~ s/^(.+)\*//) {
+      $by = $1;
+    }
+    
+    my $from;
+    my $to;
+    if ($str =~ /(.+?):(.+)/) {
+      $from = $1;
+      $to = $2;
+    }
+    
+    $array = $self->seq({from => $from, to => $to, by => $by});
+  }
+  
+  my $dim = $opt->{dim};
+  if ($dim) {
+    if (ref $dim eq 'ARRAY') {
+      $array->dim($self->array($dim));
+    }
+    elsif (ref $dim eq 'Data::R::Array') {
+      $array->dim($dim);
+    }
+  }
+  
+  return $array;
+}
+
 sub paste {
   my $self = shift;
 
@@ -39,28 +81,7 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
-    return $data;
-  }
-  elsif (ref $data eq 'ARRAY') {
-    return Data::R::Array->new(values => $data);
-  }
-  else {
-    my $str = $data;
-    my $by;
-    if ($str =~ s/^(.+)\*//) {
-      $by = $1;
-    }
-    
-    my $from;
-    my $to;
-    if ($str =~ /(.+?):(.+)/) {
-      $from = $1;
-      $to = $2;
-    }
-    
-    return $self->seq({from => $from, to => $to, by => $by});
-  }
+  return $self->array($data);
 }
 
 sub seq {

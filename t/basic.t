@@ -7,7 +7,7 @@ use Math::Trig ();
 use Data::R::Complex;
 use Data::R::Array;
 
-# Array
+# Array get and set
 {
   my $array = Data::R::Array->new(values => [1, 2, 3]);
   is($array->get(1), 1);

@@ -15,9 +15,7 @@ use overload
   fallback => 1;
 
 has 'values';
-has 'dim';
 has 'type';
-
 
 sub length {
   my $self = shift;
@@ -49,6 +47,20 @@ sub as_vector {
   my $self = shift;
   
   $self->{type} = 'vector';
+}
+
+sub dim {
+  my ($self, $dim) = @_;
+  
+  if ($dim) {
+    if (ref $dim eq 'ARRAY') {
+      $dim = Data::R::Array->new(values => $dim, type => 'vector');
+    }
+    $self->{dim} = $dim;
+  }
+  else {
+    return $self->{dim};
+  }
 }
 
 sub as_matrix {
@@ -141,8 +153,7 @@ sub names {
   
   if ($names_v) {
     if (ref $names_v eq 'ARRAY') {
-      $names_v = Data::R::Array->new(values => $names_v);
-      $names_v->type('vector');
+      $names_v = Data::R::Array->new(values => $names_v, type => 'vector');
     }
     croak "names argument must be vector object"
       unless ref $names_v eq 'Data::R::Array';

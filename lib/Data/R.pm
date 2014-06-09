@@ -9,6 +9,9 @@ use List::Util;
 use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
+use Data::R;
+
+my $r = Data::R->new;
 
 sub matrix {
   my ($self, $data, $row_num, $col_num) = @_;
@@ -26,8 +29,8 @@ sub matrix {
   my $matrix = Data::R::Array->new(
     values => $values,
     type => 'matrix',
-    dim => [$row_num, $col_num]
   );
+  $matrix->dim([$row_num, $col_num]);
   
   return $matrix;
 }

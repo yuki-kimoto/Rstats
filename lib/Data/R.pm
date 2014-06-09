@@ -4,30 +4,11 @@ our $VERSION = '0.01';
 
 use Object::Simple -base;
 
-use Data::R::Vector;
+use Data::R::Array;
 use List::Util;
 use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
-
-sub _pop_opt {
-  
-}
-
-sub array {
-  my $self = shift;
-  
-  # Option
-  my $opt;
-  if (ref $_[-1] eq 'HASH') {
-    $opt = pop @_;
-  }
-  $opt ||= {};
-  
-  
-}
-
-
 
 sub paste {
   my $self = shift;
@@ -46,7 +27,7 @@ sub paste {
   my $v1 = shift;
   
   my $v1_values = $v1->values;
-  my $v2 = Data::R::Vector->new;
+  my $v2 = Data::R::Array->new;
   my $v2_values = $v2->values;
   for my $v1_value (@$v1_values) {
     push @$v2_values, "$str$sep$v1_value";
@@ -58,11 +39,11 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     return $data;
   }
   elsif (ref $data eq 'ARRAY') {
-    return Data::R::Vector->new(values => $data);
+    return Data::R::Array->new(values => $data);
   }
   else {
     my $str = $data;
@@ -122,12 +103,12 @@ sub seq {
       my $value = $from + $num * $by;
       push @$values, $value;
     }
-    return Data::R::Vector->new(values => $values);
+    return Data::R::Array->new(values => $values);
   }
   elsif (defined $to) {
     my $values = [];
     if ($to == $from) {
-      return Data::R::Vector->new(values => [$to]);
+      return Data::R::Array->new(values => [$to]);
     }
     elsif ($to > $from) {
       if ($by < 0) {
@@ -139,7 +120,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return Data::R::Vector->new(values => $values);
+      return Data::R::Array->new(values => $values);
     }
     else {
       if ($by > 0) {
@@ -151,7 +132,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return Data::R::Vector->new(values => $values);
+      return Data::R::Array->new(values => $values);
     }
   }
   else {
@@ -174,7 +155,7 @@ sub rep {
   
   my $values = [];
   push @$values, @{$v1->values} for 1 .. $times;
-  my $v2 = Data::R::Vector->new(values => $values);
+  my $v2 = Data::R::Array->new(values => $values);
   
   return $v2;
 }
@@ -207,7 +188,7 @@ sub pmax {
     }
   }
   
-  my $v_max = Data::R::Vector->new(values => \@maxs);
+  my $v_max = Data::R::Array->new(values => \@maxs);
   
   return $v_max;
 }
@@ -224,7 +205,7 @@ sub pmin {
     }
   }
   
-  my $v_min = Data::R::Vector->new(values => \@mins);
+  my $v_min = Data::R::Array->new(values => \@mins);
   
   return $v_min;
 }
@@ -232,7 +213,7 @@ sub pmin {
 sub abs {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $tmp_v = $data * $data;
     my $abs = sqrt $self->sum($tmp_v);
 
@@ -246,7 +227,7 @@ sub abs {
 sub sum {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $sum;
     my $v = $data;
     my $v_values = $v->values;
@@ -261,7 +242,7 @@ sub sum {
 sub prod {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $prod;
     my $v = $data;
     my $v_values = $v->values;
@@ -276,7 +257,7 @@ sub prod {
 sub mean {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v = $data;
     my $mean = $self->sum($v) / $self->length($v);
     return $mean;
@@ -289,7 +270,7 @@ sub mean {
 sub var {
   my ($self, $data) = @_;
 
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v = $data;
     
     my $var = $self->sum(($v - $self->mean($v)) ** 2) / ($self->length($v) - 1);
@@ -304,7 +285,7 @@ sub length {
   my ($self, $data) = @_;
   
   my $length;
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v = $data;
     my $v_values = $v->values;
     $length = @$v_values;
@@ -318,8 +299,8 @@ sub length {
 sub sort {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
-    my $v2 = Data::R::Vector->new;
+  if (ref $data eq 'Data::R::Array') {
+    my $v2 = Data::R::Array->new;
     my $sort;
     my $v1 = $data;
     my $v1_values = $v1->values;
@@ -335,9 +316,9 @@ sub sort {
 sub log {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -353,9 +334,9 @@ sub log {
 sub exp {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -371,9 +352,9 @@ sub exp {
 sub sin {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -389,9 +370,9 @@ sub sin {
 sub cos {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -407,9 +388,9 @@ sub cos {
 sub tan {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -425,9 +406,9 @@ sub tan {
 sub sqrt {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     for (my $i = 0; $i < @$v1_values; $i++) {
@@ -443,9 +424,9 @@ sub sqrt {
 sub range {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Vector') {
+  if (ref $data eq 'Data::R::Array') {
     my $v1 = $data;
-    my $v2 = Data::R::Vector->new;
+    my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
     my $min = $self->min($v1);
@@ -477,7 +458,7 @@ Data::R - R-like statistical library
 
   my $r = Data::R->new;
   
-  # Vector
+  # Array
   my $v1 = $r->c([1, 2, 3]);
   my $v2 = $r->c([2, 3, 4]);
   my $v3 = $v1 + v2;

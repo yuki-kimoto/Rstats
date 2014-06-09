@@ -30,14 +30,14 @@ use Data::R::Array;
   
   # callback
   {
-    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    my $v1 = Data::R::Array->new(values => [1, 2, 3, 4]);
     my $v2 = $v1->grep(sub { $_[0] % 2 == 0 });
     is_deeply($v2->values, [2, 4]);
   }
   
   # names
   {
-    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    my $v1 = Data::R::Array->new(values => [1, 2, 3, 4]);
     $v1->names($r->c(['a', 'b', 'c', 'd']));
     my $v2 = $v1->grep($r->c(['b', 'd']));
     is_deeply($v2->values, [2, 4]);
@@ -72,7 +72,7 @@ use Data::R::Array;
   
   # c($vector)
   {
-    my $v = $r->c(Data::R::Vector->new(values => [1, 2, 3]));
+    my $v = $r->c(Data::R::Array->new(values => [1, 2, 3]));
     is_deeply($v->values, [1, 2, 3]);
   }
   

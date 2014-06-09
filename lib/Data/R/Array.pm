@@ -17,6 +17,14 @@ has 'values';
 has 'dim';
 has 'type';
 
+sub length {
+  my $self = shift;
+  
+  my $length = @{$self->{values}};
+  
+  return $length;
+}
+
 sub is_array {
   my $self = shift;
   

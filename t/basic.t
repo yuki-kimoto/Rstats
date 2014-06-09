@@ -7,6 +7,14 @@ use Math::Trig ();
 use Data::R::Complex;
 use Data::R::Array;
 
+my $r = Data::R->new;
+
+# length
+{
+  my $array = $r->array([1, 2, 3]);
+  is($array->length, 3);
+}
+
 # Type
 {
   my $array = Data::R::Array->new(values => [1, 2, 3]);

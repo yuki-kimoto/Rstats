@@ -10,6 +10,25 @@ use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
 
+sub _pop_opt {
+  
+}
+
+sub array {
+  my $self = shift;
+  
+  # Option
+  my $opt;
+  if (ref $_[-1] eq 'HASH') {
+    $opt = pop @_;
+  }
+  $opt ||= {};
+  
+  
+}
+
+
+
 sub paste {
   my $self = shift;
 

@@ -5,6 +5,16 @@ use warnings;
 use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
+use Data::R::Array;
+
+# Array
+{
+  my $array = Data::R::Array->new(values => [1, 2, 3]);
+  is($array->get(1), 1);
+  is($array->get(3), 3);
+  $array->set(1 => 5);;
+  is($array->get(1), 5);
+}
 
 # abs
 {

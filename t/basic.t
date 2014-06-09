@@ -9,6 +9,14 @@ use Data::R::Array;
 
 my $r = Data::R->new;
 
+# matrix
+{
+  my $mat = $r->matrix(0, 2, 5);
+  is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  is_deeply($mat->dim, [2, 5]);
+  is($mat->type, 'matrix');
+}
+
 # to_string
 {
   my $v = $r->c([1, 2, 3]);

@@ -10,6 +10,28 @@ use Math::Trig ();
 use Carp 'croak';
 use Data::R::Complex;
 
+sub matrix {
+  my ($self, $data, $row_num, $col_num) = @_;
+  
+  croak "matrix method need data as frist argument"
+    unless defined $data;
+  
+  my $length = $row_num * $col_num;
+  
+  my $values;
+  unless (ref $data) {
+    $values = [($data) x $length];
+  }
+  
+  my $matrix = Data::R::Array->new(
+    values => $values,
+    type => 'matrix',
+    dim => [$row_num, $col_num]
+  );
+  
+  return $matrix;
+}
+
 sub array {
   my ($self, $data) = @_;
   

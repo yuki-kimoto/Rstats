@@ -66,7 +66,7 @@ sub as_array {
 sub new {
   my $self = shift->SUPER::new(@_);
   
-  $self->{type} = 'array';
+  $self->{type} ||= 'array';
   $self->{values} ||= [];
   
   return $self;

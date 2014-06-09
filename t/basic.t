@@ -7,6 +7,16 @@ use Math::Trig ();
 use Data::R::Complex;
 use Data::R::Array;
 
+# Type
+{
+  my $array = Data::R::Array->new(values => [1, 2, 3]);
+  ok($array->is_array);
+  $array->as_vector;
+  ok($array->is_vector);
+  $array->as_matrix;
+  ok($array->is_matrix);
+}
+
 # Array get and set
 {
   my $array = Data::R::Array->new(values => [1, 2, 3]);

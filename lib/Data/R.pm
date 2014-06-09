@@ -81,7 +81,10 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  return $self->array($data);
+  my $array = $self->array($data);
+  $array->type('vector');
+  
+  return $array;
 }
 
 sub seq {

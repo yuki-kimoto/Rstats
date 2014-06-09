@@ -15,10 +15,48 @@ use overload
 
 has 'values';
 has 'dim';
+has 'type';
+
+sub is_array {
+  my $self = shift;
+  
+  return ($self->{type} || '') eq 'array';
+}
+
+sub is_vector {
+  my $self = shift;
+  
+  return ($self->{type} || '') eq 'vector';
+}
+
+sub is_matrix {
+  my $self = shift;
+  
+  return ($self->{type} || '') eq 'matrix';
+}
+
+sub as_vector {
+  my $self = shift;
+  
+  $self->{type} = 'vector';
+}
+
+sub as_matrix {
+  my $self = shift;
+  
+  $self->{type} = 'matrix';
+}
+
+sub as_array {
+  my $self = shift;
+  
+  $self->{type} = 'array';
+}
 
 sub new {
   my $self = shift->SUPER::new(@_);
   
+  $self->{type} = 'array';
   $self->{values} ||= [];
   
   return $self;

@@ -11,11 +11,13 @@ use overload
   '/' => \&divide,
   'neg' => \&negation,
   '**' => \&raise,
+  '""' => \&to_string,
   fallback => 1;
 
 has 'values';
 has 'dim';
 has 'type';
+
 
 sub length {
   my $self = shift;
@@ -87,7 +89,20 @@ sub set {
 }
 
 sub to_string {
+  my $self = shift;
   
+  my $str = '';
+  my $names_v = $self->names;
+  if (@{$names_v->values}) {
+    $str .= join(' ', @{$names_v->values}) . "\n";
+  }
+  
+  my $values = $self->values;
+  if (@$values) {
+    $str .= join(' ', @$values) . "\n";
+  }
+  
+  return $str;
 }
 
 sub grep {
@@ -125,6 +140,10 @@ sub names {
   my ($self, $names_v) = @_;
   
   if ($names_v) {
+    if (ref $names_v eq 'ARRAY') {
+      $names_v = Data::R::Array->new(values => $names_v);
+      $names_v->type('vector');
+    }
     croak "names argument must be vector object"
       unless ref $names_v eq 'Data::R::Array';
     my $duplication = {};

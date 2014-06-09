@@ -9,6 +9,13 @@ use Data::R::Array;
 
 my $r = Data::R->new;
 
+# to_string
+{
+  my $v = $r->c([1, 2, 3]);
+  $v->names(['a', 'b', 'c']);
+  is("$v", "a b c\n1 2 3\n");
+}
+
 # length
 {
   my $array = $r->array([1, 2, 3]);

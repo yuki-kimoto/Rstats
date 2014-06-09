@@ -71,9 +71,7 @@ sub paste {
   my $v1_values = $v1->values;
   my $v2 = Data::R::Array->new;
   my $v2_values = $v2->values;
-  for my $v1_value (@$v1_values) {
-    push @$v2_values, "$str$sep$v1_value";
-  }
+  push @$v2_values, "$str$sep$_" for @$v1_values;
   
   return $v2;
 }
@@ -123,10 +121,7 @@ sub seq {
   
   if (defined $length) {
     my $values = [];
-    for my $num (0 .. $length - 1) {
-      my $value = $from + $num * $by;
-      push @$values, $value;
-    }
+    push @$values, $from + $_ * $by for (0 .. $length - 1);
     return Data::R::Array->new(values => $values);
   }
   elsif (defined $to) {
@@ -345,9 +340,7 @@ sub log {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = log $v1_values->[$i];
-    }
+    $v2_values->[$_] = log $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {
@@ -363,9 +356,7 @@ sub exp {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = exp $v1_values->[$i];
-    }
+    $v2_values->[$_] = exp $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {
@@ -381,9 +372,7 @@ sub sin {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = sin $v1_values->[$i];
-    }
+    $v2_values->[$_] = sin $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {
@@ -399,9 +388,7 @@ sub cos {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = cos $v1_values->[$i];
-    }
+    $v2_values->[$_] = cos $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {
@@ -417,9 +404,7 @@ sub tan {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = Math::Trig::tan $v1_values->[$i];
-    }
+    $v2_values->[$_] = Math::Trig::tan $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {
@@ -435,9 +420,7 @@ sub sqrt {
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
     my $v2_values = $v2->values;
-    for (my $i = 0; $i < @$v1_values; $i++) {
-      $v2_values->[$i] = sqrt $v1_values->[$i];
-    }
+    $v2_values->[$_] = sqrt $v1_values->[$_] for (0 .. @$v1_values - 1);
     return $v2;
   }
   else {

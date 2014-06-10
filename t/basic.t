@@ -6,6 +6,8 @@ use Data::R;
 use Math::Trig ();
 use Data::R::Complex;
 use Data::R::Array;
+use Data::R::Vector;
+use Data::R::Matrix;
 
 my $r = Data::R->new;
 
@@ -14,11 +16,14 @@ my $r = Data::R->new;
   my $mat = $r->matrix(0, 2, 5);
   is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   is_deeply($mat->dim->values, [2, 5]);
-  is($mat->type, 'matrix');
+  is(ref $mat, 'Data::R::Matrix');
 }
 
 # to_string
 {
+  my $array = $r->array([1, 2, 3]);
+  is("$array", "1 2 3\n");
+  
   my $v = $r->c([1, 2, 3]);
   $v->names(['a', 'b', 'c']);
   is("$v", "a b c\n1 2 3\n");
@@ -30,6 +35,7 @@ my $r = Data::R->new;
   is($array->length, 3);
 }
 
+=pod
 # Type
 {
   my $array = Data::R::Array->new(values => [1, 2, 3]);
@@ -39,6 +45,7 @@ my $r = Data::R->new;
   $array->as_matrix;
   ok($array->is_matrix);
 }
+=cut
 
 # Array get and set
 {
@@ -59,22 +66,20 @@ my $r = Data::R->new;
 
 # grep
 {
-  my $r = Data::R->new;
-  
   # callback
   {
     my $v1 = Data::R::Array->new(values => [1, 2, 3, 4]);
     my $v2 = $v1->grep(sub { $_[0] % 2 == 0 });
     is_deeply($v2->values, [2, 4]);
   }
-  
-  # names
-  {
-    my $v1 = Data::R::Array->new(values => [1, 2, 3, 4]);
-    $v1->names($r->c(['a', 'b', 'c', 'd']));
-    my $v2 = $v1->grep($r->c(['b', 'd']));
-    is_deeply($v2->values, [2, 4]);
-  }
+}
+
+# names and grep
+{
+  my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+  $v1->names($r->c(['a', 'b', 'c', 'd']));
+  my $v2 = $v1->grep($r->c(['b', 'd']));
+  is_deeply($v2->values, [2, 4]);
 }
 
 # paste
@@ -105,7 +110,7 @@ my $r = Data::R->new;
   
   # c($vector)
   {
-    my $v = $r->c(Data::R::Array->new(values => [1, 2, 3]));
+    my $v = $r->c(Data::R::Vector->new(values => [1, 2, 3]));
     is_deeply($v->values, [1, 2, 3]);
   }
   

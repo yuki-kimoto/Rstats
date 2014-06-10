@@ -4,12 +4,13 @@ our $VERSION = '0.01';
 
 use Object::Simple -base;
 
-use Data::R::Array;
 use List::Util;
 use Math::Trig ();
 use Carp 'croak';
-use Data::R::Complex;
 use Data::R;
+use Data::R::Array;
+use Data::R::Vector;
+use Data::R::Complex;
 
 my $r = Data::R->new;
 
@@ -26,7 +27,7 @@ sub matrix {
     $values = [($data) x $length];
   }
   
-  my $matrix = Data::R::Array->new(
+  my $matrix = Data::R::Matrix->new(
     values => $values,
     type => 'matrix',
   );
@@ -39,13 +40,14 @@ sub array {
   my ($self, $data) = @_;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $array_class = $opt->{class} || 'Data::R::Array';
   
   my $array;
-  if (ref $data eq 'Data::R::Array') {
-    $array = $data;
+  if (ref $data eq 'ARRAY') {
+    $array = $array_class->new(values => $data);
   }
-  elsif (ref $data eq 'ARRAY') {
-    $array = Data::R::Array->new(values => $data);
+  elsif (ref $data) {
+    $array = $data;
   }
   else {
     my $str = $data;
@@ -67,10 +69,13 @@ sub array {
   my $dim = $opt->{dim};
   if ($dim) {
     if (ref $dim eq 'ARRAY') {
-      $array->dim($self->array($dim));
+      $array->dim($self->c($dim));
     }
-    elsif (ref $dim eq 'Data::R::Array') {
+    elsif (ref $dim eq 'Data::R::Vector') {
       $array->dim($dim);
+    }
+    else {
+      croak "dim option must be array reference or Data::R::Vector object";
     }
   }
   
@@ -104,10 +109,9 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  my $array = $self->array($data);
-  $array->type('vector');
+  my $vector = $self->array($data, {class => 'Data::R::Vector'});
   
-  return $array;
+  return $vector;
 }
 
 sub seq {
@@ -257,7 +261,7 @@ sub pmin {
 sub abs {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $tmp_v = $data * $data;
     my $abs = sqrt $self->sum($tmp_v);
 
@@ -265,13 +269,13 @@ sub abs {
   }
   else {
     croak 'Not implemented';
-  }  
+  }
 }
 
 sub sum {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $sum;
     my $v = $data;
     my $v_values = $v->values;
@@ -286,7 +290,7 @@ sub sum {
 sub prod {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $prod;
     my $v = $data;
     my $v_values = $v->values;
@@ -301,7 +305,7 @@ sub prod {
 sub mean {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v = $data;
     my $mean = $self->sum($v) / $self->length($v);
     return $mean;
@@ -314,7 +318,7 @@ sub mean {
 sub var {
   my ($self, $data) = @_;
 
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v = $data;
     
     my $var = $self->sum(($v - $self->mean($v)) ** 2) / ($self->length($v) - 1);
@@ -329,7 +333,7 @@ sub length {
   my ($self, $data) = @_;
   
   my $length;
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v = $data;
     my $v_values = $v->values;
     $length = @$v_values;
@@ -343,7 +347,7 @@ sub length {
 sub sort {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v2 = Data::R::Array->new;
     my $sort;
     my $v1 = $data;
@@ -360,7 +364,7 @@ sub sort {
 sub log {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v1 = $data;
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
@@ -376,7 +380,7 @@ sub log {
 sub exp {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v1 = $data;
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
@@ -392,7 +396,7 @@ sub exp {
 sub sin {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v1 = $data;
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
@@ -408,7 +412,7 @@ sub sin {
 sub cos {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v1 = $data;
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
@@ -424,7 +428,7 @@ sub cos {
 sub tan {
   my ($self, $data) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
+  if ($data->isa('Data::R::Array')) {
     my $v1 = $data;
     my $v2 = Data::R::Array->new;
     my $v1_values = $v1->values;
@@ -438,38 +442,35 @@ sub tan {
 }
 
 sub sqrt {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
+
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
   
-  if (ref $data eq 'Data::R::Array') {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = sqrt $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  return $self->_apply($array, sub { sqrt $_[0] });
+}
+
+sub _apply {
+  my ($self, $array1, $cb) = @_;
+  
+  my $array2 = $array1->new;
+  my $array1_values = $array1->values;
+  my $array2_values = $array2->values;
+  $array2_values->[$_] = $cb->($array1_values->[$_])
+    for (0 .. @$array1_values - 1);
+  return $array2;
 }
 
 sub range {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if (ref $data eq 'Data::R::Array') {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    my $min = $self->min($v1);
-    my $max = $self->max($v1);
-    $v2->values([$min, $max]);
-
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'range method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  my $min = $self->min($array);
+  my $max = $self->max($array);
+  
+  return Data::R::Vector->new(values => [$min, $max]);
 }
 
 sub i {

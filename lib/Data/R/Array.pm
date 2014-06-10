@@ -15,7 +15,6 @@ use overload
   fallback => 1;
 
 has 'values';
-has 'type';
 
 sub length {
   my $self = shift;
@@ -28,25 +27,19 @@ sub length {
 sub is_array {
   my $self = shift;
   
-  return ($self->{type} || '') eq 'array';
+  return (ref $self || '') eq 'Data::R::Array';
 }
 
 sub is_vector {
   my $self = shift;
   
-  return ($self->{type} || '') eq 'vector';
+  return (ref $self || '') eq 'Data::R::Vector';
 }
 
 sub is_matrix {
   my $self = shift;
   
-  return ($self->{type} || '') eq 'matrix';
-}
-
-sub as_vector {
-  my $self = shift;
-  
-  $self->{type} = 'vector';
+  return (ref $self || '') eq 'Data::R::Matrix';
 }
 
 sub dim {
@@ -54,7 +47,7 @@ sub dim {
   
   if ($dim) {
     if (ref $dim eq 'ARRAY') {
-      $dim = Data::R::Array->new(values => $dim, type => 'vector');
+      $dim = Data::R::Vector->new(values => $dim);
     }
     $self->{dim} = $dim;
   }
@@ -75,10 +68,15 @@ sub as_array {
   $self->{type} = 'array';
 }
 
+sub as_vector {
+  my $self = shift;
+  
+  $self->{type} = 'vector';
+}
+
 sub new {
   my $self = shift->SUPER::new(@_);
   
-  $self->{type} ||= 'array';
   $self->{values} ||= [];
   
   return $self;
@@ -104,11 +102,6 @@ sub to_string {
   my $self = shift;
   
   my $str = '';
-  my $names_v = $self->names;
-  if (@{$names_v->values}) {
-    $str .= join(' ', @{$names_v->values}) . "\n";
-  }
-  
   my $values = $self->values;
   if (@$values) {
     $str .= join(' ', @$values) . "\n";
@@ -121,60 +114,38 @@ sub grep {
   my ($self, $condition) = @_;
   
   if (ref (my $cb = $condition) eq 'CODE') {
-    my $v1_values = $self->values;
-    my $v2_values = [grep { $cb->($_) } @$v1_values];
-    my $v2 = Data::R::Array->new(values => $v2_values);
-    return $v2;
+    my $array1_values = $self->values;
+    my $array2_values = [grep { $cb->($_) } @$array1_values];
+    my $array2 = $self->new(values => $array2_values);
+    return $array2;
   }
-  elsif (ref (my $v2 = $condition) eq 'Data::R::Array') {
-    my $v1_names = $self->names->values;
-    my $v2_names = $v2->values;
+  elsif (ref $condition && $condition->isa('Data::R::Array')) {
+    my $array2 = $condition;
+    my $array1_names = $self->names->values;
+    my $array2_names = $array2->values;
     
-    my $v3_values = [];
-    for my $v2_name (@$v2_names) {
+    my $array3_values = [];
+    for my $array2_name (@$array2_names) {
       my $i = 0;
-      for my $v1_name (@$v1_names) {
-        if ($v2_name eq $v1_name) {
-          push @$v3_values, $self->values->[$i];
+      for my $array1_name (@$array1_names) {
+        if ($array2_name eq $array1_name) {
+          push @$array3_values, $self->values->[$i];
           last;
         }
         $i++;
       }
     }
     
-    my $v3 = Data::R::Array->new(values => $v3_values);
+    my $array3 = $self->new(values => $array3_values);
     
-    return $v3;
-  }
-}
-
-sub names {
-  my ($self, $names_v) = @_;
-  
-  if ($names_v) {
-    if (ref $names_v eq 'ARRAY') {
-      $names_v = Data::R::Array->new(values => $names_v, type => 'vector');
-    }
-    croak "names argument must be vector object"
-      unless ref $names_v eq 'Data::R::Array';
-    my $duplication = {};
-    my $names = $names_v->values;
-    for my $name (@$names) {
-      croak "Don't use same name in names arguments"
-        if $duplication->{$name};
-      $duplication->{$name}++;
-    }
-    $self->{names} = $names_v;
-  }
-  else {
-    return $self->{names};
+    return $array3;
   }
 }
 
 sub negation {
   my $self = shift;
   
-  my $v2 = Data::R::Array->new;
+  my $v2 = $self->new;
   my $v1_values = $self->values;
   my $v2_values = $v2->values;
   $v2_values->[$_] = -$v1_values->[$_] for (0 .. @$v1_values - 1);
@@ -185,8 +156,8 @@ sub negation {
 sub add {
   my ($self, $data) = @_;
 
-  my $v3 = Data::R::Array->new;
-  if (ref $data eq 'Data::R::Array') {
+  my $v3 = $self->new;
+  if (ref $data && $data->isa('Data::R::Array')) {
     my $v1_values = $self->values;
     my $v2 = $data;
     my $v2_values = $v2->values;
@@ -207,8 +178,8 @@ sub add {
 sub subtract {
   my ($self, $data, $reverse) = @_;
 
-  my $v3 = Data::R::Array->new;
-  if (ref $data eq 'Data::R::Array') {
+  my $v3 = $self->new;
+  if (ref $data && $data->isa('Data::R::Array')) {
     my $v1_values = $self->values;
     my $v2 = $data;
     my $v2_values = $v2->values;
@@ -234,8 +205,8 @@ sub subtract {
 sub multiply {
   my ($self, $data) = @_;
 
-  my $v3 = Data::R::Array->new;
-  if (ref $data eq 'Data::R::Array') {
+  my $v3 = $self->new;
+  if (ref $data  && $data->isa('Data::R::Array')) {
     my $v1_values = $self->values;
     my $v2 = $data;
     my $v2_values = $v2->values;
@@ -256,8 +227,8 @@ sub multiply {
 sub divide {
   my ($self, $data, $reverse) = @_;
 
-  my $v3 = Data::R::Array->new;
-  if (ref $data eq 'Data::R::Array') {
+  my $v3 = $self->new;
+  if (ref $data && $data->isa('Data::R::Array')) {
     my $v1_values = $self->values;
     my $v2 = $data;
     my $v2_values = $v2->values;
@@ -283,8 +254,8 @@ sub divide {
 sub raise {
   my ($self, $data, $reverse) = @_;
   
-  my $v3 = Data::R::Array->new;
-  if (ref $data eq 'Data::R::Array') {
+  my $v3 = $self->new;
+  if (ref $data && $data->isa('Data::R::Array')) {
     croak 'Not implemented';
   }
   else {

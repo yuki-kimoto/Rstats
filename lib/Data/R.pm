@@ -362,83 +362,48 @@ sub sort {
 }
 
 sub log {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = log $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  return $self->_apply($array, sub { log $_[0] });
 }
 
 sub exp {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = exp $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  return $self->_apply($array, sub { exp $_[0] });
 }
 
 sub sin {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = sin $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  return $self->_apply($array, sub { sin $_[0] });
 }
 
 sub cos {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = cos $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  return $self->_apply($array, sub { cos $_[0] });
 }
 
 sub tan {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v1 = $data;
-    my $v2 = Data::R::Array->new;
-    my $v1_values = $v1->values;
-    my $v2_values = $v2->values;
-    $v2_values->[$_] = Math::Trig::tan $v1_values->[$_] for (0 .. @$v1_values - 1);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  croak 'sqrt method must receive Data::R::Array based object'
+    unless defined $array && $array->isa('Data::R::Array');
+  
+  return $self->_apply($array, sub { Math::Trig::tan $_[0] });
 }
 
 sub sqrt {

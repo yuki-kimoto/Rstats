@@ -47,7 +47,7 @@ sub to_string {
   
   my $values = $self->values;
   if (@$values) {
-    $str .= join(' ', @$values) . "\n";
+    $str .= '[1] ' . join(' ', @$values) . "\n";
   }
   
   return $str;

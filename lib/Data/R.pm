@@ -14,6 +14,14 @@ use Data::R::Complex;
 
 my $r = Data::R->new;
 
+sub numeric {
+  my ($self, $num) = @_;
+  
+  my $v = Data::R::Vector->new(values => [(0) x $num]);
+  
+  return $v;
+}
+
 sub matrix {
   my ($self, $data, $row_num, $col_num) = @_;
   

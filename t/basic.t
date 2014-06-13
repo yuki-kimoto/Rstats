@@ -26,7 +26,7 @@ my $r = Data::R->new;
   
   my $v = $r->c([1, 2, 3]);
   $v->names(['a', 'b', 'c']);
-  is("$v", "a b c\n1 2 3\n");
+  is("$v", "a b c\n[1] 1 2 3\n");
 }
 
 # length
@@ -189,6 +189,12 @@ my $r = Data::R->new;
 # Vector
 {
   my $r = Data::R->new;
+  
+  # numeric
+  {
+    my $v1 = $r->numeric(3);
+    is_deeply($v1->values, [0, 0, 0]);
+  }
 
   # negation
   {

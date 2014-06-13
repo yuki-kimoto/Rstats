@@ -177,8 +177,13 @@ sub negation {
   return $v2;
 }
 
-sub add {
-  my ($self, $data) = @_;
+sub add { shift->_operation('+', @_) }
+sub subtract { shift->_operation('-', @_) }
+sub multiply { shift->_operation('*', @_) }
+sub divide { shift->_operation('/', @_) }
+
+sub _operation {
+  my ($self, $op, $data, $reverse) = @_;
 
   my $v3 = $self->new;
   if (ref $data && $data->isa('Data::R::Array')) {
@@ -187,88 +192,50 @@ sub add {
     my $v2_values = $v2->values;
     my $v3_values = $v3->values;
     
-    $v3_values->[$_] = $v1_values->[$_] + $v2_values->[$_] for (0 .. @$v1_values - 1);
-  }
-  else {
-    my $v1_values = $self->values;
-    my $v3_values = $v3->values;
-    
-    $v3_values->[$_] = $v1_values->[$_] + $data for (0 .. @$v1_values - 1);
-  }
-  
-  return $v3;
-}
-
-sub subtract {
-  my ($self, $data, $reverse) = @_;
-
-  my $v3 = $self->new;
-  if (ref $data && $data->isa('Data::R::Array')) {
-    my $v1_values = $self->values;
-    my $v2 = $data;
-    my $v2_values = $v2->values;
-    my $v3_values = $v3->values;
-    
-    $v3_values->[$_] = $v1_values->[$_] - $v2_values->[$_] for (0 .. @$v1_values - 1);
+    if ($op eq '+') {
+      $v3_values->[$_] = $v1_values->[$_] + $v2_values->[$_] for (0 .. @$v1_values - 1);
+    }
+    elsif ($op eq '-') {
+      $v3_values->[$_] = $v1_values->[$_] - $v2_values->[$_] for (0 .. @$v1_values - 1);
+    }
+    elsif ($op eq '*') {
+      $v3_values->[$_] = $v1_values->[$_] * $v2_values->[$_] for (0 .. @$v1_values - 1);
+    }
+    elsif ($op eq '/') {
+      $v3_values->[$_] = $v1_values->[$_] / $v2_values->[$_] for (0 .. @$v1_values - 1);
+    }
   }
   else {
     my $v1_values = $self->values;
     my $v3_values = $v3->values;
 
     if ($reverse) {
-      $v3_values->[$_] = $data - $v1_values->[$_] for (0 .. @$v1_values - 1);
+      if ($op eq '+') {
+        $v3_values->[$_] = $data + $v1_values->[$_] for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '-') {
+        $v3_values->[$_] = $data - $v1_values->[$_] for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '*') {
+        $v3_values->[$_] = $data * $v1_values->[$_] for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '/') {
+        $v3_values->[$_] = $data / $v1_values->[$_] for (0 .. @$v1_values - 1);
+      }
     }
     else {
-      $v3_values->[$_] = $v1_values->[$_] - $data for (0 .. @$v1_values - 1);
-    }
-  }
-  
-  return $v3;
-}
-
-sub multiply {
-  my ($self, $data) = @_;
-
-  my $v3 = $self->new;
-  if (ref $data  && $data->isa('Data::R::Array')) {
-    my $v1_values = $self->values;
-    my $v2 = $data;
-    my $v2_values = $v2->values;
-    my $v3_values = $v3->values;
-    
-    $v3_values->[$_] = $v1_values->[$_] * $v2_values->[$_] for (0 .. @$v1_values - 1);
-  }
-  else {
-    my $v1_values = $self->values;
-    my $v3_values = $v3->values;
-    
-    $v3_values->[$_] = $v1_values->[$_] * $data for (0 .. @$v1_values - 1);
-  }
-  
-  return $v3;
-}
-
-sub divide {
-  my ($self, $data, $reverse) = @_;
-
-  my $v3 = $self->new;
-  if (ref $data && $data->isa('Data::R::Array')) {
-    my $v1_values = $self->values;
-    my $v2 = $data;
-    my $v2_values = $v2->values;
-    my $v3_values = $v3->values;
-    
-    $v3_values->[$_] = $v1_values->[$_] / $v2_values->[$_] for (0 .. @$v1_values - 1);
-  }
-  else {
-    my $v1_values = $self->values;
-    my $v3_values = $v3->values;
-    
-    if ($reverse) {
-      $v3_values->[$_] = $data / $v1_values->[$_] for (0 .. @$v1_values - 1);
-    }
-    else {
-      $v3_values->[$_] = $v1_values->[$_] / $data for (0 .. @$v1_values - 1);
+      if ($op eq '+') {
+        $v3_values->[$_] = $v1_values->[$_] + $data for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '-') {
+        $v3_values->[$_] = $v1_values->[$_] - $data for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '*') {
+        $v3_values->[$_] = $v1_values->[$_] * $data for (0 .. @$v1_values - 1);
+      }
+      elsif ($op eq '/') {
+        $v3_values->[$_] = $v1_values->[$_] / $data for (0 .. @$v1_values - 1);
+      }
     }
   }
   

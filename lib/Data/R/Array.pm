@@ -237,39 +237,36 @@ sub _operation {
     my $v2_values;
     
     my $v3_values = $v3->values;
+    
+    my $v1_length;
+    my $v2_length;
+    my $longer_length;
     if ($reverse) {
       $v1_values = [$data];
+      $v1_length = @$v1_values;
       $v2_values = $self->values;
-      my $longer_length = $self->length;
-      if ($op eq '+') {
-        $v3_values->[$_] = $v1_values->[0] + $v2_values->[$_] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '-') {
-        $v3_values->[$_] = $v1_values->[0] - $v2_values->[$_] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '*') {
-        $v3_values->[$_] = $v1_values->[0] * $v2_values->[$_] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '/') {
-        $v3_values->[$_] = $v1_values->[0] / $v2_values->[$_] for (0 .. $longer_length - 1);
-      }
+      $v2_length = $self->length;
+      $longer_length = $v2_length;
     }
     else {
       $v1_values = $self->values;
+      $v1_length = $self->length;
       $v2_values = [$data];
-      my $longer_length = $self->length;
-      if ($op eq '+') {
-        $v3_values->[$_] = $v1_values->[$_] + $v2_values->[0] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '-') {
-        $v3_values->[$_] = $v1_values->[$_] - $v2_values->[0] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '*') {
-        $v3_values->[$_] = $v1_values->[$_] * $v2_values->[0] for (0 .. $longer_length - 1);
-      }
-      elsif ($op eq '/') {
-        $v3_values->[$_] = $v1_values->[$_] / $v2_values->[0] for (0 .. $longer_length - 1);
-      }
+      $v2_length = @$v2_values;
+      $longer_length = $self->length;
+    }
+    
+    if ($op eq '+') {
+      $v3_values->[$_] = $v1_values->[$_ % $v1_length] + $v2_values->[$_ % $v2_length] for (0 .. $longer_length - 1);
+    }
+    elsif ($op eq '-') {
+      $v3_values->[$_] = $v1_values->[$_ % $v1_length] - $v2_values->[$_ % $v2_length] for (0 .. $longer_length - 1);
+    }
+    elsif ($op eq '*') {
+      $v3_values->[$_] = $v1_values->[$_ % $v1_length] * $v2_values->[$_ % $v2_length] for (0 .. $longer_length - 1);
+    }
+    elsif ($op eq '/') {
+      $v3_values->[$_] = $v1_values->[$_ % $v1_length] / $v2_values->[$_ % $v2_length] for (0 .. $longer_length - 1);
     }
   }
   

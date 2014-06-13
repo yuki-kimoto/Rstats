@@ -201,6 +201,14 @@ my $r = Data::R->new;
     my $v1 = $r->c([[1, 2], 3, 4]);
     is_deeply($v1->values, [1, 2, 3, 4]);
   }
+  
+  # add to original vector
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    $v1->set(4 => 6);
+    is_deeply($v1->values, [1, 2, 3, 6]);
+  }
+  
   # numeric
   {
     my $v1 = $r->numeric(3);

@@ -257,6 +257,14 @@ my $r = Data::R->new;
     my $v3 = $v1 + $v2;
     is_deeply($v3->values, [3, 5, 7]);
   }
+
+  # add(different element number)
+  {
+    my $v1 = $r->c([1, 2]);
+    my $v2 = $r->c([3, 4, 5, 6]);
+    my $v3 = $v1 + $v2;
+    is_deeply($v3->values, [4, 6, 6, 8]);
+  }
   
   # add(real number)
   {

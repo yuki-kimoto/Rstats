@@ -188,21 +188,48 @@ sub _operation {
   my $v3 = $self->new;
   if (ref $data && $data->isa('Data::R::Array')) {
     my $v1_values = $self->values;
+    my $v1_length = $self->length;
     my $v2 = $data;
     my $v2_values = $v2->values;
-    my $v3_values = $v3->values;
+    my $v2_length = $v2->length;
     
+    my $short;
+    my $shorter_length;
+    my $longer_length;
+    if ($v1_length > $v2_length) {
+      $longer_length = $v1_length;
+      $shorter_length = $v2_length;
+    }
+    else {
+      $longer_length = $v2_length;
+      $shorter_length = $v1_length;
+    }
+    
+    my $v3_values = $v3->values;
+    my @v3_values;
     if ($op eq '+') {
-      $v3_values->[$_] = $v1_values->[$_] + $v2_values->[$_] for (0 .. @$v1_values - 1);
+      @v3_values = map {
+        $v1_values->[$_ % $v1_length] + $v2_values->[$_ % $v2_length]
+      } (0 .. $longer_length - 1);
+      $v3->values(\@v3_values);
     }
     elsif ($op eq '-') {
-      $v3_values->[$_] = $v1_values->[$_] - $v2_values->[$_] for (0 .. @$v1_values - 1);
+      @v3_values = map {
+        $v1_values->[$_ % $v1_length] - $v2_values->[$_ % $v2_length]
+      } (0 .. $longer_length - 1);
+      $v3->values(\@v3_values);
     }
     elsif ($op eq '*') {
-      $v3_values->[$_] = $v1_values->[$_] * $v2_values->[$_] for (0 .. @$v1_values - 1);
+      @v3_values = map {
+        $v1_values->[$_ % $v1_length] * $v2_values->[$_ % $v2_length]
+      } (0 .. $longer_length - 1);
+      $v3->values(\@v3_values);
     }
     elsif ($op eq '/') {
-      $v3_values->[$_] = $v1_values->[$_] / $v2_values->[$_] for (0 .. @$v1_values - 1);
+      @v3_values = map {
+        $v1_values->[$_ % $v1_length] / $v2_values->[$_ % $v2_length]
+      } (0 .. $longer_length - 1);
+      $v3->values(\@v3_values);
     }
   }
   else {

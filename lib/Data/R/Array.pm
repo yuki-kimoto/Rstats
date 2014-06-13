@@ -185,8 +185,6 @@ sub divide { shift->_operation('/', @_) }
 sub _operation {
   my ($self, $op, $data, $reverse) = @_;
 
-  my $v3 = $self->new;
-
   my $v1_values;
   my $v2_values;
   my $v1_length;
@@ -198,13 +196,7 @@ sub _operation {
     my $v2 = $data;
     $v2_values = $v2->values;
     $v2_length = $v2->length;
-    $longer_length;
-    if ($v1_length > $v2_length) {
-      $longer_length = $v1_length;
-    }
-    else {
-      $longer_length = $v2_length;
-    }
+    $longer_length = $v1_length > $v2_length ? $v1_length : $v2_length;
   }
   else {
     if ($reverse) {
@@ -222,35 +214,18 @@ sub _operation {
       $longer_length = $self->length;
     }
   }
-
-  my $v3_values = $v3->values;
+  
+  my $culc = {};
   my @v3_values;
-  if ($op eq '+') {
-    @v3_values = map {
-      $v1_values->[$_ % $v1_length] + $v2_values->[$_ % $v2_length]
-    } (0 .. $longer_length - 1);
-    $v3->values(\@v3_values);
-  }
-  elsif ($op eq '-') {
-    @v3_values = map {
-      $v1_values->[$_ % $v1_length] - $v2_values->[$_ % $v2_length]
-    } (0 .. $longer_length - 1);
-    $v3->values(\@v3_values);
-  }
-  elsif ($op eq '*') {
-    @v3_values = map {
-      $v1_values->[$_ % $v1_length] * $v2_values->[$_ % $v2_length]
-    } (0 .. $longer_length - 1);
-    $v3->values(\@v3_values);
-  }
-  elsif ($op eq '/') {
-    @v3_values = map {
-      $v1_values->[$_ % $v1_length] / $v2_values->[$_ % $v2_length]
-    } (0 .. $longer_length - 1);
-    $v3->values(\@v3_values);
+  if ($op eq '+' || $op eq '-' || $op eq '*' || $op eq '/') {
+    @v3_values = eval <<"EOS";
+map {
+  \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
+} (0 .. \$longer_length - 1);
+EOS
   }
   
-  return $v3;
+  return $self->new(values => \@v3_values);
 }
 
 sub raise {

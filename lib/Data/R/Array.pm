@@ -238,35 +238,37 @@ sub _operation {
     
     my $v3_values = $v3->values;
     if ($reverse) {
-      $v1_values = $self->values;
-      $v2_values = [$data];
+      $v1_values = [$data];
+      $v2_values = $self->values;
+      my $longer_length = $self->length;
       if ($op eq '+') {
-        $v3_values->[$_] = $v2_values->[0] + $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[0] + $v2_values->[$_] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '-') {
-        $v3_values->[$_] = $v2_values->[0] - $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[0] - $v2_values->[$_] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '*') {
-        $v3_values->[$_] = $v2_values->[0] * $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[0] * $v2_values->[$_] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '/') {
-        $v3_values->[$_] = $v2_values->[0] / $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[0] / $v2_values->[$_] for (0 .. $longer_length - 1);
       }
     }
     else {
       $v1_values = $self->values;
       $v2_values = [$data];
+      my $longer_length = $self->length;
       if ($op eq '+') {
-        $v3_values->[$_] = $v1_values->[$_] + $v2_values->[0] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] + $v2_values->[0] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '-') {
-        $v3_values->[$_] = $v1_values->[$_] - $v2_values->[0] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] - $v2_values->[0] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '*') {
-        $v3_values->[$_] = $v1_values->[$_] * $v2_values->[0] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] * $v2_values->[0] for (0 .. $longer_length - 1);
       }
       elsif ($op eq '/') {
-        $v3_values->[$_] = $v1_values->[$_] / $v2_values->[0] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] / $v2_values->[0] for (0 .. $longer_length - 1);
       }
     }
   }

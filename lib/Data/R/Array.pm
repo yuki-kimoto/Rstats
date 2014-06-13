@@ -16,6 +16,30 @@ use overload
 
 has 'values';
 
+sub append {
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  my $v1 = $self;
+  my $value = shift;
+  
+  my $after = $opt->{after};
+  $after = $v1->length unless defined $after;
+  
+  if (ref $value eq 'ARRAY') {
+    splice @{$self->values}, $after, 0, @$value;
+  }
+  elsif (ref $value && $value->isa('Data::R::Array')) {
+    splice @{$self->values}, $after, 0, @{$value->values};
+  }
+  else {
+    splice @{$self->values}, $after, 0, $value;
+  }
+  
+  return $self
+}
+
 sub length {
   my $self = shift;
   

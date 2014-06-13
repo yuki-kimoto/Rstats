@@ -190,6 +190,17 @@ my $r = Data::R->new;
 {
   my $r = Data::R->new;
   
+  # add (vector)
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    my $v2 = $r->c([$v1, 4, 5]);
+    is_deeply($v2->values, [1, 2, 3, 4, 5]);
+  }
+  # add (array)
+  {
+    my $v1 = $r->c([[1, 2], 3, 4]);
+    is_deeply($v1->values, [1, 2, 3, 4]);
+  }
   # numeric
   {
     my $v1 = $r->numeric(3);

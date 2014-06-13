@@ -52,7 +52,19 @@ sub array {
   
   my $array;
   if (ref $data eq 'ARRAY') {
-    $array = $array_class->new(values => $data);
+    my $values = [];
+    for my $a (@$data) {
+      if (ref $a eq 'ARRAY') {
+        push @$values, @$a;
+      }
+      elsif (ref $a && $a->isa('Data::R::Array')) {
+        push @$values, @{$a->values};
+      }
+      else {
+        push @$values, $a;
+      }
+    }
+    $array = $array_class->new(values => $values);
   }
   elsif (ref $data) {
     $array = $data;

@@ -233,35 +233,40 @@ sub _operation {
     }
   }
   else {
-    my $v1_values = $self->values;
+    my $v1_values;
+    my $v2_values;
+    
     my $v3_values = $v3->values;
-
     if ($reverse) {
+      $v1_values = $self->values;
+      $v2_values = [$data];
       if ($op eq '+') {
-        $v3_values->[$_] = $data + $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v2_values->[0] + $v1_values->[$_] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '-') {
-        $v3_values->[$_] = $data - $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v2_values->[0] - $v1_values->[$_] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '*') {
-        $v3_values->[$_] = $data * $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v2_values->[0] * $v1_values->[$_] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '/') {
-        $v3_values->[$_] = $data / $v1_values->[$_] for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v2_values->[0] / $v1_values->[$_] for (0 .. @$v1_values - 1);
       }
     }
     else {
+      $v1_values = $self->values;
+      $v2_values = [$data];
       if ($op eq '+') {
-        $v3_values->[$_] = $v1_values->[$_] + $data for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] + $v2_values->[0] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '-') {
-        $v3_values->[$_] = $v1_values->[$_] - $data for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] - $v2_values->[0] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '*') {
-        $v3_values->[$_] = $v1_values->[$_] * $data for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] * $v2_values->[0] for (0 .. @$v1_values - 1);
       }
       elsif ($op eq '/') {
-        $v3_values->[$_] = $v1_values->[$_] / $data for (0 .. @$v1_values - 1);
+        $v3_values->[$_] = $v1_values->[$_] / $v2_values->[0] for (0 .. @$v1_values - 1);
       }
     }
   }

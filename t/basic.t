@@ -49,10 +49,10 @@ my $r = Data::R->new;
 # Array get and set
 {
   my $array = Data::R::Array->new(values => [1, 2, 3]);
-  is($array->get(1), 1);
-  is($array->get(3), 3);
+  is_deeply($array->get(1)->values, [1]);
+  is_deeply($array->get(3)->values, [3]);
   $array->set(1 => 5);;
-  is($array->get(1), 5);
+  is_deeply($array->get(1)->values, [5]);
 }
 
 # abs

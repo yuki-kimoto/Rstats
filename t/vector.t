@@ -9,6 +9,42 @@ use Data::R::Vector;
 {
   my $r = Data::R->new;
   
+  # get
+  {
+    # get - single index
+    {
+      my $v1 = $r->c([1, 2, 3, 4]);
+      my $v2 = $v1->get(1);
+      is_deeply($v2->values, [1]);
+    }
+    # get - array
+    {
+      my $v1 = $r->c([1, 3, 5, 7]);
+      my $v2 = $v1->get([1, 2]);
+      is_deeply($v2->values, [1, 3]);
+    }
+    # get - vector
+    {
+      my $v1 = $r->c([1, 3, 5, 7]);
+      my $v2 = $v1->get($r->c([1, 2]));
+      is_deeply($v2->values, [1, 3]);
+    }
+    
+    # get - minus number
+    {
+      my $v1 = $r->c([1, 3, 5, 7]);
+      my $v2 = $v1->get(-1);
+      is_deeply($v2->values, [3, 5, 7]);
+    }
+
+    # get - minus number + array
+    {
+      my $v1 = $r->c([1, 3, 5, 7]);
+      my $v2 = $v1->get([-1, -2]);
+      is_deeply($v2->values, [5, 7]);
+    }
+  }
+  
   # add to original vector
   {
     my $v1 = $r->c([1, 2, 3]);

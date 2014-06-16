@@ -107,11 +107,47 @@ sub new {
 }
 
 sub get {
-  my ($self, $idx) = @_;
+  my ($self, $indexes_tmp) = @_;
   
-  my $value = $self->{values}[$idx - 1];
+  croak "get need one values" unless defined $indexes_tmp;
+  return $self->new(values => [$self->{values}[$indexes_tmp - 1]])
+    if !ref $indexes_tmp && $indexes_tmp > 0;
   
-  return $value;
+  my $indexes;
+  if (ref $indexes_tmp eq 'ARRAY') {
+    $indexes = $indexes_tmp;
+  }
+  elsif (ref $indexes_tmp && $indexes_tmp->isa('Data::R::Array')) {
+    $indexes = $indexes_tmp->{values};
+  }
+  else {
+    $indexes = [$indexes_tmp];
+  }
+  
+  # Check index
+  my $plus_count;
+  my $minus_count;
+  for my $index (@$indexes) {
+    $plus_count++ if $index > 0;
+    $minus_count++ if $index < 0;
+    croak "You can't use both plus and minus index"
+      if $plus_count && $minus_count;
+    croak "0 is invalid index" if $index == 0;
+  }
+  
+  my $values1 = $self->values;
+  my @values2;
+  if ($plus_count) {
+    @values2 = map { $values1->[$_ - 1] } @$indexes;
+  }
+  else {
+    my $indexes_h = {map { -$_ - 1 => 1 } @$indexes};
+    for (my $i = 0; $i < @$values1; $i++) {
+      push @values2, $values1->[$i] unless $indexes_h->{$i};
+    }
+  }
+  
+  return $self->new(values => \@values2);
 }
 
 sub set {

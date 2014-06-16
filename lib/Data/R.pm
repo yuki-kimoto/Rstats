@@ -461,7 +461,7 @@ sub range {
 sub i {
   my $self = shift;
   
-  my $i = Data::R::Complex->make(0, 1);
+  my $i = Data::R::Complex->new(re => 0, im => 1);
   
   return $i;
 }

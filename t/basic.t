@@ -4,7 +4,6 @@ use warnings;
 
 use Data::R;
 use Math::Trig ();
-use Data::R::Complex;
 use Data::R::Array;
 use Data::R::Vector;
 use Data::R::Matrix;
@@ -516,117 +515,5 @@ my $r = Data::R->new;
     my $v1 = $r->c([2, 1, 5]);
     my $v1_sorted = $r->sort($v1);
     is_deeply($v1_sorted->values, [1, 2, 5]);
-  }
-}
-
-# Complex
-{
-  my $r = Data::R->new;
-
-  # new
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    is($z1->re, 1);
-    is($z1->im, 2);
-  }
-  
-  # negation
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = - $z1;
-    is($z2->re, -1);
-    is($z2->im, -2);
-  }
-  
-  # add
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = Data::R::Complex->make(3, 4);
-    my $z3 = $z1 + $z2;
-    is($z3->re, 4);
-    is($z3->im, 6);
-  }
-  
-  # add(real number)
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = $z1 + 3;
-    is($z2->re, 4);
-    is($z2->im, 2);
-  }
-
-  # subtract
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = Data::R::Complex->make(3, 4);
-    my $z3 = $z1 - $z2;
-    is($z3->re, -2);
-    is($z3->im, -2);
-  }
-  
-  # subtract(real number)
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = $z1 - 3;
-    is($z2->re, -2);
-    is($z2->im, 2);
-  }
-  
-  # subtract(real number, reverse)
-  {
-    my $z1 = Data::R::Complex->make(1, 2);
-    my $z2 = 3 - $z1;
-    is($z2->re, 2);
-    is($z2->im, -2);
-  }
-  
-  # multiply
-  {
-    my $z1 = 1 + $r->i * 2;
-    my $z2 = 3 + $r->i * 4;
-    my $z3 = $z1 * $z2;
-    is($z3->re, -5);
-    is($z3->im, 10);
-  }
-
-  # multiply(real number)
-  {
-    my $z1 = 1 + $r->i * 2;
-    my $z2 = $z1 * 3;
-    is($z2->re, 3);
-    is($z2->im, 6);
-  }
-  
-  # divide
-  {
-    my $z1 = 5 - $r->i * 6;
-    my $z2 = 3 + $r->i * 2;
-    my $z3 = $z1 / $z2;
-    is($z3->re, 3/13);
-    is($z3->im, -28/13);
-  }
-
-  # divide(real number)
-  {
-    my $z1 = 2 + $r->i * 4;
-    my $z2 = $z1 / 2;
-    is($z2->re, 1);
-    is($z2->im, 2);
-  }
-
-  # divide(real number, reverse)
-  {
-    my $z1 = 3 + $r->i * 2;
-    my $z2 = 5 / $z1;
-    is($z2->re, 15 / 13);
-    is($z2->im, -10 / 13);
-  }
-
-  # raise
-  {
-    my $z1 = 1 + $r->i * 2;
-    my $z2 = $z1 ** 3;
-    is($z2->re, -11);
-    is($z2->im, -2);
   }
 }

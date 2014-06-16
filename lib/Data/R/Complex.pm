@@ -1,7 +1,8 @@
 package Data::R::Complex;
 use Object::Simple -base;
 use Carp 'croak';
-use Math::Complex ();
+use Data::R::Complex;
+use Math::Complex;
 
 use overload
   'neg' => \&negation,
@@ -11,115 +12,91 @@ use overload
   '/' => \&divide,
   '**' => \&raise;
 
-has data => sub { Math::Complex->make(0, 0) };
+has 're';
+has 'im';
 
-sub make {
-  my $self = shift->SUPER::new;
-  my ($re, $im) = @_;
+sub new {
+  my $self = shift->SUPER::new(@_);
   
-  $re = 0 unless defined $re;
-  $im = 0 unless defined $im;
-  
-  $self->data(Math::Complex->make($re, $im));
+  $self->{re} = 0 unless defined $self->{re};
+  $self->{im} = 0 unless defined $self->{im};
   
   return $self;
 }
 
-sub re { Math::Complex::Re(shift->data) }
-
-sub im { Math::Complex::Im(shift->data) }
-
 sub negation {
   my $self = shift;
   
-  my $data1 = $self->data;
-  my $data2 = -$data1;
-  
-  my $z = Data::R::Complex->new(data => $data2);
-  
-  return $z;
+  return Data::R::Complex->new(re => -$self->{re}, im => -$self->{im});
 }
 
-sub add {
-  my ($self, $z2) = @_;
-  
-  my $data1 = $self->data;
-  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
-  
-  my $data3 = $data1 + $data2;
-  my $z3 = Data::R::Complex->new(data => $data3);
-  
-  return $z3;
-}
+sub add { shift->_operation('+', @_) }
+sub subtract { shift->_operation('-', @_) }
+sub multiply { shift->_operation('*', @_) }
+sub divide { shift->_operation('/', @_) }
+sub raise { shift->_operation('**', @_) }
 
-sub subtract {
-  my ($self, $z2, $reverse) = @_;
-  
-  my $data1 = $self->data;
-  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
-  
-  my $data3;
-  if ($reverse) {
-    $data3 = $data2 - $data1;
+sub _operation {
+  my ($self, $op, $data, $reverse) = @_;
+
+  my $z1;
+  my $z2;
+  if (ref $data eq 'Data::R::Complex') {
+    $z1 = $self;
+    $z2 = $data;
   }
   else {
-    $data3 = $data1 - $data2;
+    if ($reverse) {
+      $z1 = Data::R::Complex->new(re => $data);
+      $z2 = $self;
+    }
+    else {
+      $z1 = $self;
+      $z2 = Data::R::Complex->new(re => $data);
+    }
   }
   
-  my $z3 = Data::R::Complex->new(data => $data3);
+  my $z3 = Data::R::Complex->new;
+  if ($op eq '+') {
+    $z3->{re} = $z1->{re} + $z2->{re};
+    $z3->{im} = $z1->{im} + $z2->{im};
+  }
+  elsif ($op eq '-') {
+    $z3->{re} = $z1->{re} - $z2->{re};
+    $z3->{im} = $z1->{im} - $z2->{im};
+  }
+  elsif ($op eq '*') {
+    $z3->{re} = $z1->{re} * $z2->{re} - $z1->{im} * $z2->{im};
+    $z3->{im} = $z1->{re} * $z2->{im} + $z1->{im} * $z2->{re};
+  }
+  elsif ($op eq '/') {
+    $z3 = $z1 * $z2->conj;
+    my $abs2 = $z2->{re} ** 2 + $z2->{im} ** 2;
+    $z3->{re} = $z3->{re} / $abs2;
+    $z3->{im} = $z3->{im} / $abs2;
+  }
+  elsif ($op eq '**') {
+    my $z1_c = Math::Complex->make($z1->{re}, $z1->{im});
+    my $z2_c = Math::Complex->make($z2->{re}, $z2->{im});
+    my $z3_c = $z1_c ** $z2_c;
+    $DB::single = 1;
+    $z3->{re} = Math::Complex::Re($z3_c);
+    $z3->{im} = Math::Complex::Im($z3_c);
+  }
   
   return $z3;
 }
 
-sub multiply {
-  my ($self, $z2) = @_;
+sub abs {
+  my $self = shift;
   
-  my $data1 = $self->data;
-  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
-  
-  my $data3 = $data1 * $data2;
-  my $z3 = Data::R::Complex->new(data => $data3);
-  
-  return $z3;
+  return sqrt($self->{re} ** 2 + $self->{im} ** 2);
 }
 
-sub divide {
-  my ($self, $z2, $reverse) = @_;
+sub conj {
+  my $self = shift;
   
-  my $data1 = $self->data;
-  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
-  
-  my $data3;
-  if ($reverse) {
-    $data3 = $data2 / $data1;
-  }
-  else {
-    $data3 = $data1 / $data2;
-  }
-  
-  my $z3 = Data::R::Complex->new(data => $data3);
-  
-  return $z3;
+  return Data::R::Complex->new(re => $self->{re}, im => -$self->{im});
 }
-
-sub raise {
-  my ($self, $z2, $reverse) = @_;
-  
-  my $data1 = $self->data;
-  my $data2 = ref $z2 eq 'Data::R::Complex' ? $z2->data : $z2;
-  
-  my $data3;
-  if ($reverse) {
-    $data3 = $data2 ** $data1;
-  }
-  else {
-    $data3 = $data1 ** $data2;
-  }
-  
-  my $z3 = Data::R::Complex->new(data => $data3);
-  
-  return $z3;
-}
-
 
 1;

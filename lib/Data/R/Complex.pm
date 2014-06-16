@@ -79,7 +79,6 @@ sub _operation {
     my $z1_c = Math::Complex->make($z1->{re}, $z1->{im});
     my $z2_c = Math::Complex->make($z2->{re}, $z2->{im});
     my $z3_c = $z1_c ** $z2_c;
-    $DB::single = 1;
     $z3->{re} = Math::Complex::Re($z3_c);
     $z3->{im} = Math::Complex::Im($z3_c);
   }

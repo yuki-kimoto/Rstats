@@ -114,7 +114,12 @@ sub get {
     if !ref $indexes_tmp && $indexes_tmp > 0;
   
   my $indexes;
-  if (ref $indexes_tmp eq 'ARRAY') {
+  if (ref $indexes_tmp eq 'CODE') {
+    my $values1 = $self->values;
+    my @values2 = grep { $indexes_tmp->(); } @$values1;
+    return $self->new(values => \@values2);
+  }
+  elsif (ref $indexes_tmp eq 'ARRAY') {
     $indexes = $indexes_tmp;
   }
   elsif (ref $indexes_tmp && $indexes_tmp->isa('Data::R::Array')) {

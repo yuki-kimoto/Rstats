@@ -43,6 +43,13 @@ use Data::R::Vector;
       my $v2 = $v1->get([-1, -2]);
       is_deeply($v2->values, [5, 7]);
     }
+    
+    # get - subroutine
+    {
+      my $v1 = $r->c([1, 2, 3, 4, 5]);
+      my $v2 = $v1->get(sub { $_ > 3});
+      is_deeply($v2->values, [4, 5]);
+    }
   }
   
   # get_if

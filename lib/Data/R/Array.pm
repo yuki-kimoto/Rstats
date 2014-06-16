@@ -150,6 +150,33 @@ sub get {
   return $self->new(values => \@values2);
 }
 
+sub get_if {
+  my ($self, $booles_tmp) = @_;
+
+  croak "get need one values" unless defined $booles_tmp;
+  return $self->new(values => [$self->{values}[$booles_tmp - 1]])
+    if !ref $booles_tmp && $booles_tmp > 0;
+  
+  my $booles;
+  if (ref $booles_tmp eq 'ARRAY') {
+    $booles = $booles_tmp;
+  }
+  elsif (ref $booles_tmp && $booles_tmp->isa('Data::R::Array')) {
+    $booles = $booles_tmp->{values};
+  }
+  else {
+    $booles = [$booles_tmp];
+  }
+  
+  my $values1 = $self->values;
+  my @values2;
+  for (my $i = 0; $i < @$booles; $i++) {
+    push @values2, $values1->[$i] if $booles->[$i];
+  }
+  
+  return $self->new(values => \@values2);
+}
+
 sub set {
   my ($self, $idx, $value) = @_;
   

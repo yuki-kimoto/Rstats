@@ -357,6 +357,20 @@ sub var {
   }
 }
 
+sub head {
+  my $self = shift;
+  my $array = shift;
+  
+  return $array->head(@_);
+}
+
+sub tail {
+  my $self = shift;
+  my $array = shift;
+  
+  return $array->tail(@_);
+}
+
 sub length {
   my ($self, $array) = @_;
   

@@ -10,6 +10,20 @@ use Data::R::Matrix;
 
 my $r = Data::R->new;
 
+# head
+{
+  my $v1 = $r->c([1, 2, 3, 4, 5, 6, 7]);
+  my $head = $r->head($v1);
+  is_deeply($head->values, [1, 2, 3, 4, 5, 6]);
+}
+
+# tail
+{
+  my $v1 = $r->c([1, 2, 3, 4, 5, 6, 7]);
+  my $tail = $r->tail($v1);
+  is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
+}
+
 # names
 {
   my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);

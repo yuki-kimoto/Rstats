@@ -20,30 +20,6 @@ has 'mode';
 
 my $r = Rstats->new;
 
-sub append {
-  my $self = shift;
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  my $v1 = $self;
-  my $value = shift;
-  
-  my $after = $opt->{after};
-  $after = $r->length($v1) unless defined $after;
-  
-  if (ref $value eq 'ARRAY') {
-    splice @{$self->values}, $after, 0, @$value;
-  }
-  elsif (ref $value eq 'Rstats::Array') {
-    splice @{$self->values}, $after, 0, @{$value->values};
-  }
-  else {
-    splice @{$self->values}, $after, 0, $value;
-  }
-  
-  return $self
-}
-
 sub is_array {
   my $self = shift;
   

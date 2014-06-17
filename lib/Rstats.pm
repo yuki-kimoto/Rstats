@@ -13,6 +13,29 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub append {
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = shift;
+  my $value = shift;
+  
+  my $after = $opt->{after};
+  $after = $r->length($v1) unless defined $after;
+  
+  if (ref $value eq 'ARRAY') {
+    splice @{$v1->values}, $after, 0, @$value;
+  }
+  elsif (ref $value eq 'Rstats::Array') {
+    splice @{$v1->values}, $after, 0, @{$value->values};
+  }
+  else {
+    splice @{$v1->values}, $after, 0, $value;
+  }
+  
+  return $v1
+}
+
 sub names {
   my ($self, $v1, $names_v) = @_;
   

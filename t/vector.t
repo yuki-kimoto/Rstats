@@ -82,34 +82,6 @@ use Rstats;
     is_deeply($v1->values, [1, 2, 3, 6]);
   }
   
-  # append(after option)
-  {
-    my $v1 = $r->c([1, 2, 3, 4, 5]);
-    $v1->append(1, {after => 3});
-    is_deeply($v1->values, [1, 2, 3, 1, 4, 5]);
-  }
-
-  # append(no after option)
-  {
-    my $v1 = $r->c([1, 2, 3, 4, 5]);
-    $v1->append(1);
-    is_deeply($v1->values, [1, 2, 3, 4, 5, 1]);
-  }
-
-  # append(array)
-  {
-    my $v1 = $r->c([1, 2, 3, 4, 5]);
-    $v1->append([6, 7]);
-    is_deeply($v1->values, [1, 2, 3, 4, 5, 6, 7]);
-  }
-
-  # append(vector)
-  {
-    my $v1 = $r->c([1, 2, 3, 4, 5]);
-    $v1->append($r->c([6, 7]));
-    is_deeply($v1->values, [1, 2, 3, 4, 5, 6, 7]);
-  }
-  
   # negation
   {
     my $v1 = $r->c([1, 2, 3]);

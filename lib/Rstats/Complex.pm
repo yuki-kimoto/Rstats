@@ -1,7 +1,7 @@
-package Data::R::Complex;
+package Rstats::Complex;
 use Object::Simple -base;
 use Carp 'croak';
-use Data::R::Complex;
+use Rstats::Complex;
 use Math::Complex;
 
 use overload
@@ -27,7 +27,7 @@ sub new {
 sub negation {
   my $self = shift;
   
-  return Data::R::Complex->new(re => -$self->{re}, im => -$self->{im});
+  return Rstats::Complex->new(re => -$self->{re}, im => -$self->{im});
 }
 
 sub add { shift->_operation('+', @_) }
@@ -41,22 +41,22 @@ sub _operation {
 
   my $z1;
   my $z2;
-  if (ref $data eq 'Data::R::Complex') {
+  if (ref $data eq 'Rstats::Complex') {
     $z1 = $self;
     $z2 = $data;
   }
   else {
     if ($reverse) {
-      $z1 = Data::R::Complex->new(re => $data);
+      $z1 = Rstats::Complex->new(re => $data);
       $z2 = $self;
     }
     else {
       $z1 = $self;
-      $z2 = Data::R::Complex->new(re => $data);
+      $z2 = Rstats::Complex->new(re => $data);
     }
   }
   
-  my $z3 = Data::R::Complex->new;
+  my $z3 = Rstats::Complex->new;
   if ($op eq '+') {
     $z3->{re} = $z1->{re} + $z2->{re};
     $z3->{im} = $z1->{im} + $z2->{im};
@@ -95,7 +95,7 @@ sub abs {
 sub conj {
   my $self = shift;
   
-  return Data::R::Complex->new(re => $self->{re}, im => -$self->{im});
+  return Rstats::Complex->new(re => $self->{re}, im => -$self->{im});
 }
 
 1;

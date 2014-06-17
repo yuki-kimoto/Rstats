@@ -1,4 +1,4 @@
-package Data::R::Array;
+package Rstats::Array;
 use Object::Simple -base;
 use Carp 'croak';
 use List::Util;
@@ -30,7 +30,7 @@ sub append {
   if (ref $value eq 'ARRAY') {
     splice @{$self->values}, $after, 0, @$value;
   }
-  elsif (ref $value && $value->isa('Data::R::Array')) {
+  elsif (ref $value && $value->isa('Rstats::Array')) {
     splice @{$self->values}, $after, 0, @{$value->values};
   }
   else {
@@ -51,19 +51,19 @@ sub length {
 sub is_array {
   my $self = shift;
   
-  return (ref $self || '') eq 'Data::R::Array';
+  return (ref $self || '') eq 'Rstats::Array';
 }
 
 sub is_vector {
   my $self = shift;
   
-  return (ref $self || '') eq 'Data::R::Vector';
+  return (ref $self || '') eq 'Rstats::Vector';
 }
 
 sub is_matrix {
   my $self = shift;
   
-  return (ref $self || '') eq 'Data::R::Matrix';
+  return (ref $self || '') eq 'Rstats::Matrix';
 }
 
 sub dim {
@@ -71,7 +71,7 @@ sub dim {
   
   if ($dim) {
     if (ref $dim eq 'ARRAY') {
-      $dim = Data::R::Vector->new(values => $dim);
+      $dim = Rstats::Vector->new(values => $dim);
     }
     $self->{dim} = $dim;
   }
@@ -122,7 +122,7 @@ sub get {
   elsif (ref $indexes_tmp eq 'ARRAY') {
     $indexes = $indexes_tmp;
   }
-  elsif (ref $indexes_tmp && $indexes_tmp->isa('Data::R::Array')) {
+  elsif (ref $indexes_tmp && $indexes_tmp->isa('Rstats::Array')) {
     $indexes = $indexes_tmp->{values};
   }
   else {
@@ -166,7 +166,7 @@ sub get_b {
   if (ref $booles_tmp eq 'ARRAY') {
     $booles = $booles_tmp;
   }
-  elsif (ref $booles_tmp && $booles_tmp->isa('Data::R::Array')) {
+  elsif (ref $booles_tmp && $booles_tmp->isa('Rstats::Array')) {
     $booles = $booles_tmp->{values};
   }
   else {
@@ -250,7 +250,7 @@ sub _operation {
   my $v1_length;
   my $v2_length;
   my $longer_length;
-  if (ref $data && $data->isa('Data::R::Array')) {
+  if (ref $data && $data->isa('Rstats::Array')) {
     $v1_values = $self->values;
     $v1_length = $self->length;
     my $v2 = $data;
@@ -292,7 +292,7 @@ sub raise {
   my ($self, $data, $reverse) = @_;
   
   my $v3 = $self->new;
-  if (ref $data && $data->isa('Data::R::Array')) {
+  if (ref $data && $data->isa('Rstats::Array')) {
     croak 'Not implemented';
   }
   else {

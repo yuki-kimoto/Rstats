@@ -2,13 +2,13 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Data::R;
+use Rstats;
 use Math::Trig ();
-use Data::R::Array;
-use Data::R::Vector;
-use Data::R::Matrix;
+use Rstats::Array;
+use Rstats::Vector;
+use Rstats::Matrix;
 
-my $r = Data::R->new;
+my $r = Rstats->new;
 
 # head
 {
@@ -26,7 +26,7 @@ my $r = Data::R->new;
 
 # names
 {
-  my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+  my $v1 = Rstats::Vector->new(values => [1, 2, 3, 4]);
   $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
   my $v2 = $v1->get_s($r->c(['b', 'd']));
   is_deeply($v2->values, [2, 4]);
@@ -37,7 +37,7 @@ my $r = Data::R->new;
   my $mat = $r->matrix(0, 2, 5);
   is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   is_deeply($mat->dim->values, [2, 5]);
-  is(ref $mat, 'Data::R::Matrix');
+  is(ref $mat, 'Rstats::Matrix');
 }
 
 # to_string
@@ -59,7 +59,7 @@ my $r = Data::R->new;
 =pod
 # Type
 {
-  my $array = Data::R::Array->new(values => [1, 2, 3]);
+  my $array = Rstats::Array->new(values => [1, 2, 3]);
   ok($array->is_array);
   $array->as_vector;
   ok($array->is_vector);
@@ -70,7 +70,7 @@ my $r = Data::R->new;
 
 # Array get and set
 {
-  my $array = Data::R::Array->new(values => [1, 2, 3]);
+  my $array = Rstats::Array->new(values => [1, 2, 3]);
   is_deeply($array->get(1)->values, [1]);
   is_deeply($array->get(3)->values, [3]);
   $array->set(1 => 5);;
@@ -79,7 +79,7 @@ my $r = Data::R->new;
 
 # abs
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   my $v1 = $r->c([3, 4]);
   my $abs = $r->abs($v1);
   is($abs, 5);
@@ -87,7 +87,7 @@ my $r = Data::R->new;
 
 # paste
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # paste($str, $vector);
   {
@@ -103,7 +103,7 @@ my $r = Data::R->new;
 
 # c
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # c($array)
   {
@@ -113,7 +113,7 @@ my $r = Data::R->new;
   
   # c($vector)
   {
-    my $v = $r->c(Data::R::Vector->new(values => [1, 2, 3]));
+    my $v = $r->c(Rstats::Vector->new(values => [1, 2, 3]));
     is_deeply($v->values, [1, 2, 3]);
   }
   
@@ -132,7 +132,7 @@ my $r = Data::R->new;
 
 # rep function
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # req($v, {times => $times});
   {
@@ -144,7 +144,7 @@ my $r = Data::R->new;
 
 # seq function
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # seq($from, $to),  n > m
   {
@@ -191,7 +191,7 @@ my $r = Data::R->new;
 
 # Method
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # add (vector)
   {

@@ -3,10 +3,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME                => 'Data::R',
+    NAME                => 'Rstats',
     AUTHOR              => 'Yuki Kimoto <kimoto.yuki@gmail.com>',
-    VERSION_FROM        => 'lib/Data/R.pm',
-    ABSTRACT_FROM       => 'lib/Data/R.pm',
+    VERSION_FROM        => 'lib/Rstats.pm',
+    ABSTRACT_FROM       => 'lib/Rstats.pm',
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
       ? ('LICENSE'=> 'perl')
       : ()),
@@ -15,9 +15,9 @@ WriteMakefile(
         'Test::More' => 0,
         'Object::Simple' => '3.10',
         'List::Util' => '1.38',
-        'Math::Complex' => '1.59'.
+        'Math::Complex' => '1.59',
         'Math::MatrixReal' => '2.11'
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Data-R-*' },
+    clean               => { FILES => 'Rstats-*' },
 );

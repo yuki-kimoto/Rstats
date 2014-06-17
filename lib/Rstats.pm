@@ -1,4 +1,4 @@
-package Data::R;
+package Rstats;
 
 our $VERSION = '0.01';
 
@@ -7,12 +7,12 @@ use Object::Simple -base;
 use List::Util;
 use Math::Trig ();
 use Carp 'croak';
-use Data::R;
-use Data::R::Array;
-use Data::R::Vector;
-use Data::R::Complex;
+use Rstats;
+use Rstats::Array;
+use Rstats::Vector;
+use Rstats::Complex;
 
-my $r = Data::R->new;
+my $r = Rstats->new;
 
 sub names {
   my ($self, $vector, $names) = @_;
@@ -25,7 +25,7 @@ sub names {
 sub numeric {
   my ($self, $num) = @_;
   
-  my $v = Data::R::Vector->new(values => [(0) x $num]);
+  my $v = Rstats::Vector->new(values => [(0) x $num]);
   
   return $v;
 }
@@ -43,7 +43,7 @@ sub matrix {
     $values = [($data) x $length];
   }
   
-  my $matrix = Data::R::Matrix->new(
+  my $matrix = Rstats::Matrix->new(
     values => $values,
     type => 'matrix',
   );
@@ -56,7 +56,7 @@ sub array {
   my ($self, $data) = @_;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $array_class = $opt->{class} || 'Data::R::Array';
+  my $array_class = $opt->{class} || 'Rstats::Array';
   
   my $array;
   if (ref $data eq 'ARRAY') {
@@ -65,7 +65,7 @@ sub array {
       if (ref $a eq 'ARRAY') {
         push @$values, @$a;
       }
-      elsif (ref $a && $a->isa('Data::R::Array')) {
+      elsif (ref $a && $a->isa('Rstats::Array')) {
         push @$values, @{$a->values};
       }
       else {
@@ -99,11 +99,11 @@ sub array {
     if (ref $dim eq 'ARRAY') {
       $array->dim($self->c($dim));
     }
-    elsif (ref $dim eq 'Data::R::Vector') {
+    elsif (ref $dim eq 'Rstats::Vector') {
       $array->dim($dim);
     }
     else {
-      croak "dim option must be array reference or Data::R::Vector object";
+      croak "dim option must be array reference or Rstats::Vector object";
     }
   }
   
@@ -127,7 +127,7 @@ sub paste {
   my $v1 = shift;
   
   my $v1_values = $v1->values;
-  my $v2 = Data::R::Array->new;
+  my $v2 = Rstats::Array->new;
   my $v2_values = $v2->values;
   push @$v2_values, "$str$sep$_" for @$v1_values;
   
@@ -137,7 +137,7 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  my $vector = $self->array($data, {class => 'Data::R::Vector'});
+  my $vector = $self->array($data, {class => 'Rstats::Vector'});
   
   return $vector;
 }
@@ -179,12 +179,12 @@ sub seq {
   if (defined $length) {
     my $values = [];
     push @$values, $from + $_ * $by for (0 .. $length - 1);
-    return Data::R::Array->new(values => $values);
+    return Rstats::Array->new(values => $values);
   }
   elsif (defined $to) {
     my $values = [];
     if ($to == $from) {
-      return Data::R::Array->new(values => [$to]);
+      return Rstats::Array->new(values => [$to]);
     }
     elsif ($to > $from) {
       if ($by < 0) {
@@ -196,7 +196,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return Data::R::Array->new(values => $values);
+      return Rstats::Array->new(values => $values);
     }
     else {
       if ($by > 0) {
@@ -208,7 +208,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return Data::R::Array->new(values => $values);
+      return Rstats::Array->new(values => $values);
     }
   }
   else {
@@ -231,7 +231,7 @@ sub rep {
   
   my $values = [];
   push @$values, @{$v1->values} for 1 .. $times;
-  my $v2 = Data::R::Array->new(values => $values);
+  my $v2 = Rstats::Array->new(values => $values);
   
   return $v2;
 }
@@ -264,7 +264,7 @@ sub pmax {
     }
   }
   
-  my $v_max = Data::R::Array->new(values => \@maxs);
+  my $v_max = Rstats::Array->new(values => \@maxs);
   
   return $v_max;
 }
@@ -281,7 +281,7 @@ sub pmin {
     }
   }
   
-  my $v_min = Data::R::Array->new(values => \@mins);
+  my $v_min = Rstats::Array->new(values => \@mins);
   
   return $v_min;
 }
@@ -289,7 +289,7 @@ sub pmin {
 sub abs {
   my ($self, $data) = @_;
   
-  if ($data->isa('Data::R::Array')) {
+  if ($data->isa('Rstats::Array')) {
     my $tmp_v = $data * $data;
     my $abs = sqrt $self->sum($tmp_v);
 
@@ -303,7 +303,7 @@ sub abs {
 sub sum {
   my ($self, $data) = @_;
   
-  if ($data->isa('Data::R::Array')) {
+  if ($data->isa('Rstats::Array')) {
     my $sum;
     my $v = $data;
     my $v_values = $v->values;
@@ -318,7 +318,7 @@ sub sum {
 sub prod {
   my ($self, $data) = @_;
   
-  if ($data->isa('Data::R::Array')) {
+  if ($data->isa('Rstats::Array')) {
     my $prod;
     my $v = $data;
     my $v_values = $v->values;
@@ -333,7 +333,7 @@ sub prod {
 sub mean {
   my ($self, $data) = @_;
   
-  if ($data->isa('Data::R::Array')) {
+  if ($data->isa('Rstats::Array')) {
     my $v = $data;
     my $mean = $self->sum($v) / $self->length($v);
     return $mean;
@@ -346,7 +346,7 @@ sub mean {
 sub var {
   my ($self, $data) = @_;
 
-  if ($data->isa('Data::R::Array')) {
+  if ($data->isa('Rstats::Array')) {
     my $v = $data;
     
     my $var = $self->sum(($v - $self->mean($v)) ** 2) / ($self->length($v) - 1);
@@ -380,8 +380,8 @@ sub length {
 sub sort {
   my ($self, $data) = @_;
   
-  if ($data->isa('Data::R::Array')) {
-    my $v2 = Data::R::Array->new;
+  if ($data->isa('Rstats::Array')) {
+    my $v2 = Rstats::Array->new;
     my $sort;
     my $v1 = $data;
     my $v1_values = $v1->values;
@@ -397,8 +397,8 @@ sub sort {
 sub log {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { log $_[0] });
 }
@@ -406,8 +406,8 @@ sub log {
 sub exp {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { exp $_[0] });
 }
@@ -415,8 +415,8 @@ sub exp {
 sub sin {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { sin $_[0] });
 }
@@ -424,8 +424,8 @@ sub sin {
 sub cos {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { cos $_[0] });
 }
@@ -433,8 +433,8 @@ sub cos {
 sub tan {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { Math::Trig::tan $_[0] });
 }
@@ -442,8 +442,8 @@ sub tan {
 sub sqrt {
   my ($self, $array) = @_;
 
-  croak 'sqrt method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'sqrt method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { sqrt $_[0] });
 }
@@ -462,19 +462,19 @@ sub _apply {
 sub range {
   my ($self, $array) = @_;
   
-  croak 'range method must receive Data::R::Array based object'
-    unless defined $array && $array->isa('Data::R::Array');
+  croak 'range method must receive Rstats::Array based object'
+    unless defined $array && $array->isa('Rstats::Array');
   
   my $min = $self->min($array);
   my $max = $self->max($array);
   
-  return Data::R::Vector->new(values => [$min, $max]);
+  return Rstats::Vector->new(values => [$min, $max]);
 }
 
 sub i {
   my $self = shift;
   
-  my $i = Data::R::Complex->new(re => 0, im => 1);
+  my $i = Rstats::Complex->new(re => 0, im => 1);
   
   return $i;
 }
@@ -483,11 +483,11 @@ sub i {
 
 =head1 NAME
 
-Data::R - R-like statistical library
+Rstats - R language build on Perl
 
 =head1 SYNOPSYS
 
-  my $r = Data::R->new;
+  my $r = Rstats->new;
   
   # Array
   my $v1 = $r->c([1, 2, 3]);

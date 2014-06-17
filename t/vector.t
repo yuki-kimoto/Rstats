@@ -2,12 +2,12 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Data::R;
-use Data::R::Vector;
+use Rstats;
+use Rstats::Vector;
 
 # Vector
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
 
   
   # head
@@ -123,7 +123,7 @@ use Data::R::Vector;
 
   # get_s
   {
-    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    my $v1 = Rstats::Vector->new(values => [1, 2, 3, 4]);
     $v1->names($r->c(['a', 'b', 'c', 'd']));
     my $v2 = $v1->get_s($r->c(['b', 'd']));
     is_deeply($v2->values, [2, 4]);

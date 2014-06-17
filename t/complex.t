@@ -2,23 +2,23 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Data::R;
-use Data::R::Complex;
+use Rstats;
+use Rstats::Complex;
 
 # Complex
 {
-  my $r = Data::R->new;
+  my $r = Rstats->new;
 
   # new
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     is($z1->re, 1);
     is($z1->im, 2);
   }
   
   # negation
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = - $z1;
     is($z2->re, -1);
     is($z2->im, -2);
@@ -26,8 +26,8 @@ use Data::R::Complex;
   
   # add
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
-    my $z2 = Data::R::Complex->new(re => 3, im => 4);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 3, im => 4);
     my $z3 = $z1 + $z2;
     is($z3->re, 4);
     is($z3->im, 6);
@@ -35,7 +35,7 @@ use Data::R::Complex;
   
   # add(real number)
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = $z1 + 3;
     is($z2->re, 4);
     is($z2->im, 2);
@@ -43,8 +43,8 @@ use Data::R::Complex;
 
   # subtract
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
-    my $z2 = Data::R::Complex->new(re => 3, im => 4);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 3, im => 4);
     my $z3 = $z1 - $z2;
     is($z3->re, -2);
     is($z3->im, -2);
@@ -52,7 +52,7 @@ use Data::R::Complex;
   
   # subtract(real number)
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = $z1 - 3;
     is($z2->re, -2);
     is($z2->im, 2);
@@ -60,7 +60,7 @@ use Data::R::Complex;
   
   # subtract(real number, reverse)
   {
-    my $z1 = Data::R::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = 3 - $z1;
     is($z2->re, 2);
     is($z2->im, -2);

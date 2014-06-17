@@ -71,7 +71,7 @@ use Rstats::Vector;
   # get_s
   {
     my $v1 = Rstats::Vector->new(values => [1, 2, 3, 4]);
-    $v1->names($r->c(['a', 'b', 'c', 'd']));
+    $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
     my $v2 = $v1->get_s($r->c(['b', 'd']));
     is_deeply($v2->values, [2, 4]);
   }

@@ -78,7 +78,7 @@ my $r = Rstats->new;
   is("$array", "1 2 3\n");
   
   my $v = $r->c([1, 2, 3]);
-  $v->names(['a', 'b', 'c']);
+  $r->names($v => ['a', 'b', 'c']);
   is("$v", "a b c\n[1] 1 2 3\n");
 }
 

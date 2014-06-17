@@ -181,7 +181,7 @@ sub get_s {
   my ($self, $names) = @_;
   
   my $array2 = $names;
-  my $array1_names = $self->names->values;
+  my $array1_names = $r->names($self)->values;
   my $array2_names = $array2->values;
   
   my $array3_values = [];

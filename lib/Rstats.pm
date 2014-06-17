@@ -15,11 +15,26 @@ use Rstats::Complex;
 my $r = Rstats->new;
 
 sub names {
-  my ($self, $vector, $names) = @_;
+  my ($self, $v1, $names_v) = @_;
   
-  $vector->names($names);
-  
-  return $self;
+  if ($names_v) {
+    if (ref $names_v eq 'ARRAY') {
+      $names_v = Rstats::Vector->new(values => $names_v);
+    }
+    croak "names argument must be array reference or Rstats::Vector object"
+      unless ref $names_v eq 'Rstats::Vector';
+    my $duplication = {};
+    my $names = $names_v->values;
+    for my $name (@$names) {
+      croak "Don't use same name in names arguments"
+        if $duplication->{$name};
+      $duplication->{$name}++;
+    }
+    $v1->{names} = $names_v;
+  }
+  else {
+    return $v1->{names};
+  }
 }
 
 sub numeric {

@@ -359,9 +359,21 @@ sub var {
 
 sub head {
   my $self = shift;
-  my $array = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = shift;
   
-  return $array->head(@_);
+  my $n = $opt->{n};
+  $n = 6 unless defined $n;
+  
+  my $values1 = $v1->{values};
+  my $max = $v1->length < $n ? $v1->length : $n;
+  my @values2;
+  for (my $i = 0; $i < $max; $i++) {
+    push @values2, $values1->[$i];
+  }
+  
+  return $v1->new(values => \@values2);
 }
 
 sub tail {

@@ -358,18 +358,9 @@ sub var {
 }
 
 sub length {
-  my ($self, $data) = @_;
+  my ($self, $array) = @_;
   
-  my $length;
-  if ($data->isa('Data::R::Array')) {
-    my $v = $data;
-    my $v_values = $v->values;
-    $length = @$v_values;
-    return $length;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  return $array->length;
 }
 
 sub sort {

@@ -9,6 +9,12 @@ use Data::R::Vector;
 {
   my $r = Data::R->new;
   
+  # length
+  {
+    my $v1 = $r->c([1, 2, 3]);
+    is($v1->length, 3);
+  }
+  
   # get
   {
     # get - single index

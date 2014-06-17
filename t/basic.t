@@ -39,7 +39,7 @@ my $r = Data::R->new;
 # length
 {
   my $array = $r->array([1, 2, 3]);
-  is($array->length, 3);
+  is($r->length($array), 3);
 }
 
 =pod

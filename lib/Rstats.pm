@@ -9,7 +9,6 @@ use Math::Trig ();
 use Carp 'croak';
 use Rstats;
 use Rstats::Array;
-use Rstats::Vector;
 use Rstats::Complex;
 
 my $r = Rstats->new;
@@ -19,10 +18,10 @@ sub names {
   
   if ($names_v) {
     if (ref $names_v eq 'ARRAY') {
-      $names_v = Rstats::Vector->new(values => $names_v);
+      $names_v = $r->c($names_v);
     }
-    croak "names argument must be array reference or Rstats::Vector object"
-      unless ref $names_v eq 'Rstats::Vector';
+    croak "names argument must be array"
+      unless ref $names_v eq 'Rstats::Array';
     my $duplication = {};
     my $names = $names_v->values;
     for my $name (@$names) {
@@ -40,7 +39,7 @@ sub names {
 sub numeric {
   my ($self, $num) = @_;
   
-  my $v = Rstats::Vector->new(values => [(0) x $num]);
+  my $v = $r->c([(0) x $num]);
   
   return $v;
 }
@@ -58,20 +57,26 @@ sub matrix {
     $values = [($data) x $length];
   }
   
-  my $matrix = Rstats::Matrix->new(
+  my $matrix = Rstats::Array->new(
     values => $values,
-    type => 'matrix',
+    mode => 'matrix'
   );
   $matrix->dim([$row_num, $col_num]);
   
   return $matrix;
 }
 
+sub mode {
+  my ($self, $array) = @_;
+  
+  return $array->mode;
+}
+
 sub array {
   my ($self, $data) = @_;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $array_class = $opt->{class} || 'Rstats::Array';
+  my $mode = $opt->{mode} || 'array';
   
   my $array;
   if (ref $data eq 'ARRAY') {
@@ -87,7 +92,7 @@ sub array {
         push @$values, $a;
       }
     }
-    $array = $array_class->new(values => $values);
+    $array = Rstats::Array->new(values => $values, mode => $mode);
   }
   elsif (ref $data) {
     $array = $data;
@@ -114,11 +119,11 @@ sub array {
     if (ref $dim eq 'ARRAY') {
       $array->dim($self->c($dim));
     }
-    elsif (ref $dim eq 'Rstats::Vector') {
+    elsif (ref $dim eq 'Rstats::Array') {
       $array->dim($dim);
     }
     else {
-      croak "dim option must be array reference or Rstats::Vector object";
+      croak "dim option must be array";
     }
   }
   
@@ -152,7 +157,7 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  my $vector = $self->array($data, {class => 'Rstats::Vector'});
+  my $vector = $self->array($data, {mode => 'vector'});
   
   return $vector;
 }
@@ -510,7 +515,7 @@ sub range {
   my $min = $self->min($array);
   my $max = $self->max($array);
   
-  return Rstats::Vector->new(values => [$min, $max]);
+  return $r->c([$min, $max]);
 }
 
 sub i {

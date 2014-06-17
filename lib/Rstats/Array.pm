@@ -16,6 +16,7 @@ use overload
   fallback => 1;
 
 has 'values';
+has 'mode';
 
 my $r = Rstats->new;
 
@@ -33,7 +34,7 @@ sub append {
   if (ref $value eq 'ARRAY') {
     splice @{$self->values}, $after, 0, @$value;
   }
-  elsif (ref $value && $value->isa('Rstats::Array')) {
+  elsif (ref $value eq 'Rstats::Array') {
     splice @{$self->values}, $after, 0, @{$value->values};
   }
   else {
@@ -46,19 +47,19 @@ sub append {
 sub is_array {
   my $self = shift;
   
-  return (ref $self || '') eq 'Rstats::Array';
+  return $self->{mode} eq 'array';
 }
 
 sub is_vector {
   my $self = shift;
   
-  return (ref $self || '') eq 'Rstats::Vector';
+  return $self->{mode} eq 'vector';
 }
 
 sub is_matrix {
   my $self = shift;
   
-  return (ref $self || '') eq 'Rstats::Matrix';
+  return $self->{mode} eq 'matrix';
 }
 
 sub dim {
@@ -66,7 +67,7 @@ sub dim {
   
   if ($dim) {
     if (ref $dim eq 'ARRAY') {
-      $dim = Rstats::Vector->new(values => $dim);
+      $dim = $r->c($dim);
     }
     $self->{dim} = $dim;
   }
@@ -97,6 +98,7 @@ sub new {
   my $self = shift->SUPER::new(@_);
   
   $self->{values} ||= [];
+  $self->{mode} ||= 'array';
   
   return $self;
 }
@@ -117,7 +119,7 @@ sub get {
   elsif (ref $indexes_tmp eq 'ARRAY') {
     $indexes = $indexes_tmp;
   }
-  elsif (ref $indexes_tmp && $indexes_tmp->isa('Rstats::Array')) {
+  elsif (ref $indexes_tmp eq 'Rstats::Array') {
     $indexes = $indexes_tmp->{values};
   }
   else {
@@ -161,7 +163,7 @@ sub get_b {
   if (ref $booles_tmp eq 'ARRAY') {
     $booles = $booles_tmp;
   }
-  elsif (ref $booles_tmp && $booles_tmp->isa('Rstats::Array')) {
+  elsif (ref $booles_tmp eq 'Rstats::Array') {
     $booles = $booles_tmp->{values};
   }
   else {
@@ -213,9 +215,14 @@ sub to_string {
   my $self = shift;
   
   my $str = '';
+  my $names_v = $r->names($self);
+  if ($names_v) {
+    $str .= join(' ', @{$names_v->values}) . "\n";
+  }
+  
   my $values = $self->values;
   if (@$values) {
-    $str .= join(' ', @$values) . "\n";
+    $str .= '[1] ' . join(' ', @$values) . "\n";
   }
   
   return $str;
@@ -245,7 +252,7 @@ sub _operation {
   my $v1_length;
   my $v2_length;
   my $longer_length;
-  if (ref $data && $data->isa('Rstats::Array')) {
+  if (ref $data eq 'Rstats::Array') {
     $v1_values = $self->values;
     $v1_length = $r->length($self);
     my $v2 = $data;
@@ -287,7 +294,7 @@ sub raise {
   my ($self, $data, $reverse) = @_;
   
   my $v3 = $self->new;
-  if (ref $data && $data->isa('Rstats::Array')) {
+  if (ref $data eq 'Rstats::Array') {
     croak 'Not implemented';
   }
   else {

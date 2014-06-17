@@ -5,8 +5,6 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 use Rstats::Array;
-use Rstats::Vector;
-use Rstats::Matrix;
 
 my $r = Rstats->new;
 
@@ -58,7 +56,7 @@ my $r = Rstats->new;
 
 # names
 {
-  my $v1 = Rstats::Vector->new(values => [1, 2, 3, 4]);
+  my $v1 = $r->c([1, 2, 3, 4]);
   $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
   my $v2 = $v1->get_s($r->c(['b', 'd']));
   is_deeply($v2->values, [2, 4]);
@@ -69,13 +67,13 @@ my $r = Rstats->new;
   my $mat = $r->matrix(0, 2, 5);
   is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   is_deeply($mat->dim->values, [2, 5]);
-  is(ref $mat, 'Rstats::Matrix');
+  is($r->mode($mat), 'matrix');
 }
 
 # to_string
 {
   my $array = $r->array([1, 2, 3]);
-  is("$array", "1 2 3\n");
+  is("$array", "[1] 1 2 3\n");
   
   my $v = $r->c([1, 2, 3]);
   $r->names($v => ['a', 'b', 'c']);
@@ -145,7 +143,7 @@ my $r = Rstats->new;
   
   # c($vector)
   {
-    my $v = $r->c(Rstats::Vector->new(values => [1, 2, 3]));
+    my $v = $r->c($r->c([1, 2, 3]));
     is_deeply($v->values, [1, 2, 3]);
   }
   

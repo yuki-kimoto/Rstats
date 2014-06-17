@@ -155,7 +155,7 @@ sub get {
   return $self->new(values => \@values2);
 }
 
-sub get_if {
+sub get_b {
   my ($self, $booles_tmp) = @_;
 
   croak "get need one values" unless defined $booles_tmp;
@@ -182,6 +182,30 @@ sub get_if {
   return $self->new(values => \@values2);
 }
 
+sub get_s {
+  my ($self, $names) = @_;
+  
+  my $array2 = $names;
+  my $array1_names = $self->names->values;
+  my $array2_names = $array2->values;
+  
+  my $array3_values = [];
+  for my $array2_name (@$array2_names) {
+    my $i = 0;
+    for my $array1_name (@$array1_names) {
+      if ($array2_name eq $array1_name) {
+        push @$array3_values, $self->values->[$i];
+        last;
+      }
+      $i++;
+    }
+  }
+  
+  my $array3 = $self->new(values => $array3_values);
+  
+  return $array3;
+}
+
 sub set {
   my ($self, $idx, $value) = @_;
   
@@ -200,38 +224,6 @@ sub to_string {
   }
   
   return $str;
-}
-
-sub grep {
-  my ($self, $condition) = @_;
-  
-  if (ref (my $cb = $condition) eq 'CODE') {
-    my $array1_values = $self->values;
-    my $array2_values = [grep { $cb->($_) } @$array1_values];
-    my $array2 = $self->new(values => $array2_values);
-    return $array2;
-  }
-  elsif (ref $condition && $condition->isa('Data::R::Array')) {
-    my $array2 = $condition;
-    my $array1_names = $self->names->values;
-    my $array2_names = $array2->values;
-    
-    my $array3_values = [];
-    for my $array2_name (@$array2_names) {
-      my $i = 0;
-      for my $array1_name (@$array1_names) {
-        if ($array2_name eq $array1_name) {
-          push @$array3_values, $self->values->[$i];
-          last;
-        }
-        $i++;
-      }
-    }
-    
-    my $array3 = $self->new(values => $array3_values);
-    
-    return $array3;
-  }
 }
 
 sub negation {

@@ -52,20 +52,28 @@ use Data::R::Vector;
     }
   }
   
-  # get_if
+  # get_b
   {
-    # get_if - single number
+    # getb - single number
     {
       my $v1 = $r->c([1, 3, 5, 7]);
-      my $v2 = $v1->get_if(1);
+      my $v2 = $v1->get_b(1);
       is_deeply($v2->values, [1]);
     }
-    # get_if - multiple number
+    # getb - multiple number
     {
       my $v1 = $r->c([1, 3, 5, 7]);
-      my $v2 = $v1->get_if([0, 1, 0, 1, 1]);
+      my $v2 = $v1->get_b([0, 1, 0, 1, 1]);
       is_deeply($v2->values, [3, 7, undef]);
     }
+  }
+
+  # get_s
+  {
+    my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+    $v1->names($r->c(['a', 'b', 'c', 'd']));
+    my $v2 = $v1->get_s($r->c(['b', 'd']));
+    is_deeply($v2->values, [2, 4]);
   }
   
   # add to original vector

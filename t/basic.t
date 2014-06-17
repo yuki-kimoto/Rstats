@@ -63,24 +63,6 @@ my $r = Data::R->new;
   is($abs, 5);
 }
 
-# grep
-{
-  # callback
-  {
-    my $v1 = Data::R::Array->new(values => [1, 2, 3, 4]);
-    my $v2 = $v1->grep(sub { $_[0] % 2 == 0 });
-    is_deeply($v2->values, [2, 4]);
-  }
-}
-
-# names and grep
-{
-  my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
-  $v1->names($r->c(['a', 'b', 'c', 'd']));
-  my $v2 = $v1->grep($r->c(['b', 'd']));
-  is_deeply($v2->values, [2, 4]);
-}
-
 # paste
 {
   my $r = Data::R->new;

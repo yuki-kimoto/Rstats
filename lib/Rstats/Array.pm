@@ -2,6 +2,7 @@ package Rstats::Array;
 use Object::Simple -base;
 use Carp 'croak';
 use List::Util;
+use Rstats;
 
 use overload
   bool => sub {1},
@@ -16,6 +17,8 @@ use overload
 
 has 'values';
 
+my $r = Rstats->new;
+
 sub append {
   my $self = shift;
 
@@ -25,7 +28,7 @@ sub append {
   my $value = shift;
   
   my $after = $opt->{after};
-  $after = $v1->length unless defined $after;
+  $after = $r->length($v1) unless defined $after;
   
   if (ref $value eq 'ARRAY') {
     splice @{$self->values}, $after, 0, @$value;
@@ -38,14 +41,6 @@ sub append {
   }
   
   return $self
-}
-
-sub length {
-  my $self = shift;
-  
-  my $length = @{$self->{values}};
-  
-  return $length;
 }
 
 sub is_array {
@@ -252,10 +247,10 @@ sub _operation {
   my $longer_length;
   if (ref $data && $data->isa('Rstats::Array')) {
     $v1_values = $self->values;
-    $v1_length = $self->length;
+    $v1_length = $r->length($self);
     my $v2 = $data;
     $v2_values = $v2->values;
-    $v2_length = $v2->length;
+    $v2_length = $r->length($v2);
     $longer_length = $v1_length > $v2_length ? $v1_length : $v2_length;
   }
   else {
@@ -263,15 +258,15 @@ sub _operation {
       $v1_values = [$data];
       $v1_length = @$v1_values;
       $v2_values = $self->values;
-      $v2_length = $self->length;
+      $v2_length = $r->length($self);
       $longer_length = $v2_length;
     }
     else {
       $v1_values = $self->values;
-      $v1_length = $self->length;
+      $v1_length = $r->length($self);
       $v2_values = [$data];
       $v2_length = @$v2_values;
-      $longer_length = $self->length;
+      $longer_length = $r->length($self);
     }
   }
   

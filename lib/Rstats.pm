@@ -367,7 +367,7 @@ sub head {
   $n = 6 unless defined $n;
   
   my $values1 = $v1->{values};
-  my $max = $v1->length < $n ? $v1->length : $n;
+  my $max = $r->length($v1) < $n ? $r->length($v1) : $n;
   my @values2;
   for (my $i = 0; $i < $max; $i++) {
     push @values2, $values1->[$i];
@@ -386,19 +386,22 @@ sub tail {
   $n = 6 unless defined $n;
   
   my $values1 = $v1->{values};
-  my $max = $v1->length < $n ? $v1->length : $n;
+  my $max = $r->length($v1) < $n ? $r->length($v1) : $n;
   my @values2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @values2, $values1->[$v1->length - ($i  + 1)];
+    unshift @values2, $values1->[$r->length($v1) - ($i  + 1)];
   }
   
   return $v1->new(values => \@values2);
 }
 
 sub length {
-  my ($self, $array) = @_;
+  my $self = shift;
+  my $v1 = shift;
   
-  return $array->length;
+  my $length = @{$v1->{values}};
+  
+  return $length;
 }
 
 sub sort {

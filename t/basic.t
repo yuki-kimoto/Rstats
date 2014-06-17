@@ -240,7 +240,7 @@ my $r = Rstats->new;
   # add to original vector
   {
     my $v1 = $r->c([1, 2, 3]);
-    $v1->set($v1->length + 1 => 6);
+    $v1->set($r->length($v1) + 1 => 6);
     is_deeply($v1->values, [1, 2, 3, 6]);
   }
   

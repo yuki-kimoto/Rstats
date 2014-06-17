@@ -9,29 +9,6 @@ use Rstats::Vector;
 {
   my $r = Rstats->new;
 
-  # tail
-  {
-    {
-      my $v1 = $r->c([1, 2, 3, 4, 5, 6, 7]);
-      my $tail = $v1->tail;
-      is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
-    }
-    
-    # tail - values is low than 6
-    {
-      my $v1 = $r->c([1, 2, 3]);
-      my $tail = $v1->tail;
-      is_deeply($tail->values, [1, 2, 3]);
-    }
-    
-    # tail - n option
-    {
-      my $v1 = $r->c([1, 2, 3, 4]);
-      my $tail = $v1->tail({n => 3});
-      is_deeply($tail->values, [2, 3, 4]);
-    }
-  }
-  
   # length
   {
     my $v1 = $r->c([1, 2, 3]);

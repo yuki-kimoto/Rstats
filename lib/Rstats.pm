@@ -378,9 +378,21 @@ sub head {
 
 sub tail {
   my $self = shift;
-  my $array = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = shift;
   
-  return $array->tail(@_);
+  my $n = $opt->{n};
+  $n = 6 unless defined $n;
+  
+  my $values1 = $v1->{values};
+  my $max = $v1->length < $n ? $v1->length : $n;
+  my @values2;
+  for (my $i = 0; $i < $max; $i++) {
+    unshift @values2, $values1->[$v1->length - ($i  + 1)];
+  }
+  
+  return $v1->new(values => \@values2);
 }
 
 sub length {

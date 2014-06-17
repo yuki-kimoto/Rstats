@@ -13,24 +13,6 @@ sub new {
   return $self;
 }
 
-sub tail {
-  my $self = shift;
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  my $n = $opt->{n};
-  $n = 6 unless defined $n;
-  
-  my $values1 = $self->{values};
-  my $max = $self->length < $n ? $self->length : $n;
-  my @values2;
-  for (my $i = 0; $i < $max; $i++) {
-    unshift @values2, $values1->[$self->length - ($i  + 1)];
-  }
-  
-  return $self->new(values => \@values2);
-}
-
 sub names {
   my ($self, $names_v) = @_;
   

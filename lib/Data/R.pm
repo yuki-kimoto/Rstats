@@ -14,6 +14,14 @@ use Data::R::Complex;
 
 my $r = Data::R->new;
 
+sub names {
+  my ($self, $vector, $names) = @_;
+  
+  $vector->names($names);
+  
+  return $self;
+}
+
 sub numeric {
   my ($self, $num) = @_;
   

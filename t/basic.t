@@ -10,6 +10,14 @@ use Data::R::Matrix;
 
 my $r = Data::R->new;
 
+# names
+{
+  my $v1 = Data::R::Vector->new(values => [1, 2, 3, 4]);
+  $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
+  my $v2 = $v1->get_s($r->c(['b', 'd']));
+  is_deeply($v2->values, [2, 4]);
+}
+
 # matrix
 {
   my $mat = $r->matrix(0, 2, 5);

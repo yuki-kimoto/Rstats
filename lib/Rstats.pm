@@ -305,9 +305,17 @@ sub seq {
   # To
   my $to = shift;
   $to = $opt->{to} unless defined $to;
+
+  # Length
+  my $length = $opt->{length};
   
   # By
   my $by = $opt->{by};
+  
+  if (defined $length && defined $by) {
+    croak "Can't use by option and length option as same time";
+  }
+  
   unless (defined $by) {
     if ($to >= $from) {
       $by = 1;
@@ -318,46 +326,39 @@ sub seq {
   }
   croak "by option should be except for 0" if $by == 0;
   
-  # Length
-  my $length = $opt->{length};
+  $to = $from unless defined $to;
   
-  if (defined $length) {
-    my $values = [];
-    push @$values, $from + $_ * $by for (0 .. $length - 1);
-    return Rstats::Array->new(values => $values);
+  if (defined $length && $from ne $to) {
+    $by = ($to - $from) / ($length - 1);
   }
-  elsif (defined $to) {
-    my $values = [];
-    if ($to == $from) {
-      return Rstats::Array->new(values => [$to]);
+  
+  my $values = [];
+  if ($to == $from) {
+    return $r->c([$to]);
+  }
+  elsif ($to > $from) {
+    if ($by < 0) {
+      croak "by option is invalid number(seq function)";
     }
-    elsif ($to > $from) {
-      if ($by < 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $value = $from;
-      while ($value <= $to) {
-        push @$values, $value;
-        $value += $by;
-      }
-      return Rstats::Array->new(values => $values);
+    
+    my $value = $from;
+    while ($value <= $to) {
+      push @$values, $value;
+      $value += $by;
     }
-    else {
-      if ($by > 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $value = $from;
-      while ($value >= $to) {
-        push @$values, $value;
-        $value += $by;
-      }
-      return Rstats::Array->new(values => $values);
-    }
+    return $r->c($values);
   }
   else {
-    croak "seq function need to option or length option";
+    if ($by > 0) {
+      croak "by option is invalid number(seq function)";
+    }
+    
+    my $value = $from;
+    while ($value >= $to) {
+      push @$values, $value;
+      $value += $by;
+    }
+    return $r->c($values);
   }
 }
 

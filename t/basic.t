@@ -256,8 +256,8 @@ my $r = Rstats->new;
   
   # seq($from, {by => p, length => l})
   {
-    my $v = $r->seq(1, {by => 0.5, length => 3});
-    is_deeply($v->values, [1, 1.5, 2.0]);
+    my $v = $r->seq(1, 3, {length => 5});
+    is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 }
 

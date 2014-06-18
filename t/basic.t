@@ -66,7 +66,8 @@ my $r = Rstats->new;
 {
   my $mat = $r->matrix(0, 2, 5);
   is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  is_deeply($mat->dim->values, [2, 5]);
+  my $dim = $r->dim($mat);
+  is_deeply($dim->values, [2, 5]);
   is($r->mode($mat), 'matrix');
 }
 

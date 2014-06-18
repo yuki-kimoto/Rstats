@@ -13,6 +13,20 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub dim {
+  my ($self, $v1, $dim) = @_;
+  
+  if ($dim) {
+    if (ref $dim eq 'ARRAY') {
+      $dim = $r->c($dim);
+    }
+    $v1->{dim} = $dim;
+  }
+  else {
+    return $v1->{dim};
+  }
+}
+
 sub append {
   my $self = shift;
 
@@ -84,7 +98,7 @@ sub matrix {
     values => $values,
     mode => 'matrix'
   );
-  $matrix->dim([$row_num, $col_num]);
+  $r->dim($matrix, [$row_num, $col_num]);
   
   return $matrix;
 }

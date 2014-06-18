@@ -20,56 +20,6 @@ has 'mode';
 
 my $r = Rstats->new;
 
-sub is_array {
-  my $self = shift;
-  
-  return $self->{mode} eq 'array';
-}
-
-sub is_vector {
-  my $self = shift;
-  
-  return $self->{mode} eq 'vector';
-}
-
-sub is_matrix {
-  my $self = shift;
-  
-  return $self->{mode} eq 'matrix';
-}
-
-sub dim {
-  my ($self, $dim) = @_;
-  
-  if ($dim) {
-    if (ref $dim eq 'ARRAY') {
-      $dim = $r->c($dim);
-    }
-    $self->{dim} = $dim;
-  }
-  else {
-    return $self->{dim};
-  }
-}
-
-sub as_matrix {
-  my $self = shift;
-  
-  $self->{type} = 'matrix';
-}
-
-sub as_array {
-  my $self = shift;
-  
-  $self->{type} = 'array';
-}
-
-sub as_vector {
-  my $self = shift;
-  
-  $self->{type} = 'vector';
-}
-
 sub new {
   my $self = shift->SUPER::new(@_);
   
@@ -286,6 +236,42 @@ sub raise {
     
     return $v3;
   }
+}
+
+sub is_array {
+  my $self = shift;
+  
+  return $self->{mode} eq 'array';
+}
+
+sub is_vector {
+  my $self = shift;
+  
+  return $self->{mode} eq 'vector';
+}
+
+sub is_matrix {
+  my $self = shift;
+  
+  return $self->{mode} eq 'matrix';
+}
+
+sub as_matrix {
+  my $self = shift;
+  
+  $self->{type} = 'matrix';
+}
+
+sub as_array {
+  my $self = shift;
+  
+  $self->{type} = 'array';
+}
+
+sub as_vector {
+  my $self = shift;
+  
+  $self->{type} = 'vector';
 }
 
 1;

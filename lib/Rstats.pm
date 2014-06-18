@@ -96,24 +96,24 @@ sub matrix {
   
   my $matrix = Rstats::Array->new(
     values => $values,
-    mode => 'matrix'
+    type => 'matrix'
   );
   $r->dim($matrix, [$row_num, $col_num]);
   
   return $matrix;
 }
 
-sub mode {
+sub type {
   my ($self, $array) = @_;
   
-  return $array->mode;
+  return $array->type;
 }
 
 sub array {
   my ($self, $data) = @_;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $mode = $opt->{mode} || 'array';
+  my $type = $opt->{type} || 'array';
   
   my $array;
   if (ref $data eq 'ARRAY') {
@@ -129,7 +129,7 @@ sub array {
         push @$values, $a;
       }
     }
-    $array = Rstats::Array->new(values => $values, mode => $mode);
+    $array = Rstats::Array->new(values => $values, type => $type);
   }
   elsif (ref $data) {
     $array = $data;
@@ -194,7 +194,7 @@ sub paste {
 sub c {
   my ($self, $data) = @_;
   
-  my $vector = $self->array($data, {mode => 'vector'});
+  my $vector = $self->array($data, {type => 'vector'});
   
   return $vector;
 }

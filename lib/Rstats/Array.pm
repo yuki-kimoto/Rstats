@@ -16,7 +16,7 @@ use overload
   fallback => 1;
 
 has 'values';
-has 'mode';
+has 'type';
 
 my $r = Rstats->new;
 
@@ -24,7 +24,7 @@ sub new {
   my $self = shift->SUPER::new(@_);
   
   $self->{values} ||= [];
-  $self->{mode} ||= 'array';
+  $self->{type} ||= 'array';
   
   return $self;
 }
@@ -169,91 +169,74 @@ sub add { shift->_operation('+', @_) }
 sub subtract { shift->_operation('-', @_) }
 sub multiply { shift->_operation('*', @_) }
 sub divide { shift->_operation('/', @_) }
+sub raise { shift->_operation('**', @_) }
+
+my $culcs = {};
+my @ops = qw#+ - * / **#;
+for my $op (@ops) {
+   my $code = <<"EOS";
+sub {
+  my (\$v1_values, \$v2_values) = \@_;
+   
+  my \$v1_length = \@{\$v1_values};
+  my \$v2_length = \@{\$v2_values};
+  my \$longer_length = \$v1_length > \$v2_length ? \$v1_length : \$v2_length;
+
+  my \@v3_values = map {
+    \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
+    } (0 .. \$longer_length - 1);
+  
+  return \@v3_values;
+}
+EOS
+  
+  $culcs->{$op} = eval $code;
+
+  croak $@ if $@;
+}
 
 sub _operation {
   my ($self, $op, $data, $reverse) = @_;
 
   my $v1_values;
   my $v2_values;
-  my $v1_length;
-  my $v2_length;
-  my $longer_length;
   if (ref $data eq 'Rstats::Array') {
     $v1_values = $self->values;
-    $v1_length = $r->length($self);
     my $v2 = $data;
     $v2_values = $v2->values;
-    $v2_length = $r->length($v2);
-    $longer_length = $v1_length > $v2_length ? $v1_length : $v2_length;
   }
   else {
     if ($reverse) {
       $v1_values = [$data];
-      $v1_length = @$v1_values;
       $v2_values = $self->values;
-      $v2_length = $r->length($self);
-      $longer_length = $v2_length;
     }
     else {
       $v1_values = $self->values;
-      $v1_length = $r->length($self);
       $v2_values = [$data];
-      $v2_length = @$v2_values;
-      $longer_length = $r->length($self);
     }
   }
-  
-  my $culc = {};
-  my @v3_values;
-  if ($op eq '+' || $op eq '-' || $op eq '*' || $op eq '/') {
-    @v3_values = eval <<"EOS";
-map {
-  \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
-} (0 .. \$longer_length - 1);
-EOS
-  }
+
+  my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
   
   return $self->new(values => \@v3_values);
-}
-
-sub raise {
-  my ($self, $data, $reverse) = @_;
-  
-  my $v3 = $self->new;
-  if (ref $data eq 'Rstats::Array') {
-    croak 'Not implemented';
-  }
-  else {
-    if ($reverse) {
-      croak "Not implemented";
-    }
-    else {
-      my $v1_values = $self->values;
-      my $v3_values = $v3->values;
-      
-      $v3_values->[$_] = $v1_values->[$_] ** $data for (0 .. @$v1_values - 1);
-    }
-    
-    return $v3;
-  }
 }
 
 sub is_array {
   my $self = shift;
   
-  return $self->{mode} eq 'array';
+  return $self->{type} eq 'array';
 }
 
 sub is_vector {
   my $self = shift;
   
-  return $self->{mode} eq 'vector';
+  return $self->{type} eq 'vector';
 }
 
 sub is_matrix {
   my $self = shift;
   
-  return $self->{mode} eq 'matrix';
+  return $self->{type} eq 'matrix';
 }
 
 sub as_matrix {

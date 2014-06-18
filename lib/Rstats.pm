@@ -18,10 +18,10 @@ sub _v {
   
   my $v;
   if (!ref $data) {
-    $v = $r->c([$data]);
+    $v = $self->c([$data]);
   }
   elsif (ref $data eq 'ARRAY') {
-    $v = $r->c($data);
+    $v = $self->c($data);
   }
   elsif (ref $data eq 'Rstats::Array') {
     $v = $data;
@@ -46,7 +46,7 @@ sub which {
     }
   }
   
-  return $r->c(\@v2_values);
+  return $self->c(\@v2_values);
 }
 
 sub ifelse {
@@ -65,15 +65,15 @@ sub ifelse {
     }
   }
   
-  return $r->array(\@v2_values, {type => $v1->type});
+  return $self->array(\@v2_values, {type => $v1->type});
 }
 
 sub replace {
   my ($self, $_v1, $_v2, $_v3) = @_;
   
-  my $v1 = $r->_v($_v1);
-  my $v2 = $r->_v($_v2);
-  my $v3 = $r->_v($_v3);
+  my $v1 = $self->_v($_v1);
+  my $v2 = $self->_v($_v2);
+  my $v3 = $self->_v($_v3);
   
   my $v1_values = $v1->values;
   my $v2_values = $v2->values;
@@ -98,7 +98,7 @@ sub replace {
     }
   }
   
-  return $r->array($v4_values, {type => $v1->type});
+  return $self->array($v4_values, {type => $v1->type});
 }
 
 sub dim {
@@ -106,7 +106,7 @@ sub dim {
   
   if ($dim) {
     if (ref $dim eq 'ARRAY') {
-      $dim = $r->c($dim);
+      $dim = $self->c($dim);
     }
     $v1->{dim} = $dim;
   }
@@ -123,7 +123,7 @@ sub append {
   my $value = shift;
   
   my $after = $opt->{after};
-  $after = $r->length($v1) unless defined $after;
+  $after = $self->length($v1) unless defined $after;
   
   if (ref $value eq 'ARRAY') {
     splice @{$v1->values}, $after, 0, @$value;
@@ -143,7 +143,7 @@ sub names {
   
   if ($names_v) {
     if (ref $names_v eq 'ARRAY') {
-      $names_v = $r->c($names_v);
+      $names_v = $self->c($names_v);
     }
     croak "names argument must be array"
       unless ref $names_v eq 'Rstats::Array';
@@ -164,7 +164,7 @@ sub names {
 sub numeric {
   my ($self, $num) = @_;
   
-  my $v = $r->c([(0) x $num]);
+  my $v = $self->c([(0) x $num]);
   
   return $v;
 }
@@ -186,7 +186,7 @@ sub matrix {
     values => $values,
     type => 'matrix'
   );
-  $r->dim($matrix, [$row_num, $col_num]);
+  $self->dim($matrix, [$row_num, $col_num]);
   
   return $matrix;
 }
@@ -282,6 +282,34 @@ sub c {
   return $vector;
 }
 
+sub set_seed {
+  my ($self, $seed) = @_;
+  
+  $self->{seed} = $seed;
+}
+
+sub runif {
+  my ($self, $count, $min, $max) = @_;
+  
+  $min = 0 unless defined $min;
+  $max = 1 unless defined $max;
+  croak "runif third argument must be bigger than second argument"
+    if $min > $max;
+  
+  my $diff = $max - $min;
+  my @v1_values;
+  if (defined $self->{seed}) {
+    srand $self->{seed};
+    $self->{seed} = undef;
+  }
+  for (1 .. $count) {
+    my $rand = rand($diff) + $min;
+    push @v1_values, $rand;
+  }
+  
+  return $self->c(\@v1_values);
+}
+
 sub seq {
   my $self = shift;
   
@@ -292,7 +320,7 @@ sub seq {
   my $along = $opt->{along};
   
   if ($along) {
-    my $length = $r->length($along);
+    my $length = $self->length($along);
     return $self->seq(1,$length);
   }
   else {
@@ -333,7 +361,7 @@ sub seq {
     
     my $values = [];
     if ($to == $from) {
-      return $r->c([$to]);
+      return $self->c([$to]);
     }
     elsif ($to > $from) {
       if ($by < 0) {
@@ -345,7 +373,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return $r->c($values);
+      return $self->c($values);
     }
     else {
       if ($by > 0) {
@@ -357,7 +385,7 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return $r->c($values);
+      return $self->c($values);
     }
   }
 }
@@ -508,7 +536,7 @@ sub head {
   $n = 6 unless defined $n;
   
   my $values1 = $v1->{values};
-  my $max = $r->length($v1) < $n ? $r->length($v1) : $n;
+  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
   my @values2;
   for (my $i = 0; $i < $max; $i++) {
     push @values2, $values1->[$i];
@@ -527,10 +555,10 @@ sub tail {
   $n = 6 unless defined $n;
   
   my $values1 = $v1->{values};
-  my $max = $r->length($v1) < $n ? $r->length($v1) : $n;
+  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
   my @values2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @values2, $values1->[$r->length($v1) - ($i  + 1)];
+    unshift @values2, $values1->[$self->length($v1) - ($i  + 1)];
   }
   
   return $v1->new(values => \@values2);
@@ -636,7 +664,7 @@ sub range {
   my $min = $self->min($array);
   my $max = $self->max($array);
   
-  return $r->c([$min, $max]);
+  return $self->c([$min, $max]);
 }
 
 sub i {
@@ -658,6 +686,6 @@ Rstats - R language build on Perl
   my $r = Rstats->new;
   
   # Array
-  my $v1 = $r->c([1, 2, 3]);
-  my $v2 = $r->c([2, 3, 4]);
+  my $v1 = $self->c([1, 2, 3]);
+  my $v2 = $self->c([2, 3, 4]);
   my $v3 = $v1 + v2;

@@ -8,6 +8,46 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# runif
+{
+  {
+    srand 100;
+    my $rands = [rand 1, rand 1, rand 1, rand 1, rand 1];
+    $r->set_seed(100);
+    my $v1 = $r->runif(5);
+    is_deeply($v1->values, $rands);
+    
+    my $v2 = $r->runif(5);
+    isnt($v1->values->[0], $v2->values->[0]);
+
+    my $v3 = $r->runif(5);
+    isnt($v2->values->[0], $v3->values->[0]);
+    
+    my $v4 = $r->runif(100);
+    my @in_ranges = grep { $_ >= 0 && $_ <= 1 } @{$v4->values};
+    is(scalar @in_ranges, 100);
+  }
+  
+  # runif - min and max
+  {
+    srand 100;
+    my $rands = [
+      rand(9) + 1,
+      rand(9) + 1,
+      rand(9) + 1,
+      rand(9) + 1,
+      rand(9) + 1
+    ];
+    $r->set_seed(100);
+    my $v1 = $r->runif(5, 1, 10);
+    is_deeply($v1->values, $rands);
+
+    my $v2 = $r->runif(100, 1, 2);
+    my @in_ranges = grep { $_ >= 1 && $_ <= 2 } @{$v2->values};
+    is(scalar @in_ranges, 100);
+  }
+}
+
 # which
 {
   my $v1 = $r->c(['a', 'b', 'a']);

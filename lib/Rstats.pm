@@ -593,11 +593,15 @@ sub length {
 }
 
 sub sort {
-  my ($self, $_v1) = @_;
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $decreasing = $opt->{decreasing};
+  my $_v1 = shift;
   
   my $v1 = $self->_v($_v1);
   my $v1_values = $v1->values;
-  my $v2_values = [sort(@$v1_values)];
+  my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
   return $r->c($v2_values);
 }
 

@@ -551,8 +551,17 @@ my $r = Rstats->new;
   
   # sort
   {
-    my $v1 = $r->c([2, 1, 5]);
-    my $v1_sorted = $r->sort($v1);
-    is_deeply($v1_sorted->values, [1, 2, 5]);
+    {
+      my $v1 = $r->c([2, 1, 5]);
+      my $v1_sorted = $r->sort($v1);
+      is_deeply($v1_sorted->values, [1, 2, 5]);
+    }
+    
+    # sort - decreasing
+    {
+      my $v1 = $r->c([2, 1, 5]);
+      my $v1_sorted = $r->sort($v1, {decreasing => 1});
+      is_deeply($v1_sorted->values, [5, 2, 1]);
+    }
   }
 }

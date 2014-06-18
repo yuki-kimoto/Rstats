@@ -8,6 +8,20 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# order
+{
+  my $v1 = $r->c([2, 4, 3, 1]);
+  my $v2 = $r->order($v1);
+  is_deeply($v2->values, [4, 1, 3, 2]);
+}
+
+# rev
+{
+  my $v1 = $r->c([2, 4, 3, 1]);
+  my $v2 = $r->rev($v1);
+  is_deeply($v2->values, [2, 3, 1, 4]);
+}
+
 # runif
 {
   {

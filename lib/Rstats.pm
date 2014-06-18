@@ -33,6 +33,25 @@ sub _v {
   return $v;
 }
 
+sub order { shift->_order(1, @_) }
+sub rev { shift->_order(0, @_) }
+
+sub _order {
+  my ($self, $asc, $_v1) = @_;
+  
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  
+  my @pos_vals;
+  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  my @sorted_pos_values = $asc
+    ? sort { $a->{val} <=> $b->{val} } @pos_vals
+    : sort { $b->{val} <=> $a->{val} } @pos_vals;
+  my @orders = map { $_->{pos} } @sorted_pos_values;
+  
+  return $r->c(\@orders);
+}
+
 sub which {
   my ($self, $_v1, $cond_cb) = @_;
   

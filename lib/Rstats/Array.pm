@@ -243,18 +243,24 @@ sub as_matrix {
   my $self = shift;
   
   $self->{type} = 'matrix';
+  
+  return $self;
 }
 
 sub as_array {
   my $self = shift;
   
   $self->{type} = 'array';
+  
+  return $self;
 }
 
 sub as_vector {
   my $self = shift;
   
   $self->{type} = 'vector';
+  
+  return $self;
 }
 
 1;

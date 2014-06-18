@@ -33,6 +33,25 @@ sub _v {
   return $v;
 }
 
+sub ifelse {
+  my ($self, $_v1, $value1, $value2) = @_;
+  
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  my @v2_values;
+  for my $v1_value (@$v1_values) {
+    local $_ = $v1_value;
+    if ($v1_value) {
+      push @v2_values, $value1;
+    }
+    else {
+      push @v2_values, $value2;
+    }
+  }
+  
+  return $r->array(\@v2_values, {type => $v1->type});
+}
+
 sub replace {
   my ($self, $_v1, $_v2, $_v3) = @_;
   

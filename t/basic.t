@@ -8,6 +8,13 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# which
+{
+  my $v1 = $r->c(['a', 'b', 'a']);
+  my $v2 = $r->which($v1, sub { $_ eq 'a' });
+  is_deeply($v2->values, [1, 3]);
+}
+
 # elseif
 {
   my $v1 = $r->c([1, 0, 1]);

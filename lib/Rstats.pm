@@ -33,6 +33,22 @@ sub _v {
   return $v;
 }
 
+sub which {
+  my ($self, $_v1, $cond_cb) = @_;
+  
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  my @v2_values;
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    local $_ = $v1_values->[$i];
+    if ($cond_cb->($v1_values->[$i])) {
+      push @v2_values, $i + 1;
+    }
+  }
+  
+  return $r->c(\@v2_values);
+}
+
 sub ifelse {
   my ($self, $_v1, $value1, $value2) = @_;
   

@@ -259,6 +259,11 @@ my $r = Rstats->new;
     my $v = $r->seq(1, 3, {length => 5});
     is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
+  
+  # seq(along => $v);
+  my $v1 = $r->c([3, 4, 5]);
+  my $v2 = $r->seq({along => $v1});
+  is_deeply($v2->values, [1, 2, 3]);
 }
 
 # Method

@@ -285,70 +285,80 @@ sub c {
 sub seq {
   my $self = shift;
   
+  # Option
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
-  # From
-  my $from = shift;
-  $from = $opt->{from} unless defined $from;
-  croak "seq function need from option" unless defined $from;
+  # Along
+  my $along = $opt->{along};
   
-  # To
-  my $to = shift;
-  $to = $opt->{to} unless defined $to;
-
-  # Length
-  my $length = $opt->{length};
-  
-  # By
-  my $by = $opt->{by};
-  
-  if (defined $length && defined $by) {
-    croak "Can't use by option and length option as same time";
-  }
-  
-  unless (defined $by) {
-    if ($to >= $from) {
-      $by = 1;
-    }
-    else {
-      $by = -1;
-    }
-  }
-  croak "by option should be except for 0" if $by == 0;
-  
-  $to = $from unless defined $to;
-  
-  if (defined $length && $from ne $to) {
-    $by = ($to - $from) / ($length - 1);
-  }
-  
-  my $values = [];
-  if ($to == $from) {
-    return $r->c([$to]);
-  }
-  elsif ($to > $from) {
-    if ($by < 0) {
-      croak "by option is invalid number(seq function)";
-    }
-    
-    my $value = $from;
-    while ($value <= $to) {
-      push @$values, $value;
-      $value += $by;
-    }
-    return $r->c($values);
+  if ($along) {
+    my $length = $r->length($along);
+    return $self->seq(1,$length);
   }
   else {
-    if ($by > 0) {
-      croak "by option is invalid number(seq function)";
+    # From
+    my $from = shift;
+    $from = $opt->{from} unless defined $from;
+    croak "seq function need from option" unless defined $from;
+    
+    # To
+    my $to = shift;
+    $to = $opt->{to} unless defined $to;
+
+    # Length
+    my $length = $opt->{length};
+    
+    # By
+    my $by = $opt->{by};
+    
+    if (defined $length && defined $by) {
+      croak "Can't use by option and length option as same time";
     }
     
-    my $value = $from;
-    while ($value >= $to) {
-      push @$values, $value;
-      $value += $by;
+    unless (defined $by) {
+      if ($to >= $from) {
+        $by = 1;
+      }
+      else {
+        $by = -1;
+      }
     }
-    return $r->c($values);
+    croak "by option should be except for 0" if $by == 0;
+    
+    $to = $from unless defined $to;
+    
+    if (defined $length && $from ne $to) {
+      $by = ($to - $from) / ($length - 1);
+    }
+    
+    my $values = [];
+    if ($to == $from) {
+      return $r->c([$to]);
+    }
+    elsif ($to > $from) {
+      if ($by < 0) {
+        croak "by option is invalid number(seq function)";
+      }
+      
+      my $value = $from;
+      while ($value <= $to) {
+        push @$values, $value;
+        $value += $by;
+      }
+      return $r->c($values);
+    }
+    else {
+      if ($by > 0) {
+        croak "by option is invalid number(seq function)";
+      }
+      
+      my $value = $from;
+      while ($value >= $to) {
+        push @$values, $value;
+        $value += $by;
+      }
+      return $r->c($values);
+    }
   }
 }
 

@@ -593,27 +593,16 @@ sub length {
 }
 
 sub sort {
-  my ($self, $data) = @_;
+  my ($self, $_v1) = @_;
   
-  if ($data->isa('Rstats::Array')) {
-    my $v2 = Rstats::Array->new;
-    my $sort;
-    my $v1 = $data;
-    my $v1_values = $v1->values;
-    my $v1_values_sorted = [sort(@$v1_values)];
-    $v2->values($v1_values_sorted);
-    return $v2;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  my $v2_values = [sort(@$v1_values)];
+  return $r->c($v2_values);
 }
 
 sub log {
   my ($self, $array) = @_;
-  
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { log $_[0] });
 }
@@ -621,17 +610,11 @@ sub log {
 sub exp {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
-  
   return $self->_apply($array, sub { exp $_[0] });
 }
 
 sub sin {
   my ($self, $array) = @_;
-  
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { sin $_[0] });
 }
@@ -639,17 +622,11 @@ sub sin {
 sub cos {
   my ($self, $array) = @_;
   
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
-  
   return $self->_apply($array, sub { cos $_[0] });
 }
 
 sub tan {
   my ($self, $array) = @_;
-  
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
   
   return $self->_apply($array, sub { Math::Trig::tan $_[0] });
 }
@@ -657,9 +634,6 @@ sub tan {
 sub sqrt {
   my ($self, $array) = @_;
 
-  croak 'sqrt method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
-  
   return $self->_apply($array, sub { sqrt $_[0] });
 }
 
@@ -676,9 +650,6 @@ sub _apply {
 
 sub range {
   my ($self, $array) = @_;
-  
-  croak 'range method must receive Rstats::Array based object'
-    unless defined $array && $array->isa('Rstats::Array');
   
   my $min = $self->min($array);
   my $max = $self->max($array);

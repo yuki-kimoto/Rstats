@@ -13,6 +13,59 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub _v {
+  my ($self, $data) = @_;
+  
+  my $v;
+  if (!ref $data) {
+    $v = $r->c([$data]);
+  }
+  elsif (ref $data eq 'ARRAY') {
+    $v = $r->c($data);
+  }
+  elsif (ref $data eq 'Rstats::Array') {
+    $v = $data;
+  }
+  else {
+    croak "Invalid data is passed";
+  }
+  
+  return $v;
+}
+
+sub replace {
+  my ($self, $_v1, $_v2, $_v3) = @_;
+  
+  my $v1 = $r->_v($_v1);
+  my $v2 = $r->_v($_v2);
+  my $v3 = $r->_v($_v3);
+  
+  my $v1_values = $v1->values;
+  my $v2_values = $v2->values;
+  my $v2_values_h = {};
+  for my $v2_value (@$v2_values) {
+    $v2_values_h->{$v2_value - 1}++;
+    croak "replace second argument can't have duplicate number"
+      if $v2_values_h->{$v2_value - 1} > 1;
+  }
+  my $v3_values = $v3->values;
+  my $v3_length = @{$v3_values};
+  
+  my $v4_values = [];
+  my $replace_count = 0;
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    if ($v2_values_h->{$i}) {
+      push @$v4_values, $v3_values->[$replace_count % $v3_length];
+      $replace_count++;
+    }
+    else {
+      push @$v4_values, $v1_values->[$i];
+    }
+  }
+  
+  return $r->array($v4_values, {type => $v1->type});
+}
+
 sub dim {
   my ($self, $v1, $dim) = @_;
   
@@ -535,12 +588,12 @@ sub sqrt {
 sub _apply {
   my ($self, $array1, $cb) = @_;
   
-  my $array2 = $array1->new;
   my $array1_values = $array1->values;
-  my $array2_values = $array2->values;
-  $array2_values->[$_] = $cb->($array1_values->[$_])
-    for (0 .. @$array1_values - 1);
-  return $array2;
+  my @array2_values = map {
+    $cb->($array1_values->[$_]) 
+  } (0 .. @$array1_values - 1);
+
+  return $array1->new(values => \@array2_values);
 }
 
 sub range {

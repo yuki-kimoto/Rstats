@@ -8,6 +8,33 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# replace
+{
+  {
+    my $v1 = $r->c('1:10');
+    my $v2 = $r->c([2, 5, 10]);
+    my $v3 = $r->c([12, 15, 20]);
+    my $v4 = $r->replace($v1, $v2, $v3);
+    is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 20]);
+  }
+  
+  # replace - single value
+  {
+    my $v1 = $r->c('1:10');
+    my $v2 = $r->c([2, 5, 10]);
+    my $v4 = $r->replace($v1, $v2, 11);
+    is_deeply($v4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
+  }
+  
+  # replace - few values
+  {
+    my $v1 = $r->c('1:10');
+    my $v2 = $r->c([2, 5, 10]);
+    my $v4 = $r->replace($v1, $v2, [12, 15]);
+    is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
+  }
+}
+
 # head
 {
   {

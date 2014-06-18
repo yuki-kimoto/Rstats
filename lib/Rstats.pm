@@ -258,12 +258,7 @@ sub array {
 sub paste {
   my $self = shift;
 
-  # Option
-  my $opt;
-  if (ref $_[-1] eq 'HASH') {
-    $opt = pop @_;
-  }
-  $opt ||= {};
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my $sep = $opt->{sep};
   $sep = ' ' unless defined $sep;
@@ -290,12 +285,7 @@ sub c {
 sub seq {
   my $self = shift;
   
-  # Option
-  my $opt;
-  if (ref $_[-1] eq 'HASH') {
-    $opt = pop @_;
-  }
-  $opt ||= {};
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   # From
   my $from = shift;
@@ -365,12 +355,7 @@ sub seq {
 sub rep {
   my $self = shift;
 
-  # Option
-  my $opt;
-  if (ref $_[-1] eq 'HASH') {
-    $opt = pop @_;
-  }
-  $opt ||= {};
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my $v1 = shift;
   my $times = $opt->{times} || 1;

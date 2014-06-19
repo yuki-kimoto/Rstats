@@ -8,6 +8,13 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# sequence
+{
+  my $v1 = $r->c([1, 2, 3]);
+  my $v2 = $r->sequence($v1);
+  is_deeply($v2->values, [1, 1, 2, 1, 2, 3])
+}
+  
 # sample
 {
   {

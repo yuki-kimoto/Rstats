@@ -11,19 +11,18 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
-my $r = Rstats->new;
-
 sub sequence {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_v($_v1);
   my $v1_values = $v1->values;
   
+  my @v2_values;
+  for my $v1_value (@$v1_values) {
+    push @v2_values, $self->seq($v1_value)->values;
+  }
   
-  
-  
-  
-  
+  return $self->c(\@v2_values);
 }
 
 # TODO: prob option
@@ -92,7 +91,7 @@ sub _order {
     : sort { $b->{val} <=> $a->{val} } @pos_vals;
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
-  return $r->c(\@orders);
+  return $self->c(\@orders);
 }
 
 sub which {
@@ -655,7 +654,7 @@ sub sort {
   my $v1 = $self->_v($_v1);
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
-  return $r->c($v2_values);
+  return $self->c($v2_values);
 }
 
 sub log {

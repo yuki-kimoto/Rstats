@@ -13,6 +13,8 @@ my $r = Rstats->new;
   my $v1 = $r->NULL;
   is_deeply($v1->values, []);
   is("$v1", 'NULL');
+  $v1->set(3 => 5);
+  is_deeply($v1->values, [undef, undef, 5]);
 }
 
 # order

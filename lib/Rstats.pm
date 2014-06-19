@@ -369,18 +369,26 @@ sub seq {
   
   if ($along) {
     my $length = $self->length($along);
-    return $self->seq(1,$length);
+    return $self->seq([1,$length]);
   }
   else {
+    my $from_to = shift;
+    my $from;
+    my $to;
+    if (ref $from_to eq 'ARRAY') {
+      $from = $from_to->[0];
+      $to = $from_to->[1];
+    }
+    else {
+      $from = $to = $from_to;
+    }
+    
     # From
-    my $from = shift;
     $from = $opt->{from} unless defined $from;
     croak "seq function need from option" unless defined $from;
     
     # To
-    my $to = shift;
     $to = $opt->{to} unless defined $to;
-    $to = $from unless defined $to;
 
     # Length
     my $length = $opt->{length};

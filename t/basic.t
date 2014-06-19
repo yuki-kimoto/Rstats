@@ -353,7 +353,7 @@ my $r = Rstats->new;
   
   # seq($from, $to),  n > m
   {
-    my $v = $r->seq(1, 3);
+    my $v = $r->seq([1, 3]);
     is_deeply($v->values, [1, 2, 3]);
   }
 
@@ -365,31 +365,31 @@ my $r = Rstats->new;
   
   # seq($from, $to),  n < m
   {
-    my $v = $r->seq(3, 1);
+    my $v = $r->seq([3, 1]);
     is_deeply($v->values, [3, 2, 1]);
   }
   
   # seq($from, $to), n = m
   {
-    my $v = $r->seq(2, 2);
+    my $v = $r->seq([2, 2]);
     is_deeply($v->values, [2]);
   }
   
   # seq($from, $to, {by => p}) n > m
   {
-    my $v = $r->seq(1, 3, {by => 0.5});
+    my $v = $r->seq([1, 3], {by => 0.5});
     is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 
   # seq($from, $to, {by => p}) n > m
   {
-    my $v = $r->seq(3, 1, {by => -0.5});
+    my $v = $r->seq([3, 1], {by => -0.5});
     is_deeply($v->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
   }
   
   # seq($from, {by => p, length => l})
   {
-    my $v = $r->seq(1, 3, {length => 5});
+    my $v = $r->seq([1, 3], {length => 5});
     is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
   

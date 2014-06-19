@@ -13,6 +13,33 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub sample {
+  my $self = shift;
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  my ($_v1, $length) = @_;
+  my $v1 = $self->_v($_v1);
+  
+  # Replace
+  my $replace = $opt->{replace};
+  
+  my $v1_length = $self->length($v1);
+  $length = $v1_length unless defined $length;
+  
+  croak "second argument value must be bigger than first argument elements count when you specify 'replace' option"
+    if $length > $v1_length && !$replace;
+  
+  my @v2_values;
+  for my $i (0 .. $length - 1) {
+    my $rand_num = int(rand $self->length($v1));
+    my $rand_value = splice @{$v1->values}, $rand_num, 1;
+    push @v2_values, $rand_value;
+    push @{$v1->values}, $rand_value if $replace;
+  }
+  
+  return $self->c(\@v2_values);
+}
+
 sub NULL { shift->numeric(0) }
 
 sub _v {
@@ -252,9 +279,9 @@ sub array {
     
     my $from;
     my $to;
-    if ($str =~ /(.+?):(.+)/) {
+    if ($str =~ /(.+?)(:(.+))?/) {
       $from = $1;
-      $to = $2;
+      $to = $3;
     }
     
     $array = $self->seq({from => $from, to => $to, by => $by});
@@ -353,6 +380,7 @@ sub seq {
     # To
     my $to = shift;
     $to = $opt->{to} unless defined $to;
+    $to = $from unless defined $to;
 
     # Length
     my $length = $opt->{length};

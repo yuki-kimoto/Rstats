@@ -8,6 +8,70 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# sample
+{
+  {
+    my $v1 = $r->c('1:100');
+    my $v2 = $r->sample($v1, 50);
+    is($r->length($v2), 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $v2_value (@{$v2->values}) {
+      $duplicate_h->{$v2_value}++;
+      $duplicate = 1 if $duplicate_h->{$v2_value} > 2;
+      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$duplicate);
+    ok(!$invalid_value);
+  }
+  
+  # sample - replace => 0
+  {
+    my $v1 = $r->c('1:100');
+    my $v2 = $r->sample($v1, 50, {replace => 0});
+    is($r->length($v2), 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $v2_value (@{$v2->values}) {
+      $duplicate_h->{$v2_value}++;
+      $duplicate = 1 if $duplicate_h->{$v2_value} > 2;
+      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$duplicate);
+    ok(!$invalid_value);
+  }
+
+  # sample - replace => 0
+  {
+    my $v1 = $r->c('1:100');
+    my $v2 = $r->sample($v1, 50, {replace => 1});
+    is($r->length($v2), 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $v2_value (@{$v2->values}) {
+      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$invalid_value);
+  }
+  
+  # sample - replace => 0, (strict check)
+  {
+    my $v1 = $r->c(1);
+    my $v2 = $r->sample($v1, 5, {replace => 1});
+    is($r->length($v2), 5);
+    is_deeply($v2->values, [1, 1, 1, 1, 1]);
+  }
+}
+
 # NULL
 {
   my $v1 = $r->NULL;
@@ -280,6 +344,12 @@ my $r = Rstats->new;
 # seq function
 {
   my $r = Rstats->new;
+
+  # seq($from)
+  {
+    my $v = $r->seq(1);
+    is_deeply($v->values, [1]);
+  }
   
   # seq($from, $to),  n > m
   {

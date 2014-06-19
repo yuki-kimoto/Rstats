@@ -347,8 +347,8 @@ my $r = Rstats->new;
 
   # seq($from)
   {
-    my $v = $r->seq(1);
-    is_deeply($v->values, [1]);
+    my $v = $r->seq(3);
+    is_deeply($v->values, [1, 2, 3]);
   }
   
   # seq($from, $to),  n > m

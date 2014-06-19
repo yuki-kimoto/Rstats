@@ -13,6 +13,20 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub sequence {
+  my ($self, $_v1) = @_;
+  
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  
+  
+  
+  
+  
+  
+}
+
+# TODO: prob option
 sub sample {
   my $self = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
@@ -380,7 +394,8 @@ sub seq {
       $to = $from_to->[1];
     }
     else {
-      $from = $to = $from_to;
+      $from = 1;
+      $to = $from_to;
     }
     
     # From

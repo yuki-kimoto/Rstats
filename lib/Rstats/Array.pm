@@ -139,16 +139,22 @@ sub set {
 
 sub to_string {
   my $self = shift;
-  
-  my $str = '';
-  my $names_v = $r->names($self);
-  if ($names_v) {
-    $str .= join(' ', @{$names_v->values}) . "\n";
-  }
-  
+
   my $values = $self->values;
+
+  my $str;
   if (@$values) {
-    $str .= '[1] ' . join(' ', @$values) . "\n";
+    my $names_v = $r->names($self);
+    if ($names_v) {
+      $str .= join(' ', @{$names_v->values}) . "\n";
+    }
+    
+    if (@$values) {
+      $str .= '[1] ' . join(' ', @$values) . "\n";
+    }
+  }
+  else {
+    $str = 'NULL';
   }
   
   return $str;

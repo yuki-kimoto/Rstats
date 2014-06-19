@@ -8,6 +8,13 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# NULL
+{
+  my $v1 = $r->NULL;
+  is_deeply($v1->values, []);
+  is("$v1", 'NULL');
+}
+
 # order
 {
   my $v1 = $r->c([2, 4, 3, 1]);

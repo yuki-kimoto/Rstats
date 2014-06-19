@@ -13,6 +13,8 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+sub NULL { shift->numeric(0) }
+
 sub _v {
   my ($self, $data) = @_;
   

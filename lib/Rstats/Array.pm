@@ -35,8 +35,54 @@ sub new {
     my $length = @{$self->{values}};
     $self->dim([$length]);
   }
-  $self->{mode} = 'number' unless $self->{mode};
+  $self->{mode} = 'numeric' unless $self->{mode};
   
+  return $self;
+}
+
+sub is_numeric { (shift->{mode} || '') eq 'numeric' }
+sub is_integer { (shift->{mode} || '') eq 'integer' }
+sub is_complex { (shift->{mode} || '') eq 'complex' }
+sub is_character { (shift->{mode} || '') eq 'character' }
+sub is_logical { (shift->{mode} || '') eq 'logical' }
+
+sub as_numeric {
+  my $self = shift;
+
+  $self->{mode} = 'numeric';
+
+  return $self;
+}
+
+sub as_integer {
+  my $self = shift;
+
+  $self->{mode} = 'integer';
+
+  return $self;
+}
+
+sub as_complex {
+  my $self = shift;
+
+  $self->{mode} = 'complex';
+
+  return $self;
+}
+
+sub as_character {
+  my $self = shift;
+
+  $self->{mode} = 'character';
+
+  return $self;
+}
+
+sub as_logical {
+  my $self = shift;
+
+  $self->{mode} = 'logical';
+
   return $self;
 }
 

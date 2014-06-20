@@ -8,6 +8,30 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# is_*, as_*
+{
+  # numeric
+  my $c = $r->c([1, 2, 3]);
+  is($c->mode, 'numeric');
+  ok($c->is_numeric);
+  
+  # Integer
+  ok($c->as_integer->is_integer);
+  is($c->mode, 'integer');
+  
+  # Character
+  ok($c->as_character->is_character);
+  is($c->mode, 'character');
+  
+  # Compex
+  ok($c->as_complex->is_complex);
+  is($c->mode, 'complex');
+  
+  # Logical
+  ok($c->as_logical->is_logical);
+  is($c->mode, 'logical');
+}
+
 # matrix
 {
   {

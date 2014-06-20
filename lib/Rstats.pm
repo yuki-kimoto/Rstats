@@ -561,17 +561,12 @@ sub pmin {
 }
 
 sub abs {
-  my ($self, $data) = @_;
+  my ($self, $v1) = @_;
   
-  if ($data->isa('Rstats::Array')) {
-    my $tmp_v = $data * $data;
-    my $abs = sqrt $self->sum($tmp_v)->value;
+  my $tmp_v = $v1 * $v1;
+  my $abs = sqrt $self->sum($tmp_v)->value;
 
-    return $abs;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  return $self->c($abs);
 }
 
 sub sum {

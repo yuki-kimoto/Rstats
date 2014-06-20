@@ -300,7 +300,7 @@ my $r = Rstats->new;
   my $r = Rstats->new;
   my $v1 = $r->c([3, 4]);
   my $abs = $r->abs($v1);
-  is($abs, 5);
+  is($abs->value, 5);
 }
 
 # paste

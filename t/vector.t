@@ -64,6 +64,13 @@ use Rstats;
       my $v2 = $v1->get($r->c([0, 1, 0, 1, 1])->as_logical);
       is_deeply($v2->values, [3, 7, undef]);
     }
+    
+    # get - at
+    {
+      my $v1 = $r->c([1, 2, 3, 4]);
+      my $v2 = $v1->at(1)->get;
+      is_deeply($v2->values, [1]);
+    }
   }
   
   # add to original vector

@@ -18,7 +18,18 @@ use overload
 has 'values';
 has 'type';
 has 'mode';
-has 'at';
+
+sub at {
+  my $self = shift;
+  
+  if (@_) {
+    $self->{at} = [@_];
+    
+    return $self;
+  }
+  
+  return $self->{at};
+}
 
 sub value { shift->{values}[0] }
 
@@ -120,7 +131,15 @@ sub dim {
 }
 
 sub get {
-  my ($self, $indexes_tmp) = @_;
+  my $self = shift;
+  
+  my $indexes_tmp;
+  if (@_) {
+    ($indexes_tmp) = @_;
+  }
+  else {
+    ($indexes_tmp) = @{$self->at};
+  }
   
   croak "get need one values" unless defined $indexes_tmp;
   return $self->new(values => [$self->{values}[$indexes_tmp - 1]])

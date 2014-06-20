@@ -11,6 +11,39 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
+sub rnorm {
+  my $self = shift;
+  
+  # Option
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  # Count
+  my ($count, $mean, $sd) = @_;
+  croak "rnorm count should be bigger than 0"
+    if $count < 1;
+  
+  # Mean
+  $mean = 0 unless defined $mean;
+  
+  # Standard deviation
+  $sd = 1 unless defined $sd;
+  
+  # Random numbers(standard deviation)
+  my @v1_values;
+  for (1 .. $count) {
+    my ($rand1, $rand2) = (rand, rand);
+    while ($rand1 == 0) { $rand1 = rand(); }
+    
+    my $rnorm = ($sd * sqrt(-2 * log($rand1))
+      * sin(2 * Math::Trig::pi * $rand2))
+      + $mean;
+    
+    push @v1_values, $rnorm;
+  }
+  
+  return $self->c(\@v1_values);
+}
+
 sub sequence {
   my ($self, $_v1) = @_;
   

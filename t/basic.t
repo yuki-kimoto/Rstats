@@ -8,6 +8,12 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# rnorm
+{
+  my $v1 = $r->rnorm(100);
+  is($r->length($v1), 100);
+}
+
 # sequence
 {
   my $v1 = $r->c([1, 2, 3]);

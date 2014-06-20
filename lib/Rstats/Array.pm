@@ -27,8 +27,47 @@ sub new {
   
   $self->{values} ||= [];
   $self->{type} ||= 'array';
+  if (defined $self->{dim}) {
+    $self->dim($self->{dim});
+  }
+  else {
+    my $length = @{$self->{values}};
+    $self->dim([$length]);
+  }
   
   return $self;
+}
+
+sub dim {
+  my $self = shift;
+  
+  if (@_) {
+    my $v1 = $_[0];
+    if (ref $v1 eq 'Rstats::Array') {
+      $self->{dim} = $v1->values;
+    }
+    elsif (ref $v1 eq 'ARRAY') {
+      $self->{dim} = $v1;
+    }
+    elsif(!ref $v1) {
+      $self->{dim} = [$v1];
+    }
+    else {
+      croak "Invalid values is passed to dim argument";
+    }
+  }
+  else {
+    my $dim = $self->{dim};
+    my $length = @$dim;
+    
+    my $v1 = Rstats::Array->new(
+      values => $dim,
+      type => 'matrix',
+      dim => [$length]
+    );
+    
+    return $v1;
+  } 
 }
 
 sub get {

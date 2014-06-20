@@ -211,13 +211,12 @@ sub dim {
   my ($self, $v1, $dim) = @_;
   
   if ($dim) {
-    if (ref $dim eq 'ARRAY') {
-      $dim = $self->c($dim);
-    }
-    $v1->{dim} = $dim;
+    $v1->dim($dim);
+    
+    return $self;
   }
   else {
-    return $v1->{dim};
+    return $v1->dim;
   }
 }
 
@@ -322,6 +321,7 @@ sub array {
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $type = $opt->{type} || 'array';
+  my $dim = $opt->{dim};
   
   my $array;
   if (ref $data eq 'ARRAY') {
@@ -337,7 +337,11 @@ sub array {
         push @$values, $a;
       }
     }
-    $array = Rstats::Array->new(values => $values, type => $type);
+    $array = Rstats::Array->new(
+      values => $values,
+      type => $type,
+      dim => $opt->{dim}
+    );
   }
   elsif (ref $data) {
     $array = $data;
@@ -358,19 +362,7 @@ sub array {
     }
     
     $array = $self->seq({from => $from, to => $to, by => $by});
-  }
-  
-  my $dim = $opt->{dim};
-  if ($dim) {
-    if (ref $dim eq 'ARRAY') {
-      $array->dim($self->c($dim));
-    }
-    elsif (ref $dim eq 'Rstats::Array') {
-      $array->dim($dim);
-    }
-    else {
-      croak "dim option must be array";
-    }
+    $array->dim($opt->{dim}) if $opt->{dim};
   }
   
   return $array;
@@ -492,7 +484,7 @@ sub seq {
     
     my $values = [];
     if ($to == $from) {
-      return $self->c([$to]);
+      $values->[0] = $to;
     }
     elsif ($to > $from) {
       if ($by < 0) {
@@ -504,7 +496,6 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return $self->c($values);
     }
     else {
       if ($by > 0) {
@@ -516,8 +507,12 @@ sub seq {
         push @$values, $value;
         $value += $by;
       }
-      return $self->c($values);
     }
+    
+    my $v1 = Rstats::Array->new(
+      values => $values,
+      type => 'vector',
+    );
   }
 }
 

@@ -255,16 +255,14 @@ my $r = Rstats->new;
   {
     my $mat = $r->matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    my $dim = $r->dim($mat);
-    is_deeply($dim->values, [2, 5]);
+    is_deeply($mat->dim->values, [2, 5]);
     is($r->type($mat), 'matrix');
   }
   
   {
     my $mat = $r->matrix([1,2], 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
-    my $dim = $r->dim($mat);
-    is_deeply($dim->values, [2, 5]);
+    is_deeply($mat->dim->values, [2, 5]);
     is($r->type($mat), 'matrix');
   }
 }
@@ -287,8 +285,14 @@ my $r = Rstats->new;
 
 # array
 {
-  my $array = $r->array(25);
-  is_deeply($array->values, [25]);
+  {
+    my $array = $r->array(25);
+    is_deeply($array->values, [25]);
+  }
+  {
+    my $array = $r->array([1, 2, 3]);
+    is_deeply($array->dim->values, [3]);
+  }
 }
 
 # Type

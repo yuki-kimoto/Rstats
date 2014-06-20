@@ -17,6 +17,7 @@ use overload
 
 has 'values';
 has 'type';
+has 'mode';
 
 sub value { shift->{values}[0] }
 
@@ -34,6 +35,7 @@ sub new {
     my $length = @{$self->{values}};
     $self->dim([$length]);
   }
+  $self->{mode} = 'number' unless $self->{mode};
   
   return $self;
 }
@@ -120,27 +122,17 @@ sub get {
 }
 
 sub get_b {
-  my ($self, $booles_tmp) = @_;
+  my ($self, $_bools_v) = @_;
 
-  croak "get need one values" unless defined $booles_tmp;
-  return $self->new(values => [$self->{values}[$booles_tmp - 1]])
-    if !ref $booles_tmp && $booles_tmp > 0;
+  croak "get need one values" unless defined $_bools_v;
   
-  my $booles;
-  if (ref $booles_tmp eq 'ARRAY') {
-    $booles = $booles_tmp;
-  }
-  elsif (ref $booles_tmp eq 'Rstats::Array') {
-    $booles = $booles_tmp->{values};
-  }
-  else {
-    $booles = [$booles_tmp];
-  }
+  my $bools_v = $r->_v($_bools_v);
+  my $bools_values = $bools_v->values;
   
   my $values1 = $self->values;
   my @values2;
-  for (my $i = 0; $i < @$booles; $i++) {
-    push @values2, $values1->[$i] if $booles->[$i];
+  for (my $i = 0; $i < @$bools_values; $i++) {
+    push @values2, $values1->[$i] if $bools_values->[$i];
   }
   
   return $self->new(values => \@values2);
@@ -171,9 +163,9 @@ sub get_s {
 }
 
 sub set {
-  my ($self, $idx, $value) = @_;
+  my ($self, $idx, $v1) = @_;
   
-  $self->{values}[$idx - 1] = $value;
+  $self->{values}[$idx - 1] = $v1;
   
   return $self;  
 }

@@ -8,6 +8,34 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# matrix
+{
+  {
+    my $mat = $r->matrix(0, 2, 5);
+    is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    is_deeply($mat->dim->values, [2, 5]);
+    is($r->type($mat), 'matrix');
+  }
+  
+  # matrix - repeat values
+  {
+    my $mat = $r->matrix([1,2], 2, 5);
+    is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
+    is_deeply($mat->dim->values, [2, 5]);
+    is($r->type($mat), 'matrix');
+  }
+
+=pod  
+  # matrix - to_string
+  {
+    my $mat = $r->matrix(0, 2, 5);
+    $mat->set(1 => [1, 2, 3]);
+    $mat->set(2 => [4, 5, 6]);
+    is_deeply($mat->values, [1, 4, 2, 5, 3, 6]);
+  }
+=cut
+}
+
 # cumsum
 {
   my $v1 = $r->c([1, 2, 3]);
@@ -248,23 +276,6 @@ my $r = Rstats->new;
   $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
   my $v2 = $v1->get_s($r->c(['b', 'd']));
   is_deeply($v2->values, [2, 4]);
-}
-
-# matrix
-{
-  {
-    my $mat = $r->matrix(0, 2, 5);
-    is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    is_deeply($mat->dim->values, [2, 5]);
-    is($r->type($mat), 'matrix');
-  }
-  
-  {
-    my $mat = $r->matrix([1,2], 2, 5);
-    is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
-    is_deeply($mat->dim->values, [2, 5]);
-    is($r->type($mat), 'matrix');
-  }
 }
 
 # to_string

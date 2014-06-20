@@ -18,6 +18,8 @@ use overload
 has 'values';
 has 'type';
 
+sub value { shift->{values}[0] }
+
 my $r = Rstats->new;
 
 sub new {

@@ -268,6 +268,12 @@ my $r = Rstats->new;
   is($r->length($array), 3);
 }
 
+# array
+{
+  my $array = $r->array(25);
+  is_deeply($array->values, [25]);
+}
+
 =pod
 # Type
 {
@@ -617,7 +623,7 @@ my $r = Rstats->new;
   {
     my $v1 = $r->c([1, 2, 3]);
     my $sum = $r->sum($v1);
-    is($sum, 6);
+    is($sum->value, 6);
   }
 
   # prod
@@ -638,7 +644,7 @@ my $r = Rstats->new;
   {
     my $v1 = $r->c([2, 3, 4, 7, 9]);
     my $var = $r->var($v1);
-    is($var, 8.5);
+    is($var->value, 8.5);
   }
   
   # sort

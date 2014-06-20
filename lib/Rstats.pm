@@ -325,9 +325,10 @@ sub array {
     
     my $from;
     my $to;
-    if ($str =~ /(.+?)(:(.+))?/) {
+    if ($str =~ /([^\:]+)(?:\:(.+))?/) {
       $from = $1;
-      $to = $3;
+      $to = $2;
+      $to = $from unless defined $to;
     }
     
     $array = $self->seq({from => $from, to => $to, by => $by});
@@ -425,7 +426,7 @@ sub seq {
       $from = $from_to->[0];
       $to = $from_to->[1];
     }
-    else {
+    elsif (defined $from_to) {
       $from = 1;
       $to = $from_to;
     }
@@ -564,7 +565,7 @@ sub abs {
   
   if ($data->isa('Rstats::Array')) {
     my $tmp_v = $data * $data;
-    my $abs = sqrt $self->sum($tmp_v);
+    my $abs = sqrt $self->sum($tmp_v)->value;
 
     return $abs;
   }
@@ -574,18 +575,12 @@ sub abs {
 }
 
 sub sum {
-  my ($self, $data) = @_;
+  my ($self, $_v1) = @_;
   
-  if ($data->isa('Rstats::Array')) {
-    my $sum;
-    my $v = $data;
-    my $v_values = $v->values;
-    $sum = List::Util::sum(@$v_values);
-    return $sum;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  my $sum = List::Util::sum(@$v1_values);
+  return $self->c($sum);
 }
 
 sub prod {
@@ -608,7 +603,7 @@ sub mean {
   
   if ($data->isa('Rstats::Array')) {
     my $v = $data;
-    my $mean = $self->sum($v) / $self->length($v);
+    my $mean = $self->sum($v)->value / $self->length($v);
     return $mean;
   }
   else {

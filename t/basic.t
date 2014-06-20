@@ -274,7 +274,6 @@ my $r = Rstats->new;
   is_deeply($array->values, [25]);
 }
 
-=pod
 # Type
 {
   my $array = Rstats::Array->new(values => [1, 2, 3]);
@@ -284,7 +283,6 @@ my $r = Rstats->new;
   $array->as_matrix;
   ok($array->is_matrix);
 }
-=cut
 
 # Array get and set
 {

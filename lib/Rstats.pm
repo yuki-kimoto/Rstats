@@ -612,17 +612,12 @@ sub mean {
 }
 
 sub var {
-  my ($self, $data) = @_;
+  my ($self, $v1) = @_;
 
-  if ($data->isa('Rstats::Array')) {
-    my $v = $data;
-    
-    my $var = $self->sum(($v - $self->mean($v)) ** 2) / ($self->length($v) - 1);
-    return $var;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
+    / ($self->length($v1) - 1);
+  
+  return $self->c($var);
 }
 
 sub head {

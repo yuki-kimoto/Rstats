@@ -630,14 +630,14 @@ my $r = Rstats->new;
   {
     my $v1 = $r->c([2, 3, 4]);
     my $prod = $r->prod($v1);
-    is($prod, 24);
+    is($prod->value, 24);
   }
   
   # mean
   {
     my $v1 = $r->c([1, 2, 3]);
     my $mean = $r->mean($v1);
-    is($mean, 2);
+    is($mean->value, 2);
   }
 
   # var

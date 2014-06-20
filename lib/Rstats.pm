@@ -584,31 +584,20 @@ sub sum {
 }
 
 sub prod {
-  my ($self, $data) = @_;
+  my ($self, $v1) = @_;
   
-  if ($data->isa('Rstats::Array')) {
-    my $prod;
-    my $v = $data;
-    my $v_values = $v->values;
-    $prod = List::Util::product(@$v_values);
-    return $prod;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  my $v1_values = $v1->values;
+  my $prod = List::Util::product(@$v1_values);
+  return $self->c($prod);
 }
 
 sub mean {
   my ($self, $data) = @_;
   
-  if ($data->isa('Rstats::Array')) {
-    my $v = $data;
-    my $mean = $self->sum($v)->value / $self->length($v);
-    return $mean;
-  }
-  else {
-    croak 'Not implemented';
-  }
+  my $v = $data;
+  my $mean = $self->sum($v)->value / $self->length($v);
+  
+  return $self->c($mean);
 }
 
 sub var {

@@ -298,7 +298,7 @@ my $r = Rstats->new;
 {
   my $v1 = $r->c([1, 2, 3, 4]);
   $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
-  my $v2 = $v1->get_s($r->c(['b', 'd']));
+  my $v2 = $v1->get($r->c(['b', 'd'])->as_character);
   is_deeply($v2->values, [2, 4]);
 }
 

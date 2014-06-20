@@ -49,30 +49,21 @@ use Rstats;
       my $v2 = $v1->get(sub { $_ > 3});
       is_deeply($v2->values, [4, 5]);
     }
-  }
-  
-  # get_b
-  {
-    # getb - single number
+    
+    # get - character
     {
-      my $v1 = $r->c([1, 3, 5, 7]);
-      my $v2 = $v1->get_b(1);
-      is_deeply($v2->values, [1]);
+      my $v1 = $r->c([1, 2, 3, 4]);
+      $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
+      my $v2 = $v1->get($r->c(['b', 'd'])->as_character);
+      is_deeply($v2->values, [2, 4]);
     }
-    # getb - multiple number
+    
+    # get - logical
     {
       my $v1 = $r->c([1, 3, 5, 7]);
-      my $v2 = $v1->get_b([0, 1, 0, 1, 1]);
+      my $v2 = $v1->get($r->c([0, 1, 0, 1, 1])->as_logical);
       is_deeply($v2->values, [3, 7, undef]);
     }
-  }
-
-  # get_s
-  {
-    my $v1 = $r->c([1, 2, 3, 4]);
-    $r->names($v1 => $r->c(['a', 'b', 'c', 'd']));
-    my $v2 = $v1->get_s($r->c(['b', 'd']));
-    is_deeply($v2->values, [2, 4]);
   }
   
   # add to original vector

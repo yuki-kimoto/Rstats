@@ -18,6 +18,7 @@ use overload
 has 'values';
 has 'type';
 has 'mode';
+has 'at';
 
 sub value { shift->{values}[0] }
 
@@ -136,6 +137,12 @@ sub get {
   }
   elsif (ref $indexes_tmp eq 'Rstats::Array') {
     $indexes = $indexes_tmp->{values};
+    if ($indexes_tmp->is_character) {
+      return $self->_get_character($indexes_tmp);
+    }
+    elsif ($indexes_tmp->is_logical) {
+      return $self->_get_logical($indexes_tmp);
+    }
   }
   else {
     $indexes = [$indexes_tmp];
@@ -167,7 +174,7 @@ sub get {
   return $self->new(values => \@values2);
 }
 
-sub get_b {
+sub _get_logical {
   my ($self, $_bools_v) = @_;
 
   croak "get need one values" unless defined $_bools_v;
@@ -184,7 +191,7 @@ sub get_b {
   return $self->new(values => \@values2);
 }
 
-sub get_s {
+sub _get_character {
   my ($self, $names) = @_;
   
   my $array2 = $names;

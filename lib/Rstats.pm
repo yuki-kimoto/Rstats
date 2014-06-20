@@ -276,23 +276,37 @@ sub numeric {
 }
 
 sub matrix {
-  my ($self, $data, $row_num, $col_num) = @_;
+  my $self = shift;
   
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+
+  my ($_v1, $nrow, $ncol) = @_;
+
   croak "matrix method need data as frist argument"
-    unless defined $data;
+    unless defined $_v1;
   
-  my $length = $row_num * $col_num;
+  my $v1 = $self->_v($_v1);
   
-  my $values;
-  unless (ref $data) {
-    $values = [($data) x $length];
+  # Row count
+  $nrow = $opt->{nrow} unless defined $nrow;
+  $nrow = 1 unless defined $nrow;
+  
+  # Column count
+  $ncol = $opt->{ncol} unless defined $ncol;
+  $ncol = 1 unless defined $ncol;
+  
+  my $length = $nrow * $ncol;
+  my $v1_values = $v1->values;
+  my $v1_length = @$v1_values;
+  
+  my @v2_values;
+  for (my $i = 0; $i < $length; $i++) {
+    push @v2_values, $v1_values->[$i % $v1_length]
   }
   
-  my $matrix = Rstats::Array->new(
-    values => $values,
-    type => 'matrix'
-  );
-  $self->dim($matrix, [$row_num, $col_num]);
+  my $matrix
+    = $self->array(\@v2_values,{type => 'matrix'});
+  $self->dim($matrix, [$nrow, $ncol]);
   
   return $matrix;
 }

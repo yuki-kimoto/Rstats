@@ -145,15 +145,12 @@ sub to_string {
   my $values = $self->values;
 
   my $str;
+  my $names_v = $r->names($self);
+  if ($names_v) {
+    $str .= join(' ', @{$names_v->values}) . "\n";
+  }
   if (@$values) {
-    my $names_v = $r->names($self);
-    if ($names_v) {
-      $str .= join(' ', @{$names_v->values}) . "\n";
-    }
-    
-    if (@$values) {
-      $str .= '[1] ' . join(' ', @$values) . "\n";
-    }
+    $str .= '[1] ' . join(' ', @$values) . "\n";
   }
   else {
     $str = 'NULL';

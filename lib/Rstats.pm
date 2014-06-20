@@ -11,6 +11,18 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
+sub cumsum {
+  my ($self, $_v1) = @_;
+  
+  my $v1 = $self->_v($_v1);
+  my $v1_values = $v1->values;
+  my @v2_values;
+  my $total = 0;
+  push @v2_values, $total = $total + $_ for (@$v1_values);
+  
+  return $self->c(\@v2_values);
+}
+
 sub rnorm {
   my $self = shift;
   
@@ -735,7 +747,8 @@ sub i {
 Rstats - R language build on Perl
 
 =head1 SYNOPSYS
-
+  
+  use Rstats;
   my $r = Rstats->new;
   
   # Array

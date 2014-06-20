@@ -505,7 +505,7 @@ sub rep {
   
   my $values = [];
   push @$values, @{$v1->values} for 1 .. $times;
-  my $v2 = Rstats::Array->new(values => $values);
+  my $v2 = $self->c($values);
   
   return $v2;
 }
@@ -538,7 +538,7 @@ sub pmax {
     }
   }
   
-  my $v_max = Rstats::Array->new(values => \@maxs);
+  my $v_max = $self->c(\@maxs);
   
   return $v_max;
 }
@@ -555,7 +555,7 @@ sub pmin {
     }
   }
   
-  my $v_min = Rstats::Array->new(values => \@mins);
+  my $v_min = $self->c(\@mins);
   
   return $v_min;
 }

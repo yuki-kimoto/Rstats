@@ -761,6 +761,7 @@ Rstats - R language build on Perl
   my $r = Rstats->new;
   
   # Array
-  my $v1 = $self->c([1, 2, 3]);
-  my $v2 = $self->c([2, 3, 4]);
+  my $v1 = $r->c([1, 2, 3]);
+  my $v2 = $r->c([2, 3, 4]);
   my $v3 = $v1 + v2;
+  print $v3;

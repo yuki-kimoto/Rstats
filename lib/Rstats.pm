@@ -104,7 +104,10 @@ sub _v {
   my ($self, $data) = @_;
   
   my $v;
-  if (!ref $data) {
+  if (!defined $data || !length $data) {
+    $v = $self->NULL;
+  }
+  elsif (!ref $data) {
     $v = $self->c([$data]);
   }
   elsif (ref $data eq 'ARRAY') {

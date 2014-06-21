@@ -138,10 +138,14 @@ sub get {
   unless (@_indexs) {
     @_indexs = @{$self->at};
   }
-  
+
+  my $a1_values = $self->values;
+  my $a1_dim = $self->dim->values;
   my $grep_cb;
   my @indexs;
-  for my $_index (@_indexs) {
+  for (my $i = 0; $i < @$a1_dim; $i++) {
+    my $_index = $_indexs[$i];
+    
     if (ref $_index eq 'CODE') {
       $grep_cb = $_index;
       last;
@@ -149,7 +153,7 @@ sub get {
     else {
       my $index = $self->r->_v($_index);
       my $index_values = $index->values;
-      if (!$index->is_character && !$index->is_logical) {
+      if (@$index_values && !$index->is_character && !$index->is_logical) {
         my $minus_count = 0;
         for my $index_value (@$index_values) {
           if ($index_value == 0) {
@@ -175,13 +179,15 @@ sub get {
     return Rstats::Array->new(values => \@values2, type => 'vector');
   }
   
-  my $a1_values = $self->values;
-  my $a1_dim = $self->dim->values;
   my @a2_dim;
-  for (my $i = 0; $i < @indexs; $i++) {
+  for (my $i = 0; $i < @$a1_dim; $i++) {
     my $index = $indexs[$i];
     
-    if ($index->is_character) {
+    if (!@{$index->values}) {
+      my $index_value_new = [1 .. $a1_dim->[$i]];
+      $index->values($index_value_new);
+    }
+    elsif ($index->is_character) {
       if ($self->is_vector) {
         my $index_new_values = [];
         for my $name (@{$index->values}) {
@@ -207,7 +213,6 @@ sub get {
       }
     }
     elsif ($index->is_logical) {
-      $DB::single = 1;
       my $index_values_new = [];
       for (my $i = 0; $i < @{$index->values}; $i++) {
         push @$index_values_new, $i + 1 if $index->values->[$i];
@@ -225,7 +230,7 @@ sub get {
     }
     
     my $count = @{$index->values};
-    push @a2_dim, $count;
+    push @a2_dim, $count unless $count == 1;
   }
   
   my $index_values = [map { $_->values } @indexs];
@@ -285,47 +290,6 @@ sub _pos {
   }
   
   return $pos;
-}
-
-sub _get_logical {
-  my ($self, $_bools_v) = @_;
-
-  croak "get need one values" unless defined $_bools_v;
-  
-  my $bools_v = $r->_v($_bools_v);
-  my $bools_values = $bools_v->values;
-  
-  my $values1 = $self->values;
-  my @values2;
-  for (my $i = 0; $i < @$bools_values; $i++) {
-    push @values2, $values1->[$i] if $bools_values->[$i];
-  }
-  
-  return $self->new(values => \@values2);
-}
-
-sub _get_character {
-  my ($self, $names) = @_;
-  
-  my $array2 = $names;
-  my $array1_names = $r->names($self)->values;
-  my $array2_names = $array2->values;
-  
-  my $array3_values = [];
-  for my $array2_name (@$array2_names) {
-    my $i = 0;
-    for my $array1_name (@$array1_names) {
-      if ($array2_name eq $array1_name) {
-        push @$array3_values, $self->values->[$i];
-        last;
-      }
-      $i++;
-    }
-  }
-  
-  my $array3 = $self->new(values => $array3_values);
-  
-  return $array3;
 }
 
 sub set {

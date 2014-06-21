@@ -24,7 +24,6 @@ my $r = Rstats->new;
 
 # get 3-dimention
 {
-  # $v->get(2);
   # $v->get('', 2);
   # $v->get([1, 2], 2);
   # $v->get([1, 2], [1, 3]);
@@ -34,13 +33,76 @@ my $r = Rstats->new;
   # $v->colSums;
   # $v->rowMeans;
   # $v->colMeans;
+  
+  # get 3-dimention - dimention one
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get(2);
+    is_deeply($a2->values, [2, 6, 10, 14, 18 ,22]);
+    is_deeply($r->dim($a2)->values, [3, 2]);
+  }
 
-  # get - 3-dimention
+  # get 3-dimention - dimention two
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get('', 2);
+    is_deeply($a2->values, [5, 6, 7, 8, 17, 18, 19, 20]);
+    is_deeply($r->dim($a2)->values, [4, 2]);
+  }
+
+  # get 3-dimention - dimention three
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get('', '', 2);
+    is_deeply($a2->values, [13 .. 24]);
+    is_deeply($r->dim($a2)->values, [4, 3]);
+  }
+
+  # get 3-dimention - one value
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get(3, 2, 1);
+    is_deeply($a2->values, [7]);
+    is_deeply($r->dim($a2)->values, []);
+  }
+
+  # get 3-dimention - dimention one and two
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get(1, 2);
+    is_deeply($a2->values, [5, 17]);
+    is_deeply($r->dim($a2)->values, [2]);
+  }
+  # get 3-dimention - dimention one and three
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get(3, '', 2);
+    is_deeply($a2->values, [15, 19, 23]);
+    is_deeply($r->dim($a2)->values, [3]);
+  }
+
+  # get 3-dimention - dimention two and three
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get('', 1, 2);
+    is_deeply($a2->values, [13, 14, 15, 16]);
+    is_deeply($r->dim($a2)->values, [4]);
+  }
+  
+  # get 3-dimention - all values
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
     my $a2 = $a1->get([1, 2, 3, 4], [1, 2, 3], [1, 2]);
     is_deeply($a2->values, [1 .. 24]);
     is_deeply($r->dim($a2)->values, [4, 3, 2]);
+  }
+
+  # get 3-dimention - some values
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->get([2, 3], [1, 3], [1, 2]);
+    is_deeply($a2->values, [2, 3, 10, 11, 14, 15, 22, 23]);
+    is_deeply($r->dim($a2)->values, [2, 2, 2]);
   }
 }
 
@@ -84,6 +146,14 @@ my $r = Rstats->new;
 
 # get
 {
+
+  # get - one value
+  {
+    my $v1 = $r->c([1]);
+    my $v2 = $v1->get(1);
+    is_deeply($v2->values, [1]);
+    is_deeply($v2->dim->values, []);
+  }
 
   # get - single index
   {

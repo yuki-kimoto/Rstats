@@ -22,6 +22,29 @@ my $r = Rstats->new;
   }
 }
 
+# set 3-dimention
+{
+  # set 3-dimention
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->at(4, 3, 2)->set(25);
+    is_deeply($a2->values, [1 .. 23, 25]);
+  }
+
+  # set 3-dimention - one and tow dimention
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->at(4, 3)->set(25);
+    is_deeply($a2->values, [1 .. 11, 25, 13 .. 23, 25]);
+  }
+
+  # set 3-dimention - one and tow dimention, value is two
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->at(4, 3)->set([25, 26]);
+    is_deeply($a2->values, [1 .. 11, 25, 13 .. 23, 26]);
+  }}
+
 # get 3-dimention
 {
   # get 3-dimention - minus

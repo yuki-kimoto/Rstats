@@ -135,14 +135,15 @@ sub dim {
 sub get {
   my ($self, @_indexs) = @_;
 
-  my $at = $self->at;
   my $_indexs;
   if (@_indexs) {
     $_indexs = \@_indexs;
   }
   else {
+    my $at = $self->at;
     $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   }
+  $self->at($_indexs);
   
   if (ref $_indexs->[0] eq 'CODE') {
     my $a1_values = $self->values;
@@ -175,7 +176,7 @@ sub set {
   
   for (my $i = 0; $i < @$positions; $i++) {
     my $pos = $positions->[$i];
-    $self->values->[$pos - 1] = $array->values->[$i % @$positions];
+    $self->values->[$pos - 1] = $array->values->[(($i + 1) % @$positions) - 1];
   }
   
   return $self;

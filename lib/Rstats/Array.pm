@@ -138,45 +138,38 @@ sub get {
   unless (@_indexs) {
     @_indexs = @{$self->at};
   }
+  
+  if (ref $_indexs[0] eq 'CODE') {
+    my $a1_values = $self->values;
+    my @values2 = grep { $_indexs[0]->() } @$a1_values;
+    return Rstats::Array->new(values => \@values2, type => 'vector');
+  }
 
   my $a1_values = $self->values;
   my $a1_dim = $self->dim->values;
-  my $grep_cb;
   my @indexs;
+  my @a2_dim;
   for (my $i = 0; $i < @$a1_dim; $i++) {
     my $_index = $_indexs[$i];
     
-    if (ref $_index eq 'CODE') {
-      $grep_cb = $_index;
-      my $a1_values = $self->values;
-      my @values2 = grep { $grep_cb->() } @$a1_values;
-      return Rstats::Array->new(values => \@values2, type => 'vector');
-    }
-    else {
-      my $index = $self->r->_v($_index);
-      my $index_values = $index->values;
-      if (@$index_values && !$index->is_character && !$index->is_logical) {
-        my $minus_count = 0;
-        for my $index_value (@$index_values) {
-          if ($index_value == 0) {
-            croak "0 is invalid index";
-          }
-          else {
-            $minus_count++ if $index_value < 0;
-          }
+    my $index = $self->r->_v($_index);
+    my $index_values = $index->values;
+    if (@$index_values && !$index->is_character && !$index->is_logical) {
+      my $minus_count = 0;
+      for my $index_value (@$index_values) {
+        if ($index_value == 0) {
+          croak "0 is invalid index";
         }
-        croak "Can't min minus sign and plus sign"
-          if $minus_count > 0 && $minus_count != @$index_values;
-        $index->{_minus} = 1 if $minus_count > 0;
+        else {
+          $minus_count++ if $index_value < 0;
+        }
       }
-      
-      push @indexs, $index;
+      croak "Can't min minus sign and plus sign"
+        if $minus_count > 0 && $minus_count != @$index_values;
+      $index->{_minus} = 1 if $minus_count > 0;
     }
-  }
-  
-  my @a2_dim;
-  for (my $i = 0; $i < @$a1_dim; $i++) {
-    my $index = $indexs[$i];
+    
+    push @indexs, $index;
     
     if (!@{$index->values}) {
       my $index_value_new = [1 .. $a1_dim->[$i]];

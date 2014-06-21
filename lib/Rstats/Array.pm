@@ -145,10 +145,21 @@ sub get {
     return Rstats::Array->new(values => \@values2, type => 'vector');
   }
 
+  my ($positions, $a2_dim) = $self->_parse_index(@_indexs);
+  
+  my @a2_values = map { $self->values->[$_ - 1] } @$positions;
+  
+  return Rstats::Array->new(values => \@a2_values, dim => $a2_dim);
+}
+
+sub _parse_index {
+  my ($self, @_indexs) = @_;
+  
   my $a1_values = $self->values;
   my $a1_dim = $self->dim->values;
   my @indexs;
   my @a2_dim;
+  
   for (my $i = 0; $i < @$a1_dim; $i++) {
     my $_index = $_indexs[$i];
     
@@ -224,10 +235,8 @@ sub get {
   my $index_values = [map { $_->values } @indexs];
   my $ords = $self->_cross_product($index_values);
   my @positions = map { $self->_pos($_, $a1_dim) } @$ords;
-
-  my @a2_values = map { $a1_values->[$_ - 1] } @positions;
   
-  return Rstats::Array->new(values => \@a2_values, dim => \@a2_dim);
+  return (\@positions, \@a2_dim);
 }
 
 sub _cross_product {

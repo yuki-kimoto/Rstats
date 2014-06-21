@@ -43,8 +43,15 @@ my $r = Rstats->new;
     my $a1 = $r->array('1:24', [4, 3, 2]);
     my $a2 = $a1->at(4, 3)->set([25, 26]);
     is_deeply($a2->values, [1 .. 11, 25, 13 .. 23, 26]);
-  }}
-
+  }
+  
+  # set 3-dimention - 
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a2 = $a1->at(2, '', 1)->set([31, 32, 33]);
+    is_deeply($a2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
+  }
+}
 # get 3-dimention
 {
   # get 3-dimention - minus

@@ -38,7 +38,6 @@ my $r = Rstats->new;
   # get - 3-dimention
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
-    $DB::single = 1;
     my $a2 = $a1->get([1, 2, 3, 4], [1, 2, 3], [1, 2]);
     is_deeply($a2->values, [1 .. 24]);
     is_deeply($r->dim($a2)->values, [4, 3, 2]);
@@ -83,7 +82,6 @@ my $r = Rstats->new;
   ]);
 }
 
-=pod
 # get
 {
 
@@ -138,7 +136,8 @@ my $r = Rstats->new;
   # get - logical
   {
     my $v1 = $r->c([1, 3, 5, 7]);
-    my $v2 = $v1->get($r->c([0, 1, 0, 1, 1])->as_logical);
+    my $logical_v = $r->c([0, 1, 0, 1, 1])->as_logical;
+    my $v2 = $v1->get($logical_v);
     is_deeply($v2->values, [3, 7, undef]);
   }
   
@@ -149,4 +148,3 @@ my $r = Rstats->new;
     is_deeply($v2->values, [1]);
   }
 }
-=cut

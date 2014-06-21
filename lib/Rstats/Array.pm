@@ -132,73 +132,6 @@ sub dim {
   } 
 }
 
-=pod
-
-sub get {
-  my $self = shift;
-  
-  my $indexes_tmp;
-  if (@_) {
-    ($indexes_tmp) = @_;
-  }
-  else {
-    ($indexes_tmp) = @{$self->at};
-  }
-  
-  croak "get need one values" unless defined $indexes_tmp;
-  return $self->new(values => [$self->{values}[$indexes_tmp - 1]])
-    if !ref $indexes_tmp && $indexes_tmp > 0;
-  
-  my $indexes;
-  if (ref $indexes_tmp eq 'CODE') {
-    my $values1 = $self->values;
-    my @values2 = grep { $indexes_tmp->(); } @$values1;
-    return $self->new(values => \@values2);
-  }
-  elsif (ref $indexes_tmp eq 'ARRAY') {
-    $indexes = $indexes_tmp;
-  }
-  elsif (ref $indexes_tmp eq 'Rstats::Array') {
-    $indexes = $indexes_tmp->{values};
-    if ($indexes_tmp->is_character) {
-      return $self->_get_character($indexes_tmp);
-    }
-    elsif ($indexes_tmp->is_logical) {
-      return $self->_get_logical($indexes_tmp);
-    }
-  }
-  else {
-    $indexes = [$indexes_tmp];
-  }
-  
-  # Check index
-  my $plus_count;
-  my $minus_count;
-  for my $index (@$indexes) {
-    $plus_count++ if $index > 0;
-    $minus_count++ if $index < 0;
-    croak "You can't use both plus and minus index"
-      if $plus_count && $minus_count;
-    croak "0 is invalid index" if $index == 0;
-  }
-  
-  my $values1 = $self->values;
-  my @values2;
-  if ($plus_count) {
-    @values2 = map { $values1->[$_ - 1] } @$indexes;
-  }
-  else {
-    my $indexes_h = {map { -$_ - 1 => 1 } @$indexes};
-    for (my $i = 0; $i < @$values1; $i++) {
-      push @values2, $values1->[$i] unless $indexes_h->{$i};
-    }
-  }
-  
-  return $self->new(values => \@values2);
-}
-
-=cut
-
 sub get {
   my ($self, @_indexs) = @_;
   
@@ -216,7 +149,7 @@ sub get {
     else {
       my $index = $self->r->_v($_index);
       my $index_values = $index->values;
-      unless ($index->is_character) {
+      if (!$index->is_character && !$index->is_logical) {
         my $minus_count = 0;
         for my $index_value (@$index_values) {
           if ($index_value == 0) {
@@ -239,7 +172,7 @@ sub get {
   if ($grep_cb) {
     my $a1_values = $self->values;
     my @values2 = grep { $grep_cb->() } @$a1_values;
-    return Rastas::Array->new(values => \@values2, type => 'vector');
+    return Rstats::Array->new(values => \@values2, type => 'vector');
   }
   
   my $a1_values = $self->values;
@@ -247,13 +180,51 @@ sub get {
   my @a2_dim;
   for (my $i = 0; $i < @indexs; $i++) {
     my $index = $indexs[$i];
-    my $count;
-    if ($index->{_minus}) {
-      $count = $a1_dim->values->[$i] - @{$index->values};
+    
+    if ($index->is_character) {
+      if ($self->is_vector) {
+        my $index_new_values = [];
+        for my $name (@{$index->values}) {
+          my $i = 0;
+          my $value;
+          for my $self_name (@{$self->r->names($self)->values}) {
+            if ($name eq $self_name) {
+              $value = $self->values->[$i];
+              last;
+            }
+            $i++;
+          }
+          croak "Can't find name" unless defined $value;
+          push @$index_new_values, $value;
+        }
+        $indexs[$i]->values($index_new_values);
+      }
+      elsif ($self->is_matrix) {
+        
+      }
+      else {
+        croak "Can't support name except vector and matrix";
+      }
     }
-    else {
-      $count = @{$index->values};
+    elsif ($index->is_logical) {
+      $DB::single = 1;
+      my $index_values_new = [];
+      for (my $i = 0; $i < @{$index->values}; $i++) {
+        push @$index_values_new, $i + 1 if $index->values->[$i];
+      }
+      $index->values($index_values_new);
     }
+    elsif ($index->{_minus}) {
+      my $index_value_new = [];
+      
+      for my $k (1 .. $a1_dim->[$i]) {
+        push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
+      }
+      $index->values($index_value_new);
+      delete $index->{_minus};
+    }
+    
+    my $count = @{$index->values};
     push @a2_dim, $count;
   }
   

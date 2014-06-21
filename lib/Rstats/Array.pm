@@ -250,25 +250,29 @@ sub _cross_product {
   my ($self, $values) = @_;
 
   my @idxs = (0) x @$values;
-  my @idx_idx = 0..( @idxs - 1 );
+  my @idx_idx = 0..(@idxs - 1);
   my @array = map { $_->[0] } @$values;
   my $result = [];
   
-  LOOP:
+  push @$result, [@array];
+  my $end_loop;
   while (1) {
-    push @$result, [@array];
-  } continue {
     foreach my $i (@idx_idx) {
       if( $idxs[$i] < @{$values->[$i]} - 1 ) {
         $array[$i] = $values->[$i][++$idxs[$i]];
+        push @$result, [@array];
         last;
       }
       
-      last LOOP if $i == $idx_idx[-1];
+      if ($i == $idx_idx[-1]) {
+        $end_loop = 1;
+        last;
+      }
       
       $idxs[$i] = 0;
       $array[$i] = $values->[$i][0];
     }
+    last if $end_loop;
   }
   
   return $result;

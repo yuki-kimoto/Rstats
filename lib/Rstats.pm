@@ -316,54 +316,61 @@ sub type {
   return $array->type;
 }
 
-sub array {
-  my ($self, $data) = @_;
+sub _parse_seq_str {
+  my ($self, $seq_str) = @_;
   
+  my $by;
+  if ($seq_str =~ s/^(.+)\*//) {
+    $by = $1;
+  }
+  
+  my $from;
+  my $to;
+  if ($seq_str =~ /([^\:]+)(?:\:(.+))?/) {
+    $from = $1;
+    $to = $2;
+    $to = $from unless defined $to;
+  }
+  
+  my $array = $self->seq({from => $from, to => $to, by => $by});
+  
+  return $array;
+}
+
+sub array {
+  my $self = shift;
+  
+  # Arguments
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my ($v1, $dim) = @_;
+  $dim = $opt->{dim} unless defined $dim;
   my $type = $opt->{type} || 'array';
-  my $dim = $opt->{dim};
   
   my $array;
-  if (ref $data eq 'ARRAY') {
+  if (ref $v1 eq 'ARRAY') {
     my $values = [];
-    for my $a (@$data) {
+    for my $a (@$v1) {
       if (ref $a eq 'ARRAY') {
         push @$values, @$a;
       }
-      elsif (ref $a && $a->isa('Rstats::Array')) {
+      elsif (ref $a eq 'Rstats::Array') {
         push @$values, @{$a->values};
       }
       else {
         push @$values, $a;
       }
     }
-    $array = Rstats::Array->new(
-      values => $values,
-      type => $type,
-      dim => $opt->{dim}
-    );
+    $array = Rstats::Array->new(values => $values);
   }
-  elsif (ref $data) {
-    $array = $data;
+  elsif (ref $v1 eq 'Rstats::Array') {
+    $array = $v1;
   }
-  else {
-    my $str = $data;
-    my $by;
-    if ($str =~ s/^(.+)\*//) {
-      $by = $1;
-    }
-    
-    my $from;
-    my $to;
-    if ($str =~ /([^\:]+)(?:\:(.+))?/) {
-      $from = $1;
-      $to = $2;
-      $to = $from unless defined $to;
-    }
-    
-    $array = $self->seq({from => $from, to => $to, by => $by});
-    $array->dim($opt->{dim}) if $opt->{dim};
+  elsif(!ref $1) {
+    $array = $self->_parse_seq_str($v1);
   }
+  
+  $array->type($type) if defined $type;
+  $array->dim($dim) if defined $dim;
   
   return $array;
 }

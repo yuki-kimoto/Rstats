@@ -104,7 +104,10 @@ sub _v {
   my ($self, $data) = @_;
   
   my $v;
-  if (!defined $data || !length $data) {
+  if (!defined $data) {
+    $v = $self->c([undef]);
+  }
+  elsif (!length $data) {
     $v = $self->NULL;
   }
   elsif (!ref $data) {

@@ -149,7 +149,7 @@ my $r = Rstats->new;
   my $v1 = $r->NULL;
   is_deeply($v1->values, []);
   is("$v1", 'NULL');
-  $v1->set(3 => 5);
+  $v1->at(3)->set(5);
   is_deeply($v1->values, [undef, undef, 5]);
 }
 
@@ -345,7 +345,7 @@ my $r = Rstats->new;
   my $array = Rstats::Array->new(values => [1, 2, 3]);
   is_deeply($array->get(1)->values, [1]);
   is_deeply($array->get(3)->values, [3]);
-  $array->set(1 => 5);;
+  $array->at(1)->set(5);;
   is_deeply($array->get(1)->values, [5]);
 }
 
@@ -491,7 +491,7 @@ my $r = Rstats->new;
   # add to original vector
   {
     my $v1 = $r->c([1, 2, 3]);
-    $v1->set($r->length($v1) + 1 => 6);
+    $v1->at($r->length($v1) + 1)->set(6);
     is_deeply($v1->values, [1, 2, 3, 6]);
   }
   

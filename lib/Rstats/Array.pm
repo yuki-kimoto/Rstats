@@ -134,23 +134,53 @@ sub dim {
 
 sub get {
   my ($self, @_indexs) = @_;
-  
-  unless (@_indexs) {
-    @_indexs = @{$self->at};
+
+  my $at = $self->at;
+  my $_indexs;
+  if (@_indexs) {
+    $_indexs = \@_indexs;
+  }
+  else {
+    $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   }
   
-  if (ref $_indexs[0] eq 'CODE') {
+  if (ref $_indexs->[0] eq 'CODE') {
     my $a1_values = $self->values;
-    my @values2 = grep { $_indexs[0]->() } @$a1_values;
+    my @values2 = grep { $_indexs->[0]->() } @$a1_values;
     return Rstats::Array->new(values => \@values2, type => 'vector');
   }
 
-  my ($positions, $a2_dim) = $self->_parse_index(@_indexs);
+  my ($positions, $a2_dim) = $self->_parse_index(@$_indexs);
   
   my @a2_values = map { $self->values->[$_ - 1] } @$positions;
   
   return Rstats::Array->new(values => \@a2_values, dim => $a2_dim);
 }
+
+sub set {
+  my ($self, $_array) = @_;
+  
+  my $array = $self->r->_v($_array);
+  
+  my $at = $self->at;
+  my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
+  
+  if (ref $_indexs->[0] eq 'CODE') {
+    my $a1_values = $self->values;
+    my @values2 = grep { $_indexs->[0]->() } @$a1_values;
+    return Rstats::Array->new(values => \@values2, type => 'vector');
+  }
+
+  my ($positions, $a2_dim) = $self->_parse_index(@$_indexs);
+  
+  for (my $i = 0; $i < @$positions; $i++) {
+    my $pos = $positions->[$i];
+    $self->values->[$pos - 1] = $array->values->[$i % @$positions];
+  }
+  
+  return $self;
+}
+
 
 sub _parse_index {
   my ($self, @_indexs) = @_;
@@ -162,6 +192,8 @@ sub _parse_index {
   
   for (my $i = 0; $i < @$a1_dim; $i++) {
     my $_index = $_indexs[$i];
+    
+    $_index = '' unless defined $_index;
     
     my $index = $self->r->_v($_index);
     my $index_values = $index->values;
@@ -287,14 +319,6 @@ sub _pos {
   }
   
   return $pos;
-}
-
-sub set {
-  my ($self, $idx, $v1) = @_;
-  
-  $self->{values}[$idx - 1] = $v1;
-  
-  return $self;  
 }
 
 sub to_string {

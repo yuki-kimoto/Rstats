@@ -216,11 +216,4 @@ my $r = Rstats->new;
     my $v2 = $v1->get($logical_v);
     is_deeply($v2->values, [3, 7, undef]);
   }
-  
-  # get - at
-  {
-    my $v1 = $r->c([1, 2, 3, 4]);
-    my $v2 = $v1->at(1)->get;
-    is_deeply($v2->values, [1]);
-  }
 }

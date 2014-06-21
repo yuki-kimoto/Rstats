@@ -5,3 +5,16 @@ Rstats - R language build on Perl (EXPERIMENTAL)
 INSTALLATION
 
 curl -L cpanmin.us | perl - -n  git@github.com:yuki-kimoto/Rstats.git
+
+Usage
+
+  use Rstats;
+  my $r = Rstats->new;
+  
+  # Vector
+  my $v1 = $self->c([1, 2, 3]);
+  my $v2 = $self->c([2, 3, 4]);
+  my $v3 = $v1 + v2;
+  print $v3;
+
+See examples in t directory to know current inplemented features.

@@ -19,6 +19,8 @@ has 'values';
 has 'type';
 has 'mode';
 
+sub r { Rstats->new }
+
 sub at {
   my $self = shift;
   
@@ -130,6 +132,8 @@ sub dim {
   } 
 }
 
+=pod
+
 sub get {
   my $self = shift;
   
@@ -191,6 +195,125 @@ sub get {
   }
   
   return $self->new(values => \@values2);
+}
+
+=cut
+
+sub get {
+  my ($self, @_indexs) = @_;
+  
+  unless (@_indexs) {
+    @_indexs = @{$self->at};
+  }
+  
+  my $grep_cb;
+  my @indexs;
+  for my $_index (@_indexs) {
+    if (ref $_index eq 'CODE') {
+      $grep_cb = $_index;
+      last;
+    }
+    else {
+      my $index = $self->r->_v($_index);
+      my $index_values = $index->values;
+      unless ($index->is_character) {
+        my $minus_count = 0;
+        for my $index_value (@$index_values) {
+          if ($index_value == 0) {
+            croak "0 is invalid index";
+          }
+          else {
+            $minus_count++ if $index_value < 0;
+          }
+        }
+        croak "Can't min minus sign and plus sign"
+          if $minus_count > 0 && $minus_count != @$index_values;
+        $index->{_minus} = 1 if $minus_count > 0;
+      }
+      
+      push @indexs, $index;
+    }
+  }
+  
+  # Grep callback
+  if ($grep_cb) {
+    my $a1_values = $self->values;
+    my @values2 = grep { $grep_cb->() } @$a1_values;
+    return Rastas::Array->new(values => \@values2, type => 'vector');
+  }
+  
+  my $a1_values = $self->values;
+  my $a1_dim = $self->dim->values;
+  my @a2_dim;
+  for (my $i = 0; $i < @indexs; $i++) {
+    my $index = $indexs[$i];
+    my $count;
+    if ($index->{_minus}) {
+      $count = $a1_dim->values->[$i] - @{$index->values};
+    }
+    else {
+      $count = @{$index->values};
+    }
+    push @a2_dim, $count;
+  }
+  
+  my $index_values = [map { $_->values } @indexs];
+  my $ords = $self->_cross_product($index_values);
+
+  my @a2_values;
+  for my $ord (@$ords) {
+    my $pos = $self->_pos($ord, $a1_dim);
+    my $value = $a1_values->[$pos - 1];
+    push @a2_values, $value;
+  }
+  
+  return Rstats::Array->new(values => \@a2_values, dim => \@a2_dim);
+}
+
+sub _cross_product {
+  my ($self, $values) = @_;
+
+  my @idxs = (0) x @$values;
+  my @idx_idx = 0..( @idxs - 1 );
+  my @array = map { $_->[0] } @$values;
+  my $result = [];
+  
+  LOOP:
+  while (1) {
+    push @$result, [@array];
+  } continue {
+    foreach my $i (@idx_idx) {
+      if( $idxs[$i] < @{$values->[$i]} - 1 ) {
+        $array[$i] = $values->[$i][++$idxs[$i]];
+        last;
+      }
+      
+      last LOOP if $i == $idx_idx[-1];
+      
+      $idxs[$i] = 0;
+      $array[$i] = $values->[$i][0];
+    }
+  }
+  
+  return $result;
+}
+
+sub _pos {
+  my ($self, $ord, $dim) = @_;
+  
+  my $pos = 0;
+  for (my $d = 0; $d < @$dim; $d++) {
+    if ($d > 0) {
+      my $tmp = 1;
+      $tmp *= $dim->[$_] for (0 .. $d - 1);
+      $pos += $tmp * ($ord->[$d] - 1);
+    }
+    else {
+      $pos += $ord->[$d];
+    }
+  }
+  
+  return $pos;
 }
 
 sub _get_logical {

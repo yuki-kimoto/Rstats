@@ -294,6 +294,7 @@ my $r = Rstats->new;
   }
 }
 
+=pod
 # names
 {
   my $v1 = $r->c([1, 2, 3, 4]);
@@ -301,6 +302,7 @@ my $r = Rstats->new;
   my $v2 = $v1->get($r->c(['b', 'd'])->as_character);
   is_deeply($v2->values, [2, 4]);
 }
+=cut
 
 # to_string
 {
@@ -340,6 +342,7 @@ my $r = Rstats->new;
   ok($array->is_matrix);
 }
 
+=pod
 # Array get and set
 {
   my $array = Rstats::Array->new(values => [1, 2, 3]);
@@ -348,6 +351,7 @@ my $r = Rstats->new;
   $array->set(1 => 5);;
   is_deeply($array->get(1)->values, [5]);
 }
+=cut
 
 # abs
 {

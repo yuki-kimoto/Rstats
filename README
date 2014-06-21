@@ -1,7 +1,7 @@
 NAME
 
-Rstats - R language build on Perl
+Rstats - R language build on Perl (EXPERIMENTAL)
 
 INSTALLATION
 
-cpan Data::R
+curl -L cpanmin.us | perl - -n  git@github.com:yuki-kimoto/Rstats.git

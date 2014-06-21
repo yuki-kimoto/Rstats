@@ -27,7 +27,6 @@ my $r = Rstats->new;
   # get 3-dimention - minus
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
-    $DB::single = 1;
     my $a2 = $a1->get([-1, -2], [-1, -2]);
     is_deeply($a2->values, [11, 12, 23, 24]);
     is_deeply($r->dim($a2)->values, [2, 2]);
@@ -96,6 +95,14 @@ my $r = Rstats->new;
     is_deeply($r->dim($a2)->values, [4, 3, 2]);
   }
 
+  # get 3-dimention - all values 2
+  {
+    my $a1 = $r->array([map { $_ * 2 } (1 .. 24)], [4, 3, 2]);
+    my $a2 = $a1->get([1, 2, 3, 4], [1, 2, 3], [1, 2]);
+    is_deeply($a2->values, [map { $_ * 2 } (1 .. 24)]);
+    is_deeply($r->dim($a2)->values, [4, 3, 2]);
+  }
+  
   # get 3-dimention - some values
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);

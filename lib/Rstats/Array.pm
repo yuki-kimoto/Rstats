@@ -148,7 +148,9 @@ sub get {
     
     if (ref $_index eq 'CODE') {
       $grep_cb = $_index;
-      last;
+      my $a1_values = $self->values;
+      my @values2 = grep { $grep_cb->() } @$a1_values;
+      return Rstats::Array->new(values => \@values2, type => 'vector');
     }
     else {
       my $index = $self->r->_v($_index);
@@ -170,13 +172,6 @@ sub get {
       
       push @indexs, $index;
     }
-  }
-  
-  # Grep callback
-  if ($grep_cb) {
-    my $a1_values = $self->values;
-    my @values2 = grep { $grep_cb->() } @$a1_values;
-    return Rstats::Array->new(values => \@values2, type => 'vector');
   }
   
   my @a2_dim;
@@ -235,13 +230,9 @@ sub get {
   
   my $index_values = [map { $_->values } @indexs];
   my $ords = $self->_cross_product($index_values);
+  my @positions = map { $self->_pos($_, $a1_dim) } @$ords;
 
-  my @a2_values;
-  for my $ord (@$ords) {
-    my $pos = $self->_pos($ord, $a1_dim);
-    my $value = $a1_values->[$pos - 1];
-    push @a2_values, $value;
-  }
+  my @a2_values = map { $a1_values->[$_ - 1] } @positions;
   
   return Rstats::Array->new(values => \@a2_values, dim => \@a2_dim);
 }

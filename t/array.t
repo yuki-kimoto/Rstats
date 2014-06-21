@@ -24,16 +24,6 @@ my $r = Rstats->new;
 
 # get 3-dimention
 {
-  # $v->get('', 2);
-  # $v->get([1, 2], 2);
-  # $v->get([1, 2], [1, 3]);
-  # $v->get('', -$r->c([1, 3]));
-  # $v->get('', $r->c(1, 0, 1)->as_logical);
-  # $v->rowSums;
-  # $v->colSums;
-  # $v->rowMeans;
-  # $v->colMeans;
-
   # get 3-dimention - minus
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);

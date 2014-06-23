@@ -133,7 +133,13 @@ sub dim {
 }
 
 sub get {
-  my ($self, @_indexs) = @_;
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $drop = $opt->{drop};
+  $drop = 1 unless defined $drop;
+  
+  my @_indexs = @_;
 
   my $_indexs;
   if (@_indexs) {
@@ -151,7 +157,7 @@ sub get {
     return Rstats::Array->new(values => \@values2, type => 'vector');
   }
 
-  my ($positions, $a2_dim) = $self->_parse_index(@$_indexs);
+  my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
   
   my @a2_values = map { $self->values->[$_ - 1] } @$positions;
   
@@ -173,7 +179,7 @@ sub set {
     $array = $self->r->_v($_array);
   }
   
-  my ($positions, $a2_dim) = $self->_parse_index(@$_indexs);
+  my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
   
   my $self_values = $self->values;
   if ($code) {
@@ -196,7 +202,7 @@ sub set {
 
 
 sub _parse_index {
-  my ($self, @_indexs) = @_;
+  my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
   my $a1_dim = $self->dim->values;
@@ -274,7 +280,7 @@ sub _parse_index {
     }
     
     my $count = @{$index->values};
-    push @a2_dim, $count;
+    push @a2_dim, $count unless $count == 1 && $drop;
   }
   
   my $index_values = [map { $_->values } @indexs];

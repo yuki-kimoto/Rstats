@@ -320,8 +320,11 @@ sub matrix {
     push @v2_values, $v1_values->[$i % $v1_length]
   }
   
+  my $dim = [];
+  push @$dim, $nrow if $nrow > 1;
+  push @$dim, $ncol if $ncol > 1;
   my $matrix = $self->array(\@v2_values,{type => 'matrix'});
-  $self->dim($matrix, [$nrow, $ncol]);
+  $self->dim($matrix, $dim);
   
   return $matrix;
 }

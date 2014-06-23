@@ -111,7 +111,7 @@ sub _v {
     $v = $self->NULL;
   }
   elsif (!ref $data) {
-    $v = $self->c([$data]);
+    $v = $self->c($data);
   }
   elsif (ref $data eq 'ARRAY') {
     $v = $self->c($data);
@@ -285,7 +285,7 @@ sub matrix {
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
 
-  my ($_v1, $nrow, $ncol) = @_;
+  my ($_v1, $nrow, $ncol, $byrow, $dirnames) = @_;
 
   croak "matrix method need data as frist argument"
     unless defined $_v1;
@@ -294,23 +294,33 @@ sub matrix {
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;
-  $nrow = 1 unless defined $nrow;
   
   # Column count
   $ncol = $opt->{ncol} unless defined $ncol;
-  $ncol = 1 unless defined $ncol;
   
-  my $length = $nrow * $ncol;
+  # By row
+  $byrow = $opt->{byrow} unless defined $byrow;
+  
   my $v1_values = $v1->values;
   my $v1_length = @$v1_values;
+  if (!defined $nrow && !defined $ncol) {
+    $nrow = $v1_length;
+    $ncol = 1;
+  }
+  elsif (!defined $nrow) {
+    $nrow = int($v1_length / $ncol);
+  }
+  elsif (!defined $ncol) {
+    $ncol = int($v1_length / $nrow);
+  }
+  my $length = $nrow * $ncol;
   
   my @v2_values;
   for (my $i = 0; $i < $length; $i++) {
     push @v2_values, $v1_values->[$i % $v1_length]
   }
   
-  my $matrix
-    = $self->array(\@v2_values,{type => 'matrix'});
+  my $matrix = $self->array(\@v2_values,{type => 'matrix'});
   $self->dim($matrix, [$nrow, $ncol]);
   
   return $matrix;

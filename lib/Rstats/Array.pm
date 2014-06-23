@@ -274,7 +274,7 @@ sub _parse_index {
     }
     
     my $count = @{$index->values};
-    push @a2_dim, $count unless $count == 1;
+    push @a2_dim, $count;
   }
   
   my $index_values = [map { $_->values } @indexs];

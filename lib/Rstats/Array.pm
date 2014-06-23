@@ -160,23 +160,35 @@ sub get {
 
 sub set {
   my ($self, $_array) = @_;
-  
-  my $array = $self->r->_v($_array);
-  
+
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  
-  if (ref $_indexs->[0] eq 'CODE') {
-    my $a1_values = $self->values;
-    my @values2 = grep { $_indexs->[0]->() } @$a1_values;
-    return Rstats::Array->new(values => \@values2, type => 'vector');
-  }
 
+  my $code;
+  my $array;
+  if (ref $_array eq 'CODE') {
+    $code = $_array;
+  }
+  else {
+    $array = $self->r->_v($_array);
+  }
+  
   my ($positions, $a2_dim) = $self->_parse_index(@$_indexs);
   
-  for (my $i = 0; $i < @$positions; $i++) {
-    my $pos = $positions->[$i];
-    $self->values->[$pos - 1] = $array->values->[(($i + 1) % @$positions) - 1];
+  my $self_values = $self->values;
+  if ($code) {
+    for (my $i = 0; $i < @$positions; $i++) {
+      my $pos = $positions->[$i];
+      local $_ = $self_values->[$pos - 1];
+      $self_values->[$pos - 1] = $code->();
+    }    
+  }
+  else {
+    my $array_values = $array->values;
+    for (my $i = 0; $i < @$positions; $i++) {
+      my $pos = $positions->[$i];
+      $self_values->[$pos - 1] = $array_values->[(($i + 1) % @$positions) - 1];
+    }
   }
   
   return $self;

@@ -6,6 +6,17 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# t
+{
+  # t - basic
+  {
+    my $m1 = $r->matrix('1:6', 3, 2);
+    my $m2 = $r->t($m1);
+    is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
+    is_deeply($r->dim($m2)->values, [2, 3]);
+  }
+}
+
 # matrix
 {
   {
@@ -54,4 +65,13 @@ my $r = Rstats->new;
     is_deeply($r->dim($m1)->values, [3, 4]);
     ok($m1->is_matrix);
   }
+  
+  # matrix - repeat 3
+  {
+    my $m1 = $r->matrix(0, 3, 4);
+    is_deeply($m1->values, [(0) x 12]);
+    is_deeply($r->dim($m1)->values, [3, 4]);
+    ok($m1->is_matrix);
+  }
+  
 }

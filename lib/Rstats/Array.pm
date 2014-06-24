@@ -261,6 +261,7 @@ sub _parse_index {
     my $count = @{$index->values};
     push @a2_dim, $count unless $count == 1 && $drop;
   }
+  @a2_dim = (1) unless @a2_dim;
   
   my $index_values = [map { $_->values } @indexs];
   my $ords = $self->_cross_product($index_values);

@@ -8,6 +8,14 @@ my $r = Rstats->new;
 
 # to_string
 {
+  # to_string - one element
+  {
+    my $a1 = $r->array('0');
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+    my $expected = "[1] 0\n";
+    is($a1_str, $expected);
+  }
   # to_string - 3-dimention
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
@@ -185,7 +193,7 @@ EOS
     my $a1 = $r->array('1:24', [4, 3, 2]);
     my $a2 = $a1->get(3, 2, 1);
     is_deeply($a2->values, [7]);
-    is_deeply($r->dim($a2)->values, []);
+    is_deeply($r->dim($a2)->values, [1]);
   }
 
   # get 3-dimention - one value, drop => 0
@@ -290,7 +298,7 @@ EOS
     my $v1 = $r->c([1]);
     my $v2 = $v1->get(1);
     is_deeply($v2->values, [1]);
-    is_deeply($v2->dim->values, []);
+    is_deeply($v2->dim->values, [1]);
   }
 
   # get - single index

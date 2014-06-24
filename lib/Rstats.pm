@@ -11,6 +11,24 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
+sub t {
+  my ($self, $m1) = @_;
+  
+  my $m1_row = $m1->dim->values->[0];
+  my $m1_col = $m1->dim->values->[1];
+  
+  my $m2 = $self->matrix(0, $m1_col, $m1_row);
+  
+  for my $row (1 .. $m1_row) {
+    for my $col (1 .. $m1_col) {
+      my $value = $m1->get($row, $col);
+      $m2->at($col, $row)->set($value);
+    }
+  }
+  
+  return $m2;
+}
+
 sub cumsum {
   my ($self, $_v1) = @_;
   

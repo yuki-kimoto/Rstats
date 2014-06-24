@@ -47,9 +47,99 @@ sub names {
     $self->{names} = $names;
   }
   else {
-    $self->{names} ||= [] unless exists $self->{names};
+    $self->{names} = [] unless exists $self->{names};
     return Rstats::Array->array($self->{names});
   }
+}
+
+sub colnames {
+  my $self = shift;
+  
+  if (@_) {
+    my $_colnames = shift;
+    my $colnames;
+    if (!defined $_colnames) {
+      $colnames = [];
+    }
+    elsif (ref $_colnames eq 'ARRAY') {
+      $colnames = $_colnames;
+    }
+    elsif (ref $_colnames eq 'Rstats::Array') {
+      $colnames = $_colnames->values;
+    }
+    else {
+      $colnames = [$_colnames];
+    }
+    
+    my $duplication = {};
+    for my $name (@$colnames) {
+      croak "Don't use same name in colnames arguments"
+        if $duplication->{$name};
+      $duplication->{$name}++;
+    }
+    $self->{colnames} = $colnames;
+  }
+  else {
+    $self->{colnames} = [] unless exists $self->{colnames};
+    return Rstats::Array->array($self->{colnames});
+  }
+}
+
+sub rownames {
+  my $self = shift;
+  
+  if (@_) {
+    my $_rownames = shift;
+    my $rownames;
+    if (!defined $_rownames) {
+      $rownames = [];
+    }
+    elsif (ref $_rownames eq 'ARRAY') {
+      $rownames = $_rownames;
+    }
+    elsif (ref $_rownames eq 'Rstats::Array') {
+      $rownames = $_rownames->values;
+    }
+    else {
+      $rownames = [$_rownames];
+    }
+    
+    my $duplication = {};
+    for my $name (@$rownames) {
+      croak "Don't use same name in rownames arguments"
+        if $duplication->{$name};
+      $duplication->{$name}++;
+    }
+    $self->{rownames} = $rownames;
+  }
+  else {
+    $self->{rownames} = [] unless exists $self->{rownames};
+    return Rstats::Array->array($self->{rownames});
+  }
+}
+
+sub dim {
+  my $self = shift;
+  
+  if (@_) {
+    my $v1 = $_[0];
+    if (ref $v1 eq 'Rstats::Array') {
+      $self->{dim} = $v1->values;
+    }
+    elsif (ref $v1 eq 'ARRAY') {
+      $self->{dim} = $v1;
+    }
+    elsif(!ref $v1) {
+      $self->{dim} = [$v1];
+    }
+    else {
+      croak "Invalid values is passed to dim argument";
+    }
+  }
+  else {
+    $self->{dim} = [] unless exists $self->{dim};
+    return Rstats::Array->array($self->{dim});
+  } 
 }
 
 sub length {
@@ -313,34 +403,6 @@ sub as_logical {
   $self->{mode} = 'logical';
 
   return $self;
-}
-
-sub dim {
-  my $self = shift;
-  
-  if (@_) {
-    my $v1 = $_[0];
-    if (ref $v1 eq 'Rstats::Array') {
-      $self->{dim} = $v1->values;
-    }
-    elsif (ref $v1 eq 'ARRAY') {
-      $self->{dim} = $v1;
-    }
-    elsif(!ref $v1) {
-      $self->{dim} = [$v1];
-    }
-    else {
-      croak "Invalid values is passed to dim argument";
-    }
-  }
-  else {
-    my $dim = $self->{dim};
-    my $length = @$dim;
-    
-    my $v1 = $self->r->array($dim, {type => 'matrix'});
-    
-    return $v1;
-  } 
 }
 
 sub get {

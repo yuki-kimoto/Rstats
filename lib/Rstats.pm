@@ -268,6 +268,20 @@ sub names {
   return $v1->names(@_);
 }
 
+sub rownames {
+  my $self = shift;
+  my $m1 = shift;
+  
+  return $m1->rownames(@_);
+}
+
+sub colnames {
+  my $self = shift;
+  my $m1 = shift;
+  
+  return $m1->colnames(@_);
+}
+
 sub numeric {
   my ($self, $num) = @_;
   

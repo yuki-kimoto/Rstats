@@ -48,16 +48,6 @@ my $r = Rstats->new;
     is_deeply($mat->dim->values, [2, 5]);
     is($r->type($mat), 'matrix');
   }
-
-=pod  
-  # matrix - to_string
-  {
-    my $mat = $r->matrix(0, 2, 5);
-    $mat->set(1 => [1, 2, 3]);
-    $mat->set(2 => [4, 5, 6]);
-    is_deeply($mat->values, [1, 4, 2, 5, 3, 6]);
-  }
-=cut
 }
 
 # cumsum

@@ -232,16 +232,10 @@ sub replace {
 }
 
 sub dim {
-  my ($self, $v1, $dim) = @_;
+  my $self = shift;
+  my $v1 = shift;
   
-  if ($dim) {
-    $v1->dim($dim);
-    
-    return $self;
-  }
-  else {
-    return $v1->dim;
-  }
+  return $v1->dim(@_);
 }
 
 sub append {
@@ -268,26 +262,10 @@ sub append {
 }
 
 sub names {
-  my ($self, $v1, $names_v) = @_;
+  my $self = shift;
+  my $v1 = shift;
   
-  if ($names_v) {
-    if (ref $names_v eq 'ARRAY') {
-      $names_v = $self->c($names_v);
-    }
-    croak "names argument must be array"
-      unless ref $names_v eq 'Rstats::Array';
-    my $duplication = {};
-    my $names = $names_v->values;
-    for my $name (@$names) {
-      croak "Don't use same name in names arguments"
-        if $duplication->{$name};
-      $duplication->{$name}++;
-    }
-    $v1->{names} = $names_v;
-  }
-  else {
-    return $v1->{names};
-  }
+  return $v1->names(@_);
 }
 
 sub numeric {
@@ -409,7 +387,7 @@ sub runif {
 sub seq {
   my $self = shift;
   
-  Rstats::Array->seq(@_);
+  return Rstats::Array->seq(@_);
 }
 
 sub rep {

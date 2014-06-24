@@ -19,6 +19,39 @@ has 'values';
 has 'type';
 has 'mode';
 
+sub names {
+  my $self = shift;
+  
+  if (@_) {
+    my $_names = shift;
+    my $names;
+    if (!defined $_names) {
+      $names = [];
+    }
+    elsif (ref $_names eq 'ARRAY') {
+      $names = $_names;
+    }
+    elsif (ref $_names eq 'Rstats::Array') {
+      $names = $_names->values;
+    }
+    else {
+      $names = [$_names];
+    }
+    
+    my $duplication = {};
+    for my $name (@$names) {
+      croak "Don't use same name in names arguments"
+        if $duplication->{$name};
+      $duplication->{$name}++;
+    }
+    $self->{names} = $names;
+  }
+  else {
+    $self->{names} ||= [] unless exists $self->{names};
+    return Rstats::Array->array($self->{names});
+  }
+}
+
 sub length {
   my $self = shift;
   
@@ -525,8 +558,8 @@ sub to_string {
   my $values = $self->values;
 
   my $str;
-  my $names_v = $r->names($self);
-  if ($names_v) {
+  my $names_v = $self->names;
+  if (@{$names_v->values}) {
     $str .= join(' ', @{$names_v->values}) . "\n";
   }
   

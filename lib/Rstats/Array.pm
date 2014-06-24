@@ -367,8 +367,7 @@ sub to_string {
         my $dim_value = pop @dim_values;
         
         for (my $i = 1; $i <= $dim_value; $i++) {
-          $str .= (',' x $dim_num) . "$i"
-            . (',' x ($dim_length - $dim_num - 1)) . "\n";
+          $str .= (',' x $dim_num) . "$i" . "\n";
           unshift @$positions, $i;
           if (@dim_values > 2) {
             $dim_num--;

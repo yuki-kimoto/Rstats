@@ -345,105 +345,10 @@ sub type {
   return $array->type;
 }
 
-sub _parse_seq_str {
-  my ($self, $seq_str) = @_;
-  
-  my $by;
-  if ($seq_str =~ s/^(.+)\*//) {
-    $by = $1;
-  }
-  
-  my $from;
-  my $to;
-  if ($seq_str =~ /([^\:]+)(?:\:(.+))?/) {
-    $from = $1;
-    $to = $2;
-    $to = $from unless defined $to;
-  }
-  
-  my $array = $self->seq({from => $from, to => $to, by => $by});
-  
-  return $array;
-}
-
 sub array {
   my $self = shift;
   
-  # Arguments
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($v1, $_dim) = @_;
-  $_dim = $opt->{dim} unless defined $_dim;
-  
-  # Array
-  my $array = Rstats::Array->new;
-  
-  # Value
-  my $values = [];
-  if (defined $v1) {
-    if (ref $v1 eq 'ARRAY') {
-      for my $a (@$v1) {
-        if (ref $a eq 'ARRAY') {
-          push @$values, @$a;
-        }
-        elsif (ref $a eq 'Rstats::Array') {
-          push @$values, @{$a->values};
-        }
-        else {
-          push @$values, $a;
-        }
-      }
-    }
-    elsif (ref $v1 eq 'Rstats::Array') {
-      $values = $v1->values;
-    }
-    elsif(!ref $v1) {
-      $values = $self->_parse_seq_str($v1)->values;
-    }
-  }
-  else {
-    croak "Invalid first argument";
-  }
-  
-  # Dimention
-  my $dim;
-  if (defined $_dim) {
-    if (ref $_dim eq 'Rstats::Array') {
-      $dim = $_dim->values;
-    }
-    elsif (ref $_dim eq 'ARRAY') {
-      $dim = $_dim;
-    }
-    elsif(!ref $_dim) {
-      $dim = [$_dim];
-    }
-  }
-  else {
-    $dim = [scalar @$values]
-  }
-  $array->dim($dim);
-  
-  # Fix values
-  my $max_length = 1;
-  $max_length *= $_ for @$dim;
-  if (@$values > $max_length) {
-    @$values = splice @$values, 0, $max_length;
-  }
-  elsif (@$values < $max_length) {
-    my $repeat_count = int($max_length / @$values) + 1;
-    @$values = (@$values) x $repeat_count;
-    @$values = splice @$values, 0, $max_length;
-  }
-  $array->values($values);
-  
-  # Type
-  my $type = $opt->{type} || 'array';
-  $array->type($type);
-  
-  # Mode
-  my $mode = $opt->{mode} || 'numeric';
-  $array->mode($mode);
-  
-  return $array;
+  return Rstats::Array->array(@_);
 }
 
 sub paste {
@@ -504,91 +409,7 @@ sub runif {
 sub seq {
   my $self = shift;
   
-  # Option
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  # Along
-  my $along = $opt->{along};
-  
-  if ($along) {
-    my $length = $self->length($along);
-    return $self->seq([1,$length]);
-  }
-  else {
-    my $from_to = shift;
-    my $from;
-    my $to;
-    if (ref $from_to eq 'ARRAY') {
-      $from = $from_to->[0];
-      $to = $from_to->[1];
-    }
-    elsif (defined $from_to) {
-      $from = 1;
-      $to = $from_to;
-    }
-    
-    # From
-    $from = $opt->{from} unless defined $from;
-    croak "seq function need from option" unless defined $from;
-    
-    # To
-    $to = $opt->{to} unless defined $to;
-
-    # Length
-    my $length = $opt->{length};
-    
-    # By
-    my $by = $opt->{by};
-    
-    if (defined $length && defined $by) {
-      croak "Can't use by option and length option as same time";
-    }
-    
-    unless (defined $by) {
-      if ($to >= $from) {
-        $by = 1;
-      }
-      else {
-        $by = -1;
-      }
-    }
-    croak "by option should be except for 0" if $by == 0;
-    
-    $to = $from unless defined $to;
-    
-    if (defined $length && $from ne $to) {
-      $by = ($to - $from) / ($length - 1);
-    }
-    
-    my $values = [];
-    if ($to == $from) {
-      $values->[0] = $to;
-    }
-    elsif ($to > $from) {
-      if ($by < 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $value = $from;
-      while ($value <= $to) {
-        push @$values, $value;
-        $value += $by;
-      }
-    }
-    else {
-      if ($by > 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $value = $from;
-      while ($value >= $to) {
-        push @$values, $value;
-        $value += $by;
-      }
-    }
-    
-    my $v1 = $self->array($values, {type => 'vector'});
-  }
+  Rstats::Array->seq(@_);
 }
 
 sub rep {
@@ -742,9 +563,7 @@ sub length {
   my $self = shift;
   my $v1 = shift;
   
-  my $length = @{$v1->{values}};
-  
-  return $length;
+  return $v1->length;
 }
 
 sub sort {

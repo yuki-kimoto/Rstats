@@ -355,7 +355,7 @@ sub to_string {
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
-  my $postions = [];
+  my $positions = [];
   if (@$values) {
     if ($dim_length == 1) {
       $str .= '[1] ' . join(' ', @$values) . "\n";
@@ -369,14 +369,29 @@ sub to_string {
         for (my $i = 1; $i <= $dim_value; $i++) {
           $str .= (',' x $dim_num) . "$i"
             . (',' x ($dim_length - $dim_num - 1)) . "\n";
+          unshift @$positions, $i;
           if (@dim_values > 2) {
             $dim_num--;
             $code->(@dim_values);
             $dim_num++;
           }
           else {
-            $str .= "ppp\n";
+            $str .= "     ";
+            for my $d2 (1 .. $dim_values[1]) {
+              $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
+            }
+            for my $d1 (1 .. $dim_values[0]) {
+              $str .= "[$d1,] ";
+              
+              my @values;
+              for my $d2 (1 .. $dim_values[1]) {
+                push @values, $self->get($d1, $d2, @$positions)->value;
+              }
+              
+              $str .= join(' ', @values) . "\n";
+            }
           }
+          shift @$positions;
         }
       };
       $code->(@$dim_values);

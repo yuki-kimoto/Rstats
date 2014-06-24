@@ -6,7 +6,14 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# array test
+# to string
+{
+  my $a1 = $r->array('1:24', [4, 3, 2]);
+  $a1->to_string;
+  
+}
+
+# array
 {
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);

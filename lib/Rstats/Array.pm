@@ -350,8 +350,37 @@ sub to_string {
   if ($names_v) {
     $str .= join(' ', @{$names_v->values}) . "\n";
   }
+  
+  my $dim_values = $self->r->dim($self)->values;
+  
+  my $dim_length = @$dim_values;
+  my $dim_num = $dim_length - 1;
+  my $postions = [];
   if (@$values) {
-    $str .= '[1] ' . join(' ', @$values) . "\n";
+    if ($dim_length == 1) {
+      $str .= '[1] ' . join(' ', @$values) . "\n";
+    }
+    else {
+      my $code;
+      $code = sub {
+        my (@dim_values) = @_;
+        my $dim_value = pop @dim_values;
+        
+        for (my $i = 1; $i <= $dim_value; $i++) {
+          $str .= (',' x $dim_num) . "$i"
+            . (',' x ($dim_length - $dim_num - 1)) . "\n";
+          if (@dim_values > 2) {
+            $dim_num--;
+            $code->(@dim_values);
+            $dim_num++;
+          }
+          else {
+            $str .= "ppp\n";
+          }
+        }
+      };
+      $code->(@$dim_values);
+    }
   }
   else {
     $str = 'NULL';

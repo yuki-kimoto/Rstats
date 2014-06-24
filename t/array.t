@@ -16,6 +16,25 @@ my $r = Rstats->new;
     my $expected = "[1] 0\n";
     is($a1_str, $expected);
   }
+
+  # to_string - 2-dimention
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+  
   # to_string - 3-dimention
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);

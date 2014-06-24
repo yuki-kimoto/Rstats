@@ -116,32 +116,16 @@ sub sample {
   return $self->c(\@v2_values);
 }
 
-sub NULL { shift->numeric(0) }
+sub NULL {
+  my $self = shift;
+  
+  return Rstats::Array->NULL;
+}
 
 sub _v {
-  my ($self, $data) = @_;
+  my $self = shift;
   
-  my $v;
-  if (!defined $data) {
-    $v = $self->c([undef]);
-  }
-  elsif (!length $data) {
-    $v = $self->NULL;
-  }
-  elsif (!ref $data) {
-    $v = $self->c($data);
-  }
-  elsif (ref $data eq 'ARRAY') {
-    $v = $self->c($data);
-  }
-  elsif (ref $data eq 'Rstats::Array') {
-    $v = $data;
-  }
-  else {
-    croak "Invalid data is passed";
-  }
-  
-  return $v;
+  return Rstats::Array->_v(@_);
 }
 
 sub order { shift->_order(1, @_) }
@@ -283,11 +267,9 @@ sub colnames {
 }
 
 sub numeric {
-  my ($self, $num) = @_;
+  my $self = shift;
   
-  my $v = $self->c([(0) x $num]);
-  
-  return $v;
+  return Rstats::Array->numeric(@_);
 }
 
 sub matrix {
@@ -363,11 +345,9 @@ sub paste {
 }
 
 sub c {
-  my ($self, $data) = @_;
+  my $self = shift;
   
-  my $vector = $self->array($data, {type => 'vector'});
-  
-  return $vector;
+  return Rstats::Array->c(@_);
 }
 
 sub set_seed {

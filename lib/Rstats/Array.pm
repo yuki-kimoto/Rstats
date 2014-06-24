@@ -341,8 +341,6 @@ sub array {
   return $array;
 }
 
-sub r { Rstats->new }
-
 sub at {
   my $self = shift;
   
@@ -427,14 +425,60 @@ sub get {
   if (ref $_indexs->[0] eq 'CODE') {
     my $a1_values = $self->values;
     my @values2 = grep { $_indexs->[0]->() } @$a1_values;
-    return $self->r->array(\@values2,{type => 'vector'});
+    return Rstats::Array->array(\@values2,{type => 'vector'});
   }
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
   
   my @a2_values = map { $self->values->[$_ - 1] } @$positions;
   
-  return $self->r->array(\@a2_values, $a2_dim);
+  return Rstats::Array->array(\@a2_values, $a2_dim);
+}
+
+sub NULL {
+  my $self = shift;
+  
+  return Rstats::Array->numeric(0);
+}
+
+sub numeric {
+  my ($self, $num) = @_;
+  
+  return Rstats::Array->c([(0) x $num]);
+}
+
+sub _v {
+  my ($self, $data) = @_;
+  
+  my $v;
+  if (!defined $data) {
+    $v = Rstats::Array->c([undef]);
+  }
+  elsif (defined $data && $data eq '') {
+    $v = Rstats::Array->NULL;
+  }
+  elsif (!ref $data) {
+    $v = Rstats::Array->c($data);
+  }
+  elsif (ref $data eq 'ARRAY') {
+    $v = Rstats::Array->c($data);
+  }
+  elsif (ref $data eq 'Rstats::Array') {
+    $v = $data;
+  }
+  else {
+    croak "Invalid data is passed";
+  }
+  
+  return $v;
+}
+
+sub c {
+  my ($self, $data) = @_;
+  
+  my $vector = $self->array($data, {type => 'vector'});
+  
+  return $vector;
 }
 
 sub set {
@@ -449,7 +493,7 @@ sub set {
     $code = $_array;
   }
   else {
-    $array = $self->r->_v($_array);
+    $array = Rstats::Array->_v($_array);
   }
   
   my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
@@ -487,7 +531,7 @@ sub _parse_index {
     
     $_index = '' unless defined $_index;
     
-    my $index = $self->r->_v($_index);
+    my $index = Rstats::Array->_v($_index);
     my $index_values = $index->values;
     if (@$index_values && !$index->is_character && !$index->is_logical) {
       my $minus_count = 0;
@@ -516,7 +560,7 @@ sub _parse_index {
         for my $name (@{$index->values}) {
           my $i = 0;
           my $value;
-          for my $self_name (@{$self->r->names($self)->values}) {
+          for my $self_name (@{$self->names->values}) {
             if ($name eq $self_name) {
               $value = $self->values->[$i];
               last;
@@ -620,19 +664,50 @@ sub to_string {
   my $values = $self->values;
 
   my $str;
-  my $names_v = $self->names;
-  if (@{$names_v->values}) {
-    $str .= join(' ', @{$names_v->values}) . "\n";
-  }
   
-  my $dim_values = $self->r->dim($self)->values;
+  my $dim_values = $self->dim->values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
   if (@$values) {
     if ($dim_length == 1) {
+      my $names = $self->names->values;
+      if (@$names) {
+        $str .= join(' ', @$names) . "\n";
+      }
       $str .= '[1] ' . join(' ', @$values) . "\n";
+    }
+    elsif ($dim_length == 2) {
+      $str .= '     ';
+      
+      my $colnames = $self->colnames->values;
+      if (@$colnames) {
+        $str .= join(' ', @$colnames) . "\n";
+      }
+      else {
+        for my $d2 (1 .. $dim_values->[1]) {
+          $str .= $d2 == $dim_values->[1] ? "[,$d2]\n" : "[,$d2] ";
+        }
+      }
+      
+      my $rownames = $self->rownames->values;
+      my $use_rownames = @$rownames ? 1 : 0;
+      for my $d1 (1 .. $dim_values->[0]) {
+        if ($use_rownames) {
+          $str .= "$rownames->[$d1] ";
+        }
+        else {
+          $str .= "[$d1,] ";
+        }
+        
+        my @values;
+        for my $d2 (1 .. $dim_values->[1]) {
+          push @values, $self->get($d1, $d2, @$positions)->value;
+        }
+        
+        $str .= join(' ', @values) . "\n";
+      }
     }
     else {
       my $code;
@@ -649,7 +724,7 @@ sub to_string {
             $dim_num++;
           }
           else {
-            $str .= "     ";
+            $str .= '     ';
             for my $d2 (1 .. $dim_values[1]) {
               $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
             }
@@ -680,12 +755,11 @@ sub to_string {
 sub negation {
   my $self = shift;
   
-  my $v2 = $self->r->array([]);
   my $v1_values = $self->values;
-  my $v2_values = $v2->values;
+  my $v2_values = [];
   $v2_values->[$_] = -$v1_values->[$_] for (0 .. @$v1_values - 1);
   
-  return $v2;
+  return Rstats::Array->array($v2_values);
 }
 
 sub add { shift->_operation('+', @_) }
@@ -741,7 +815,7 @@ sub _operation {
 
   my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
   
-  return $self->r->array(\@v3_values);
+  return Rstats::Array->array(\@v3_values);
 }
 
 sub is_array {

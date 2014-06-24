@@ -315,16 +315,8 @@ sub matrix {
   }
   my $length = $nrow * $ncol;
   
-  my @v2_values;
-  for (my $i = 0; $i < $length; $i++) {
-    push @v2_values, $v1_values->[$i % $v1_length]
-  }
-  
-  my $dim = [];
-  push @$dim, $nrow if $nrow > 1;
-  push @$dim, $ncol if $ncol > 1;
-  my $matrix = $self->array(\@v2_values,{type => 'matrix'});
-  $self->dim($matrix, $dim);
+  my $dim = [$nrow, $ncol];
+  my $matrix = $self->array($v1_values, $dim, {type => 'matrix'});
   
   return $matrix;
 }
@@ -361,35 +353,77 @@ sub array {
   
   # Arguments
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($v1, $dim) = @_;
-  $dim = $opt->{dim} unless defined $dim;
-  my $type = $opt->{type} || 'array';
+  my ($v1, $_dim) = @_;
+  $_dim = $opt->{dim} unless defined $_dim;
   
-  my $array;
-  if (ref $v1 eq 'ARRAY') {
-    my $values = [];
-    for my $a (@$v1) {
-      if (ref $a eq 'ARRAY') {
-        push @$values, @$a;
-      }
-      elsif (ref $a eq 'Rstats::Array') {
-        push @$values, @{$a->values};
-      }
-      else {
-        push @$values, $a;
+  # Array
+  my $array = Rstats::Array->new;
+  
+  # Value
+  my $values = [];
+  if (defined $v1) {
+    if (ref $v1 eq 'ARRAY') {
+      for my $a (@$v1) {
+        if (ref $a eq 'ARRAY') {
+          push @$values, @$a;
+        }
+        elsif (ref $a eq 'Rstats::Array') {
+          push @$values, @{$a->values};
+        }
+        else {
+          push @$values, $a;
+        }
       }
     }
-    $array = Rstats::Array->new(values => $values);
+    elsif (ref $v1 eq 'Rstats::Array') {
+      $values = $v1->values;
+    }
+    elsif(!ref $v1) {
+      $values = $self->_parse_seq_str($v1)->values;
+    }
   }
-  elsif (ref $v1 eq 'Rstats::Array') {
-    $array = $v1;
-  }
-  elsif(!ref $1) {
-    $array = $self->_parse_seq_str($v1);
+  else {
+    croak "Invalid first argument";
   }
   
-  $array->type($type) if defined $type;
-  $array->dim($dim) if defined $dim;
+  # Dimention
+  my $dim;
+  if (defined $_dim) {
+    if (ref $_dim eq 'Rstats::Array') {
+      $dim = $_dim->values;
+    }
+    elsif (ref $_dim eq 'ARRAY') {
+      $dim = $_dim;
+    }
+    elsif(!ref $_dim) {
+      $dim = [$_dim];
+    }
+  }
+  else {
+    $dim = [scalar @$values]
+  }
+  $array->dim($dim);
+  
+  # Fix values
+  my $max_length = 1;
+  $max_length *= $_ for @$dim;
+  if (@$values > $max_length) {
+    @$values = splice @$values, 0, $max_length;
+  }
+  elsif (@$values < $max_length) {
+    my $repeat_count = int($max_length / @$values) + 1;
+    @$values = (@$values) x $repeat_count;
+    @$values = splice @$values, 0, $max_length;
+  }
+  $array->values($values);
+  
+  # Type
+  my $type = $opt->{type} || 'array';
+  $array->type($type);
+  
+  # Mode
+  my $mode = $opt->{mode} || 'numeric';
+  $array->mode($mode);
   
   return $array;
 }
@@ -406,7 +440,7 @@ sub paste {
   my $v1 = shift;
   
   my $v1_values = $v1->values;
-  my $v2 = Rstats::Array->new;
+  my $v2 = $self->array([]);
   my $v2_values = $v2->values;
   push @$v2_values, "$str$sep$_" for @$v1_values;
   
@@ -535,10 +569,7 @@ sub seq {
       }
     }
     
-    my $v1 = Rstats::Array->new(
-      values => $values,
-      type => 'vector',
-    );
+    my $v1 = $self->array($values, {type => 'vector'});
   }
 }
 

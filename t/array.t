@@ -6,8 +6,9 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# to string
+# to_string
 {
+  # to_string - 3-dimention
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
     my $a1_str = "$a1";
@@ -93,6 +94,7 @@ EOS
 
 # array
 {
+  # array - basic
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);
     is_deeply($a1->values, [1 .. 24]);

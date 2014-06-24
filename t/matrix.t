@@ -35,18 +35,23 @@ my $r = Rstats->new;
   {
     my $m1 = $r->matrix('1:12');
     is_deeply($m1->values, [1 .. 12]);
-    is_deeply($r->dim($m1)->values, [12]);
+    is_deeply($r->dim($m1)->values, [12, 1]);
     ok($m1->is_matrix);
   }
 
-=pod
   # matrix - repeat
   {
     my $m1 = $r->matrix('1:3', 3, 4);
-    is_deeply($m1->values, [1 .. 12]);
-    is_deeply($r->dim($m1)->values, [(1 .. 3) x 4]);
+    is_deeply($m1->values, [(1 .. 3) x 4]);
+    is_deeply($r->dim($m1)->values, [3, 4]);
     ok($m1->is_matrix);
   }
-=cut
 
+  # matrix - repeat 2
+  {
+    my $m1 = $r->matrix('1:10', 3, 4);
+    is_deeply($m1->values, [1 .. 10, 1, 2]);
+    is_deeply($r->dim($m1)->values, [3, 4]);
+    ok($m1->is_matrix);
+  }
 }

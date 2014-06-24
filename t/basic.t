@@ -332,7 +332,7 @@ my $r = Rstats->new;
 
 # Type
 {
-  my $array = Rstats::Array->new(values => [1, 2, 3]);
+  my $array = $r->array([1, 2, 3]);
   ok($array->is_array);
   $array->as_vector;
   ok($array->is_vector);
@@ -342,7 +342,7 @@ my $r = Rstats->new;
 
 # Array get and set
 {
-  my $array = Rstats::Array->new(values => [1, 2, 3]);
+  my $array = $r->array([1, 2, 3]);
   is_deeply($array->get(1)->values, [1]);
   is_deeply($array->get(3)->values, [3]);
   $array->at(1)->set(5);;

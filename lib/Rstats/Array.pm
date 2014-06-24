@@ -37,23 +37,6 @@ sub value { shift->{values}[0] }
 
 my $r = Rstats->new;
 
-sub new {
-  my $self = shift->SUPER::new(@_);
-  
-  $self->{values} ||= [];
-  $self->{type} ||= 'array';
-  if (defined $self->{dim}) {
-    $self->dim($self->{dim});
-  }
-  else {
-    my $length = @{$self->{values}};
-    $self->dim([$length]);
-  }
-  $self->{mode} = 'numeric' unless $self->{mode};
-  
-  return $self;
-}
-
 sub is_numeric { (shift->{mode} || '') eq 'numeric' }
 sub is_integer { (shift->{mode} || '') eq 'integer' }
 sub is_complex { (shift->{mode} || '') eq 'complex' }
@@ -122,11 +105,7 @@ sub dim {
     my $dim = $self->{dim};
     my $length = @$dim;
     
-    my $v1 = Rstats::Array->new(
-      values => $dim,
-      type => 'matrix',
-      dim => [$length]
-    );
+    my $v1 = $self->r->array($dim, {type => 'matrix'});
     
     return $v1;
   } 
@@ -154,14 +133,14 @@ sub get {
   if (ref $_indexs->[0] eq 'CODE') {
     my $a1_values = $self->values;
     my @values2 = grep { $_indexs->[0]->() } @$a1_values;
-    return Rstats::Array->new(values => \@values2, type => 'vector');
+    return $self->r->array(\@values2,{type => 'vector'});
   }
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
   
   my @a2_values = map { $self->values->[$_ - 1] } @$positions;
   
-  return Rstats::Array->new(values => \@a2_values, dim => $a2_dim);
+  return $self->r->array(\@a2_values, $a2_dim);
 }
 
 sub set {
@@ -406,7 +385,7 @@ sub to_string {
 sub negation {
   my $self = shift;
   
-  my $v2 = $self->new;
+  my $v2 = $self->r->array([]);
   my $v1_values = $self->values;
   my $v2_values = $v2->values;
   $v2_values->[$_] = -$v1_values->[$_] for (0 .. @$v1_values - 1);
@@ -467,7 +446,7 @@ sub _operation {
 
   my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
   
-  return $self->new(values => \@v3_values);
+  return $self->r->array(\@v3_values);
 }
 
 sub is_array {

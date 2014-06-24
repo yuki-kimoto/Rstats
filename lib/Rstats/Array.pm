@@ -19,6 +19,18 @@ has 'values';
 has 'type';
 has 'mode';
 
+sub nrow {
+  my $self = shift;
+  
+  return Rstats::Array->array($self->dim->values->[0]);
+}
+
+sub ncol {
+  my $self = shift;
+  
+  return Rstats::Array->array($self->dim->values->[1]);
+}
+
 sub names {
   my $self = shift;
   

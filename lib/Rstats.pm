@@ -11,6 +11,18 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
+sub nrow {
+  my ($self, $m) = @_;
+  
+  return $m->nrow;
+}
+
+sub ncol {
+  my ($self, $m) = @_;
+  
+  return $m->ncol;
+}
+
 sub t {
   my ($self, $m1) = @_;
   

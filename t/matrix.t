@@ -6,49 +6,16 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# rownames and colnames
+# nrow and ncol
 {
-  # rownames and colnames - accessor
-  {
-    my $m1 = $r->matrix('1:6', 2, 3);
-    $r->colnames($m1, [qw/c1 c2 c3/]);
-    is_deeply($r->colnames($m1)->values, [qw/c1 c2 c3/]);
-    $r->rownames($m1, [qw/r1 r2 r3/]);
-    is_deeply($r->rownames($m1)->values, [qw/r1 r2 r3/]);
-  }
-
-  # rownames and colnames - to_string
-  {
-    my $m1 = $r->matrix('1:6', 2, 3);
-    $r->colnames($m1, [qw/c1 c2 c3/]);
-    $r->rownames($m1, [qw/r1 r2 r3/]);
-    my $m1_str = "$m1";
-    $m1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-    c1 c2 c3
-r1 1 3 5
-r2 2 4 6
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($m1_str, $expected);
-  }
-}
-
-# t
-{
-  # t - basic
-  {
-    my $m1 = $r->matrix('1:6', 3, 2);
-    my $m2 = $r->t($m1);
-    is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
-    is_deeply($r->dim($m2)->values, [2, 3]);
-  }
+  my $m1 = $r->matrix('1:12', 3, 4);
+  is_deeply($r->nrow($m1)->values, [3]);
+  is_deeply($r->ncol($m1)->values, [4]);
 }
 
 # matrix
 {
+  # matrix - basic
   {
     my $m1 = $r->matrix('1:12', 3, 4);
     is_deeply($m1->values, [1 .. 12]);
@@ -103,5 +70,46 @@ EOS
     is_deeply($r->dim($m1)->values, [3, 4]);
     ok($m1->is_matrix);
   }
-  
 }
+
+# rownames and colnames
+{
+  # rownames and colnames - accessor
+  {
+    my $m1 = $r->matrix('1:6', 2, 3);
+    $r->colnames($m1, [qw/c1 c2 c3/]);
+    is_deeply($r->colnames($m1)->values, [qw/c1 c2 c3/]);
+    $r->rownames($m1, [qw/r1 r2 r3/]);
+    is_deeply($r->rownames($m1)->values, [qw/r1 r2 r3/]);
+  }
+
+  # rownames and colnames - to_string
+  {
+    my $m1 = $r->matrix('1:6', 2, 3);
+    $r->colnames($m1, [qw/c1 c2 c3/]);
+    $r->rownames($m1, [qw/r1 r2 r3/]);
+    my $m1_str = "$m1";
+    $m1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+    c1 c2 c3
+r1 1 3 5
+r2 2 4 6
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($m1_str, $expected);
+  }
+}
+
+# t
+{
+  # t - basic
+  {
+    my $m1 = $r->matrix('1:6', 3, 2);
+    my $m2 = $r->t($m1);
+    is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
+    is_deeply($r->dim($m2)->values, [2, 3]);
+  }
+}
+

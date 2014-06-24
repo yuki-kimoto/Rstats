@@ -695,7 +695,8 @@ sub to_string {
       my $use_rownames = @$rownames ? 1 : 0;
       for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
-          $str .= "$rownames->[$d1] ";
+          my $rowname = $rownames->[$d1 - 1];
+          $str .= "$rowname ";
         }
         else {
           $str .= "[$d1,] ";

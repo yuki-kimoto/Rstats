@@ -8,12 +8,31 @@ my $r = Rstats->new;
 
 # rownames and colnames
 {
+  # rownames and colnames - accessor
   {
     my $m1 = $r->matrix('1:6', 2, 3);
     $r->colnames($m1, [qw/c1 c2 c3/]);
     is_deeply($r->colnames($m1)->values, [qw/c1 c2 c3/]);
     $r->rownames($m1, [qw/r1 r2 r3/]);
     is_deeply($r->rownames($m1)->values, [qw/r1 r2 r3/]);
+  }
+
+  # rownames and colnames - to_string
+  {
+    my $m1 = $r->matrix('1:6', 2, 3);
+    $r->colnames($m1, [qw/c1 c2 c3/]);
+    $r->rownames($m1, [qw/r1 r2 r3/]);
+    my $m1_str = "$m1";
+    $m1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+    c1 c2 c3
+r1 1 3 5
+r2 2 4 6
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($m1_str, $expected);
   }
 }
 

@@ -19,6 +19,31 @@ has 'values';
 has 'type';
 has 'mode';
 
+sub row {
+  my $self = shift;
+  
+  my $nrow = $self->nrow->value;
+  my $ncol = $self->ncol->value;
+  
+  my @values = (1 .. $nrow) x $ncol;
+  
+  return Rstats::Array->array(\@values, [$nrow, $ncol]);
+}
+
+sub col {
+  my $self = shift;
+  
+  my $nrow = $self->nrow->value;
+  my $ncol = $self->ncol->value;
+  
+  my @values;
+  for my $col (1 .. $ncol) {
+    push @values, ($col) x $nrow;
+  }
+  
+  return Rstats::Array->array(\@values, [$nrow, $ncol]);
+}
+
 sub nrow {
   my $self = shift;
   

@@ -45,7 +45,7 @@ sub t {
   
   for my $row (1 .. $m1_row) {
     for my $col (1 .. $m1_col) {
-      my $value = $m1->get($row, $col);
+      my $value = $m1->value($row, $col);
       $m2->at($col, $row)->set($value);
     }
   }

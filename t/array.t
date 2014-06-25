@@ -14,19 +14,26 @@ my $r = Rstats->new;
     is($a1->value, 1);
   }
 
-  # value - one argument
+  # value - one-dimetion
   {
     my $a1 = $r->array('1:4');
     is($a1->value(2), 2);
   }
   
-  # value - two argument
+  # value - two-dimention
   {
     my $a1 = $r->array('1:12', [4, 3]);
     is($a1->value(3, 2), 7);
   }
 
-  # value - three argument
+  # value - two-dimention, as_vector
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    $a1->as_vector;
+    is($a1->value(5), 5);
+  }
+  
+  # value - three-dimention
   {
     my $a1 = $r->array('1:24', [4, 3, 1]);
     is($a1->value(3, 2, 1), 7);

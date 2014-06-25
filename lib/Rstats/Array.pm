@@ -393,12 +393,14 @@ sub at {
 sub value {
   my $self = shift;
   
+  my $dim_values = $self->_current_dim_values;
+  
   if (@_) {
-    if ($self->{type} eq 'vector') {
+    if (@$dim_values == 1) {
       return $self->{values}[$_[0] - 1];
     }
-    elsif ($self->{type} eq 'matrix') {
-      return $self->{values}[($_[0] - 1) + $self->{dim}[1] * ($_[1] - 1)];
+    elsif (@$dim_values == 2) {
+      return $self->{values}[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
       return $self->get(@_)->value;
@@ -791,7 +793,7 @@ sub to_string {
         
         my @values;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @values, $self->get($d1, $d2)->value;
+          push @values, $self->value($d1, $d2);
         }
         
         $str .= join(' ', @values) . "\n";
@@ -821,7 +823,7 @@ sub to_string {
               
               my @values;
               for my $d2 (1 .. $dim_values[1]) {
-                push @values, $self->get($d1, $d2, @$positions)->value;
+                push @values, $self->value($d1, $d2, @$positions);
               }
               
               $str .= join(' ', @values) . "\n";

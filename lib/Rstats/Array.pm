@@ -707,30 +707,54 @@ sub to_string {
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
-  if (@$values) {
+  my $type = $self->{type};
+  
+  my $output_type;
+  if ($type eq 'vector') {
+    $output_type = 'vector';
+  }
+  elsif ($type eq 'matrix') {
+    $output_type = 'matrix';
+  }
+  elsif ($type eq 'array') {
     if ($dim_length == 1) {
+      $output_type = 'vector';
+    }
+    elsif ($dim_length == 2) {
+      $output_type = 'matrix';
+    }
+    else {
+      $output_type = 'array';
+    }
+  }
+  
+  if (@$values) {
+    if ($output_type eq 'vector') {
       my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
       $str .= '[1] ' . join(' ', @$values) . "\n";
     }
-    elsif ($dim_length == 2) {
+    elsif ($output_type eq 'matrix') {
       $str .= '     ';
+      
+      my $dim_values0 = $dim_values->[0];
+      my $dim_values1 = $dim_length == 1 ? 1 : $dim_values->[1];
       
       my $colnames = $self->colnames->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
       else {
-        for my $d2 (1 .. $dim_values->[1]) {
-          $str .= $d2 == $dim_values->[1] ? "[,$d2]\n" : "[,$d2] ";
+        for my $d2 (1 .. $dim_values1) {
+          $str .= $d2 == $dim_values1 ? "[,$d2]\n" : "[,$d2] ";
         }
       }
       
       my $rownames = $self->rownames->values;
       my $use_rownames = @$rownames ? 1 : 0;
-      for my $d1 (1 .. $dim_values->[0]) {
+      for my $d1 (1 .. $dim_values0) {
         if ($use_rownames) {
           my $rowname = $rownames->[$d1 - 1];
           $str .= "$rowname ";
@@ -740,7 +764,7 @@ sub to_string {
         }
         
         my @values;
-        for my $d2 (1 .. $dim_values->[1]) {
+        for my $d2 (1 .. $dim_values1) {
           push @values, $self->get($d1, $d2, @$positions)->value;
         }
         

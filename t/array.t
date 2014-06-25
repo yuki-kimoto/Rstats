@@ -34,6 +34,107 @@ EOS
     
     is($a1_str, $expected);
   }
+
+  # to_string - 1-dimention
+  {
+    my $a1 = $r->array('1:4');
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 1-dimention, as_vector
+  {
+    my $a1 = $r->array('1:4');
+    $a1->as_vector;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 1-dimention, as_matrix
+  {
+    my $a1 = $r->array('1:4');
+    $a1->as_matrix;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+   [,1]
+[1,] 1
+[2,] 2
+[3,] 3
+[4,] 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 2-dimention
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    $a1->as_matrix;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 2-dimention, as_vector
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    $a1->as_vector;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4 5 6 7 8 9 10 11 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 2-dimention, as_matrix
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    $a1->as_matrix;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
   
   # to_string - 3-dimention
   {

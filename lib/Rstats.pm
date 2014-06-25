@@ -332,7 +332,19 @@ sub matrix {
   my $length = $nrow * $ncol;
   
   my $dim = [$nrow, $ncol];
-  my $matrix = $self->array($v1_values, $dim, {type => 'matrix'});
+  my $matrix;
+  if ($byrow) {
+    $matrix = $self->array(
+      $v1_values,
+      [$dim->[1], $dim->[0]],
+      {type => 'matrix'}
+    );
+    
+    $matrix = $self->t($matrix);
+  }
+  else {
+    $matrix = $self->array($v1_values, $dim, {type => 'matrix'});
+  }
   
   return $matrix;
 }

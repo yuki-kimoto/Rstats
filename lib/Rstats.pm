@@ -48,11 +48,39 @@ sub colSums {
 }
 
 sub rowMeans {
+  my ($self, $m1) = @_;
   
+  my $dim_values = $m1->_current_dim_values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $col (1 .. $dim_values->[1]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$v1_values, $v1_value / $dim_values->[0];
+    }
+    return $self->c($v1_values);
+  }
+  else {
+    croak "Can't culculate rowSums";
+  }
 }
 
 sub colMeans {
+  my ($self, $m1) = @_;
   
+  my $dim_values = $m1->_current_dim_values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $row (1 .. $dim_values->[0]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
+      push @$v1_values, $v1_value / $dim_values->[1];
+    }
+    return $self->c($v1_values);
+  }
+  else {
+    croak "Can't culculate colSums";
+  }
 }
 
 sub row {

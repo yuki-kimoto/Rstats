@@ -6,6 +6,28 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# cbind
+{
+  my $m1 = $r->cbind(
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12]
+  );
+  is_deeply($m1->values, [1 .. 12]);
+  is_deeply($m1->dim->values, [4, 3]);
+}
+
+# rbind
+{
+  my $m1 = $r->rbind(
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12]
+  );
+  is_deeply($m1->values, [1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12]);
+  is_deeply($m1->dim->values, [3, 4]);
+}
+
 # rowSums
 {
   my $m1 = $r->matrix('1:12', 4, 3);

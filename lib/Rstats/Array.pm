@@ -179,6 +179,10 @@ sub dim {
   } 
 }
 
+sub dim_as {
+  
+}
+
 sub length {
   my $self = shift;
   
@@ -393,7 +397,7 @@ sub at {
 sub value {
   my $self = shift;
   
-  my $dim_values = $self->_current_dim_values;
+  my $dim_values = $self->as_dim_values;
   
   if (@_) {
     if (@$dim_values == 1) {
@@ -578,7 +582,7 @@ sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
-  my $a1_dim = $self->_current_dim_values($self->{dim});
+  my $a1_dim = $self->as_dim_values($self->{dim});
   
   my @indexs;
   my @a2_dim;
@@ -715,7 +719,7 @@ sub _pos {
   return $pos;
 }
 
-sub _current_dim_values {
+sub as_dim_values {
   my $self = shift;
   
   my $dim_values = $self->{dim};
@@ -751,7 +755,7 @@ sub to_string {
 
   my $values = $self->values;
   
-  my $dim_values = $self->_current_dim_values;
+  my $dim_values = $self->as_dim_values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;

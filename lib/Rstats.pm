@@ -11,10 +11,51 @@ use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
 
+sub rbind {
+  my ($self, @arrays) = @_;
+  
+  my $matrix = $self->cbind(@arrays);
+  
+  return $self->t($matrix);
+}
+
+sub cbind {
+  my ($self, @arrays) = @_;
+  
+  my $row_count_needed;
+  my $col_count_total;
+  my $a2_values = [];
+  for my $_a (@arrays) {
+    
+    my $a = $self->_v($_a);
+    
+    my $row_count;
+    if ($a->is_matrix) {
+      $row_count = $a->as_dim_values->[0];
+      $col_count_total += $a->as_dim_values->[1];
+    }
+    elsif ($a->is_vector) {
+      $row_count = $a->as_dim_values->[0];
+      $col_count_total += 1;
+    }
+    else {
+      croak "cbind or rbind can only receive matrix and vector";
+    }
+    
+    $row_count_needed = $row_count unless defined $row_count_needed;
+    croak "Row count is different" if $row_count_needed ne $row_count;
+    
+    push @$a2_values, $a->values;
+  }
+  my $matrix = $self->matrix($a2_values, $row_count_needed, $col_count_total);
+  
+  return $matrix;
+}
+
 sub rowSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->_current_dim_values;
+  my $dim_values = $m1->as_dim_values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -32,7 +73,7 @@ sub rowSums {
 sub colSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->_current_dim_values;
+  my $dim_values = $m1->as_dim_values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -50,7 +91,7 @@ sub colSums {
 sub rowMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->_current_dim_values;
+  my $dim_values = $m1->as_dim_values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -68,7 +109,7 @@ sub rowMeans {
 sub colMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->_current_dim_values;
+  my $dim_values = $m1->as_dim_values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {

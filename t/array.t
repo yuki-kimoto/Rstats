@@ -6,6 +6,33 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# value
+{
+  # value - none argument
+  {
+    my $a1 = $r->array('1:4');
+    is($a1->value, 1);
+  }
+
+  # value - one argument
+  {
+    my $a1 = $r->array('1:4');
+    is($a1->value(2), 2);
+  }
+  
+  # value - two argument
+  {
+    my $a1 = $r->array('1:12', [4, 3]);
+    is($a1->value(3, 2), 7);
+  }
+
+  # value - three argument
+  {
+    my $a1 = $r->array('1:24', [4, 3, 1]);
+    is($a1->value(3, 2, 1), 7);
+  }
+}
+
 # to_string
 {
   # to_string - one element

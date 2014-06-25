@@ -390,9 +390,26 @@ sub at {
   return $self->{at};
 }
 
-sub value { shift->{values}[0] }
+sub value {
+  my $self = shift;
+  
+  if (@_) {
+    if ($self->{type} eq 'vector') {
+      return $self->{values}[$_[0] - 1];
+    }
+    elsif ($self->{type} eq 'matrix') {
+      return $self->{values}[($_[0] - 1) + $self->{dim}[1] * ($_[1] - 1)];
+    }
+    else {
+      return $self->get(@_)->value;
+    }
+  }
+  else {
+    return $self->{values}[0];
+  }
+}
 
-my $r = Rstats->new;
+
 
 sub is_numeric { (shift->{mode} || '') eq 'numeric' }
 sub is_integer { (shift->{mode} || '') eq 'integer' }
@@ -559,17 +576,7 @@ sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
-  my $a1_dim = [@{$self->dim->values}];
-  my $type = $self->type;
-  if ($type eq 'vector') {
-  
-  }
-  elsif ($type eq 'matrix') {
-    
-  }
-  else {
-    
-  }
+  my $a1_dim = $self->_current_dim_values($self->{dim});
   
   my @indexs;
   my @a2_dim;
@@ -706,79 +713,74 @@ sub _pos {
   return $pos;
 }
 
+sub _current_dim_values {
+  my $self = shift;
+  
+  my $dim_values = $self->{dim};
+  my $current_dim_values = [];
+  my $type = $self->{type};
+  if ($type eq 'vector') {
+    $current_dim_values->[0] = 1;
+    $current_dim_values->[0] *= $_ for @$dim_values;
+  }
+  elsif ($type eq 'matrix') {
+    if (@$dim_values == 1) {
+      $current_dim_values->[0] = $dim_values->[0];
+      $current_dim_values->[1] = 1;
+    }
+    elsif (@$dim_values == 2) {
+      $current_dim_values = $dim_values;
+    }
+    elsif (@$dim_values > 2) {
+      $current_dim_values->[0] = 1;
+      $current_dim_values->[0] *= $_ for @$dim_values;
+      $current_dim_values->[1] = 1;
+    }
+  }
+  else {
+    $current_dim_values = $dim_values;
+  }
+  
+  return $current_dim_values;
+}
+
 sub to_string {
   my $self = shift;
 
   my $values = $self->values;
-
-  my $str;
   
-  my $dim_values = $self->dim->values;
+  my $dim_values = $self->_current_dim_values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
   my $type = $self->{type};
   
-  my $output_type;
-  if ($type eq 'vector') {
-    $output_type = 'vector';
-  }
-  elsif ($type eq 'matrix') {
-    $output_type = 'matrix';
-  }
-  elsif ($type eq 'array') {
-    if ($dim_length == 1) {
-      $output_type = 'vector';
-    }
-    elsif ($dim_length == 2) {
-      $output_type = 'matrix';
-    }
-    else {
-      $output_type = 'array';
-    }
-  }
-  
+  my $str;
   if (@$values) {
-    if ($output_type eq 'vector') {
+    if ($dim_length == 1) {
       my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
       $str .= '[1] ' . join(' ', @$values) . "\n";
     }
-    elsif ($output_type eq 'matrix') {
+    elsif ($dim_length == 2) {
       $str .= '     ';
-      
-      my $dim_values0;
-      my $dim_values1;
-      if ($dim_length == 1) {
-        $dim_values0 = $dim_values->[0];
-        $dim_values1 = 1;
-      }
-      elsif ($dim_length == 2) {
-        $dim_values0 = $dim_values->[0];
-        $dim_values1 = $dim_values->[1];
-      }
-      elsif ($dim_length > 2) {
-        $dim_values0 = 1;
-        $dim_values0 *= $_ for @$dim_values;
-        $dim_values1 = 1;
-      }
       
       my $colnames = $self->colnames->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
       else {
-        for my $d2 (1 .. $dim_values1) {
-          $str .= $d2 == $dim_values1 ? "[,$d2]\n" : "[,$d2] ";
+        for my $d2 (1 .. $dim_values->[1]) {
+          $str .= $d2 == $dim_values->[1] ? "[,$d2]\n" : "[,$d2] ";
         }
       }
       
       my $rownames = $self->rownames->values;
       my $use_rownames = @$rownames ? 1 : 0;
-      for my $d1 (1 .. $dim_values0) {
+      for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
           my $rowname = $rownames->[$d1 - 1];
           $str .= "$rowname ";
@@ -788,8 +790,8 @@ sub to_string {
         }
         
         my @values;
-        for my $d2 (1 .. $dim_values1) {
-          push @values, $self->get($d1, $d2, @$positions)->value;
+        for my $d2 (1 .. $dim_values->[1]) {
+          push @values, $self->get($d1, $d2)->value;
         }
         
         $str .= join(' ', @values) . "\n";

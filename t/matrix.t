@@ -6,6 +6,22 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# rowSums
+{
+  my $m1 = $r->matrix('1:12', 4, 3);
+  my $v1 = $r->rowSums($m1);
+  is_deeply($v1->values,[10, 26, 42]);
+  is_deeply($v1->dim->values, [3]);
+}
+
+# colSums
+{
+  my $m1 = $r->matrix('1:12', 4, 3);
+  my $v1 = $r->colSums($m1);
+  is_deeply($v1->values,[15, 18, 21, 24]);
+  is_deeply($v1->dim->values, [4]);
+}
+
 # row
 {
   my $m1 = $r->matrix('1:12', 3, 4);

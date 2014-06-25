@@ -160,6 +160,59 @@ EOS
     
     is($a1_str, $expected);
   }
+
+  # to_string - 3-dimention, as_vector
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    $a1->as_vector;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 3-dimention, as_matrix
+  {
+    my $a1 = $r->array('1:24', [4, 3, 2]);
+    $a1->as_matrix;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+    my $expected = <<'EOS';
+     [,1]
+[1,] 1
+[2,] 2
+[3,] 3
+[4,] 4
+[5,] 5
+[6,] 6
+[7,] 7
+[8,] 8
+[9,] 9
+[10,] 10
+[11,] 11
+[12,] 12
+[13,] 13
+[14,] 14
+[15,] 15
+[16,] 16
+[17,] 17
+[18,] 18
+[19,] 19
+[20,] 20
+[21,] 21
+[22,] 22
+[23,] 23
+[24,] 24
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
   
   # to_string - 4 dimention
   {

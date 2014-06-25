@@ -559,7 +559,18 @@ sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
-  my $a1_dim = $self->dim->values;
+  my $a1_dim = [@{$self->dim->values}];
+  my $type = $self->type;
+  if ($type eq 'vector') {
+  
+  }
+  elsif ($type eq 'matrix') {
+    
+  }
+  else {
+    
+  }
+  
   my @indexs;
   my @a2_dim;
   
@@ -739,8 +750,21 @@ sub to_string {
     elsif ($output_type eq 'matrix') {
       $str .= '     ';
       
-      my $dim_values0 = $dim_values->[0];
-      my $dim_values1 = $dim_length == 1 ? 1 : $dim_values->[1];
+      my $dim_values0;
+      my $dim_values1;
+      if ($dim_length == 1) {
+        $dim_values0 = $dim_values->[0];
+        $dim_values1 = 1;
+      }
+      elsif ($dim_length == 2) {
+        $dim_values0 = $dim_values->[0];
+        $dim_values1 = $dim_values->[1];
+      }
+      elsif ($dim_length > 2) {
+        $dim_values0 = 1;
+        $dim_values0 *= $_ for @$dim_values;
+        $dim_values1 = 1;
+      }
       
       my $colnames = $self->colnames->values;
       if (@$colnames) {

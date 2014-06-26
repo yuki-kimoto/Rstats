@@ -7,6 +7,96 @@ use Math::Trig ();
 
 my $r = Rstats->new;
 
+# atanh
+{
+  # atanh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->atanh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::atanh($a1_values->[0]),
+        Math::Trig::atanh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # atanh - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->atanh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::atanh($a1_values->[0]),
+        Math::Trig::atanh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# acosh
+{
+  # acosh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->acosh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::acosh($a1_values->[0]),
+        Math::Trig::acosh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # acosh - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->acosh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::acosh($a1_values->[0]),
+        Math::Trig::acosh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# asinh
+{
+  # asinh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->asinh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::asinh($a1_values->[0]),
+        Math::Trig::asinh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # asinh - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->asinh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::asinh($a1_values->[0]),
+        Math::Trig::asinh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # tanh
 {
   # tanh - array reference

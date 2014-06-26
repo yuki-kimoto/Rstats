@@ -7,6 +7,96 @@ use Math::Trig ();
 
 my $r = Rstats->new;
 
+# tanh
+{
+  # tanh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->tanh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::tanh($a1_values->[0]),
+        Math::Trig::tanh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # atan - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->tanh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::tanh($a1_values->[0]),
+        Math::Trig::tanh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# cosh
+{
+  # cosh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->cosh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::cosh($a1_values->[0]),
+        Math::Trig::cosh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # cosh - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->cosh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::cosh($a1_values->[0]),
+        Math::Trig::cosh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# sinh
+{
+  # sinh - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->sinh($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::sinh($a1_values->[0]),
+        Math::Trig::sinh($a1_values->[1]),
+      ]
+    );
+  }
+
+  # sinh - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->sinh($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::sinh($a1_values->[0]),
+        Math::Trig::sinh($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # atan
 {
   # atan - array reference

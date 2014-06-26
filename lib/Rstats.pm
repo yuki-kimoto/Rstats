@@ -814,6 +814,36 @@ sub atan {
   return $a1->clone_without_values(values => \@a2_values);
 }
 
+sub sinh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::sinh $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
+sub cosh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::cosh $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
+sub tanh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::tanh $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
 sub sqrt {
   my ($self, $_a1) = @_;
   

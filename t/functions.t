@@ -7,6 +7,30 @@ use Math::Trig ();
 
 my $r = Rstats->new;
 
+# ceiling
+{
+  # ceiling - array reference
+  {
+    my $a1_values = [2.5, 2.0, -1.0, -1.3];
+    my $a2 = $r->ceiling($a1_values);
+    is_deeply(
+      $a2->values,
+      [3, 2, -1, -1]
+    );
+  }
+
+  # ceiling - matrix
+  {
+    my $a1_values = [2.5, 2.0, -1.0, -1.3];
+    my $a2 = $r->ceiling($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [3, 2, -1, -1]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # atanh
 {
   # atanh - array reference

@@ -10,6 +10,12 @@ use Carp 'croak';
 use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
+use POSIX ();;
+
+# TODO
+#   logp1x
+#   gamma
+#   lgamma
 
 sub rbind {
   my ($self, @arrays) = @_;
@@ -712,6 +718,16 @@ sub sort {
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
   return $self->c($v2_values);
+}
+
+sub ceiling {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { POSIX::ceil $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub log {

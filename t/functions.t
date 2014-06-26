@@ -6,6 +6,26 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# expm1
+{
+  # expm1 - array refference
+  {
+    my $a1 = $r->expm1([-0.0000005, -4]);
+    is_deeply($a1->values, [
+      -0.0000005 + 0.5 * -0.0000005 * -0.0000005, exp(-4) - 1.0
+    ]);
+  }
+
+  # expm1 - matrix
+  {
+    my $a1 = $r->expm1($r->matrix([-0.0000005, -4]));
+    is_deeply($a1->values, [
+      -0.0000005 + 0.5 * -0.0000005 * -0.0000005, exp(-4) - 1.0
+    ]);
+    is($a1->type, 'matrix');
+  }
+}
+
 # sqrt
 {
   # sqrt - array reference

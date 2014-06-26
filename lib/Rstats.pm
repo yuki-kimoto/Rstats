@@ -599,7 +599,9 @@ sub pmin {
 }
 
 sub expm1 {
-  my ($self, $a1) = @_;
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
   
   my @a2_values
     = map {

@@ -743,9 +743,13 @@ sub tan {
 }
 
 sub sqrt {
-  my ($self, $array) = @_;
-
-  return $self->_apply($array, sub { sqrt $_[0] });
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { sqrt $_ } @{$a1->values};
+  
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub _apply {

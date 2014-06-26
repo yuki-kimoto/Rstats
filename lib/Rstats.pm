@@ -715,33 +715,53 @@ sub sort {
 }
 
 sub log {
-  my ($self, $array) = @_;
+  my ($self, $_a1) = @_;
   
-  return $self->_apply($array, sub { log $_[0] });
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { log $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub exp {
-  my ($self, $array) = @_;
+  my ($self, $_a1) = @_;
   
-  return $self->_apply($array, sub { exp $_[0] });
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { exp $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub sin {
-  my ($self, $array) = @_;
+  my ($self, $_a1) = @_;
   
-  return $self->_apply($array, sub { sin $_[0] });
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { sin $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub cos {
-  my ($self, $array) = @_;
+  my ($self, $_a1) = @_;
   
-  return $self->_apply($array, sub { cos $_[0] });
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { cos $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub tan {
-  my ($self, $array) = @_;
+  my ($self, $_a1) = @_;
   
-  return $self->_apply($array, sub { Math::Trig::tan $_[0] });
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::tan $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub sqrt {
@@ -752,17 +772,6 @@ sub sqrt {
   my @a2_values = map { sqrt $_ } @{$a1->values};
   
   return $a1->clone_without_values(values => \@a2_values);
-}
-
-sub _apply {
-  my ($self, $array1, $cb) = @_;
-  
-  my $array1_values = $array1->values;
-  my @array2_values = map {
-    $cb->($array1_values->[$_]) 
-  } (0 .. @$array1_values - 1);
-
-  return $array1->new(values => \@array2_values);
 }
 
 sub range {

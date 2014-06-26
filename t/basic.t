@@ -557,20 +557,6 @@ my $r = Rstats->new;
     is_deeply($pmin->values, [1, 2, 3, 4]);
   }
   
-  # log
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->log($v1);
-    is_deeply(
-      $v2->values,
-      [
-        log $v1->values->[0],
-        log $v1->values->[1],
-        log $v1->values->[2]
-      ]
-    );
-  }
-
   # sin
   {
     my $v1 = $r->c([2, 3, 4]);

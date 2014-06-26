@@ -6,6 +6,96 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# log10
+{
+  # log10 - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log10($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0] / log 10,
+        log $a1_values->[1] / log 10,
+      ]
+    );
+  }
+
+  # log10 - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log10($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0] / log 10,
+        log $a1_values->[1] / log 10,
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# log2
+{
+  # log2 - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log2($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0] / log 2,
+        log $a1_values->[1] / log 2,
+      ]
+    );
+  }
+
+  # log2 - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log2($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0] / log 2,
+        log $a1_values->[1] / log 2,
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# log
+{
+  # log - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0],
+        log $a1_values->[1],
+      ]
+    );
+  }
+
+  # log - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->log($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0],
+        log $a1_values->[1],
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # expm1
 {
   # expm1 - array refference

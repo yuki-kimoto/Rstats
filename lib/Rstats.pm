@@ -724,6 +724,26 @@ sub log {
   return $a1->clone_without_values(values => \@a2_values);
 }
 
+sub log10 {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { CORE::log $_ / CORE::log 10 } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
+sub log2 {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { CORE::log $_ / CORE::log 2 } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
 sub exp {
   my ($self, $_a1) = @_;
   

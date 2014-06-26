@@ -598,13 +598,25 @@ sub pmin {
   return $v_min;
 }
 
-sub abs {
-  my ($self, $v1) = @_;
+sub expm1 {
+  my ($self, $a1) = @_;
   
-  my $tmp_v = $v1 * $v1;
-  my $abs = sqrt $self->sum($tmp_v)->value;
+  my @a2_values
+    = map {
+      abs($_) < 1e-5 ? $_ + 0.5 * $_ * $_ : exp($_) - 1.0
+    } @{$a1->values};
+  
+  return $a1->clone_without_values(values => \@a2_values);
+}
 
-  return $self->c($abs);
+sub abs {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { abs $_ } @{$a1->values};
+  
+  return $a1->clone_without_values(values => \@a2_values);
 }
 
 sub sum {

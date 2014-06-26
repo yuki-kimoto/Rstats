@@ -6,6 +6,40 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# which
+
+# clone_without_values
+{
+  # clone_without_values - matrix
+  {
+    my $a1 = $r->matrix('1:24', 3, 2);
+    $a1->rownames(['r1', 'r2', 'r3']);
+    $a1->colnames(['c1', 'c2']);
+    my $a2 = $a1->clone_without_values;
+    is($a2->type, 'matrix');
+    is($a2->mode, 'numeric');
+    is_deeply($a2->dim->values, [3, 2]);
+    is_deeply($a2->rownames->values, ['r1', 'r2', 'r3']);
+    is_deeply($a2->colnames->values, ['c1', 'c2']);
+    is_deeply($a2->values, []);
+  }
+  
+  # clone_without_values - matrix with value
+  {
+    my $a1 = $r->matrix('1:24', 3, 2);
+    my $a2 = $a1->clone_without_values(values => [2 .. 25]);
+    is_deeply($a2->values, [2 .. 25]);
+  }
+  
+  # clone_without_values - vector
+  {
+    my $a1 = $r->matrix('1:24', 3, 2);
+    $a1->names(['r1', 'r2', 'r3']);
+    my $a2 = $a1->clone_without_values;
+    is_deeply($a2->names->values, ['r1', 'r2', 'r3']);
+  }
+}
+
 # value
 {
   # value - none argument

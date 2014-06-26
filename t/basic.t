@@ -339,14 +339,6 @@ my $r = Rstats->new;
   is_deeply($array->get(1)->values, [5]);
 }
 
-# abs
-{
-  my $r = Rstats->new;
-  my $v1 = $r->c([3, 4]);
-  my $abs = $r->abs($v1);
-  is($abs->value, 5);
-}
-
 # paste
 {
   my $r = Rstats->new;
@@ -579,20 +571,6 @@ my $r = Rstats->new;
     );
   }
 
-  # exp
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->exp($v1);
-    is_deeply(
-      $v2->values,
-      [
-        exp $v1->values->[0],
-        exp $v1->values->[1],
-        exp $v1->values->[2]
-      ]
-    );
-  }
-
   # sin
   {
     my $v1 = $r->c([2, 3, 4]);
@@ -635,20 +613,6 @@ my $r = Rstats->new;
     );
   }
 
-  # sqrt
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->sqrt($v1);
-    is_deeply(
-      $v2->values,
-      [
-        sqrt $v1->values->[0],
-        sqrt $v1->values->[1],
-        sqrt $v1->values->[2]
-      ]
-    );
-  }
-  
   # range
   {
     my $v1 = $r->c([1, 2, 3]);

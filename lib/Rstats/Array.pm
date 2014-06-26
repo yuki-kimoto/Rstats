@@ -19,6 +19,21 @@ has 'values';
 has 'type';
 has 'mode';
 
+sub clone_without_values {
+  my ($self, %opt) = @_;
+  
+  my $array = Rstats::Array->new;
+  $array->{type} = $self->{type};
+  $array->{mode} = $self->{mode};
+  $array->{names} = [@{$self->{names} || []}];
+  $array->{rownames} = [@{$self->{rownames} || []}];
+  $array->{colnames} = [@{$self->{colnames} || []}];
+  $array->{dim} = [@{$self->{dim} || []}];
+  $array->{values} = $opt{values} ? $opt{values} : [];
+  
+  return $array;
+}
+
 sub row {
   my $self = shift;
   

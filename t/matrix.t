@@ -6,6 +6,8 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# arr.ind=TRUE
+
 # cbind
 {
   my $m1 = $r->cbind(

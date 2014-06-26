@@ -724,6 +724,8 @@ sub log {
   return $a1->clone_without_values(values => \@a2_values);
 }
 
+sub logb { shift->log(@_) }
+
 sub log10 {
   my ($self, $_a1) = @_;
   

@@ -457,6 +457,36 @@ my $r = Rstats->new;
   }
 }
 
+# logb
+{
+  # logb - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->logb($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0],
+        log $a1_values->[1],
+      ]
+    );
+  }
+
+  # logb - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->logb($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        log $a1_values->[0],
+        log $a1_values->[1],
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # expm1
 {
   # expm1 - array refference

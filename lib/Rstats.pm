@@ -720,6 +720,16 @@ sub sort {
   return $self->c($v2_values);
 }
 
+sub floor {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { POSIX::floor $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
 sub ceiling {
   my ($self, $_a1) = @_;
   

@@ -556,48 +556,6 @@ my $r = Rstats->new;
     my $pmin = $r->pmin($v1, $v2);
     is_deeply($pmin->values, [1, 2, 3, 4]);
   }
-  
-  # sin
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->sin($v1);
-    is_deeply(
-      $v2->values,
-      [
-        sin $v1->values->[0],
-        sin $v1->values->[1],
-        sin $v1->values->[2]
-      ]
-    );
-  }
-
-  # cos
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->cos($v1);
-    is_deeply(
-      $v2->values,
-      [
-        cos $v1->values->[0],
-        cos $v1->values->[1],
-        cos $v1->values->[2]
-      ]
-    );
-  }
-
-  # tan
-  {
-    my $v1 = $r->c([2, 3, 4]);
-    my $v2 = $r->tan($v1);
-    is_deeply(
-      $v2->values,
-      [
-        Math::Trig::tan($v1->values->[0]),
-        Math::Trig::tan($v1->values->[1]),
-        Math::Trig::tan($v1->values->[2])
-      ]
-    );
-  }
 
   # range
   {

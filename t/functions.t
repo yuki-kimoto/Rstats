@@ -3,8 +3,189 @@ use strict;
 use warnings;
 
 use Rstats;
+use Math::Trig ();
 
 my $r = Rstats->new;
+
+# atan
+{
+  # atan - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->atan($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::atan($a1_values->[0]),
+        Math::Trig::atan($a1_values->[1]),
+      ]
+    );
+  }
+
+  # atan - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->atan($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::atan($a1_values->[0]),
+        Math::Trig::atan($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# acos
+{
+  # acos - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->acos($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::acos($a1_values->[0]),
+        Math::Trig::acos($a1_values->[1]),
+      ]
+    );
+  }
+
+  # acos - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->acos($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::acos($a1_values->[0]),
+        Math::Trig::acos($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# asin
+{
+  # asin - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->asin($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::asin($a1_values->[0]),
+        Math::Trig::asin($a1_values->[1]),
+      ]
+    );
+  }
+
+  # asin - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->asin($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::asin($a1_values->[0]),
+        Math::Trig::asin($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# tan
+{
+  # tan - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->tan($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::tan($a1_values->[0]),
+        Math::Trig::tan($a1_values->[1]),
+      ]
+    );
+  }
+
+  # tan - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->tan($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::tan($a1_values->[0]),
+        Math::Trig::tan($a1_values->[1]),
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# cos
+{
+  # cos - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->cos($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        cos $a1_values->[0],
+        cos $a1_values->[1],
+      ]
+    );
+  }
+
+  # cos - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->cos($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        cos $a1_values->[0],
+        cos $a1_values->[1],
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
+# sin
+{
+  # sin - array reference
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->sin($a1_values);
+    is_deeply(
+      $a2->values,
+      [
+        sin $a1_values->[0],
+        sin $a1_values->[1],
+      ]
+    );
+  }
+
+  # sin - matrix
+  {
+    my $a1_values = [2, 3];
+    my $a2 = $r->sin($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [
+        sin $a1_values->[0],
+        sin $a1_values->[1],
+      ]
+    );
+    is($a2->type, 'matrix');
+  }
+}
 
 # log10
 {

@@ -784,6 +784,36 @@ sub tan {
   return $a1->clone_without_values(values => \@a2_values);
 }
 
+sub asin {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::asin $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
+sub acos {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::acos $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
+sub atan {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map { Math::Trig::atan $_ } @{$a1->values};
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
+
 sub sqrt {
   my ($self, $_a1) = @_;
   

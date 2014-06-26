@@ -7,6 +7,72 @@ use Math::Trig ();
 
 my $r = Rstats->new;
 
+# round
+{
+  # round - array reference
+  {
+    my $a1_values = [-1.3, 2.4, 2.5, 2.51, 3.51];
+    my $a2 = $r->round($a1_values);
+    is_deeply(
+      $a2->values,
+      [-1, 2, 2, 3, 4]
+    );
+  }
+
+  # round - matrix
+  {
+    my $a1_values = [-1.3, 2.4, 2.5, 2.51, 3.51];
+    my $a2 = $r->round($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [-1, 2, 2, 3, 4]
+    );
+    is($a2->type, 'matrix');
+  }
+
+  # round - array reference
+  {
+    my $a1_values = [-13, 24, 25, 25.1, 35.1];
+    my $a2 = $r->round($a1_values, -1);
+    is_deeply(
+      $a2->values,
+      [-10, 20, 20, 30, 40]
+    );
+  }
+
+  # round - matrix
+  {
+    my $a1_values = [-13, 24, 25, 25.1, 35.1];
+    my $a2 = $r->round($r->matrix($a1_values), -1);
+    is_deeply(
+      $a2->values,
+      [-10, 20, 20, 30, 40]
+    );
+    is($a2->type, 'matrix');
+  }
+  
+  # round - array reference
+  {
+    my $a1_values = [-0.13, 0.24, 0.25, 0.251, 0.351];
+    my $a2 = $r->round($a1_values, 1);
+    is_deeply(
+      $a2->values,
+      [-0.1, 0.2, 0.2, 0.3, 0.4]
+    );
+  }
+
+  # round - matrix
+  {
+    my $a1_values = [-0.13, 0.24, 0.25, 0.251, 0.351];
+    my $a2 = $r->round($r->matrix($a1_values), 1);
+    is_deeply(
+      $a2->values,
+      [-0.1, 0.2, 0.2, 0.3, 0.4]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # trunc
 {
   # trunc - array reference

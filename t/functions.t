@@ -7,6 +7,30 @@ use Math::Trig ();
 
 my $r = Rstats->new;
 
+# trunc
+{
+  # trunc - array reference
+  {
+    my $a1_values = [-1.2, -1, 1, 1.2];
+    my $a2 = $r->trunc($a1_values);
+    is_deeply(
+      $a2->values,
+      [-1, -1, 1, 1]
+    );
+  }
+
+  # trunc - matrix
+  {
+    my $a1_values = [-1.2, -1, 1, 1.2];
+    my $a2 = $r->trunc($r->matrix($a1_values));
+    is_deeply(
+      $a2->values,
+      [-1, -1, 1, 1]
+    );
+    is($a2->type, 'matrix');
+  }
+}
+
 # floor
 {
   # floor - array reference

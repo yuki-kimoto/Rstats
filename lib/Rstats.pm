@@ -19,9 +19,9 @@ use Rstats::Logical;
 #   gamma
 #   lgamma
 
-sub TRUE { Rstats::Logical->new(logical => 1) }
+sub TRUE { Rstats::Logical->TRUE }
 
-sub FALSE { Rstats::Logical->new(logical => 0) }
+sub FALSE { Rstats::Logical->FALSE }
 
 sub as_matrix {
   my ($self, $a1) = @_;

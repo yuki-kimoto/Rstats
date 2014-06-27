@@ -825,8 +825,16 @@ EOS
     my $v2 = $v1->get($r->c(['b', 'd'])->as_character);
     is_deeply($v2->values, [2, 4]);
   }
-  
+
   # get - logical
+  {
+    my $v1 = $r->c([1, 3, 5, 7]);
+    my $logical_v = $r->c([$r->FALSE, $r->TRUE, $r->FALSE, $r->TRUE, $r->TRUE])->as_logical;
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
+  # get - as_logical
   {
     my $v1 = $r->c([1, 3, 5, 7]);
     my $logical_v = $r->c([0, 1, 0, 1, 1])->as_logical;

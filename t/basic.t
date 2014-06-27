@@ -29,7 +29,7 @@ my $r = Rstats->new;
   
   # Logical
   ok($c->as_logical->is_logical->value);
-  is($c->mode, 'logical');
+  is($c->as_logical->mode, 'logical');
 }
 
 # matrix

@@ -500,9 +500,15 @@ sub as_character {
 sub as_logical {
   my $self = shift;
 
-  $self->{mode} = 'logical';
-
-  return $self;
+  my $a1_values = $self->values;
+  my $a2 = $self->clone_without_values;
+  $a2->{mode} = 'logical';
+  my @a2_values = map {
+    $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+  } @$a1_values;
+  $a2->values(\@a2_values);
+  
+  return $a2;
 }
 
 sub get {

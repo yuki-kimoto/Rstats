@@ -8,6 +8,10 @@ use overload
 
 has 'logical';
 
+sub TRUE { Rstats::Logical->new(logical => 1) }
+
+sub FALSE { Rstats::Logical->new(logical => 0) }
+
 sub bool {
   my $self = shift;
   

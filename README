@@ -18,3 +18,35 @@ Usage
   print $v3;
 
 See examples in t directory to know current inplemented features.
+
+Corresponding to R
+
+  # 1:24
+  c('1:24')
+
+  # c(1, 2, 3)
+  c([1, 2, 3])
+
+  # array(1:24, c(4, 3, 2))
+  array('1:24', [4, 3, 2])
+  
+  # a1 + a2
+  $a1 + $a2
+  
+  # a1 - a2
+  a1 - a2
+  
+  # a1 * a2
+  a1 * a2
+  
+  # a1 / a2
+  a1 / a2
+  
+  # a1 ^ a2 (power)
+  a1 ** a2
+  
+  # a1 %% a2 (reminder)
+  a1 % a2
+  
+  # a1 %/% a2 (integer quotient)
+  $r->tranc($a1 / $a2)

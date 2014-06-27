@@ -923,7 +923,7 @@ sub _operation {
       $v2_values = [$data];
     }
   }
-
+  
   my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
   
   return Rstats::Array->array(\@v3_values);

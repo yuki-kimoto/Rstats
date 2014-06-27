@@ -17,14 +17,12 @@ use overload
   fallback => 1;
 
 has 'values';
-has 'type';
 has 'mode';
 
 sub clone_without_values {
   my ($self, %opt) = @_;
   
   my $array = Rstats::Array->new;
-  $array->{type} = $self->{type};
   $array->{mode} = $self->{mode};
   $array->{names} = [@{$self->{names} || []}];
   $array->{rownames} = [@{$self->{rownames} || []}];
@@ -293,7 +291,7 @@ sub seq {
       }
     }
     
-    my $v1 = $self->array($values, {type => 'vector'});
+    my $v1 = $self->array($values);
   }
 }
 
@@ -387,10 +385,6 @@ sub array {
   }
   $array->values($values);
   
-  # Type
-  my $type = $opt->{type} || 'array';
-  $array->type($type);
-  
   # Mode
   my $mode = $opt->{mode} || 'numeric';
   $array->mode($mode);
@@ -413,7 +407,7 @@ sub at {
 sub value {
   my $self = shift;
   
-  my $dim_values = $self->as_dim_values;
+  my $dim_values = $self->dim->values;
   
   if (@_) {
     if (@$dim_values == 1) {
@@ -501,7 +495,7 @@ sub get {
   if (ref $_indexs->[0] eq 'CODE') {
     my $a1_values = $self->values;
     my @values2 = grep { $_indexs->[0]->() } @$a1_values;
-    return Rstats::Array->array(\@values2,{type => 'vector'});
+    return Rstats::Array->array(\@values2);
   }
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
@@ -552,7 +546,7 @@ sub _v {
 sub c {
   my ($self, $data) = @_;
   
-  my $vector = $self->array($data, {type => 'vector'});
+  my $vector = $self->array($data);
   
   return $vector;
 }
@@ -598,7 +592,7 @@ sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
-  my $a1_dim = $self->as_dim_values($self->{dim});
+  my $a1_dim = $self->dim->values;
   
   my @indexs;
   my @a2_dim;
@@ -735,48 +729,16 @@ sub _pos {
   return $pos;
 }
 
-sub as_dim_values {
-  my $self = shift;
-  
-  my $dim_values = $self->{dim};
-  my $current_dim_values = [];
-  my $type = $self->{type};
-  if ($type eq 'vector') {
-    $current_dim_values->[0] = 1;
-    $current_dim_values->[0] *= $_ for @$dim_values;
-  }
-  elsif ($type eq 'matrix') {
-    if (@$dim_values == 1) {
-      $current_dim_values->[0] = $dim_values->[0];
-      $current_dim_values->[1] = 1;
-    }
-    elsif (@$dim_values == 2) {
-      $current_dim_values = $dim_values;
-    }
-    elsif (@$dim_values > 2) {
-      $current_dim_values->[0] = 1;
-      $current_dim_values->[0] *= $_ for @$dim_values;
-      $current_dim_values->[1] = 1;
-    }
-  }
-  else {
-    $current_dim_values = $dim_values;
-  }
-  
-  return $current_dim_values;
-}
-
 sub to_string {
   my $self = shift;
 
   my $values = $self->values;
   
-  my $dim_values = $self->as_dim_values;
+  my $dim_values = $self->dim->values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
-  my $type = $self->{type};
   
   my $str;
   if (@$values) {
@@ -929,46 +891,128 @@ sub _operation {
   return Rstats::Array->array(\@v3_values);
 }
 
-sub is_array {
+sub matrix {
   my $self = shift;
   
-  return $self->{type} eq 'array';
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+
+  my ($_v1, $nrow, $ncol, $byrow, $dirnames) = @_;
+
+  croak "matrix method need data as frist argument"
+    unless defined $_v1;
+  
+  my $v1 = $self->_v($_v1);
+  
+  # Row count
+  $nrow = $opt->{nrow} unless defined $nrow;
+  
+  # Column count
+  $ncol = $opt->{ncol} unless defined $ncol;
+  
+  # By row
+  $byrow = $opt->{byrow} unless defined $byrow;
+  
+  my $v1_values = $v1->values;
+  my $v1_length = @$v1_values;
+  if (!defined $nrow && !defined $ncol) {
+    $nrow = $v1_length;
+    $ncol = 1;
+  }
+  elsif (!defined $nrow) {
+    $nrow = int($v1_length / $ncol);
+  }
+  elsif (!defined $ncol) {
+    $ncol = int($v1_length / $nrow);
+  }
+  my $length = $nrow * $ncol;
+  
+  my $dim = [$nrow, $ncol];
+  my $matrix;
+  if ($byrow) {
+    $matrix = $self->array(
+      $v1_values,
+      [$dim->[1], $dim->[0]],
+    );
+    
+    $matrix = $self->t($matrix);
+  }
+  else {
+    $matrix = $self->array($v1_values, $dim);
+  }
+  
+  return $matrix;
 }
+
+sub t {
+  my ($self, $m1) = @_;
+  
+  my $m1_row = $m1->dim->values->[0];
+  my $m1_col = $m1->dim->values->[1];
+  
+  my $m2 = $self->matrix(0, $m1_col, $m1_row);
+  
+  for my $row (1 .. $m1_row) {
+    for my $col (1 .. $m1_col) {
+      my $value = $m1->value($row, $col);
+      $m2->at($col, $row)->set($value);
+    }
+  }
+  
+  return $m2;
+}
+
+sub is_array { 1 }
 
 sub is_vector {
   my $self = shift;
   
-  return $self->{type} eq 'vector';
+  return @{$self->dim->values} == 1;
 }
 
 sub is_matrix {
   my $self = shift;
   
-  return $self->{type} eq 'matrix';
+  return @{$self->dim->values} == 2;
 }
 
 sub as_matrix {
   my $self = shift;
   
-  $self->{type} = 'matrix';
+  my $a1_dim_values = $self->dim->values;
+  my $a1_dim_count = @$a1_dim_values;
+  my $a2_dim_values = [];
+  my $row;
+  my $col;
+  if ($a1_dim_count == 2) {
+    $row = $a1_dim_values->[0];
+    $col = $a1_dim_values->[1];
+  }
+  else {
+    $row = 1;
+    $row *= $_ for @$a1_dim_values;
+    $col = 1;
+  }
   
-  return $self;
+  my $a2_values = [@{$self->values}];
+  
+  return $self->matrix($a2_values, $row, $col);
 }
 
 sub as_array {
   my $self = shift;
   
-  $self->{type} = 'array';
+  my $a1_values = [@{$self->values}];
+  my $a1_dim_values = [@{$self->dim->values}];
   
-  return $self;
+  return $self->array($a1_values, $a1_dim_values);
 }
 
 sub as_vector {
   my $self = shift;
   
-  $self->{type} = 'vector';
+  my $a1_values = [@{$self->values}];
   
-  return $self;
+  return $self->c($a1_values);
 }
 
 1;

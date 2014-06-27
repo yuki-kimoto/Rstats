@@ -38,11 +38,11 @@ sub cbind {
     
     my $row_count;
     if ($a->is_matrix) {
-      $row_count = $a->as_dim_values->[0];
-      $col_count_total += $a->as_dim_values->[1];
+      $row_count = $a->dim->values->[0];
+      $col_count_total += $a->dim->values->[1];
     }
     elsif ($a->is_vector) {
-      $row_count = $a->as_dim_values->[0];
+      $row_count = $a->dim->values->[0];
       $col_count_total += 1;
     }
     else {
@@ -62,7 +62,7 @@ sub cbind {
 sub rowSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->as_dim_values;
+  my $dim_values = $m1->dim->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -80,7 +80,7 @@ sub rowSums {
 sub colSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->as_dim_values;
+  my $dim_values = $m1->dim->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -98,7 +98,7 @@ sub colSums {
 sub rowMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->as_dim_values;
+  my $dim_values = $m1->dim->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -116,7 +116,7 @@ sub rowMeans {
 sub colMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->as_dim_values;
+  my $dim_values = $m1->dim->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -156,21 +156,9 @@ sub ncol {
 }
 
 sub t {
-  my ($self, $m1) = @_;
+  my $self = shift;
   
-  my $m1_row = $m1->dim->values->[0];
-  my $m1_col = $m1->dim->values->[1];
-  
-  my $m2 = $self->matrix(0, $m1_col, $m1_row);
-  
-  for my $row (1 .. $m1_row) {
-    for my $col (1 .. $m1_col) {
-      my $value = $m1->value($row, $col);
-      $m2->at($col, $row)->set($value);
-    }
-  }
-  
-  return $m2;
+  return Rstats::Array->t(@_);
 }
 
 sub cumsum {
@@ -323,7 +311,7 @@ sub ifelse {
     }
   }
   
-  return $self->array(\@v2_values, {type => $v1->type});
+  return $self->array(\@v2_values);
 }
 
 sub replace {
@@ -356,7 +344,7 @@ sub replace {
     }
   }
   
-  return $self->array($v4_values, {type => $v1->type});
+  return $self->array($v4_values);
 }
 
 sub dim {
@@ -419,60 +407,7 @@ sub numeric {
 sub matrix {
   my $self = shift;
   
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-
-  my ($_v1, $nrow, $ncol, $byrow, $dirnames) = @_;
-
-  croak "matrix method need data as frist argument"
-    unless defined $_v1;
-  
-  my $v1 = $self->_v($_v1);
-  
-  # Row count
-  $nrow = $opt->{nrow} unless defined $nrow;
-  
-  # Column count
-  $ncol = $opt->{ncol} unless defined $ncol;
-  
-  # By row
-  $byrow = $opt->{byrow} unless defined $byrow;
-  
-  my $v1_values = $v1->values;
-  my $v1_length = @$v1_values;
-  if (!defined $nrow && !defined $ncol) {
-    $nrow = $v1_length;
-    $ncol = 1;
-  }
-  elsif (!defined $nrow) {
-    $nrow = int($v1_length / $ncol);
-  }
-  elsif (!defined $ncol) {
-    $ncol = int($v1_length / $nrow);
-  }
-  my $length = $nrow * $ncol;
-  
-  my $dim = [$nrow, $ncol];
-  my $matrix;
-  if ($byrow) {
-    $matrix = $self->array(
-      $v1_values,
-      [$dim->[1], $dim->[0]],
-      {type => 'matrix'}
-    );
-    
-    $matrix = $self->t($matrix);
-  }
-  else {
-    $matrix = $self->array($v1_values, $dim, {type => 'matrix'});
-  }
-  
-  return $matrix;
-}
-
-sub type {
-  my ($self, $array) = @_;
-  
-  return $array->type;
+  return Rstats::Array->matrix(@_);
 }
 
 sub array {

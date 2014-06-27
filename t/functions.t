@@ -27,7 +27,6 @@ my $r = Rstats->new;
       $a2->values,
       [-1, 2, 2, 3, 4]
     );
-    is($a2->type, 'matrix');
   }
 
   # round - array reference
@@ -58,7 +57,6 @@ my $r = Rstats->new;
       $a2->values,
       [-10, 20, 20, 30, 40]
     );
-    is($a2->type, 'matrix');
   }
   
   # round - array reference
@@ -79,7 +77,6 @@ my $r = Rstats->new;
       $a2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -103,7 +100,6 @@ my $r = Rstats->new;
       $a2->values,
       [-1, -1, 1, 1]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -127,7 +123,6 @@ my $r = Rstats->new;
       $a2->values,
       [2, 2, -1, -2]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -151,7 +146,6 @@ my $r = Rstats->new;
       $a2->values,
       [3, 2, -1, -1]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -181,7 +175,6 @@ my $r = Rstats->new;
         Math::Trig::atanh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -211,7 +204,6 @@ my $r = Rstats->new;
         Math::Trig::acosh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -241,7 +233,6 @@ my $r = Rstats->new;
         Math::Trig::asinh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -271,7 +262,6 @@ my $r = Rstats->new;
         Math::Trig::tanh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -301,7 +291,6 @@ my $r = Rstats->new;
         Math::Trig::cosh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -331,7 +320,6 @@ my $r = Rstats->new;
         Math::Trig::sinh($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -361,7 +349,6 @@ my $r = Rstats->new;
         Math::Trig::atan($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -391,7 +378,6 @@ my $r = Rstats->new;
         Math::Trig::acos($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -421,7 +407,6 @@ my $r = Rstats->new;
         Math::Trig::asin($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -451,7 +436,6 @@ my $r = Rstats->new;
         Math::Trig::tan($a1_values->[1]),
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -481,7 +465,6 @@ my $r = Rstats->new;
         cos $a1_values->[1],
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -511,7 +494,6 @@ my $r = Rstats->new;
         sin $a1_values->[1],
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -541,7 +523,6 @@ my $r = Rstats->new;
         log $a1_values->[1] / log 10,
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -571,7 +552,6 @@ my $r = Rstats->new;
         log $a1_values->[1] / log 2,
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -601,7 +581,6 @@ my $r = Rstats->new;
         log $a1_values->[1],
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -631,7 +610,6 @@ my $r = Rstats->new;
         log $a1_values->[1],
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -651,7 +629,6 @@ my $r = Rstats->new;
     is_deeply($a1->values, [
       -0.0000005 + 0.5 * -0.0000005 * -0.0000005, exp(-4) - 1.0
     ]);
-    is($a1->type, 'matrix');
   }
 }
 
@@ -683,7 +660,6 @@ my $r = Rstats->new;
         sqrt $a1_values->[2]
       ]
     );
-    is($a2->type, 'matrix');
   }
 }
 
@@ -699,7 +675,6 @@ my $r = Rstats->new;
   {
     my $a1 = $r->abs($r->matrix([-3, 4]));
     is_deeply($a1->values, [3, 4]);
-    is($a1->type, 'matrix');
   }
 }
 

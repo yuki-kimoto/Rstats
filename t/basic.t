@@ -38,7 +38,7 @@ my $r = Rstats->new;
     my $mat = $r->matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply($mat->dim->values, [2, 5]);
-    is($r->type($mat), 'matrix');
+    ok($mat->is_matrix);
   }
   
   # matrix - repeat values
@@ -46,7 +46,7 @@ my $r = Rstats->new;
     my $mat = $r->matrix([1,2], 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply($mat->dim->values, [2, 5]);
-    is($r->type($mat), 'matrix');
+    ok($mat->is_matrix);
   }
 }
 
@@ -306,16 +306,6 @@ my $r = Rstats->new;
     my $array = $r->array([1, 2, 3]);
     is_deeply($array->dim->values, [3]);
   }
-}
-
-# Type
-{
-  my $array = $r->array([1, 2, 3]);
-  ok($array->is_array);
-  $array->as_vector;
-  ok($array->is_vector);
-  $array->as_matrix;
-  ok($array->is_matrix);
 }
 
 # Array get and set

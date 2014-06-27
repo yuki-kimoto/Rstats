@@ -119,6 +119,14 @@ my $r = Rstats->new;
     ok($m1->is_matrix);
   }
 
+  # matrix - nrow and ncol option
+  {
+    my $m1 = $r->matrix('1:12', {nrow => 4, ncol => 3});
+    is_deeply($m1->values, [1 .. 12]);
+    is_deeply($r->dim($m1)->values, [4, 3]);
+    ok($m1->is_matrix);
+  }
+  
   # matrix - repeat
   {
     my $m1 = $r->matrix('1:3', 3, 4);

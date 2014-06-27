@@ -12,11 +12,16 @@ use Rstats::Array;
 use Rstats::Complex;
 use POSIX ();;
 use Math::Round ();
+use Rstats::Logical;
 
 # TODO
 #   logp1x
 #   gamma
 #   lgamma
+
+sub TRUE { Rstats::Logical->new(logical => 1) }
+
+sub FALSE { Rstats::Logical->new(logical => 0) }
 
 sub as_matrix {
   my ($self, $a1) = @_;

@@ -40,6 +40,16 @@ my $r = Rstats->new;
     );
   }
 
+  # round - array reference
+  {
+    my $a1_values = [-13, 24, 25, 25.1, 35.1];
+    my $a2 = $r->round($a1_values, {digits => -1});
+    is_deeply(
+      $a2->values,
+      [-10, 20, 20, 30, 40]
+    );
+  }
+  
   # round - matrix
   {
     my $a1_values = [-13, 24, 25, 25.1, 35.1];

@@ -742,12 +742,16 @@ sub floor {
 }
 
 sub round {
-  my ($self, $_a1, $col) = @_;
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my ($_a1, $digits) = @_;
+  $digits = $opt->{digits} unless defined $digits;
+  $digits = 0 unless defined $digits;
   
   my $a1 = $self->_v($_a1);
-  $col ||= 0;
 
-  my $r = 10 ** $col;
+  my $r = 10 ** $digits;
   my @a2_values = map { Math::Round::round_even($_ * $r) / $r } @{$a1->values};
 
   return $a1->clone_without_values(values => \@a2_values);

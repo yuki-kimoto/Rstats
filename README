@@ -34,19 +34,19 @@ Corresponding to R
   $a1 + $a2
   
   # a1 - a2
-  a1 - a2
+  $a1 - $a2
   
   # a1 * a2
-  a1 * a2
+  $a1 * $a2
   
   # a1 / a2
-  a1 / a2
+  $a1 / $a2
   
   # a1 ^ a2 (power)
-  a1 ** a2
+  $a1 ** $a2
   
   # a1 %% a2 (reminder)
-  a1 % a2
+  $a1 % $a2
   
   # a1 %/% a2 (integer quotient)
   $r->tranc($a1 / $a2)
@@ -59,4 +59,3 @@ Corresponding to R
   
   # as.array(a1)
   $r->as_array($a1);
-

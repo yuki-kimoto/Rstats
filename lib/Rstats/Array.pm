@@ -425,13 +425,45 @@ sub value {
   }
 }
 
+sub is_numeric {
+  my $self = shift;
+  
+  my $is = ($self->{mode} || '') eq 'numeric' ? 1 : 0;
+  
+  return $self->c([$is]);
+}
 
+sub is_integer {
+  my $self = shift;
+  
+  my $is = ($self->{mode} || '') eq 'integer' ? 1 : 0;
+  
+  return $self->c([$is]);
+}
 
-sub is_numeric { (shift->{mode} || '') eq 'numeric' }
-sub is_integer { (shift->{mode} || '') eq 'integer' }
-sub is_complex { (shift->{mode} || '') eq 'complex' }
-sub is_character { (shift->{mode} || '') eq 'character' }
-sub is_logical { (shift->{mode} || '') eq 'logical' }
+sub is_complex {
+  my $self = shift;
+  
+  my $is = ($self->{mode} || '') eq 'complex' ? 1 : 0;
+  
+  return $self->c([$is]);
+}
+
+sub is_character {
+  my $self = shift;
+  
+  my $is = ($self->{mode} || '') eq 'character' ? 1 : 0;
+  
+  return $self->c([$is]);
+}
+
+sub is_logical {
+  my $self = shift;
+  
+  my $is = ($self->{mode} || '') eq 'logical' ? 1 : 0;
+  
+  return $self->c([$is]);
+}
 
 sub as_numeric {
   my $self = shift;
@@ -604,7 +636,7 @@ sub _parse_index {
     
     my $index = Rstats::Array->_v($_index);
     my $index_values = $index->values;
-    if (@$index_values && !$index->is_character && !$index->is_logical) {
+    if (@$index_values && !$index->is_character->value && !$index->is_logical->value) {
       my $minus_count = 0;
       for my $index_value (@$index_values) {
         if ($index_value == 0) {
@@ -625,8 +657,8 @@ sub _parse_index {
       my $index_value_new = [1 .. $a1_dim->[$i]];
       $index->values($index_value_new);
     }
-    elsif ($index->is_character) {
-      if ($self->is_vector) {
+    elsif ($index->is_character->value) {
+      if ($self->is_vector->value) {
         my $index_new_values = [];
         for my $name (@{$index->values}) {
           my $i = 0;
@@ -643,14 +675,14 @@ sub _parse_index {
         }
         $indexs[$i]->values($index_new_values);
       }
-      elsif ($self->is_matrix) {
+      elsif ($self->is_matrix->value) {
         
       }
       else {
         croak "Can't support name except vector and matrix";
       }
     }
-    elsif ($index->is_logical) {
+    elsif ($index->is_logical->value) {
       my $index_values_new = [];
       for (my $i = 0; $i < @{$index->values}; $i++) {
         push @$index_values_new, $i + 1 if $index->values->[$i];
@@ -961,18 +993,27 @@ sub t {
   return $m2;
 }
 
-sub is_array { 1 }
+sub is_array {
+  my $self = shift;
+  
+  
+  return $self->c([1]);
+}
 
 sub is_vector {
   my $self = shift;
   
-  return @{$self->dim->values} == 1;
+  my $is = @{$self->dim->values} == 1 ? 1 : 0;
+  
+  return $self->c([$is]);
 }
 
 sub is_matrix {
   my $self = shift;
+
+  my $is = @{$self->dim->values} == 2 ? 1 : 0;
   
-  return @{$self->dim->values} == 2;
+  return $self->c([$is]);
 }
 
 sub as_matrix {

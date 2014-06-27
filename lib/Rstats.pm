@@ -73,11 +73,11 @@ sub cbind {
     my $a = $self->_v($_a);
     
     my $row_count;
-    if ($a->is_matrix) {
+    if ($a->is_matrix->value) {
       $row_count = $a->dim->values->[0];
       $col_count_total += $a->dim->values->[1];
     }
-    elsif ($a->is_vector) {
+    elsif ($a->is_vector->value) {
       $row_count = $a->dim->values->[0];
       $col_count_total += 1;
     }

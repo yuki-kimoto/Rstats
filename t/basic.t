@@ -13,22 +13,22 @@ my $r = Rstats->new;
   # numeric
   my $c = $r->c([1, 2, 3]);
   is($c->mode, 'numeric');
-  ok($c->is_numeric);
+  ok($c->is_numeric->value);
   
   # Integer
-  ok($c->as_integer->is_integer);
+  ok($c->as_integer->is_integer->value);
   is($c->mode, 'integer');
   
   # Character
-  ok($c->as_character->is_character);
+  ok($c->as_character->is_character->value);
   is($c->mode, 'character');
   
   # Compex
-  ok($c->as_complex->is_complex);
+  ok($c->as_complex->is_complex->value);
   is($c->mode, 'complex');
   
   # Logical
-  ok($c->as_logical->is_logical);
+  ok($c->as_logical->is_logical->value);
   is($c->mode, 'logical');
 }
 

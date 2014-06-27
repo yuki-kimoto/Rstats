@@ -13,21 +13,21 @@ my $r = Rstats->new;
   # is_* - is_vector
   {
     my $array = $r->array('1:24');
-    ok($array->is_vector);
-    ok($array->is_array);
+    ok($array->is_vector->value);
+    ok($array->is_array->value);
   }
   
   # is_* - is_matrix
   {
     my $array = $r->matrix('1:12', 4, 3);
-    ok($array->is_matrix);
-    ok($array->is_array);
+    ok($array->is_matrix->value);
+    ok($array->is_array->value);
   }
 
   # is_* - is_array
   {
     my $array = $r->matrix('1:12', [4, 3, 2]);
-    ok($array->is_array);
+    ok($array->is_array->value);
   }
 }
 
@@ -36,21 +36,21 @@ my $r = Rstats->new;
   # is_* - is_vector
   {
     my $array = $r->array('1:24');
-    ok($r->is_vector($array));
-    ok($r->is_vector($array));
+    ok($r->is_vector($array)->value);
+    ok($r->is_vector($array)->value);
   }
   
   # is_* - is_matrix
   {
     my $array = $r->matrix('1:24', 4, 3);
-    ok($r->is_matrix($array));
-    ok($r->is_matrix($array));
+    ok($r->is_matrix($array)->value);
+    ok($r->is_matrix($array)->value);
   }
 
   # is_* - is_array
   {
     my $array = $r->matrix('1:12', [4, 3, 2]);
-    ok($r->is_array($array));
+    ok($r->is_array($array)->value);
   }
 }
 
@@ -251,7 +251,7 @@ my $r = Rstats->new;
     $a1->rownames(['r1', 'r2', 'r3']);
     $a1->colnames(['c1', 'c2']);
     my $a2 = $a1->clone_without_values;
-    ok($a2->is_matrix);
+    ok($a2->is_matrix->value);
     is($a2->mode, 'numeric');
     is_deeply($a2->dim->values, [3, 2]);
     is_deeply($a2->rownames->values, ['r1', 'r2', 'r3']);

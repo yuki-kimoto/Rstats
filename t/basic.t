@@ -11,7 +11,7 @@ my $r = Rstats->new;
 # is_*, as_*
 {
   # numeric
-  my $c = $r->c([1, 2, 3]);
+  my $c = $r->c([0, 1, 2]);
   is($c->mode, 'numeric');
   ok($c->is_numeric->value);
   
@@ -25,11 +25,18 @@ my $r = Rstats->new;
   
   # Compex
   ok($c->as_complex->is_complex->value);
-  is($c->mode, 'complex');
+  is($c->as_complex->mode, 'complex');
   
   # Logical
-  ok($c->as_logical->is_logical->value);
-  is($c->as_logical->mode, 'logical');
+  {
+    my $a1 = $r->c([0, 1, 2]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical->value);
+    is($a2->mode, 'logical');
+    is($a2->value(1)->logical, 0);
+    is($a2->value(2)->logical, 1);
+    is($a2->value(3)->logical, 1);
+  }
 }
 
 # matrix

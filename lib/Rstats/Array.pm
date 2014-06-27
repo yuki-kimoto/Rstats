@@ -484,6 +484,14 @@ sub as_integer {
 sub as_complex {
   my $self = shift;
 
+  my $a1_values = $self->values;
+  my $a2 = $self->clone_without_values;
+  $a2->{mode} = 'logical';
+  my @a2_values = map {
+    ref $_ eq 'Rstats::Complex' ? $_ : Rstats::Complex->new(re => $_, im => 0)
+  } @$a1_values;
+  $a2->values(\@a2_values);
+
   $self->{mode} = 'complex';
 
   return $self;

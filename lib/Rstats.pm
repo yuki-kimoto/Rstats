@@ -23,6 +23,36 @@ sub TRUE { Rstats::Logical->TRUE }
 
 sub FALSE { Rstats::Logical->FALSE }
 
+sub as_compelx {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_complex;
+}
+
+sub as_numeric {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_numeric;
+}
+
+sub as_integer {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_integer;
+}
+
+sub as_character {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_character;
+}
+
+sub as_logical {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_logical;
+}
+
 sub as_matrix {
   my ($self, $a1) = @_;
   

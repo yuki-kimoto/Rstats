@@ -10,6 +10,7 @@ use overload
   '-' => \&subtract,
   '*' => \&multiply,
   '/' => \&divide,
+  '%' => \&reminder,
   'neg' => \&negation,
   '**' => \&raise,
   '""' => \&to_string,
@@ -876,9 +877,10 @@ sub subtract { shift->_operation('-', @_) }
 sub multiply { shift->_operation('*', @_) }
 sub divide { shift->_operation('/', @_) }
 sub raise { shift->_operation('**', @_) }
+sub remainder { shift->_operation('%', @_) }
 
 my $culcs = {};
-my @ops = qw#+ - * / **#;
+my @ops = qw#+ - * / ** %#;
 for my $op (@ops) {
    my $code = <<"EOS";
 sub {

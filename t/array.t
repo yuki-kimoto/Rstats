@@ -112,6 +112,27 @@ my $r = Rstats->new;
     my $a2 = $a1 ** 2;
     is_deeply($a2->values, [1, 4, 9]);
   }
+
+  # operation - raise, reverse
+  {
+    my $a1 = $r->c([1, 2, 3]);
+    my $a2 = 2 ** $a1;
+    is_deeply($a2->values, [2, 4, 8]);
+  }
+
+  # operation - remainder
+  {
+    my $a1 = $r->c([1, 2, 3]);
+    my $a2 = $a1 % 3;
+    is_deeply($a2->values, [1, 2, 0]);
+  }
+
+  # operation - remainder, reverse
+  {
+    my $a1 = $r->c([1, 2, 3]);
+    my $a2 = 2 % $a1;
+    is_deeply($a2->values, [0, 0, 2]);
+  }
 }
 
 # clone_without_values

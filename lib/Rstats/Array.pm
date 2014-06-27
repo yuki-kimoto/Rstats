@@ -10,7 +10,7 @@ use overload
   '-' => \&subtract,
   '*' => \&multiply,
   '/' => \&divide,
-  '%' => \&reminder,
+  '%' => \&remainder,
   'neg' => \&negation,
   '**' => \&raise,
   '""' => \&to_string,

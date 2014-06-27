@@ -58,4 +58,13 @@ Corresponding to R
   $r->as_vector($a1)
   
   # as.array(a1)
-  $r->as_array($a1);
+  $r->as_array($a1)
+
+  # is.matrix(a1)
+  $r->is_matrix($a1)
+  
+  # is.vector(a1)
+  $r->is_vector($a1)
+  
+  # is.array(a1)
+  $r->is_array($a1)

@@ -8,20 +8,28 @@ use Rstats::Array;
 
 my $r = Rstats->new;
 
+# as_numeric
+{
+  # as_numeric - from integer
+  {
+    my $a1 = $r->c([0, 1, 2])->as_integer;
+    my $a2 = $r->as_numeric($a1);
+    is($a2->mode, 'numeric');
+    is_deeply($a2->values, [0, 1, 2]);
+  }
+}
+  
 # is_*, as_*
 {
-  # numeric
   my $c = $r->c([0, 1, 2]);
-  is($c->mode, 'numeric');
-  ok($c->is_numeric->value);
   
   # Integer
   ok($c->as_integer->is_integer->value);
-  is($c->mode, 'integer');
+  is($c->as_integer->mode, 'integer');
   
   # Character
   ok($c->as_character->is_character->value);
-  is($c->mode, 'character');
+  is($c->as_character->mode, 'character');
   
   # Compex
   ok($c->as_complex->is_complex->value);

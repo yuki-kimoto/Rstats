@@ -465,44 +465,75 @@ sub is_logical {
   return $self->c([$is]);
 }
 
-sub as_numeric {
-  my $self = shift;
-
-  $self->{mode} = 'numeric';
-
-  return $self;
-}
-
-sub as_integer {
-  my $self = shift;
-
-  $self->{mode} = 'integer';
-
-  return $self;
-}
-
 sub as_complex {
   my $self = shift;
 
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
-  $a2->{mode} = 'logical';
   my @a2_values = map {
     ref $_ eq 'Rstats::Complex' ? $_ : Rstats::Complex->new(re => $_, im => 0)
   } @$a1_values;
   $a2->values(\@a2_values);
+  $a2->{mode} = 'complex';
 
-  $self->{mode} = 'complex';
-
-  return $self;
+  return $a2;
 }
 
-sub as_character {
+sub as_numeric {
   my $self = shift;
+  
+  my $a1 = $self;
+  my $a1_values = $a1->values;
+  my $a2 = $self->clone_without_values;
+  my @a2_values;
+  if ($a1->is_complex->value) {
+    warn "Complex image number is removed";
+    @a2_values = map { $_->re } @$a1_values;    
+  }
+  elsif ($a1->is_numeric->value || $a1->is_integer->value) {
+    @a2_values = @$a1_values;
+  }
+  elsif ($a1->is_logical->value) {
+    @a2_values = map { $_ ? 1 : 0 } @$a1_values;
+  }
+  elsif ($a1->is_character->value) {
+    warn "NA is created for forced conversion";
+    @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
+  }
+  $a2->values(\@a2_values);
+  $a2->{mode} = 'numeric';
 
-  $self->{mode} = 'character';
+  return $a2;
+}
 
-  return $self;
+sub as_integer {
+  my $self = shift;
+  
+  my $a1 = $self;
+  my $a1_values = $a1->values;
+  my $a2 = $self->clone_without_values;
+  my @a2_values;
+  if ($a1->is_complex->value) {
+    warn "Complex image number is removed";
+    @a2_values = map { int $_->re } @$a1_values;    
+  }
+  elsif ($a1->is_numeric->value) {
+    @a2_values = map { int $_ } @$a1_values;
+  }
+  elsif ($a1->is_integer->value) {
+    @a2_values = @$a1_values;
+  }
+  elsif ($a1->is_logical->value) {
+    @a2_values = map { $_ ? 1 : 0 } @$a1_values;
+  }
+  elsif ($a1->is_character->value) {
+    warn "NA is created for forced conversion";
+    @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
+  }
+  $a2->values(\@a2_values);
+  $a2->{mode} = 'integer';
+
+  return $a2;
 }
 
 sub as_logical {
@@ -510,14 +541,27 @@ sub as_logical {
 
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
-  $a2->{mode} = 'logical';
   my @a2_values = map {
     $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
   } @$a1_values;
   $a2->values(\@a2_values);
+  $a2->{mode} = 'logical';
   
   return $a2;
 }
+
+sub as_character {
+  my $self = shift;
+
+  my $a1_values = $self->values;
+  my $a2 = $self->clone_without_values;
+  my @a2_values = map { "$_" } @$a1_values;
+  $a2->values(\@a2_values);
+  $a2->{mode} = 'character';
+
+  return $a2;
+}
+
 
 sub get {
   my $self = shift;

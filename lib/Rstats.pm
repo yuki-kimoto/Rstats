@@ -18,6 +18,42 @@ use Math::Round ();
 #   gamma
 #   lgamma
 
+sub as_matrix {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_matrix;
+}
+
+sub as_vector {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_vector;
+}
+
+sub as_array {
+  my ($self, $a1) = @_;
+  
+  return $a1->as_array;
+}
+
+sub is_matrix {
+  my ($self, $a1) = @_;
+  
+  return $a1->is_matrix;
+}
+
+sub is_vector {
+  my ($self, $a1) = @_;
+  
+  return $a1->is_vector;
+}
+
+sub is_array {
+  my ($self, $a1) = @_;
+  
+  return $a1->is_array;
+}
+
 sub rbind {
   my ($self, @arrays) = @_;
   

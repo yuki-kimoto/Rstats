@@ -50,3 +50,13 @@ Corresponding to R
   
   # a1 %/% a2 (integer quotient)
   $r->tranc($a1 / $a2)
+
+  # as.matrix(a1)
+  $r->as_matrix($a1)
+  
+  # as.vector(a1)
+  $r->as_vector($a1)
+  
+  # as.array(a1)
+  $r->as_array($a1);
+

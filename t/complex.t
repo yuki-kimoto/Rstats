@@ -5,9 +5,31 @@ use warnings;
 use Rstats;
 use Rstats::Complex;
 
-# Complex
+my $r = Rstats->new;
+
+# to_string
 {
-  my $r = Rstats->new;
+  # to_string - basic
+  {
+    my $z1 = $r->complex(1, 2);
+    is("$z1", "1+2i");
+  }
+  
+  # to_string - image number is 0
+  {
+    my $z1 = $r->complex(1, 0);
+    is("$z1", "1+0i");
+  }
+  
+  # to_string - image number is minus
+  {
+    my $z1 = $r->complex(1, -1);
+    is("$z1", "1-1i");
+  }
+}
+
+# new
+{
 
   # new
   {
@@ -15,8 +37,11 @@ use Rstats::Complex;
     is($z1->re, 1);
     is($z1->im, 2);
   }
-  
-  # negation
+}
+
+# operation
+{
+  # operation - negation
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = - $z1;
@@ -24,7 +49,7 @@ use Rstats::Complex;
     is($z2->im, -2);
   }
   
-  # add
+  # operation - add
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = Rstats::Complex->new(re => 3, im => 4);
@@ -33,7 +58,7 @@ use Rstats::Complex;
     is($z3->im, 6);
   }
   
-  # add(real number)
+  # operation - add(real number)
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = $z1 + 3;
@@ -41,7 +66,7 @@ use Rstats::Complex;
     is($z2->im, 2);
   }
 
-  # subtract
+  # operation - subtract
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = Rstats::Complex->new(re => 3, im => 4);
@@ -50,7 +75,7 @@ use Rstats::Complex;
     is($z3->im, -2);
   }
   
-  # subtract(real number)
+  #operation -  subtract(real number)
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = $z1 - 3;
@@ -58,7 +83,7 @@ use Rstats::Complex;
     is($z2->im, 2);
   }
   
-  # subtract(real number, reverse)
+  # operation - subtract(real number, reverse)
   {
     my $z1 = Rstats::Complex->new(re => 1, im => 2);
     my $z2 = 3 - $z1;
@@ -66,7 +91,7 @@ use Rstats::Complex;
     is($z2->im, -2);
   }
   
-  # multiply
+  # operation - multiply
   {
     my $z1 = 1 + $r->i * 2;
     my $z2 = 3 + $r->i * 4;
@@ -75,7 +100,7 @@ use Rstats::Complex;
     is($z3->im, 10);
   }
 
-  # multiply(real number)
+  # operation - multiply(real number)
   {
     my $z1 = 1 + $r->i * 2;
     my $z2 = $z1 * 3;
@@ -83,14 +108,14 @@ use Rstats::Complex;
     is($z2->im, 6);
   }
   
-  # abs
+  # operation - abs
   {
     my $z1 = 3 + $r->i * 4;
     my $abs = $z1->abs;
     is($abs, 5);
   }
   
-  # conj
+  # operation - conj
   {
     my $z1 = 1 + $r->i * 2;
     my $conj = $z1->conj;
@@ -98,7 +123,7 @@ use Rstats::Complex;
     is($conj->im, -2);
   }
   
-  # divide
+  # operation - divide
   {
     my $z1 = 5 - $r->i * 6;
     my $z2 = 3 + $r->i * 2;
@@ -107,7 +132,7 @@ use Rstats::Complex;
     is($z3->im, -28/13);
   }
 
-  # divide(real number)
+  # operation - divide(real number)
   {
     my $z1 = 2 + $r->i * 4;
     my $z2 = $z1 / 2;
@@ -115,7 +140,7 @@ use Rstats::Complex;
     is($z2->im, 2);
   }
 
-  # divide(real number, reverse)
+  # operation - divide(real number, reverse)
   {
     my $z1 = 3 + $r->i * 2;
     my $z2 = 5 / $z1;
@@ -123,7 +148,7 @@ use Rstats::Complex;
     is($z2->im, -10 / 13);
   }
 
-  # raise
+  # operation - raise
   {
     my $z1 = 1 + $r->i * 2;
     my $z2 = $z1 ** 3;

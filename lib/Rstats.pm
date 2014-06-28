@@ -19,6 +19,12 @@ use Rstats::Logical;
 #   gamma
 #   lgamma
 
+sub complex {
+  my ($self, $re, $im) = @_;
+  
+  return Rstats::Complex->new(re => $re, im => $im);
+}
+
 sub TRUE { Rstats::Logical->TRUE }
 
 sub FALSE { Rstats::Logical->FALSE }

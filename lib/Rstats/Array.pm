@@ -1,8 +1,10 @@
 package Rstats::Array;
 use Object::Simple -base;
-use Carp 'croak';
+use Carp 'croak', 'carp';
 use List::Util;
 use Rstats;
+
+our @CARP_NOT = ('Rstats');
 
 use overload
   bool => sub {1},
@@ -487,7 +489,7 @@ sub as_numeric {
   my $a2 = $self->clone_without_values;
   my @a2_values;
   if ($a1->is_complex->value) {
-    warn "Complex image number is removed";
+    carp "imaginary parts discarded in coercion";
     @a2_values = map { $_->re } @$a1_values;    
   }
   elsif ($a1->is_numeric->value || $a1->is_integer->value) {
@@ -497,7 +499,7 @@ sub as_numeric {
     @a2_values = map { $_ ? 1 : 0 } @$a1_values;
   }
   elsif ($a1->is_character->value) {
-    warn "NA is created for forced conversion";
+    carp "NA is created for forced conversion";
     @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
   }
   $a2->values(\@a2_values);
@@ -514,7 +516,7 @@ sub as_integer {
   my $a2 = $self->clone_without_values;
   my @a2_values;
   if ($a1->is_complex->value) {
-    warn "Complex image number is removed";
+    carp "Complex image number is removed";
     @a2_values = map { int $_->re } @$a1_values;    
   }
   elsif ($a1->is_numeric->value) {
@@ -527,7 +529,7 @@ sub as_integer {
     @a2_values = map { $_ ? 1 : 0 } @$a1_values;
   }
   elsif ($a1->is_character->value) {
-    warn "NA is created for forced conversion";
+    carp "NA is created for forced conversion";
     @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
   }
   $a2->values(\@a2_values);

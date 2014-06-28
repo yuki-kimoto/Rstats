@@ -10,13 +10,52 @@ my $r = Rstats->new;
 
 # as_numeric
 {
+  # as_numeric - from complex
+  {
+    my $a1 = $r->c([$r->complex(1, 1), $r->complex(2, 2)]);
+    $a1->mode('complex');
+    my $a2 = $r->as_numeric($a1);
+    is($a2->mode, 'numeric');
+    is_deeply($a2->values, [1, 2]);
+  }
+
+  # as_numeric - from numeric
+  {
+    my $a1 = $r->c([0.1, 1.1, 2.2]);
+    $a1->mode('numeric');
+    my $a2 = $r->as_numeric($a1);
+    is($a2->mode, 'numeric');
+    is_deeply($a2->values, [0.1, 1.1, 2.2]);
+  }
+    
   # as_numeric - from integer
+  {
+    my $a1 = $r->c([0, 1, 2]);
+    $a1->mode('integer');
+    my $a2 = $r->as_numeric($a1);
+    is($a2->mode, 'numeric');
+    is_deeply($a2->values, [0, 1, 2]);
+  }
+  
+  # as_numeric - from logical
+  {
+    my $a1 = $r->c([$r->TRUE, $r->FALSE]);
+    $a1->mode('logical');
+    my $a2 = $r->as_numeric($a1);
+    is($a2->mode, 'numeric');
+    is_deeply($a2->values, [1, 0]);
+  }
+
+=pod
+  # as_numeric - from character
   {
     my $a1 = $r->c([0, 1, 2])->as_integer;
     my $a2 = $r->as_numeric($a1);
     is($a2->mode, 'numeric');
     is_deeply($a2->values, [0, 1, 2]);
   }
+=cut
+
 }
   
 # is_*, as_*

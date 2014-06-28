@@ -18,6 +18,77 @@ use Rstats::Logical;
 #   logp1x
 #   gamma
 #   lgamma
+#   complete_cases
+
+sub is_null {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = [!@$a1->values ? Rstats::Logical->TRUE : Rstats::Logical->FALSE];
+  my $a2 = Rstats::Array->array(\@a2_values);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_na {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map {
+    ref $_ eq  'Rstats::NA' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+  } @{$a1->values};
+  my $a2 = Rstats::Array->array(\@a2_values);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_nan {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map {
+    ref $_ eq  'Rstats::NaN' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+  } @{$a1->values};
+  my $a2 = Rstats::Array->array(\@a2_values);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_finite {
+  my ($self, $_a1) = @_;
+
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map {
+    !ref $_ || ref $_ eq 'Rstats::Complex' || ref $_ eq 'Rstats::Logical' 
+      ? Rstats::Logical->TRUE
+      : Rstats::Logical->FALSE
+  } @{$a1->values};
+  my $a2 = Rstats::Array->array(\@a2_values);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_infinite {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_v($_a1);
+  
+  my @a2_values = map {
+    ref $_ eq 'Rstats::Inf' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+  } @{$a1->values};
+  my $a2 = Rstats::Array->array(\@a2_values);
+  $a2->mode('logical');
+
+  return $a1->clone_without_values(values => \@a2_values);
+}
 
 sub complex {
   my ($self, $re, $im) = @_;

@@ -3,6 +3,7 @@ use Object::Simple -base;
 use Carp 'croak', 'carp';
 use List::Util;
 use Rstats;
+use B;
 
 our @CARP_NOT = ('Rstats');
 
@@ -374,6 +375,89 @@ sub array {
   }
   $array->dim($dim);
   
+  # Check values
+  my $mode = $opt->{mode};
+  if (defined $mode) {
+    if ($mode eq 'character') {
+      my $a1 = Rstats::Array->as_character(Rstats::Array->new(values => $values));
+      $values = $a1->values;
+      $array->mode($mode);
+    }
+    elsif ($mode eq 'complex') {
+      my $a1 = Rstats::Array->as_complex(Rstats::Array->new(values => $values));
+      $values = $a1->values;
+    }
+    elsif ($mode eq 'numeric') {
+      my $a1 = Rstats::Array->as_numeric(Rstats::Array->new(values => $values));
+      $values = $a1->values;
+    }
+    elsif ($mode eq 'integer') {
+      my $a1 = Rstats::Array->as_integer(Rstats::Array->new(values => $values));
+      $values = $a1->values;
+    }
+    elsif ($mode eq 'logical') {
+      my $a1 = Rstats::Array->as_logical(Rstats::Array->new(values => $values));
+      $values = $a1->values;
+    }
+    else {
+      croak "mode $mode is invalid";
+    }
+    $array->mode($mode);
+  }
+  else {
+    my $mode_h = {};
+    for my $value (@$values) {
+      if (ref $value eq 'Rstats::Complex') {
+        $mode_h->{complex}++;
+      }
+      elsif (ref $value eq 'Rstats::Character') {
+        $mode_h->{character}++;
+      }
+      elsif (ref $value eq 'Rstats::Logical' || ref $value eq 'Rstats::NA') {
+        $mode_h->{logical}++;
+      }
+      elsif (ref $value eq 'Rstats::NaN' && ref $value eq 'Rstats::Inf') {
+        $mode_h->{numeric}++;
+      }
+      elsif (B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
+          && 0 + $value eq $value
+          && $value * 0 == 0
+        ) {
+            $mode_h->{numeric}++;
+      }
+      else {
+        $mode_h->{character}++;
+      }
+    }
+
+    # Convert to same mode
+    if (keys %$mode_h > 1) {
+      if ($mode_h->{character}) {
+        my $a1 = Rstats::Array->as_character(Rstats::Array->new(values => $values));
+        $values = $a1->values;
+        $array->mode('character');
+      }
+      elsif ($mode_h->{complex}) {
+        my $a1 = Rstats::Array->as_complex(Rstats::Array->new(values => $values));
+        $values = $a1->values;
+        $array->mode('complex');
+      }
+      elsif ($mode_h->{numeric}) {
+        my $a1 = Rstats::Array->as_numeric(Rstats::Array->new(values => $values));
+        $values = $a1->values;
+        $array->mode('numeric');
+      }
+      elsif ($mode_h->{logical}) {
+        my $a1 = Rstats::Array->as_logical(Rstats::Array->new(values => $values));
+        $values = $a1->values;
+        $array->mode('logical');
+      }
+    }
+    else {
+      $array->mode($mode);
+    }
+  }
+  
   # Fix values
   my $max_length = 1;
   $max_length *= $_ for @$dim;
@@ -388,7 +472,6 @@ sub array {
   $array->values($values);
   
   # Mode
-  my $mode = $opt->{mode} || 'numeric';
   $array->mode($mode);
   
   return $array;
@@ -544,7 +627,9 @@ sub as_logical {
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+      ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN' ? Rstats::Na->NA
+    : $_ ? Rstats::Logical->TRUE
+    : Rstats::Logical->FALSE
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{mode} = 'logical';

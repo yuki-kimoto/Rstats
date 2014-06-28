@@ -6,7 +6,9 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# which
+# TODO
+#   which
+#   get - logical, undef
 
 # is_*
 {
@@ -252,7 +254,6 @@ my $r = Rstats->new;
     $a1->colnames(['c1', 'c2']);
     my $a2 = $a1->clone_without_values;
     ok($a2->is_matrix->value);
-    is($a2->mode, 'numeric');
     is_deeply($a2->dim->values, [3, 2]);
     is_deeply($a2->rownames->values, ['r1', 'r2', 'r3']);
     is_deeply($a2->colnames->values, ['c1', 'c2']);
@@ -825,7 +826,7 @@ EOS
     my $v2 = $v1->get($r->c(['b', 'd'])->as_character);
     is_deeply($v2->values, [2, 4]);
   }
-
+=pod
   # get - logical
   {
     my $v1 = $r->c([1, 3, 5, 7]);
@@ -841,7 +842,7 @@ EOS
     my $v2 = $v1->get($logical_v);
     is_deeply($v2->values, [3, 7, undef]);
   }
-
+=cut
   # get - as_vector
   {
     my $a1 = $r->array('1:24', [4, 3, 2]);

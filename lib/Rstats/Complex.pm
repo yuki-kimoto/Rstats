@@ -5,6 +5,7 @@ use Rstats::Complex;
 use Math::Complex;
 
 use overload
+  'bool' => \&bool,
   'neg' => \&negation,
   '+' => \&add,
   '-' => \&subtract,
@@ -15,6 +16,12 @@ use overload
 
 has 're';
 has 'im';
+
+sub bool {
+  my $self = shift;
+  
+  return $self->{re} == 0 && $self->{im} == 0 ? Rstats::Logical->FALSE : Rstats::Logical->TRUE;
+}
 
 sub to_string {
   my $self = shift;

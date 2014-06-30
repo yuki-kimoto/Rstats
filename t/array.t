@@ -10,6 +10,67 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# as_logical
+{
+  # as_logical - character, number
+  {
+    my $a1 = $r->array(["1.23"]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is(ref $a2->values->[0], 'Rstats::NA');
+  }
+
+  # as_logical - character, pre and trailing space
+  {
+    my $a1 = $r->array(["  1  "]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is(ref $a2->values->[0], 'Rstats::NA');
+  }
+
+  # as_logical - character
+  {
+    my $a1 = $r->array(["a"]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is(ref $a2->values->[0], 'Rstats::NA');
+  }
+  
+  # as_logical - complex
+  {
+    my $a1 = $r->array([$r->complex(1, 2)]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is($a2->values->[0], $r->TRUE);
+  }
+
+  # as_logical - complex, 0 + 0i
+  {
+    my $a1 = $r->array([$r->complex(0, 0)]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is($a2->values->[0], $r->FALSE);
+  }
+  
+  # as_logical - numeric
+  {
+    my $a1 = $r->array([1.1, 0]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is($a2->values->[0], $r->TRUE);
+    is($a2->values->[1], $r->FALSE);
+  }
+  
+  # as_logical - logical
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is($a2->values->[0], $r->TRUE);
+    is($a2->values->[1], $r->FALSE);
+  }
+}
+
 # as_integer
 {
   # as_integer - character, only real number, no sign

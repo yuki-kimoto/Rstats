@@ -1,7 +1,9 @@
 package Rstats::Inf;
 use Object::Simple -base;
+use Rstats::Logical;
 
 use overload
+  'bool' => \&bool,
   '""' => \&to_string,
   'neg' => \&negation,
   fallback => 1;
@@ -10,6 +12,8 @@ has 'minus';
 
 my $Inf = Rstats::Inf->new;
 my $Inf_minus = Rstats::Inf->new(minus => 1);
+
+sub bool { Rstats::Logical->TRUE }
 
 sub Inf { $Inf }
 

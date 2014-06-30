@@ -683,9 +683,19 @@ sub as_logical {
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-      ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN' ? Rstats::Na->NA
-    : $_ ? Rstats::Logical->TRUE
-    : Rstats::Logical->FALSE
+    if (ref $_ eq 'Rstats::Complex' || ref $_ eq 'Rstats::Logical' || ref $_ eq 'Rstats::Inf') {
+      $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+    }
+    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
+      Rstats::NA->NA;
+    }
+    elsif ($self->_is_numeric($_)) {
+      $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      Rstats::NA->NA;
+    } 
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{mode} = 'logical';

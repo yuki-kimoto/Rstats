@@ -100,7 +100,7 @@ sub TRUE { Rstats::Logical->TRUE }
 
 sub FALSE { Rstats::Logical->FALSE }
 
-sub as_compelx {
+sub as_complex {
   my ($self, $a1) = @_;
   
   return $a1->as_complex;

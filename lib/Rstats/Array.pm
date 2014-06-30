@@ -5,6 +5,9 @@ use List::Util;
 use Rstats;
 use B;
 use Scalar::Util 'looks_like_number';
+use Rstats::NA;
+use Rstats::NaN;
+use Rstats::Inf;
 
 our @CARP_NOT = ('Rstats');
 
@@ -524,7 +527,7 @@ sub is_logical {
 sub _looks_like_complex {
   my ($self, $value) = @_;
   
-  return if !defined $value || CORE::length $value;
+  return if !defined $value || !CORE::length $value;
   $value =~ s/^ +//;
   $value =~ s/ +$//;
   
@@ -535,7 +538,7 @@ sub _looks_like_complex {
     $re = 0;
     $im = $1;
   }
-  elsif($value =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-]+)i?$/) {
+  elsif($value =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-i]+)i?$/) {
     $re = $1;
     $im = $2;
   }
@@ -554,12 +557,19 @@ sub _looks_like_complex {
 sub as_complex {
   my $self = shift;
   
-  $DB::single = 1;
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
     if (ref $_ eq 'Rstats::Complex') {
       Rstats::Complex->new(re => $_->re, im => $_->im);
+    }
+    elsif (ref $_ eq 'Rstats::Logical') {
+      if ($_) {
+        Rstats::Complex->new(re => 1, im => 0);
+      }
+      else {
+        Rstats::Complex->new(re => 0, im => 0);
+      }
     }
     elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
       Rstats::NA->NA;

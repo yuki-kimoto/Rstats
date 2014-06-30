@@ -623,10 +623,7 @@ sub as_numeric {
     elsif (ref $_ eq 'Rstats::Logical') {
       $_ ? 1 : 0;
     }
-    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
-      $_;
-    }
-    elsif (ref $_ eq 'Rstats::Inf') {
+    elsif (ref $_ eq 'Rstats::Inf' || ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
       $_;
     }
     elsif (my @nums = $self->_looks_like_number($_)) {
@@ -661,7 +658,8 @@ sub as_integer {
       Rstats::NA->NA;
     }
     elsif (ref $_ eq 'Rstats::Inf') {
-      $_;
+      carp "NAs introduced by coercion";
+      Rstats::NA->NA;
     }
     elsif (my @nums = $self->_looks_like_number($_)) {
       int($nums[0] + 0);

@@ -22,7 +22,7 @@ sub to_string {
   my $re = $self->re;
   my $im = $self->im;
   
-  my $str = $re;
+  my $str = "$re";
   $str .= '+' if $im >= 0;
   $str .= $im . 'i';
   

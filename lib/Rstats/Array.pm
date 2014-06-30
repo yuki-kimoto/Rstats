@@ -4,6 +4,7 @@ use Carp 'croak', 'carp';
 use List::Util;
 use Rstats;
 use B;
+use Scalar::Util 'looks_like_number';
 
 our @CARP_NOT = ('Rstats');
 
@@ -319,6 +320,14 @@ sub _parse_seq_str {
   return $array;
 }
 
+sub _is_numeric {
+  my ($self, $value) = @_;
+  
+  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
+        && 0 + $value eq $value
+        && $value * 0 == 0
+}
+
 sub array {
   my $self = shift;
   
@@ -376,86 +385,51 @@ sub array {
   $array->dim($dim);
   
   # Check values
-  my $mode = $opt->{mode};
-  if (defined $mode) {
-    if ($mode eq 'character') {
-      my $a1 = Rstats::Array->as_character(Rstats::Array->new(values => $values));
-      $values = $a1->values;
-      $array->mode($mode);
+  my $mode_h = {};
+  for my $value (@$values) {
+    if (ref $value eq 'Rstats::Complex') {
+      $mode_h->{complex}++;
     }
-    elsif ($mode eq 'complex') {
-      my $a1 = Rstats::Array->as_complex(Rstats::Array->new(values => $values));
-      $values = $a1->values;
+    elsif (ref $value eq 'Rstats::Logical' || ref $value eq 'Rstats::NA') {
+      $mode_h->{logical}++;
     }
-    elsif ($mode eq 'numeric') {
-      my $a1 = Rstats::Array->as_numeric(Rstats::Array->new(values => $values));
-      $values = $a1->values;
+    elsif (ref $value eq 'Rstats::NaN' && ref $value eq 'Rstats::Inf') {
+      $mode_h->{numeric}++;
     }
-    elsif ($mode eq 'integer') {
-      my $a1 = Rstats::Array->as_integer(Rstats::Array->new(values => $values));
-      $values = $a1->values;
-    }
-    elsif ($mode eq 'logical') {
-      my $a1 = Rstats::Array->as_logical(Rstats::Array->new(values => $values));
-      $values = $a1->values;
+    elsif ($self->_is_numeric($value)) {
+      $mode_h->{numeric}++;
     }
     else {
-      croak "mode $mode is invalid";
+      $mode_h->{character}++;
     }
-    $array->mode($mode);
+  }
+
+  # Upgrade values and type
+  my @modes = keys %$mode_h;
+  if (@modes > 1) {
+    if ($mode_h->{character}) {
+      my $a1 = Rstats::Array->new(values => $values)->as_character;
+      $values = $a1->values;
+      $array->mode('character');
+    }
+    elsif ($mode_h->{complex}) {
+      my $a1 = Rstats::Array->new(values => $values)->as_complex;
+      $values = $a1->values;
+      $array->mode('complex');
+    }
+    elsif ($mode_h->{numeric}) {
+      my $a1 = Rstats::Array->new(values => $values)->as_numeric;
+      $values = $a1->values;
+      $array->mode('numeric');
+    }
+    elsif ($mode_h->{logical}) {
+      my $a1 = Rstats::Array->new(values => $values)->as_logical;
+      $values = $a1->values;
+      $array->mode('logical');
+    }
   }
   else {
-    my $mode_h = {};
-    for my $value (@$values) {
-      if (ref $value eq 'Rstats::Complex') {
-        $mode_h->{complex}++;
-      }
-      elsif (ref $value eq 'Rstats::Character') {
-        $mode_h->{character}++;
-      }
-      elsif (ref $value eq 'Rstats::Logical' || ref $value eq 'Rstats::NA') {
-        $mode_h->{logical}++;
-      }
-      elsif (ref $value eq 'Rstats::NaN' && ref $value eq 'Rstats::Inf') {
-        $mode_h->{numeric}++;
-      }
-      elsif (B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-          && 0 + $value eq $value
-          && $value * 0 == 0
-        ) {
-            $mode_h->{numeric}++;
-      }
-      else {
-        $mode_h->{character}++;
-      }
-    }
-
-    # Convert to same mode
-    if (keys %$mode_h > 1) {
-      if ($mode_h->{character}) {
-        my $a1 = Rstats::Array->as_character(Rstats::Array->new(values => $values));
-        $values = $a1->values;
-        $array->mode('character');
-      }
-      elsif ($mode_h->{complex}) {
-        my $a1 = Rstats::Array->as_complex(Rstats::Array->new(values => $values));
-        $values = $a1->values;
-        $array->mode('complex');
-      }
-      elsif ($mode_h->{numeric}) {
-        my $a1 = Rstats::Array->as_numeric(Rstats::Array->new(values => $values));
-        $values = $a1->values;
-        $array->mode('numeric');
-      }
-      elsif ($mode_h->{logical}) {
-        my $a1 = Rstats::Array->as_logical(Rstats::Array->new(values => $values));
-        $values = $a1->values;
-        $array->mode('logical');
-      }
-    }
-    else {
-      $array->mode($mode);
-    }
+    $array->mode($modes[0]);
   }
   
   # Fix values
@@ -470,9 +444,6 @@ sub array {
     @$values = splice @$values, 0, $max_length;
   }
   $array->values($values);
-  
-  # Mode
-  $array->mode($mode);
   
   return $array;
 }
@@ -550,13 +521,62 @@ sub is_logical {
   return $self->c([$is]);
 }
 
+sub _looks_like_complex {
+  my ($self, $value) = @_;
+  
+  return if !defined $value || CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
+  
+  my $re;
+  my $im;
+  
+  if ($value =~ /^([\+\-]?[^\+\-]+)i$/) {
+    $re = 0;
+    $im = $1;
+  }
+  elsif($value =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-]+)i?$/) {
+    $re = $1;
+    $im = $2;
+  }
+  else {
+    return;
+  }
+  
+  if (looks_like_number $re && looks_like_number $im) {
+    return ($re, $im);
+  }
+  else {
+    return;
+  }
+}
+
 sub as_complex {
   my $self = shift;
-
+  
+  $DB::single = 1;
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    ref $_ eq 'Rstats::Complex' ? $_ : Rstats::Complex->new(re => $_, im => 0)
+    if (ref $_ eq 'Rstats::Complex') {
+      Rstats::Complex->new(re => $_->re, im => $_->im);
+    }
+    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
+      Rstats::NA->NA;
+    }
+    elsif (ref $_ eq 'Rstats::Inf') {
+      Rstats::Complex->new(re => $_, im => 0);
+    }
+    elsif (looks_like_number $_) {
+      Rstats::Complex->new(re => $_ + 0, im => 0);
+    }
+    elsif (my @nums = $self->_looks_like_complex($_)) {
+      Rstats::Complex->new(re => $nums[0] + 0, im => $nums[1] + 0);
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      Rstats::NA->NA;
+    }
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{mode} = 'complex';

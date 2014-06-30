@@ -10,6 +10,62 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# array decide type
+{
+  # array decide type - complex
+  {
+    my $a1 = $r->array([$r->complex(1, 2), $r->complex(3, 4)]);
+    is($a1->values->[0]->re, 1);
+    is($a1->values->[0]->im, 2);
+    is($a1->values->[1]->re, 3);
+    is($a1->values->[1]->im, 4);
+    ok($a1->is_complex);
+  }
+
+  # array decide type - numerci
+  {
+    my $a1 = $r->array([1, 2]);
+    is_deeply($a1->values, [1, 2]);
+    ok($a1->is_numeric);
+  }
+  
+  # array decide type - logical
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    is_deeply($a1->values, [$r->TRUE, $r->FALSE]);
+    ok($a1->is_logical);
+  }
+
+  # array decide type - character
+  {
+    my $a1 = $r->array(["c1", "c2"]);
+    is_deeply($a1->values, ["c1", "c2"]);
+    ok($a1->is_character);
+  }
+
+  # array decide type - character, look like number
+  {
+    my $a1 = $r->array(["1", "2"]);
+    is_deeply($a1->values, ["1", "2"]);
+    ok($a1->is_character);
+  }
+}
+
+# array upgrade type
+{
+  # array decide type - complex
+  {
+    my $a1_values = [1, $r->complex(3, 4)];
+    my $a1 = $r->array($a1_values);
+    is($a1->values->[0]->re, 1);
+    is($a1->values->[0]->im, 0);
+    is($a1->values->[1]->re, 3);
+    is($a1->values->[1]->im, 4);
+    ok($a1->is_complex);
+  }
+
+}
+
 # is_*
 {
   # is_* - is_vector

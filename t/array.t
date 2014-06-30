@@ -10,8 +10,85 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# as_character
+{
+  # as_character - Inf
+  {
+    my $a1 = $r->array([$r->Inf]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is_deeply($a2->values, ["Inf"]);
+  }
+
+  # as_character - NA
+  {
+    my $a1 = $r->array([$r->NA]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is_deeply($a2->values, ["NA"]);
+  }
+
+  # as_character - NaN
+  {
+    my $a1 = $r->array([$r->NaN]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is_deeply($a2->values, ["NaN"]);
+  }
+  
+  # as_character - character
+  {
+    my $a1 = $r->array(["a"]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is($a2->values->[0], "a");
+  }
+  
+  # as_character - complex
+  {
+    my $a1 = $r->array([$r->complex(1, 2)]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is($a2->values->[0], "1+2i");
+  }
+
+  # as_character - complex, 0 + 0i
+  {
+    my $a1 = $r->array([$r->complex(0, 0)]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is($a2->values->[0], "0+0i");
+  }
+  
+  # as_character - numeric
+  {
+    my $a1 = $r->array([1.1, 0]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is($a2->values->[0], "1.1");
+    is($a2->values->[1], "0");
+  }
+  
+  # as_character - logical
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a2 = $r->as_character($a1);
+    ok($a2->is_character);
+    is($a2->values->[0], "TRUE");
+    is($a2->values->[1], "FALSE");
+  }
+}
+
 # as_logical
 {
+  # as_logical - Inf, NA, NaN
+  {
+    my $a1 = $r->array([$r->Inf, $r->NA, $r->NaN]);
+    my $a2 = $r->as_logical($a1);
+    ok($a2->is_logical);
+    is_deeply($a2->values, [$r->TRUE, $r->NA, $r->NA]);
+  }
+  
   # as_logical - character, number
   {
     my $a1 = $r->array(["1.23"]);
@@ -417,6 +494,27 @@ my $r = Rstats->new;
     my $a1 = $r->array(["1", "2"]);
     is_deeply($a1->values, ["1", "2"]);
     ok($a1->is_character);
+  }
+
+  # array decide type - Inf
+  {
+    my $a1 = $r->array([$r->Inf]);
+    is_deeply($a1->values, [$r->Inf]);
+    ok($a1->is_numeric);
+  }
+
+  # array decide type - NaN
+  {
+    my $a1 = $r->array([$r->NaN]);
+    is_deeply($a1->values, [$r->NaN]);
+    ok($a1->is_numeric);
+  }
+
+  # array decide type - NA
+  {
+    my $a1 = $r->array([$r->NA]);
+    is_deeply($a1->values, [$r->NA]);
+    ok($a1->is_logical);
   }
 }
 

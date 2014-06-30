@@ -13,12 +13,19 @@ use Rstats::Complex;
 use POSIX ();;
 use Math::Round ();
 use Rstats::Logical;
+use Rstats::Inf;
+use Rstats::NA;
+use Rstats::NaN;
 
 # TODO
 #   logp1x
 #   gamma
 #   lgamma
 #   complete_cases
+
+sub Inf { Rstats::Inf->Inf }
+sub NA { Rstats::NA->NA }
+sub NaN { Rstats::NaN->NaN }
 
 sub is_null {
   my ($self, $_a1) = @_;

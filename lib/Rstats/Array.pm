@@ -396,7 +396,7 @@ sub array {
     elsif (ref $value eq 'Rstats::Logical' || ref $value eq 'Rstats::NA') {
       $mode_h->{logical}++;
     }
-    elsif (ref $value eq 'Rstats::NaN' && ref $value eq 'Rstats::Inf') {
+    elsif (ref $value eq 'Rstats::NaN' || ref $value eq 'Rstats::Inf') {
       $mode_h->{numeric}++;
     }
     elsif ($self->_is_numeric($value)) {
@@ -624,7 +624,7 @@ sub as_numeric {
       $_ ? 1 : 0;
     }
     elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
-      Rstats::NA->NA;
+      $_;
     }
     elsif (ref $_ eq 'Rstats::Inf') {
       $_;

@@ -649,24 +649,28 @@ sub as_integer {
   my $a1 = $self;
   my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
-  my @a2_values;
-  if ($a1->is_complex->value) {
-    carp "Complex image number is removed";
-    @a2_values = map { int $_->re } @$a1_values;    
-  }
-  elsif ($a1->is_numeric->value) {
-    @a2_values = map { int $_ } @$a1_values;
-  }
-  elsif ($a1->is_integer->value) {
-    @a2_values = @$a1_values;
-  }
-  elsif ($a1->is_logical->value) {
-    @a2_values = map { $_ ? 1 : 0 } @$a1_values;
-  }
-  elsif ($a1->is_character->value) {
-    carp "NA is created for forced conversion";
-    @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
-  }
+  my @a2_values = map {
+    if (ref $_ eq 'Rstats::Complex') {
+      carp "imaginary parts discarded in coercion";
+      $_->re;
+    }
+    elsif (ref $_ eq 'Rstats::Logical') {
+      $_ ? 1 : 0;
+    }
+    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
+      Rstats::NA->NA;
+    }
+    elsif (ref $_ eq 'Rstats::Inf') {
+      $_;
+    }
+    elsif (my @nums = $self->_looks_like_number($_)) {
+      int($nums[0] + 0);
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      Rstats::NA->NA;
+    } 
+  } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{mode} = 'integer';
 

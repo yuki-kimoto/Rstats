@@ -10,6 +10,82 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# as_integer
+{
+  # as_integer - character, only real number, no sign
+  {
+    my $a1 = $r->array(["1.23"]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+
+  # as_integer - character, only real number, plus
+  {
+    my $a1 = $r->array(["+1"]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_integer - character, only real number, minus
+  {
+    my $a1 = $r->array(["-1.23"]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], -1);
+  }
+
+  # as_integer - character, pre and trailing space
+  {
+    my $a1 = $r->array(["  1  "]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+
+  # as_integer - error
+  {
+    my $a1 = $r->array(["a"]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is(ref $a2->values->[0], 'Rstats::NA');
+  }
+  
+  # as_integer - complex
+  {
+    my $a1 = $r->array([$r->complex(1, 2)]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_integer - integer
+  {
+    my $a1 = $r->array([1.1]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_integer - integer
+  {
+    my $a1 = $r->array([1]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_integer - logical
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a2 = $r->as_integer($a1);
+    ok($a2->is_integer);
+    is($a2->values->[0], 1);
+    is($a2->values->[1], 0);
+  }
+}
+
 # as_numeric
 {
   # as_numeric - character, only real number, no sign

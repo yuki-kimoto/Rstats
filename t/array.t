@@ -10,6 +10,82 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# as_numeric
+{
+  # as_numeric - character, only real number, no sign
+  {
+    my $a1 = $r->array(["1.23"]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1.23);
+  }
+
+  # as_numeric - character, only real number, plus
+  {
+    my $a1 = $r->array(["+1.23"]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1.23);
+  }
+  
+  # as_numeric - character, only real number, minus
+  {
+    my $a1 = $r->array(["-1.23"]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], -1.23);
+  }
+
+  # as_numeric - character, pre and trailing space
+  {
+    my $a1 = $r->array(["  1  "]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1);
+  }
+
+  # as_numeric - error
+  {
+    my $a1 = $r->array(["a"]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is(ref $a2->values->[0], 'Rstats::NA');
+  }
+  
+  # as_numeric - complex
+  {
+    my $a1 = $r->array([$r->complex(1, 2)]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_numeric - numeric
+  {
+    my $a1 = $r->array([1.1]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1.1);
+  }
+  
+  # as_numeric - integer
+  {
+    my $a1 = $r->array([1]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1);
+  }
+  
+  # as_numeric - logical
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a2 = $r->as_numeric($a1);
+    ok($a2->is_numeric);
+    is($a2->values->[0], 1);
+    is($a2->values->[1], 0);
+  }
+}
+
 # as_complex
 {
   # as_complex - character, only real number, no sign
@@ -21,6 +97,15 @@ my $r = Rstats->new;
     is($a2->values->[0]->im, 0);
   }
 
+  # as_complex - character, only real number, pre and trailing space
+  {
+    my $a1 = $r->array(["  1.23  "]);
+    my $a2 = $r->as_complex($a1);
+    ok($a2->is_complex);
+    is($a2->values->[0]->re, 1.23);
+    is($a2->values->[0]->im, 0);
+  }
+  
   # as_complex - character, only real number, plus
   {
     my $a1 = $r->array(["+1.23"]);

@@ -554,6 +554,21 @@ sub _looks_like_complex {
   }
 }
 
+sub _looks_like_number {
+  my ($self, $value) = @_;
+  
+  return if !defined $value || !CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
+  
+  if (looks_like_number $value) {
+    return ($value);
+  }
+  else {
+    return;
+  }
+}
+
 sub as_complex {
   my $self = shift;
   
@@ -577,11 +592,11 @@ sub as_complex {
     elsif (ref $_ eq 'Rstats::Inf') {
       Rstats::Complex->new(re => $_, im => 0);
     }
-    elsif (looks_like_number $_) {
-      Rstats::Complex->new(re => $_ + 0, im => 0);
+    elsif (my @nums = $self->_looks_like_number($_)) {
+      Rstats::Complex->new(re => $nums[0] + 0, im => 0);
     }
-    elsif (my @nums = $self->_looks_like_complex($_)) {
-      Rstats::Complex->new(re => $nums[0] + 0, im => $nums[1] + 0);
+    elsif (my @c_nums = $self->_looks_like_complex($_)) {
+      Rstats::Complex->new(re => $c_nums[0] + 0, im => $c_nums[1] + 0);
     }
     else {
       carp 'NAs introduced by coercion';
@@ -600,21 +615,28 @@ sub as_numeric {
   my $a1 = $self;
   my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
-  my @a2_values;
-  if ($a1->is_complex->value) {
-    carp "imaginary parts discarded in coercion";
-    @a2_values = map { $_->re } @$a1_values;    
-  }
-  elsif ($a1->is_numeric->value || $a1->is_integer->value) {
-    @a2_values = @$a1_values;
-  }
-  elsif ($a1->is_logical->value) {
-    @a2_values = map { $_ ? 1 : 0 } @$a1_values;
-  }
-  elsif ($a1->is_character->value) {
-    carp "NA is created for forced conversion";
-    @a2_values = map { Rstats::NA->new } (1 .. @$a1_values);
-  }
+  my @a2_values = map {
+    if (ref $_ eq 'Rstats::Complex') {
+      carp "imaginary parts discarded in coercion";
+      $_->re;
+    }
+    elsif (ref $_ eq 'Rstats::Logical') {
+      $_ ? 1 : 0;
+    }
+    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
+      Rstats::NA->NA;
+    }
+    elsif (ref $_ eq 'Rstats::Inf') {
+      $_;
+    }
+    elsif (my @nums = $self->_looks_like_number($_)) {
+      $nums[0] + 0;
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      Rstats::NA->NA;
+    } 
+  } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{mode} = 'numeric';
 

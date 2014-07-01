@@ -1154,22 +1154,29 @@ EOS
 
 sub _operation {
   my ($self, $op, $data, $reverse) = @_;
-
+  
+  my $v1;
+  my $v2;
   my $v1_values;
   my $v2_values;
   if (ref $data eq 'Rstats::Array') {
-    $v1_values = $self->values;
-    my $v2 = $data;
+    $v1 = $self;
+    $v1_values = $v1->values;
+    $v2 = $data;
     $v2_values = $v2->values;
   }
   else {
     if ($reverse) {
-      $v1_values = [$data];
-      $v2_values = $self->values;
+      $v1 = Rstats::Array->array([$data]);
+      $v1_values = $v1->values;
+      $v2 = $self;
+      $v2_values = $v2->values;
     }
     else {
-      $v1_values = $self->values;
-      $v2_values = [$data];
+      $v1 = $self;
+      $v1_values = $v1->values;
+      $v2 = Rstats::Array->array([$data]);
+      $v2_values = $v2->values;
     }
   }
   

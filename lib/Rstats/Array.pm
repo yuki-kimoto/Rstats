@@ -1111,7 +1111,17 @@ sub equal { shift->_operation('==', @_)->as_logical }
 sub not_equal { shift->_operation('!=', @_)->as_logical }
 
 my $culcs = {};
-my @ops = qw#+ - * / ** % < <= > >= == !=#;
+my @ops = qw#+ - * / ** % < <= > >= == != lt le gt ge eq ne#;
+my %character_ops = (
+  '<' => 'lt',
+  '<=' => 'le',
+  '>' => 'gt',
+  '>=' => 'ge',
+  '==' => 'eq',
+  '!=' => 'ne'
+);
+my %comparison_ops = map { $_ => 1} (qw/< <= > >= == != lt le gt ge eq ne/);
+
 for my $op (@ops) {
    my $code = <<"EOS";
 sub {
@@ -1155,6 +1165,7 @@ sub _operation {
     }
   }
   
+  $op = $character_ops{$op} if $self->is_character && $character_ops{$op};
   my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
   
   return Rstats::Array->array(\@v3_values);

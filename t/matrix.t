@@ -35,7 +35,7 @@ my $r = Rstats->new;
   my $m1 = $r->matrix('1:12', 4, 3);
   my $v1 = $r->rowSums($m1);
   is_deeply($v1->values,[10, 26, 42]);
-  is_deeply($v1->dim->values, [3]);
+  is_deeply($v1->dim->values, []);
 }
 
 # rowMeans
@@ -43,7 +43,7 @@ my $r = Rstats->new;
   my $m1 = $r->matrix('1:12', 4, 3);
   my $v1 = $r->rowMeans($m1);
   is_deeply($v1->values,[10/4, 26/4, 42/4]);
-  is_deeply($v1->dim->values, [3]);
+  is_deeply($v1->dim->values, []);
 }
 
 # colSums
@@ -51,7 +51,7 @@ my $r = Rstats->new;
   my $m1 = $r->matrix('1:12', 4, 3);
   my $v1 = $r->colSums($m1);
   is_deeply($v1->values,[15, 18, 21, 24]);
-  is_deeply($v1->dim->values, [4]);
+  is_deeply($v1->dim->values, []);
 }
 
 # colMeans
@@ -59,7 +59,7 @@ my $r = Rstats->new;
   my $m1 = $r->matrix('1:12', 4, 3);
   my $v1 = $r->colMeans($m1);
   is_deeply($v1->values,[15/3, 18/3, 21/3, 24/3]);
-  is_deeply($v1->dim->values, [4]);
+  is_deeply($v1->dim->values, []);
 }
 
 # row

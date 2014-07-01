@@ -192,12 +192,12 @@ sub cbind {
     my $a = $self->_to_a($_a);
     
     my $row_count;
-    if ($a->is_matrix->value) {
+    if ($a->is_matrix) {
       $row_count = $a->dim->values->[0];
       $col_count_total += $a->dim->values->[1];
     }
-    elsif ($a->is_vector->value) {
-      $row_count = $a->dim->values->[0];
+    elsif ($a->is_vector) {
+      $row_count = $a->_real_dim_values->[0];
       $col_count_total += 1;
     }
     else {

@@ -230,8 +230,8 @@ sub dim {
   }
   else {
     $self->{dim} = [] unless exists $self->{dim};
-    return Rstats::Array->array($self->{dim});
-  } 
+    return Rstats::Array->new(values => $self->{dim});
+  }
 }
 
 sub length {
@@ -467,7 +467,7 @@ sub array {
   
   # Fix values
   my $max_length = 1;
-  $max_length *= $_ for @$dim;
+  $max_length *= $_ for @{$array->_real_dim_values || [scalar @$values]};
   if (@$values > $max_length) {
     @$values = splice @$values, 0, $max_length;
   }
@@ -479,6 +479,25 @@ sub array {
   $array->values($values);
   
   return $array;
+}
+
+sub _real_dim_values {
+  my $self = shift;
+  
+  my $dim = $self->dim;
+  my $dim_values = $dim->values;
+  if (@$dim_values) {
+    return $dim_values;
+  }
+  else {
+    if (defined $self->values) {
+      my $length = @{$self->values};
+      return [$length];
+    }
+    else {
+      return;
+    }
+  }
 }
 
 sub at {
@@ -496,7 +515,7 @@ sub at {
 sub value {
   my $self = shift;
   
-  my $dim_values = $self->dim->values;
+  my $dim_values = $self->_real_dim_values;
   
   if (@_) {
     if (@$dim_values == 1) {
@@ -840,7 +859,7 @@ sub _to_a {
 sub c {
   my ($self, $data) = @_;
   
-  my $vector = $self->array($data);
+  my $vector = Rstats::Array->array($data, []);
   
   return $vector;
 }
@@ -886,7 +905,7 @@ sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
   my $a1_values = $self->values;
-  my $a1_dim = $self->dim->values;
+  my $a1_dim = $self->_real_dim_values;
   
   my @indexs;
   my @a2_dim;
@@ -920,7 +939,7 @@ sub _parse_index {
       $index->values($index_value_new);
     }
     elsif ($index->is_character->value) {
-      if ($self->is_vector->value) {
+      if ($self->is_vector) {
         my $index_new_values = [];
         for my $name (@{$index->values}) {
           my $i = 0;
@@ -937,7 +956,7 @@ sub _parse_index {
         }
         $indexs[$i]->values($index_new_values);
       }
-      elsif ($self->is_matrix->value) {
+      elsif ($self->is_matrix) {
         
       }
       else {
@@ -1028,7 +1047,7 @@ sub to_string {
 
   my $values = $self->values;
   
-  my $dim_values = $self->dim->values;
+  my $dim_values = $self->_real_dim_values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
@@ -1289,14 +1308,13 @@ sub t {
 sub is_array {
   my $self = shift;
   
-  
-  return $self->c([1]);
+  return $self->c([Rstats::Logical->TRUE]);
 }
 
 sub is_vector {
   my $self = shift;
   
-  my $is = @{$self->dim->values} == 1 ? 1 : 0;
+  my $is = @{$self->dim->values} == 0 ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
   
   return $self->c([$is]);
 }
@@ -1304,7 +1322,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = @{$self->dim->values} == 2 ? 1 : 0;
+  my $is = @{$self->dim->values} == 2 ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
   
   return $self->c([$is]);
 }
@@ -1312,7 +1330,7 @@ sub is_matrix {
 sub as_matrix {
   my $self = shift;
   
-  my $a1_dim_values = $self->dim->values;
+  my $a1_dim_values = $self->_real_dim_values;
   my $a1_dim_count = @$a1_dim_values;
   my $a2_dim_values = [];
   my $row;
@@ -1336,7 +1354,7 @@ sub as_array {
   my $self = shift;
   
   my $a1_values = [@{$self->values}];
-  my $a1_dim_values = [@{$self->dim->values}];
+  my $a1_dim_values = [@{$self->_real_dim_values}];
   
   return $self->array($a1_values, $a1_dim_values);
 }

@@ -10,6 +10,26 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# comparison operator
+{
+=pod
+sub less_than { shift->_operation('<', @_)->as_logical }
+sub less_than_or_equal { shift->_operation('<=', @_)->as_logical }
+sub more_than { shift->_operation('>', @_)->as_logical }
+sub more_than_or_equal { shift->_operation('>=', @_)->as_logical }
+sub equal { shift->_operation('==', @_)->as_logical }
+sub not_equal { shift->_operation('!=', @_)->as_logical }
+=cut
+
+  # comparison operator - <
+  {
+    my $a1 = $r->array([1,2,3]);
+    my $a2 = $r->array([2,1,3]);
+    my $a3 = $a1 < $a2;
+    is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->FALSE]);
+  }
+}
+
 # bool context
 {
   # bool context - one argument, true

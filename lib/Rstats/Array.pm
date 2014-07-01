@@ -21,6 +21,12 @@ use overload
   'neg' => \&negation,
   '**' => \&raise,
   '""' => \&to_string,
+  '<' => \&less_than,
+  '<=' => \&less_than_or_equal,
+  '>' => \&more_than,
+  '>=' => \&more_than_or_equal,
+  '==' => \&equal,
+  '!=' => \&not_equal,
   fallback => 1;
 
 has 'values';
@@ -217,10 +223,6 @@ sub dim {
     $self->{dim} = [] unless exists $self->{dim};
     return Rstats::Array->array($self->{dim});
   } 
-}
-
-sub dim_as {
-  
 }
 
 sub length {
@@ -1101,8 +1103,15 @@ sub divide { shift->_operation('/', @_) }
 sub raise { shift->_operation('**', @_) }
 sub remainder { shift->_operation('%', @_) }
 
+sub less_than { shift->_operation('<', @_)->as_logical }
+sub less_than_or_equal { shift->_operation('<=', @_)->as_logical }
+sub more_than { shift->_operation('>', @_)->as_logical }
+sub more_than_or_equal { shift->_operation('>=', @_)->as_logical }
+sub equal { shift->_operation('==', @_)->as_logical }
+sub not_equal { shift->_operation('!=', @_)->as_logical }
+
 my $culcs = {};
-my @ops = qw#+ - * / ** %#;
+my @ops = qw#+ - * / ** % < <= > >= == !=#;
 for my $op (@ops) {
    my $code = <<"EOS";
 sub {
@@ -1115,7 +1124,7 @@ sub {
   my \@v3_values = map {
     \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
     } (0 .. \$longer_length - 1);
-  
+
   return \@v3_values;
 }
 EOS

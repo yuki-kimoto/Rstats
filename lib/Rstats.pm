@@ -30,7 +30,7 @@ sub NaN { Rstats::NaN->NaN }
 sub is_null {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = [!@$a1->values ? Rstats::Logical->TRUE : Rstats::Logical->FALSE];
   my $a2 = Rstats::Array->array(\@a2_values);
@@ -42,7 +42,7 @@ sub is_null {
 sub is_na {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
     ref $_ eq  'Rstats::NA' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
@@ -56,7 +56,7 @@ sub is_na {
 sub is_nan {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
     ref $_ eq  'Rstats::NaN' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
@@ -70,7 +70,7 @@ sub is_nan {
 sub is_finite {
   my ($self, $_a1) = @_;
 
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
     !ref $_ || ref $_ eq 'Rstats::Complex' || ref $_ eq 'Rstats::Logical' 
@@ -86,7 +86,7 @@ sub is_finite {
 sub is_infinite {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
     ref $_ eq 'Rstats::Inf' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
@@ -189,7 +189,7 @@ sub cbind {
   my $a2_values = [];
   for my $_a (@arrays) {
     
-    my $a = $self->_v($_a);
+    my $a = $self->_to_a($_a);
     
     my $row_count;
     if ($a->is_matrix->value) {
@@ -319,7 +319,7 @@ sub t {
 sub cumsum {
   my ($self, $_v1) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   my $total = 0;
@@ -364,7 +364,7 @@ sub rnorm {
 sub sequence {
   my ($self, $_v1) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   
   my @v2_values;
@@ -381,7 +381,7 @@ sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_v1, $length) = @_;
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   
   # Replace
   my $replace = $opt->{replace};
@@ -409,10 +409,10 @@ sub NULL {
   return Rstats::Array->NULL;
 }
 
-sub _v {
+sub _to_a {
   my $self = shift;
   
-  return Rstats::Array->_v(@_);
+  return Rstats::Array->_to_a(@_);
 }
 
 sub order { shift->_order(1, @_) }
@@ -421,7 +421,7 @@ sub rev { shift->_order(0, @_) }
 sub _order {
   my ($self, $asc, $_v1) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   
   my @pos_vals;
@@ -437,7 +437,7 @@ sub _order {
 sub which {
   my ($self, $_v1, $cond_cb) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for (my $i = 0; $i < @$v1_values; $i++) {
@@ -453,7 +453,7 @@ sub which {
 sub ifelse {
   my ($self, $_v1, $value1, $value2) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for my $v1_value (@$v1_values) {
@@ -472,9 +472,9 @@ sub ifelse {
 sub replace {
   my ($self, $_v1, $_v2, $_v3) = @_;
   
-  my $v1 = $self->_v($_v1);
-  my $v2 = $self->_v($_v2);
-  my $v3 = $self->_v($_v3);
+  my $v1 = $self->_to_a($_v1);
+  my $v2 = $self->_to_a($_v2);
+  my $v3 = $self->_to_a($_v3);
   
   my $v1_values = $v1->values;
   my $v2_values = $v2->values;
@@ -698,7 +698,7 @@ sub pmin {
 sub expm1 {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values
     = map {
@@ -711,7 +711,7 @@ sub expm1 {
 sub abs {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { abs $_ } @{$a1->values};
   
@@ -721,7 +721,7 @@ sub abs {
 sub sum {
   my ($self, $_v1) = @_;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   my $sum = List::Util::sum(@$v1_values);
   return $self->c($sum);
@@ -805,7 +805,7 @@ sub sort {
   my $decreasing = $opt->{decreasing};
   my $_v1 = shift;
   
-  my $v1 = $self->_v($_v1);
+  my $v1 = $self->_to_a($_v1);
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
   return $self->c($v2_values);
@@ -814,7 +814,7 @@ sub sort {
 sub trunc {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { int $_ } @{$a1->values};
 
@@ -824,7 +824,7 @@ sub trunc {
 sub floor {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { POSIX::floor $_ } @{$a1->values};
 
@@ -839,7 +839,7 @@ sub round {
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
 
   my $r = 10 ** $digits;
   my @a2_values = map { Math::Round::round_even($_ * $r) / $r } @{$a1->values};
@@ -850,7 +850,7 @@ sub round {
 sub ceiling {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { POSIX::ceil $_ } @{$a1->values};
 
@@ -860,7 +860,7 @@ sub ceiling {
 sub log {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { log $_ } @{$a1->values};
 
@@ -872,7 +872,7 @@ sub logb { shift->log(@_) }
 sub log10 {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { CORE::log $_ / CORE::log 10 } @{$a1->values};
 
@@ -882,7 +882,7 @@ sub log10 {
 sub log2 {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { CORE::log $_ / CORE::log 2 } @{$a1->values};
 
@@ -892,7 +892,7 @@ sub log2 {
 sub exp {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { exp $_ } @{$a1->values};
 
@@ -902,7 +902,7 @@ sub exp {
 sub sin {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { sin $_ } @{$a1->values};
 
@@ -912,7 +912,7 @@ sub sin {
 sub cos {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { cos $_ } @{$a1->values};
 
@@ -922,7 +922,7 @@ sub cos {
 sub tan {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::tan $_ } @{$a1->values};
 
@@ -932,7 +932,7 @@ sub tan {
 sub asinh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::asinh $_ } @{$a1->values};
 
@@ -942,7 +942,7 @@ sub asinh {
 sub acosh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::acosh $_ } @{$a1->values};
 
@@ -952,7 +952,7 @@ sub acosh {
 sub atanh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::atanh $_ } @{$a1->values};
 
@@ -962,7 +962,7 @@ sub atanh {
 sub asin {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::asin $_ } @{$a1->values};
 
@@ -972,7 +972,7 @@ sub asin {
 sub acos {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::acos $_ } @{$a1->values};
 
@@ -982,7 +982,7 @@ sub acos {
 sub atan {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::atan $_ } @{$a1->values};
 
@@ -992,7 +992,7 @@ sub atan {
 sub sinh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::sinh $_ } @{$a1->values};
 
@@ -1002,7 +1002,7 @@ sub sinh {
 sub cosh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::cosh $_ } @{$a1->values};
 
@@ -1012,7 +1012,7 @@ sub cosh {
 sub tanh {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { Math::Trig::tanh $_ } @{$a1->values};
 
@@ -1022,7 +1022,7 @@ sub tanh {
 sub sqrt {
   my ($self, $_a1) = @_;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map { sqrt $_ } @{$a1->values};
   

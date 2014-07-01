@@ -780,7 +780,7 @@ sub numeric {
   return Rstats::Array->c([(0) x $num]);
 }
 
-sub _v {
+sub _to_a {
   my ($self, $data) = @_;
   
   my $v;
@@ -826,7 +826,7 @@ sub set {
     $code = $_array;
   }
   else {
-    $array = Rstats::Array->_v($_array);
+    $array = Rstats::Array->_to_a($_array);
   }
   
   my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
@@ -865,7 +865,7 @@ sub _parse_index {
     
     $_index = '' unless defined $_index;
     
-    my $index = Rstats::Array->_v($_index);
+    my $index = Rstats::Array->_to_a($_index);
     my $index_values = $index->values;
     if (@$index_values && !$index->is_character->value && !$index->is_logical->value) {
       my $minus_count = 0;
@@ -1188,7 +1188,7 @@ sub matrix {
   croak "matrix method need data as frist argument"
     unless defined $_a1;
   
-  my $a1 = $self->_v($_a1);
+  my $a1 = Rstats::Array->_to_a($_a1);
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;

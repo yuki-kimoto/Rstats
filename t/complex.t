@@ -7,15 +7,67 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
-=pod
 # comparison operator
 {
-  # comparison operator - ==
+  # comparison operator - ==, true
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2)
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    is($z1 == $z2, $r->TRUE);
+  }
+  # comparison operator - ==, false
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 1);
+    is($z1 == $z2, $r->FALSE);
+  }
+
+  # comparison operator - !=, true
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    is($z1 != $z2, $r->FALSE);
+  }
+  
+  # comparison operator - !=, false
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 1);
+    is($z1 != $z2, $r->TRUE);
+  }
+
+  # comparison operator - <, error
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    eval { my $result = $z1 < $z2 };
+    like($@, qr/invalid/);
+  }
+
+  # comparison operator - <=, error
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    eval { my $result = $z1 <= $z2 };
+    like($@, qr/invalid/);
+  }
+
+  # comparison operator - >, error
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    eval { my $result = $z1 > $z2 };
+    like($@, qr/invalid/);
+  }
+
+  # comparison operator - >=, error
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    eval { my $result = $z1 >= $z2 };
+    like($@, qr/invalid/);
   }
 }
-=cut
 
 # to_string
 {

@@ -117,10 +117,10 @@ sub _operation {
     $z3->{im} = Math::Complex::Im($z3_c);
   }
   elsif ($op eq '==') {
-    return $z1->re == $z2->re && $z1->im == $z2->re ? Rstats->TRUE : Rstats->FALSE;
+    return $z1->re == $z2->re && $z1->im == $z2->im ? Rstats->TRUE : Rstats->FALSE;
   }
   elsif ($op eq '!=') {
-    return $z1->re == $z2->re && $z1->im == $z2->re ? Rstats->FALSE : Rstats->TRUE;
+    return $z1->re == $z2->re && $z1->im == $z2->im ? Rstats->FALSE : Rstats->TRUE;
   }
   
   return $z3;

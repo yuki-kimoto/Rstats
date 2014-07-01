@@ -12,10 +12,23 @@ use overload
   '*' => \&multiply,
   '/' => \&divide,
   '**' => \&raise,
+  '<' => \&less_than,
+  '<=' => \&less_than_or_equal,
+  '>' => \&more_than,
+  '>=' => \&more_than_or_equal,
+  '==' => \&equal,
+  '!=' => \&not_equal,
   '""' => \&to_string;
 
 has 're';
 has 'im';
+
+sub less_than { croak "Error in a < b : invalid comparison with complex values" }
+sub less_than_or_equal { croak "Error in a < b : invalid comparison with complex values" }
+sub more_than { croak "Error in a < b : invalid comparison with complex values" }
+sub more_than_or_equal { croak "Error in a < b : invalid comparison with complex values" }
+sub equal { shift->_operation('==', @_) }
+sub not_equal { shift->_operation('!=', @_) }
 
 sub bool {
   my $self = shift;
@@ -102,6 +115,12 @@ sub _operation {
     my $z3_c = $z1_c ** $z2_c;
     $z3->{re} = Math::Complex::Re($z3_c);
     $z3->{im} = Math::Complex::Im($z3_c);
+  }
+  elsif ($op eq '==') {
+    return $z1->re == $z2->re && $z1->im == $z2->re ? Rstats->TRUE : Rstats->FALSE;
+  }
+  elsif ($op eq '!=') {
+    return $z1->re == $z2->re && $z1->im == $z2->re ? Rstats->FALSE : Rstats->TRUE;
   }
   
   return $z3;

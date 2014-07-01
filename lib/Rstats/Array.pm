@@ -8,6 +8,7 @@ use Scalar::Util 'looks_like_number';
 use Rstats::NA;
 use Rstats::NaN;
 use Rstats::Inf;
+use Rstats::Logical;
 
 our @CARP_NOT = ('Rstats');
 
@@ -1103,12 +1104,12 @@ sub divide { shift->_operation('/', @_) }
 sub raise { shift->_operation('**', @_) }
 sub remainder { shift->_operation('%', @_) }
 
-sub less_than { shift->_operation('<', @_)->as_logical }
-sub less_than_or_equal { shift->_operation('<=', @_)->as_logical }
-sub more_than { shift->_operation('>', @_)->as_logical }
-sub more_than_or_equal { shift->_operation('>=', @_)->as_logical }
-sub equal { shift->_operation('==', @_)->as_logical }
-sub not_equal { shift->_operation('!=', @_)->as_logical }
+sub less_than { shift->_operation('<', @_) }
+sub less_than_or_equal { shift->_operation('<=', @_) }
+sub more_than { shift->_operation('>', @_) }
+sub more_than_or_equal { shift->_operation('>=', @_) }
+sub equal { shift->_operation('==', @_) }
+sub not_equal { shift->_operation('!=', @_) }
 
 my $culcs = {};
 my @ops = qw#+ - * / ** % < <= > >= == != lt le gt ge eq ne#;
@@ -1136,7 +1137,7 @@ sub {
 EOS
   
   if ($comparison_ops{$op}) {
-    $code .= "? 1 : 0\n";
+    $code .= "? Rstats::Logical->TRUE : Rstats::Logical->FALSE\n";
   }
   
   $code .= <<"EOS";

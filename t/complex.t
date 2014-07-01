@@ -7,23 +7,33 @@ use Rstats::Complex;
 
 my $r = Rstats->new;
 
+=pod
+# comparison operator
+{
+  # comparison operator - ==
+  {
+    my $z1 = Rstats::Complex->new(re => 1, im => 2)
+  }
+}
+=cut
+
 # to_string
 {
   # to_string - basic
   {
-    my $z1 = $r->complex(1, 2);
+    my $z1 = Rstats::Complex->new(re => 1, im => 2);
     is("$z1", "1+2i");
   }
   
   # to_string - image number is 0
   {
-    my $z1 = $r->complex(1, 0);
+    my $z1 = Rstats::Complex->new(re => 1, im => 0);
     is("$z1", "1+0i");
   }
   
   # to_string - image number is minus
   {
-    my $z1 = $r->complex(1, -1);
+    my $z1 = Rstats::Complex->new(re => 1, im => -1);
     is("$z1", "1-1i");
   }
 }

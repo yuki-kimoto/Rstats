@@ -12,7 +12,7 @@ use Rstats::Inf;
 our @CARP_NOT = ('Rstats');
 
 use overload
-  bool => sub {1},
+  bool => \&bool,
   '+' => \&add,
   '-' => \&subtract,
   '*' => \&multiply,
@@ -25,6 +25,25 @@ use overload
 
 has 'values';
 has 'mode';
+
+sub bool {
+  my $self = shift;
+  
+  my $length = @{$self->values};
+  if ($length == 0) {
+    croak 'Error in if (a) { : argument is of length zero';
+  }
+  elsif ($length > 1) {
+    carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
+  }
+  
+  my $value = $self->value;
+  my $a1 = Rstats::Array->array([$value]);
+  my $a2 = $a1->as_logical;
+  my $a2_value = $a2->value;
+  
+  return $a2_value ? 1 : 0;
+}
 
 sub clone_without_values {
   my ($self, %opt) = @_;

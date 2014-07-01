@@ -10,6 +10,53 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# bool context
+{
+  # bool context - one argument, true
+  {
+    my $a1 = $r->array(1);
+    if ($a1) {
+      pass;
+    }
+    else {
+      fail;
+    }
+  }
+  
+  # bool context - one argument, false
+  {
+    my $a1 = $r->array(0);
+    if ($a1) {
+      fail;
+    }
+    else {
+      pass;
+    }
+  }
+
+  # bool context - two argument, true
+  {
+    my $a1 = $r->array(3, 3);
+    if ($a1) {
+      pass;
+    }
+    else {
+      fail;
+    }
+  }
+
+  # bool context - two argument, true
+  {
+    my $a1 = $r->NULL;
+    eval {
+      if ($a1) {
+      
+      }
+    };
+    like($@, qr/zero/);
+  }
+}
+
 # operation
 {
   # operation - add to original vector

@@ -1133,7 +1133,14 @@ sub {
 
   my \@v3_values = map {
     \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
-    } (0 .. \$longer_length - 1);
+EOS
+  
+  if ($comparison_ops{$op}) {
+    $code .= "? 1 : 0\n";
+  }
+  
+  $code .= <<"EOS";
+  } (0 .. \$longer_length - 1);
 
   return \@v3_values;
 }

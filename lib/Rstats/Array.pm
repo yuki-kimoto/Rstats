@@ -12,6 +12,14 @@ use Rstats::Logical;
 
 our @CARP_NOT = ('Rstats');
 
+my $mode_precidence = {
+  character => 5,
+  complex => 4,
+  numeric => 3,
+  integer => 2,
+  logical => 1,
+};
+
 use overload
   bool => \&bool,
   '+' => \&add,
@@ -588,6 +596,29 @@ sub _looks_like_number {
   }
   else {
     return;
+  }
+}
+
+sub _as {
+  my ($self, $mode) = @_;
+  
+  if ($mode eq 'character') {
+    return $self->as_character;
+  }
+  elsif ($mode eq 'complex') {
+    return $self->as_complex;
+  }
+  elsif ($mode eq 'numeric') {
+    return $self->as_numeric;
+  }
+  elsif ($mode eq 'integer') {
+    return $self->as_integer;
+  }
+  elsif ($mode eq 'logical') {
+    return $self->as_logical;
+  }
+  else {
+    croak "Invalid mode is passed";
   }
 }
 
@@ -1170,6 +1201,13 @@ sub _operation {
       $a1 = $self;
       $a2 = Rstats::Array->array([$data]);
     }
+  }
+  
+  if ($mode_precidence->{$a1->mode} > $mode_precidence->{$a2->mode}) {
+    $a2 = $a2->_as($a1->mode);
+  }
+  elsif ($mode_precidence->{$a1->mode} < $mode_precidence->{$a2->mode}) {
+    $a1 = $a1->_as($a2->mode);
   }
   
   $op = $character_ops{$op} if $self->is_character && $character_ops{$op};

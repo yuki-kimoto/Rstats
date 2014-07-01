@@ -206,15 +206,15 @@ sub dim {
   my $self = shift;
   
   if (@_) {
-    my $v1 = $_[0];
-    if (ref $v1 eq 'Rstats::Array') {
-      $self->{dim} = $v1->values;
+    my $a1 = $_[0];
+    if (ref $a1 eq 'Rstats::Array') {
+      $self->{dim} = $a1->values;
     }
-    elsif (ref $v1 eq 'ARRAY') {
-      $self->{dim} = $v1;
+    elsif (ref $a1 eq 'ARRAY') {
+      $self->{dim} = $a1;
     }
-    elsif(!ref $v1) {
-      $self->{dim} = [$v1];
+    elsif(!ref $a1) {
+      $self->{dim} = [$a1];
     }
     else {
       croak "Invalid values is passed to dim argument";
@@ -320,7 +320,7 @@ sub seq {
       }
     }
     
-    my $v1 = $self->array($values);
+    my $a1 = $self->array($values);
   }
 }
 
@@ -358,7 +358,7 @@ sub array {
   
   # Arguments
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($v1, $_dim) = @_;
+  my ($a1, $_dim) = @_;
   $_dim = $opt->{dim} unless defined $_dim;
   
   # Array
@@ -366,9 +366,9 @@ sub array {
   
   # Value
   my $values = [];
-  if (defined $v1) {
-    if (ref $v1 eq 'ARRAY') {
-      for my $a (@$v1) {
+  if (defined $a1) {
+    if (ref $a1 eq 'ARRAY') {
+      for my $a (@$a1) {
         if (ref $a eq 'ARRAY') {
           push @$values, @$a;
         }
@@ -380,11 +380,11 @@ sub array {
         }
       }
     }
-    elsif (ref $v1 eq 'Rstats::Array') {
-      $values = $v1->values;
+    elsif (ref $a1 eq 'Rstats::Array') {
+      $values = $a1->values;
     }
-    elsif(!ref $v1) {
-      $values = $self->_parse_seq_str($v1)->values;
+    elsif(!ref $a1) {
+      $values = $self->_parse_seq_str($a1)->values;
     }
   }
   else {
@@ -1090,11 +1090,11 @@ sub to_string {
 sub negation {
   my $self = shift;
   
-  my $v1_values = $self->values;
-  my $v2_values = [];
-  $v2_values->[$_] = -$v1_values->[$_] for (0 .. @$v1_values - 1);
+  my $a1_values = $self->values;
+  my $a2_values = [];
+  $a2_values->[$_] = -$a1_values->[$_] for (0 .. @$a1_values - 1);
   
-  return Rstats::Array->array($v2_values);
+  return Rstats::Array->array($a2_values);
 }
 
 sub add { shift->_operation('+', @_) }
@@ -1126,14 +1126,14 @@ my %comparison_ops = map { $_ => 1} (qw/< <= > >= == != lt le gt ge eq ne/);
 for my $op (@ops) {
    my $code = <<"EOS";
 sub {
-  my (\$v1_values, \$v2_values) = \@_;
+  my (\$a1_values, \$a2_values) = \@_;
    
-  my \$v1_length = \@{\$v1_values};
-  my \$v2_length = \@{\$v2_values};
-  my \$longer_length = \$v1_length > \$v2_length ? \$v1_length : \$v2_length;
+  my \$a1_length = \@{\$a1_values};
+  my \$a2_length = \@{\$a2_values};
+  my \$longer_length = \$a1_length > \$a2_length ? \$a1_length : \$a2_length;
 
-  my \@v3_values = map {
-    \$v1_values->[\$_ % \$v1_length] $op \$v2_values->[\$_ % \$v2_length]
+  my \@a3_values = map {
+    \$a1_values->[\$_ % \$a1_length] $op \$a2_values->[\$_ % \$a2_length]
 EOS
   
   if ($comparison_ops{$op}) {
@@ -1143,7 +1143,7 @@ EOS
   $code .= <<"EOS";
   } (0 .. \$longer_length - 1);
 
-  return \@v3_values;
+  return \@a3_values;
 }
 EOS
   
@@ -1155,35 +1155,27 @@ EOS
 sub _operation {
   my ($self, $op, $data, $reverse) = @_;
   
-  my $v1;
-  my $v2;
-  my $v1_values;
-  my $v2_values;
+  my $a1;
+  my $a2;
   if (ref $data eq 'Rstats::Array') {
-    $v1 = $self;
-    $v1_values = $v1->values;
-    $v2 = $data;
-    $v2_values = $v2->values;
+    $a1 = $self;
+    $a2 = $data;
   }
   else {
     if ($reverse) {
-      $v1 = Rstats::Array->array([$data]);
-      $v1_values = $v1->values;
-      $v2 = $self;
-      $v2_values = $v2->values;
+      $a1 = Rstats::Array->array([$data]);
+      $a2 = $self;
     }
     else {
-      $v1 = $self;
-      $v1_values = $v1->values;
-      $v2 = Rstats::Array->array([$data]);
-      $v2_values = $v2->values;
+      $a1 = $self;
+      $a2 = Rstats::Array->array([$data]);
     }
   }
   
   $op = $character_ops{$op} if $self->is_character && $character_ops{$op};
-  my @v3_values = $culcs->{$op}->($v1_values, $v2_values);
+  my @a3_values = $culcs->{$op}->($a1->values, $a2->values);
   
-  return Rstats::Array->array(\@v3_values);
+  return Rstats::Array->array(\@a3_values);
 }
 
 sub matrix {
@@ -1191,12 +1183,12 @@ sub matrix {
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
 
-  my ($_v1, $nrow, $ncol, $byrow, $dirnames) = @_;
+  my ($_a1, $nrow, $ncol, $byrow, $dirnames) = @_;
 
   croak "matrix method need data as frist argument"
-    unless defined $_v1;
+    unless defined $_a1;
   
-  my $v1 = $self->_v($_v1);
+  my $a1 = $self->_v($_a1);
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;
@@ -1207,17 +1199,17 @@ sub matrix {
   # By row
   $byrow = $opt->{byrow} unless defined $byrow;
   
-  my $v1_values = $v1->values;
-  my $v1_length = @$v1_values;
+  my $a1_values = $a1->values;
+  my $a1_length = @$a1_values;
   if (!defined $nrow && !defined $ncol) {
-    $nrow = $v1_length;
+    $nrow = $a1_length;
     $ncol = 1;
   }
   elsif (!defined $nrow) {
-    $nrow = int($v1_length / $ncol);
+    $nrow = int($a1_length / $ncol);
   }
   elsif (!defined $ncol) {
-    $ncol = int($v1_length / $nrow);
+    $ncol = int($a1_length / $nrow);
   }
   my $length = $nrow * $ncol;
   
@@ -1225,14 +1217,14 @@ sub matrix {
   my $matrix;
   if ($byrow) {
     $matrix = $self->array(
-      $v1_values,
+      $a1_values,
       [$dim->[1], $dim->[0]],
     );
     
     $matrix = $self->t($matrix);
   }
   else {
-    $matrix = $self->array($v1_values, $dim);
+    $matrix = $self->array($a1_values, $dim);
   }
   
   return $matrix;

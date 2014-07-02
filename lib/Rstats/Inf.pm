@@ -17,6 +17,8 @@ sub bool { Rstats::Logical->TRUE }
 
 sub Inf { $Inf }
 
+sub Inf_minus { $Inf_minus }
+
 sub negation {
   my $self = shift;
   

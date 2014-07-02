@@ -10,10 +10,10 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
-# comparison operator number
+# comparison operator numeric
 {
 
-  # comparison operator number - <
+  # comparison operator numeric - <
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
@@ -21,7 +21,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->FALSE]);
   }
 
-  # comparison operator number - <, arguments count is different
+  # comparison operator numeric - <, arguments count is different
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
@@ -29,7 +29,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->FALSE]);
   }
 
-  # comparison operator number - <=
+  # comparison operator numeric - <=
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
@@ -37,7 +37,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->TRUE]);
   }
 
-  # comparison operator number - <=, arguments count is different
+  # comparison operator numeric - <=, arguments count is different
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
@@ -45,7 +45,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->TRUE, $r->TRUE, $r->FALSE]);
   }
 
-  # comparison operator number - >
+  # comparison operator numeric - >
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
@@ -53,7 +53,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->FALSE]);
   }
 
-  # comparison operator number - >, arguments count is different
+  # comparison operator numeric - >, arguments count is different
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
@@ -61,7 +61,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->FALSE, $r->TRUE]);
   }
 
-  # comparison operator number - >=
+  # comparison operator numeric - >=
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
@@ -69,7 +69,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->TRUE]);
   }
 
-  # comparison operator number - >=, arguments count is different
+  # comparison operator numeric - >=, arguments count is different
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
@@ -77,7 +77,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->TRUE]);
   }
 
-  # comparison operator number - ==
+  # comparison operator numeric - ==
   {
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
@@ -85,7 +85,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->TRUE]);
   }
 
-  # comparison operator number - ==, arguments count is different
+  # comparison operator numeric - ==, arguments count is different
   {
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
@@ -93,7 +93,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->FALSE, $r->TRUE]);
   }
 
-  # comparison operator number - !=
+  # comparison operator numeric - !=
   {
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
@@ -101,7 +101,7 @@ my $r = Rstats->new;
     is_deeply($a3->values, [$r->TRUE, $r->FALSE]);
   }
 
-  # comparison operator number - !=, arguments count is different
+  # comparison operator numeric - !=, arguments count is different
   {
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);

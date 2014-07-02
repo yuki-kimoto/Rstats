@@ -13,6 +13,23 @@ has 'minus';
 my $Inf = Rstats::Inf->new;
 my $Inf_minus = Rstats::Inf->new(minus => 1);
 
+sub _operation {
+  my ($self, $op, $data, $reverse) = @_;
+  
+  my $value1;
+  my $value2;
+  if ($reverse) {
+    $value1 = $data;
+    $value2 = $self;
+  }
+  else {
+    $value1 = $self;
+    $value2 = $data;
+  }
+  
+  
+}
+
 sub bool { Rstats::Logical->TRUE }
 
 sub Inf { $Inf }

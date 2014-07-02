@@ -29,13 +29,13 @@ use overload
   '%' => \&remainder,
   'neg' => \&negation,
   '**' => \&raise,
-  '""' => \&to_string,
   '<' => \&less_than,
   '<=' => \&less_than_or_equal,
   '>' => \&more_than,
   '>=' => \&more_than_or_equal,
   '==' => \&equal,
   '!=' => \&not_equal,
+  '""' => \&to_string,
   fallback => 1;
 
 has 'values';
@@ -833,21 +833,21 @@ sub numeric {
 sub _to_a {
   my ($self, $data) = @_;
   
+  croak "undef value is invalid" unless defined $data;
   my $v;
-  if (!defined $data) {
-    $v = Rstats::Array->c([undef]);
-  }
-  elsif (defined $data && $data eq '') {
-    $v = Rstats::Array->NULL;
-  }
-  elsif (!ref $data) {
-    $v = Rstats::Array->c($data);
-  }
-  elsif (ref $data eq 'ARRAY') {
+  if (ref $data eq 'ARRAY') {
     $v = Rstats::Array->c($data);
   }
   elsif (ref $data eq 'Rstats::Array') {
     $v = $data;
+  }
+  elsif (!ref $data) {
+    if ($data eq '') {
+      $v = Rstats::Array->NULL;
+    }
+    else {
+      $v = Rstats::Array->c($data);
+    }
   }
   else {
     croak "Invalid data is passed";
@@ -1162,8 +1162,10 @@ sub equal { shift->_operation('==', @_) }
 sub not_equal { shift->_operation('!=', @_) }
 
 my $culcs = {};
-my @ops = qw#+ - * / ** % < <= > >= == != lt le gt ge eq ne#;
-my %character_ops = (
+my %numeric_ops_h = map { $_ => 1} (qw#+ - * / ** %#);
+my %comparison_ops_h = map { $_ => 1} (qw/< <= > >= == !=/);
+my @ops = (keys %numeric_ops_h, keys %comparison_ops_h);
+my %character_comparison_ops = (
   '<' => 'lt',
   '<=' => 'le',
   '>' => 'gt',
@@ -1171,8 +1173,6 @@ my %character_ops = (
   '==' => 'eq',
   '!=' => 'ne'
 );
-my %comparison_ops = map { $_ => 1} (qw/< <= > >= == != lt le gt ge eq ne/);
-
 for my $op (@ops) {
    my $code = <<"EOS";
 sub {
@@ -1186,7 +1186,7 @@ sub {
     \$a1_values->[\$_ % \$a1_length] $op \$a2_values->[\$_ % \$a2_length]
 EOS
   
-  if ($comparison_ops{$op}) {
+  if ($comparison_ops_h{$op}) {
     $code .= "? Rstats::Logical->TRUE : Rstats::Logical->FALSE\n";
   }
   
@@ -1222,18 +1222,74 @@ sub _operation {
     }
   }
   
-  if ($mode_precidence->{$a1->mode} > $mode_precidence->{$a2->mode}) {
-    $a2 = $a2->_as($a1->mode);
-  }
-  elsif ($mode_precidence->{$a1->mode} < $mode_precidence->{$a2->mode}) {
-    $a1 = $a1->_as($a2->mode);
-  }
+  # Upgrade mode if mode is different
+  ($a1, $a2) = $self->_upgrade_mode($a1, $a2)
+    if $a1->mode ne $a2->mode;
   
-  $op = $character_ops{$op} if $self->is_character && $character_ops{$op};
+  # Error when numeric operator is used to character
+  croak("Error in a + b : non-numeric argument to binary operator")
+    if $a1->is_character && $numeric_ops_h{$op};
+  
+  # Convert operator to Perl character comparison operator
+  $op = $character_comparison_ops{$op}
+    if $a1->is_character && $character_comparison_ops{$op};
+  
   my @a3_values = $culcs->{$op}->($a1->values, $a2->values);
   
   return Rstats::Array->array(\@a3_values);
 }
+
+sub _upgrade_mode {
+  my ($self, @arrays) = @_;
+  
+  # Check values
+  my $mode_h = {};
+  for my $array (@arrays) {
+    if ($array->mode eq 'complex') {
+      $mode_h->{complex}++;
+    }
+    elsif ($array->mode eq 'numeric') {
+      $mode_h->{numeric}++;
+    }
+    elsif ($array->mode eq 'integer') {
+      $mode_h->{integer}++;
+    }
+    elsif ($array->mode eq 'character') {
+      $mode_h->{character}++;
+    }
+    elsif ($array->mode eq 'logical') {
+      $mode_h->{logical}++;
+    }
+    else {
+      croak "Invalid mode";
+    }
+  }
+
+  # Upgrade values and type if mode is different
+  my @modes = keys %$mode_h;
+  if (@modes > 1) {
+    my $to_mode;
+    if ($mode_h->{character}) {
+      $to_mode = 'character';
+    }
+    elsif ($mode_h->{complex}) {
+      $to_mode = 'complex';
+    }
+    elsif ($mode_h->{numeric}) {
+      $to_mode = 'numeric';
+    }
+    elsif ($mode_h->{integer}) {
+      $to_mode = 'integer';
+    }
+    elsif ($mode_h->{logical}) {
+      $to_mode = 'logical';
+    }
+    $_ = $_->_as($to_mode) for @arrays;
+  }
+  
+  return @arrays;
+}
+
 
 sub matrix {
   my $self = shift;

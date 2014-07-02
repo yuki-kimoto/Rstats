@@ -18,7 +18,8 @@ use overload
   '>=' => \&more_than_or_equal,
   '==' => \&equal,
   '!=' => \&not_equal,
-  '""' => \&to_string;
+  '""' => \&to_string,
+  fallback => 1;
 
 has 're';
 has 'im';

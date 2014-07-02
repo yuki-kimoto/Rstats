@@ -3,6 +3,8 @@ use Object::Simple -base;
 
 use overload
   bool => \&bool,
+  '==' => \&equal,
+  '!=' => \&not_equal,
   '""' => \&to_string,
   fallback => 1;
 
@@ -19,6 +21,18 @@ sub bool {
   my $self = shift;
   
   return $self->logical ? 1 : 0;
+}
+
+sub equal {
+  my ($self, $logical) = @_;
+  
+  return $self == $logical;
+}
+
+sub not_equal {
+  my ($self, $logical) = @_;
+  
+  return $self != $logical;
 }
 
 sub to_string {

@@ -12,10 +12,6 @@ my $r = Rstats->new;
 
 # comparison operator number
 {
-=pod
-sub equal { shift->_operation('==', @_)->as_logical }
-sub not_equal { shift->_operation('!=', @_)->as_logical }
-=cut
 
   # comparison operator number - <
   {
@@ -161,23 +157,74 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
   }
 }
 
-# operation
+# numeric operator auto upgrade
 {
-  # operation - add to original vector
+  # numeric operator auto upgrade - character, +
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 + $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, -
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 - $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, *
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 * $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, /
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 / $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, ^
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 ** $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, %
+  {
+    my $a1 = $r->array(["1", "2", "3"]);
+    my $a2 = $r->array([1, 2, 3]);
+    eval { my $ret = $a1 % $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+}
+
+# operator
+{
+  # operator - add to original vector
   {
     my $a1 = $r->c([1, 2, 3]);
     $a1->at($r->length($a1) + 1)->set(6);
     is_deeply($a1->values, [1, 2, 3, 6]);
   }
   
-  # operation - negation
+  # operator - negation
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = -$a1;
     is_deeply($a2->values, [-1, -2, -3]);
   }
   
-  # operation - add
+  # operator - add
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $r->c([2, 3, 4]);
@@ -185,7 +232,7 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
     is_deeply($v3->values, [3, 5, 7]);
   }
 
-  # operation - add(different element number)
+  # operator - add(different element number)
   {
     my $a1 = $r->c([1, 2]);
     my $a2 = $r->c([3, 4, 5, 6]);
@@ -193,14 +240,14 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
     is_deeply($v3->values, [4, 6, 6, 8]);
   }
   
-  # operation - add(real number)
+  # operator - add(real number)
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $a1 + 1;
     is_deeply($a2->values, [2, 3, 4]);
   }
   
-  # operation - subtract
+  # operator - subtract
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $r->c([3, 3, 3]);
@@ -208,21 +255,21 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
     is_deeply($v3->values, [-2, -1, 0]);
   }
 
-  # operation - subtract(real number)
+  # operator - subtract(real number)
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $a1 - 1;
     is_deeply($a2->values, [0, 1, 2]);
   }
 
-  # operation - subtract(real number, reverse)
+  # operator - subtract(real number, reverse)
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = 1 - $a1;
     is_deeply($a2->values, [0, -1, -2]);
   }
     
-  # operation - mutiply
+  # operator - mutiply
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $r->c([2, 3, 4]);
@@ -230,14 +277,14 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
     is_deeply($v3->values, [2, 6, 12]);
   }
 
-  # operation - mutiply(real number)
+  # operator - mutiply(real number)
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $a1 * 2;
     is_deeply($a2->values, [2, 4, 6]);
   }
   
-  # operation - divide
+  # operator - divide
   {
     my $a1 = $r->c([6, 3, 12]);
     my $a2 = $r->c([2, 3, 4]);
@@ -245,42 +292,42 @@ sub not_equal { shift->_operation('!=', @_)->as_logical }
     is_deeply($v3->values, [3, 1, 3]);
   }
 
-  # operation - divide(real number)
+  # operator - divide(real number)
   {
     my $a1 = $r->c([2, 4, 6]);
     my $a2 = $a1 / 2;
     is_deeply($a2->values, [1, 2, 3]);
   }
 
-  # operation - divide(real number, reverse)
+  # operator - divide(real number, reverse)
   {
     my $a1 = $r->c([2, 4, 6]);
     my $a2 = 2 / $a1;
     is_deeply($a2->values, [1, 1/2, 1/3]);
   }
   
-  # operation - raise
+  # operator - raise
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $a1 ** 2;
     is_deeply($a2->values, [1, 4, 9]);
   }
 
-  # operation - raise, reverse
+  # operator - raise, reverse
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = 2 ** $a1;
     is_deeply($a2->values, [2, 4, 8]);
   }
 
-  # operation - remainder
+  # operator - remainder
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = $a1 % 3;
     is_deeply($a2->values, [1, 2, 0]);
   }
 
-  # operation - remainder, reverse
+  # operator - remainder, reverse
   {
     my $a1 = $r->c([1, 2, 3]);
     my $a2 = 2 % $a1;

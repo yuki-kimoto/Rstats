@@ -18,11 +18,11 @@ use overload
   '""' => \&to_string,
   fallback => 1;
 
-my $NA = Rstats::NA->new;
+my $na = Rstats::NA->new;
 
-sub NA { $NA }
+sub NA { $na }
 
-sub _operator { $NA }
+sub _operator { $na }
 
 sub to_string { 'NA' }
 

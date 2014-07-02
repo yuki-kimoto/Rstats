@@ -10,12 +10,12 @@ use Carp 'croak';
 use Rstats;
 use Rstats::Array;
 use Rstats::Complex;
-use POSIX ();;
-use Math::Round ();
 use Rstats::Logical;
 use Rstats::Inf;
 use Rstats::NA;
 use Rstats::NaN;
+use POSIX ();;
+use Math::Round ();
 
 # TODO
 #   logp1x

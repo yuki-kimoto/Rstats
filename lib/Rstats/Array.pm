@@ -1,5 +1,6 @@
 package Rstats::Array;
 use Object::Simple -base;
+
 use Carp 'croak', 'carp';
 use List::Util;
 use Rstats;
@@ -386,6 +387,8 @@ sub _parse_seq_str {
 
 sub _is_numeric {
   my ($self, $value) = @_;
+  
+  return unless defined $value;
   
   return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
         && 0 + $value eq $value

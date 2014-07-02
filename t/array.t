@@ -159,6 +159,36 @@ my $r = Rstats->new;
 
 # numeric operator auto upgrade
 {
+  # numeric operator auto upgrade - complex
+  {
+    my $a1 = $r->array([$r->complex(1,2), $r->complex(3,4)]);
+    my $a2 = $r->array([1, 2]);
+    my $a3 = $a1 + $a2;
+    ok($a3->is_complex);
+    is($a3->values->[0]->re, 2);
+    is($a3->values->[0]->im, 2);
+    is($a3->values->[1]->re, 5);
+    is($a3->values->[1]->im, 4);
+  }
+
+  # numeric operator auto upgrade - numeric
+  {
+    my $a1 = $r->array([1.1, 1.2]);
+    my $a2 = $r->array([1, 2])->as_integer;
+    my $a3 = $a1 + $a2;
+    ok($a3->is_numeric);
+    is_deeply($a3->values, [2.1, 3.2])
+  }
+
+  # numeric operator auto upgrade - integer
+  {
+    my $a1 = $r->array([3, 5])->as_integer;
+    my $a2 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a3 = $a1 + $a2;
+    ok($a3->is_integer);
+    is_deeply($a3->values, [4, 5])
+  }
+    
   # numeric operator auto upgrade - character, +
   {
     my $a1 = $r->array(["1", "2", "3"]);

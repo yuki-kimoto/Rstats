@@ -25,7 +25,7 @@ my $r = Rstats->new;
     my $a1 = $r->c([$r->complex(1, 1), $r->complex(2, 2)]);
     $a1->mode('complex');
     my $a2 = $r->as_numeric($a1);
-    is($a2->mode, 'numeric');
+    is($a2->mode->value, 'numeric');
     is_deeply($a2->values, [1, 2]);
   }
 
@@ -34,7 +34,7 @@ my $r = Rstats->new;
     my $a1 = $r->c([0.1, 1.1, 2.2]);
     $a1->mode('numeric');
     my $a2 = $r->as_numeric($a1);
-    is($a2->mode, 'numeric');
+    is($a2->mode->value, 'numeric');
     is_deeply($a2->values, [0.1, 1.1, 2.2]);
   }
     
@@ -43,7 +43,7 @@ my $r = Rstats->new;
     my $a1 = $r->c([0, 1, 2]);
     $a1->mode('integer');
     my $a2 = $r->as_numeric($a1);
-    is($a2->mode, 'numeric');
+    is($a2->mode->value, 'numeric');
     is_deeply($a2->values, [0, 1, 2]);
   }
   
@@ -52,47 +52,59 @@ my $r = Rstats->new;
     my $a1 = $r->c([$r->TRUE, $r->FALSE]);
     $a1->mode('logical');
     my $a2 = $r->as_numeric($a1);
-    is($a2->mode, 'numeric');
+    is($a2->mode->value, 'numeric');
     is_deeply($a2->values, [1, 0]);
   }
 
-=pod
   # as_numeric - from character
   {
     my $a1 = $r->c([0, 1, 2])->as_integer;
     my $a2 = $r->as_numeric($a1);
-    is($a2->mode, 'numeric');
+    is($a2->mode->value, 'numeric');
     is_deeply($a2->values, [0, 1, 2]);
   }
-=cut
-
 }
   
-# is_*, as_*
+# is_*, as_*, typeof
 {
-  my $c = $r->c([0, 1, 2]);
+  # is_*, as_*, typeof - integer
+  {
+    my $c = $r->c([0, 1, 2]);
+    ok($c->as_integer->is_integer);
+    is($c->as_integer->mode->value, 'numeric');
+    is($c->as_integer->typeof->value, 'integer');
+  }
   
-  # Integer
-  ok($c->as_integer->is_integer->value);
-  is($c->as_integer->mode, 'integer');
+  # is_*, as_*, typeof - character
+  {
+    my $c = $r->c([0, 1, 2]);
+    ok($c->as_character->is_character);
+    is($c->as_character->mode->value, 'character');
+    is($c->as_character->typeof->value, 'character');
+  }
   
-  # Character
-  ok($c->as_character->is_character->value);
-  is($c->as_character->mode, 'character');
+  # is_*, as_*, typeof - complex
+  {
+    my $c = $r->c([0, 1, 2]);
+    ok($c->as_complex->is_complex);
+    is($c->as_complex->mode->value, 'complex');
+    is($c->as_complex->typeof->value, 'complex');
+  }
   
-  # Compex
-  ok($c->as_complex->is_complex->value);
-  is($c->as_complex->mode, 'complex');
-  
-  # Logical
+  # is_*, as_*, typeof - logical
   {
     my $a1 = $r->c([0, 1, 2]);
     my $a2 = $r->as_logical($a1);
-    ok($a2->is_logical->value);
-    is($a2->mode, 'logical');
-    is($a2->value(1)->logical, 0);
-    is($a2->value(2)->logical, 1);
-    is($a2->value(3)->logical, 1);
+    ok($a2->is_logical);
+    is($a2->mode->value, 'logical');
+    is($a2->typeof->value, 'logical');
+  }
+
+  # is_*, as_*, typeof - NULL
+  {
+    my $a1 = $r->NULL;
+    is($a1->mode->value, 'NULL');
+    is($a1->typeof->value, 'NULL');
   }
 }
 

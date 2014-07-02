@@ -12,13 +12,7 @@ use Rstats::Logical;
 
 our @CARP_NOT = ('Rstats');
 
-my $mode_precidence = {
-  character => 5,
-  complex => 4,
-  numeric => 3,
-  integer => 2,
-  logical => 1,
-};
+my %types_h = map { $_ => 1 } qw/character complex numeric integer logical/;
 
 use overload
   bool => \&bool,
@@ -39,7 +33,44 @@ use overload
   fallback => 1;
 
 has 'values';
-has 'mode';
+
+sub typeof {
+  my $self = shift;
+  
+  my $type = $self->{type};
+  my $a1_values = defined $type ? $type : "NULL";
+  my $a1 = Rstats::Array->c([$a1_values]);
+  
+  return $a1;
+}
+
+sub mode {
+  my $self = shift;
+  
+  if (@_) {
+    my $type = $_[0];
+    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
+      unless $types_h{$type};
+    
+    $self->{type} = $type;
+    
+    return $self;
+  }
+  else {
+    my $type = $self->{type};
+    my $mode;
+    if (defined $type) {
+      $mode = $type eq 'integer' ? 'numeric' : $type;
+    }
+    else {
+      $mode = 'NULL';
+    }
+
+    my $a1 = Rstats::Array->c([$mode]);
+
+    return $a1;
+  }
+}
 
 sub bool {
   my $self = shift;
@@ -64,7 +95,7 @@ sub clone_without_values {
   my ($self, %opt) = @_;
   
   my $array = Rstats::Array->new;
-  $array->{mode} = $self->{mode};
+  $array->{type} = $self->{type};
   $array->{names} = [@{$self->{names} || []}];
   $array->{rownames} = [@{$self->{rownames} || []}];
   $array->{colnames} = [@{$self->{colnames} || []}];
@@ -461,7 +492,7 @@ sub array {
       $array->mode('logical');
     }
   }
-  else {
+  elsif(@modes == 1) {
     $array->mode($modes[0]);
   }
   
@@ -536,7 +567,7 @@ sub value {
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->{mode} || '') eq 'numeric' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'numeric' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -544,7 +575,7 @@ sub is_numeric {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->{mode} || '') eq 'integer' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'integer' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -552,7 +583,7 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->{mode} || '') eq 'complex' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'complex' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -560,7 +591,7 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->{mode} || '') eq 'character' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'character' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -568,7 +599,7 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->{mode} || '') eq 'logical' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'logical' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -676,7 +707,7 @@ sub as_complex {
     }
   } @$a1_values;
   $a2->values(\@a2_values);
-  $a2->{mode} = 'complex';
+  $a2->{type} = 'complex';
 
   return $a2;
 }
@@ -707,7 +738,7 @@ sub as_numeric {
     } 
   } @$a1_values;
   $a2->values(\@a2_values);
-  $a2->{mode} = 'numeric';
+  $a2->{type} = 'numeric';
 
   return $a2;
 }
@@ -742,7 +773,7 @@ sub as_integer {
     } 
   } @$a1_values;
   $a2->values(\@a2_values);
-  $a2->{mode} = 'integer';
+  $a2->{type} = 'integer';
 
   return $a2;
 }
@@ -768,7 +799,7 @@ sub as_logical {
     } 
   } @$a1_values;
   $a2->values(\@a2_values);
-  $a2->{mode} = 'logical';
+  $a2->{type} = 'logical';
   
   return $a2;
 }
@@ -780,7 +811,7 @@ sub as_character {
   my $a2 = $self->clone_without_values;
   my @a2_values = map { "$_" } @$a1_values;
   $a2->values(\@a2_values);
-  $a2->{mode} = 'character';
+  $a2->{type} = 'character';
 
   return $a2;
 }
@@ -1224,7 +1255,7 @@ sub _operation {
   
   # Upgrade mode if mode is different
   ($a1, $a2) = $self->_upgrade_mode($a1, $a2)
-    if $a1->mode ne $a2->mode;
+    if ($a1->{type} || '') ne ($a2->{type} || '');
   
   # Error when numeric operator is used to character
   croak("Error in a + b : non-numeric argument to binary operator")
@@ -1236,7 +1267,9 @@ sub _operation {
   
   my @a3_values = $culcs->{$op}->($a1->values, $a2->values);
   
-  return Rstats::Array->array(\@a3_values);
+  my $a3 = Rstats::Array->array(\@a3_values);
+  $a3->{type} = 'integer' if $a1->is_integer;
+  return $a3;
 }
 
 sub _upgrade_mode {
@@ -1245,19 +1278,20 @@ sub _upgrade_mode {
   # Check values
   my $mode_h = {};
   for my $array (@arrays) {
-    if ($array->mode eq 'complex') {
-      $mode_h->{complex}++;
-    }
-    elsif ($array->mode eq 'numeric') {
-      $mode_h->{numeric}++;
-    }
-    elsif ($array->mode eq 'integer') {
-      $mode_h->{integer}++;
-    }
-    elsif ($array->mode eq 'character') {
+    my $type = $array->{type} || '';
+    if ($type eq 'character') {
       $mode_h->{character}++;
     }
-    elsif ($array->mode eq 'logical') {
+    elsif ($type eq 'complex') {
+      $mode_h->{complex}++;
+    }
+    elsif ($type eq 'numeric') {
+      $mode_h->{numeric}++;
+    }
+    elsif ($type eq 'integer') {
+      $mode_h->{integer}++;
+    }
+    elsif ($type eq 'logical') {
       $mode_h->{logical}++;
     }
     else {

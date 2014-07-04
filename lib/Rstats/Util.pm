@@ -14,8 +14,8 @@ use Scalar::Util 'refaddr';
 use B;
 
 # Special values
-my $true = Rstats::Type::Logical->new(logical => 1);
-my $false = Rstats::Type::Logical->new(logical => 0);
+my $true = Rstats::Type::Logical->new(value => 1);
+my $false = Rstats::Type::Logical->new(value => 0);
 my $na = Rstats::Type::NA->new;
 my $nan = Rstats::Type::Double->new(type => 'nan');
 my $inf = Rstats::Type::Double->new(type => 'inf');

@@ -2,24 +2,63 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats;
-
-my $r = Rstats->new;
+use Rstats::Util;
+use Scalar::Util 'refaddr';
 
 # logical
 {
-  # TRUE
-  ok(!!$r->TRUE);
+  # logical - singleton, true
+  {
+    my $true1 = Rstats::Util::true;
+    my $true2 = Rstats::Util::true;
+    is(refaddr $true1, refaddr $true2);
+  }
   
-  # FALSE
-  ok(!$r->FALSE);
+  # logical - singleton, false
+  {
+    my $false1 = Rstats::Util::false;
+    my $false2 = Rstats::Util::false;
+    is(refaddr $false1, refaddr $false2);
+  }
   
-  # to_string, TURE
-  my $true = $r->TRUE;
-  is("$true", 'TRUE');
+  # logical - bool, TRUE
+  {
+    my $true = Rstats::Util::true;
+    ok($true);
+  }
   
-  # to_string, FALSE
-  my $false = $r->FALSE;
-  is("$false", "FALSE");
+  # logical - bool, FALSE
+  {
+    my $false = Rstats::Util::false;
+    ok(!$false);
+  }
+  
+  # negation, true
+  {
+    my $true = Rstats::Util::true;
+    my $num = -$true;
+    ok(Rstats::Util::is_integer($num));
+    is($num->value, 0);
+  }
+
+  # negation, false
+  {
+    my $false = Rstats::Util::false;
+    my $num = -$false;
+    ok(Rstats::Util::is_integer($num));
+    is($num->value, 1);
+  }
+  
+  # to_string, true
+  {
+    my $true = Rstats::Util::true;
+    is("$true", 'TRUE');
+  }
+  
+  # to_string, false
+  {
+    my $false = Rstats::Util::false;
+    is("$false", "FALSE");
+  }
 }
 

@@ -12,7 +12,24 @@ use overload
 has 'value';
 has 'type';
 
-sub bool { croak 'argument is not interpretable as logical' }
+sub bool {
+  my $self = shift;
+  
+  my $value = $self->value;
+  if (defined $value) {
+    $value == 0 ? 0 : 1;
+  }
+  else {
+    # Inf, -Inf
+    if (Rstats::Util::is_infinite($self)) {
+      1;
+    }
+    # NaN
+    else {
+      croak 'argument is not interpretable as logical'
+    }
+  }
+}
 
 sub negation {
   my $self = shift;

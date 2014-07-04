@@ -2,10 +2,8 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats::NaN;
-use Rstats::Logical;
-use Rstats::Type::NA;
 use Rstats;
+use Rstats::Util;
 
 my $r = Rstats->new;
 

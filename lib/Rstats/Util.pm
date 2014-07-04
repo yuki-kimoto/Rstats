@@ -3,18 +3,31 @@ package Rstats::Util;
 use strict;
 use warnings;
 use Carp 'croak';
-use Rstats::Type::NA;
-use Rstats::Type::Logical;
-use Rstats::Type::Complex;
-use Rstats::Type::Character;
-use Rstats::Type::Integer;
 
+require Rstats::Type::NA;
+require Rstats::Type::Logical;
+require Rstats::Type::Complex;
+require Rstats::Type::Character;
+require Rstats::Type::Integer;
+require Rstats::Type::Double;
+use Scalar::Util 'refaddr';
+use B;
+
+# Special values
 my $true = Rstats::Type::Logical->new(logical => 1);
 my $false = Rstats::Type::Logical->new(logical => 0);
 my $na = Rstats::Type::NA->new;
 my $nan = Rstats::Type::Double->new(type => 'nan');
 my $inf = Rstats::Type::Double->new(type => 'inf');
 my $inf_minus = Rstats::Type::Double->new(type => '-inf');
+
+# Address
+my $true_ad = refaddr $true;
+my $false_ad = refaddr $false;
+my $na_ad = refaddr $na;
+my $nan_ad = refaddr $nan;
+my $inf_ad = refaddr $inf;
+my $inf_minus_ad = refaddr $inf_minus;
 
 sub true { $true }
 sub false { $false }
@@ -23,12 +36,16 @@ sub nan { $nan }
 sub inf { $inf }
 sub inf_minus { $inf_minus }
 
-sub is_nan { $_[0] == $nan }
-sub is_na { $_[0] == $na }
-sub is_infinite { $_[0] == $inf }
+sub is_nan { ref $_[0] && (refaddr $_[0] == $nan_ad) }
+sub is_na { ref $_[0] && (refaddr $_[0] == $na_ad) }
+sub is_infinite { is_infinite_positive($_[0]) || is_infinite_negative($_[0]) }
+sub is_infinite_positive { ref $_[0] && (refaddr $_[0] == $inf_ad) }
+sub is_infinite_negative { ref $_[0] && (refaddr $_[0] == $inf_minus_ad) }
+
 sub is_finite {
-  return is_integer($_[0]) || is_double($_[0]) && 
+  return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
+
 sub is_integer { ref $_[0] eq 'Rstats::Type::Integer' }
 sub is_double { ref $_[0] eq 'Rstats::Type::Double' }
 sub is_complex { ref $_[0] eq 'Rstats::Type::Complex' }
@@ -44,6 +61,20 @@ sub complex {
   
   return $z;
 }
+
+sub is_numeric {
+  my ($self, $value) = @_;
+  
+  return unless defined $value;
+  
+  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
+        && 0 + $value eq $value
+        && $value * 0 == 0
+}
+
+1;
+
+__END__
 
 my %numeric_ops_h = map { $_ => 1} (qw#+ - * / ** %#);
 my %comparison_ops_h = map { $_ => 1} (qw/< <= > >= == !=/);
@@ -257,19 +288,5 @@ sub conj {
 
 # End Complex
 
-sub is_nan {
-  my $value = shift;
-  
-  return ref $value eq 'Rstats::NaN';
-}
 
-sub is_numeric {
-  my ($self, $value) = @_;
-  
-  return unless defined $value;
-  
-  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-        && 0 + $value eq $value
-        && $value * 0 == 0
-}
 

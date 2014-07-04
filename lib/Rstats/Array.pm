@@ -697,7 +697,7 @@ sub as_complex {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
-      if (my @nums = $self->_looks_like_complex($_) {
+      if (my @nums = $self->_looks_like_complex($_)) {
         Rstats::Util::complex(@nums);
       }
       else {
@@ -743,7 +743,7 @@ sub as_numeric {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_) {
+      if ($self->_looks_like_number($_)) {
         Rstats::Type::Double->new(value => $_ + 0);
       }
       else {
@@ -785,7 +785,7 @@ sub as_integer {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_) {
+      if ($self->_looks_like_number($_)) {
         Rstats::Type::Integer->new(value => int($_ + 0));
       }
       else {
@@ -832,7 +832,7 @@ sub as_logical {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_) {
+      if ($self->_looks_like_number($_)) {
         $_ ? Rstats::Util::true : Rstats::Util::false;
       }
       else {
@@ -1291,7 +1291,7 @@ sub {
 EOS
   
   if ($comparison_ops_h{$op}) {
-    $code .= "? Rstats::Logical->TRUE : Rstats::Logical->FALSE\n";
+    $code .= "? Rstats::Util::true() : Rstats::Util::false()\n";
   }
   
   $code .= <<"EOS";
@@ -1471,13 +1471,13 @@ sub t {
 sub is_array {
   my $self = shift;
   
-  return $self->c([Rstats::Logical->TRUE]);
+  return $self->c([Rstats::Util::true()]);
 }
 
 sub is_vector {
   my $self = shift;
   
-  my $is = @{$self->dim->values} == 0 ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+  my $is = @{$self->dim->values} == 0 ? Rstats::Util::true() : Rstats::Util::false();
   
   return $self->c([$is]);
 }
@@ -1485,7 +1485,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = @{$self->dim->values} == 2 ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+  my $is = @{$self->dim->values} == 2 ? Rstats::Util::true() : Rstats::Util::false();
   
   return $self->c([$is]);
 }

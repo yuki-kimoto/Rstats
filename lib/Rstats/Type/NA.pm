@@ -2,7 +2,7 @@ package Rstats::Type::NA;
 use Object::Simple -base;
 
 use Carp 'croak';
-use Rstats::Util;
+require Rstats::Util;
 
 use overload
   'bool' => \&bool,
@@ -11,7 +11,7 @@ use overload
 
 sub bool { croak "Error in bool context (a) { : missing value where TRUE/FALSE needed" }
 
-sub nagation { Rstats::Util::na }
+sub nagation { Rstats::Util::na() }
 
 sub to_string { 'NA' }
 

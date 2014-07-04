@@ -2,7 +2,7 @@ package Rstats::Type::Double;
 use Object::Simple -base;
 
 use Carp 'croak';
-use Rstats::Util;
+require Rstats::Util;
 
 use overload
   'bool' => \&bool,
@@ -10,7 +10,7 @@ use overload
   '""' => \&to_string;
 
 has 'value';
-hss 'type';
+has 'type';
 
 sub bool { croak 'argument is not interpretable as logical' }
 
@@ -23,18 +23,20 @@ sub negation {
     return Rstats::Type::Double->new(value => -$self->value);
   }
   elsif ($type eq 'nan') {
-    return Rstats::Util::nan;
+    return Rstats::Util::nan();
   }
   elsif ($type eq 'inf') {
-    return Rstats::Util::inf_minus;
+    return Rstats::Util::inf_minus();
   }
   elsif ($type eq '-inf') {
-    return Rstats::Util::inf;
+    return Rstats::Util::inf();
   }
 }
 
 sub to_string {
   my $self = shift;
+  
+  my $type = $self->type;
   
   if (!$type) {
     return $self->value . "";

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::Complex;
+use Rstats::Type::Complex;
 
 my $r = Rstats->new;
 
@@ -11,59 +11,59 @@ my $r = Rstats->new;
 {
   # comparison operator - ==, true
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     is($z1 == $z2, $r->TRUE);
   }
   # comparison operator - ==, false
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 1);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 1);
     is($z1 == $z2, $r->FALSE);
   }
 
   # comparison operator - !=, true
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     is($z1 != $z2, $r->FALSE);
   }
   
   # comparison operator - !=, false
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 1);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 1);
     is($z1 != $z2, $r->TRUE);
   }
 
   # comparison operator - <, error
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     eval { my $result = $z1 < $z2 };
     like($@, qr/invalid/);
   }
 
   # comparison operator - <=, error
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     eval { my $result = $z1 <= $z2 };
     like($@, qr/invalid/);
   }
 
   # comparison operator - >, error
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     eval { my $result = $z1 > $z2 };
     like($@, qr/invalid/);
   }
 
   # comparison operator - >=, error
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 1, im => 2);
     eval { my $result = $z1 >= $z2 };
     like($@, qr/invalid/);
   }
@@ -73,19 +73,19 @@ my $r = Rstats->new;
 {
   # to_string - basic
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     is("$z1", "1+2i");
   }
   
   # to_string - image number is 0
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 0);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 0);
     is("$z1", "1+0i");
   }
   
   # to_string - image number is minus
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => -1);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => -1);
     is("$z1", "1-1i");
   }
 }
@@ -95,7 +95,7 @@ my $r = Rstats->new;
 
   # new
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     is($z1->re, 1);
     is($z1->im, 2);
   }
@@ -105,7 +105,7 @@ my $r = Rstats->new;
 {
   # operation - negation
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     my $z2 = - $z1;
     is($z2->re, -1);
     is($z2->im, -2);
@@ -113,8 +113,8 @@ my $r = Rstats->new;
   
   # operation - add
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 3, im => 4);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 3, im => 4);
     my $z3 = $z1 + $z2;
     is($z3->re, 4);
     is($z3->im, 6);
@@ -122,7 +122,7 @@ my $r = Rstats->new;
   
   # operation - add(real number)
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     my $z2 = $z1 + 3;
     is($z2->re, 4);
     is($z2->im, 2);
@@ -130,8 +130,8 @@ my $r = Rstats->new;
 
   # operation - subtract
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
-    my $z2 = Rstats::Complex->new(re => 3, im => 4);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
+    my $z2 = Rstats::Type::Complex->new(re => 3, im => 4);
     my $z3 = $z1 - $z2;
     is($z3->re, -2);
     is($z3->im, -2);
@@ -139,7 +139,7 @@ my $r = Rstats->new;
   
   #operation -  subtract(real number)
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     my $z2 = $z1 - 3;
     is($z2->re, -2);
     is($z2->im, 2);
@@ -147,7 +147,7 @@ my $r = Rstats->new;
   
   # operation - subtract(real number, reverse)
   {
-    my $z1 = Rstats::Complex->new(re => 1, im => 2);
+    my $z1 = Rstats::Type::Complex->new(re => 1, im => 2);
     my $z2 = 3 - $z1;
     is($z2->re, 2);
     is($z2->im, -2);

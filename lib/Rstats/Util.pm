@@ -83,15 +83,15 @@ sub add_inf {
 sub operation {
   my ($op, $value1, $value2) = @_;
   
-  if (ref $value1 eq 'Rstats::NA' || ref $value2 eq 'Rstats::NA') {
-    return Rstats::NA->NA;
+  if (ref $value1 eq 'Rstats::Type::NA' || ref $value2 eq 'Rstats::Type::NA') {
+    return Rstats::Util::na;
   }
   elsif (ref $value1 eq 'Rstats::NaN' || ref $value2 eq 'Rstats::NaN') {
     if ($numeric_ops_h{$op}) {
-      return Rstats::NaN->NaN;
+      return Rstats::Util::nan;
     }
     else {
-      return Rstats::NA->NA;
+      return Rstats::Util::na;
     }
   }
   else {
@@ -112,7 +112,7 @@ sub operation {
         my $re = $value1->{re} + $value2->{re};
         my $im = $value1->{im} + $value2->{im};
         
-        return Rstats::Complex->new(re => $re, im => $im);
+        return Rstats::Type::Complex->new(re => $re, im => $im);
       }
       elsif ($type eq 'numeric' || $type eq 'integer' || $type eq 'logical') {
         return $value1 + $value2;
@@ -177,7 +177,7 @@ sub operation {
 sub is_na {
   my $value = shift;
   
-  return ref $value eq 'Rstats::NA';
+  return ref $value eq 'Rstats::Type::NA';
 }
 
 # Complex
@@ -192,22 +192,22 @@ sub _operation {
 
   my $z1;
   my $z2;
-  if (ref $data eq 'Rstats::Complex') {
+  if (ref $data eq 'Rstats::Type::Complex') {
     $z1 = $self;
     $z2 = $data;
   }
   else {
     if ($reverse) {
-      $z1 = Rstats::Complex->new(re => $data);
+      $z1 = Rstats::Type::Complex->new(re => $data);
       $z2 = $self;
     }
     else {
       $z1 = $self;
-      $z2 = Rstats::Complex->new(re => $data);
+      $z2 = Rstats::Type::Complex->new(re => $data);
     }
   }
   
-  my $z3 = Rstats::Complex->new;
+  my $z3 = Rstats::Type::Complex->new;
   if ($op eq '+') {
     $z3->{re} = $z1->{re} + $z2->{re};
     $z3->{im} = $z1->{im} + $z2->{im};
@@ -252,7 +252,7 @@ sub abs {
 sub conj {
   my $self = shift;
   
-  return Rstats::Complex->new(re => $self->{re}, im => -$self->{im});
+  return Rstats::Type::Complex->new(re => $self->{re}, im => -$self->{im});
 }
 
 # End Complex

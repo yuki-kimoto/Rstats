@@ -9,10 +9,10 @@ use Math::Trig ();
 use Carp 'croak';
 use Rstats;
 use Rstats::Array;
-use Rstats::Complex;
+use Rstats::Type::Complex;
 use Rstats::Logical;
 use Rstats::Inf;
-use Rstats::NA;
+use Rstats::Type::NA;
 use Rstats::NaN;
 use POSIX ();;
 use Math::Round ();
@@ -23,9 +23,9 @@ use Math::Round ();
 #   lgamma
 #   complete_cases
 
-sub Inf { Rstats::Inf->Inf }
-sub NA { Rstats::NA->NA }
-sub NaN { Rstats::NaN->NaN }
+sub Inf { Rstats::Util::inf }
+sub NA { Rstats::Util::na }
+sub NaN { Rstats::Util::nan }
 
 sub is_null {
   my ($self, $_a1) = @_;
@@ -45,7 +45,7 @@ sub is_na {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
-    ref $_ eq  'Rstats::NA' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::Logical->TRUE : Rstats::Logical->FALSE
   } @{$a1->values};
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
@@ -73,7 +73,7 @@ sub is_finite {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
-    !ref $_ || ref $_ eq 'Rstats::Complex' || ref $_ eq 'Rstats::Logical' 
+    !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
       ? Rstats::Logical->TRUE
       : Rstats::Logical->FALSE
   } @{$a1->values};
@@ -100,7 +100,7 @@ sub is_infinite {
 sub complex {
   my ($self, $re, $im) = @_;
   
-  return $self->c([Rstats::Complex->new(re => $re, im => $im)]);
+  return $self->c([Rstats::Type::Complex->new(re => $re, im => $im)]);
 }
 
 sub TRUE { Rstats::Logical->TRUE }
@@ -1041,7 +1041,7 @@ sub range {
 sub i {
   my $self = shift;
   
-  my $i = Rstats::Complex->new(re => 0, im => 1);
+  my $i = Rstats::Type::Complex->new(re => 0, im => 1);
   
   return $i;
 }

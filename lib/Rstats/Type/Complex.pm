@@ -16,7 +16,7 @@ sub bool { croak 'argument is not interpretable as logical' }
 sub negation {
   my $self = shift;
   
-  return Rstats::Complex->new(re => -$self->{re}, im => -$self->{im});
+  return Rstats::Type::Complex->new(re => -$self->{re}, im => -$self->{im});
 }
 
 sub to_string {

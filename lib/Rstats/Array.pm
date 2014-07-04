@@ -6,10 +6,9 @@ use List::Util;
 use Rstats;
 use B;
 use Scalar::Util 'looks_like_number';
-use Rstats::NA;
-use Rstats::NaN;
-use Rstats::Inf;
-use Rstats::Logical;
+use Rstats::Type::NA;
+use Rstats::Type::Logical;
+use Rstats::Type::Character;
 
 our @CARP_NOT = ('Rstats');
 
@@ -454,19 +453,31 @@ sub array {
   # Check values
   my $mode_h = {};
   for my $value (@$values) {
-    if (ref $value eq 'Rstats::Complex') {
+    if (!defined $value) {
+      croak "undef is invalid value";
+    }
+    elsif (ref $value eq 'Rstats::Type::Character') {
+      $mode_h->{character}++;
+    }
+    elsif (ref $value eq 'Rstats::Type::Complex') {
       $mode_h->{complex}++;
     }
-    elsif (ref $value eq 'Rstats::Logical' || ref $value eq 'Rstats::NA') {
-      $mode_h->{logical}++;
-    }
-    elsif (ref $value eq 'Rstats::NaN' || ref $value eq 'Rstats::Inf') {
+    elsif (ref $value eq 'Rstats::Type::Double') {
       $mode_h->{numeric}++;
     }
-    elsif ($self->_is_numeric($value)) {
+    elsif (ref $value eq 'Rstats::Type::Integer') {
+      $value = Rstats::Type::Double->new(value => $value->value);
+      $mode_h->{numeric}++;
+    }
+    elsif (ref $value eq 'Rstats::Type::Logical') {
+      $mode_h->{logical}++;
+    }
+    elsif (Rstats::Util::is_numeric($value)) {
+      $value = Rstats::Type::Double->new(value => $value);
       $mode_h->{numeric}++;
     }
     else {
+      $value = Rstats::Type::Character->new(value => "$value");
       $mode_h->{character}++;
     }
   }
@@ -495,8 +506,8 @@ sub array {
       $array->mode('logical');
     }
   }
-  elsif(@modes == 1) {
-    $array->mode($modes[0]);
+  else {
+    $array->mode($modes[0] || 'logical');
   }
   
   # Fix values
@@ -678,35 +689,41 @@ sub _as {
 sub as_complex {
   my $self = shift;
   
-  my $a1_values = $self->values;
+  my $a1 = $self;
+  my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    if (ref $_ eq 'Rstats::Complex') {
-      Rstats::Complex->new(re => $_->re, im => $_->im);
+    if (ref $_ eq 'Rstats::Type::NA') {
+      $_;
     }
-    elsif (ref $_ eq 'Rstats::Logical') {
-      if ($_) {
-        Rstats::Complex->new(re => 1, im => 0);
+    elsif (ref $_ eq 'Rstats::Type::Character') {
+      if (my @nums = $self->_looks_like_complex($_) {
+        Rstats::Util::complex(@nums);
       }
       else {
-        Rstats::Complex->new(re => 0, im => 0);
+        carp 'NAs introduced by coercion';
+        Rstats::Util::na;
       }
     }
-    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
-      Rstats::NA->NA;
+    elsif (ref $_ eq 'Rstats::Type::Complex') {
+      $_;
     }
-    elsif (ref $_ eq 'Rstats::Inf') {
-      Rstats::Complex->new(re => $_, im => 0);
+    elsif (ref $_ eq 'Rstats::Type::Double') {
+      if (Rstats::Util::is_nan($_)) {
+        Rstats::Util::na;
+      }
+      else {
+        Rstats::Util::complex($_, 0);
+      }
     }
-    elsif (my @nums = $self->_looks_like_number($_)) {
-      Rstats::Complex->new(re => $nums[0] + 0, im => 0);
+    elsif (ref $_ eq 'Rstats::Type::Integer') {
+      Rstats::Util::complex($_, 0);
     }
-    elsif (my @c_nums = $self->_looks_like_complex($_)) {
-      Rstats::Complex->new(re => $c_nums[0] + 0, im => $c_nums[1] + 0);
+    elsif (ref $_ eq 'Rstats::Type::Logical') {
+      Rstats::Util::complex($_->value ? 1 : 0, 0);
     }
     else {
-      carp 'NAs introduced by coercion';
-      Rstats::NA->NA;
+      croak "unexpected type";
     }
   } @$a1_values;
   $a2->values(\@a2_values);
@@ -722,23 +739,34 @@ sub as_numeric {
   my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    if (ref $_ eq 'Rstats::Complex') {
-      carp "imaginary parts discarded in coercion";
-      $_->re;
-    }
-    elsif (ref $_ eq 'Rstats::Logical') {
-      $_ ? 1 : 0;
-    }
-    elsif (ref $_ eq 'Rstats::Inf' || ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
+    if (ref $_ eq 'Rstats::Type::NA') {
       $_;
     }
-    elsif (my @nums = $self->_looks_like_number($_)) {
-      $nums[0] + 0;
+    elsif (ref $_ eq 'Rstats::Type::Character') {
+      if ($self->_looks_like_number($_) {
+        Rstats::Type::Double->new(value => $_ + 0);
+      }
+      else {
+        carp 'NAs introduced by coercion';
+        Rstats::Util::na;
+      }
+    }
+    elsif (ref $_ eq 'Rstats::Type::Complex') {
+      carp "imaginary parts discarded in coercion";
+      Rstats::Type::Double->new(value => $_->re);
+    }
+    elsif (ref $_ eq 'Rstats::Type::Double') {
+      $_;
+    }
+    elsif (ref $_ eq 'Rstats::Type::Integer') {
+      Rstats::Type::Double->new(value => $_->value);
+    }
+    elsif (ref $_ eq 'Rstats::Type::Logical') {
+      Rstats::Type::Double->new(value => $_ ? 1 : 0);
     }
     else {
-      carp 'NAs introduced by coercion';
-      Rstats::NA->NA;
-    } 
+      croak "unexpected type";
+    }
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{type} = 'numeric';
@@ -753,27 +781,39 @@ sub as_integer {
   my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    if (ref $_ eq 'Rstats::Complex') {
+    if (ref $_ eq 'Rstats::Type::NA') {
+      $_;
+    }
+    elsif (ref $_ eq 'Rstats::Type::Character') {
+      if ($self->_looks_like_number($_) {
+        Rstats::Type::Integer->new(value => int($_ + 0));
+      }
+      else {
+        carp 'NAs introduced by coercion';
+        Rstats::Util::na;
+      }
+    }
+    elsif (ref $_ eq 'Rstats::Type::Complex') {
       carp "imaginary parts discarded in coercion";
-      $_->re;
+      Rstats::Type::Integer->new(value => int($_->re));
     }
-    elsif (ref $_ eq 'Rstats::Logical') {
-      $_ ? 1 : 0;
+    elsif (ref $_ eq 'Rstats::Type::Double') {
+      if (Rstats::Util::is_nan($_) || Rstats::Util::is_inifinite($_)) {
+        Rstats::Util::na;
+      }
+      else {
+        $_ == 0 ? Rstats::Util::false : Rstats::Util::true;
+      }
     }
-    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
-      Rstats::NA->NA;
+    elsif (ref $_ eq 'Rstats::Type::Integer') {
+      $_; 
     }
-    elsif (ref $_ eq 'Rstats::Inf') {
-      carp "NAs introduced by coercion";
-      Rstats::NA->NA;
-    }
-    elsif (my @nums = $self->_looks_like_number($_)) {
-      int($nums[0] + 0);
+    elsif (ref $_ eq 'Rstats::Type::Logical') {
+      Rstats::Type::Integer->new(value => $_ ? 1 : 0);
     }
     else {
-      carp 'NAs introduced by coercion';
-      Rstats::NA->NA;
-    } 
+      croak "unexpected type";
+    }
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{type} = 'integer';
@@ -783,27 +823,58 @@ sub as_integer {
 
 sub as_logical {
   my $self = shift;
-
-  my $a1_values = $self->values;
+  
+  my $a1 = $self;
+  my $a1_values = $a1->values;
   my $a2 = $self->clone_without_values;
   my @a2_values = map {
-    if (ref $_ eq 'Rstats::Complex' || ref $_ eq 'Rstats::Logical' || ref $_ eq 'Rstats::Inf') {
-      $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+    if (ref $_ eq 'Rstats::Type::NA') {
+      $_;
     }
-    elsif (ref $_ eq 'Rstats::NA' || ref $_ eq 'Rstats::NaN') {
-      Rstats::NA->NA;
+    elsif (ref $_ eq 'Rstats::Type::Character') {
+      if ($self->_looks_like_number($_) {
+        $_ ? Rstats::Util::true : Rstats::Util::false;
+      }
+      else {
+        carp 'NAs introduced by coercion';
+        Rstats::Util::na;
+      }
     }
-    elsif ($self->_is_numeric($_)) {
-      $_ ? Rstats::Logical->TRUE : Rstats::Logical->FALSE;
+    elsif (ref $_ eq 'Rstats::Type::Complex') {
+      carp "imaginary parts discarded in coercion";
+      my $re = $_->re->value;
+      my $im = $_->im->value;
+      if (defined $re && $re == 0 && defined $im && $im == 0) {
+        Rstats::Util::false;
+      }
+      else {
+        Rstats::Util::true;
+      }
+    }
+    elsif (ref $_ eq 'Rstats::Type::Double') {
+      if (Rstats::Util::is_nan($_)) {
+        Rstats::Util::na;
+      }
+      elsif (Rstats::Util::is_inifinite($_)) {
+        Rstats::Util::true;
+      }
+      else {
+        $_ == 0 ? Rstats::Util::false : Rstats::Util::true;
+      }
+    }
+    elsif (ref $_ eq 'Rstats::Type::Integer') {
+      $_->value == 0 ? Rstats::Util::false : Rstats::Util::true;
+    }
+    elsif (ref $_ eq 'Rstats::Type::Logical') {
+      $_;
     }
     else {
-      carp 'NAs introduced by coercion';
-      Rstats::NA->NA;
-    } 
+      croak "unexpected type";
+    }
   } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{type} = 'logical';
-  
+
   return $a2;
 }
 
@@ -812,13 +883,12 @@ sub as_character {
 
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
-  my @a2_values = map { "$_" } @$a1_values;
+  my @a2_values = map { Rstats::Type::Chracter->new(value => "$_") } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{type} = 'character';
 
   return $a2;
 }
-
 
 sub get {
   my $self = shift;

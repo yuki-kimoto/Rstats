@@ -33,7 +33,17 @@ sub is_integer { ref $_[0] eq 'Rstats::Type::Integer' }
 sub is_double { ref $_[0] eq 'Rstats::Type::Double' }
 sub is_complex { ref $_[0] eq 'Rstats::Type::Complex' }
 sub is_character { ref $_[0] eq 'Rstats::Type::Character' }
-sub is_logical { ref $_[0] eq 'Rstats::Type::Logical' } 
+sub is_logical { ref $_[0] eq 'Rstats::Type::Logical' }
+
+sub complex {
+  my ($re_value, $im_value) = @_;
+  
+  my $re = Rstats::Type::Double->new(value => $re_value);
+  my $im = Rstats::Type::Double->new(value => $im_value);
+  my $z = Rstats::Type::Complex->new(re => $re, im => $im);
+  
+  return $z;
+}
 
 my %numeric_ops_h = map { $_ => 1} (qw#+ - * / ** %#);
 my %comparison_ops_h = map { $_ => 1} (qw/< <= > >= == !=/);

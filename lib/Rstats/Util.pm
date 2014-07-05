@@ -205,9 +205,98 @@ sub subtract {
   }
 }
 
-sub subtract { shift->_operation('-', @_) }
-
-sub multiply { shift->_operation('*', @_) }
+sub multiply {
+  my ($self, $v1, $v2) = @_;
+  
+  return NA if is_na($v1) || is_na(v2);
+  
+  if (is_character($v1)) {
+    croak "Error in a + b : non-numeric argument to binary operator";
+  }
+  elsif (is_complex($v1)) {
+    my $re = Rstats::Type::Double->new(value => $v1->re->value * $v2->re->value - $v1->im->value * $v2->im->value);
+    my $im = Rstats::Type::Double->new(value => $v1->re->value * $v2->im->value + $v1->im->value * $v2->re->value);
+    
+    return Rstats::Type::Complex->new(re => $re, im => $im);
+  }
+  elsif (is_double($v1)) {
+    return NaN if is_nan($v1) || is_nan($v2);
+    if (defined $v1->value) {
+      if (defined $v2) {
+        return Rstats::Type::Double->new(value => $v1->value * $v2->value);
+      }
+      elsif (is_positive_infinite($v2))
+        if ($v1->value == 0) {
+          return NaN;
+        }
+        elsif ($v1->value > 0) {
+          return Inf;
+        }
+        elsif ($v1->value < 0) {
+          return negativeInf;
+        }
+      }
+      elsif (is_negative_infinite($v2)) {
+        if ($v1->value == 0) {
+          return NaN;
+        }
+        elsif ($v1->value > 0) {
+          return negativeInf;
+        }
+        elsif ($v1->value < 0) {
+          return Inf;
+        }
+      }
+    }
+    elsif (is_positive_infinite($v1))
+      if (defined $v2) {
+        if ($v2->value == 0) {
+          return NaN;
+        }
+        elsif ($v2->value > 0) {
+          return Inf;
+        }
+        elsif ($v2->value < 0) {
+          return negativeInf;
+        }
+      }
+      elsif (is_positive_infinite($v2))
+        return Inf;
+      }
+      elsif (is_negative_infinite($v2)) {
+        return negativeInf;
+      }
+    }
+    elsif (is_negative_infinite($v1)) {
+      if (defined $v2) {
+        if ($v2->value == 0) {
+          return NaN;
+        }
+        elsif ($v2->value > 0) {
+          return negativeInf;
+        }
+        elsif ($v2->value < 0) {
+          return Inf;
+        }
+      }
+      elsif (is_positive_infinite($v2))
+        return negativeInf;
+      }
+      elsif (is_negative_infinite($v2)) {
+        return Inf;
+      }
+    }
+  }
+  elsif (is_integer($v1)) {
+    return Rstats::Type::Integer->new(value => $v1->value * $v2->value);
+  }
+  elsif (is_logical($v1)) {
+    return Rstats::Type::Integer->new(value => $v1->value * $v2->value);
+  }
+  else {
+    croak "Invalid type";
+  }
+}
 
 sub divide { shift->_operation('/', @_) }
 

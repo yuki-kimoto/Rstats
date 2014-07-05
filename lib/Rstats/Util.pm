@@ -12,6 +12,7 @@ require Rstats::Type::Integer;
 require Rstats::Type::Double;
 use Scalar::Util 'refaddr';
 use B;
+use Math::Complex;
 
 # Special values
 my $true = Rstats::Type::Logical->new(value => 1);
@@ -433,7 +434,201 @@ sub divide {
   }
 }
 
-sub raise { shift->_operation('**', @_) }
+sub raise {
+  my ($self, $v1, $v2) = @_;
+  
+  return NA if is_na($v1) || is_na(v2);
+  
+  if (is_character($v1)) {
+    croak "Error in a + b : non-numeric argument to binary operator";
+  }
+  elsif (is_complex($v1)) {
+    my $v1_c = Math::Complex->make($v1->re->value, $v1->im->value);
+    my $v2_c = Math::Complex->make($v2->re->value, $v2->im->value);
+    
+    my $v3_c = $v1_c ** $v2_c;
+    my $re = Math::Complex::Re($v3_c);
+    my $im = Math::Complex::Im($v3_c);
+    
+    return complex($re, $im);
+  }
+  elsif (is_double($v1)) {
+    return NaN if is_nan($v1) || is_nan($v2);
+    if (defined $v1->value) {
+      if ($v1->value == 0) {
+        if (defined $v2) {
+          if ($v2->value == 0) {
+            return Rstats::Type::Double->new(value => 1);
+          }
+          elsif ($v2->value > 0) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+          elsif ($v2->value < 0) {
+            return Inf;
+          }
+        }
+        elsif (is_positive_infinite($v2))
+          return Rstats::Type::Double->new(value => 0);
+        }
+        elsif (is_negative_infinite($v2))
+          return Inf
+        }
+      }
+      elsif ($v1->value > 0) {
+        if (defined $v2) {
+          if ($v2->value == 0) {
+            return Rstats::Type::Double->new(value => 1);
+          }
+          else {
+            return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+          }
+        }
+        elsif (is_positive_infinite($v2))
+          if ($v1->value < 1) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+          elsif ($v1->value == 1) {
+            return Rstats::Type::Double->new(value => 1);
+          }
+          elsif ($v1->value > 1) {
+            return Inf;
+          }
+        }
+        elsif (is_negative_infinite($v2))
+          if ($v1->value < 1) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+          elsif ($v1->value == 1) {
+            return Rstats::Type::Double->new(value => 1);
+          }
+          elsif ($v1->value > 1) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+        }
+      }
+      elsif ($v1->value < 0) {
+        if (defined $v2) {
+          if ($v2->value == 0) {
+            return Rstats::Type::Double->new(value => -1);
+          }
+          else {
+            return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+          }
+        }
+        elsif (is_positive_infinite($v2))
+          if ($v1->value > -1) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+          elsif ($v1->value == -1) {
+            return Rstats::Type::Double->new(value => -1);
+          }
+          elsif ($v1->value < -1) {
+            return negativeInf;
+          }
+        }
+        elsif (is_negative_infinite($v2))
+          if ($v1->value > -1) {
+            return Inf;
+          }
+          elsif ($v1->value == -1) {
+            return Rstats::Type::Double->new(value => -s1);
+          }
+          elsif ($v1->value < -1) {
+            return Rstats::Type::Double->new(value => 0);
+          }
+        }
+      }
+    }
+    elsif (is_positive_infinite($v1))
+      if (defined $v2) {
+        if ($v2->value == 0) {
+          return Rstats::Type::Double->new(value => 1);
+        }
+        elsif ($v2->value > 0) {
+          return Inf;
+        }
+        elsif ($v2->value < 0) {
+          return Rstats::Type::Double->new(value => 0);
+        }
+      }
+      elsif (is_positive_infinite($v2))
+        return Inf;
+      }
+      elsif (is_negative_infinite($v2))
+        return Rstats::Type::Double->new(value => 0);
+      }
+    }
+    elsif (is_negative_infinite($v1)) {
+      if (defined $v2) {
+        if ($v2->value == 0) {
+          return Rstats::Type::Double->new(value => -1);
+        }
+        elsif ($v2->value > 0) {
+          return negativeInf;
+        }
+        elsif ($v2->value < 0) {
+          return Rstats::Type::Double->new(value => 0);
+        }
+      }
+      elsif (is_positive_infinite($v2))
+        return negativeInf;
+      }
+      elsif (is_negative_infinite($v2))
+        return Rstats::Type::Double->new(value => 0);
+      }
+    }
+  }
+  elsif (is_integer($v1)) {
+    if ($v1->value == 0) {
+      if ($v2->value == 0) {
+        return Rstats::Type::Double->new(value => 1);
+      }
+      elsif ($v2->value > 0) {
+        return Rstats::Type::Double->new(value => 0);
+      }
+      elsif ($v2->value < 0) {
+        return Inf;
+      }
+    }
+    elsif ($v1->value > 0) {
+      if ($v2->value == 0) {
+        return Rstats::Type::Double->new(value => 1);
+      }
+      else {
+        return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+      }
+    }
+    elsif ($v1->value < 0) {
+      if ($v2->value == 0) {
+        return Rstats::Type::Double->new(value => -1);
+      }
+      else
+        return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+      }
+    }
+  }
+  elsif (is_logical($v1)) {
+    if ($v1->value == 0) {
+      if ($v2->value == 0) {
+        return Rstats::Type::Double->new(value => 1);
+      }
+      elsif ($v2->value == 1) {
+        return Rstats::Type::Double->new(value => 0);
+      }
+    }
+    elsif ($v1->value ==  1) {
+      if ($v2->value == 0) {
+        return Rstats::Type::Double->new(value => 1);
+      }
+      elsif ($v2->value == 1) {
+        return Rstats::Type::Double->new(value => 1);
+      }
+    }
+  }
+  else {
+    croak "Invalid type";
+  }
+}
 
 sub remainder { shift->_operation('%', @_) }
 

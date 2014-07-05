@@ -10,7 +10,7 @@ use overload
   '""' => \&to_string;
 
 has 'value';
-has 'type';
+has 'flag';
 
 sub bool {
   my $self = shift;
@@ -34,18 +34,18 @@ sub bool {
 sub negation {
   my $self = shift;
   
-  my $type = $self->type;
+  my $flag = $self->flag;
   
-  if (!$type) {
+  if (!$flag) {
     return Rstats::Type::Double->new(value => -$self->value);
   }
-  elsif ($type eq 'nan') {
+  elsif ($flag eq 'nan') {
     return Rstats::Util::nan();
   }
-  elsif ($type eq 'inf') {
+  elsif ($flag eq 'inf') {
     return Rstats::Util::inf_minus();
   }
-  elsif ($type eq '-inf') {
+  elsif ($flag eq '-inf') {
     return Rstats::Util::inf();
   }
 }
@@ -53,18 +53,18 @@ sub negation {
 sub to_string {
   my $self = shift;
   
-  my $type = $self->type;
+  my $flag = $self->flag;
   
-  if (!$type) {
+  if (!$flag) {
     return $self->value . "";
   }
-  elsif ($type eq 'nan') {
+  elsif ($flag eq 'nan') {
     return 'NaN';
   }
-  elsif ($type eq 'inf') {
+  elsif ($flag eq 'inf') {
     return 'Inf';
   }
-  elsif ($type eq '-inf') {
+  elsif ($flag eq '-inf') {
     return '-Inf';
   }
 }

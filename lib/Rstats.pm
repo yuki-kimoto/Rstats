@@ -10,6 +10,7 @@ use Carp 'croak';
 use POSIX ();;
 use Math::Round ();
 use Rstats::Util;
+use Rstats::Array;
 
 # TODO
 #   logp1x

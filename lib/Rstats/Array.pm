@@ -883,7 +883,7 @@ sub as_character {
 
   my $a1_values = $self->values;
   my $a2 = $self->clone_without_values;
-  my @a2_values = map { Rstats::Type::Chracter->new(value => "$_") } @$a1_values;
+  my @a2_values = map { Rstats::Type::Character->new(value => "$_") } @$a1_values;
   $a2->values(\@a2_values);
   $a2->{type} = 'character';
 

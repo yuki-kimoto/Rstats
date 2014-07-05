@@ -13,6 +13,7 @@ require Rstats::Type::Double;
 use Scalar::Util 'refaddr';
 use B;
 use Math::Complex;
+use Posix ();
 
 # Special values
 my $true = Rstats::Type::Logical->new(value => 1);
@@ -92,7 +93,7 @@ sub add {
   if (is_character($v1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  eislf (is_complex($v1)) {
+  elsif (is_complex($v1)) {
     my $re = add($v1->{re}, $v2->{re});
     my $im = add( $v1->{im}, $v2->{im});
     
@@ -153,7 +154,7 @@ sub subtract {
   if (is_character($v1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  eislf (is_complex($v1)) {
+  elsif (is_complex($v1)) {
     my $re = subtract($v1->{re}, $v2->{re});
     my $im = subtract($v1->{im}, $v2->{im});
     
@@ -630,7 +631,48 @@ sub raise {
   }
 }
 
-sub remainder { shift->_operation('%', @_) }
+sub remainder {
+  my ($self, $v1, $v2) = @_;
+  
+  return NA if is_na($v1) || is_na(v2);
+  
+  if (is_character($v1)) {
+    croak "Error in a + b : non-numeric argument to binary operator";
+  }
+  elsif (is_complex($v1)) {
+    croak "unimplemented complex operation";
+  }
+  elsif (is_double($v1)) {
+    return NaN if is_nan($v1) || is_nan($v2) || is_infinite($v1) || is_infinite($v2);
+    
+    if ($v2->value == 0) {
+      return NaN;
+    }
+    else {
+      my $v3_value = $v1->value - POSIX::floor($v1->value/$v2->value) * $v2->value;
+      return Rstats::Type::Double->new(value => $v3);
+    }
+  }
+  elsif (is_integer($v1)) {
+    if ($v2->value == 0) {
+      return NaN;
+    }
+    else {
+      return Rstats::Type::Double->new(value => $v1 % $v2);
+    }
+  }
+  elsif (is_logical($v1)) {
+    if ($v2->value == 0) {
+      return NaN;
+    }
+    else {
+      return Rstats::Type::Double->new(value => $v1->value % $v2->value);
+    }
+  }
+  else {
+    croak "Invalid type";
+  }
+}
 
 sub conj {
   my $val = shift;

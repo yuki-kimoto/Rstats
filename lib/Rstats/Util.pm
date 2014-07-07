@@ -19,9 +19,9 @@ use POSIX ();
 my $true = Rstats::Type::Logical->new(value => 1);
 my $false = Rstats::Type::Logical->new(value => 0);
 my $na = Rstats::Type::NA->new;
-my $nan = Rstats::Type::Double->new(type => 'nan');
-my $inf = Rstats::Type::Double->new(type => 'inf');
-my $negative_inf = Rstats::Type::Double->new(type => '-inf');
+my $nan = Rstats::Type::Double->new(flag => 'nan');
+my $inf = Rstats::Type::Double->new(flag => 'inf');
+my $negative_inf = Rstats::Type::Double->new(flag => '-inf');
 
 # Address
 my $true_ad = refaddr $true;
@@ -64,7 +64,7 @@ sub complex {
 }
 
 sub is_perl_number {
-  my ($self, $value) = @_;
+  my ($value) = @_;
   
   return unless defined $value;
   
@@ -85,8 +85,89 @@ my %character_comparison_ops = (
   '!=' => 'ne'
 );
 
+sub to_string {
+  my $v1 = shift;
+  
+  if (is_na($v1)) {
+    return 'NA';
+  }
+  elsif (is_character($v1)) {
+    return $v1->value;
+  }
+  elsif (is_complex($v1)) {
+    my $re = $v1->re;
+    my $im = $v1->im;
+    
+    my $str = "$re";
+    $str .= '+' if $im >= 0;
+    $str .= $im . 'i';
+  }
+  elsif (is_double($v1)) {
+    
+    my $flag = $v1->flag;
+    
+    if (defined $v1->value) {
+      return $v1->value . "";
+    }
+    elsif ($flag eq 'nan') {
+      return 'NaN';
+    }
+    elsif ($flag eq 'inf') {
+      return 'Inf';
+    }
+    elsif ($flag eq '-inf') {
+      return '-Inf';
+    }
+  }
+  elsif (is_integer($v1)) {
+    return $v1->value . "";
+  }
+  elsif (is_logical($v1)) {
+    return $v1->value ? 'TRUE' : 'FALSE'
+  }
+  else {
+    croak "Invalid type";
+  }
+}
+
+sub negation {
+  my $v1 = shift;
+  
+  if (is_na($v1)) {
+    return NA;
+  }
+  elsif (is_character($v1)) {
+    croak 'argument is not interpretable as logical'
+  }
+  elsif (is_complex($v1)) {
+    return Rstats::Type::Complex->new(-$v1->re, im => -$v1->im);
+  }
+  elsif (is_double($v1)) {
+    
+    my $flag = $v1->flag;
+    if (defined $v1->value) {
+      return Rstats::Type::Double->new(value => -$v1->value);
+    }
+    elsif ($flag eq 'nan') {
+      return NaN;
+    }
+    elsif ($flag eq 'inf') {
+      return negativeInf;
+    }
+    elsif ($flag eq '-inf') {
+      return Inf;
+    }
+  }
+  elsif (is_integer($v1) || is_logical($v1)) {
+    return Rstats::Type::Integer->new(value => -$v1->value);
+  }
+  else {
+    croak "Invalid type";
+  }  
+}
+
 sub bool {
-  my ($self, $v1) = @_;
+  my $v1 = shift;
   
   if (is_na($v1)) {
     croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
@@ -118,7 +199,7 @@ sub bool {
 }
 
 sub add {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   
@@ -179,7 +260,7 @@ sub add {
 }
 
 sub subtract {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   
@@ -240,7 +321,7 @@ sub subtract {
 }
 
 sub multiply {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   
@@ -333,7 +414,7 @@ sub multiply {
 }
 
 sub divide {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   
@@ -468,7 +549,7 @@ sub divide {
 }
 
 sub raise {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   
@@ -664,7 +745,7 @@ sub raise {
 }
 
 sub remainder {
-  my ($self, $v1, $v2) = @_;
+  my ($v1, $v2) = @_;
   
   return NA if is_na($v1) || is_na(v2);
   

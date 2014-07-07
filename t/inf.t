@@ -18,37 +18,37 @@ use Scalar::Util 'refaddr';
   # Inf - singleton, minus
   {
     my $inf = Rstats::Util::Inf;
-    my $inf_minus = -$inf;
-    my $inf_minus2 = Rstats::Util::negativeInf;
-    is(refaddr $inf_minus, refaddr $inf_minus2);
+    my $negative_inf = Rstats::Util::negation($inf);
+    my $negative_inf2 = Rstats::Util::negativeInf;
+    is(refaddr $negative_inf, refaddr $negative_inf2);
   }
   
   # Inf - negation
   {
     my $inf = Rstats::Util::Inf;
-    my $inf_minus = -$inf;
-    my $inf_minus2 = Rstats::Util::negativeInf;
-    is(refaddr $inf_minus, refaddr $inf_minus2);
+    my $negative_inf = Rstats::Util::negation($inf);
+    my $negative_inf2 = Rstats::Util::negativeInf;
+    is(refaddr $negative_inf, refaddr $negative_inf2);
   }
 
   # Inf - negation repeat
   {
     my $inf = Rstats::Util::Inf;
-    my $inf_minus = -$inf;
-    my $inf2 = -$inf_minus;
+    my $negative_inf = Rstats::Util::negation($inf);
+    my $inf2 = Rstats::Util::negation($negative_inf);
     is(refaddr $inf, refaddr $inf2);
   }
   
   # Inf - to_string, plus
   {
     my $inf = Rstats::Util::Inf;
-    is("$inf", 'Inf');
+    is(Rstats::Util::to_string($inf), 'Inf');
   }
 
   # Inf - to_string, minus
   {
-    my $inf_minus = Rstats::Util::negativeInf;
-    is("$inf_minus", '-Inf');
+    my $negative_inf = Rstats::Util::negativeInf;
+    is(Rstats::Util::to_string($negative_inf), '-Inf');
   }
 }
 
@@ -62,8 +62,8 @@ use Scalar::Util 'refaddr';
   
   # is_infinite - -Inf, true
   {
-    my $inf_minus = Rstats::Util::negativeInf;
-    ok(Rstats::Util::is_infinite($inf_minus));
+    my $negative_inf = Rstats::Util::negativeInf;
+    ok(Rstats::Util::is_infinite($negative_inf));
   }
   
   # is_infinite - Double, false
@@ -83,8 +83,8 @@ use Scalar::Util 'refaddr';
   
   # is_finite - -Inf, false
   {
-    my $inf_minus = Rstats::Util::negativeInf;
-    ok(!Rstats::Util::is_finite($inf_minus));
+    my $negative_inf = Rstats::Util::negativeInf;
+    ok(!Rstats::Util::is_finite($negative_inf));
   }
   
   # is_finite - Double, true

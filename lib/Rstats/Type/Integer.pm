@@ -10,8 +10,6 @@ use overload
 
 has 'value';
 
-sub bool { croak 'argument is not interpretable as logical' }
-
 sub negation { -shift->value }
 
 sub to_string { shift->value . "" }

@@ -18,16 +18,16 @@ use Rstats::Array;
 #   lgamma
 #   complete_cases
 
-sub Inf { Rstats::Util::inf }
-sub NA { Rstats::Util::na }
-sub NaN { Rstats::Util::nan }
+sub Inf { Rstats::Util::Inf }
+sub NA { Rstats::Util::NA }
+sub NaN { Rstats::Util::NaN }
 
 sub is_null {
   my ($self, $_a1) = @_;
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = [!@$a1->values ? Rstats::Util::true() : Rstats::Util::false()];
+  my @a2_values = [!@$a1->values ? Rstats::Util::TRUE() : Rstats::Util::FALSE()];
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
   
@@ -40,7 +40,7 @@ sub is_na {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::Util::true() : Rstats::Util::false()
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->values};
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
@@ -54,7 +54,7 @@ sub is_nan {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
-    ref $_ eq  'Rstats::NaN' ? Rstats::Util::true() : Rstats::Util::false()
+    ref $_ eq  'Rstats::NaN' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->values};
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
@@ -69,8 +69,8 @@ sub is_finite {
   
   my @a2_values = map {
     !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
-      ? Rstats::Util::true()
-      : Rstats::Util::false()
+      ? Rstats::Util::TRUE()
+      : Rstats::Util::FALSE()
   } @{$a1->values};
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
@@ -84,7 +84,7 @@ sub is_infinite {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_values = map {
-    ref $_ eq 'Rstats::Inf' ? Rstats::Util::true() : Rstats::Util::false()
+    ref $_ eq 'Rstats::Inf' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->values};
   my $a2 = Rstats::Array->array(\@a2_values);
   $a2->mode('logical');
@@ -98,9 +98,9 @@ sub complex {
   return $self->c([Rstats::Type::Complex->new(re => $re, im => $im)]);
 }
 
-sub TRUE { Rstats::Util::true() }
+sub TRUE { Rstats::Util::TRUE() }
 
-sub FALSE { Rstats::Util::false() }
+sub FALSE { Rstats::Util::FALSE() }
 
 sub as_complex {
   my ($self, $a1) = @_;

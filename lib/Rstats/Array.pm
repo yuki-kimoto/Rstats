@@ -472,7 +472,7 @@ sub array {
     elsif (ref $value eq 'Rstats::Type::Logical') {
       $mode_h->{logical}++;
     }
-    elsif (Rstats::Util::is_numeric($value)) {
+    elsif (Rstats::Util::is_perl_number($value)) {
       $value = Rstats::Type::Double->new(value => $value);
       $mode_h->{numeric}++;
     }
@@ -702,7 +702,7 @@ sub as_complex {
       }
       else {
         carp 'NAs introduced by coercion';
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
@@ -710,7 +710,7 @@ sub as_complex {
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
       if (Rstats::Util::is_nan($_)) {
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
       else {
         Rstats::Util::complex($_, 0);
@@ -748,7 +748,7 @@ sub as_numeric {
       }
       else {
         carp 'NAs introduced by coercion';
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
@@ -790,7 +790,7 @@ sub as_integer {
       }
       else {
         carp 'NAs introduced by coercion';
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
@@ -799,10 +799,10 @@ sub as_integer {
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
       if (Rstats::Util::is_nan($_) || Rstats::Util::is_inifinite($_)) {
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
       else {
-        $_ == 0 ? Rstats::Util::false : Rstats::Util::true;
+        $_ == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Integer') {
@@ -833,11 +833,11 @@ sub as_logical {
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
       if ($self->_looks_like_number($_)) {
-        $_ ? Rstats::Util::true : Rstats::Util::false;
+        $_ ? Rstats::Util::TRUE : Rstats::Util::FALSE;
       }
       else {
         carp 'NAs introduced by coercion';
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
@@ -845,25 +845,25 @@ sub as_logical {
       my $re = $_->re->value;
       my $im = $_->im->value;
       if (defined $re && $re == 0 && defined $im && $im == 0) {
-        Rstats::Util::false;
+        Rstats::Util::FALSE;
       }
       else {
-        Rstats::Util::true;
+        Rstats::Util::TRUE;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
       if (Rstats::Util::is_nan($_)) {
-        Rstats::Util::na;
+        Rstats::Util::NA;
       }
       elsif (Rstats::Util::is_inifinite($_)) {
-        Rstats::Util::true;
+        Rstats::Util::TRUE;
       }
       else {
-        $_ == 0 ? Rstats::Util::false : Rstats::Util::true;
+        $_ == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Integer') {
-      $_->value == 0 ? Rstats::Util::false : Rstats::Util::true;
+      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
     }
     elsif (ref $_ eq 'Rstats::Type::Logical') {
       $_;
@@ -1291,7 +1291,7 @@ sub {
 EOS
   
   if ($comparison_ops_h{$op}) {
-    $code .= "? Rstats::Util::true() : Rstats::Util::false()\n";
+    $code .= "? Rstats::Util::TRUE() : Rstats::Util::FALSE()\n";
   }
   
   $code .= <<"EOS";
@@ -1471,13 +1471,13 @@ sub t {
 sub is_array {
   my $self = shift;
   
-  return $self->c([Rstats::Util::true()]);
+  return $self->c([Rstats::Util::TRUE()]);
 }
 
 sub is_vector {
   my $self = shift;
   
-  my $is = @{$self->dim->values} == 0 ? Rstats::Util::true() : Rstats::Util::false();
+  my $is = @{$self->dim->values} == 0 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
   
   return $self->c([$is]);
 }
@@ -1485,7 +1485,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = @{$self->dim->values} == 2 ? Rstats::Util::true() : Rstats::Util::false();
+  my $is = @{$self->dim->values} == 2 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
   
   return $self->c([$is]);
 }

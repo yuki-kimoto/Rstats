@@ -11,7 +11,7 @@ use overload
 
 sub bool { croak "Error in bool context (a) { : missing value where TRUE/FALSE needed" }
 
-sub nagation { Rstats::Util::na() }
+sub nagation { Rstats::Util::NA() }
 
 sub to_string { 'NA' }
 

@@ -9,31 +9,31 @@ use Scalar::Util 'refaddr';
 {
   # Inf - singleton
   {
-    my $inf = Rstats::Util::inf;
-    my $inf2 = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
+    my $inf2 = Rstats::Util::Inf;
   
     is(refaddr $inf, refaddr $inf2);
   }
   
   # Inf - singleton, minus
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     my $inf_minus = -$inf;
-    my $inf_minus2 = Rstats::Util::inf_minus;
+    my $inf_minus2 = Rstats::Util::negativeInf;
     is(refaddr $inf_minus, refaddr $inf_minus2);
   }
   
   # Inf - negation
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     my $inf_minus = -$inf;
-    my $inf_minus2 = Rstats::Util::inf_minus;
+    my $inf_minus2 = Rstats::Util::negativeInf;
     is(refaddr $inf_minus, refaddr $inf_minus2);
   }
 
   # Inf - negation repeat
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     my $inf_minus = -$inf;
     my $inf2 = -$inf_minus;
     is(refaddr $inf, refaddr $inf2);
@@ -41,13 +41,13 @@ use Scalar::Util 'refaddr';
   
   # Inf - to_string, plus
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     is("$inf", 'Inf');
   }
 
   # Inf - to_string, minus
   {
-    my $inf_minus = Rstats::Util::inf_minus;
+    my $inf_minus = Rstats::Util::negativeInf;
     is("$inf_minus", '-Inf');
   }
 }
@@ -56,13 +56,13 @@ use Scalar::Util 'refaddr';
 {
   # is_infinite - Inf, true
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     ok(Rstats::Util::is_infinite($inf));
   }
   
   # is_infinite - -Inf, true
   {
-    my $inf_minus = Rstats::Util::inf_minus;
+    my $inf_minus = Rstats::Util::negativeInf;
     ok(Rstats::Util::is_infinite($inf_minus));
   }
   
@@ -77,13 +77,13 @@ use Scalar::Util 'refaddr';
 {
   # is_finite - Inf, false
   {
-    my $inf = Rstats::Util::inf;
+    my $inf = Rstats::Util::Inf;
     ok(!Rstats::Util::is_finite($inf));
   }
   
   # is_finite - -Inf, false
   {
-    my $inf_minus = Rstats::Util::inf_minus;
+    my $inf_minus = Rstats::Util::negativeInf;
     ok(!Rstats::Util::is_finite($inf_minus));
   }
   

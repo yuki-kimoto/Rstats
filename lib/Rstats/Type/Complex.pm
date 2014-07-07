@@ -11,8 +11,6 @@ use overload
 has 're';
 has 'im';
 
-sub bool { croak 'argument is not interpretable as logical' }
-
 sub negation {
   my $self = shift;
   

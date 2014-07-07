@@ -10,8 +10,6 @@ use overload
 
 has 'value';
 
-sub bool { croak 'Error in -a : invalid argument to unary operator ' }
-
 sub negation { croak 'argument is not interpretable as logical' }
 
 sub to_string { shift->value . "" }

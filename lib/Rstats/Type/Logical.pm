@@ -11,8 +11,6 @@ use overload
 
 has 'value';
 
-sub bool { shift->value }
-
 sub nagation {
   shift->value
     ? Rstats::Type::Integer->new(value => 0)

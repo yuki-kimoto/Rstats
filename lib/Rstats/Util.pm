@@ -31,8 +31,8 @@ my $nan_ad = refaddr $nan;
 my $inf_ad = refaddr $inf;
 my $negative_inf_ad = refaddr $negative_inf;
 
-sub true { $true }
-sub false { $false }
+sub TRUE { $true }
+sub FALSE { $false }
 sub NA { $na }
 sub NaN { $nan }
 sub Inf { $inf }
@@ -84,6 +84,38 @@ my %character_comparison_ops = (
   '==' => 'eq',
   '!=' => 'ne'
 );
+
+sub bool {
+  my ($self, $v1) = @_;
+  
+  if (is_na($v1)) {
+    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
+  }
+  elsif (is_character($v1) || is_complex($v1)) {
+    croak 'Error in -a : invalid argument to unary operator ';
+  }
+  elsif (is_double($v1)) {
+
+    if (defined $v1->value) {
+      return $v1->value;
+    }
+    else {
+      if (is_infinite($v1)) {
+        1;
+      }
+      # NaN
+      else {
+        croak 'argument is not interpretable as logical'
+      }
+    }
+  }
+  elsif (is_integer($v1) || is_logical($v1)) {
+    return $v1->value;
+  }
+  else {
+    croak "Invalid type";
+  }  
+}
 
 sub add {
   my ($self, $v1, $v2) = @_;

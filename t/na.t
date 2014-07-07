@@ -21,21 +21,22 @@ use Scalar::Util 'refaddr';
 # negation
 {
   my $na1 = Rstats::Util::NA;
-  my $na2 = -$na1;
+  my $na2 = Rstats::Util::negation($na1);
   ok(Rstats::Util::is_na($na2));
 }
 
 # bool
 {
   my $na = Rstats::Util::NA;
-  eval { if ($na) { 1 } };
+  
+  eval { Rstats::Util::bool($na) };
   like($@, qr/bool/);
 }
 
 # to_string
 {
   my $na = Rstats::Util::NA;
-  is("$na", 'NA');
+  is(Rstats::Util::to_string($na), 'NA');
 }
 
 # is_na

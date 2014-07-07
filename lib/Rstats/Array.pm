@@ -15,21 +15,21 @@ our @CARP_NOT = ('Rstats');
 my %types_h = map { $_ => 1 } qw/character complex numeric integer logical/;
 
 use overload
-  bool => \&bool,
-  '+' => \&add,
-  '-' => \&subtract,
-  '*' => \&multiply,
-  '/' => \&divide,
-  '%' => \&remainder,
-  'neg' => \&negation,
-  '**' => \&raise,
-  '<' => \&less_than,
-  '<=' => \&less_than_or_equal,
-  '>' => \&more_than,
-  '>=' => \&more_than_or_equal,
-  '==' => \&equal,
-  '!=' => \&not_equal,
-  '""' => \&to_string,
+  bool => sub { shift->_operation('bool', @_) },
+  '+' => sub { shift->_operation('add', @_) },
+  '-' => sub { shift->_operation('subtract', @_) },
+  '*' => sub { shift->_operation('multiply', @_) },
+  '/' => sub { shift->_operation('divide', @_) },
+  '%' => sub { shift->_operation('reminder', @_) },
+  'neg' => sub { shift->_operation('negation', @_) },
+  '**' => sub { shift->_operation('raise', @_) },
+  '<' => sub { shift->_operation('lower_than', @_) },
+  '<=' => sub { shift->_operation('lower_than_or_equal', @_) },
+  '>' => sub { shift->_operation('more_than', @_) },
+  '>=' => sub { shift->_operation('more_than_or_equal', @_) },
+  '==' => sub { shift->_operation('equal', @_) },
+  '!=' => sub { shift->_operation('not_equal', @_) },
+  '""' => sub { shift->_operation('to_string', @_) },
   fallback => 1;
 
 has 'values';
@@ -1244,66 +1244,12 @@ sub to_string {
 sub negation {
   my $self = shift;
   
-  my $a1_values = $self->values;
-  my $a2_values = [];
-  $a2_values->[$_] = -$a1_values->[$_] for (0 .. @$a1_values - 1);
+  my $a1 = $self->clone_without_values;
+  my $a1_values = [];
+  $a1_values->[$_] = Rstats::Util::negation($a1_values->[$_]) for (0 .. @$a1_values - 1);
+  $a1->values($a1_values);
   
-  return Rstats::Array->array($a2_values);
-}
-
-sub add { shift->_operation('+', @_) }
-sub subtract { shift->_operation('-', @_) }
-sub multiply { shift->_operation('*', @_) }
-sub divide { shift->_operation('/', @_) }
-sub raise { shift->_operation('**', @_) }
-sub remainder { shift->_operation('%', @_) }
-
-sub less_than { shift->_operation('<', @_) }
-sub less_than_or_equal { shift->_operation('<=', @_) }
-sub more_than { shift->_operation('>', @_) }
-sub more_than_or_equal { shift->_operation('>=', @_) }
-sub equal { shift->_operation('==', @_) }
-sub not_equal { shift->_operation('!=', @_) }
-
-my $culcs = {};
-my %numeric_ops_h = map { $_ => 1} (qw#+ - * / ** %#);
-my %comparison_ops_h = map { $_ => 1} (qw/< <= > >= == !=/);
-my @ops = (keys %numeric_ops_h, keys %comparison_ops_h);
-my %character_comparison_ops = (
-  '<' => 'lt',
-  '<=' => 'le',
-  '>' => 'gt',
-  '>=' => 'ge',
-  '==' => 'eq',
-  '!=' => 'ne'
-);
-for my $op (@ops) {
-   my $code = <<"EOS";
-sub {
-  my (\$a1_values, \$a2_values) = \@_;
-   
-  my \$a1_length = \@{\$a1_values};
-  my \$a2_length = \@{\$a2_values};
-  my \$longer_length = \$a1_length > \$a2_length ? \$a1_length : \$a2_length;
-
-  my \@a3_values = map {
-    \$a1_values->[\$_ % \$a1_length] $op \$a2_values->[\$_ % \$a2_length]
-EOS
-  
-  if ($comparison_ops_h{$op}) {
-    $code .= "? Rstats::Util::TRUE() : Rstats::Util::FALSE()\n";
-  }
-  
-  $code .= <<"EOS";
-  } (0 .. \$longer_length - 1);
-
-  return \@a3_values;
-}
-EOS
-  
-  $culcs->{$op} = eval $code;
-
-  croak $@ if $@;
+  return $a1;
 }
 
 sub _operation {
@@ -1328,20 +1274,21 @@ sub _operation {
   
   # Upgrade mode if mode is different
   ($a1, $a2) = $self->_upgrade_mode($a1, $a2)
-    if ($a1->{type} || '') ne ($a2->{type} || '');
+    if $a1->{type} ne $a2->{type};
   
-  # Error when numeric operator is used to character
-  croak("Error in a + b : non-numeric argument to binary operator")
-    if $a1->is_character && $numeric_ops_h{$op};
+  # Calculate
+  my $a1_length = @{$a1->values};
+  my $a2_length = @{$a2->values};
+  my $longer_length = $a1_length > $a2_length ? $a1_length : $a2_length;
   
-  # Convert operator to Perl character comparison operator
-  $op = $character_comparison_ops{$op}
-    if $a1->is_character && $character_comparison_ops{$op};
-  
-  my @a3_values = $culcs->{$op}->($a1->values, $a2->values);
+  no strict 'refs';
+  my $operation = "Rstats::Util::$op";
+  my @a3_values = map {
+    &$operation($a1->values->[$_ % $a1_length], $a2->values->[$_ % $a2_length])
+  } (0 .. $longer_length - 1);
   
   my $a3 = Rstats::Array->array(\@a3_values);
-  $a3->{type} = 'integer' if $a1->is_integer;
+  
   return $a3;
 }
 

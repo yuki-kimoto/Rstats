@@ -16,12 +16,12 @@ use Math::Complex;
 use POSIX ();
 
 # Special values
-my $true = Rstats::Type::Logical->new(value => 1);
-my $false = Rstats::Type::Logical->new(value => 0);
 my $na = Rstats::Type::NA->new;
 my $nan = Rstats::Type::Double->new(flag => 'nan');
 my $inf = Rstats::Type::Double->new(flag => 'inf');
 my $negative_inf = Rstats::Type::Double->new(flag => '-inf');
+my $true = logical(1);
+my $false = logical(0);
 
 # Address
 my $true_ad = refaddr $true;
@@ -47,21 +47,30 @@ sub is_finite {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
 
-sub is_integer { ref $_[0] eq 'Rstats::Type::Integer' }
-sub is_double { ref $_[0] eq 'Rstats::Type::Double' }
-sub is_complex { ref $_[0] eq 'Rstats::Type::Complex' }
-sub is_character { ref $_[0] eq 'Rstats::Type::Character' }
-sub is_logical { ref $_[0] eq 'Rstats::Type::Logical' }
+sub is_character { ref $_[0] && $_[0]->{type} eq 'character' }
+sub is_complex { ref $_[0] && $_[0]->{type} eq 'complex' }
+sub is_double { ref $_[0] && $_[0]->{type} eq 'double' }
+sub is_integer { ref $_[0] && $_[0]->{type} eq 'integer' }
+sub is_logical { ref $_[0] && $_[0]->{type} eq 'logical' }
 
+sub character { Rstats::Type::Character->new(value => shift) }
 sub complex {
   my ($re_value, $im_value) = @_;
   
-  my $re = Rstats::Type::Double->new(value => $re_value);
-  my $im = Rstats::Type::Double->new(value => $im_value);
-  my $z = Rstats::Type::Complex->new(re => $re, im => $im);
+  my $re = double($re_value);
+  my $im = double($im_value);
+  my $z = complex_double($re, $im);
   
   return $z;
 }
+sub complex_double {
+  my ($re, $im) = @_;
+  
+  my $z = Rstats::Type::complex->new(re => $re, $im => $im);
+}
+sub double { Rstats::Type::Double->new(value => shift, type => shift || 'normal') }
+sub integer { Rstats::Type::Integer->new(value => shift) }
+sub logical { Rstats::Type::Logical->new(value => shift) }
 
 sub is_perl_number {
   my ($value) = @_;
@@ -140,13 +149,13 @@ sub negation {
     croak 'argument is not interpretable as logical'
   }
   elsif (is_complex($v1)) {
-    return Rstats::Type::Complex->new(-$v1->re, im => -$v1->im);
+    return complex(-$v1->re->value, im => -$v1->im->value);
   }
   elsif (is_double($v1)) {
     
     my $flag = $v1->flag;
     if (defined $v1->value) {
-      return Rstats::Type::Double->new(value => -$v1->value);
+      return double(-$v1->value);
     }
     elsif ($flag eq 'nan') {
       return NaN;
@@ -159,7 +168,7 @@ sub negation {
     }
   }
   elsif (is_integer($v1) || is_logical($v1)) {
-    return Rstats::Type::Integer->new(value => -$v1->value);
+    return integer(-$v1->value);
   }
   else {
     croak "Invalid type";
@@ -198,6 +207,7 @@ sub bool {
   }  
 }
 
+
 sub add {
   my ($v1, $v2) = @_;
   
@@ -208,15 +218,15 @@ sub add {
   }
   elsif (is_complex($v1)) {
     my $re = add($v1->{re}, $v2->{re});
-    my $im = add( $v1->{im}, $v2->{im});
+    my $im = add($v1->{im}, $v2->{im});
     
-    return Rstats::Type::Complex->new(re => $re, im => $im);
+    return complex($re->value, $im->value);
   }
   elsif (is_double($v1)) {
     return NaN if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return Rstats::Type::Double->new(value => $v1->value + $v2->value);
+        return double($v1->value + $v2->value);
       }
       elsif (is_positive_infinite($v2)) {
         return Inf;
@@ -249,10 +259,10 @@ sub add {
     }
   }
   elsif (is_integer($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value + $v2->value);
+    return integer($v1->value + $v2->value);
   }
   elsif (is_logical($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value + $v2->value);
+    return integer($v1->value + $v2->value);
   }
   else {
     croak "Invalid type";
@@ -271,13 +281,13 @@ sub subtract {
     my $re = subtract($v1->{re}, $v2->{re});
     my $im = subtract($v1->{im}, $v2->{im});
     
-    return Rstats::Type::Complex->new(re => $re, im => $im);
+    return complex_double($re, $im);
   }
   elsif (is_double($v1)) {
     return NaN if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return Rstats::Type::Double->new(value => $v1->value - $v2->value);
+        return double($v1->value - $v2->value);
       }
       elsif (is_positive_infinite($v2)) {
         return negativeInf;
@@ -310,10 +320,10 @@ sub subtract {
     }
   }
   elsif (is_integer($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value + $v2->value);
+    return integer($v1->value + $v2->value);
   }
   elsif (is_logical($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value + $v2->value);
+    return integer($v1->value + $v2->value);
   }
   else {
     croak "Invalid type";
@@ -329,16 +339,16 @@ sub multiply {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($v1)) {
-    my $re = Rstats::Type::Double->new(value => $v1->re->value * $v2->re->value - $v1->im->value * $v2->im->value);
-    my $im = Rstats::Type::Double->new(value => $v1->re->value * $v2->im->value + $v1->im->value * $v2->re->value);
+    my $re = double($v1->re->value * $v2->re->value - $v1->im->value * $v2->im->value);
+    my $im = double($v1->re->value * $v2->im->value + $v1->im->value * $v2->re->value);
     
-    return Rstats::Type::Complex->new(re => $re, im => $im);
+    return complex_double($re, $im);
   }
   elsif (is_double($v1)) {
     return NaN if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return Rstats::Type::Double->new(value => $v1->value * $v2->value);
+        return double($v1->value * $v2->value);
       }
       elsif (is_positive_infinite($v2)) {
         if ($v1->value == 0) {
@@ -403,10 +413,10 @@ sub multiply {
     }
   }
   elsif (is_integer($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value * $v2->value);
+    return integer($v1->value * $v2->value);
   }
   elsif (is_logical($v1)) {
-    return Rstats::Type::Integer->new(value => $v1->value * $v2->value);
+    return integer($v1->value * $v2->value);
   }
   else {
     croak "Invalid type";
@@ -423,11 +433,11 @@ sub divide {
   }
   elsif (is_complex($v1)) {
     my $v3 = $v1 * conj($v2);
-    my $abs2 = Rstats::Type::Double->new(value => $v2->re->value ** 2 + $v2->im->value ** 2);
+    my $abs2 = double($v2->re->value ** 2 + $v2->im->value ** 2);
     my $re = $v3->re / $abs2;
     my $im = $v3->im / $abs2;
     
-    return Rstats::Type::Complex->new(re => $re, im => $im);
+    return complex_double($re, $im);
   }
   elsif (is_double($v1)) {
     return NaN if is_nan($v1) || is_nan($v2);
@@ -438,11 +448,11 @@ sub divide {
             return NaN;
           }
           else {
-            return Rstats::Type::Double->new(value => 0)
+            return double(0)
           }
         }
         elsif (is_infinite($v2)) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
       }
       elsif ($v1->value > 0) {
@@ -451,11 +461,11 @@ sub divide {
             return Inf;
           }
           else {
-            return Rstats::Type::Double->new(value => $v1->value / $v2->value);
+            return double($v1->value / $v2->value);
           }
         }
         elsif (is_infinite($v2)) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
       }
       elsif ($v1->value < 0) {
@@ -464,11 +474,11 @@ sub divide {
             return negativeInf;
           }
           else {
-            return Rstats::Type::Double->new(value => $v1->value / $v2->value);
+            return double($v1->value / $v2->value);
           }
         }
         elsif (is_infinite($v2)) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
       }
     }
@@ -505,7 +515,7 @@ sub divide {
         return NaN;
       }
       else {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
     }
     elsif ($v1->value > 0) {
@@ -513,7 +523,7 @@ sub divide {
         return Inf;
       }
       else  {
-        return Rstats::Type::Double->new(value => $v1->value / $v2->value);
+        return double($v1->value / $v2->value);
       }
     }
     elsif ($v1->value < 0) {
@@ -521,7 +531,7 @@ sub divide {
         return negativeInf;
       }
       else {
-        return Rstats::Type::Double->new(value => $v1->value / $v2->value);
+        return double($v1->value / $v2->value);
       }
     }
   }
@@ -531,7 +541,7 @@ sub divide {
         return NaN;
       }
       elsif ($v2->value == 1) {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
     }
     elsif ($v1->value == 1) {
@@ -539,7 +549,7 @@ sub divide {
         return Inf;
       }
       elsif ($v2->value == 1)  {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
     }
   }
@@ -572,17 +582,17 @@ sub raise {
       if ($v1->value == 0) {
         if (defined $v2) {
           if ($v2->value == 0) {
-            return Rstats::Type::Double->new(value => 1);
+            return double(1);
           }
           elsif ($v2->value > 0) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
           elsif ($v2->value < 0) {
             return Inf;
           }
         }
         elsif (is_positive_infinite($v2)) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
         elsif (is_negative_infinite($v2)) {
           return Inf
@@ -591,18 +601,18 @@ sub raise {
       elsif ($v1->value > 0) {
         if (defined $v2) {
           if ($v2->value == 0) {
-            return Rstats::Type::Double->new(value => 1);
+            return double(1);
           }
           else {
-            return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+            return double($v1->value ** $v2->value);
           }
         }
         elsif (is_positive_infinite($v2)) {
           if ($v1->value < 1) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
           elsif ($v1->value == 1) {
-            return Rstats::Type::Double->new(value => 1);
+            return double(1);
           }
           elsif ($v1->value > 1) {
             return Inf;
@@ -610,31 +620,31 @@ sub raise {
         }
         elsif (is_negative_infinite($v2)) {
           if ($v1->value < 1) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
           elsif ($v1->value == 1) {
-            return Rstats::Type::Double->new(value => 1);
+            return double(1);
           }
           elsif ($v1->value > 1) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
         }
       }
       elsif ($v1->value < 0) {
         if (defined $v2) {
           if ($v2->value == 0) {
-            return Rstats::Type::Double->new(value => -1);
+            return double(-1);
           }
           else {
-            return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+            return double($v1->value ** $v2->value);
           }
         }
         elsif (is_positive_infinite($v2)) {
           if ($v1->value > -1) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
           elsif ($v1->value == -1) {
-            return Rstats::Type::Double->new(value => -1);
+            return double(-1);
           }
           elsif ($v1->value < -1) {
             return negativeInf;
@@ -645,10 +655,10 @@ sub raise {
             return Inf;
           }
           elsif ($v1->value == -1) {
-            return Rstats::Type::Double->new(value => -s1);
+            return double(-1);
           }
           elsif ($v1->value < -1) {
-            return Rstats::Type::Double->new(value => 0);
+            return double(0);
           }
         }
       }
@@ -656,49 +666,49 @@ sub raise {
     elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         if ($v2->value == 0) {
-          return Rstats::Type::Double->new(value => 1);
+          return double(1);
         }
         elsif ($v2->value > 0) {
           return Inf;
         }
         elsif ($v2->value < 0) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
       }
       elsif (is_positive_infinite($v2)) {
         return Inf;
       }
       elsif (is_negative_infinite($v2)) {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
     }
     elsif (is_negative_infinite($v1)) {
       if (defined $v2) {
         if ($v2->value == 0) {
-          return Rstats::Type::Double->new(value => -1);
+          return double(-1);
         }
         elsif ($v2->value > 0) {
           return negativeInf;
         }
         elsif ($v2->value < 0) {
-          return Rstats::Type::Double->new(value => 0);
+          return double(0);
         }
       }
       elsif (is_positive_infinite($v2)) {
         return negativeInf;
       }
       elsif (is_negative_infinite($v2)) {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
     }
   }
   elsif (is_integer($v1)) {
     if ($v1->value == 0) {
       if ($v2->value == 0) {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
       elsif ($v2->value > 0) {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
       elsif ($v2->value < 0) {
         return Inf;
@@ -706,36 +716,36 @@ sub raise {
     }
     elsif ($v1->value > 0) {
       if ($v2->value == 0) {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
       else {
-        return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+        return double($v1->value ** $v2->value);
       }
     }
     elsif ($v1->value < 0) {
       if ($v2->value == 0) {
-        return Rstats::Type::Double->new(value => -1);
+        return double(-1);
       }
       else {
-        return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
+        return double($v1->value ** $v2->value);
       }
     }
   }
   elsif (is_logical($v1)) {
     if ($v1->value == 0) {
       if ($v2->value == 0) {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
       elsif ($v2->value == 1) {
-        return Rstats::Type::Double->new(value => 0);
+        return double(0);
       }
     }
     elsif ($v1->value ==  1) {
       if ($v2->value == 0) {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
       elsif ($v2->value == 1) {
-        return Rstats::Type::Double->new(value => 1);
+        return double(1);
       }
     }
   }
@@ -763,7 +773,7 @@ sub remainder {
     }
     else {
       my $v3_value = $v1->value - POSIX::floor($v1->value/$v2->value) * $v2->value;
-      return Rstats::Type::Double->new(value => $v3_value);
+      return double($v3_value);
     }
   }
   elsif (is_integer($v1)) {
@@ -771,7 +781,7 @@ sub remainder {
       return NaN;
     }
     else {
-      return Rstats::Type::Double->new(value => $v1 % $v2);
+      return double($v1 % $v2);
     }
   }
   elsif (is_logical($v1)) {
@@ -779,7 +789,7 @@ sub remainder {
       return NaN;
     }
     else {
-      return Rstats::Type::Double->new(value => $v1->value % $v2->value);
+      return double($v1->value % $v2->value);
     }
   }
   else {
@@ -791,7 +801,7 @@ sub conj {
   my $val = shift;
   
   if (is_complex($val)) {
-    return Rstats::Type::Complex->new(re => $val->re, im => -$val->im);
+    return complex($val->re, Rstats::Util::negation($val->im));
   }
   else {
     croak 'Invalid type';

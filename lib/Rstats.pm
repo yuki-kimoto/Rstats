@@ -837,9 +837,12 @@ sub round {
   my $a1 = $self->_to_a($_a1);
 
   my $r = 10 ** $digits;
-  my @a2_values = map { Math::Round::round_even($_ * $r) / $r } @{$a1->values};
-
-  return $a1->clone_without_values(values => \@a2_values);
+  my @a2_values = map { Rstats::Type::Double->new(value => Math::Round::round_even($_->value * $r) / $r) } @{$a1->values};
+  my $a2 = $a1->clone_without_values;
+  $a2->values(\@a2_values);
+  $a2->type('double');
+  
+  return $a2;
 }
 
 sub ceiling {

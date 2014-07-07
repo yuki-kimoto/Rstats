@@ -30,35 +30,35 @@ use Scalar::Util 'refaddr';
   # logical - bool, FALSE
   {
     my $false = Rstats::Util::FALSE;
-    ok(!$false);
+    ok(!Rstats::Util::bool($false));
   }
   
   # negation, true
   {
     my $true = Rstats::Util::TRUE;
-    my $num = -$true;
+    my $num = Rstats::Util::negation($true);
     ok(Rstats::Util::is_integer($num));
-    is($num->value, 0);
+    is($num->value, -1);
   }
 
   # negation, false
   {
     my $false = Rstats::Util::FALSE;
-    my $num = -$false;
+    my $num = Rstats::Util::negation($false);
     ok(Rstats::Util::is_integer($num));
-    is($num->value, 1);
+    is($num->value, 0);
   }
   
   # to_string, true
   {
     my $true = Rstats::Util::TRUE;
-    is("$true", 'TRUE');
+    is(Rstats::Util::to_string($true), 'TRUE');
   }
   
   # to_string, false
   {
     my $false = Rstats::Util::FALSE;
-    is("$false", "FALSE");
+    is(Rstats::Util::to_string($false), "FALSE");
   }
 }
 

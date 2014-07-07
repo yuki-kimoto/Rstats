@@ -236,7 +236,7 @@ sub add {
         return NaN;
       }
     }
-    elsif (is_negative_infinite($v2)) {
+    elsif (is_negative_infinite($v1)) {
       if (defined $v2) {
         return negativeInf;
       }
@@ -795,6 +795,64 @@ sub conj {
   }
   else {
     croak 'Invalid type';
+  }
+}
+
+sub more_than {
+  my ($v1, $v2) = @_;
+  
+  return NA if is_na($v1) || is_na(v2);
+  
+  if (is_character($v1)) {
+    return $v1->value gt $v2->value ? TRUE : FALSE;
+  }
+  elsif (is_complex($v1)) {
+    croak "invalid comparison with complex values";
+  }
+  elsif (is_double($v1)) {
+    return NA if is_nan($v1) || is_nan($v2);
+    if (defined $v1->value) {
+      if (defined $v2) {
+        return $v1->value > $v2->value;
+      }
+      elsif (is_positive_infinite($v2)) {
+        return FALSE;
+      }
+      elsif (is_negative_infinite($v2)) {
+        return TRUE;
+      }
+    }
+    elsif (is_positive_infinite($v1)) {
+      if (defined $v2) {
+        return TRUE;
+      }
+      elsif (is_positive_infinite($v2)) {
+        return FALSE;
+      }
+      elsif (is_negative_infinite($v2)) {
+        return TRUE;
+      }
+    }
+    elsif (is_negative_infinite($v1)) {
+      if (defined $v2) {
+        return negativeInf;
+      }
+      elsif (is_positive_infinite($v2)) {
+        return FALSE;
+      }
+      elsif (is_negative_infinite($v2)) {
+        return FALSE;
+      }
+    }
+  }
+  elsif (is_integer($v1)) {
+    return $v1->value > $v2->value ? TRUE : FALSE;
+  }
+  elsif (is_logical($v1)) {
+    return $v1->value > $v2->value ? TRUE : FALSE;
+  }
+  else {
+    croak "Invalid type";
   }
 }
 

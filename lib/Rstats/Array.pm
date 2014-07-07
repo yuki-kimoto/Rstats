@@ -798,7 +798,7 @@ sub as_integer {
       Rstats::Type::Integer->new(value => int($_->re));
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
-      if (Rstats::Util::is_nan($_) || Rstats::Util::is_inifinite($_)) {
+      if (Rstats::Util::is_nan($_) || Rstats::Util::is_infinite($_)) {
         Rstats::Util::NA;
       }
       else {
@@ -855,7 +855,7 @@ sub as_logical {
       if (Rstats::Util::is_nan($_)) {
         Rstats::Util::NA;
       }
-      elsif (Rstats::Util::is_inifinite($_)) {
+      elsif (Rstats::Util::is_infinite($_)) {
         Rstats::Util::TRUE;
       }
       else {

@@ -13,7 +13,7 @@ require Rstats::Type::Double;
 use Scalar::Util 'refaddr';
 use B;
 use Math::Complex;
-use Posix ();
+use POSIX ();
 
 # Special values
 my $true = Rstats::Type::Logical->new(value => 1);
@@ -105,18 +105,18 @@ sub add {
       if (defined $v2) {
         return Rstats::Type::Double->new(value => $v1->value + $v2->value);
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return Inf;
       }
       elsif (is_negative_infinite($v2)) {
         return negativeInf;
       }
     }
-    elsif (is_positive_infinite($v1))
+    elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         return Inf;
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return Inf;
       }
       elsif (is_negative_infinite($v2)) {
@@ -127,7 +127,7 @@ sub add {
       if (defined $v2) {
         return negativeInf;
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return NaN;
       }
       elsif (is_negative_infinite($v2)) {
@@ -166,18 +166,18 @@ sub subtract {
       if (defined $v2) {
         return Rstats::Type::Double->new(value => $v1->value - $v2->value);
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return negativeInf;
       }
       elsif (is_negative_infinite($v2)) {
         return Inf;
       }
     }
-    elsif (is_positive_infinite($v1))
+    elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         return Inf;
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return NaN;
       }
       elsif (is_negative_infinite($v2)) {
@@ -188,7 +188,7 @@ sub subtract {
       if (defined $v2) {
         return negativeInf;
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return negativeInf;
       }
       elsif (is_negative_infinite($v2)) {
@@ -227,7 +227,7 @@ sub multiply {
       if (defined $v2) {
         return Rstats::Type::Double->new(value => $v1->value * $v2->value);
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         if ($v1->value == 0) {
           return NaN;
         }
@@ -250,7 +250,7 @@ sub multiply {
         }
       }
     }
-    elsif (is_positive_infinite($v1))
+    elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         if ($v2->value == 0) {
           return NaN;
@@ -262,7 +262,7 @@ sub multiply {
           return negativeInf;
         }
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return Inf;
       }
       elsif (is_negative_infinite($v2)) {
@@ -281,7 +281,7 @@ sub multiply {
           return Inf;
         }
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return negativeInf;
       }
       elsif (is_negative_infinite($v2)) {
@@ -328,7 +328,7 @@ sub divide {
             return Rstats::Type::Double->new(value => 0)
           }
         }
-        elsif (is_infinite($v2))
+        elsif (is_infinite($v2)) {
           return Rstats::Type::Double->new(value => 0);
         }
       }
@@ -341,7 +341,7 @@ sub divide {
             return Rstats::Type::Double->new(value => $v1->value / $v2->value);
           }
         }
-        elsif (is_infinite($v2))
+        elsif (is_infinite($v2)) {
           return Rstats::Type::Double->new(value => 0);
         }
       }
@@ -354,12 +354,12 @@ sub divide {
             return Rstats::Type::Double->new(value => $v1->value / $v2->value);
           }
         }
-        elsif (is_infinite($v2))
+        elsif (is_infinite($v2)) {
           return Rstats::Type::Double->new(value => 0);
         }
       }
     }
-    elsif (is_positive_infinite($v1))
+    elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         if ($v2->value >= 0) {
           return Inf;
@@ -368,7 +368,7 @@ sub divide {
           return negativeInf;
         }
       }
-      elsif (is_infinite($v2))
+      elsif (is_infinite($v2)) {
         return NaN;
       }
     }
@@ -381,7 +381,7 @@ sub divide {
           return Inf;
         }
       }
-      elsif (is_infinite($v2))
+      elsif (is_infinite($v2)) {
         return NaN;
       }
     }
@@ -407,7 +407,7 @@ sub divide {
       if ($v2->value == 0) {
         return negativeInf;
       }
-      else
+      else {
         return Rstats::Type::Double->new(value => $v1->value / $v2->value);
       }
     }
@@ -468,10 +468,10 @@ sub raise {
             return Inf;
           }
         }
-        elsif (is_positive_infinite($v2))
+        elsif (is_positive_infinite($v2)) {
           return Rstats::Type::Double->new(value => 0);
         }
-        elsif (is_negative_infinite($v2))
+        elsif (is_negative_infinite($v2)) {
           return Inf
         }
       }
@@ -484,7 +484,7 @@ sub raise {
             return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
           }
         }
-        elsif (is_positive_infinite($v2))
+        elsif (is_positive_infinite($v2)) {
           if ($v1->value < 1) {
             return Rstats::Type::Double->new(value => 0);
           }
@@ -495,7 +495,7 @@ sub raise {
             return Inf;
           }
         }
-        elsif (is_negative_infinite($v2))
+        elsif (is_negative_infinite($v2)) {
           if ($v1->value < 1) {
             return Rstats::Type::Double->new(value => 0);
           }
@@ -516,7 +516,7 @@ sub raise {
             return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
           }
         }
-        elsif (is_positive_infinite($v2))
+        elsif (is_positive_infinite($v2)) {
           if ($v1->value > -1) {
             return Rstats::Type::Double->new(value => 0);
           }
@@ -527,7 +527,7 @@ sub raise {
             return negativeInf;
           }
         }
-        elsif (is_negative_infinite($v2))
+        elsif (is_negative_infinite($v2)) {
           if ($v1->value > -1) {
             return Inf;
           }
@@ -540,7 +540,7 @@ sub raise {
         }
       }
     }
-    elsif (is_positive_infinite($v1))
+    elsif (is_positive_infinite($v1)) {
       if (defined $v2) {
         if ($v2->value == 0) {
           return Rstats::Type::Double->new(value => 1);
@@ -552,10 +552,10 @@ sub raise {
           return Rstats::Type::Double->new(value => 0);
         }
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return Inf;
       }
-      elsif (is_negative_infinite($v2))
+      elsif (is_negative_infinite($v2)) {
         return Rstats::Type::Double->new(value => 0);
       }
     }
@@ -571,10 +571,10 @@ sub raise {
           return Rstats::Type::Double->new(value => 0);
         }
       }
-      elsif (is_positive_infinite($v2))
+      elsif (is_positive_infinite($v2)) {
         return negativeInf;
       }
-      elsif (is_negative_infinite($v2))
+      elsif (is_negative_infinite($v2)) {
         return Rstats::Type::Double->new(value => 0);
       }
     }
@@ -603,7 +603,7 @@ sub raise {
       if ($v2->value == 0) {
         return Rstats::Type::Double->new(value => -1);
       }
-      else
+      else {
         return Rstats::Type::Double->new(value => $v1->value ** $v2->value);
       }
     }
@@ -650,7 +650,7 @@ sub remainder {
     }
     else {
       my $v3_value = $v1->value - POSIX::floor($v1->value/$v2->value) * $v2->value;
-      return Rstats::Type::Double->new(value => $v3);
+      return Rstats::Type::Double->new(value => $v3_value);
     }
   }
   elsif (is_integer($v1)) {

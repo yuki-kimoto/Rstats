@@ -95,7 +95,7 @@ sub is_infinite {
 sub complex {
   my ($self, $re, $im) = @_;
   
-  return $self->c([Rstats::Type::Complex->new(re => $re, im => $im)]);
+  return $self->c([Rstats::Util::complex($re, $im)]);
 }
 
 sub TRUE { Rstats::Util::TRUE() }

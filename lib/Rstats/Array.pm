@@ -18,7 +18,7 @@ use overload
   '-' => sub { shift->_operation('subtract', @_) },
   '*' => sub { shift->_operation('multiply', @_) },
   '/' => sub { shift->_operation('divide', @_) },
-  '%' => sub { shift->_operation('reminder', @_) },
+  '%' => sub { shift->_operation('remainder', @_) },
   'neg' => \&negation,
   '**' => sub { shift->_operation('raise', @_) },
   '<' => sub { shift->_operation('less_than', @_) },
@@ -84,9 +84,7 @@ sub mode {
       croak qq/could not find function "as_$type"/;
     }
 
-    my $a1 = Rstats::Array->c([$mode]);
-
-    return $a1;
+    return Rstats::Array->c([$mode]);
   }
 }
 
@@ -102,11 +100,8 @@ sub bool {
   }
   
   my $element = $self->element;
-  my $a1 = Rstats::Array->array([$element]);
-  my $a2 = $a1->as_logical;
-  my $a2_element = $a2->element;
   
-  return $a2_element ? 1 : 0;
+  return Rstats::Util::bool($element);
 }
 
 sub clone_without_elements {
@@ -481,18 +476,18 @@ sub array {
       $mode_h->{complex}++;
     }
     elsif (Rstats::Util::is_double($element)) {
-      $mode_h->{numeric}++;
+      $mode_h->{double}++;
     }
     elsif (Rstats::Util::is_integer($element)) {
-      $element = Rstats::Util::double($element->element);
-      $mode_h->{numeric}++;
+      $element = Rstats::Util::double($element->value);
+      $mode_h->{double}++;
     }
     elsif (Rstats::Util::is_logical($element)) {
       $mode_h->{logical}++;
     }
     elsif (Rstats::Util::is_perl_number($element)) {
       $element = Rstats::Util::double($element);
-      $mode_h->{numeric}++;
+      $mode_h->{double}++;
     }
     else {
       $element = Rstats::Util::character("$element");
@@ -513,10 +508,10 @@ sub array {
       $elements = $a1->elements;
       $array->mode('complex');
     }
-    elsif ($mode_h->{numeric}) {
-      my $a1 = Rstats::Array->new(elements => $elements)->as_numeric;
+    elsif ($mode_h->{double}) {
+      my $a1 = Rstats::Array->new(elements => $elements)->as_double;
       $elements = $a1->elements;
-      $array->mode('numeric');
+      $array->mode('double');
     }
     elsif ($mode_h->{logical}) {
       my $a1 = Rstats::Array->new(elements => $elements)->as_logical;
@@ -690,6 +685,9 @@ sub _as {
   elsif ($mode eq 'complex') {
     return $self->as_complex;
   }
+  elsif ($mode eq 'double') {
+    return $self->as_double;
+  }
   elsif ($mode eq 'numeric') {
     return $self->as_numeric;
   }
@@ -750,7 +748,9 @@ sub as_complex {
   return $a2;
 }
 
-sub as_numeric {
+sub as_numeric { as_double(@_) }
+
+sub as_double {
   my $self = shift;
   
   my $a1 = $self;
@@ -787,7 +787,7 @@ sub as_numeric {
     }
   } @$a1_elements;
   $a2->elements(\@a2_elements);
-  $a2->{type} = 'numeric';
+  $a2->{type} = 'double';
 
   return $a2;
 }
@@ -1325,8 +1325,8 @@ sub _upgrade_mode {
     elsif ($type eq 'complex') {
       $mode_h->{complex}++;
     }
-    elsif ($type eq 'numeric') {
-      $mode_h->{numeric}++;
+    elsif ($type eq 'double') {
+      $mode_h->{double}++;
     }
     elsif ($type eq 'integer') {
       $mode_h->{integer}++;
@@ -1349,8 +1349,8 @@ sub _upgrade_mode {
     elsif ($mode_h->{complex}) {
       $to_mode = 'complex';
     }
-    elsif ($mode_h->{numeric}) {
-      $to_mode = 'numeric';
+    elsif ($mode_h->{double}) {
+      $to_mode = 'double';
     }
     elsif ($mode_h->{integer}) {
       $to_mode = 'integer';

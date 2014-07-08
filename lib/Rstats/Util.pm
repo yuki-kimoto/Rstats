@@ -66,7 +66,7 @@ sub complex {
 sub complex_double {
   my ($re, $im) = @_;
   
-  my $z = Rstats::Type::complex->new(re => $re, $im => $im);
+  my $z = Rstats::Type::Complex->new(re => $re, im => $im);
 }
 sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal') }
 sub integer { Rstats::Type::Integer->new(value => shift) }
@@ -239,7 +239,6 @@ sub bool {
     croak "Invalid type";
   }  
 }
-
 
 sub add {
   my ($v1, $v2) = @_;

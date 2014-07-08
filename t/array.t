@@ -18,7 +18,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->FALSE]);
   }
 
   # comparison operator numeric - <, arguments count is different
@@ -26,7 +26,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -34,7 +34,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -42,7 +42,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->TRUE, $r->FALSE]);
   }
 
   # comparison operator numeric - >
@@ -50,7 +50,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -58,7 +58,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->FALSE, $r->TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -66,7 +66,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -74,7 +74,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -82,7 +82,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -90,7 +90,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->contents, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [$r->FALSE, $r->TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -98,7 +98,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -106,7 +106,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->contents, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [$r->TRUE, $r->FALSE]);
   }
 }
 
@@ -165,10 +165,10 @@ my $r = Rstats->new;
     my $a2 = $r->array([1, 2]);
     my $a3 = $a1 + $a2;
     ok($a3->is_complex);
-    is($a3->values->[0]->re, 2);
-    is($a3->values->[0]->im, 2);
-    is($a3->values->[1]->re, 5);
-    is($a3->values->[1]->im, 4);
+    is($a3->values->[0]->re->value, 2);
+    is($a3->values->[0]->im->value, 2);
+    is($a3->values->[1]->re->value, 5);
+    is($a3->values->[1]->im->value, 4);
   }
 
   # numeric operator auto upgrade - numeric

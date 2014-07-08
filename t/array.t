@@ -365,14 +365,14 @@ my $r = Rstats->new;
   }
 }
 
-# clone_without_values
+# clone_without_elements
 {
-  # clone_without_values - matrix
+  # clone_without_elements - matrix
   {
     my $a1 = $r->matrix('1:24', 3, 2);
     $a1->rownames(['r1', 'r2', 'r3']);
     $a1->colnames(['c1', 'c2']);
-    my $a2 = $a1->clone_without_values;
+    my $a2 = $a1->clone_without_elements;
     ok($a2->is_matrix->value);
     is_deeply($a2->dim->values, [3, 2]);
     is_deeply($a2->rownames->values, ['r1', 'r2', 'r3']);
@@ -380,18 +380,18 @@ my $r = Rstats->new;
     is_deeply($a2->values, []);
   }
   
-  # clone_without_values - matrix with value
+  # clone_without_elements - matrix with value
   {
     my $a1 = $r->matrix('1:24', 3, 2);
-    my $a2 = $a1->clone_without_values(values => [2 .. 25]);
+    my $a2 = $a1->clone_without_elements(values => [2 .. 25]);
     is_deeply($a2->values, [2 .. 25]);
   }
   
-  # clone_without_values - vector
+  # clone_without_elements - vector
   {
     my $a1 = $r->matrix('1:24', 3, 2);
     $a1->names(['r1', 'r2', 'r3']);
-    my $a2 = $a1->clone_without_values;
+    my $a2 = $a1->clone_without_elements;
     is_deeply($a2->names->values, ['r1', 'r2', 'r3']);
   }
 }

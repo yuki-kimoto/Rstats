@@ -525,7 +525,7 @@ sub array {
   
   # Fix elements
   my $max_length = 1;
-  $max_length *= $_ for @{$array->_real_dim_elements || [scalar @$elements]};
+  $max_length *= $_ for @{$array->_real_dim_values || [scalar @$elements]};
   if (@$elements > $max_length) {
     @$elements = splice @$elements, 0, $max_length;
   }
@@ -539,13 +539,12 @@ sub array {
   return $array;
 }
 
-sub _real_dim_elements {
+sub _real_dim_values {
   my $self = shift;
   
   my $dim = $self->dim;
-  my $dim_elements = $dim->elements;
-  if (@$dim_elements) {
-    return $dim_elements;
+  if (@{$dim->values}) {
+    return $dim->values;
   }
   else {
     if (defined $self->elements) {
@@ -573,7 +572,7 @@ sub at {
 sub element {
   my $self = shift;
   
-  my $dim_elements = $self->_real_dim_elements;
+  my $dim_elements = $self->_real_dim_values;
   
   if (@_) {
     if (@$dim_elements == 1) {
@@ -1028,9 +1027,7 @@ sub set {
 sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
-  my $a1_elements = $self->elements;
-  my $a1_dim = $self->_real_dim_elements;
-  
+  my $a1_dim = $self->_real_dim_values;
   my @indexs;
   my @a2_dim;
   
@@ -1040,45 +1037,43 @@ sub _parse_index {
     $_index = '' unless defined $_index;
     
     my $index = Rstats::Array->_to_a($_index);
-    my $index_elements = $index->elements;
-    if (@$index_elements && !$index->is_character->element && !$index->is_logical->element) {
+    my $index_values = $index->values;
+    if (@$index_values && !$index->is_character && !$index->is_logical) {
       my $minus_count = 0;
-      for my $index_element (@$index_elements) {
-        if ($index_element == 0) {
+      for my $index_value (@$index_values) {
+        if ($index_value == 0) {
           croak "0 is invalid index";
         }
         else {
-          $minus_count++ if $index_element < 0;
+          $minus_count++ if $index_value < 0;
         }
       }
       croak "Can't min minus sign and plus sign"
-        if $minus_count > 0 && $minus_count != @$index_elements;
+        if $minus_count > 0 && $minus_count != @$index_values;
       $index->{_minus} = 1 if $minus_count > 0;
     }
     
-    push @indexs, $index;
-    
-    if (!@{$index->elements}) {
-      my $index_element_new = [1 .. $a1_dim->[$i]];
-      $index->elements($index_element_new);
+    if (!@{$index->values}) {
+      my $index_values_new = [1 .. $a1_dim->[$i]];
+      $index = Rstats::Array->array($index_values_new);
     }
-    elsif ($index->is_character->element) {
+    elsif ($index->is_character) {
       if ($self->is_vector) {
-        my $index_new_elements = [];
-        for my $name (@{$index->elements}) {
+        my $index_new_values = [];
+        for my $name (@{$index->values}) {
           my $i = 0;
-          my $element;
-          for my $self_name (@{$self->names->elements}) {
+          my $value;
+          for my $self_name (@{$self->names->values}) {
             if ($name eq $self_name) {
-              $element = $self->elements->[$i];
+              $value = $self->values->[$i];
               last;
             }
             $i++;
           }
-          croak "Can't find name" unless defined $element;
-          push @$index_new_elements, $element;
+          croak "Can't find name" unless defined $value;
+          push @$index_new_values, $value;
         }
-        $indexs[$i]->elements($index_new_elements);
+        $indexs[$i] = Rstats::Array->array($index_new_values);
       }
       elsif ($self->is_matrix) {
         
@@ -1087,49 +1082,50 @@ sub _parse_index {
         croak "Can't support name except vector and matrix";
       }
     }
-    elsif ($index->is_logical->element) {
-      my $index_elements_new = [];
-      for (my $i = 0; $i < @{$index->elements}; $i++) {
-        push @$index_elements_new, $i + 1 if $index->elements->[$i];
+    elsif ($index->is_logical) {
+      my $index_values_new = [];
+      for (my $i = 0; $i < @{$index->values}; $i++) {
+        push @$index_values_new, $i + 1 if Rstats::Util::bool($index->elements->[$i]);
       }
-      $index->elements($index_elements_new);
+      $index = Rstats::Array->array($index_values_new);
     }
     elsif ($index->{_minus}) {
-      my $index_element_new = [];
+      my $index_value_new = [];
       
       for my $k (1 .. $a1_dim->[$i]) {
-        push @$index_element_new, $k unless grep { $_ == -$k } @{$index->elements};
+        push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
       }
-      $index->elements($index_element_new);
-      delete $index->{_minus};
+      $index = Rstats::Array->array($index_value_new);
     }
-    
+
+    push @indexs, $index;
+
     my $count = @{$index->elements};
     push @a2_dim, $count unless $count == 1 && $drop;
   }
   @a2_dim = (1) unless @a2_dim;
   
-  my $index_elements = [map { $_->elements } @indexs];
-  my $ords = $self->_cross_product($index_elements);
+  my $index_values = [map { $_->values } @indexs];
+  my $ords = $self->_cross_product($index_values);
   my @positions = map { $self->_pos($_, $a1_dim) } @$ords;
   
   return (\@positions, \@a2_dim);
 }
 
 sub _cross_product {
-  my ($self, $elements) = @_;
+  my ($self, $values) = @_;
 
-  my @idxs = (0) x @$elements;
+  my @idxs = (0) x @$values;
   my @idx_idx = 0..(@idxs - 1);
-  my @array = map { $_->[0] } @$elements;
+  my @array = map { $_->[0] } @$values;
   my $result = [];
   
   push @$result, [@array];
   my $end_loop;
   while (1) {
     foreach my $i (@idx_idx) {
-      if( $idxs[$i] < @{$elements->[$i]} - 1 ) {
-        $array[$i] = $elements->[$i][++$idxs[$i]];
+      if( $idxs[$i] < @{$values->[$i]} - 1 ) {
+        $array[$i] = $values->[$i][++$idxs[$i]];
         push @$result, [@array];
         last;
       }
@@ -1140,7 +1136,7 @@ sub _cross_product {
       }
       
       $idxs[$i] = 0;
-      $array[$i] = $elements->[$i][0];
+      $array[$i] = $values->[$i][0];
     }
     last if $end_loop;
   }
@@ -1171,7 +1167,7 @@ sub to_string {
 
   my $elements = $self->elements;
   
-  my $dim_elements = $self->_real_dim_elements;
+  my $dim_elements = $self->_real_dim_values;
   
   my $dim_length = @$dim_elements;
   my $dim_num = $dim_length - 1;
@@ -1466,7 +1462,7 @@ sub is_matrix {
 sub as_matrix {
   my $self = shift;
   
-  my $a1_dim_elements = $self->_real_dim_elements;
+  my $a1_dim_elements = $self->_real_dim_values;
   my $a1_dim_count = @$a1_dim_elements;
   my $a2_dim_elements = [];
   my $row;
@@ -1490,7 +1486,7 @@ sub as_array {
   my $self = shift;
   
   my $a1_elements = [@{$self->elements}];
-  my $a1_dim_elements = [@{$self->_real_dim_elements}];
+  my $a1_dim_elements = [@{$self->_real_dim_values}];
   
   return $self->array($a1_elements, $a1_dim_elements);
 }

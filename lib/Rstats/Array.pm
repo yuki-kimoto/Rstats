@@ -6,22 +6,20 @@ use List::Util;
 use Rstats;
 use B;
 use Scalar::Util 'looks_like_number';
-use Rstats::Type::NA;
-use Rstats::Type::Logical;
-use Rstats::Type::Character;
+use Rstats::Util;
 
 our @CARP_NOT = ('Rstats');
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 use overload
-  bool => sub { shift->_operation('bool', @_) },
+  bool => \&bool,
   '+' => sub { shift->_operation('add', @_) },
   '-' => sub { shift->_operation('subtract', @_) },
   '*' => sub { shift->_operation('multiply', @_) },
   '/' => sub { shift->_operation('divide', @_) },
   '%' => sub { shift->_operation('reminder', @_) },
-  'neg' => sub { shift->_operation('negation', @_) },
+  'neg' => \&negation,
   '**' => sub { shift->_operation('raise', @_) },
   '<' => sub { shift->_operation('less_than', @_) },
   '<=' => sub { shift->_operation('less_than_or_equal', @_) },
@@ -29,7 +27,7 @@ use overload
   '>=' => sub { shift->_operation('more_than_or_equal', @_) },
   '==' => sub { shift->_operation('equal', @_) },
   '!=' => sub { shift->_operation('not_equal', @_) },
-  '""' => sub { shift->_operation('to_string', @_) },
+  '""' => \&to_string,
   fallback => 1;
 
 has 'contents';
@@ -476,20 +474,20 @@ sub array {
     if (!defined $content) {
       croak "undef is invalid content";
     }
-    elsif (ref $content eq 'Rstats::Type::Character') {
+    elsif (Rstats::Util::is_character($content)) {
       $mode_h->{character}++;
     }
-    elsif (ref $content eq 'Rstats::Type::Complex') {
+    elsif (Rstats::Util::is_complex($content)) {
       $mode_h->{complex}++;
     }
-    elsif (ref $content eq 'Rstats::Type::Double') {
+    elsif (Rstats::Util::is_double($content)) {
       $mode_h->{numeric}++;
     }
-    elsif (ref $content eq 'Rstats::Type::Integer') {
+    elsif (Rstats::Util::is_integer($content)) {
       $content = Rstats::Util::double($content->content);
       $mode_h->{numeric}++;
     }
-    elsif (ref $content eq 'Rstats::Type::Logical') {
+    elsif (Rstats::Util::is_logical($content)) {
       $mode_h->{logical}++;
     }
     elsif (Rstats::Util::is_perl_number($content)) {
@@ -713,11 +711,11 @@ sub as_complex {
   my $a1_contents = $a1->contents;
   my $a2 = $self->clone_without_contents;
   my @a2_contents = map {
-    if (ref $_ eq 'Rstats::Type::NA') {
+    if (Rstats::Util::is_na($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Character') {
-      if (my @nums = $self->_looks_like_complex($_)) {
+    elsif (Rstats::Util::is_character($_)) {
+      if (my @nums = $self->_looks_like_complex($_->value)) {
         Rstats::Util::complex(@nums);
       }
       else {
@@ -725,22 +723,22 @@ sub as_complex {
         Rstats::Util::NA;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Complex') {
+    elsif (Rstats::Util::is_complex($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Double') {
+    elsif (Rstats::Util::is_double($_)) {
       if (Rstats::Util::is_nan($_)) {
         Rstats::Util::NA;
       }
       else {
-        Rstats::Util::complex($_, 0);
+        Rstats::Util::complex($_->value, 0);
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Integer') {
-      Rstats::Util::complex($_, 0);
+    elsif (Rstats::Util::is_integer($_)) {
+      Rstats::Util::complex($_->value, 0);
     }
-    elsif (ref $_ eq 'Rstats::Type::Logical') {
-      Rstats::Util::complex($_->content ? 1 : 0, 0);
+    elsif (Rstats::Util::is_logical($_)) {
+      Rstats::Util::complex($_->value ? 1 : 0, 0);
     }
     else {
       croak "unexpected type";
@@ -759,30 +757,30 @@ sub as_numeric {
   my $a1_contents = $a1->contents;
   my $a2 = $self->clone_without_contents;
   my @a2_contents = map {
-    if (ref $_ eq 'Rstats::Type::NA') {
+    if (Rstats::Util::is_na($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_)) {
-        Rstats::Util::double($_ + 0);
+    elsif (Rstats::Util::is_character($_)) {
+      if ($self->_looks_like_number($_->value)) {
+        Rstats::Util::double($_->value + 0);
       }
       else {
         carp 'NAs introduced by coercion';
         Rstats::Util::NA;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Complex') {
+    elsif (Rstats::Util::is_complex($_)) {
       carp "imaginary parts discarded in coercion";
-      Rstats::Util::double($_->re);
+      Rstats::Util::double($_->re->value);
     }
-    elsif (ref $_ eq 'Rstats::Type::Double') {
+    elsif (Rstats::Util::is_double($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Integer') {
-      Rstats::Util::double($_->content);
+    elsif (Rstats::Util::is_integer($_)) {
+      Rstats::Util::double($_->value);
     }
-    elsif (ref $_ eq 'Rstats::Type::Logical') {
-      Rstats::Util::double($_ ? 1 : 0);
+    elsif (Rstats::Util::is_logical($_)) {
+      Rstats::Util::double($_->value ? 1 : 0);
     }
     else {
       croak "unexpected type";
@@ -801,34 +799,34 @@ sub as_integer {
   my $a1_contents = $a1->contents;
   my $a2 = $self->clone_without_contents;
   my @a2_contents = map {
-    if (ref $_ eq 'Rstats::Type::NA') {
+    if (Rstats::Util::is_na($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_)) {
-        Rstats::Util::integer(int($_ + 0));
+    elsif (Rstats::Util::is_character($_)) {
+      if ($self->_looks_like_number($_->value)) {
+        Rstats::Util::integer(int($_->value + 0));
       }
       else {
         carp 'NAs introduced by coercion';
         Rstats::Util::NA;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Complex') {
+    elsif (Rstats::Util::is_complex($_)) {
       carp "imaginary parts discarded in coercion";
-      Rstats::Util::integer(int($_->re));
+      Rstats::Util::integer(int($_->re->value));
     }
-    elsif (ref $_ eq 'Rstats::Type::Double') {
+    elsif (Rstats::Util::is_double($_)) {
       if (Rstats::Util::is_nan($_) || Rstats::Util::is_infinite($_)) {
         Rstats::Util::NA;
       }
       else {
-        $_ == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
+        Rstats::Util::integer($_->value);
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Integer') {
+    elsif (Rstats::Util::is_integer($_)) {
       $_; 
     }
-    elsif (ref $_ eq 'Rstats::Type::Logical') {
+    elsif (Rstats::Util::is_logical($_)) {
       Rstats::Util::integer($_ ? 1 : 0);
     }
     else {
@@ -848,22 +846,22 @@ sub as_logical {
   my $a1_contents = $a1->contents;
   my $a2 = $self->clone_without_contents;
   my @a2_contents = map {
-    if (ref $_ eq 'Rstats::Type::NA') {
+    if (Rstats::Util::is_na($_)) {
       $_;
     }
-    elsif (ref $_ eq 'Rstats::Type::Character') {
-      if ($self->_looks_like_number($_)) {
-        $_ ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+    elsif (Rstats::Util::is_character($_)) {
+      if ($self->_looks_like_number($_->value)) {
+        $_->value ? Rstats::Util::TRUE : Rstats::Util::FALSE;
       }
       else {
         carp 'NAs introduced by coercion';
         Rstats::Util::NA;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Complex') {
+    elsif (Rstats::Util::is_complex($_)) {
       carp "imaginary parts discarded in coercion";
-      my $re = $_->re->content;
-      my $im = $_->im->content;
+      my $re = $_->re->value;
+      my $im = $_->im->value;
       if (defined $re && $re == 0 && defined $im && $im == 0) {
         Rstats::Util::FALSE;
       }
@@ -871,7 +869,7 @@ sub as_logical {
         Rstats::Util::TRUE;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Double') {
+    elsif (Rstats::Util::is_double($_)) {
       if (Rstats::Util::is_nan($_)) {
         Rstats::Util::NA;
       }
@@ -879,14 +877,14 @@ sub as_logical {
         Rstats::Util::TRUE;
       }
       else {
-        $_ == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
+        $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
       }
     }
-    elsif (ref $_ eq 'Rstats::Type::Integer') {
-      $_->content == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
+    elsif (Rstats::Util::is_integer($_)) {
+      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
     }
-    elsif (ref $_ eq 'Rstats::Type::Logical') {
-      $_;
+    elsif (Rstats::Util::is_logical($_)) {
+      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
     }
     else {
       croak "unexpected type";
@@ -903,7 +901,9 @@ sub as_character {
 
   my $a1_contents = $self->contents;
   my $a2 = $self->clone_without_contents;
-  my @a2_contents = map { Rstats::Util::character("$_") } @$a1_contents;
+  my @a2_contents = map {
+    Rstats::Util::character(Rstats::Util::to_string($_))
+  } @$a1_contents;
   $a2->contents(\@a2_contents);
   $a2->{type} = 'character';
 

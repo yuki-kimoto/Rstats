@@ -697,10 +697,18 @@ sub expm1 {
   
   my @a2_contents
     = map {
-      abs($_) < 1e-5 ? $_ + 0.5 * $_ * $_ : exp($_) - 1.0
+      Rstats::Util::double(
+        abs($_->value) < 1e-5
+          ? $_->value + 0.5 * $_->value * $_->value
+          : exp($_->value) - 1.0
+      )
     } @{$a1->contents};
   
-  return $a1->clone_without_contents(contents => \@a2_contents);
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
 }
 
 sub abs {
@@ -708,9 +716,13 @@ sub abs {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_contents = map { abs $_ } @{$a1->contents};
+  my @a2_contents = map { Rstats::Util::double(abs $_->value) } @{$a1->contents};
   
-  return $a1->clone_without_contents(contents => \@a2_contents);
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
 }
 
 sub sum {
@@ -786,6 +798,321 @@ sub tail {
   return $v1->new(contents => \@contents2);
 }
 
+sub trunc {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(int $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub floor {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(POSIX::floor $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub round {
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my ($_a1, $digits) = @_;
+  $digits = $opt->{digits} unless defined $digits;
+  $digits = 0 unless defined $digits;
+  
+  my $a1 = $self->_to_a($_a1);
+
+  my $r = 10 ** $digits;
+  my @a2_contents = map { Rstats::Util::double(Math::Round::round_even($_->value * $r) / $r) } @{$a1->contents};
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub ceiling {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  my @a2_contents = map { Rstats::Util::double(POSIX::ceil $_->value) } @{$a1->contents};
+  
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub log {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(log $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub logb { shift->log(@_) }
+
+sub log10 {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(CORE::log $_->value / CORE::log 10) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+}
+
+sub log2 {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(CORE::log $_->value / CORE::log 2) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub exp {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(exp $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub sin {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(sin $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub cos {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(cos $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub tan {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::tan $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub asinh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::asinh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub acosh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::acosh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub atanh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::atanh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub asin {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::asin $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub acos {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::acos $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub atan {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::atan $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub sinh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::sinh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub cosh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::cosh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub tanh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(Math::Trig::tanh $_->value) } @{$a1->contents};
+
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub sqrt {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = $self->_to_a($_a1);
+  
+  my @a2_contents = map { Rstats::Util::double(sqrt $_->value) } @{$a1->contents};
+  
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub range {
+  my ($self, $array) = @_;
+  
+  my $min = $self->min($array);
+  my $max = $self->max($array);
+  
+  return $self->c([$min, $max]);
+}
+
+sub i {
+  my $self = shift;
+  
+  my $i = Rstats::Type::Complex->new(re => 0, im => 1);
+  
+  return $i;
+}
+
 sub length {
   my $self = shift;
   my $v1 = shift;
@@ -804,244 +1131,6 @@ sub sort {
   my $v1_contents = $v1->contents;
   my $v2_contents = $decreasing ? [reverse sort(@$v1_contents)] : [sort(@$v1_contents)];
   return $self->c($v2_contents);
-}
-
-sub trunc {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { int $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub floor {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { POSIX::floor $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub round {
-  my $self = shift;
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($_a1, $digits) = @_;
-  $digits = $opt->{digits} unless defined $digits;
-  $digits = 0 unless defined $digits;
-  
-  my $a1 = $self->_to_a($_a1);
-
-  my $r = 10 ** $digits;
-  my @a2_contents = map { Rstats::Util::double(Math::Round::round_even($_ * $r) / $r) } @{$a1->values};
-  my $a2 = $a1->clone_without_contents;
-  $a2->contents(\@a2_contents);
-  $a2->mode('double');
-  
-  return $a2;
-}
-
-sub ceiling {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { POSIX::ceil $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub log {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { log $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub logb { shift->log(@_) }
-
-sub log10 {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { CORE::log $_ / CORE::log 10 } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub log2 {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { CORE::log $_ / CORE::log 2 } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub exp {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { exp $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub sin {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { sin $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub cos {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { cos $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub tan {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::tan $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub asinh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::asinh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub acosh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::acosh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub atanh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::atanh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub asin {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::asin $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub acos {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::acos $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub atan {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::atan $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub sinh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::sinh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub cosh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::cosh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub tanh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { Math::Trig::tanh $_ } @{$a1->contents};
-
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub sqrt {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = $self->_to_a($_a1);
-  
-  my @a2_contents = map { sqrt $_ } @{$a1->contents};
-  
-  return $a1->clone_without_contents(contents => \@a2_contents);
-}
-
-sub range {
-  my ($self, $array) = @_;
-  
-  my $min = $self->min($array);
-  my $max = $self->max($array);
-  
-  return $self->c([$min, $max]);
-}
-
-sub i {
-  my $self = shift;
-  
-  my $i = Rstats::Type::Complex->new(re => 0, im => 1);
-  
-  return $i;
 }
 
 1;

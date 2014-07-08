@@ -1080,7 +1080,7 @@ sub equal {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value == $v2->value;
+        return $v1->value == $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return FALSE;
@@ -1132,13 +1132,13 @@ sub not_equal {
     return $v1->value ne $v2->value ? TRUE : FALSE;
   }
   elsif (is_complex($v1)) {
-    return !($v1->re->value == $v2->re->value && $v2->im->value == $v2->im->value);
+    return !($v1->re->value == $v2->re->value && $v2->im->value == $v2->im->value) ? TRUE : FALSE;
   }
   elsif (is_double($v1)) {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value != $v2->value;
+        return $v1->value != $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return TRUE;

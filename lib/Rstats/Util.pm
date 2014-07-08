@@ -47,11 +47,11 @@ sub is_finite {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
 
-sub is_character { ref $_[0] && $_[0]->{type} eq 'character' }
-sub is_complex { ref $_[0] && $_[0]->{type} eq 'complex' }
-sub is_double { ref $_[0] && $_[0]->{type} eq 'double' }
-sub is_integer { ref $_[0] && $_[0]->{type} eq 'integer' }
-sub is_logical { ref $_[0] && $_[0]->{type} eq 'logical' }
+sub is_character { ref $_[0] eq 'Rstats::Type::Character' }
+sub is_complex { ref $_[0] eq 'Rstats::Type::Complex' }
+sub is_double { ref $_[0] eq 'Rstats::Type::Double' }
+sub is_integer { ref $_[0] eq 'Rstats::Type::Integer' }
+sub is_logical { ref $_[0] eq 'Rstats::Type::Logical' }
 
 sub character { Rstats::Type::Character->new(value => shift) }
 sub complex {
@@ -68,9 +68,34 @@ sub complex_double {
   
   my $z = Rstats::Type::complex->new(re => $re, $im => $im);
 }
-sub double { Rstats::Type::Double->new(value => shift, type => shift || 'normal') }
+sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal') }
 sub integer { Rstats::Type::Integer->new(value => shift) }
 sub logical { Rstats::Type::Logical->new(value => shift) }
+
+sub value {
+  my $element = shift;
+  
+  if (is_character($element)) {
+    return $element->value;
+  }
+  elsif (is_complex($element)) {
+    my $hash = {
+      re => $element->re->value,
+      im => $element->im->value
+    };
+    
+    return $hash;
+  }
+  elsif (is_double($element)) {
+    return $element->value;
+  }
+  elsif (is_integer($element)) {
+    return $element->value;
+  }
+  elsif (is_logical($element)) {
+    return $element->value;
+  }
+}
 
 sub is_perl_number {
   my ($value) = @_;
@@ -823,7 +848,7 @@ sub more_than {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value > $v2->value;
+        return $v1->value > $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return FALSE;
@@ -881,7 +906,7 @@ sub more_than_or_equal {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value >= $v2->value;
+        return $v1->value >= $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return FALSE;
@@ -939,7 +964,7 @@ sub less_than {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value < $v2->value;
+        return $v1->value < $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return TRUE;
@@ -997,7 +1022,7 @@ sub less_than_or_equal {
     return NA if is_nan($v1) || is_nan($v2);
     if (defined $v1->value) {
       if (defined $v2) {
-        return $v1->value <= $v2->value;
+        return $v1->value <= $v2->value ? TRUE : FALSE;
       }
       elsif (is_positive_infinite($v2)) {
         return TRUE;

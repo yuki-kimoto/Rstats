@@ -12,7 +12,7 @@ use Rstats::Type::Character;
 
 our @CARP_NOT = ('Rstats');
 
-my %types_h = map { $_ => 1 } qw/character complex numeric integer logical/;
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 use overload
   bool => sub { shift->_operation('bool', @_) },
@@ -23,8 +23,8 @@ use overload
   '%' => sub { shift->_operation('reminder', @_) },
   'neg' => sub { shift->_operation('negation', @_) },
   '**' => sub { shift->_operation('raise', @_) },
-  '<' => sub { shift->_operation('lower_than', @_) },
-  '<=' => sub { shift->_operation('lower_than_or_equal', @_) },
+  '<' => sub { shift->_operation('less_than', @_) },
+  '<=' => sub { shift->_operation('less_than_or_equal', @_) },
   '>' => sub { shift->_operation('more_than', @_) },
   '>=' => sub { shift->_operation('more_than_or_equal', @_) },
   '==' => sub { shift->_operation('equal', @_) },
@@ -32,14 +32,24 @@ use overload
   '""' => sub { shift->_operation('to_string', @_) },
   fallback => 1;
 
-has 'values';
+has 'contents';
+
+sub values {
+  my $self = shift;
+  
+  my @values = map { Rstats::Util::value($_) } @{$self->contents};
+  
+  return \@values;
+}
+
+sub value { Rstats::Util::value(shift->content(@_)) }
 
 sub typeof {
   my $self = shift;
   
   my $type = $self->{type};
-  my $a1_values = defined $type ? $type : "NULL";
-  my $a1 = Rstats::Array->c([$a1_values]);
+  my $a1_contents = defined $type ? $type : "NULL";
+  my $a1 = Rstats::Array->c([$a1_contents]);
   
   return $a1;
 }
@@ -52,7 +62,12 @@ sub mode {
     croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
       unless $types_h{$type};
     
-    $self->{type} = $type;
+    if ($type eq 'numeric') {
+      $self->{type} = 'double';
+    }
+    else {
+      $self->{type} = $type;
+    }
     
     return $self;
   }
@@ -60,10 +75,15 @@ sub mode {
     my $type = $self->{type};
     my $mode;
     if (defined $type) {
-      $mode = $type eq 'integer' ? 'numeric' : $type;
+      if ($type eq 'integer' || $type eq 'double') {
+        $mode = 'numeric';
+      }
+      else {
+        $mode = $type;
+      }
     }
     else {
-      $mode = 'NULL';
+      croak qq/could not find function "as_$type"/;
     }
 
     my $a1 = Rstats::Array->c([$mode]);
@@ -75,7 +95,7 @@ sub mode {
 sub bool {
   my $self = shift;
   
-  my $length = @{$self->values};
+  my $length = @{$self->contents};
   if ($length == 0) {
     croak 'Error in if (a) { : argument is of length zero';
   }
@@ -83,15 +103,15 @@ sub bool {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
-  my $value = $self->value;
-  my $a1 = Rstats::Array->array([$value]);
+  my $content = $self->content;
+  my $a1 = Rstats::Array->array([$content]);
   my $a2 = $a1->as_logical;
-  my $a2_value = $a2->value;
+  my $a2_content = $a2->content;
   
-  return $a2_value ? 1 : 0;
+  return $a2_content ? 1 : 0;
 }
 
-sub clone_without_values {
+sub clone_without_contents {
   my ($self, %opt) = @_;
   
   my $array = Rstats::Array->new;
@@ -100,7 +120,7 @@ sub clone_without_values {
   $array->{rownames} = [@{$self->{rownames} || []}];
   $array->{colnames} = [@{$self->{colnames} || []}];
   $array->{dim} = [@{$self->{dim} || []}];
-  $array->{values} = $opt{values} ? $opt{values} : [];
+  $array->{contents} = $opt{contents} ? $opt{contents} : [];
   
   return $array;
 }
@@ -108,38 +128,38 @@ sub clone_without_values {
 sub row {
   my $self = shift;
   
-  my $nrow = $self->nrow->value;
-  my $ncol = $self->ncol->value;
+  my $nrow = $self->nrow->content;
+  my $ncol = $self->ncol->content;
   
-  my @values = (1 .. $nrow) x $ncol;
+  my @contents = (1 .. $nrow) x $ncol;
   
-  return Rstats::Array->array(\@values, [$nrow, $ncol]);
+  return Rstats::Array->array(\@contents, [$nrow, $ncol]);
 }
 
 sub col {
   my $self = shift;
   
-  my $nrow = $self->nrow->value;
-  my $ncol = $self->ncol->value;
+  my $nrow = $self->nrow->content;
+  my $ncol = $self->ncol->content;
   
-  my @values;
+  my @contents;
   for my $col (1 .. $ncol) {
-    push @values, ($col) x $nrow;
+    push @contents, ($col) x $nrow;
   }
   
-  return Rstats::Array->array(\@values, [$nrow, $ncol]);
+  return Rstats::Array->array(\@contents, [$nrow, $ncol]);
 }
 
 sub nrow {
   my $self = shift;
   
-  return Rstats::Array->array($self->dim->values->[0]);
+  return Rstats::Array->array($self->dim->contents->[0]);
 }
 
 sub ncol {
   my $self = shift;
   
-  return Rstats::Array->array($self->dim->values->[1]);
+  return Rstats::Array->array($self->dim->contents->[1]);
 }
 
 sub names {
@@ -155,7 +175,7 @@ sub names {
       $names = $_names;
     }
     elsif (ref $_names eq 'Rstats::Array') {
-      $names = $_names->values;
+      $names = $_names->contents;
     }
     else {
       $names = [$_names];
@@ -188,7 +208,7 @@ sub colnames {
       $colnames = $_colnames;
     }
     elsif (ref $_colnames eq 'Rstats::Array') {
-      $colnames = $_colnames->values;
+      $colnames = $_colnames->contents;
     }
     else {
       $colnames = [$_colnames];
@@ -221,7 +241,7 @@ sub rownames {
       $rownames = $_rownames;
     }
     elsif (ref $_rownames eq 'Rstats::Array') {
-      $rownames = $_rownames->values;
+      $rownames = $_rownames->contents;
     }
     else {
       $rownames = [$_rownames];
@@ -247,7 +267,7 @@ sub dim {
   if (@_) {
     my $a1 = $_[0];
     if (ref $a1 eq 'Rstats::Array') {
-      $self->{dim} = $a1->values;
+      $self->{dim} = $a1->contents;
     }
     elsif (ref $a1 eq 'ARRAY') {
       $self->{dim} = $a1;
@@ -256,19 +276,19 @@ sub dim {
       $self->{dim} = [$a1];
     }
     else {
-      croak "Invalid values is passed to dim argument";
+      croak "Invalid contents is passed to dim argument";
     }
   }
   else {
     $self->{dim} = [] unless exists $self->{dim};
-    return Rstats::Array->new(values => $self->{dim});
+    return Rstats::Array->new(contents => $self->{dim});
   }
 }
 
 sub length {
   my $self = shift;
   
-  my $length = @{$self->values};
+  my $length = @{$self->contents};
   
   return $length;
 }
@@ -332,19 +352,19 @@ sub seq {
       $by = ($to - $from) / ($length - 1);
     }
     
-    my $values = [];
+    my $contents = [];
     if ($to == $from) {
-      $values->[0] = $to;
+      $contents->[0] = $to;
     }
     elsif ($to > $from) {
       if ($by < 0) {
         croak "by option is invalid number(seq function)";
       }
       
-      my $value = $from;
-      while ($value <= $to) {
-        push @$values, $value;
-        $value += $by;
+      my $content = $from;
+      while ($content <= $to) {
+        push @$contents, $content;
+        $content += $by;
       }
     }
     else {
@@ -352,14 +372,14 @@ sub seq {
         croak "by option is invalid number(seq function)";
       }
       
-      my $value = $from;
-      while ($value >= $to) {
-        push @$values, $value;
-        $value += $by;
+      my $content = $from;
+      while ($content >= $to) {
+        push @$contents, $content;
+        $content += $by;
       }
     }
     
-    my $a1 = $self->array($values);
+    my $a1 = $self->array($contents);
   }
 }
 
@@ -385,13 +405,13 @@ sub _parse_seq_str {
 }
 
 sub _is_numeric {
-  my ($self, $value) = @_;
+  my ($self, $content) = @_;
   
-  return unless defined $value;
+  return unless defined $content;
   
-  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-        && 0 + $value eq $value
-        && $value * 0 == 0
+  return B::svref_2object(\$content)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
+        && 0 + $content eq $content
+        && $content * 0 == 0
 }
 
 sub array {
@@ -406,26 +426,26 @@ sub array {
   my $array = Rstats::Array->new;
   
   # Value
-  my $values = [];
+  my $contents = [];
   if (defined $a1) {
     if (ref $a1 eq 'ARRAY') {
       for my $a (@$a1) {
         if (ref $a eq 'ARRAY') {
-          push @$values, @$a;
+          push @$contents, @$a;
         }
         elsif (ref $a eq 'Rstats::Array') {
-          push @$values, @{$a->values};
+          push @$contents, @{$a->contents};
         }
         else {
-          push @$values, $a;
+          push @$contents, $a;
         }
       }
     }
     elsif (ref $a1 eq 'Rstats::Array') {
-      $values = $a1->values;
+      $contents = $a1->contents;
     }
     elsif(!ref $a1) {
-      $values = $self->_parse_seq_str($a1)->values;
+      $contents = $self->_parse_seq_str($a1)->contents;
     }
   }
   else {
@@ -436,7 +456,7 @@ sub array {
   my $dim;
   if (defined $_dim) {
     if (ref $_dim eq 'Rstats::Array') {
-      $dim = $_dim->values;
+      $dim = $_dim->contents;
     }
     elsif (ref $_dim eq 'ARRAY') {
       $dim = $_dim;
@@ -446,63 +466,63 @@ sub array {
     }
   }
   else {
-    $dim = [scalar @$values]
+    $dim = [scalar @$contents]
   }
   $array->dim($dim);
   
-  # Check values
+  # Check contents
   my $mode_h = {};
-  for my $value (@$values) {
-    if (!defined $value) {
-      croak "undef is invalid value";
+  for my $content (@$contents) {
+    if (!defined $content) {
+      croak "undef is invalid content";
     }
-    elsif (ref $value eq 'Rstats::Type::Character') {
+    elsif (ref $content eq 'Rstats::Type::Character') {
       $mode_h->{character}++;
     }
-    elsif (ref $value eq 'Rstats::Type::Complex') {
+    elsif (ref $content eq 'Rstats::Type::Complex') {
       $mode_h->{complex}++;
     }
-    elsif (ref $value eq 'Rstats::Type::Double') {
+    elsif (ref $content eq 'Rstats::Type::Double') {
       $mode_h->{numeric}++;
     }
-    elsif (ref $value eq 'Rstats::Type::Integer') {
-      $value = Rstats::Type::Double->new(value => $value->value);
+    elsif (ref $content eq 'Rstats::Type::Integer') {
+      $content = Rstats::Util::double($content->content);
       $mode_h->{numeric}++;
     }
-    elsif (ref $value eq 'Rstats::Type::Logical') {
+    elsif (ref $content eq 'Rstats::Type::Logical') {
       $mode_h->{logical}++;
     }
-    elsif (Rstats::Util::is_perl_number($value)) {
-      $value = Rstats::Type::Double->new(value => $value);
+    elsif (Rstats::Util::is_perl_number($content)) {
+      $content = Rstats::Util::double($content);
       $mode_h->{numeric}++;
     }
     else {
-      $value = Rstats::Type::Character->new(value => "$value");
+      $content = Rstats::Util::character("$content");
       $mode_h->{character}++;
     }
   }
 
-  # Upgrade values and type
+  # Upgrade contents and type
   my @modes = keys %$mode_h;
   if (@modes > 1) {
     if ($mode_h->{character}) {
-      my $a1 = Rstats::Array->new(values => $values)->as_character;
-      $values = $a1->values;
+      my $a1 = Rstats::Array->new(contents => $contents)->as_character;
+      $contents = $a1->contents;
       $array->mode('character');
     }
     elsif ($mode_h->{complex}) {
-      my $a1 = Rstats::Array->new(values => $values)->as_complex;
-      $values = $a1->values;
+      my $a1 = Rstats::Array->new(contents => $contents)->as_complex;
+      $contents = $a1->contents;
       $array->mode('complex');
     }
     elsif ($mode_h->{numeric}) {
-      my $a1 = Rstats::Array->new(values => $values)->as_numeric;
-      $values = $a1->values;
+      my $a1 = Rstats::Array->new(contents => $contents)->as_numeric;
+      $contents = $a1->contents;
       $array->mode('numeric');
     }
     elsif ($mode_h->{logical}) {
-      my $a1 = Rstats::Array->new(values => $values)->as_logical;
-      $values = $a1->values;
+      my $a1 = Rstats::Array->new(contents => $contents)->as_logical;
+      $contents = $a1->contents;
       $array->mode('logical');
     }
   }
@@ -510,33 +530,33 @@ sub array {
     $array->mode($modes[0] || 'logical');
   }
   
-  # Fix values
+  # Fix contents
   my $max_length = 1;
-  $max_length *= $_ for @{$array->_real_dim_values || [scalar @$values]};
-  if (@$values > $max_length) {
-    @$values = splice @$values, 0, $max_length;
+  $max_length *= $_ for @{$array->_real_dim_contents || [scalar @$contents]};
+  if (@$contents > $max_length) {
+    @$contents = splice @$contents, 0, $max_length;
   }
-  elsif (@$values < $max_length) {
-    my $repeat_count = int($max_length / @$values) + 1;
-    @$values = (@$values) x $repeat_count;
-    @$values = splice @$values, 0, $max_length;
+  elsif (@$contents < $max_length) {
+    my $repeat_count = int($max_length / @$contents) + 1;
+    @$contents = (@$contents) x $repeat_count;
+    @$contents = splice @$contents, 0, $max_length;
   }
-  $array->values($values);
+  $array->contents($contents);
   
   return $array;
 }
 
-sub _real_dim_values {
+sub _real_dim_contents {
   my $self = shift;
   
   my $dim = $self->dim;
-  my $dim_values = $dim->values;
-  if (@$dim_values) {
-    return $dim_values;
+  my $dim_contents = $dim->contents;
+  if (@$dim_contents) {
+    return $dim_contents;
   }
   else {
-    if (defined $self->values) {
-      my $length = @{$self->values};
+    if (defined $self->contents) {
+      my $length = @{$self->contents};
       return [$length];
     }
     else {
@@ -557,24 +577,24 @@ sub at {
   return $self->{at};
 }
 
-sub value {
+sub content {
   my $self = shift;
   
-  my $dim_values = $self->_real_dim_values;
+  my $dim_contents = $self->_real_dim_contents;
   
   if (@_) {
-    if (@$dim_values == 1) {
-      return $self->{values}[$_[0] - 1];
+    if (@$dim_contents == 1) {
+      return $self->{contents}[$_[0] - 1];
     }
-    elsif (@$dim_values == 2) {
-      return $self->{values}[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+    elsif (@$dim_contents == 2) {
+      return $self->{contents}[($_[0] + $dim_contents->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      return $self->get(@_)->value;
+      return $self->get(@_)->content;
     }
   }
   else {
-    return $self->{values}[0];
+    return $self->{contents}[0];
   }
 }
 
@@ -619,20 +639,20 @@ sub is_logical {
 }
 
 sub _looks_like_complex {
-  my ($self, $value) = @_;
+  my ($self, $content) = @_;
   
-  return if !defined $value || !CORE::length $value;
-  $value =~ s/^ +//;
-  $value =~ s/ +$//;
+  return if !defined $content || !CORE::length $content;
+  $content =~ s/^ +//;
+  $content =~ s/ +$//;
   
   my $re;
   my $im;
   
-  if ($value =~ /^([\+\-]?[^\+\-]+)i$/) {
+  if ($content =~ /^([\+\-]?[^\+\-]+)i$/) {
     $re = 0;
     $im = $1;
   }
-  elsif($value =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-i]+)i?$/) {
+  elsif($content =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-i]+)i?$/) {
     $re = $1;
     $im = $2;
   }
@@ -649,14 +669,14 @@ sub _looks_like_complex {
 }
 
 sub _looks_like_number {
-  my ($self, $value) = @_;
+  my ($self, $content) = @_;
   
-  return if !defined $value || !CORE::length $value;
-  $value =~ s/^ +//;
-  $value =~ s/ +$//;
+  return if !defined $content || !CORE::length $content;
+  $content =~ s/^ +//;
+  $content =~ s/ +$//;
   
-  if (looks_like_number $value) {
-    return ($value);
+  if (looks_like_number $content) {
+    return ($content);
   }
   else {
     return;
@@ -690,9 +710,9 @@ sub as_complex {
   my $self = shift;
   
   my $a1 = $self;
-  my $a1_values = $a1->values;
-  my $a2 = $self->clone_without_values;
-  my @a2_values = map {
+  my $a1_contents = $a1->contents;
+  my $a2 = $self->clone_without_contents;
+  my @a2_contents = map {
     if (ref $_ eq 'Rstats::Type::NA') {
       $_;
     }
@@ -720,13 +740,13 @@ sub as_complex {
       Rstats::Util::complex($_, 0);
     }
     elsif (ref $_ eq 'Rstats::Type::Logical') {
-      Rstats::Util::complex($_->value ? 1 : 0, 0);
+      Rstats::Util::complex($_->content ? 1 : 0, 0);
     }
     else {
       croak "unexpected type";
     }
-  } @$a1_values;
-  $a2->values(\@a2_values);
+  } @$a1_contents;
+  $a2->contents(\@a2_contents);
   $a2->{type} = 'complex';
 
   return $a2;
@@ -736,15 +756,15 @@ sub as_numeric {
   my $self = shift;
   
   my $a1 = $self;
-  my $a1_values = $a1->values;
-  my $a2 = $self->clone_without_values;
-  my @a2_values = map {
+  my $a1_contents = $a1->contents;
+  my $a2 = $self->clone_without_contents;
+  my @a2_contents = map {
     if (ref $_ eq 'Rstats::Type::NA') {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
       if ($self->_looks_like_number($_)) {
-        Rstats::Type::Double->new(value => $_ + 0);
+        Rstats::Util::double($_ + 0);
       }
       else {
         carp 'NAs introduced by coercion';
@@ -753,22 +773,22 @@ sub as_numeric {
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
       carp "imaginary parts discarded in coercion";
-      Rstats::Type::Double->new(value => $_->re);
+      Rstats::Util::double($_->re);
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Integer') {
-      Rstats::Type::Double->new(value => $_->value);
+      Rstats::Util::double($_->content);
     }
     elsif (ref $_ eq 'Rstats::Type::Logical') {
-      Rstats::Type::Double->new(value => $_ ? 1 : 0);
+      Rstats::Util::double($_ ? 1 : 0);
     }
     else {
       croak "unexpected type";
     }
-  } @$a1_values;
-  $a2->values(\@a2_values);
+  } @$a1_contents;
+  $a2->contents(\@a2_contents);
   $a2->{type} = 'numeric';
 
   return $a2;
@@ -778,15 +798,15 @@ sub as_integer {
   my $self = shift;
   
   my $a1 = $self;
-  my $a1_values = $a1->values;
-  my $a2 = $self->clone_without_values;
-  my @a2_values = map {
+  my $a1_contents = $a1->contents;
+  my $a2 = $self->clone_without_contents;
+  my @a2_contents = map {
     if (ref $_ eq 'Rstats::Type::NA') {
       $_;
     }
     elsif (ref $_ eq 'Rstats::Type::Character') {
       if ($self->_looks_like_number($_)) {
-        Rstats::Type::Integer->new(value => int($_ + 0));
+        Rstats::Util::integer(int($_ + 0));
       }
       else {
         carp 'NAs introduced by coercion';
@@ -795,7 +815,7 @@ sub as_integer {
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
       carp "imaginary parts discarded in coercion";
-      Rstats::Type::Integer->new(value => int($_->re));
+      Rstats::Util::integer(int($_->re));
     }
     elsif (ref $_ eq 'Rstats::Type::Double') {
       if (Rstats::Util::is_nan($_) || Rstats::Util::is_infinite($_)) {
@@ -809,13 +829,13 @@ sub as_integer {
       $_; 
     }
     elsif (ref $_ eq 'Rstats::Type::Logical') {
-      Rstats::Type::Integer->new(value => $_ ? 1 : 0);
+      Rstats::Util::integer($_ ? 1 : 0);
     }
     else {
       croak "unexpected type";
     }
-  } @$a1_values;
-  $a2->values(\@a2_values);
+  } @$a1_contents;
+  $a2->contents(\@a2_contents);
   $a2->{type} = 'integer';
 
   return $a2;
@@ -825,9 +845,9 @@ sub as_logical {
   my $self = shift;
   
   my $a1 = $self;
-  my $a1_values = $a1->values;
-  my $a2 = $self->clone_without_values;
-  my @a2_values = map {
+  my $a1_contents = $a1->contents;
+  my $a2 = $self->clone_without_contents;
+  my @a2_contents = map {
     if (ref $_ eq 'Rstats::Type::NA') {
       $_;
     }
@@ -842,8 +862,8 @@ sub as_logical {
     }
     elsif (ref $_ eq 'Rstats::Type::Complex') {
       carp "imaginary parts discarded in coercion";
-      my $re = $_->re->value;
-      my $im = $_->im->value;
+      my $re = $_->re->content;
+      my $im = $_->im->content;
       if (defined $re && $re == 0 && defined $im && $im == 0) {
         Rstats::Util::FALSE;
       }
@@ -863,7 +883,7 @@ sub as_logical {
       }
     }
     elsif (ref $_ eq 'Rstats::Type::Integer') {
-      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
+      $_->content == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
     }
     elsif (ref $_ eq 'Rstats::Type::Logical') {
       $_;
@@ -871,8 +891,8 @@ sub as_logical {
     else {
       croak "unexpected type";
     }
-  } @$a1_values;
-  $a2->values(\@a2_values);
+  } @$a1_contents;
+  $a2->contents(\@a2_contents);
   $a2->{type} = 'logical';
 
   return $a2;
@@ -881,10 +901,10 @@ sub as_logical {
 sub as_character {
   my $self = shift;
 
-  my $a1_values = $self->values;
-  my $a2 = $self->clone_without_values;
-  my @a2_values = map { Rstats::Type::Character->new(value => "$_") } @$a1_values;
-  $a2->values(\@a2_values);
+  my $a1_contents = $self->contents;
+  my $a2 = $self->clone_without_contents;
+  my @a2_contents = map { Rstats::Util::character("$_") } @$a1_contents;
+  $a2->contents(\@a2_contents);
   $a2->{type} = 'character';
 
   return $a2;
@@ -910,16 +930,16 @@ sub get {
   $self->at($_indexs);
   
   if (ref $_indexs->[0] eq 'CODE') {
-    my $a1_values = $self->values;
-    my @values2 = grep { $_indexs->[0]->() } @$a1_values;
-    return Rstats::Array->array(\@values2);
+    my $a1_contents = $self->contents;
+    my @contents2 = grep { $_indexs->[0]->() } @$a1_contents;
+    return Rstats::Array->array(\@contents2);
   }
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
   
-  my @a2_values = map { $self->values->[$_ - 1] } @$positions;
+  my @a2_contents = map { $self->contents->[$_ - 1] } @$positions;
   
-  return Rstats::Array->array(\@a2_values, $a2_dim);
+  return Rstats::Array->array(\@a2_contents, $a2_dim);
 }
 
 sub NULL {
@@ -937,7 +957,7 @@ sub numeric {
 sub _to_a {
   my ($self, $data) = @_;
   
-  croak "undef value is invalid" unless defined $data;
+  croak "undef content is invalid" unless defined $data;
   my $v;
   if (ref $data eq 'ARRAY') {
     $v = Rstats::Array->c($data);
@@ -985,19 +1005,19 @@ sub set {
   
   my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
   
-  my $self_values = $self->values;
+  my $self_contents = $self->contents;
   if ($code) {
     for (my $i = 0; $i < @$positions; $i++) {
       my $pos = $positions->[$i];
-      local $_ = $self_values->[$pos - 1];
-      $self_values->[$pos - 1] = $code->();
+      local $_ = $self_contents->[$pos - 1];
+      $self_contents->[$pos - 1] = $code->();
     }    
   }
   else {
-    my $array_values = $array->values;
+    my $array_contents = $array->contents;
     for (my $i = 0; $i < @$positions; $i++) {
       my $pos = $positions->[$i];
-      $self_values->[$pos - 1] = $array_values->[(($i + 1) % @$positions) - 1];
+      $self_contents->[$pos - 1] = $array_contents->[(($i + 1) % @$positions) - 1];
     }
   }
   
@@ -1008,8 +1028,8 @@ sub set {
 sub _parse_index {
   my ($self, $drop, @_indexs) = @_;
   
-  my $a1_values = $self->values;
-  my $a1_dim = $self->_real_dim_values;
+  my $a1_contents = $self->contents;
+  my $a1_dim = $self->_real_dim_contents;
   
   my @indexs;
   my @a2_dim;
@@ -1020,45 +1040,45 @@ sub _parse_index {
     $_index = '' unless defined $_index;
     
     my $index = Rstats::Array->_to_a($_index);
-    my $index_values = $index->values;
-    if (@$index_values && !$index->is_character->value && !$index->is_logical->value) {
+    my $index_contents = $index->contents;
+    if (@$index_contents && !$index->is_character->content && !$index->is_logical->content) {
       my $minus_count = 0;
-      for my $index_value (@$index_values) {
-        if ($index_value == 0) {
+      for my $index_content (@$index_contents) {
+        if ($index_content == 0) {
           croak "0 is invalid index";
         }
         else {
-          $minus_count++ if $index_value < 0;
+          $minus_count++ if $index_content < 0;
         }
       }
       croak "Can't min minus sign and plus sign"
-        if $minus_count > 0 && $minus_count != @$index_values;
+        if $minus_count > 0 && $minus_count != @$index_contents;
       $index->{_minus} = 1 if $minus_count > 0;
     }
     
     push @indexs, $index;
     
-    if (!@{$index->values}) {
-      my $index_value_new = [1 .. $a1_dim->[$i]];
-      $index->values($index_value_new);
+    if (!@{$index->contents}) {
+      my $index_content_new = [1 .. $a1_dim->[$i]];
+      $index->contents($index_content_new);
     }
-    elsif ($index->is_character->value) {
+    elsif ($index->is_character->content) {
       if ($self->is_vector) {
-        my $index_new_values = [];
-        for my $name (@{$index->values}) {
+        my $index_new_contents = [];
+        for my $name (@{$index->contents}) {
           my $i = 0;
-          my $value;
-          for my $self_name (@{$self->names->values}) {
+          my $content;
+          for my $self_name (@{$self->names->contents}) {
             if ($name eq $self_name) {
-              $value = $self->values->[$i];
+              $content = $self->contents->[$i];
               last;
             }
             $i++;
           }
-          croak "Can't find name" unless defined $value;
-          push @$index_new_values, $value;
+          croak "Can't find name" unless defined $content;
+          push @$index_new_contents, $content;
         }
-        $indexs[$i]->values($index_new_values);
+        $indexs[$i]->contents($index_new_contents);
       }
       elsif ($self->is_matrix) {
         
@@ -1067,49 +1087,49 @@ sub _parse_index {
         croak "Can't support name except vector and matrix";
       }
     }
-    elsif ($index->is_logical->value) {
-      my $index_values_new = [];
-      for (my $i = 0; $i < @{$index->values}; $i++) {
-        push @$index_values_new, $i + 1 if $index->values->[$i];
+    elsif ($index->is_logical->content) {
+      my $index_contents_new = [];
+      for (my $i = 0; $i < @{$index->contents}; $i++) {
+        push @$index_contents_new, $i + 1 if $index->contents->[$i];
       }
-      $index->values($index_values_new);
+      $index->contents($index_contents_new);
     }
     elsif ($index->{_minus}) {
-      my $index_value_new = [];
+      my $index_content_new = [];
       
       for my $k (1 .. $a1_dim->[$i]) {
-        push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
+        push @$index_content_new, $k unless grep { $_ == -$k } @{$index->contents};
       }
-      $index->values($index_value_new);
+      $index->contents($index_content_new);
       delete $index->{_minus};
     }
     
-    my $count = @{$index->values};
+    my $count = @{$index->contents};
     push @a2_dim, $count unless $count == 1 && $drop;
   }
   @a2_dim = (1) unless @a2_dim;
   
-  my $index_values = [map { $_->values } @indexs];
-  my $ords = $self->_cross_product($index_values);
+  my $index_contents = [map { $_->contents } @indexs];
+  my $ords = $self->_cross_product($index_contents);
   my @positions = map { $self->_pos($_, $a1_dim) } @$ords;
   
   return (\@positions, \@a2_dim);
 }
 
 sub _cross_product {
-  my ($self, $values) = @_;
+  my ($self, $contents) = @_;
 
-  my @idxs = (0) x @$values;
+  my @idxs = (0) x @$contents;
   my @idx_idx = 0..(@idxs - 1);
-  my @array = map { $_->[0] } @$values;
+  my @array = map { $_->[0] } @$contents;
   my $result = [];
   
   push @$result, [@array];
   my $end_loop;
   while (1) {
     foreach my $i (@idx_idx) {
-      if( $idxs[$i] < @{$values->[$i]} - 1 ) {
-        $array[$i] = $values->[$i][++$idxs[$i]];
+      if( $idxs[$i] < @{$contents->[$i]} - 1 ) {
+        $array[$i] = $contents->[$i][++$idxs[$i]];
         push @$result, [@array];
         last;
       }
@@ -1120,7 +1140,7 @@ sub _cross_product {
       }
       
       $idxs[$i] = 0;
-      $array[$i] = $values->[$i][0];
+      $array[$i] = $contents->[$i][0];
     }
     last if $end_loop;
   }
@@ -1149,39 +1169,39 @@ sub _pos {
 sub to_string {
   my $self = shift;
 
-  my $values = $self->values;
+  my $contents = $self->contents;
   
-  my $dim_values = $self->_real_dim_values;
+  my $dim_contents = $self->_real_dim_contents;
   
-  my $dim_length = @$dim_values;
+  my $dim_length = @$dim_contents;
   my $dim_num = $dim_length - 1;
   my $positions = [];
   
   my $str;
-  if (@$values) {
+  if (@$contents) {
     if ($dim_length == 1) {
-      my $names = $self->names->values;
+      my $names = $self->names->contents;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      $str .= '[1] ' . join(' ', @$values) . "\n";
+      $str .= '[1] ' . join(' ', @$contents) . "\n";
     }
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = $self->colnames->values;
+      my $colnames = $self->colnames->contents;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
       else {
-        for my $d2 (1 .. $dim_values->[1]) {
-          $str .= $d2 == $dim_values->[1] ? "[,$d2]\n" : "[,$d2] ";
+        for my $d2 (1 .. $dim_contents->[1]) {
+          $str .= $d2 == $dim_contents->[1] ? "[,$d2]\n" : "[,$d2] ";
         }
       }
       
-      my $rownames = $self->rownames->values;
+      my $rownames = $self->rownames->contents;
       my $use_rownames = @$rownames ? 1 : 0;
-      for my $d1 (1 .. $dim_values->[0]) {
+      for my $d1 (1 .. $dim_contents->[0]) {
         if ($use_rownames) {
           my $rowname = $rownames->[$d1 - 1];
           $str .= "$rowname ";
@@ -1190,48 +1210,48 @@ sub to_string {
           $str .= "[$d1,] ";
         }
         
-        my @values;
-        for my $d2 (1 .. $dim_values->[1]) {
-          push @values, $self->value($d1, $d2);
+        my @contents;
+        for my $d2 (1 .. $dim_contents->[1]) {
+          push @contents, $self->content($d1, $d2);
         }
         
-        $str .= join(' ', @values) . "\n";
+        $str .= join(' ', @contents) . "\n";
       }
     }
     else {
       my $code;
       $code = sub {
-        my (@dim_values) = @_;
-        my $dim_value = pop @dim_values;
+        my (@dim_contents) = @_;
+        my $dim_content = pop @dim_contents;
         
-        for (my $i = 1; $i <= $dim_value; $i++) {
+        for (my $i = 1; $i <= $dim_content; $i++) {
           $str .= (',' x $dim_num) . "$i" . "\n";
           unshift @$positions, $i;
-          if (@dim_values > 2) {
+          if (@dim_contents > 2) {
             $dim_num--;
-            $code->(@dim_values);
+            $code->(@dim_contents);
             $dim_num++;
           }
           else {
             $str .= '     ';
-            for my $d2 (1 .. $dim_values[1]) {
-              $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
+            for my $d2 (1 .. $dim_contents[1]) {
+              $str .= $d2 == $dim_contents[1] ? "[,$d2]\n" : "[,$d2] ";
             }
-            for my $d1 (1 .. $dim_values[0]) {
+            for my $d1 (1 .. $dim_contents[0]) {
               $str .= "[$d1,] ";
               
-              my @values;
-              for my $d2 (1 .. $dim_values[1]) {
-                push @values, $self->value($d1, $d2, @$positions);
+              my @contents;
+              for my $d2 (1 .. $dim_contents[1]) {
+                push @contents, $self->content($d1, $d2, @$positions);
               }
               
-              $str .= join(' ', @values) . "\n";
+              $str .= join(' ', @contents) . "\n";
             }
           }
           shift @$positions;
         }
       };
-      $code->(@$dim_values);
+      $code->(@$dim_contents);
     }
   }
   else {
@@ -1244,10 +1264,10 @@ sub to_string {
 sub negation {
   my $self = shift;
   
-  my $a1 = $self->clone_without_values;
-  my $a1_values = [];
-  $a1_values->[$_] = Rstats::Util::negation($a1_values->[$_]) for (0 .. @$a1_values - 1);
-  $a1->values($a1_values);
+  my $a1 = $self->clone_without_contents;
+  my $a1_contents = [];
+  $a1_contents->[$_] = Rstats::Util::negation($a1_contents->[$_]) for (0 .. @$a1_contents - 1);
+  $a1->contents($a1_contents);
   
   return $a1;
 }
@@ -1277,17 +1297,17 @@ sub _operation {
     if $a1->{type} ne $a2->{type};
   
   # Calculate
-  my $a1_length = @{$a1->values};
-  my $a2_length = @{$a2->values};
+  my $a1_length = @{$a1->contents};
+  my $a2_length = @{$a2->contents};
   my $longer_length = $a1_length > $a2_length ? $a1_length : $a2_length;
   
   no strict 'refs';
   my $operation = "Rstats::Util::$op";
-  my @a3_values = map {
-    &$operation($a1->values->[$_ % $a1_length], $a2->values->[$_ % $a2_length])
+  my @a3_contents = map {
+    &$operation($a1->contents->[$_ % $a1_length], $a2->contents->[$_ % $a2_length])
   } (0 .. $longer_length - 1);
   
-  my $a3 = Rstats::Array->array(\@a3_values);
+  my $a3 = Rstats::Array->array(\@a3_contents);
   
   return $a3;
 }
@@ -1295,7 +1315,7 @@ sub _operation {
 sub _upgrade_mode {
   my ($self, @arrays) = @_;
   
-  # Check values
+  # Check contents
   my $mode_h = {};
   for my $array (@arrays) {
     my $type = $array->{type} || '';
@@ -1319,7 +1339,7 @@ sub _upgrade_mode {
     }
   }
 
-  # Upgrade values and type if mode is different
+  # Upgrade contents and type if mode is different
   my @modes = keys %$mode_h;
   if (@modes > 1) {
     my $to_mode;
@@ -1366,8 +1386,8 @@ sub matrix {
   # By row
   $byrow = $opt->{byrow} unless defined $byrow;
   
-  my $a1_values = $a1->values;
-  my $a1_length = @$a1_values;
+  my $a1_contents = $a1->contents;
+  my $a1_length = @$a1_contents;
   if (!defined $nrow && !defined $ncol) {
     $nrow = $a1_length;
     $ncol = 1;
@@ -1384,14 +1404,14 @@ sub matrix {
   my $matrix;
   if ($byrow) {
     $matrix = $self->array(
-      $a1_values,
+      $a1_contents,
       [$dim->[1], $dim->[0]],
     );
     
     $matrix = $self->t($matrix);
   }
   else {
-    $matrix = $self->array($a1_values, $dim);
+    $matrix = $self->array($a1_contents, $dim);
   }
   
   return $matrix;
@@ -1400,15 +1420,15 @@ sub matrix {
 sub t {
   my ($self, $m1) = @_;
   
-  my $m1_row = $m1->dim->values->[0];
-  my $m1_col = $m1->dim->values->[1];
+  my $m1_row = $m1->dim->contents->[0];
+  my $m1_col = $m1->dim->contents->[1];
   
   my $m2 = $self->matrix(0, $m1_col, $m1_row);
   
   for my $row (1 .. $m1_row) {
     for my $col (1 .. $m1_col) {
-      my $value = $m1->value($row, $col);
-      $m2->at($col, $row)->set($value);
+      my $content = $m1->content($row, $col);
+      $m2->at($col, $row)->set($content);
     }
   }
   
@@ -1424,7 +1444,7 @@ sub is_array {
 sub is_vector {
   my $self = shift;
   
-  my $is = @{$self->dim->values} == 0 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
+  my $is = @{$self->dim->contents} == 0 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
   
   return $self->c([$is]);
 }
@@ -1432,7 +1452,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = @{$self->dim->values} == 2 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
+  my $is = @{$self->dim->contents} == 2 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
   
   return $self->c([$is]);
 }
@@ -1440,41 +1460,41 @@ sub is_matrix {
 sub as_matrix {
   my $self = shift;
   
-  my $a1_dim_values = $self->_real_dim_values;
-  my $a1_dim_count = @$a1_dim_values;
-  my $a2_dim_values = [];
+  my $a1_dim_contents = $self->_real_dim_contents;
+  my $a1_dim_count = @$a1_dim_contents;
+  my $a2_dim_contents = [];
   my $row;
   my $col;
   if ($a1_dim_count == 2) {
-    $row = $a1_dim_values->[0];
-    $col = $a1_dim_values->[1];
+    $row = $a1_dim_contents->[0];
+    $col = $a1_dim_contents->[1];
   }
   else {
     $row = 1;
-    $row *= $_ for @$a1_dim_values;
+    $row *= $_ for @$a1_dim_contents;
     $col = 1;
   }
   
-  my $a2_values = [@{$self->values}];
+  my $a2_contents = [@{$self->contents}];
   
-  return $self->matrix($a2_values, $row, $col);
+  return $self->matrix($a2_contents, $row, $col);
 }
 
 sub as_array {
   my $self = shift;
   
-  my $a1_values = [@{$self->values}];
-  my $a1_dim_values = [@{$self->_real_dim_values}];
+  my $a1_contents = [@{$self->contents}];
+  my $a1_dim_contents = [@{$self->_real_dim_contents}];
   
-  return $self->array($a1_values, $a1_dim_values);
+  return $self->array($a1_contents, $a1_dim_contents);
 }
 
 sub as_vector {
   my $self = shift;
   
-  my $a1_values = [@{$self->values}];
+  my $a1_contents = [@{$self->contents}];
   
-  return $self->c($a1_values);
+  return $self->c($a1_contents);
 }
 
 1;

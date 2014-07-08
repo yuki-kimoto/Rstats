@@ -9,8 +9,8 @@ use Math::Trig ();
 use Carp 'croak';
 use POSIX ();;
 use Math::Round ();
-use Rstats::Util;
-use Rstats::Array;
+require Rstats::Util;
+require Rstats::Array;
 
 # TODO
 #   logp1x
@@ -18,17 +18,17 @@ use Rstats::Array;
 #   lgamma
 #   complete_cases
 
-sub Inf { Rstats::Util::Inf }
-sub NA { Rstats::Util::NA }
-sub NaN { Rstats::Util::NaN }
+sub Inf { array(Rstats::Util::Inf()) }
+sub NA { array(Rstats::Util::NA()) }
+sub NaN { array(Rstats::Util::NaN()) }
 
 sub is_null {
   my ($self, $_a1) = @_;
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = [!@$a1->values ? Rstats::Util::TRUE() : Rstats::Util::FALSE()];
-  my $a2 = Rstats::Array->array(\@a2_values);
+  my @a2_contents = [!@$a1->contents ? Rstats::Util::TRUE() : Rstats::Util::FALSE()];
+  my $a2 = Rstats::Array->array(\@a2_contents);
   $a2->mode('logical');
   
   return $a2;
@@ -39,10 +39,10 @@ sub is_na {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map {
+  my @a2_contents = map {
     ref $_ eq  'Rstats::Type::NA' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
-  } @{$a1->values};
-  my $a2 = Rstats::Array->array(\@a2_values);
+  } @{$a1->contents};
+  my $a2 = Rstats::Array->array(\@a2_contents);
   $a2->mode('logical');
   
   return $a2;
@@ -53,10 +53,10 @@ sub is_nan {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map {
+  my @a2_contents = map {
     ref $_ eq  'Rstats::NaN' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
-  } @{$a1->values};
-  my $a2 = Rstats::Array->array(\@a2_values);
+  } @{$a1->contents};
+  my $a2 = Rstats::Array->array(\@a2_contents);
   $a2->mode('logical');
   
   return $a2;
@@ -67,12 +67,12 @@ sub is_finite {
 
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map {
+  my @a2_contents = map {
     !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
       ? Rstats::Util::TRUE()
       : Rstats::Util::FALSE()
-  } @{$a1->values};
-  my $a2 = Rstats::Array->array(\@a2_values);
+  } @{$a1->contents};
+  my $a2 = Rstats::Array->array(\@a2_contents);
   $a2->mode('logical');
   
   return $a2;
@@ -83,13 +83,13 @@ sub is_infinite {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map {
+  my @a2_contents = map {
     ref $_ eq 'Rstats::Inf' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
-  } @{$a1->values};
-  my $a2 = Rstats::Array->array(\@a2_values);
+  } @{$a1->contents};
+  my $a2 = Rstats::Array->array(\@a2_contents);
   $a2->mode('logical');
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub complex {
@@ -181,18 +181,18 @@ sub cbind {
   
   my $row_count_needed;
   my $col_count_total;
-  my $a2_values = [];
+  my $a2_contents = [];
   for my $_a (@arrays) {
     
     my $a = $self->_to_a($_a);
     
     my $row_count;
     if ($a->is_matrix) {
-      $row_count = $a->dim->values->[0];
-      $col_count_total += $a->dim->values->[1];
+      $row_count = $a->dim->contents->[0];
+      $col_count_total += $a->dim->contents->[1];
     }
     elsif ($a->is_vector) {
-      $row_count = $a->_real_dim_values->[0];
+      $row_count = $a->_real_dim_contents->[0];
       $col_count_total += 1;
     }
     else {
@@ -202,9 +202,9 @@ sub cbind {
     $row_count_needed = $row_count unless defined $row_count_needed;
     croak "Row count is different" if $row_count_needed ne $row_count;
     
-    push @$a2_values, $a->values;
+    push @$a2_contents, $a->contents;
   }
-  my $matrix = $self->matrix($a2_values, $row_count_needed, $col_count_total);
+  my $matrix = $self->matrix($a2_contents, $row_count_needed, $col_count_total);
   
   return $matrix;
 }
@@ -212,15 +212,15 @@ sub cbind {
 sub rowSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value;
+  my $dim_contents = $m1->dim->contents;
+  if (@$dim_contents == 2) {
+    my $v1_contents = [];
+    for my $col (1 .. $dim_contents->[1]) {
+      my $v1_content = 0;
+      $v1_content += $m1->content($_, $col) for (1 .. $dim_contents->[0]);
+      push @$v1_contents, $v1_content;
     }
-    return $self->c($v1_values);
+    return $self->c($v1_contents);
   }
   else {
     croak "Can't culculate rowSums";
@@ -230,15 +230,15 @@ sub rowSums {
 sub colSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $row (1 .. $dim_values->[0]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
-      push @$v1_values, $v1_value;
+  my $dim_contents = $m1->dim->contents;
+  if (@$dim_contents == 2) {
+    my $v1_contents = [];
+    for my $row (1 .. $dim_contents->[0]) {
+      my $v1_content = 0;
+      $v1_content += $m1->content($row, $_) for (1 .. $dim_contents->[1]);
+      push @$v1_contents, $v1_content;
     }
-    return $self->c($v1_values);
+    return $self->c($v1_contents);
   }
   else {
     croak "Can't culculate colSums";
@@ -248,15 +248,15 @@ sub colSums {
 sub rowMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value / $dim_values->[0];
+  my $dim_contents = $m1->dim->contents;
+  if (@$dim_contents == 2) {
+    my $v1_contents = [];
+    for my $col (1 .. $dim_contents->[1]) {
+      my $v1_content = 0;
+      $v1_content += $m1->content($_, $col) for (1 .. $dim_contents->[0]);
+      push @$v1_contents, $v1_content / $dim_contents->[0];
     }
-    return $self->c($v1_values);
+    return $self->c($v1_contents);
   }
   else {
     croak "Can't culculate rowSums";
@@ -266,15 +266,15 @@ sub rowMeans {
 sub colMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $row (1 .. $dim_values->[0]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
-      push @$v1_values, $v1_value / $dim_values->[1];
+  my $dim_contents = $m1->dim->contents;
+  if (@$dim_contents == 2) {
+    my $v1_contents = [];
+    for my $row (1 .. $dim_contents->[0]) {
+      my $v1_content = 0;
+      $v1_content += $m1->content($row, $_) for (1 .. $dim_contents->[1]);
+      push @$v1_contents, $v1_content / $dim_contents->[1];
     }
-    return $self->c($v1_values);
+    return $self->c($v1_contents);
   }
   else {
     croak "Can't culculate colSums";
@@ -315,12 +315,12 @@ sub cumsum {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
-  my @v2_values;
+  my $v1_contents = $v1->contents;
+  my @v2_contents;
   my $total = 0;
-  push @v2_values, $total = $total + $_ for (@$v1_values);
+  push @v2_contents, $total = $total + $_ for (@$v1_contents);
   
-  return $self->c(\@v2_values);
+  return $self->c(\@v2_contents);
 }
 
 sub rnorm {
@@ -341,7 +341,7 @@ sub rnorm {
   $sd = 1 unless defined $sd;
   
   # Random numbers(standard deviation)
-  my @v1_values;
+  my @v1_contents;
   for (1 .. $count) {
     my ($rand1, $rand2) = (rand, rand);
     while ($rand1 == 0) { $rand1 = rand(); }
@@ -350,24 +350,24 @@ sub rnorm {
       * sin(2 * Math::Trig::pi * $rand2))
       + $mean;
     
-    push @v1_values, $rnorm;
+    push @v1_contents, $rnorm;
   }
   
-  return $self->c(\@v1_values);
+  return $self->c(\@v1_contents);
 }
 
 sub sequence {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
+  my $v1_contents = $v1->contents;
   
-  my @v2_values;
-  for my $v1_value (@$v1_values) {
-    push @v2_values, $self->seq($v1_value)->values;
+  my @v2_contents;
+  for my $v1_content (@$v1_contents) {
+    push @v2_contents, $self->seq($v1_content)->contents;
   }
   
-  return $self->c(\@v2_values);
+  return $self->c(\@v2_contents);
 }
 
 # TODO: prob option
@@ -384,18 +384,18 @@ sub sample {
   my $v1_length = $self->length($v1);
   $length = $v1_length unless defined $length;
   
-  croak "second argument value must be bigger than first argument elements count when you specify 'replace' option"
+  croak "second argument content must be bigger than first argument elements count when you specify 'replace' option"
     if $length > $v1_length && !$replace;
   
-  my @v2_values;
+  my @v2_contents;
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand $self->length($v1));
-    my $rand_value = splice @{$v1->values}, $rand_num, 1;
-    push @v2_values, $rand_value;
-    push @{$v1->values}, $rand_value if $replace;
+    my $rand_content = splice @{$v1->contents}, $rand_num, 1;
+    push @v2_contents, $rand_content;
+    push @{$v1->contents}, $rand_content if $replace;
   }
   
-  return $self->c(\@v2_values);
+  return $self->c(\@v2_contents);
 }
 
 sub NULL {
@@ -417,14 +417,14 @@ sub _order {
   my ($self, $asc, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
+  my $v1_contents = $v1->contents;
   
   my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
-  my @sorted_pos_values = $asc
+  push @pos_vals, {pos => $_ + 1, val => $v1_contents->[$_]} for (0 .. @$v1_contents - 1);
+  my @sorted_pos_contents = $asc
     ? sort { $a->{val} <=> $b->{val} } @pos_vals
     : sort { $b->{val} <=> $a->{val} } @pos_vals;
-  my @orders = map { $_->{pos} } @sorted_pos_values;
+  my @orders = map { $_->{pos} } @sorted_pos_contents;
   
   return $self->c(\@orders);
 }
@@ -433,35 +433,35 @@ sub which {
   my ($self, $_v1, $cond_cb) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
-  my @v2_values;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    local $_ = $v1_values->[$i];
-    if ($cond_cb->($v1_values->[$i])) {
-      push @v2_values, $i + 1;
+  my $v1_contents = $v1->contents;
+  my @v2_contents;
+  for (my $i = 0; $i < @$v1_contents; $i++) {
+    local $_ = $v1_contents->[$i];
+    if ($cond_cb->($v1_contents->[$i])) {
+      push @v2_contents, $i + 1;
     }
   }
   
-  return $self->c(\@v2_values);
+  return $self->c(\@v2_contents);
 }
 
 sub ifelse {
-  my ($self, $_v1, $value1, $value2) = @_;
+  my ($self, $_v1, $content1, $content2) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
-  my @v2_values;
-  for my $v1_value (@$v1_values) {
-    local $_ = $v1_value;
-    if ($v1_value) {
-      push @v2_values, $value1;
+  my $v1_contents = $v1->contents;
+  my @v2_contents;
+  for my $v1_content (@$v1_contents) {
+    local $_ = $v1_content;
+    if ($v1_content) {
+      push @v2_contents, $content1;
     }
     else {
-      push @v2_values, $value2;
+      push @v2_contents, $content2;
     }
   }
   
-  return $self->array(\@v2_values);
+  return $self->array(\@v2_contents);
 }
 
 sub replace {
@@ -471,30 +471,30 @@ sub replace {
   my $v2 = $self->_to_a($_v2);
   my $v3 = $self->_to_a($_v3);
   
-  my $v1_values = $v1->values;
-  my $v2_values = $v2->values;
-  my $v2_values_h = {};
-  for my $v2_value (@$v2_values) {
-    $v2_values_h->{$v2_value - 1}++;
+  my $v1_contents = $v1->contents;
+  my $v2_contents = $v2->contents;
+  my $v2_contents_h = {};
+  for my $v2_content (@$v2_contents) {
+    $v2_contents_h->{$v2_content - 1}++;
     croak "replace second argument can't have duplicate number"
-      if $v2_values_h->{$v2_value - 1} > 1;
+      if $v2_contents_h->{$v2_content - 1} > 1;
   }
-  my $v3_values = $v3->values;
-  my $v3_length = @{$v3_values};
+  my $v3_contents = $v3->contents;
+  my $v3_length = @{$v3_contents};
   
-  my $v4_values = [];
+  my $v4_contents = [];
   my $replace_count = 0;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    if ($v2_values_h->{$i}) {
-      push @$v4_values, $v3_values->[$replace_count % $v3_length];
+  for (my $i = 0; $i < @$v1_contents; $i++) {
+    if ($v2_contents_h->{$i}) {
+      push @$v4_contents, $v3_contents->[$replace_count % $v3_length];
       $replace_count++;
     }
     else {
-      push @$v4_values, $v1_values->[$i];
+      push @$v4_contents, $v1_contents->[$i];
     }
   }
   
-  return $self->array($v4_values);
+  return $self->array($v4_contents);
 }
 
 sub dim {
@@ -509,19 +509,19 @@ sub append {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $v1 = shift;
-  my $value = shift;
+  my $content = shift;
   
   my $after = $opt->{after};
   $after = $self->length($v1) unless defined $after;
   
-  if (ref $value eq 'ARRAY') {
-    splice @{$v1->values}, $after, 0, @$value;
+  if (ref $content eq 'ARRAY') {
+    splice @{$v1->contents}, $after, 0, @$content;
   }
-  elsif (ref $value eq 'Rstats::Array') {
-    splice @{$v1->values}, $after, 0, @{$value->values};
+  elsif (ref $content eq 'Rstats::Array') {
+    splice @{$v1->contents}, $after, 0, @{$content->contents};
   }
   else {
-    splice @{$v1->values}, $after, 0, $value;
+    splice @{$v1->contents}, $after, 0, $content;
   }
   
   return $v1
@@ -577,10 +577,10 @@ sub paste {
   my $str = shift;
   my $v1 = shift;
   
-  my $v1_values = $v1->values;
+  my $v1_contents = $v1->contents;
   my $v2 = $self->array([]);
-  my $v2_values = $v2->values;
-  push @$v2_values, "$str$sep$_" for @$v1_values;
+  my $v2_contents = $v2->contents;
+  push @$v2_contents, "$str$sep$_" for @$v1_contents;
   
   return $v2;
 }
@@ -606,17 +606,17 @@ sub runif {
     if $min > $max;
   
   my $diff = $max - $min;
-  my @v1_values;
+  my @v1_contents;
   if (defined $self->{seed}) {
     srand $self->{seed};
     $self->{seed} = undef;
   }
   for (1 .. $count) {
     my $rand = rand($diff) + $min;
-    push @v1_values, $rand;
+    push @v1_contents, $rand;
   }
   
-  return $self->c(\@v1_values);
+  return $self->c(\@v1_contents);
 }
 
 sub seq {
@@ -633,9 +633,9 @@ sub rep {
   my $v1 = shift;
   my $times = $opt->{times} || 1;
   
-  my $values = [];
-  push @$values, @{$v1->values} for 1 .. $times;
-  my $v2 = $self->c($values);
+  my $contents = [];
+  push @$contents, @{$v1->contents} for 1 .. $times;
+  my $v2 = $self->c($contents);
   
   return $v2;
 }
@@ -643,16 +643,16 @@ sub rep {
 sub max {
   my ($self, @vs) = @_;
   
-  my @all_values = map { @{$_->values} } @vs;
-  my $max = List::Util::max(@all_values);
+  my @all_contents = map { @{$_->contents} } @vs;
+  my $max = List::Util::max(@all_contents);
   return $max;
 }
 
 sub min {
   my ($self, @vs) = @_;
   
-  my @all_values = map { @{$_->values} } @vs;
-  my $min = List::Util::min(@all_values);
+  my @all_contents = map { @{$_->contents} } @vs;
+  my $min = List::Util::min(@all_contents);
   return $min;
 }
 
@@ -661,10 +661,10 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $values = $v->values;
-    for (my $i = 0; $i <@$values; $i++) {
-      $maxs[$i] = $values->[$i]
-        if !defined $maxs[$i] || $values->[$i] > $maxs[$i]
+    my $contents = $v->contents;
+    for (my $i = 0; $i <@$contents; $i++) {
+      $maxs[$i] = $contents->[$i]
+        if !defined $maxs[$i] || $contents->[$i] > $maxs[$i]
     }
   }
   
@@ -678,10 +678,10 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $values = $v->values;
-    for (my $i = 0; $i <@$values; $i++) {
-      $mins[$i] = $values->[$i]
-        if !defined $mins[$i] || $values->[$i] < $mins[$i]
+    my $contents = $v->contents;
+    for (my $i = 0; $i <@$contents; $i++) {
+      $mins[$i] = $contents->[$i]
+        if !defined $mins[$i] || $contents->[$i] < $mins[$i]
     }
   }
   
@@ -695,12 +695,12 @@ sub expm1 {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values
+  my @a2_contents
     = map {
       abs($_) < 1e-5 ? $_ + 0.5 * $_ * $_ : exp($_) - 1.0
-    } @{$a1->values};
+    } @{$a1->contents};
   
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub abs {
@@ -708,25 +708,25 @@ sub abs {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { abs $_ } @{$a1->values};
+  my @a2_contents = map { abs $_ } @{$a1->contents};
   
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub sum {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
-  my $sum = List::Util::sum(@$v1_values);
+  my $v1_contents = $v1->contents;
+  my $sum = List::Util::sum(@$v1_contents);
   return $self->c($sum);
 }
 
 sub prod {
   my ($self, $v1) = @_;
   
-  my $v1_values = $v1->values;
-  my $prod = List::Util::product(@$v1_values);
+  my $v1_contents = $v1->contents;
+  my $prod = List::Util::product(@$v1_contents);
   return $self->c($prod);
 }
 
@@ -734,7 +734,7 @@ sub mean {
   my ($self, $data) = @_;
   
   my $v = $data;
-  my $mean = $self->sum($v)->value / $self->length($v);
+  my $mean = $self->sum($v)->content / $self->length($v);
   
   return $self->c($mean);
 }
@@ -742,7 +742,7 @@ sub mean {
 sub var {
   my ($self, $v1) = @_;
 
-  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
+  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->content
     / ($self->length($v1) - 1);
   
   return $self->c($var);
@@ -757,14 +757,14 @@ sub head {
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $values1 = $v1->{values};
+  my $contents1 = $v1->{contents};
   my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
-  my @values2;
+  my @contents2;
   for (my $i = 0; $i < $max; $i++) {
-    push @values2, $values1->[$i];
+    push @contents2, $contents1->[$i];
   }
   
-  return $v1->new(values => \@values2);
+  return $v1->new(contents => \@contents2);
 }
 
 sub tail {
@@ -776,14 +776,14 @@ sub tail {
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $values1 = $v1->{values};
+  my $contents1 = $v1->{contents};
   my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
-  my @values2;
+  my @contents2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @values2, $values1->[$self->length($v1) - ($i  + 1)];
+    unshift @contents2, $contents1->[$self->length($v1) - ($i  + 1)];
   }
   
-  return $v1->new(values => \@values2);
+  return $v1->new(contents => \@contents2);
 }
 
 sub length {
@@ -801,9 +801,9 @@ sub sort {
   my $_v1 = shift;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_values = $v1->values;
-  my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
-  return $self->c($v2_values);
+  my $v1_contents = $v1->contents;
+  my $v2_contents = $decreasing ? [reverse sort(@$v1_contents)] : [sort(@$v1_contents)];
+  return $self->c($v2_contents);
 }
 
 sub trunc {
@@ -811,9 +811,9 @@ sub trunc {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { int $_ } @{$a1->values};
+  my @a2_contents = map { int $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub floor {
@@ -821,9 +821,9 @@ sub floor {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { POSIX::floor $_ } @{$a1->values};
+  my @a2_contents = map { POSIX::floor $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub round {
@@ -837,10 +837,10 @@ sub round {
   my $a1 = $self->_to_a($_a1);
 
   my $r = 10 ** $digits;
-  my @a2_values = map { Rstats::Type::Double->new(value => Math::Round::round_even($_->value * $r) / $r) } @{$a1->values};
-  my $a2 = $a1->clone_without_values;
-  $a2->values(\@a2_values);
-  $a2->type('double');
+  my @a2_contents = map { Rstats::Util::double(Math::Round::round_even($_ * $r) / $r) } @{$a1->values};
+  my $a2 = $a1->clone_without_contents;
+  $a2->contents(\@a2_contents);
+  $a2->mode('double');
   
   return $a2;
 }
@@ -850,9 +850,9 @@ sub ceiling {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { POSIX::ceil $_ } @{$a1->values};
+  my @a2_contents = map { POSIX::ceil $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub log {
@@ -860,9 +860,9 @@ sub log {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { log $_ } @{$a1->values};
+  my @a2_contents = map { log $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub logb { shift->log(@_) }
@@ -872,9 +872,9 @@ sub log10 {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { CORE::log $_ / CORE::log 10 } @{$a1->values};
+  my @a2_contents = map { CORE::log $_ / CORE::log 10 } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub log2 {
@@ -882,9 +882,9 @@ sub log2 {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { CORE::log $_ / CORE::log 2 } @{$a1->values};
+  my @a2_contents = map { CORE::log $_ / CORE::log 2 } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub exp {
@@ -892,9 +892,9 @@ sub exp {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { exp $_ } @{$a1->values};
+  my @a2_contents = map { exp $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub sin {
@@ -902,9 +902,9 @@ sub sin {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { sin $_ } @{$a1->values};
+  my @a2_contents = map { sin $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub cos {
@@ -912,9 +912,9 @@ sub cos {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { cos $_ } @{$a1->values};
+  my @a2_contents = map { cos $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub tan {
@@ -922,9 +922,9 @@ sub tan {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::tan $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::tan $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub asinh {
@@ -932,9 +932,9 @@ sub asinh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::asinh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::asinh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub acosh {
@@ -942,9 +942,9 @@ sub acosh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::acosh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::acosh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub atanh {
@@ -952,9 +952,9 @@ sub atanh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::atanh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::atanh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub asin {
@@ -962,9 +962,9 @@ sub asin {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::asin $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::asin $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub acos {
@@ -972,9 +972,9 @@ sub acos {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::acos $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::acos $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub atan {
@@ -982,9 +982,9 @@ sub atan {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::atan $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::atan $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub sinh {
@@ -992,9 +992,9 @@ sub sinh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::sinh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::sinh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub cosh {
@@ -1002,9 +1002,9 @@ sub cosh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::cosh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::cosh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub tanh {
@@ -1012,9 +1012,9 @@ sub tanh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { Math::Trig::tanh $_ } @{$a1->values};
+  my @a2_contents = map { Math::Trig::tanh $_ } @{$a1->contents};
 
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub sqrt {
@@ -1022,9 +1022,9 @@ sub sqrt {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_values = map { sqrt $_ } @{$a1->values};
+  my @a2_contents = map { sqrt $_ } @{$a1->contents};
   
-  return $a1->clone_without_values(values => \@a2_values);
+  return $a1->clone_without_contents(contents => \@a2_contents);
 }
 
 sub range {

@@ -594,7 +594,7 @@ sub element {
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'numeric' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'double' ? 1 : 0;
   
   return $self->c([$is]);
 }
@@ -827,7 +827,7 @@ sub as_integer {
       $_; 
     }
     elsif (Rstats::Util::is_logical($_)) {
-      Rstats::Util::integer($_ ? 1 : 0);
+      Rstats::Util::integer($_->value ? 1 : 0);
     }
     else {
       croak "unexpected type";
@@ -1308,6 +1308,12 @@ sub _operation {
   } (0 .. $longer_length - 1);
   
   my $a3 = Rstats::Array->array(\@a3_elements);
+  if ($op eq '/') {
+    $a3->{type} = 'double';
+  }
+  else {
+    $a3->{type} = $a1->{type};
+  }
   
   return $a3;
 }

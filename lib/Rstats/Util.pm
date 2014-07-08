@@ -72,28 +72,36 @@ sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal'
 sub integer { Rstats::Type::Integer->new(value => shift) }
 sub logical { Rstats::Type::Logical->new(value => shift) }
 
+sub element {
+  my $value = shift;
+  
+  if (!ref $value) {
+    if (is_perl_number($value)) {
+      return double($value);
+    }
+    else {
+      return character($value);
+    }
+  }
+  else {
+    return $value;
+  }
+  if (is_character($value) || is_integer($value) || is_double($value)) {
+    return $value->value;
+  }
+  else {
+    return $value;
+  }
+}
+
 sub value {
   my $element = shift;
   
-  if (is_character($element)) {
+  if (is_character($element) || is_integer($element) || is_double($element)) {
     return $element->value;
   }
-  elsif (is_complex($element)) {
-    my $hash = {
-      re => $element->re->value,
-      im => $element->im->value
-    };
-    
-    return $hash;
-  }
-  elsif (is_double($element)) {
-    return $element->value;
-  }
-  elsif (is_integer($element)) {
-    return $element->value;
-  }
-  elsif (is_logical($element)) {
-    return $element->value;
+  else {
+    return $element;
   }
 }
 

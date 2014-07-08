@@ -383,7 +383,8 @@ my $r = Rstats->new;
   # clone_without_elements - matrix with value
   {
     my $a1 = $r->matrix('1:24', 3, 2);
-    my $a2 = $a1->clone_without_elements(values => [2 .. 25]);
+    my $a2 = $a1->clone_without_elements;
+    $a2->values([2 .. 25]);
     is_deeply($a2->values, [2 .. 25]);
   }
   

@@ -35,9 +35,15 @@ has 'elements';
 sub values {
   my $self = shift;
   
-  my @values = map { Rstats::Util::value($_) } @{$self->elements};
+  if (@_) {
+    my @elements = map { Rstats::Util::element($_) } @{$_[0]};
+    $self->{elements} = \@elements;
+  }
+  else {
+    my @values = map { Rstats::Util::value($_) } @{$self->elements};
   
-  return \@values;
+    return \@values;
+  }
 }
 
 sub value { Rstats::Util::value(shift->element(@_)) }
@@ -929,9 +935,8 @@ sub get {
   $self->at($_indexs);
   
   if (ref $_indexs->[0] eq 'CODE') {
-    my $a1_elements = $self->elements;
-    my @elements2 = grep { $_indexs->[0]->() } @$a1_elements;
-    return Rstats::Array->array(\@elements2);
+    my @elements2 = grep { $_indexs->[0]->() } @{$self->values};
+    return Rstats::Array->c(\@elements2);
   }
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
@@ -1008,9 +1013,9 @@ sub set {
   if ($code) {
     for (my $i = 0; $i < @$positions; $i++) {
       my $pos = $positions->[$i];
-      local $_ = $self_elements->[$pos - 1];
-      $self_elements->[$pos - 1] = $code->();
-    }    
+      local $_ = Rstats::Util::value($self_elements->[$pos - 1]);
+      $self_elements->[$pos - 1] = Rstats::Util::element($code->());
+    }
   }
   else {
     my $array_elements = $array->elements;
@@ -1260,9 +1265,8 @@ sub to_string {
 sub negation {
   my $self = shift;
   
+  my $a1_elements = [map { Rstats::Util::negation($_) } @{$self->elements}];
   my $a1 = $self->clone_without_elements;
-  my $a1_elements = [];
-  $a1_elements->[$_] = Rstats::Util::negation($a1_elements->[$_]) for (0 .. @$a1_elements - 1);
   $a1->elements($a1_elements);
   
   return $a1;

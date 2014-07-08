@@ -1165,39 +1165,39 @@ sub _pos {
 sub to_string {
   my $self = shift;
 
-  my $elements = $self->elements;
+  my $values = $self->values;
   
-  my $dim_elements = $self->_real_dim_values;
+  my $dim_values = $self->_real_dim_values;
   
-  my $dim_length = @$dim_elements;
+  my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
   
   my $str;
-  if (@$elements) {
+  if (@$values) {
     if ($dim_length == 1) {
-      my $names = $self->names->elements;
+      my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      $str .= '[1] ' . join(' ', @$elements) . "\n";
+      $str .= '[1] ' . join(' ', @$values) . "\n";
     }
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = $self->colnames->elements;
+      my $colnames = $self->colnames->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
       else {
-        for my $d2 (1 .. $dim_elements->[1]) {
-          $str .= $d2 == $dim_elements->[1] ? "[,$d2]\n" : "[,$d2] ";
+        for my $d2 (1 .. $dim_values->[1]) {
+          $str .= $d2 == $dim_values->[1] ? "[,$d2]\n" : "[,$d2] ";
         }
       }
       
-      my $rownames = $self->rownames->elements;
+      my $rownames = $self->rownames->values;
       my $use_rownames = @$rownames ? 1 : 0;
-      for my $d1 (1 .. $dim_elements->[0]) {
+      for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
           my $rowname = $rownames->[$d1 - 1];
           $str .= "$rowname ";
@@ -1206,48 +1206,48 @@ sub to_string {
           $str .= "[$d1,] ";
         }
         
-        my @elements;
-        for my $d2 (1 .. $dim_elements->[1]) {
-          push @elements, $self->element($d1, $d2);
+        my @values;
+        for my $d2 (1 .. $dim_values->[1]) {
+          push @values, $self->value($d1, $d2);
         }
         
-        $str .= join(' ', @elements) . "\n";
+        $str .= join(' ', @values) . "\n";
       }
     }
     else {
       my $code;
       $code = sub {
-        my (@dim_elements) = @_;
-        my $dim_element = pop @dim_elements;
+        my (@dim_values) = @_;
+        my $dim_value = pop @dim_values;
         
-        for (my $i = 1; $i <= $dim_element; $i++) {
+        for (my $i = 1; $i <= $dim_value; $i++) {
           $str .= (',' x $dim_num) . "$i" . "\n";
           unshift @$positions, $i;
-          if (@dim_elements > 2) {
+          if (@dim_values > 2) {
             $dim_num--;
-            $code->(@dim_elements);
+            $code->(@dim_values);
             $dim_num++;
           }
           else {
             $str .= '     ';
-            for my $d2 (1 .. $dim_elements[1]) {
-              $str .= $d2 == $dim_elements[1] ? "[,$d2]\n" : "[,$d2] ";
+            for my $d2 (1 .. $dim_values[1]) {
+              $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
             }
-            for my $d1 (1 .. $dim_elements[0]) {
+            for my $d1 (1 .. $dim_values[0]) {
               $str .= "[$d1,] ";
               
-              my @elements;
-              for my $d2 (1 .. $dim_elements[1]) {
-                push @elements, $self->element($d1, $d2, @$positions);
+              my @values;
+              for my $d2 (1 .. $dim_values[1]) {
+                push @values, $self->value($d1, $d2, @$positions);
               }
               
-              $str .= join(' ', @elements) . "\n";
+              $str .= join(' ', @values) . "\n";
             }
           }
           shift @$positions;
         }
       };
-      $code->(@$dim_elements);
+      $code->(@$dim_values);
     }
   }
   else {

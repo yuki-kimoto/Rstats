@@ -14,28 +14,28 @@ my $r = Rstats->new;
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,2);
     my $ret = Rstats::Util::equal($z1, $z2);
-    is($ret, $r->TRUE);
+    is($ret, Rstats::Util::TRUE);
   }
   # comparison operator - ==, false
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,1);
     my $ret = Rstats::Util::equal($z1, $z2);
-    is($ret, $r->FALSE);
+    is($ret, Rstats::Util::FALSE);
   }
 
   # comparison operator - !=, true
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,2);
-    is(Rstats::Util::not_equal($z1, $z2), $r->FALSE);
+    is(Rstats::Util::not_equal($z1, $z2), Rstats::Util::FALSE);
   }
   
   # comparison operator - !=, false
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,1);
-    is(Rstats::Util::not_equal($z1, $z2), $r->TRUE);
+    is(Rstats::Util::not_equal($z1, $z2), Rstats::Util::TRUE);
   }
 
   # comparison operator - <, error

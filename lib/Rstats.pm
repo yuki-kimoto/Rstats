@@ -192,7 +192,7 @@ sub cbind {
       $col_count_total += $a->dim->elements->[1];
     }
     elsif ($a->is_vector) {
-      $row_count = $a->_real_dim_elements->[0];
+      $row_count = $a->_real_dim_values->[0];
       $col_count_total += 1;
     }
     else {

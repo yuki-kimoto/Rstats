@@ -961,24 +961,13 @@ sub numeric {
 sub _to_a {
   my ($self, $data) = @_;
   
-  croak "undef element is invalid" unless defined $data;
+  return $self->NULL unless defined $data;
   my $v;
-  if (ref $data eq 'ARRAY') {
-    $v = Rstats::Array->c($data);
-  }
-  elsif (ref $data eq 'Rstats::Array') {
+  if (ref $data eq 'Rstats::Array') {
     $v = $data;
   }
-  elsif (!ref $data) {
-    if ($data eq '') {
-      $v = Rstats::Array->NULL;
-    }
-    else {
-      $v = Rstats::Array->c($data);
-    }
-  }
   else {
-    croak "Invalid data is passed";
+    $v = Rstats::Array->c($data);
   }
   
   return $v;
@@ -1038,8 +1027,6 @@ sub _parse_index {
   
   for (my $i = 0; $i < @$a1_dim; $i++) {
     my $_index = $_indexs[$i];
-    
-    $_index = '' unless defined $_index;
     
     my $index = Rstats::Array->_to_a($_index);
     my $index_values = $index->values;

@@ -8,6 +8,17 @@ my $r = Rstats->new;
 
 # arr.ind=TRUE
 
+# t
+{
+  # t - basic
+  {
+    my $m1 = $r->matrix('1:6', 3, 2);
+    my $m2 = $r->t($m1);
+    is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
+    is_deeply($r->dim($m2)->values, [2, 3]);
+  }
+}
+
 # cbind
 {
   my $m1 = $r->cbind(
@@ -187,17 +198,6 @@ EOS
     $expected =~ s/[ \t]+/ /;
     
     is($m1_str, $expected);
-  }
-}
-
-# t
-{
-  # t - basic
-  {
-    my $m1 = $r->matrix('1:6', 3, 2);
-    my $m2 = $r->t($m1);
-    is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
-    is_deeply($r->dim($m2)->values, [2, 3]);
   }
 }
 

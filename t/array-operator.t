@@ -14,15 +14,15 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
   }
-
+  
   # comparison operator numeric - <, arguments count is different
   {
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -30,7 +30,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -38,7 +38,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -46,7 +46,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -54,7 +54,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -62,7 +62,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -70,7 +70,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -78,7 +78,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -86,7 +86,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->values, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -94,7 +94,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -102,6 +102,6 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->values, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 }

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Util;
 
 my $r = Rstats->new;
 
@@ -10,7 +11,7 @@ my $r = Rstats->new;
 {
   # as_character - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_character($a1);
     ok($a2->is_character);
     is_deeply($a2->values, ["Inf"]);
@@ -18,7 +19,7 @@ my $r = Rstats->new;
 
   # as_character - NA
   {
-    my $a1 = $r->array([$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
     my $a2 = $r->as_character($a1);
     ok($a2->is_character);
     is_deeply($a2->values, ["NA"]);
@@ -26,7 +27,7 @@ my $r = Rstats->new;
 
   # as_character - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
     my $a2 = $r->as_character($a1);
     ok($a2->is_character);
     is_deeply($a2->values, ["NaN"]);
@@ -67,7 +68,7 @@ my $r = Rstats->new;
   
   # as_character - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_character($a1);
     ok($a2->is_character);
     is($a2->values->[0], "TRUE");
@@ -79,26 +80,26 @@ my $r = Rstats->new;
 {
   # as_logical - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is_deeply($a2->values, [$r->TRUE]);
+    is_deeply($a2->values, [Rstats::Util::TRUE]);
   }
 
   # as_logical - NA
   {
-    my $a1 = $r->array([$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_logical - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
   
   # as_logical - character, number
@@ -130,7 +131,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([$r->complex(1, 2)]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is($a2->values->[0], $r->TRUE);
+    is($a2->values->[0], Rstats::Util::TRUE);
   }
 
   # as_logical - complex, 0 + 0i
@@ -138,7 +139,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([$r->complex(0, 0)]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is($a2->values->[0], $r->FALSE);
+    is($a2->values->[0], Rstats::Util::FALSE);
   }
   
   # as_logical - numeric
@@ -146,17 +147,17 @@ my $r = Rstats->new;
     my $a1 = $r->array([1.1, 0]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is($a2->values->[0], $r->TRUE);
-    is($a2->values->[1], $r->FALSE);
+    is($a2->values->[0], Rstats::Util::TRUE);
+    is($a2->values->[1], Rstats::Util::FALSE);
   }
   
   # as_logical - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is($a2->values->[0], $r->TRUE);
-    is($a2->values->[1], $r->FALSE);
+    is($a2->values->[0], Rstats::Util::TRUE);
+    is($a2->values->[1], Rstats::Util::FALSE);
   }
 }
 
@@ -164,26 +165,26 @@ my $r = Rstats->new;
 {
   # as_integer - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_integer($a1);
     ok($a2->is_integer);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_integer - NA
   {
-    my $a1 = $r->array([$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
     my $a2 = $r->as_integer($a1);
     ok($a2->is_integer);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_integer - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
     my $a2 = $r->as_integer($a1);
     ok($a2->is_integer);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
   
   # as_integer - character, only real number, no sign
@@ -252,7 +253,7 @@ my $r = Rstats->new;
   
   # as_integer - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_integer($a1);
     ok($a2->is_integer);
     is($a2->values->[0], 1);
@@ -264,26 +265,26 @@ my $r = Rstats->new;
 {
   # as_numeric - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_numeric($a1);
     ok($a2->is_numeric);
-    is_deeply($a2->values, [$r->Inf]);
+    is_deeply($a2->values, [Rstats::Util::Inf]);
   }
 
   # as_numeric - NA
   {
-    my $a1 = $r->array([$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
     my $a2 = $r->as_numeric($a1);
     ok($a2->is_numeric);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_numeric - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
     my $a2 = $r->as_numeric($a1);
     ok($a2->is_numeric);
-    is_deeply($a2->values, [$r->NaN]);
+    is_deeply($a2->values, [Rstats::Util::NaN]);
   }
 
   # as_numeric - character, only real number, no sign
@@ -352,7 +353,7 @@ my $r = Rstats->new;
   
   # as_numeric - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_numeric($a1);
     ok($a2->is_numeric);
     is($a2->values->[0], 1);
@@ -364,27 +365,27 @@ my $r = Rstats->new;
 {
   # as_complex - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, $r->Inf);
+    is($a2->values->[0]->re, Rstats::Util::Inf);
     is($a2->values->[0]->im, 0);
   }
 
   # as_complex - NA
   {
-    my $a1 = $r->array([$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_complex - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is_deeply($a2->values, [$r->NA]);
+    is_deeply($a2->values, [Rstats::Util::NA]);
   }
 
   # as_complex - character, only real number, no sign
@@ -531,7 +532,7 @@ my $r = Rstats->new;
   
   # as_complex - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
     is($a2->values->[0]->re, 1);
@@ -562,8 +563,8 @@ my $r = Rstats->new;
   
   # array decide type - logical
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
-    is_deeply($a1->values, [$r->TRUE, $r->FALSE]);
+    my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
+    is_deeply($a1->values, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
     ok($a1->is_logical);
   }
 
@@ -583,22 +584,22 @@ my $r = Rstats->new;
 
   # array decide type - Inf
   {
-    my $a1 = $r->array([$r->Inf]);
-    is_deeply($a1->values, [$r->Inf]);
+    my $a1 = $r->array([Rstats::Util::Inf]);
+    is_deeply($a1->values, [Rstats::Util::Inf]);
     ok($a1->is_numeric);
   }
 
   # array decide type - NaN
   {
-    my $a1 = $r->array([$r->NaN]);
-    is_deeply($a1->values, [$r->NaN]);
+    my $a1 = $r->array([Rstats::Util::NaN]);
+    is_deeply($a1->values, [Rstats::Util::NaN]);
     ok($a1->is_numeric);
   }
 
   # array decide type - NA
   {
-    my $a1 = $r->array([$r->NA]);
-    is_deeply($a1->values, [$r->NA]);
+    my $a1 = $r->array([Rstats::Util::NA]);
+    is_deeply($a1->values, [Rstats::Util::NA]);
     ok($a1->is_logical);
   }
 }

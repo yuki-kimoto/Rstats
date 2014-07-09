@@ -13,13 +13,15 @@ my $r = Rstats->new;
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,2);
-    is(Rstats::Util::equal($z1, $z2), $r->TRUE);
+    my $ret = Rstats::Util::equal($z1, $z2);
+    is($ret, $r->TRUE);
   }
   # comparison operator - ==, false
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(1,1);
-    is(Rstats::Util::equal($z1, $z2), $r->FALSE);
+    my $ret = Rstats::Util::equal($z1, $z2);
+    is($ret, $r->FALSE);
   }
 
   # comparison operator - !=, true
@@ -92,12 +94,11 @@ my $r = Rstats->new;
 
 # new
 {
-
   # new
   {
     my $z1 = Rstats::Util::complex(1,2);
-    is($z1->value->{re}, 1);
-    is($z1->value->{im}, 2);
+    is(Rstats::Util::value($z1)->{re}, 1);
+    is(Rstats::Util::value($z1)->{im}, 2);
   }
 }
 
@@ -107,8 +108,8 @@ my $r = Rstats->new;
   {
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::negation($z1);
-    is($z2->value->{re}, -1);
-    is($z2->value->{im}, -2);
+    is(Rstats::Util::value($z2)->{re}, -1);
+    is(Rstats::Util::value($z2)->{im}, -2);
   }
   
   # operation - add
@@ -116,8 +117,8 @@ my $r = Rstats->new;
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(3,4);
     my $z3 = Rstats::Util::add($z1, $z2);
-    is($z3->value->{re}, 4);
-    is($z3->value->{im}, 6);
+    is(Rstats::Util::value($z3)->{re}, 4);
+    is(Rstats::Util::value($z3)->{im}, 6);
   }
   
   # operation - subtract
@@ -125,64 +126,49 @@ my $r = Rstats->new;
     my $z1 = Rstats::Util::complex(1,2);
     my $z2 = Rstats::Util::complex(3,4);
     my $z3 = Rstats::Util::subtract($z1, $z2);
-    is($z3->value->{re}, -2);
-    is($z3->value->{im}, -2);
+    is(Rstats::Util::value($z3)->{re}, -2);
+    is(Rstats::Util::value($z3)->{im}, -2);
   }
   
   # operation - multiply
   {
-    my $z1 = 1 + $r->i * 2;
-    my $z2 = 3 + $r->i * 4;
+    my $z1 = Rstats::Util::complex(1, 2);
+    my $z2 = Rstats::Util::complex(3, 4);
     my $z3 = Rstats::Util::multiply($z1, $z2);
-    is($z3->value->{re}, -5);
-    is($z3->value->{im}, 10);
+    is(Rstats::Util::value($z3)->{re}, -5);
+    is(Rstats::Util::value($z3)->{im}, 10);
   }
 
   # operation - abs
   {
-    my $z1 = 3 + $r->i * 4;
-    my $abs = $z1->abs;
-    is($abs, 5);
+    my $z1 = Rstats::Util::complex(3, 4);
+    my $abs = Rstats::Util::abs($z1);
+    is(Rstats::Util::value($abs), 5);
   }
   
   # operation - conj
   {
-    my $z1 = 1 + $r->i * 2;
-    my $conj = $z1->conj;
-    is($conj->value->{re}, 1);
-    is($conj->value->{im}, -2);
+    my $z1 = Rstats::Util::complex(1, 2);
+    my $conj = Rstats::Util::conj($z1);
+    is(Rstats::Util::value($conj)->{re}, 1);
+    is(Rstats::Util::value($conj)->{im}, -2);
   }
   
   # operation - divide
   {
-    my $z1 = 5 - $r->i * 6;
-    my $z2 = 3 + $r->i * 2;
-    my $z3 = $z1 / $z2;
-    is($z3->value->{re}, 3/13);
-    is($z3->value->{im}, -28/13);
-  }
-
-  # operation - divide(real number)
-  {
-    my $z1 = 2 + $r->i * 4;
-    my $z2 = $z1 / 2;
-    is($z2->value->{re}, 1);
-    is($z2->value->{im}, 2);
-  }
-
-  # operation - divide(real number, reverse)
-  {
-    my $z1 = 3 + $r->i * 2;
-    my $z2 = 5 / $z1;
-    is($z2->value->{re}, 15 / 13);
-    is($z2->value->{im}, -10 / 13);
+    my $z1 = Rstats::Util::complex(5, -6);
+    my $z2 = Rstats::Util::complex(3, 2);
+    my $z3 = Rstats::Util::divide($z1, $z2);
+    is(Rstats::Util::value($z3)->{re}, 3/13);
+    is(Rstats::Util::value($z3)->{im}, -28/13);
   }
 
   # operation - raise
   {
-    my $z1 = 1 + $r->i * 2;
-    my $z2 = $z1 ** 3;
-    is($z2->value->{re}, -11);
-    is($z2->value->{im}, -2);
+    my $z1 = Rstats::Util::complex(1, 2);
+    my $z2 = Rstats::Util::complex(3, 0);
+    my $z3 = Rstats::Util::raise($z1, $z2);
+    is(Rstats::Util::value($z3)->{re}, -11);
+    is(Rstats::Util::value($z3)->{im}, -2);
   }
 }

@@ -180,8 +180,8 @@ sub to_string {
     return $v1->value;
   }
   elsif (is_complex($v1)) {
-    my $re = $v1->re;
-    my $im = $v1->im;
+    my $re = to_string($v1->re);
+    my $im = to_string($v1->im);
     
     my $str = "$re";
     $str .= '+' if $im >= 0;
@@ -225,7 +225,7 @@ sub negation {
     croak 'argument is not interpretable as logical'
   }
   elsif (is_complex($v1)) {
-    return complex(-$v1->re->value, im => -$v1->im->value);
+    return complex_double(negation($v1->re), negation($v1->im));
   }
   elsif (is_double($v1)) {
     
@@ -507,10 +507,10 @@ sub divide {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($v1)) {
-    my $v3 = $v1 * conj($v2);
-    my $abs2 = double($v2->re->value ** 2 + $v2->im->value ** 2);
-    my $re = $v3->re / $abs2;
-    my $im = $v3->im / $abs2;
+    my $v3 = multiply($v1, conj($v2));
+    my $abs2 = double(value($v2->re) ** 2 + value($v2->im) ** 2);
+    my $re = divide($v3->re, $abs2);
+    my $im = divide($v3->im, $abs2);
     
     return complex_double($re, $im);
   }
@@ -642,8 +642,8 @@ sub raise {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($v1)) {
-    my $v1_c = Math::Complex->make($v1->re->value, $v1->im->value);
-    my $v2_c = Math::Complex->make($v2->re->value, $v2->im->value);
+    my $v1_c = Math::Complex->make(Rstats::Util::value($v1->re), Rstats::Util::value($v1->im));
+    my $v2_c = Math::Complex->make(Rstats::Util::value($v2->re), Rstats::Util::value($v2->im));
     
     my $v3_c = $v1_c ** $v2_c;
     my $re = Math::Complex::Re($v3_c);
@@ -876,7 +876,7 @@ sub conj {
   my $value = shift;
   
   if (is_complex($value)) {
-    return complex($value->re, Rstats::Util::negation($value->im));
+    return complex_double($value->re, Rstats::Util::negation($value->im));
   }
   else {
     croak 'Invalid type';
@@ -888,7 +888,7 @@ sub abs {
   
   if (is_complex($element)) {
     return double(
-      sqrt(Rstats::Util::value($element->re) ** 2 + $element->im_value ** 2)
+      sqrt(Rstats::Util::value($element)->{re} ** 2 + Rstats::Util::value($element)->{im} ** 2)
     );
   }
   else {
@@ -1137,7 +1137,7 @@ sub equal {
     return $v1->value eq $v2->value ? TRUE : FALSE;
   }
   elsif (is_complex($v1)) {
-    return $v1->re->value == $v2->re->value && $v2->im->value == $v2->im->value;
+    return $v1->re->value == $v2->re->value && $v1->im->value == $v2->im->value ? TRUE : FALSE;
   }
   elsif (is_double($v1)) {
     return NA if is_nan($v1) || is_nan($v2);
@@ -1195,7 +1195,7 @@ sub not_equal {
     return $v1->value ne $v2->value ? TRUE : FALSE;
   }
   elsif (is_complex($v1)) {
-    return !($v1->re->value == $v2->re->value && $v2->im->value == $v2->im->value) ? TRUE : FALSE;
+    return !($v1->re->value == $v2->re->value && $v1->im->value == $v2->im->value) ? TRUE : FALSE;
   }
   elsif (is_double($v1)) {
     return NA if is_nan($v1) || is_nan($v2);

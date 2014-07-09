@@ -48,6 +48,18 @@ sub values {
 
 sub value { Rstats::Util::value(shift->element(@_)) }
 
+sub re_value {
+  my $self = shift;
+  
+  return Rstats::Util::value($self->element->re);
+}
+
+sub im_value {
+  my $self = shift;
+  
+  return Rstats::Util::value($self->element->im);
+}
+
 sub typeof {
   my $self = shift;
   

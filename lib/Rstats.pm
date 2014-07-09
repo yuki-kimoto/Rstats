@@ -315,12 +315,11 @@ sub cumsum {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
-  my @v2_elements;
+  my @v2_values;
   my $total = 0;
-  push @v2_elements, $total = $total + $_ for (@$v1_elements);
+  push @v2_values, $total = $total + $_ for @{$v1->values};
   
-  return $self->c(\@v2_elements);
+  return $self->c(\@v2_values);
 }
 
 sub rnorm {
@@ -360,14 +359,14 @@ sub sequence {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
+  my $v1_values = $v1->values;
   
-  my @v2_elements;
-  for my $v1_element (@$v1_elements) {
-    push @v2_elements, $self->seq($v1_element)->elements;
+  my @v2_values;
+  for my $v1_value (@$v1_values) {
+    push @v2_values, $self->seq($v1_value)->values;
   }
   
-  return $self->c(\@v2_elements);
+  return $self->c(\@v2_values);
 }
 
 # TODO: prob option
@@ -417,14 +416,14 @@ sub _order {
   my ($self, $asc, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
+  my $v1_values = $v1->values;
   
   my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $v1_elements->[$_]} for (0 .. @$v1_elements - 1);
-  my @sorted_pos_elements = $asc
+  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  my @sorted_pos_values = $asc
     ? sort { $a->{val} <=> $b->{val} } @pos_vals
     : sort { $b->{val} <=> $a->{val} } @pos_vals;
-  my @orders = map { $_->{pos} } @sorted_pos_elements;
+  my @orders = map { $_->{pos} } @sorted_pos_values;
   
   return $self->c(\@orders);
 }
@@ -433,35 +432,35 @@ sub which {
   my ($self, $_v1, $cond_cb) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
-  my @v2_elements;
-  for (my $i = 0; $i < @$v1_elements; $i++) {
-    local $_ = $v1_elements->[$i];
-    if ($cond_cb->($v1_elements->[$i])) {
-      push @v2_elements, $i + 1;
+  my $v1_values = $v1->values;
+  my @v2_values;
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    local $_ = $v1_values->[$i];
+    if ($cond_cb->($v1_values->[$i])) {
+      push @v2_values, $i + 1;
     }
   }
   
-  return $self->c(\@v2_elements);
+  return $self->c(\@v2_values);
 }
 
 sub ifelse {
-  my ($self, $_v1, $element1, $element2) = @_;
+  my ($self, $_v1, $value1, $value2) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
-  my @v2_elements;
-  for my $v1_element (@$v1_elements) {
-    local $_ = $v1_element;
-    if ($v1_element) {
-      push @v2_elements, $element1;
+  my $v1_values = $v1->values;
+  my @v2_values;
+  for my $v1_value (@$v1_values) {
+    local $_ = $v1_value;
+    if ($v1_value) {
+      push @v2_values, $value1;
     }
     else {
-      push @v2_elements, $element2;
+      push @v2_values, $value2;
     }
   }
   
-  return $self->array(\@v2_elements);
+  return $self->array(\@v2_values);
 }
 
 sub replace {
@@ -471,30 +470,30 @@ sub replace {
   my $v2 = $self->_to_a($_v2);
   my $v3 = $self->_to_a($_v3);
   
-  my $v1_elements = $v1->elements;
-  my $v2_elements = $v2->elements;
-  my $v2_elements_h = {};
-  for my $v2_element (@$v2_elements) {
-    $v2_elements_h->{$v2_element - 1}++;
+  my $v1_values = $v1->values;
+  my $v2_values = $v2->values;
+  my $v2_values_h = {};
+  for my $v2_value (@$v2_values) {
+    $v2_values_h->{$v2_value - 1}++;
     croak "replace second argument can't have duplicate number"
-      if $v2_elements_h->{$v2_element - 1} > 1;
+      if $v2_values_h->{$v2_value - 1} > 1;
   }
-  my $v3_elements = $v3->elements;
-  my $v3_length = @{$v3_elements};
+  my $v3_values = $v3->values;
+  my $v3_length = @{$v3_values};
   
-  my $v4_elements = [];
+  my $v4_values = [];
   my $replace_count = 0;
-  for (my $i = 0; $i < @$v1_elements; $i++) {
-    if ($v2_elements_h->{$i}) {
-      push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    if ($v2_values_h->{$i}) {
+      push @$v4_values, $v3_values->[$replace_count % $v3_length];
       $replace_count++;
     }
     else {
-      push @$v4_elements, $v1_elements->[$i];
+      push @$v4_values, $v1_values->[$i];
     }
   }
   
-  return $self->array($v4_elements);
+  return $self->array($v4_values);
 }
 
 sub dim {
@@ -577,12 +576,11 @@ sub paste {
   my $str = shift;
   my $v1 = shift;
   
-  my $v1_elements = $v1->elements;
-  my $v2 = $self->array([]);
-  my $v2_elements = $v2->elements;
-  push @$v2_elements, "$str$sep$_" for @$v1_elements;
+  my $v1_values = $v1->values;
+  my $v2_values = [];
+  push @$v2_values, "$str$sep$_" for @$v1_values;
   
-  return $v2;
+  return Rstats::Array->c($v2_values);
 }
 
 sub c {
@@ -643,16 +641,16 @@ sub rep {
 sub max {
   my ($self, @vs) = @_;
   
-  my @all_elements = map { @{$_->elements} } @vs;
-  my $max = List::Util::max(@all_elements);
+  my @all_values = map { @{$_->values} } @vs;
+  my $max = List::Util::max(@all_values);
   return $max;
 }
 
 sub min {
   my ($self, @vs) = @_;
   
-  my @all_elements = map { @{$_->elements} } @vs;
-  my $min = List::Util::min(@all_elements);
+  my @all_values = map { @{$_->values} } @vs;
+  my $min = List::Util::min(@all_values);
   return $min;
 }
 
@@ -661,10 +659,10 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $elements = $v->elements;
-    for (my $i = 0; $i <@$elements; $i++) {
-      $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || $elements->[$i] > $maxs[$i]
+    my $values = $v->values;
+    for (my $i = 0; $i <@$values; $i++) {
+      $maxs[$i] = $values->[$i]
+        if !defined $maxs[$i] || $values->[$i] > $maxs[$i]
     }
   }
   
@@ -678,10 +676,10 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $elements = $v->elements;
-    for (my $i = 0; $i <@$elements; $i++) {
-      $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || $elements->[$i] < $mins[$i]
+    my $values = $v->values;
+    for (my $i = 0; $i <@$values; $i++) {
+      $mins[$i] = $values->[$i]
+        if !defined $mins[$i] || $values->[$i] < $mins[$i]
     }
   }
   
@@ -729,16 +727,16 @@ sub sum {
   my ($self, $_v1) = @_;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
-  my $sum = List::Util::sum(@$v1_elements);
+  my $v1_values = $v1->values;
+  my $sum = List::Util::sum(@$v1_values);
   return $self->c($sum);
 }
 
 sub prod {
   my ($self, $v1) = @_;
   
-  my $v1_elements = $v1->elements;
-  my $prod = List::Util::product(@$v1_elements);
+  my $v1_values = $v1->values;
+  my $prod = List::Util::product(@$v1_values);
   return $self->c($prod);
 }
 
@@ -746,7 +744,7 @@ sub mean {
   my ($self, $data) = @_;
   
   my $v = $data;
-  my $mean = $self->sum($v)->element / $self->length($v);
+  my $mean = $self->sum($v)->value / $self->length($v);
   
   return $self->c($mean);
 }
@@ -754,7 +752,7 @@ sub mean {
 sub var {
   my ($self, $v1) = @_;
 
-  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->element
+  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
     / ($self->length($v1) - 1);
   
   return $self->c($var);
@@ -1128,9 +1126,9 @@ sub sort {
   my $_v1 = shift;
   
   my $v1 = $self->_to_a($_v1);
-  my $v1_elements = $v1->elements;
-  my $v2_elements = $decreasing ? [reverse sort(@$v1_elements)] : [sort(@$v1_elements)];
-  return $self->c($v2_elements);
+  my $v1_values = $v1->values;
+  my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
+  return $self->c($v2_values);
 }
 
 1;

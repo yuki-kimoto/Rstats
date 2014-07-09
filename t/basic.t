@@ -13,8 +13,8 @@ my $r = Rstats->new;
   # complex
   {
     my $a1 = $r->complex(1, 2);
-    is($a1->value->re, 1);
-    is($a1->value->im, 2);
+    is($a1->re_value, 1);
+    is($a1->im_value, 2);
   }
 }
 
@@ -103,8 +103,8 @@ my $r = Rstats->new;
   # is_*, as_*, typeof - NULL
   {
     my $a1 = $r->NULL;
-    is($a1->mode->value, 'NULL');
-    is($a1->typeof->value, 'NULL');
+    is($a1->mode->value, 'logical');
+    is($a1->typeof->value, 'logical');
   }
 }
 

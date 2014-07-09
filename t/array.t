@@ -10,13 +10,6 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
-# TRUE
-{
-  my $a1 = $r->TRUE;
-  my $a1_str = "$a1";
-  1;
-}
-
 # comparison operator numeric
 {
 
@@ -25,7 +18,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - <, arguments count is different
@@ -33,7 +26,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -41,7 +34,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -49,7 +42,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -57,7 +50,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -65,7 +58,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -73,7 +66,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -81,7 +74,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2,3]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->TRUE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -89,7 +82,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -97,7 +90,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [$r->FALSE, $r->TRUE]);
+    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -105,7 +98,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2,2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -113,7 +106,7 @@ my $r = Rstats->new;
     my $a1 = $r->array([1,2]);
     my $a2 = $r->array([2]);
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [$r->TRUE, $r->FALSE]);
+    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
   }
 }
 
@@ -515,19 +508,23 @@ EOS
   }
   
 
-  # to_string - 1-dimention, TRUE, FALSE, NA, NaN, Inf, -Inf
+  # to_string - 1-dimention, TRUE, FALSE
   {
-    my $a1 = $r->array([$r->TRUE, $r->FALSE, $r->NA, $r->NaN, $r->Inf, -$r->Inf]);
+    my $a1 = $r->array([$r->TRUE, $r->FALSE]);
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
-[1] TRUE FALSE NA NaN Inf -Inf
+[1] TRUE FALSE
 EOS
     $expected =~ s/[ \t]+/ /;
     
     is($a1_str, $expected);
   }
+
+=pod
+ NA NaN Inf -Inf
+=cut
 
   # to_string - 2-dimention
   {

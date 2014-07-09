@@ -171,28 +171,28 @@ my %character_comparison_ops = (
 );
 
 sub to_string {
-  my $v1 = shift;
+  my $element = shift;
   
-  if (is_na($v1)) {
+  if (is_na($element)) {
     return 'NA';
   }
-  elsif (is_character($v1)) {
-    return $v1->value;
+  elsif (is_character($element)) {
+    return $element->value . "";
   }
-  elsif (is_complex($v1)) {
-    my $re = to_string($v1->re);
-    my $im = to_string($v1->im);
+  elsif (is_complex($element)) {
+    my $re = to_string($element->re);
+    my $im = to_string($element->im);
     
     my $str = "$re";
     $str .= '+' if $im >= 0;
     $str .= $im . 'i';
   }
-  elsif (is_double($v1)) {
+  elsif (is_double($element)) {
     
-    my $flag = $v1->flag;
+    my $flag = $element->flag;
     
-    if (defined $v1->value) {
-      return $v1->value . "";
+    if (defined $element->value) {
+      return $element->value . "";
     }
     elsif ($flag eq 'nan') {
       return 'NaN';
@@ -204,11 +204,11 @@ sub to_string {
       return '-Inf';
     }
   }
-  elsif (is_integer($v1)) {
-    return $v1->value . "";
+  elsif (is_integer($element)) {
+    return $element->value . "";
   }
-  elsif (is_logical($v1)) {
-    return $v1->value ? 'TRUE' : 'FALSE'
+  elsif (is_logical($element)) {
+    return $element->value ? 'TRUE' : 'FALSE'
   }
   else {
     croak "Invalid type";

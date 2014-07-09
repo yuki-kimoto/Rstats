@@ -3,9 +3,17 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Util;
 use Math::Trig ();
 
 my $r = Rstats->new;
+
+# NA
+{
+  my $na = $r->NA;
+  my $na_element = $na->element;
+  is($na_element, Rstats::Util::NA);
+}
 
 # round
 {

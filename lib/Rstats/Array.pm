@@ -475,6 +475,8 @@ sub array {
   # Check elements
   my $mode_h = {};
   for my $element (@$elements) {
+    next if Rstats::Util::is_na($element);
+    
     if (!defined $element) {
       croak "undef is invalid element";
     }
@@ -1168,7 +1170,7 @@ sub _pos {
 sub to_string {
   my $self = shift;
 
-  my $values = $self->values;
+  my $elements = $self->elements;
   
   my $dim_values = $self->_real_dim_values;
   
@@ -1177,13 +1179,14 @@ sub to_string {
   my $positions = [];
   
   my $str;
-  if (@$values) {
+  if (@$elements) {
     if ($dim_length == 1) {
       my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      $str .= '[1] ' . join(' ', @$values) . "\n";
+      my @parts = map { Rstats::Util::to_string($_) } @$elements;
+      $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
       $str .= '     ';

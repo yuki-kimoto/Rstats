@@ -13,8 +13,8 @@ my $r = Rstats->new;
   # complex
   {
     my $a1 = $r->complex(1, 2);
-    is($a1->re_value, 1);
-    is($a1->im_value, 2);
+    is($a1->value->{re}, 1);
+    is($a1->value->{im}, 2);
   }
 }
 

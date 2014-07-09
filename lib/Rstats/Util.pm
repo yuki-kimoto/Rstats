@@ -97,11 +97,54 @@ sub element {
 sub value {
   my $element = shift;
   
-  if (is_character($element) || is_integer($element) || is_double($element)) {
+  if (is_character($element)
+    || is_integer($element)
+    || (is_double($element) && !is_nan($element) && !is_infinite($element))
+  ) {
     return $element->value;
+  }
+  elsif (is_complex($element)) {
+    return {
+      re => value($element->re),
+      im => value($element->im)
+    };
   }
   else {
     return $element;
+  }
+}
+
+sub re_value {
+  my $element = shift;
+  
+  if (is_complex($element)) {
+    my $re_element = $element->re;
+    if (!is_nan($re_element) && !is_infinite($re_element)) {
+      return $re_element->value;
+    }
+    else {
+      return $re_element;
+    }
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub im_value {
+  my $element = shift;
+  
+  if (is_complex($element)) {
+    my $im_element = $element->im;
+    if (!is_nan($im_element) && !is_infinite($im_element)) {
+      return $im_element->value;
+    }
+    else {
+      return $im_element;
+    }
+  }
+  else {
+    croak 'Not implemented';
   }
 }
 
@@ -830,13 +873,26 @@ sub remainder {
 }
 
 sub conj {
-  my $val = shift;
+  my $value = shift;
   
-  if (is_complex($val)) {
-    return complex($val->re, Rstats::Util::negation($val->im));
+  if (is_complex($value)) {
+    return complex($value->re, Rstats::Util::negation($value->im));
   }
   else {
     croak 'Invalid type';
+  }
+}
+
+sub abs {
+  my $element = shift;
+  
+  if (is_complex($element)) {
+    return double(
+      sqrt(Rstats::Util::value($element->re) ** 2 + $element->im_value ** 2)
+    );
+  }
+  else {
+    croak 'Not implemented';
   }
 }
 

@@ -3,38 +3,37 @@ use strict;
 use warnings;
 
 use Rstats::Util;
-use Scalar::Util 'refaddr';
 
-# reference
-{
-  my $nan = Rstats::Util::NaN;
-  is(ref $nan, 'Rstats::Type::Double');
-}
-
-# singleton
+# nan - singleton
 {
   my $nan1 = Rstats::Util::NaN;
   my $nan2 = Rstats::Util::NaN;
-  is(refaddr $nan1, refaddr $nan2);
+  is($nan1, $nan2);
+}
+
+# nan - nan is double
+{
+  my $nan = Rstats::Util::NaN;
+  ok(Rstats::Util::is_double($nan));
 }
 
 # negation
 {
   my $nan1 = Rstats::Util::NaN;
-  my $nan2 = -$nan1;
+  my $nan2 = Rstats::Util::negation($nan1);
   ok(Rstats::Util::is_nan($nan2));
 }
 
-# boolean
+# non - boolean
 {
   my $nan = Rstats::Util::NaN;
-  eval { if ($nan) { 1 } };
+  eval { Rstats::Util::bool($nan) };
   like($@, qr/logical/);
 }
 
-# to_string
+# non - to_string
 {
   my $nan = Rstats::Util::NaN;
-  is("$nan", 'NaN');
+  is(Rstats::Util::to_string($nan), 'NaN');
 }
 

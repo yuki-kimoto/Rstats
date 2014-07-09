@@ -127,38 +127,38 @@ sub clone_without_elements {
 sub row {
   my $self = shift;
   
-  my $nrow = $self->nrow->element;
-  my $ncol = $self->ncol->element;
+  my $nrow = $self->nrow->value;
+  my $ncol = $self->ncol->value;
   
-  my @elements = (1 .. $nrow) x $ncol;
+  my @values = (1 .. $nrow) x $ncol;
   
-  return Rstats::Array->array(\@elements, [$nrow, $ncol]);
+  return Rstats::Array->array(\@values, [$nrow, $ncol]);
 }
 
 sub col {
   my $self = shift;
   
-  my $nrow = $self->nrow->element;
-  my $ncol = $self->ncol->element;
+  my $nrow = $self->nrow->value;
+  my $ncol = $self->ncol->value;
   
-  my @elements;
+  my @values;
   for my $col (1 .. $ncol) {
-    push @elements, ($col) x $nrow;
+    push @values, ($col) x $nrow;
   }
   
-  return Rstats::Array->array(\@elements, [$nrow, $ncol]);
+  return Rstats::Array->array(\@values, [$nrow, $ncol]);
 }
 
 sub nrow {
   my $self = shift;
   
-  return Rstats::Array->array($self->dim->elements->[0]);
+  return Rstats::Array->array($self->dim->values->[0]);
 }
 
 sub ncol {
   my $self = shift;
   
-  return Rstats::Array->array($self->dim->elements->[1]);
+  return Rstats::Array->array($self->dim->values->[1]);
 }
 
 sub names {

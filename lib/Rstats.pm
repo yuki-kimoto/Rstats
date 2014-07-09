@@ -211,15 +211,15 @@ sub cbind {
 sub rowSums {
   my ($self, $m1) = @_;
   
-  my $dim_elements = $m1->dim->elements;
-  if (@$dim_elements == 2) {
-    my $v1_elements = [];
-    for my $col (1 .. $dim_elements->[1]) {
-      my $v1_element = 0;
-      $v1_element += $m1->element($_, $col) for (1 .. $dim_elements->[0]);
-      push @$v1_elements, $v1_element;
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $col (1 .. $dim_values->[1]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$v1_values, $v1_value;
     }
-    return $self->c($v1_elements);
+    return $self->c($v1_values);
   }
   else {
     croak "Can't culculate rowSums";
@@ -229,15 +229,15 @@ sub rowSums {
 sub colSums {
   my ($self, $m1) = @_;
   
-  my $dim_elements = $m1->dim->elements;
-  if (@$dim_elements == 2) {
-    my $v1_elements = [];
-    for my $row (1 .. $dim_elements->[0]) {
-      my $v1_element = 0;
-      $v1_element += $m1->element($row, $_) for (1 .. $dim_elements->[1]);
-      push @$v1_elements, $v1_element;
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $row (1 .. $dim_values->[0]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
+      push @$v1_values, $v1_value;
     }
-    return $self->c($v1_elements);
+    return $self->c($v1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -247,15 +247,15 @@ sub colSums {
 sub rowMeans {
   my ($self, $m1) = @_;
   
-  my $dim_elements = $m1->dim->elements;
-  if (@$dim_elements == 2) {
-    my $v1_elements = [];
-    for my $col (1 .. $dim_elements->[1]) {
-      my $v1_element = 0;
-      $v1_element += $m1->element($_, $col) for (1 .. $dim_elements->[0]);
-      push @$v1_elements, $v1_element / $dim_elements->[0];
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $col (1 .. $dim_values->[1]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$v1_values, $v1_value / $dim_values->[0];
     }
-    return $self->c($v1_elements);
+    return $self->c($v1_values);
   }
   else {
     croak "Can't culculate rowSums";
@@ -265,15 +265,15 @@ sub rowMeans {
 sub colMeans {
   my ($self, $m1) = @_;
   
-  my $dim_elements = $m1->dim->elements;
-  if (@$dim_elements == 2) {
-    my $v1_elements = [];
-    for my $row (1 .. $dim_elements->[0]) {
-      my $v1_element = 0;
-      $v1_element += $m1->element($row, $_) for (1 .. $dim_elements->[1]);
-      push @$v1_elements, $v1_element / $dim_elements->[1];
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $row (1 .. $dim_values->[0]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
+      push @$v1_values, $v1_value / $dim_values->[1];
     }
-    return $self->c($v1_elements);
+    return $self->c($v1_values);
   }
   else {
     croak "Can't culculate colSums";

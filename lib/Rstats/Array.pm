@@ -578,28 +578,36 @@ sub at {
 sub element {
   my $self = shift;
   
-  my $dim_elements = $self->_real_dim_values;
+  my $dim_values = $self->_real_dim_values;
   
   if (@_) {
-    if (@$dim_elements == 1) {
-      return $self->{elements}[$_[0] - 1];
+    if (@$dim_values == 1) {
+      return $self->elements->[$_[0] - 1];
     }
-    elsif (@$dim_elements == 2) {
-      return $self->{elements}[($_[0] + $dim_elements->[0] * ($_[1] - 1)) - 1];
+    elsif (@$dim_values == 2) {
+      return $self->elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      return $self->get(@_)->element;
+      return $self->get(@_)->elements->[0];
     }
   }
   else {
-    return $self->{elements}[0];
+    return $self->elements->[0];
   }
 }
 
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'double' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'double' || ($self->{type} || '') eq 'integer' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+  
+  return $self->c([$is]);
+}
+
+sub is_double {
+  my $self = shift;
+  
+  my $is = ($self->{type} || '') eq 'double' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
   
   return $self->c([$is]);
 }
@@ -607,7 +615,7 @@ sub is_numeric {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'integer' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'integer' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
   
   return $self->c([$is]);
 }
@@ -615,7 +623,7 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'complex' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'complex' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
   
   return $self->c([$is]);
 }
@@ -623,7 +631,7 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'character' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'character' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
   
   return $self->c([$is]);
 }
@@ -631,7 +639,7 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'logical' ? 1 : 0;
+  my $is = ($self->{type} || '') eq 'logical' ? Rstats::Util::TRUE : Rstats::Util::FALSE;
   
   return $self->c([$is]);
 }
@@ -1198,12 +1206,12 @@ sub to_string {
           $str .= "[$d1,] ";
         }
         
-        my @values;
+        my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @values, $self->value($d1, $d2);
+          push @parts, Rstats::Util::to_string($self->element($d1, $d2));
         }
         
-        $str .= join(' ', @values) . "\n";
+        $str .= join(' ', @parts) . "\n";
       }
     }
     else {
@@ -1228,12 +1236,12 @@ sub to_string {
             for my $d1 (1 .. $dim_values[0]) {
               $str .= "[$d1,] ";
               
-              my @values;
+              my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                push @values, $self->value($d1, $d2, @$positions);
+                push @parts, Rstats::Util::to_string($self->element($d1, $d2, @$positions));
               }
               
-              $str .= join(' ', @values) . "\n";
+              $str .= join(' ', @parts) . "\n";
             }
           }
           shift @$positions;
@@ -1421,7 +1429,8 @@ sub t {
   for my $row (1 .. $m1_row) {
     for my $col (1 .. $m1_col) {
       my $element = $m1->element($row, $col);
-      $m2->at($col, $row)->set($element);
+      $m2->at($col, $row);
+      $m2->set($element);
     }
   }
   

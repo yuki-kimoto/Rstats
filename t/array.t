@@ -10,6 +10,13 @@ my $r = Rstats->new;
 #   which
 #   get - logical, undef
 
+# TRUE
+{
+  my $a1 = $r->TRUE;
+  my $a1_str = "$a1";
+  1;
+}
+
 # comparison operator numeric
 {
 
@@ -506,6 +513,21 @@ EOS
     
     is($a2_str, $expected);
   }
+  
+
+  # to_string - 1-dimention, TRUE, FALSE, NA, NaN, Inf, -Inf
+  {
+    my $a1 = $r->array([$r->TRUE, $r->FALSE, $r->NA, $r->NaN, $r->Inf, -$r->Inf]);
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] TRUE FALSE NA NaN Inf -Inf
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
 
   # to_string - 2-dimention
   {
@@ -694,7 +716,6 @@ EOS
     
     is($a1_str, $expected);
   }
-
 }
 
 # array

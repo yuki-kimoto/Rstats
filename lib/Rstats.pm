@@ -18,9 +18,11 @@ require Rstats::Array;
 #   lgamma
 #   complete_cases
 
-sub Inf { array(Rstats::Util::Inf()) }
-sub NA { array(Rstats::Util::NA()) }
-sub NaN { array(Rstats::Util::NaN()) }
+sub Inf { shift->c(Rstats::Util::Inf()) }
+sub NA { shift->c(Rstats::Util::NA()) }
+sub NaN { shift->c(Rstats::Util::NaN()) }
+sub TRUE { shift->c(Rstats::Util::TRUE()) }
+sub FALSE { shift->c(Rstats::Util::FALSE()) }
 
 sub is_null {
   my ($self, $_a1) = @_;
@@ -98,9 +100,6 @@ sub complex {
   return $self->c([Rstats::Util::complex($re, $im)]);
 }
 
-sub TRUE { Rstats::Util::TRUE() }
-
-sub FALSE { Rstats::Util::FALSE() }
 
 sub as_complex {
   my ($self, $a1) = @_;

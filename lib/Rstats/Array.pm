@@ -443,6 +443,9 @@ sub array {
     elsif (ref $a1 eq 'Rstats::Array') {
       $elements = $a1->elements;
     }
+    elsif (ref $a1) {
+      $elements = [$a1];
+    }
     elsif(!ref $a1) {
       $elements = $self->_parse_seq_str($a1)->elements;
     }

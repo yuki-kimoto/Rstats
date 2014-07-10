@@ -160,40 +160,6 @@ sub value {
   }
 }
 
-sub re_value {
-  my $element = shift;
-  
-  if (is_complex($element)) {
-    my $re_element = $element->re;
-    if (!is_nan($re_element) && !is_infinite($re_element)) {
-      return $re_element->value;
-    }
-    else {
-      return $re_element;
-    }
-  }
-  else {
-    croak 'Not implemented';
-  }
-}
-
-sub im_value {
-  my $element = shift;
-  
-  if (is_complex($element)) {
-    my $im_element = $element->im;
-    if (!is_nan($im_element) && !is_infinite($im_element)) {
-      return $im_element->value;
-    }
-    else {
-      return $im_element;
-    }
-  }
-  else {
-    croak 'Not implemented';
-  }
-}
-
 sub is_perl_number {
   my ($value) = @_;
   

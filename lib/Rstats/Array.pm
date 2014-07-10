@@ -5,7 +5,6 @@ use Carp 'croak', 'carp';
 use List::Util;
 use Rstats;
 use B;
-use Scalar::Util 'looks_like_number';
 use Rstats::Util;
 
 our @CARP_NOT = ('Rstats');
@@ -649,52 +648,6 @@ sub is_logical {
   return $self->c([$is]);
 }
 
-sub _looks_like_complex {
-  my ($self, $value) = @_;
-  
-  return if !defined $value || !CORE::length $value;
-  $value =~ s/^ +//;
-  $value =~ s/ +$//;
-  
-  my $re;
-  my $im;
-  
-  if ($value =~ /^([\+\-]?[^\+\-]+)i$/) {
-    $re = 0;
-    $im = $1;
-  }
-  elsif($value =~ /^([\+\-]?[^\+\-]+)(?:([\+\-][^\+\-i]+)i)?$/) {
-    $re = $1;
-    $im = $2;
-    $im = 0 unless defined $im;
-  }
-  else {
-    return;
-  }
-  
-  if (looks_like_number $re && looks_like_number $im) {
-    return ($re + 0, $im + 0);
-  }
-  else {
-    return;
-  }
-}
-
-sub _looks_like_number {
-  my ($self, $value) = @_;
-  
-  return if !defined $value || !CORE::length $value;
-  $value =~ s/^ +//;
-  $value =~ s/ +$//;
-  
-  if (looks_like_number $value) {
-    return ($value + 0);
-  }
-  else {
-    return;
-  }
-}
-
 sub _as {
   my ($self, $mode) = @_;
   
@@ -732,8 +685,9 @@ sub as_complex {
       $_;
     }
     elsif (Rstats::Util::is_character($_)) {
-      if (my @nums = $self->_looks_like_complex($_->value)) {
-        Rstats::Util::complex(@nums);
+      my $z = Rstats::Util::looks_like_complex($_->value);
+      if (defined $z) {
+        Rstats::Util::complex($z->{re}, $z->{im});
       }
       else {
         carp 'NAs introduced by coercion';
@@ -780,8 +734,8 @@ sub as_double {
       $_;
     }
     elsif (Rstats::Util::is_character($_)) {
-      if ($self->_looks_like_number($_->value)) {
-        Rstats::Util::double($_->value + 0);
+      if (my $num = Rstats::Util::looks_like_number($_->value)) {
+        Rstats::Util::double($num + 0);
       }
       else {
         carp 'NAs introduced by coercion';
@@ -822,8 +776,8 @@ sub as_integer {
       $_;
     }
     elsif (Rstats::Util::is_character($_)) {
-      if ($self->_looks_like_number($_->value)) {
-        Rstats::Util::integer(int($_->value + 0));
+      if (my $num = Rstats::Util::looks_like_number($_->value)) {
+        Rstats::Util::integer(int $num);
       }
       else {
         carp 'NAs introduced by coercion';

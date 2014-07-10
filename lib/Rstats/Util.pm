@@ -10,9 +10,9 @@ require Rstats::Type::Complex;
 require Rstats::Type::Character;
 require Rstats::Type::Integer;
 require Rstats::Type::Double;
-use Scalar::Util 'refaddr';
-use B;
-use Math::Complex;
+use Scalar::Util ();
+use B ();
+use Math::Complex ();
 use POSIX ();
 
 # Special values
@@ -24,12 +24,12 @@ my $true = logical(1);
 my $false = logical(0);
 
 # Address
-my $true_ad = refaddr $true;
-my $false_ad = refaddr $false;
-my $na_ad = refaddr $na;
-my $nan_ad = refaddr $nan;
-my $inf_ad = refaddr $inf;
-my $negative_inf_ad = refaddr $negative_inf;
+my $true_ad = Scalar::Util::refaddr $true;
+my $false_ad = Scalar::Util::refaddr $false;
+my $na_ad = Scalar::Util::refaddr $na;
+my $nan_ad = Scalar::Util::refaddr $nan;
+my $inf_ad = Scalar::Util::refaddr $inf;
+my $negative_inf_ad = Scalar::Util::refaddr $negative_inf;
 
 sub TRUE { $true }
 sub FALSE { $false }
@@ -38,11 +38,11 @@ sub NaN { $nan }
 sub Inf { $inf }
 sub negativeInf { $negative_inf }
 
-sub is_nan { ref $_[0] && (refaddr $_[0] == $nan_ad) }
-sub is_na { ref $_[0] && (refaddr $_[0] == $na_ad) }
+sub is_nan { ref $_[0] && (Scalar::Util::refaddr $_[0] == $nan_ad) }
+sub is_na { ref $_[0] && (Scalar::Util::refaddr $_[0] == $na_ad) }
 sub is_infinite { is_positive_infinite($_[0]) || is_negative_infinite($_[0]) }
-sub is_positive_infinite { ref $_[0] && (refaddr $_[0] == $inf_ad) }
-sub is_negative_infinite { ref $_[0] && (refaddr $_[0] == $negative_inf_ad) }
+sub is_positive_infinite { ref $_[0] && (Scalar::Util::refaddr $_[0] == $inf_ad) }
+sub is_negative_infinite { ref $_[0] && (Scalar::Util::refaddr $_[0] == $negative_inf_ad) }
 sub is_finite {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
@@ -71,6 +71,52 @@ sub complex_double {
 sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal') }
 sub integer { Rstats::Type::Integer->new(value => int(shift)) }
 sub logical { Rstats::Type::Logical->new(value => shift) }
+
+sub looks_like_number {
+  my $value = shift;
+  
+  return if !defined $value || !CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
+  
+  if (Scalar::Util::looks_like_number $value) {
+    return $value + 0;
+  }
+  else {
+    return;
+  }
+}
+
+sub looks_like_complex {
+  my $value = shift;
+  
+  return if !defined $value || !CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
+  
+  my $re;
+  my $im;
+  
+  if ($value =~ /^([\+\-]?[^\+\-]+)i$/) {
+    $re = 0;
+    $im = $1;
+  }
+  elsif($value =~ /^([\+\-]?[^\+\-]+)(?:([\+\-][^\+\-i]+)i)?$/) {
+    $re = $1;
+    $im = $2;
+    $im = 0 unless defined $im;
+  }
+  else {
+    return;
+  }
+  
+  if (defined Rstats::Util::looks_like_number($re) && defined Rstats::Util::looks_like_number($im)) {
+    return {re => $re + 0, im => $im + 0};
+  }
+  else {
+    return;
+  }
+}
 
 sub element {
   my $value = shift;

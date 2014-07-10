@@ -360,7 +360,7 @@ sub sequence {
   
   my @v2_values;
   for my $v1_value (@$v1_values) {
-    push @v2_values, $self->seq($v1_value)->values;
+    push @v2_values, $self->seq(1, $v1_value)->values;
   }
   
   return $self->c(\@v2_values);

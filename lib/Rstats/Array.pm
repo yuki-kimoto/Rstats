@@ -300,20 +300,10 @@ sub seq {
   
   if ($along) {
     my $length = $along->length;
-    return $self->seq([1,$length]);
+    return $self->seq(1,$length);
   }
   else {
-    my $from_to = shift;
-    my $from;
-    my $to;
-    if (ref $from_to eq 'ARRAY') {
-      $from = $from_to->[0];
-      $to = $from_to->[1];
-    }
-    elsif (defined $from_to) {
-      $from = 1;
-      $to = $from_to;
-    }
+    my ($from, $to) = @_;
     
     # From
     $from = $opt->{from} unless defined $from;
@@ -321,6 +311,7 @@ sub seq {
     
     # To
     $to = $opt->{to} unless defined $to;
+    croak "seq function need to option" unless defined $to;
 
     # Length
     my $length = $opt->{length};
@@ -410,7 +401,10 @@ sub c {
   # Value
   my $elements = [];
   my $a1;
-  if (@values > 1) {
+  if (@values == 0) {
+    return Rstats::Array->NULL;
+  }
+  elsif (@values > 1) {
     $a1 = \@values;
   }
   else {
@@ -912,11 +906,7 @@ sub get {
   return Rstats::Array->array(\@a2_elements, $a2_dim);
 }
 
-sub NULL {
-  my $self = shift;
-  
-  return Rstats::Array->numeric(0);
-}
+sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 
 sub numeric {
   my ($self, $num) = @_;

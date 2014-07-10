@@ -368,8 +368,8 @@ my $r = Rstats->new;
     my $a1 = $r->array([Rstats::Util::Inf]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, Rstats::Util::Inf);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, Rstats::Util::Inf);
+    is($a2->values->[0]->{im}, 0);
   }
 
   # as_complex - NA
@@ -393,8 +393,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["1.23"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1.23);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, 1.23);
+    is($a2->values->[0]->{im}, 0);
   }
 
   # as_complex - character, only real number, pre and trailing space
@@ -402,8 +402,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["  1.23  "]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1.23);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, 1.23);
+    is($a2->values->[0]->{im}, 0);
   }
   
   # as_complex - character, only real number, plus
@@ -411,8 +411,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["+1.23"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1.23);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, 1.23);
+    is($a2->values->[0]->{im}, 0);
   }
   
   # as_complex - character, only real number, minus
@@ -420,8 +420,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["-1.23"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, -1.23);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, -1.23);
+    is($a2->values->[0]->{im}, 0);
   }
 
   # as_complex - character, only image number, no sign
@@ -429,8 +429,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 0);
-    is($a2->values->[0]->im, 1.23);
+    is($a2->values->[0]->{re}, 0);
+    is($a2->values->[0]->{im}, 1.23);
   }
 
   # as_complex - character, only image number, plus
@@ -438,8 +438,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["+1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 0);
-    is($a2->values->[0]->im, 1.23);
+    is($a2->values->[0]->{re}, 0);
+    is($a2->values->[0]->{im}, 1.23);
   }
 
   # as_complex - character, only image number, minus
@@ -447,8 +447,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["-1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 0);
-    is($a2->values->[0]->im, -1.23);
+    is($a2->values->[0]->{re}, 0);
+    is($a2->values->[0]->{im}, -1.23);
   }
 
   # as_complex - character, real number and image number, no sign
@@ -456,8 +456,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["2.5+1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 2.5);
-    is($a2->values->[0]->im, 1.23);
+    is($a2->values->[0]->{re}, 2.5);
+    is($a2->values->[0]->{im}, 1.23);
   }
 
   # as_complex - character, real number and image number, plus
@@ -465,8 +465,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["+2.5+1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 2.5);
-    is($a2->values->[0]->im, 1.23);
+    is($a2->values->[0]->{re}, 2.5);
+    is($a2->values->[0]->{im}, 1.23);
   }
   
   # as_complex - character, real number and image number, minus
@@ -474,8 +474,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["-2.5-1.23i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, -2.5);
-    is($a2->values->[0]->im, -1.23);
+    is($a2->values->[0]->{re}, -2.5);
+    is($a2->values->[0]->{im}, -1.23);
   }
 
   # as_complex - character, pre and trailing space
@@ -483,8 +483,8 @@ my $r = Rstats->new;
     my $a1 = $r->array(["  2.5+1.23i  "]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 2.5);
-    is($a2->values->[0]->im, 1.23);
+    is($a2->values->[0]->{re}, 2.5);
+    is($a2->values->[0]->{im}, 1.23);
   }
 
   # as_complex - error
@@ -508,8 +508,8 @@ my $r = Rstats->new;
     my $a1 = $r->array([$r->complex(1, 2)]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1);
-    is($a2->values->[0]->im, 2);
+    is($a2->values->[0]->{re}, 1);
+    is($a2->values->[0]->{im}, 2);
   }
   
   # as_complex - numeric
@@ -517,8 +517,8 @@ my $r = Rstats->new;
     my $a1 = $r->array([1.1]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1.1);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, 1.1);
+    is($a2->values->[0]->{im}, 0);
   }
   
   # as_complex - integer
@@ -526,8 +526,8 @@ my $r = Rstats->new;
     my $a1 = $r->array([1]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1);
-    is($a2->values->[0]->im, 0);
+    is($a2->values->[0]->{re}, 1);
+    is($a2->values->[0]->{im}, 0);
   }
   
   # as_complex - logical
@@ -535,10 +535,10 @@ my $r = Rstats->new;
     my $a1 = $r->array([Rstats::Util::TRUE, Rstats::Util::FALSE]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is($a2->values->[0]->re, 1);
-    is($a2->values->[0]->im, 0);
-    is($a2->values->[1]->re, 0);
-    is($a2->values->[1]->im, 0);
+    is($a2->values->[0]->{re}, 1);
+    is($a2->values->[0]->{im}, 0);
+    is($a2->values->[1]->{re}, 0);
+    is($a2->values->[1]->{im}, 0);
   }
 }
 
@@ -547,10 +547,10 @@ my $r = Rstats->new;
   # array decide type - complex
   {
     my $a1 = $r->array([$r->complex(1, 2), $r->complex(3, 4)]);
-    is($a1->values->[0]->re, 1);
-    is($a1->values->[0]->im, 2);
-    is($a1->values->[1]->re, 3);
-    is($a1->values->[1]->im, 4);
+    is($a1->values->[0]->{re}, 1);
+    is($a1->values->[0]->{im}, 2);
+    is($a1->values->[1]->{re}, 3);
+    is($a1->values->[1]->{im}, 4);
     ok($a1->is_complex);
   }
 
@@ -610,10 +610,10 @@ my $r = Rstats->new;
   {
     my $a1_values = [1, $r->complex(3, 4)];
     my $a1 = $r->array($a1_values);
-    is($a1->values->[0]->re, 1);
-    is($a1->values->[0]->im, 0);
-    is($a1->values->[1]->re, 3);
-    is($a1->values->[1]->im, 4);
+    is($a1->values->[0]->{re}, 1);
+    is($a1->values->[0]->{im}, 0);
+    is($a1->values->[1]->{re}, 3);
+    is($a1->values->[1]->{im}, 4);
     ok($a1->is_complex);
   }
 

@@ -69,7 +69,7 @@ sub complex_double {
   my $z = Rstats::Type::Complex->new(re => $re, im => $im);
 }
 sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal') }
-sub integer { Rstats::Type::Integer->new(value => shift) }
+sub integer { Rstats::Type::Integer->new(value => int(shift)) }
 sub logical { Rstats::Type::Logical->new(value => shift) }
 
 sub element {

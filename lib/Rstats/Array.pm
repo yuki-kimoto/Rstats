@@ -650,29 +650,30 @@ sub is_logical {
 }
 
 sub _looks_like_complex {
-  my ($self, $element) = @_;
+  my ($self, $value) = @_;
   
-  return if !defined $element || !CORE::length $element;
-  $element =~ s/^ +//;
-  $element =~ s/ +$//;
+  return if !defined $value || !CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
   
   my $re;
   my $im;
   
-  if ($element =~ /^([\+\-]?[^\+\-]+)i$/) {
+  if ($value =~ /^([\+\-]?[^\+\-]+)i$/) {
     $re = 0;
     $im = $1;
   }
-  elsif($element =~ /^([\+\-]?[^\+\-]+)([\+\-][^\+\-i]+)i?$/) {
+  elsif($value =~ /^([\+\-]?[^\+\-]+)(?:([\+\-][^\+\-i]+)i)?$/) {
     $re = $1;
     $im = $2;
+    $im = 0 unless defined $im;
   }
   else {
     return;
   }
   
   if (looks_like_number $re && looks_like_number $im) {
-    return ($re, $im);
+    return ($re + 0, $im + 0);
   }
   else {
     return;
@@ -680,14 +681,14 @@ sub _looks_like_complex {
 }
 
 sub _looks_like_number {
-  my ($self, $element) = @_;
+  my ($self, $value) = @_;
   
-  return if !defined $element || !CORE::length $element;
-  $element =~ s/^ +//;
-  $element =~ s/ +$//;
+  return if !defined $value || !CORE::length $value;
+  $value =~ s/^ +//;
+  $value =~ s/ +$//;
   
-  if (looks_like_number $element) {
-    return ($element);
+  if (looks_like_number $value) {
+    return ($value + 0);
   }
   else {
     return;
@@ -747,7 +748,7 @@ sub as_complex {
         Rstats::Util::NA;
       }
       else {
-        Rstats::Util::complex($_->value, 0);
+        Rstats::Util::complex_double($_, Rstats::Util::double(0));
       }
     }
     elsif (Rstats::Util::is_integer($_)) {
@@ -868,13 +869,7 @@ sub as_logical {
       $_;
     }
     elsif (Rstats::Util::is_character($_)) {
-      if ($self->_looks_like_number($_->value)) {
-        $_->value ? Rstats::Util::TRUE : Rstats::Util::FALSE;
-      }
-      else {
-        carp 'NAs introduced by coercion';
-        Rstats::Util::NA;
-      }
+      Rstats::Util::NA;
     }
     elsif (Rstats::Util::is_complex($_)) {
       carp "imaginary parts discarded in coercion";

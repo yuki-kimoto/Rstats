@@ -5,7 +5,7 @@ use warnings;
 use Rstats;
 use Rstats::Util;
 
-my $r = Rstats->new;
+my $r = Rstats::Class->new;
 
 # as_character
 {

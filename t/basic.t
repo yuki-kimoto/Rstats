@@ -2,11 +2,11 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats;
+use Rstats::Class;
 use Math::Trig ();
 use Rstats::Array;
 
-my $r = Rstats->new;
+my $r = Rstats::Class->new;
 
 # complex
 {
@@ -395,8 +395,6 @@ my $r = Rstats->new;
 
 # paste
 {
-  my $r = Rstats->new;
-  
   # paste($str, $vector);
   {
     my $v = $r->paste('x', $r->c($r->C('1:3')));
@@ -411,8 +409,6 @@ my $r = Rstats->new;
 
 # c
 {
-  my $r = Rstats->new;
-  
   # c($array)
   {
     my $v = $r->c([1, 2, 3]);
@@ -440,8 +436,6 @@ my $r = Rstats->new;
 
 # rep function
 {
-  my $r = Rstats->new;
-  
   # req($v, {times => $times});
   {
     my $v1 = $r->c([1, 2, 3]);
@@ -452,8 +446,6 @@ my $r = Rstats->new;
 
 # seq function
 {
-  my $r = Rstats->new;
-
   # seq($from)
   {
     my $v = $r->seq(3);
@@ -510,8 +502,6 @@ my $r = Rstats->new;
 
 # Method
 {
-  my $r = Rstats->new;
-  
   # add (vector)
   {
     my $v1 = $r->c([1, 2, 3]);

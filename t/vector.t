@@ -2,9 +2,9 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats;
+use Rstats::Class;
 
-my $r = Rstats->new;
+my $r = Rstats::Class->new;
 
 # names
 {

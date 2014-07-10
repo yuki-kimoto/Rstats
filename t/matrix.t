@@ -4,7 +4,7 @@ use warnings;
 
 use Rstats;
 
-my $r = Rstats->new;
+my $r = Rstats::Class->new;
 
 # arr.ind=TRUE
 

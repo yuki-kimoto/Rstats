@@ -2,11 +2,11 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats;
+use Rstats::Class;
 use Rstats::Util;
 use Math::Trig ();
 
-my $r = Rstats->new;
+my $r = Rstats::Class->new;
 
 # NA
 {

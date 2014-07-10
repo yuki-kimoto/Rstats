@@ -2,7 +2,7 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats::Lite;
+use Rstats;
 use Rstats::Util;
 
 # c
@@ -73,3 +73,4 @@ use Rstats::Util;
   my $v1 = r->c(1, 2, 3);
   is_deeply($v1->values, [1, 2, 3]);
 }
+

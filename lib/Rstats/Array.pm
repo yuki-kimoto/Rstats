@@ -402,16 +402,6 @@ sub _parse_seq_str {
   return $array;
 }
 
-sub _is_numeric {
-  my ($self, $element) = @_;
-  
-  return unless defined $element;
-  
-  return B::svref_2object(\$element)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-        && 0 + $element eq $element
-        && $element * 0 == 0
-}
-
 sub array {
   my $self = shift;
   

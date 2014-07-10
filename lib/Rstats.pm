@@ -1111,9 +1111,9 @@ sub range {
 sub i {
   my $self = shift;
   
-  my $i = Rstats::Type::Complex->new(re => 0, im => 1);
+  my $i = Rstats::Util::complex(0, 1);
   
-  return $i;
+  return $self->c($i);
 }
 
 sub length {

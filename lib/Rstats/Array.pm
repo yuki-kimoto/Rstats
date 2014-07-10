@@ -404,13 +404,20 @@ sub C {
 }
 
 sub c {
-  my ($self, $a1) = @_;
+  my ($self, @values) = @_;
   
   # Array
   my $array = Rstats::Array->new;
   
   # Value
   my $elements = [];
+  my $a1;
+  if (@values > 1) {
+    $a1 = \@values;
+  }
+  else {
+    $a1 = $values[0];
+  }
   if (defined $a1) {
     if (ref $a1 eq 'ARRAY') {
       for my $a (@$a1) {

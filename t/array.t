@@ -15,7 +15,7 @@ my $r = Rstats->new;
 
   # comparison operator numeric - <
   {
-    my $a1 = $r->array([1,2,3]);
+    my $a1 = $r->array($r->c(1,2,3));
     my $a2 = $r->array([2,1,3]);
     my $a3 = $a1 < $a2;
     is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);

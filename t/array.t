@@ -369,7 +369,7 @@ my $r = Rstats->new;
 {
   # clone_without_elements - matrix
   {
-    my $a1 = $r->matrix('1:24', 3, 2);
+    my $a1 = $r->matrix($r->C('1:24'), 3, 2);
     $a1->rownames(['r1', 'r2', 'r3']);
     $a1->colnames(['c1', 'c2']);
     my $a2 = $a1->clone_without_elements;
@@ -382,7 +382,7 @@ my $r = Rstats->new;
   
   # clone_without_elements - matrix with value
   {
-    my $a1 = $r->matrix('1:24', 3, 2);
+    my $a1 = $r->matrix($r->C('1:24'), 3, 2);
     my $a2 = $a1->clone_without_elements;
     $a2->values([2 .. 25]);
     is_deeply($a2->values, [2 .. 25]);
@@ -390,7 +390,7 @@ my $r = Rstats->new;
   
   # clone_without_elements - vector
   {
-    my $a1 = $r->matrix('1:24', 3, 2);
+    my $a1 = $r->matrix($r->C('1:24'), 3, 2);
     $a1->names(['r1', 'r2', 'r3']);
     my $a2 = $a1->clone_without_elements;
     is_deeply($a2->names->values, ['r1', 'r2', 'r3']);
@@ -401,31 +401,31 @@ my $r = Rstats->new;
 {
   # value - none argument
   {
-    my $a1 = $r->array('1:4');
+    my $a1 = $r->array($r->C('1:4'));
     is($a1->value, 1);
   }
 
   # value - one-dimetion
   {
-    my $a1 = $r->array('1:4');
+    my $a1 = $r->array($r->C('1:4'));
     is($a1->value(2), 2);
   }
   
   # value - two-dimention
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     is($a1->value(3, 2), 7);
   }
 
   # value - two-dimention, as_vector
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     is($a1->as_vector->value(5), 5);
   }
   
   # value - three-dimention
   {
-    my $a1 = $r->array('1:24', [4, 3, 1]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 1]);
     is($a1->value(3, 2, 1), 7);
   }
 }
@@ -443,7 +443,7 @@ my $r = Rstats->new;
 
   # to_string - 2-dimention
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 
@@ -461,7 +461,7 @@ EOS
 
   # to_string - 1-dimention
   {
-    my $a1 = $r->array('1:4');
+    my $a1 = $r->array($r->C('1:4'));
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 
@@ -475,7 +475,7 @@ EOS
 
   # to_string - 1-dimention, as_vector
   {
-    my $a1 = $r->array('1:4');
+    my $a1 = $r->array($r->C('1:4'));
     my $a2 = $a1->as_vector;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -490,7 +490,7 @@ EOS
 
   # to_string - 1-dimention, as_matrix
   {
-    my $a1 = $r->array('1:4');
+    my $a1 = $r->array($r->C('1:4'));
     my $a2 = $a1->as_matrix;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -528,7 +528,7 @@ EOS
 
   # to_string - 2-dimention
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     my $a2 = $a1->as_matrix;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -547,7 +547,7 @@ EOS
 
   # to_string - 2-dimention, as_vector
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     my $a2 = $a1->as_vector;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -562,7 +562,7 @@ EOS
 
   # to_string - 2-dimention, as_matrix
   {
-    my $a1 = $r->array('1:12', [4, 3]);
+    my $a1 = $r->array($r->C('1:12'), [4, 3]);
     my $a2 = $a1->as_matrix;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -581,7 +581,7 @@ EOS
   
   # to_string - 3-dimention
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 
@@ -606,7 +606,7 @@ EOS
 
   # to_string - 3-dimention, as_vector
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->as_vector;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -621,7 +621,7 @@ EOS
 
   # to_string - 3-dimention, as_matrix
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->as_matrix;
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
@@ -659,7 +659,7 @@ EOS
   
   # to_string - 4 dimention
   {
-    my $a1 = $r->array('1:120', [5, 4, 3, 2]);
+    my $a1 = $r->array($r->C('1:120'), [5, 4, 3, 2]);
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 
@@ -719,14 +719,14 @@ EOS
 {
   # array - basic
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($a1->values, [1 .. 24]);
     is_deeply($r->dim($a1)->values, [4, 3, 2]);
   }
   
   # array - dim option
   {
-    my $a1 = $r->array('1:24', {dim => [4, 3, 2]});
+    my $a1 = $r->array($r->C('1:24'), {dim => [4, 3, 2]});
     is_deeply($a1->values, [1 .. 24]);
     is_deeply($r->dim($a1)->values, [4, 3, 2]);
   }
@@ -736,35 +736,35 @@ EOS
 {
   # set 3-dimention
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->at(4, 3, 2)->set(25);
     is_deeply($a2->values, [1 .. 23, 25]);
   }
 
   # set 3-dimention - one and tow dimention
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->at(4, 3)->set(25);
     is_deeply($a2->values, [1 .. 11, 25, 13 .. 23, 25]);
   }
 
   # set 3-dimention - one and tow dimention, value is two
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->at(4, 3)->set([25, 26]);
     is_deeply($a2->values, [1 .. 11, 25, 13 .. 23, 26]);
   }
   
   # set 3-dimention - one and three dimention, value is three
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->at(2, [], 1)->set([31, 32, 33]);
     is_deeply($a2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
   }
 
   # set 3-dimention
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->at(4, [], 1)->set(sub { $_ * 2 });
     is_deeply($a2->values, [1, 2, 3, 8, 5, 6, 7, 16, 9, 10, 11, 24, 13 .. 24]);
   }
@@ -773,7 +773,7 @@ EOS
 {
   # get 3-dimention - minus
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([-1, -2], [-1, -2]);
     is_deeply($a2->values, [11, 12, 23, 24]);
     is_deeply($r->dim($a2)->values, [2, 2]);
@@ -781,7 +781,7 @@ EOS
   
   # get 3-dimention - dimention one
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get(2);
     is_deeply($a2->values, [2, 6, 10, 14, 18 ,22]);
     is_deeply($r->dim($a2)->values, [3, 2]);
@@ -789,7 +789,7 @@ EOS
 
   # get 3-dimention - dimention two
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([], 2);
     is_deeply($a2->values, [5, 6, 7, 8, 17, 18, 19, 20]);
     is_deeply($r->dim($a2)->values, [4, 2]);
@@ -797,7 +797,7 @@ EOS
 
   # get 3-dimention - dimention three
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([], [], 2);
     is_deeply($a2->values, [13 .. 24]);
     is_deeply($r->dim($a2)->values, [4, 3]);
@@ -805,7 +805,7 @@ EOS
 
   # get 3-dimention - one value
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get(3, 2, 1);
     is_deeply($a2->values, [7]);
     is_deeply($r->dim($a2)->values, [1]);
@@ -813,7 +813,7 @@ EOS
 
   # get 3-dimention - one value, drop => 0
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get(3, 2, 1, {drop => 0});
     is_deeply($a2->values, [7]);
     is_deeply($r->dim($a2)->values, [1, 1, 1]);
@@ -821,14 +821,14 @@ EOS
   
   # get 3-dimention - dimention one and two
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get(1, 2);
     is_deeply($a2->values, [5, 17]);
     is_deeply($r->dim($a2)->values, [2]);
   }
   # get 3-dimention - dimention one and three
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get(3, [], 2);
     is_deeply($a2->values, [15, 19, 23]);
     is_deeply($r->dim($a2)->values, [3]);
@@ -836,7 +836,7 @@ EOS
 
   # get 3-dimention - dimention two and three
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([], 1, 2);
     is_deeply($a2->values, [13, 14, 15, 16]);
     is_deeply($r->dim($a2)->values, [4]);
@@ -844,7 +844,7 @@ EOS
   
   # get 3-dimention - all values
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([1, 2, 3, 4], [1, 2, 3], [1, 2]);
     is_deeply($a2->values, [1 .. 24]);
     is_deeply($r->dim($a2)->values, [4, 3, 2]);
@@ -860,7 +860,7 @@ EOS
   
   # get 3-dimention - some values
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     my $a2 = $a1->get([2, 3], [1, 3], [1, 2]);
     is_deeply($a2->values, [2, 3, 10, 11, 14, 15, 22, 23]);
     is_deeply($r->dim($a2)->values, [2, 2, 2]);
@@ -869,7 +869,7 @@ EOS
 
 # _pos
 {
-  my $a1 = $r->array('1:24', [4, 3, 2]);
+  my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
   my $dim = [4, 3, 2];
   
   {
@@ -891,7 +891,7 @@ EOS
     ['c1', 'c2']
   ];
   
-  my $a1 = $r->array('1:3');
+  my $a1 = $r->array($r->C('1:3'));
   my $result = $a1->_cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
@@ -984,13 +984,13 @@ EOS
 =cut
   # get - as_vector
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($a1->as_vector->get(5)->values, [5]);
   }
 
   # get - as_matrix
   {
-    my $a1 = $r->array('1:24', [4, 3, 2]);
+    my $a1 = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($a1->as_vector->get(5, 1)->values, [5]);
   }
 }

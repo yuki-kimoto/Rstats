@@ -149,7 +149,7 @@ my $r = Rstats->new;
 # sample
 {
   {
-    my $v1 = $r->c('1:100');
+    my $v1 = $r->c($r->C('1:100'));
     my $v2 = $r->sample($v1, 50);
     is($r->length($v2), 50);
     my $duplicate_h = {};
@@ -168,7 +168,7 @@ my $r = Rstats->new;
   
   # sample - replace => 0
   {
-    my $v1 = $r->c('1:100');
+    my $v1 = $r->c($r->C('1:100'));
     my $v2 = $r->sample($v1, 50, {replace => 0});
     is($r->length($v2), 50);
     my $duplicate_h = {};
@@ -187,7 +187,7 @@ my $r = Rstats->new;
 
   # sample - replace => 0
   {
-    my $v1 = $r->c('1:100');
+    my $v1 = $r->c($r->C('1:100'));
     my $v2 = $r->sample($v1, 50, {replace => 1});
     is($r->length($v2), 50);
     my $duplicate_h = {};
@@ -290,7 +290,7 @@ my $r = Rstats->new;
 # replace
 {
   {
-    my $v1 = $r->c('1:10');
+    my $v1 = $r->c($r->C('1:10'));
     my $v2 = $r->c([2, 5, 10]);
     my $v3 = $r->c([12, 15, 20]);
     my $v4 = $r->replace($v1, $v2, $v3);
@@ -299,7 +299,7 @@ my $r = Rstats->new;
   
   # replace - single value
   {
-    my $v1 = $r->c('1:10');
+    my $v1 = $r->c($r->C('1:10'));
     my $v2 = $r->c([2, 5, 10]);
     my $v4 = $r->replace($v1, $v2, 11);
     is_deeply($v4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
@@ -307,7 +307,7 @@ my $r = Rstats->new;
   
   # replace - few values
   {
-    my $v1 = $r->c('1:10');
+    my $v1 = $r->c($r->C('1:10'));
     my $v2 = $r->c([2, 5, 10]);
     my $v4 = $r->replace($v1, $v2, [12, 15]);
     is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
@@ -399,12 +399,12 @@ my $r = Rstats->new;
   
   # paste($str, $vector);
   {
-    my $v = $r->paste('x', $r->c('1:3'));
+    my $v = $r->paste('x', $r->c($r->C('1:3')));
     is_deeply($v->values, ['x 1', 'x 2', 'x 3']);
   }
   # paste($str, $vector, {sep => ''});
   {
-    my $v = $r->paste('x', $r->c('1:3'), {sep => ''});
+    my $v = $r->paste('x', $r->c($r->C('1:3')), {sep => ''});
     is_deeply($v->values, ['x1', 'x2', 'x3']);
   }
 }
@@ -425,15 +425,15 @@ my $r = Rstats->new;
     is_deeply($v->values, [1, 2, 3]);
   }
   
-  # c('1:3')
+  # c($r->C('1:3')
   {
-    my $v = $r->c('1:3');
+    my $v = $r->c($r->C('1:3'));
     is_deeply($v->values, [1, 2, 3]);
   }
   
   # c('0.5*1:3')
   {
-    my $v = $r->c('0.5*1:3');
+    my $v = $r->C('0.5*1:3');
     is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
   }
 }

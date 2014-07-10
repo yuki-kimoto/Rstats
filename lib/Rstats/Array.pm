@@ -377,14 +377,15 @@ sub seq {
       }
     }
     
-    my $a1 = $self->array($elements);
+    return $self->c($elements);
   }
 }
 
-sub _parse_seq_str {
+sub C {
   my ($self, $seq_str) = @_;
-  
+
   my $by;
+  my $mode;
   if ($seq_str =~ s/^(.+)\*//) {
     $by = $1;
   }
@@ -397,9 +398,9 @@ sub _parse_seq_str {
     $to = $from unless defined $to;
   }
   
-  my $array = $self->seq({from => $from, to => $to, by => $by});
+  my $vector = $self->seq({from => $from, to => $to, by => $by});
   
-  return $array;
+  return $vector;
 }
 
 sub c {
@@ -427,11 +428,8 @@ sub c {
     elsif (ref $a1 eq 'Rstats::Array') {
       $elements = $a1->elements;
     }
-    elsif (ref $a1) {
+    else {
       $elements = [$a1];
-    }
-    elsif(!ref $a1) {
-      $elements = $self->_parse_seq_str($a1)->elements;
     }
   }
   else {

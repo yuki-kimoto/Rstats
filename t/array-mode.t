@@ -623,28 +623,28 @@ my $r = Rstats->new;
 {
   # is_* - is_vector
   {
-    my $array = $r->c('1:24');
+    my $array = $r->c($r->C('1:24'));
     ok($array->is_vector);
     ok($array->is_array);
   }
 
   # is_* - is_vector
   {
-    my $array = $r->array('1:24');
+    my $array = $r->array($r->C('1:24'));
     ok(!$array->is_vector);
     ok($array->is_array);
   }
     
   # is_* - is_matrix
   {
-    my $array = $r->matrix('1:12', 4, 3);
+    my $array = $r->matrix($r->C('1:12'), 4, 3);
     ok($array->is_matrix);
     ok($array->is_array);
   }
 
   # is_* - is_array
   {
-    my $array = $r->array('1:24', [4, 3, 2]);
+    my $array = $r->array($r->C('1:24'), [4, 3, 2]);
     ok($array->is_array);
     ok(!$array->is_vector);
     ok(!$array->is_matrix);
@@ -655,19 +655,19 @@ my $r = Rstats->new;
 {
   # is_* - is_vector
   {
-    my $array = $r->array('1:24');
+    my $array = $r->array($r->C('1:24'));
     ok(!$r->is_vector($array));
   }
   
   # is_* - is_matrix
   {
-    my $array = $r->matrix('1:24', 4, 3);
+    my $array = $r->matrix($r->C('1:24'), 4, 3);
     ok($r->is_matrix($array));
   }
 
   # is_* - is_array
   {
-    my $array = $r->array('1:12', [4, 3, 2]);
+    my $array = $r->array($r->C('1:12'), [4, 3, 2]);
     ok($r->is_array($array));
   }
 }
@@ -676,28 +676,28 @@ my $r = Rstats->new;
 {
   # as_* - as_vector
   {
-    my $array = $r->array('1:24', [4, 3, 2]);
+    my $array = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($array->as_vector->values, [1 .. 24]);
     is_deeply($array->as_vector->dim->values, []);
   }
   
   # as_* - as_matrix, from vector
   {
-    my $array = $r->c('1:24');
+    my $array = $r->c($r->C('1:24'));
     is_deeply($array->as_matrix->values, [1 .. 24]);
     is_deeply($array->as_matrix->dim->values, [24, 1]);
   }
 
   # as_* - as_matrix, from matrix
   {
-    my $array = $r->matrix('1:12', 4, 3);
+    my $array = $r->matrix($r->C('1:12'), 4, 3);
     is_deeply($array->as_matrix->values, [1 .. 12]);
     is_deeply($array->as_matrix->dim->values, [4, 3]);
   }
 
   # as_* - as_matrix, from array
   {
-    my $array = $r->array('1:24', [4, 3, 2]);
+    my $array = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($array->as_matrix->values, [1 .. 24]);
     is_deeply($array->as_matrix->dim->values, [24, 1]);
   }
@@ -707,28 +707,28 @@ my $r = Rstats->new;
 {
   # as_* from Rstats object - as_vector
   {
-    my $array = $r->array('1:24', [4, 3, 2]);
+    my $array = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($r->as_vector($array)->values, [1 .. 24]);
     is_deeply($r->as_vector($array)->dim->values, []);
   }
   
   # as_* from Rstats object - as_matrix, from vector
   {
-    my $array = $r->c('1:24');
+    my $array = $r->c($r->C('1:24'));
     is_deeply($r->as_matrix($array)->values, [1 .. 24]);
     is_deeply($r->as_matrix($array)->dim->values, [24, 1]);
   }
 
   # as_* from Rstats object - as_matrix, from matrix
   {
-    my $array = $r->matrix('1:12', 4, 3);
+    my $array = $r->matrix($r->C('1:12'), 4, 3);
     is_deeply($r->as_matrix($array)->values, [1 .. 12]);
     is_deeply($r->as_matrix($array)->dim->values, [4, 3]);
   }
 
   # as_* from Rstats object - as_matrix, from array
   {
-    my $array = $r->array('1:24', [4, 3, 2]);
+    my $array = $r->array($r->C('1:24'), [4, 3, 2]);
     is_deeply($r->as_matrix($array)->values, [1 .. 24]);
     is_deeply($r->as_matrix($array)->dim->values, [24, 1]);
   }

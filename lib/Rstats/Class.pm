@@ -990,7 +990,7 @@ sub atanh {
   
   my $a1 = $self->_to_a($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::atanh $_->value) } @{$a1->elements};
+  my @a2_elements = map { Rstats::Util::double(Math::Trig::atanh($_->value)) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);

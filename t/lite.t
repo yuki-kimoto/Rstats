@@ -66,3 +66,10 @@ use Rstats::Util;
   my $inf = Inf;
   is_deeply($inf->values, [Rstats::Util::Inf]);
 }
+
+# r
+{
+  my $r = r;
+  my $v1 = r->c(1, 2, 3);
+  is_deeply($v1->values, [1, 2, 3]);
+}

@@ -402,13 +402,8 @@ sub _parse_seq_str {
   return $array;
 }
 
-sub array {
-  my $self = shift;
-  
-  # Arguments
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($a1, $_dim) = @_;
-  $_dim = $opt->{dim} unless defined $_dim;
+sub c {
+  my ($self, $a1) = @_;
   
   # Array
   my $array = Rstats::Array->new;
@@ -442,24 +437,6 @@ sub array {
   else {
     croak "Invalid first argument";
   }
-  
-  # Dimention
-  my $dim;
-  if (defined $_dim) {
-    if (ref $_dim eq 'Rstats::Array') {
-      $dim = $_dim->elements;
-    }
-    elsif (ref $_dim eq 'ARRAY') {
-      $dim = $_dim;
-    }
-    elsif(!ref $_dim) {
-      $dim = [$_dim];
-    }
-  }
-  else {
-    $dim = [scalar @$elements]
-  }
-  $array->dim($dim);
   
   # Check elements
   my $mode_h = {};
@@ -522,6 +499,40 @@ sub array {
   else {
     $array->mode($modes[0] || 'logical');
   }
+  
+  $array->elements($elements);
+  
+  return $array;
+}
+
+sub array {
+  my $self = shift;
+  
+  # Arguments
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my ($a1, $_dim) = @_;
+  $_dim = $opt->{dim} unless defined $_dim;
+  
+  my $array = Rstats::Array->c($a1);
+
+  # Dimention
+  my $elements = $array->elements;
+  my $dim;
+  if (defined $_dim) {
+    if (ref $_dim eq 'Rstats::Array') {
+      $dim = $_dim->elements;
+    }
+    elsif (ref $_dim eq 'ARRAY') {
+      $dim = $_dim;
+    }
+    elsif(!ref $_dim) {
+      $dim = [$_dim];
+    }
+  }
+  else {
+    $dim = [scalar @$elements]
+  }
+  $array->dim($dim);
   
   # Fix elements
   my $max_length = 1;
@@ -923,14 +934,6 @@ sub _to_a {
   }
   
   return $v;
-}
-
-sub c {
-  my ($self, $data) = @_;
-  
-  my $vector = Rstats::Array->array($data, []);
-  
-  return $vector;
 }
 
 sub set {

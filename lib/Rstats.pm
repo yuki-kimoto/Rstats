@@ -13,7 +13,7 @@ sub import {
   
   my $r = Rstats::Class->new;
   
-  my @methods = qw/c C array matrix i TRUE FALSE NA NaN Inf/;
+  my @methods = qw/c C array matrix i TRUE FALSE NA NaN Inf NULL/;
   
   no strict 'refs';
   for my $method (@methods) {

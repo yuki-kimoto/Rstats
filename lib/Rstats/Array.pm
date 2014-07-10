@@ -906,7 +906,8 @@ sub get {
   return Rstats::Array->array(\@a2_elements, $a2_dim);
 }
 
-sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
+my $null = Rstats::Array->new(elements => [], dim => [], type => 'logical');
+sub NULL { $null }
 
 sub numeric {
   my ($self, $num) = @_;

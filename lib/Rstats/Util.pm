@@ -170,18 +170,6 @@ sub is_perl_number {
         && $value * 0 == 0
 }
 
-my %numeric_ops_h = map { $_ => 1} (qw#+ - * / ** %#);
-my %comparison_ops_h = map { $_ => 1} (qw/< <= > >= == !=/);
-my @ops = (keys %numeric_ops_h, keys %comparison_ops_h);
-my %character_comparison_ops = (
-  '<' => 'lt',
-  '<=' => 'le',
-  '>' => 'gt',
-  '>=' => 'ge',
-  '==' => 'eq',
-  '!=' => 'ne'
-);
-
 sub to_string {
   my $element = shift;
   

@@ -107,7 +107,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["1.23"]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
 
   # as_logical - character, pre and trailing space
@@ -115,7 +115,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["  1  "]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
 
   # as_logical - character
@@ -123,7 +123,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["a"]);
     my $a2 = $r->as_logical($a1);
     ok($a2->is_logical);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
   
   # as_logical - complex
@@ -224,7 +224,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["a"]);
     my $a2 = $r->as_integer($a1);
     ok($a2->is_integer);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
   
   # as_integer - complex
@@ -324,7 +324,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["a"]);
     my $a2 = $r->as_numeric($a1);
     ok($a2->is_numeric);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
   
   # as_numeric - complex
@@ -492,7 +492,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["a"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
 
   # as_complex - error
@@ -500,7 +500,7 @@ my $r = Rstats->new;
     my $a1 = $r->array(["i"]);
     my $a2 = $r->as_complex($a1);
     ok($a2->is_complex);
-    is(ref $a2->values->[0], 'Rstats::Type::NA');
+    is(ref $a2->values->[0], 'Rstats::Element::NA');
   }
         
   # as_complex - complex

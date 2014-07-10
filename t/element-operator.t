@@ -10,91 +10,91 @@ ok(1);
   {
     my $na = Rstats::Util::NA;
     my $ret = $na + 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - -
   {
     my $na = Rstats::Util::NA;
     my $ret = $na - 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - *
   {
     my $na = Rstats::Util::NA;
     my $ret = $na * 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - /
   {
     my $na = Rstats::Util::NA;
     my $ret = $na / 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - **
   {
     my $na = Rstats::Util::NA;
     my $ret = $na ** 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - %
   {
     my $na = Rstats::Util::NA;
     my $ret = $na % 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - negation
   {
     my $na = Rstats::Util::NA;
     my $ret = -$na;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - <
   {
     my $na = Rstats::Util::NA;
     my $ret = $na < 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - <=
   {
     my $na = Rstats::Util::NA;
     my $ret = $na <= 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - >
   {
     my $na = Rstats::Util::NA;
     my $ret = $na > 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - >=
   {
     my $na = Rstats::Util::NA;
     my $ret = $na >= 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - ==
   {
     my $na = Rstats::Util::NA;
     my $ret = $na == 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # operator - !=
   {
     my $na = Rstats::Util::NA;
     my $ret = $na != 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 }
 
@@ -156,14 +156,14 @@ ok(1);
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan < 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - <, complex
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan < $r->complex(1,1);
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - ==, character
@@ -184,35 +184,35 @@ ok(1);
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan <= 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - >
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan > 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - >=
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan >= 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - ==
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan == 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 
   # comparison operator - !=
   {
     my $nan = Rstats::Util::NaN;
     my $ret = $nan != 1;
-    is(ref $ret, 'Rstats::Type::NA');
+    is(ref $ret, 'Rstats::Element::NA');
   }
 }
 

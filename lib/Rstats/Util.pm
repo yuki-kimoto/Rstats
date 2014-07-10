@@ -4,22 +4,22 @@ use strict;
 use warnings;
 use Carp 'croak';
 
-require Rstats::Type::NA;
-require Rstats::Type::Logical;
-require Rstats::Type::Complex;
-require Rstats::Type::Character;
-require Rstats::Type::Integer;
-require Rstats::Type::Double;
+require Rstats::Element::NA;
+require Rstats::Element::Logical;
+require Rstats::Element::Complex;
+require Rstats::Element::Character;
+require Rstats::Element::Integer;
+require Rstats::Element::Double;
 use Scalar::Util ();
 use B ();
 use Math::Complex ();
 use POSIX ();
 
 # Special values
-my $na = Rstats::Type::NA->new;
-my $nan = Rstats::Type::Double->new(flag => 'nan');
-my $inf = Rstats::Type::Double->new(flag => 'inf');
-my $negative_inf = Rstats::Type::Double->new(flag => '-inf');
+my $na = Rstats::Element::NA->new;
+my $nan = Rstats::Element::Double->new(flag => 'nan');
+my $inf = Rstats::Element::Double->new(flag => 'inf');
+my $negative_inf = Rstats::Element::Double->new(flag => '-inf');
 my $true = logical(1);
 my $false = logical(0);
 
@@ -47,13 +47,13 @@ sub is_finite {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
 
-sub is_character { ref $_[0] eq 'Rstats::Type::Character' }
-sub is_complex { ref $_[0] eq 'Rstats::Type::Complex' }
-sub is_double { ref $_[0] eq 'Rstats::Type::Double' }
-sub is_integer { ref $_[0] eq 'Rstats::Type::Integer' }
-sub is_logical { ref $_[0] eq 'Rstats::Type::Logical' }
+sub is_character { ref $_[0] eq 'Rstats::Element::Character' }
+sub is_complex { ref $_[0] eq 'Rstats::Element::Complex' }
+sub is_double { ref $_[0] eq 'Rstats::Element::Double' }
+sub is_integer { ref $_[0] eq 'Rstats::Element::Integer' }
+sub is_logical { ref $_[0] eq 'Rstats::Element::Logical' }
 
-sub character { Rstats::Type::Character->new(value => shift) }
+sub character { Rstats::Element::Character->new(value => shift) }
 sub complex {
   my ($re_value, $im_value) = @_;
   
@@ -66,11 +66,11 @@ sub complex {
 sub complex_double {
   my ($re, $im) = @_;
   
-  my $z = Rstats::Type::Complex->new(re => $re, im => $im);
+  my $z = Rstats::Element::Complex->new(re => $re, im => $im);
 }
-sub double { Rstats::Type::Double->new(value => shift, flag => shift || 'normal') }
-sub integer { Rstats::Type::Integer->new(value => int(shift)) }
-sub logical { Rstats::Type::Logical->new(value => shift) }
+sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'normal') }
+sub integer { Rstats::Element::Integer->new(value => int(shift)) }
+sub logical { Rstats::Element::Logical->new(value => shift) }
 
 sub looks_like_number {
   my $value = shift;

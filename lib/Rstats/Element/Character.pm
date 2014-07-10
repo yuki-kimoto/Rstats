@@ -1,4 +1,4 @@
-package Rstats::Type::Character;
+package Rstats::Element::Character;
 use Object::Simple -base;
 
 has 'value';

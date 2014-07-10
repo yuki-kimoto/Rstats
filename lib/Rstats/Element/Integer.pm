@@ -1,4 +1,4 @@
-package Rstats::Type::Integer;
+package Rstats::Element::Integer;
 use Object::Simple -base;
 
 has 'value';

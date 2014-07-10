@@ -1,4 +1,4 @@
-package Rstats::Type::Complex;
+package Rstats::Element::Complex;
 use Object::Simple -base;
 
 has 're';

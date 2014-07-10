@@ -1,4 +1,4 @@
-package Rstats::Type::Double;
+package Rstats::Element::Double;
 use Object::Simple -base;
 
 use Carp 'croak';

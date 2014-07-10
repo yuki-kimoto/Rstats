@@ -42,7 +42,7 @@ sub is_na {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_elements = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
+    ref $_ eq  'Rstats::Element::NA' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->elements};
   my $a2 = Rstats::Array->array(\@a2_elements);
   $a2->mode('logical');
@@ -70,7 +70,7 @@ sub is_finite {
   my $a1 = $self->_to_a($_a1);
   
   my @a2_elements = map {
-    !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
+    !ref $_ || ref $_ eq 'Rstats::Element::Complex' || ref $_ eq 'Rstats::Logical' 
       ? Rstats::Util::TRUE()
       : Rstats::Util::FALSE()
   } @{$a1->elements};
@@ -1105,7 +1105,7 @@ sub range {
 sub i {
   my $self = shift;
   
-  my $i = Rstats::Type::Complex->new(re => 0, im => 1);
+  my $i = Rstats::Element::Complex->new(re => 0, im => 1);
   
   return $i;
 }

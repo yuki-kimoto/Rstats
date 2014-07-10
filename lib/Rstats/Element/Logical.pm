@@ -1,4 +1,4 @@
-package Rstats::Type::Logical;
+package Rstats::Element::Logical;
 use Object::Simple -base;
 
 has 'value';

@@ -67,6 +67,14 @@ use Rstats::Util;
   is_deeply($inf->values, [Rstats::Util::Inf]);
 }
 
+# NULL
+{
+  my $null = NULL;
+  is_deeply($null->elements, []);
+  is_deeply($null->{dim}, []);
+  is_deeply($null->{type}, 'logical');
+}
+
 # r
 {
   my $r = r;

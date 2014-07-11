@@ -42,6 +42,7 @@ curl -L cpanmin.us | perl - -n  git@github.com:yuki-kimoto/Rstats.git
     my $na = NA;
     my $nan = Nan;
     my $inf = Inf;
+    my $null = NULL;
     
     # all methods is called from r
     my $a1 = r->sum(c(1, 2, 3));

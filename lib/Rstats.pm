@@ -59,6 +59,7 @@ Rstats - R language build on Perl
   my $na = NA;
   my $nan = NaN;
   my $inf = Inf;
+  my $null = NULL;
   
   # all methods is called from r
   my $a1 = r->sum(c(1, 2, 3));

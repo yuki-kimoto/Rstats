@@ -652,213 +652,7 @@ sub numeric {
   return Rstats::Array->numeric(@_);
 }
 
-sub TRUE { shift->c(Rstats::Util::TRUE()) }
-
-sub rbind {
-  my ($self, @arrays) = @_;
-  
-  my $matrix = $self->cbind(@arrays);
-  
-  return $self->t($matrix);
-}
-
-sub rowSums {
-  my ($self, $m1) = @_;
-  
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value;
-    }
-    return $self->c($v1_values);
-  }
-  else {
-    croak "Can't culculate rowSums";
-  }
-}
-
-sub rowMeans {
-  my ($self, $m1) = @_;
-  
-  my $dim_values = $m1->dim->values;
-  if (@$dim_values == 2) {
-    my $v1_values = [];
-    for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value / $dim_values->[0];
-    }
-    return $self->c($v1_values);
-  }
-  else {
-    croak "Can't culculate rowSums";
-  }
-}
-
-sub row {
-  my ($self, $m) = @_;
-  
-  return $m->row;
-}
-
-sub t {
-  my $self = shift;
-  
-  return Rstats::Array->t(@_);
-}
-
-sub rnorm {
-  my $self = shift;
-  
-  # Option
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  # Count
-  my ($count, $mean, $sd) = @_;
-  croak "rnorm count should be bigger than 0"
-    if $count < 1;
-  
-  # Mean
-  $mean = 0 unless defined $mean;
-  
-  # Standard deviation
-  $sd = 1 unless defined $sd;
-  
-  # Random numbers(standard deviation)
-  my @v1_elements;
-  for (1 .. $count) {
-    my ($rand1, $rand2) = (rand, rand);
-    while ($rand1 == 0) { $rand1 = rand(); }
-    
-    my $rnorm = ($sd * sqrt(-2 * CORE::log($rand1))
-      * sin(2 * Math::Trig::pi * $rand2))
-      + $mean;
-    
-    push @v1_elements, $rnorm;
-  }
-  
-  return $self->c(\@v1_elements);
-}
-
-sub sequence {
-  my ($self, $_v1) = @_;
-  
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v1_values = $v1->values;
-  
-  my @v2_values;
-  for my $v1_value (@$v1_values) {
-    push @v2_values, $self->seq(1, $v1_value)->values;
-  }
-  
-  return $self->c(\@v2_values);
-}
-
-# TODO: prob option
-sub sample {
-  my $self = shift;
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  my ($_v1, $length) = @_;
-  my $v1 = Rstats::Array->to_array($_v1);
-  
-  # Replace
-  my $replace = $opt->{replace};
-  
-  my $v1_length = $self->length($v1);
-  $length = $v1_length unless defined $length;
-  
-  croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
-    if $length > $v1_length && !$replace;
-  
-  my @v2_elements;
-  for my $i (0 .. $length - 1) {
-    my $rand_num = int(rand $self->length($v1));
-    my $rand_element = splice @{$v1->elements}, $rand_num, 1;
-    push @v2_elements, $rand_element;
-    push @{$v1->elements}, $rand_element if $replace;
-  }
-  
-  return $self->c(\@v2_elements);
-}
-
 sub order { shift->_order(1, @_) }
-sub rev { shift->_order(0, @_) }
-
-sub _order {
-  my ($self, $asc, $_v1) = @_;
-  
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v1_values = $v1->values;
-  
-  my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
-  my @sorted_pos_values = $asc
-    ? sort { $a->{val} <=> $b->{val} } @pos_vals
-    : sort { $b->{val} <=> $a->{val} } @pos_vals;
-  my @orders = map { $_->{pos} } @sorted_pos_values;
-  
-  return $self->c(\@orders);
-}
-
-sub which {
-  my ($self, $_v1, $cond_cb) = @_;
-  
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v1_values = $v1->values;
-  my @v2_values;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    local $_ = $v1_values->[$i];
-    if ($cond_cb->($v1_values->[$i])) {
-      push @v2_values, $i + 1;
-    }
-  }
-  
-  return $self->c(\@v2_values);
-}
-
-sub replace {
-  my ($self, $_v1, $_v2, $_v3) = @_;
-  
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v2 = Rstats::Array->to_array($_v2);
-  my $v3 = Rstats::Array->to_array($_v3);
-  
-  my $v1_values = $v1->values;
-  my $v2_values = $v2->values;
-  my $v2_values_h = {};
-  for my $v2_value (@$v2_values) {
-    $v2_values_h->{$v2_value - 1}++;
-    croak "replace second argument can't have duplicate number"
-      if $v2_values_h->{$v2_value - 1} > 1;
-  }
-  my $v3_values = $v3->values;
-  my $v3_length = @{$v3_values};
-  
-  my $v4_values = [];
-  my $replace_count = 0;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    if ($v2_values_h->{$i}) {
-      push @$v4_values, $v3_values->[$replace_count % $v3_length];
-      $replace_count++;
-    }
-    else {
-      push @$v4_values, $v1_values->[$i];
-    }
-  }
-  
-  return $self->array($v4_values);
-}
-
-sub rownames {
-  my $self = shift;
-  my $m1 = shift;
-  
-  return $m1->rownames(@_);
-}
 
 sub paste {
   my $self = shift;
@@ -876,55 +670,6 @@ sub paste {
   push @$v2_values, "$str$sep$_" for @$v1_values;
   
   return Rstats::Array->c($v2_values);
-}
-
-sub set_seed {
-  my ($self, $seed) = @_;
-  
-  $self->{seed} = $seed;
-}
-
-sub runif {
-  my ($self, $count, $min, $max) = @_;
-  
-  $min = 0 unless defined $min;
-  $max = 1 unless defined $max;
-  croak "runif third argument must be bigger than second argument"
-    if $min > $max;
-  
-  my $diff = $max - $min;
-  my @v1_elements;
-  if (defined $self->{seed}) {
-    srand $self->{seed};
-    $self->{seed} = undef;
-  }
-  for (1 .. $count) {
-    my $rand = rand($diff) + $min;
-    push @v1_elements, $rand;
-  }
-  
-  return $self->c(\@v1_elements);
-}
-
-sub seq {
-  my $self = shift;
-  
-  return Rstats::Array->seq(@_);
-}
-
-sub rep {
-  my $self = shift;
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  my $v1 = shift;
-  my $times = $opt->{times} || 1;
-  
-  my $elements = [];
-  push @$elements, @{$v1->elements} for 1 .. $times;
-  my $v2 = $self->c($elements);
-  
-  return $v2;
 }
 
 sub pmax {
@@ -961,15 +706,6 @@ sub pmin {
   return $v_min;
 }
 
-sub sum {
-  my ($self, $_v1) = @_;
-  
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v1_values = $v1->values;
-  my $sum = List::Util::sum(@$v1_values);
-  return $self->c($sum);
-}
-
 sub prod {
   my ($self, $v1) = @_;
   
@@ -978,46 +714,110 @@ sub prod {
   return $self->c($prod);
 }
 
-sub var {
-  my ($self, $v1) = @_;
-
-  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
-    / ($self->length($v1) - 1);
+sub set_seed {
+  my ($self, $seed) = @_;
   
-  return $self->c($var);
+  $self->{seed} = $seed;
 }
 
-sub tail {
+sub range {
+  my ($self, $array) = @_;
+  
+  my $min = $self->min($array);
+  my $max = $self->max($array);
+  
+  return $self->c([$min, $max]);
+}
+
+sub rbind {
+  my ($self, @arrays) = @_;
+  
+  my $matrix = $self->cbind(@arrays);
+  
+  return $self->t($matrix);
+}
+
+sub rep {
   my $self = shift;
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
   my $v1 = shift;
+  my $times = $opt->{times} || 1;
   
-  my $n = $opt->{n};
-  $n = 6 unless defined $n;
+  my $elements = [];
+  push @$elements, @{$v1->elements} for 1 .. $times;
+  my $v2 = $self->c($elements);
   
-  my $elements1 = $v1->{elements};
-  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
-  my @elements2;
-  for (my $i = 0; $i < $max; $i++) {
-    unshift @elements2, $elements1->[$self->length($v1) - ($i  + 1)];
-  }
-  
-  return $v1->new(elements => \@elements2);
+  return $v2;
 }
 
-sub trunc {
-  my ($self, $_a1) = @_;
+sub replace {
+  my ($self, $_v1, $_v2, $_v3) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $v1 = Rstats::Array->to_array($_v1);
+  my $v2 = Rstats::Array->to_array($_v2);
+  my $v3 = Rstats::Array->to_array($_v3);
   
-  my @a2_elements = map { Rstats::Util::double(int $_->value) } @{$a1->elements};
+  my $v1_values = $v1->values;
+  my $v2_values = $v2->values;
+  my $v2_values_h = {};
+  for my $v2_value (@$v2_values) {
+    $v2_values_h->{$v2_value - 1}++;
+    croak "replace second argument can't have duplicate number"
+      if $v2_values_h->{$v2_value - 1} > 1;
+  }
+  my $v3_values = $v3->values;
+  my $v3_length = @{$v3_values};
+  
+  my $v4_values = [];
+  my $replace_count = 0;
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    if ($v2_values_h->{$i}) {
+      push @$v4_values, $v3_values->[$replace_count % $v3_length];
+      $replace_count++;
+    }
+    else {
+      push @$v4_values, $v1_values->[$i];
+    }
+  }
+  
+  return $self->array($v4_values);
+}
 
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
-  $a2->mode('double');
+sub rev { shift->_order(0, @_) }
+
+sub rnorm {
+  my $self = shift;
   
-  return $a2;
+  # Option
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  # Count
+  my ($count, $mean, $sd) = @_;
+  croak "rnorm count should be bigger than 0"
+    if $count < 1;
+  
+  # Mean
+  $mean = 0 unless defined $mean;
+  
+  # Standard deviation
+  $sd = 1 unless defined $sd;
+  
+  # Random numbers(standard deviation)
+  my @v1_elements;
+  for (1 .. $count) {
+    my ($rand1, $rand2) = (rand, rand);
+    while ($rand1 == 0) { $rand1 = rand(); }
+    
+    my $rnorm = ($sd * sqrt(-2 * CORE::log($rand1))
+      * sin(2 * Math::Trig::pi * $rand2))
+      + $mean;
+    
+    push @v1_elements, $rnorm;
+  }
+  
+  return $self->c(\@v1_elements);
 }
 
 sub round {
@@ -1039,26 +839,131 @@ sub round {
   return $a2;
 }
 
+sub row {
+  my ($self, $m) = @_;
+  
+  return $m->row;
+}
+
+sub rowMeans {
+  my ($self, $m1) = @_;
+  
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $col (1 .. $dim_values->[1]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$v1_values, $v1_value / $dim_values->[0];
+    }
+    return $self->c($v1_values);
+  }
+  else {
+    croak "Can't culculate rowSums";
+  }
+}
+
+sub rowSums {
+  my ($self, $m1) = @_;
+  
+  my $dim_values = $m1->dim->values;
+  if (@$dim_values == 2) {
+    my $v1_values = [];
+    for my $col (1 .. $dim_values->[1]) {
+      my $v1_value = 0;
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$v1_values, $v1_value;
+    }
+    return $self->c($v1_values);
+  }
+  else {
+    croak "Can't culculate rowSums";
+  }
+}
+
+sub rownames {
+  my $self = shift;
+  my $m1 = shift;
+  
+  return $m1->rownames(@_);
+}
+
+sub runif {
+  my ($self, $count, $min, $max) = @_;
+  
+  $min = 0 unless defined $min;
+  $max = 1 unless defined $max;
+  croak "runif third argument must be bigger than second argument"
+    if $min > $max;
+  
+  my $diff = $max - $min;
+  my @v1_elements;
+  if (defined $self->{seed}) {
+    srand $self->{seed};
+    $self->{seed} = undef;
+  }
+  for (1 .. $count) {
+    my $rand = rand($diff) + $min;
+    push @v1_elements, $rand;
+  }
+  
+  return $self->c(\@v1_elements);
+}
+
+# TODO: prob option
+sub sample {
+  my $self = shift;
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  my ($_v1, $length) = @_;
+  my $v1 = Rstats::Array->to_array($_v1);
+  
+  # Replace
+  my $replace = $opt->{replace};
+  
+  my $v1_length = $self->length($v1);
+  $length = $v1_length unless defined $length;
+  
+  croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
+    if $length > $v1_length && !$replace;
+  
+  my @v2_elements;
+  for my $i (0 .. $length - 1) {
+    my $rand_num = int(rand $self->length($v1));
+    my $rand_element = splice @{$v1->elements}, $rand_num, 1;
+    push @v2_elements, $rand_element;
+    push @{$v1->elements}, $rand_element if $replace;
+  }
+  
+  return $self->c(\@v2_elements);
+}
+
+sub seq {
+  my $self = shift;
+  
+  return Rstats::Array->seq(@_);
+}
+
+sub sequence {
+  my ($self, $_v1) = @_;
+  
+  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1_values = $v1->values;
+  
+  my @v2_values;
+  for my $v1_value (@$v1_values) {
+    push @v2_values, $self->seq(1, $v1_value)->values;
+  }
+  
+  return $self->c(\@v2_values);
+}
+
 sub sin {
   my ($self, $_a1) = @_;
   
   my $a1 = Rstats::Array->to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(sin $_->value) } @{$a1->elements};
-
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
-  $a2->mode('double');
-  
-  return $a2;
-}
-
-sub tan {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = Rstats::Array->to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::tan $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
@@ -1081,20 +986,6 @@ sub sinh {
   return $a2;
 }
 
-sub tanh {
-  my ($self, $_a1) = @_;
-  
-  my $a1 = Rstats::Array->to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::tanh $_->value) } @{$a1->elements};
-
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
-  $a2->mode('double');
-  
-  return $a2;
-}
-
 sub sqrt {
   my ($self, $_a1) = @_;
   
@@ -1109,15 +1000,6 @@ sub sqrt {
   return $a2;
 }
 
-sub range {
-  my ($self, $array) = @_;
-  
-  my $min = $self->min($array);
-  my $max = $self->max($array);
-  
-  return $self->c([$min, $max]);
-}
-
 sub sort {
   my $self = shift;
 
@@ -1129,6 +1011,125 @@ sub sort {
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
   return $self->c($v2_values);
+}
+
+sub sum {
+  my ($self, $_v1) = @_;
+  
+  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1_values = $v1->values;
+  my $sum = List::Util::sum(@$v1_values);
+  return $self->c($sum);
+}
+
+sub t {
+  my $self = shift;
+  
+  return Rstats::Array->t(@_);
+}
+
+sub tail {
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = shift;
+  
+  my $n = $opt->{n};
+  $n = 6 unless defined $n;
+  
+  my $elements1 = $v1->{elements};
+  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
+  my @elements2;
+  for (my $i = 0; $i < $max; $i++) {
+    unshift @elements2, $elements1->[$self->length($v1) - ($i  + 1)];
+  }
+  
+  return $v1->new(elements => \@elements2);
+}
+
+sub tan {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = Rstats::Array->to_array($_a1);
+  
+  my @a2_elements = map { Rstats::Util::double(Math::Trig::tan $_->value) } @{$a1->elements};
+
+  my $a2 = $a1->clone_without_elements;
+  $a2->elements(\@a2_elements);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub tanh {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = Rstats::Array->to_array($_a1);
+  
+  my @a2_elements = map { Rstats::Util::double(Math::Trig::tanh $_->value) } @{$a1->elements};
+
+  my $a2 = $a1->clone_without_elements;
+  $a2->elements(\@a2_elements);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub TRUE { shift->c(Rstats::Util::TRUE()) }
+
+sub trunc {
+  my ($self, $_a1) = @_;
+  
+  my $a1 = Rstats::Array->to_array($_a1);
+  
+  my @a2_elements = map { Rstats::Util::double(int $_->value) } @{$a1->elements};
+
+  my $a2 = $a1->clone_without_elements;
+  $a2->elements(\@a2_elements);
+  $a2->mode('double');
+  
+  return $a2;
+}
+
+sub var {
+  my ($self, $v1) = @_;
+
+  my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
+    / ($self->length($v1) - 1);
+  
+  return $self->c($var);
+}
+
+sub which {
+  my ($self, $_v1, $cond_cb) = @_;
+  
+  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1_values = $v1->values;
+  my @v2_values;
+  for (my $i = 0; $i < @$v1_values; $i++) {
+    local $_ = $v1_values->[$i];
+    if ($cond_cb->($v1_values->[$i])) {
+      push @v2_values, $i + 1;
+    }
+  }
+  
+  return $self->c(\@v2_values);
+}
+
+sub _order {
+  my ($self, $asc, $_v1) = @_;
+  
+  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1_values = $v1->values;
+  
+  my @pos_vals;
+  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  my @sorted_pos_values = $asc
+    ? sort { $a->{val} <=> $b->{val} } @pos_vals
+    : sort { $b->{val} <=> $a->{val} } @pos_vals;
+  my @orders = map { $_->{pos} } @sorted_pos_values;
+  
+  return $self->c(\@orders);
 }
 
 1;

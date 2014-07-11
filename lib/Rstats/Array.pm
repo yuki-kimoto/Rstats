@@ -915,19 +915,15 @@ sub numeric {
   return Rstats::Array->c([(0) x $num]);
 }
 
-sub _to_a {
-  my ($self, $data) = @_;
+sub to_array {
+  my ($self, $_array) = @_;
   
-  return $self->NULL unless defined $data;
-  my $v;
-  if (ref $data eq 'Rstats::Array') {
-    $v = $data;
-  }
-  else {
-    $v = Rstats::Array->c($data);
-  }
+  my $array
+   = !defined $_array ? Rstats::Array->NULL
+   : ref $_array eq 'Rstats::Array' ? $_array
+   : Rstats::Array->c($_array);
   
-  return $v;
+  return $array;
 }
 
 sub set {
@@ -942,7 +938,7 @@ sub set {
     $code = $_array;
   }
   else {
-    $array = Rstats::Array->_to_a($_array);
+    $array = Rstats::Array->to_array($_array);
   }
   
   my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
@@ -977,7 +973,7 @@ sub _parse_index {
   for (my $i = 0; $i < @$a1_dim; $i++) {
     my $_index = $_indexs[$i];
     
-    my $index = Rstats::Array->_to_a($_index);
+    my $index = Rstats::Array->to_array($_index);
     my $index_values = $index->values;
     if (@$index_values && !$index->is_character && !$index->is_logical) {
       my $minus_count = 0;
@@ -1318,7 +1314,7 @@ sub matrix {
   croak "matrix method need data as frist argument"
     unless defined $_a1;
   
-  my $a1 = Rstats::Array->_to_a($_a1);
+  my $a1 = Rstats::Array->to_array($_a1);
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;

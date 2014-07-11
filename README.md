@@ -22,7 +22,7 @@ curl -L cpanmin.us | perl - -n  git@github.com:yuki-kimoto/Rstats.git
     my $v3 = $v1 + v2;
     print $v3;
     
-    # Sequence
+    # Sequence m:n
     my $v1 = C('1:3');
 
     # Matrix

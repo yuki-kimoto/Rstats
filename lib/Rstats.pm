@@ -13,8 +13,8 @@ sub import {
   
   my $r = Rstats::Class->new;
   
+  # Export primary methods
   my @methods = qw/c C array matrix i TRUE FALSE NA NaN Inf NULL/;
-  
   no strict 'refs';
   for my $method (@methods) {
     *{"${class}::$method"} = sub { $r->$method(@_) }
@@ -26,13 +26,11 @@ sub import {
 
 =head1 NAME
 
-Rstats::Class - Rstats class interface
+Rstats - R language build on Perl
 
 =head1 SYNOPSYS
   
   use Rstats;
-  
-  my $r = Rstats::Class->new;
   
   # Vector
   my $v1 = c(1, 2, 3);
@@ -59,8 +57,234 @@ Rstats::Class - Rstats class interface
   my $true = TRUE;
   my $false = FALSE;
   my $na = NA;
-  my $nan = Nan;
+  my $nan = NaN;
   my $inf = Inf;
   
-  # Other method is called from r
+  # all methods is called from r
   my $a1 = r->sum(c(1, 2, 3));
+
+=head1 Corresponding to R
+
+  # a1
+  print $a1
+
+  # c(1, 2, 3)
+  c(1, 2, 3)
+
+  # 1:24
+  C('1:24')
+
+  # array(1:24, c(4, 3, 2))
+  array(C('1:24'), c(4, 3, 2))
+
+  # 3 + 2i
+  3 + 2*i
+
+  # TRUE
+  TRUE
+  
+  # FALSE
+  FALSE
+  
+  # NA
+  NA
+  
+  # NaN
+  NaN
+  
+  # Inf
+  Inf
+  
+  # NULL
+  NULL
+
+  # names
+    # names(a1)
+    r->names($a1)
+  
+    # names(a1) = c("n1", "n2")
+    r->names($a1 => c("n1", "n2"));
+  
+  # matrix
+    # matrix(1:12, 4, 3)
+    matrix(C('1:12'), 4, 3)
+    
+    # matrix(1:12, nrow=4, ncol=3)
+    matrix(C('1:12'), {nrow => 4, ncol => 3});
+    
+    # matrix(1:12, 4, 3, byrow=TRUE)
+    matrix(C('1:12'), 4, 3, {byrow => 1});
+  
+  # a1 + a2
+  $a1 + $a2
+  
+  # a1 - a2
+  $a1 - $a2
+  
+  # a1 * a2
+  $a1 * $a2
+  
+  # a1 / a2
+  $a1 / $a2
+  
+  # a1 ^ a2 (power)
+  $a1 ** $a2
+  
+  # a1 %% a2 (remainder)
+  $a1 % $a2
+  
+  # a1 %/% a2 (integer quotient)
+  r->tranc($a1 / $a2)
+
+  # as.matrix(a1)
+  r->as_matrix($a1)
+  
+  # as.vector(a1)
+  r->as_vector($a1)
+  
+  # as.array(a1)
+  r->as_array($a1)
+
+  # is.matrix(a1)
+  r->is_matrix($a1)
+  
+  # is.vector(a1)
+  r->is_vector($a1)
+  
+  # is.array(a1)
+  r->is_array($a1)
+
+  # abs(a1)
+  r->abs($a1)
+  
+  # sqrt(a1)
+  r->sqrt($a1)
+
+  # exp(a1)
+  r->exp($a1)
+  
+  # expm1(a1)
+  r->expm1($a1)
+  
+  # log(a1)
+  r->log($a1)
+  
+  # logb(a1)
+  r->logb($a1)
+  
+  # log2(a1)
+  r->log2($a1)
+  
+  # log10(a1)
+  r->log10($a1)
+  
+  # sin(a1)
+  r->sin($a1)
+  
+  # cos(a1)
+  r->cos($a1)
+  
+  # tan(a1)
+  r->tan($a1)
+  
+  # asin(a1)
+  r->asin($a1)
+  
+  # acos(a1)
+  r->acos($a1)
+  
+  # atan(a1)
+  r->atan($a1)
+  
+  # sinh(a1)
+  r->sinh($a1)
+  
+  # sinh(a1)
+  r->sinh($a1)
+  
+  # cosh(a1)
+  r->cosh($a1)
+  
+  # cosh(a1)
+  r->cosh($a1)
+  
+  # atan(a1)
+  r->atan($a1)
+  
+  # tanh(a1)
+  r->tanh($a1)
+  
+  # asinh(a1)
+  r->asinh($a1)
+  
+  # acosh(a1)
+  r->acosh($a1)
+  
+  # acosh(a1)
+  r->acosh($a1)
+  
+  # atanh(a1)
+  r->atanh($a1)
+  
+  # ceiling(a1)
+  r->ceiling($a1)
+  
+  # floor(a1)
+  r->floor($a1)
+  
+  # trunc(a1)
+  r->trunc($a1)
+  
+  # round
+    # round(a1)
+    r->round($a1)
+
+    # round(a1, digit)
+    r->round($a1, $digits)
+    
+    # round(a1, digits=1)
+    r->round($a1, {digits => 1});
+  
+  # t
+  r->t($a1)
+  
+  # rownames
+    # rownames(a1)
+    r->rownames($a1)
+    
+    # rownames(a1) = c("r1", "r2")
+    r->rownames($a1 => c("r1", "r2"))
+    
+  # colnames
+    # colnames(a1)
+    r->colnames($a1)
+    
+    # colnames(a1) = c("r1", "r2")
+    r->colnames($a1 => c("r1", "r2"))
+
+  # nrow(a1)
+  r->nrow($a1)
+  
+  # ncol(a1)
+  r->ncol($a1)
+  
+  # row(a1)
+  r->row($a1)
+  
+  # col(a1)
+  r->col($a1)
+
+  # colMeans(a1)
+  r->colMeans($a1)
+  
+  # rowMeans(a1)
+  r->rowMeans($a1)
+  
+  # rowSums(a1)
+  r->rowSums($a1)
+  
+  # rbind(c(1, 2), c(3, 4), c(5, 6))
+  r->rbind(c(1, 2), c(3, 4), c(5, 6))
+  
+  # cbind(c(1, 2), c(3, 4), c(5, 6))
+  r->cbind(c(1, 2), c(3, 4), c(5, 6));

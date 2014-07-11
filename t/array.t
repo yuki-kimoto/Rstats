@@ -963,23 +963,23 @@ EOS
     my $v2 = $v1->get(c('b', 'd'));
     is_deeply($v2->values, [2, 4]);
   }
-=pod
+
   # get - logical
   {
     my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(r->FALSE, r->TRUE, r->FALSE, r->TRUE, r->TRUE])->as_logical;
+    my $logical_v = c(r->FALSE, r->TRUE, r->FALSE, r->TRUE, r->TRUE);
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
+    is_deeply($v2->values, [3, 7, Rstats::Util::NA]);
   }
 
   # get - as_logical
   {
     my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(0, 1, 0, 1, 1])->as_logical;
+    my $logical_v = c(0, 1, 0, 1, 1)->as_logical;
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
+    is_deeply($v2->values, [3, 7, Rstats::Util::NA]);
   }
-=cut
+
   # get - as_vector
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));

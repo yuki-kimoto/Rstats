@@ -440,10 +440,7 @@ sub c {
   for my $element (@$elements) {
     next if Rstats::Util::is_na($element);
     
-    if (!defined $element) {
-      croak "undef is invalid element";
-    }
-    elsif (Rstats::Util::is_character($element)) {
+    if (Rstats::Util::is_character($element)) {
       $mode_h->{character}++;
     }
     elsif (Rstats::Util::is_complex($element)) {
@@ -901,7 +898,7 @@ sub get {
 
   my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
   
-  my @a2_elements = map { $self->elements->[$_ - 1] } @$positions;
+  my @a2_elements = map { $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::Util::NA } @$positions;
   
   return Rstats::Array->array(\@a2_elements, $a2_dim);
 }

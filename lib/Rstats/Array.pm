@@ -18,6 +18,7 @@ use overload
   '%' => sub { shift->_operation('remainder', @_) },
   'neg' => \&negation,
   '**' => sub { shift->_operation('raise', @_) },
+  'x' => sub { shift->inner_product(@_) },
   '<' => sub { shift->_operation('less_than', @_) },
   '<=' => sub { shift->_operation('less_than_or_equal', @_) },
   '>' => sub { shift->_operation('more_than', @_) },
@@ -28,6 +29,52 @@ use overload
   fallback => 1;
 
 has 'elements';
+
+use Rstats::Class;
+my $r = Rstats::Class->new;
+
+sub inner_product {
+  my ($self, $data, $reverse) = @_;
+  
+  # fix postion
+  my ($a1, $a2) = $self->_fix_position($data, $reverse);
+  
+  # Upgrade mode if mode is different
+  ($a1, $a2) = $self->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  
+  # Convert to matrix
+  $a1 = $r->t($r->as_matrix($a1)) if $a1->is_vector;
+  $a2 = $r->as_matrix($a2) if $a2->is_vector;
+  
+  # Calculate
+  if ($a1->is_matrix && $a2->is_matrix) {
+    
+    croak "requires numeric/complex matrix/vector arguments"
+      if @{$a1->elements} == 0 || @{$a2->elements} == 0;
+    croak "Error in a x b : non-conformable arguments"
+      unless $a1->dim->values->[1] == $a2->dim->values->[0];
+    
+    my $row_max = $a1->dim->values->[0];
+    my $col_max = $a2->dim->values->[1];
+    
+    my $a3_elements = [];
+    for (my $col = 1; $col <= $col_max; $col++) {
+      for (my $row = 1; $row <= $row_max; $row++) {
+        my $v1 = $a1->get($row);
+        my $v2 = $a2->get(Rstats::Array->NULL, $col);
+        my $v3 = $r->sum($a1 * $a2);
+        push $a3_elements, $v3;
+      }
+    }
+    
+    my $a3 = Rstats::Array->matrix($a3_elements, $row_max, $col_max);
+    
+    return $a3;
+  }
+  else {
+    croak "inner_product should be dim < 3."
+  }
+}
 
 sub values {
   my $self = shift;
@@ -1202,8 +1249,8 @@ sub negation {
   return $a1;
 }
 
-sub _operation {
-  my ($self, $op, $data, $reverse) = @_;
+sub _fix_position {
+  my ($self, $data, $reverse) = @_;
   
   my $a1;
   my $a2;
@@ -1222,9 +1269,17 @@ sub _operation {
     }
   }
   
+  return ($a1, $a2);
+}
+
+sub _operation {
+  my ($self, $op, $data, $reverse) = @_;
+  
+  # fix postion
+  my ($a1, $a2) = $self->_fix_position($data, $reverse);
+  
   # Upgrade mode if mode is different
-  ($a1, $a2) = $self->_upgrade_mode($a1, $a2)
-    if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = $self->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
   
   # Calculate
   my $a1_length = @{$a1->elements};

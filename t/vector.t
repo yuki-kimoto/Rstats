@@ -30,7 +30,7 @@ use Rstats;
     my $v2 = c(4, 5, 6);
     my $v3 = $v1 x $v2;
     is_deeply($v3->values, [32]);
-    is_deeply($v3->dim->values, [1, 1]);
+    is_deeply(r->dim($v3)->values, [1, 1]);
   }
   
   # innert product - size is different

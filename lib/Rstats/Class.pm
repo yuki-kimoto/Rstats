@@ -49,6 +49,7 @@ my @methods = qw/
   row
   rownames
   seq
+  sum
 /;
 
 for my $method (@methods) {
@@ -896,15 +897,6 @@ sub sort {
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
   return Rstats::ArrayUtil::c($v2_values);
-}
-
-sub sum {
-  my ($self, $_v1) = @_;
-  
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my $v1_values = $v1->values;
-  my $sum = List::Util::sum(@$v1_values);
-  return Rstats::ArrayUtil::c($sum);
 }
 
 sub t {

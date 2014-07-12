@@ -202,6 +202,15 @@ sub row {
   return Rstats::ArrayUtil::array(\@values, [$nrow, $ncol]);
 }
 
+sub sum {
+  my $_v1 = shift;
+  
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
+  my $v1_values = $v1->values;
+  my $sum = List::Util::sum(@$v1_values);
+  return Rstats::ArrayUtil::c($sum);
+}
+
 sub col {
   my $array = shift;
   

@@ -25,7 +25,7 @@ use Rstats;
     c(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1 .. 12]);
-  is_deeply($m1->dim->values, [4, 3]);
+  is_deeply(r->dim($m1)->values, [4, 3]);
 }
 
 # rbind
@@ -36,7 +36,7 @@ use Rstats;
     c(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12]);
-  is_deeply($m1->dim->values, [3, 4]);
+  is_deeply(r->dim($m1)->values, [3, 4]);
 }
 
 # rowSums
@@ -44,7 +44,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 4, 3);
   my $v1 = r->rowSums($m1);
   is_deeply($v1->values,[10, 26, 42]);
-  is_deeply($v1->dim->values, []);
+  is_deeply(r->dim($v1)->values, []);
 }
 
 # rowMeans
@@ -52,7 +52,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 4, 3);
   my $v1 = r->rowMeans($m1);
   is_deeply($v1->values,[10/4, 26/4, 42/4]);
-  is_deeply($v1->dim->values, []);
+  is_deeply(r->dim($v1)->values, []);
 }
 
 # colSums
@@ -60,7 +60,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 4, 3);
   my $v1 = r->colSums($m1);
   is_deeply($v1->values,[15, 18, 21, 24]);
-  is_deeply($v1->dim->values, []);
+  is_deeply(r->dim($v1)->values, []);
 }
 
 # colMeans
@@ -68,7 +68,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 4, 3);
   my $v1 = r->colMeans($m1);
   is_deeply($v1->values,[15/3, 18/3, 21/3, 24/3]);
-  is_deeply($v1->dim->values, []);
+  is_deeply(r->dim($v1)->values, []);
 }
 
 # row
@@ -76,7 +76,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 3, 4);
   my $m2 = r->row($m1);
   is_deeply($m2->values,[1,2,3,1,2,3,1,2,3,1,2,3]);
-  is_deeply($m2->dim->values, [3, 4]);
+  is_deeply(r->dim($m2)->values, [3, 4]);
 }
 
 # col
@@ -84,7 +84,7 @@ use Rstats;
   my $m1 = matrix(C('1:12'), 3, 4);
   my $m2 = r->col($m1);
   is_deeply($m2->values,[1,1,1,2,2,2,3,3,3,4,4,4]);
-  is_deeply($m2->dim->values, [3, 4]);
+  is_deeply(r->dim($m2)->values, [3, 4]);
 }
 
 # nrow and ncol
@@ -101,7 +101,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'), 3, 4);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
   
   # matrix - omit row
@@ -109,7 +109,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'), 3);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
   
   # matrix - omit col
@@ -117,7 +117,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'), undef, 4);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
 
   # matrix - omit col
@@ -125,7 +125,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'));
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [12, 1]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
 
   # matrix - nrow and ncol option
@@ -133,7 +133,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'), {nrow => 4, ncol => 3});
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [4, 3]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
   
   # matrix - repeat
@@ -141,7 +141,7 @@ use Rstats;
     my $m1 = matrix(C('1:3'), 3, 4);
     is_deeply($m1->values, [(1 .. 3) x 4]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
 
   # matrix - repeat 2
@@ -149,7 +149,7 @@ use Rstats;
     my $m1 = matrix(C('1:10'), 3, 4);
     is_deeply($m1->values, [1 .. 10, 1, 2]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
   
   # matrix - repeat 3
@@ -157,7 +157,7 @@ use Rstats;
     my $m1 = matrix(0, 3, 4);
     is_deeply($m1->values, [(0) x 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
   
   # matrix - byrow
@@ -165,7 +165,7 @@ use Rstats;
     my $m1 = matrix(C('1:12'), 3, 4, {byrow => 1});
     is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok($m1->is_matrix);
+    ok(r->is_matrix($m1));
   }
 }
 

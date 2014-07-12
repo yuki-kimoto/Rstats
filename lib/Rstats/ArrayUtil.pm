@@ -1018,10 +1018,10 @@ sub pos {
 }
 
 sub t {
-  my ($array, $m1) = @_;
+  my $m1 = shift;
   
-  my $m1_row = Rstats::ArrayUtil::dim($m1)->elements->[0];
-  my $m1_col = Rstats::ArrayUtil::dim($m1)->elements->[1];
+  my $m1_row = Rstats::ArrayUtil::dim($m1)->values->[0];
+  my $m1_col = Rstats::ArrayUtil::dim($m1)->values->[1];
   
   my $m2 = Rstats::ArrayUtil::matrix(0, $m1_col, $m1_row);
   

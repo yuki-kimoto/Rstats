@@ -198,12 +198,12 @@ sub cbind {
     my $a = Rstats::ArrayUtil::to_array($_a);
     
     my $row_count;
-    if ($a->is_matrix) {
+    if (Rstats::ArrayUtil::is_matrix($a)) {
       $row_count = Rstats::ArrayUtil::dim($a)->elements->[0];
       $col_count_total += Rstats::ArrayUtil::dim($a)->elements->[1];
     }
-    elsif ($a->is_vector) {
-      $row_count = $a->_real_dim_values->[0];
+    elsif (Rstats::ArrayUtil::is_vector($a)) {
+      $row_count = Rstats::ArrayUtil::real_dim_values($a)->[0];
       $col_count_total += 1;
     }
     else {

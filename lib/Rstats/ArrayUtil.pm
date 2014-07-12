@@ -2,9 +2,12 @@ package Rstats::ArrayUtil;
 
 use strict;
 use warnings;
-use Carp 'croak';
+use Carp qw/croak carp/;
+use Rstats::Util;
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+
+sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 
 sub array {
   
@@ -87,15 +90,15 @@ sub matrix {
   my $dim = [$nrow, $ncol];
   my $matrix;
   if ($byrow) {
-    $matrix = $array->array(
+    $matrix = Rstats::ArrayUtil::array(
       $a1_elements,
       [$dim->[1], $dim->[0]],
     );
     
-    $matrix = $array->t($matrix);
+    $matrix = Rstats::ArrayUtil::t($matrix);
   }
   else {
-    $matrix = $array->array($a1_elements, $dim);
+    $matrix = Rstats::ArrayUtil::array($a1_elements, $dim);
   }
   
   return $matrix;
@@ -191,8 +194,8 @@ sub inner_product {
 sub row {
   my $array = shift;
   
-  my $nrow = $array->nrow->value;
-  my $ncol = $array->ncol->value;
+  my $nrow = Rstats::ArrayUtil::nrow($array)->value;
+  my $ncol = Rstats::ArrayUtil::ncol($array)->value;
   
   my @values = (1 .. $nrow) x $ncol;
   
@@ -202,8 +205,8 @@ sub row {
 sub col {
   my $array = shift;
   
-  my $nrow = $array->nrow->value;
-  my $ncol = $array->ncol->value;
+  my $nrow = Rstats::ArrayUtil::nrow($array)->value;
+  my $ncol = Rstats::ArrayUtil::ncol($array)->value;
   
   my @values;
   for my $col (1 .. $ncol) {
@@ -438,16 +441,16 @@ sub seq {
 }
 
 sub c {
-  my ($array, @values) = @_;
+  my @values = @_;
   
   # Array
-  my $array = Rstats::ArrayUtil::NULL;
+  my $array = Rstats::ArrayUtil::NULL();
   
   # Value
   my $elements = [];
   my $a1;
   if (@values == 0) {
-    return Rstats::ArrayUtil::NULL;
+    return Rstats::ArrayUtil::NULL();
   }
   elsif (@values > 1) {
     $a1 = \@values;
@@ -664,7 +667,7 @@ sub as_complex {
   
   my $a1 = $array;
   my $a1_elements = $a1->elements;
-  my $a2 = Rstats::ArrayUtil::clone_without_elements;
+  my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     if (Rstats::Util::is_na($_)) {
       $_;
@@ -713,7 +716,7 @@ sub as_double {
   
   my $a1 = $array;
   my $a1_elements = $a1->elements;
-  my $a2 = Rstats::ArrayUtil::clone_without_elements;
+  my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     if (Rstats::Util::is_na($_)) {
       $_;
@@ -755,7 +758,7 @@ sub as_integer {
   
   my $a1 = $array;
   my $a1_elements = $a1->elements;
-  my $a2 = Rstats::ArrayUtil::clone_without_elements;
+  my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     if (Rstats::Util::is_na($_)) {
       $_;
@@ -802,7 +805,7 @@ sub as_logical {
   
   my $a1 = $array;
   my $a1_elements = $a1->elements;
-  my $a2 = Rstats::ArrayUtil::clone_without_elements;
+  my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     if (Rstats::Util::is_na($_)) {
       $_;
@@ -849,10 +852,10 @@ sub as_logical {
 }
 
 sub as_character {
-  my $array = shift;
+  my $a1 = shift;
 
-  my $a1_elements = $array->elements;
-  my $a2 = Rstats::ArrayUtil::clone_without_elements;
+  my $a1_elements = $1->elements;
+  my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     Rstats::Util::character(Rstats::Util::to_string($_))
   } @$a1_elements;
@@ -862,8 +865,6 @@ sub as_character {
   return $a2;
 }
 
-sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
-
 sub numeric {
   my ($array, $num) = @_;
   
@@ -871,7 +872,7 @@ sub numeric {
 }
 
 sub to_array {
-  my ($array, $_array) = @_;
+  my $_array = shift;
   
   my $array
    = !defined $_array ? Rstats::ArrayUtil::NULL

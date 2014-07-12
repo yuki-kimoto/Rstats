@@ -16,50 +16,48 @@ require Rstats::Array;
 #   lgamma
 #   complete_cases
 
-{
+my @methods = qw/
+  as_array,
+  as_character
+  as_complex
+  as_integer
+  as_logical
+  as_matrix
+  as_numeric
+  as_vector
+  c
+  C
+  col
+  colnames
+  dim
+  is_array
+  is_complex
+  is_matrix
+  is_numeric
+  is_double
+  is_integer
+  is_logical
+  is_vector
+  length
+  NA
+  names
+  NaN
+  ncol
+  nrow
+  NULL
+  numeric
+  row
+  rownames
+  seq
+/;
+
+for my $method (@methods) {
+  my $function = "Rstats::ArrayUtil::$method";
+  my $code = "sub { shift; $function(\@_) }";
+
   no strict 'refs';
-  my @methods = qw/
-    as_array,
-    as_character
-    as_complex
-    as_integer
-    as_logical
-    as_matrix
-    as_numeric
-    as_vector
-    c
-    C
-    col
-    colnames
-    dim
-    is_array
-    is_complex
-    is_matrix
-    is_numeric
-    is_double
-    is_integer
-    is_logical
-    is_vector
-    length
-    NA
-    names
-    NaN
-    ncol
-    nrow
-    NULL
-    numeric
-    row
-    rownames
-    seq
-  /;
-  for my $method (@methods) {
-    *{"Rstats::Class::$method"} = sub {
-      my $self = shift;
-      
-      my $function = "Rstats::ArrayUtil::$method";
-      return &$function(@_);
-    };
-  }
+  *{"Rstats::Class::$method"} = eval $code;
+  croak $@ if $@;
 }
 
 sub abs {

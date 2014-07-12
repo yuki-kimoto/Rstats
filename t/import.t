@@ -21,14 +21,14 @@ use Rstats::Util;
 {
   my $a1 = array(C('1:12'), c(4, 3));
   is_deeply($a1->values, [1 .. 12]);
-  is_deeply($a1->dim->values, [4, 3]);
+  is_deeply(r->dim($a1)->values, [4, 3]);
 }
 
 # matrix
 {
   my $m1 = matrix(C('1:12'), 4, 3);
   is_deeply($m1->values, [1 .. 12]);
-  is_deeply($m1->dim->values, [4, 3]);
+  is_deeply(r->dim($m1)->values, [4, 3]);
 }
 
 # i

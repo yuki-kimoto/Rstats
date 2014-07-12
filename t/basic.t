@@ -21,44 +21,44 @@ use Rstats::Array;
   # as_numeric - from complex
   {
     my $a1 = c(r->complex(1, 1), r->complex(2, 2));
-    $a1->mode('complex');
+    r->mode($a1 => 'complex');
     my $a2 = r->as_numeric($a1);
-    is($a2->mode->value, 'numeric');
+    is(r->mode($a2)->value, 'numeric');
     is_deeply($a2->values, [1, 2]);
   }
 
   # as_numeric - from numeric
   {
     my $a1 = c(0.1, 1.1, 2.2);
-    $a1->mode('numeric');
+    r->mode($a1 => 'numeric');
     my $a2 = r->as_numeric($a1);
-    is($a2->mode->value, 'numeric');
+    is(r->mode($a2)->value, 'numeric');
     is_deeply($a2->values, [0.1, 1.1, 2.2]);
   }
     
   # as_numeric - from integer
   {
     my $a1 = c(0, 1, 2);
-    $a1->mode('integer');
+    r->mode($a1 => 'integer');
     my $a2 = r->as_numeric($a1);
-    is($a2->mode->value, 'numeric');
+    is(r->mode($a2)->value, 'numeric');
     is_deeply($a2->values, [0, 1, 2]);
   }
   
   # as_numeric - from logical
   {
     my $a1 = c(r->TRUE, r->FALSE);
-    $a1->mode('logical');
+    r->mode($a1 => 'logical');
     my $a2 = r->as_numeric($a1);
-    is($a2->mode->value, 'numeric');
+    is(r->mode($a2)->value, 'numeric');
     is_deeply($a2->values, [1, 0]);
   }
 
   # as_numeric - from character
   {
-    my $a1 = c(0, 1, 2)->as_integer;
+    my $a1 = r->as_integer(c(0, 1, 2));
     my $a2 = r->as_numeric($a1);
-    is($a2->mode->value, 'numeric');
+    is(r->mode($a2)->value, 'numeric');
     is_deeply($a2->values, [0, 1, 2]);
   }
 }
@@ -68,41 +68,41 @@ use Rstats::Array;
   # is_*, as_*, typeof - integer
   {
     my $c = c(0, 1, 2);
-    ok($c->as_integer->is_integer);
-    is($c->as_integer->mode->value, 'numeric');
-    is($c->as_integer->typeof->value, 'integer');
+    ok(r->is_integer(r->as_integer($c)));
+    is(r->mode(r->as_integer($c))->value, 'numeric');
+    is(r->typeof(r->as_integer($c))->value, 'integer');
   }
   
   # is_*, as_*, typeof - character
   {
     my $c = c(0, 1, 2);
-    ok($c->as_character->is_character);
-    is($c->as_character->mode->value, 'character');
-    is($c->as_character->typeof->value, 'character');
+    ok(r->is_character(r->as_character($c)));
+    is(r->mode(r->as_character($c))->value, 'character');
+    is(r->typeof(r->as_character($c))->value, 'character');
   }
   
   # is_*, as_*, typeof - complex
   {
     my $c = c(0, 1, 2);
-    ok($c->as_complex->is_complex);
-    is($c->as_complex->mode->value, 'complex');
-    is($c->as_complex->typeof->value, 'complex');
+    ok(r->is_complex(r->as_complex($c)));
+    is(r->mode(r->as_complex($c))->value, 'complex');
+    is(r->typeof(r->as_complex($c))->value, 'complex');
   }
   
   # is_*, as_*, typeof - logical
   {
     my $a1 = c(0, 1, 2);
     my $a2 = r->as_logical($a1);
-    ok($a2->is_logical);
-    is($a2->mode->value, 'logical');
-    is($a2->typeof->value, 'logical');
+    ok(r->is_logical($a2));
+    is(r->mode($a2)->value, 'logical');
+    is(r->typeof($a2)->value, 'logical');
   }
 
   # is_*, as_*, typeof - NULL
   {
     my $a1 = r->NULL;
-    is($a1->mode->value, 'logical');
-    is($a1->typeof->value, 'logical');
+    is(r->mode($a1)->value, 'logical');
+    is(r->typeof($a1)->value, 'logical');
   }
 }
 
@@ -111,16 +111,16 @@ use Rstats::Array;
   {
     my $mat = matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    is_deeply($mat->dim->values, [2, 5]);
-    ok($mat->is_matrix);
+    is_deeply(r->dim($mat)->values, [2, 5]);
+    ok(r->is_matrix($mat));
   }
   
   # matrix - repeat values
   {
     my $mat = matrix([1,2], 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
-    is_deeply($mat->dim->values, [2, 5]);
-    ok($mat->is_matrix);
+    is_deeply(r->dim($mat)->values, [2, 5]);
+    ok(r->is_matrix($mat));
   }
 }
 
@@ -134,7 +134,7 @@ use Rstats::Array;
 # rnorm
 {
   my $v1 = r->rnorm(100);
-  is(r->length($v1), 100);
+  is(r->length($v1)->value, 100);
 }
 
 # sequence
@@ -149,7 +149,7 @@ use Rstats::Array;
   {
     my $v1 = C('1:100');
     my $v2 = r->sample($v1, 50);
-    is(r->length($v2), 50);
+    is(r->length($v2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
@@ -168,7 +168,7 @@ use Rstats::Array;
   {
     my $v1 = C('1:100');
     my $v2 = r->sample($v1, 50, {replace => 0});
-    is(r->length($v2), 50);
+    is(r->length($v2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
@@ -187,7 +187,7 @@ use Rstats::Array;
   {
     my $v1 = C('1:100');
     my $v2 = r->sample($v1, 50, {replace => 1});
-    is(r->length($v2), 50);
+    is(r->length($v2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
@@ -203,7 +203,7 @@ use Rstats::Array;
   {
     my $v1 = c(1);
     my $v2 = r->sample($v1, 5, {replace => 1});
-    is(r->length($v2), 5);
+    is(r->length($v2)->value, 5);
     is_deeply($v2->values, [1, 1, 1, 1, 1]);
   }
 }
@@ -367,7 +367,7 @@ use Rstats::Array;
 # length
 {
   my $array = array(c(1, 2, 3));
-  is(r->length($array), 3);
+  is(r->length($array)->value, 3);
 }
 
 # array
@@ -378,7 +378,7 @@ use Rstats::Array;
   }
   {
     my $array = array(c(1, 2, 3));
-    is_deeply($array->dim->values, [3]);
+    is_deeply(r->dim($array)->values, [3]);
   }
 }
 
@@ -509,7 +509,7 @@ use Rstats::Array;
   # add to original vector
   {
     my $v1 = c(1, 2, 3);
-    $v1->at(r->length($v1) + 1)->set(6);
+    $v1->at(r->length($v1)->value + 1)->set(6);
     is_deeply($v1->values, [1, 2, 3, 6]);
   }
   
@@ -604,7 +604,7 @@ use Rstats::Array;
   {
     my $v1 = c(1, 2, 4);
     my $length = r->length($v1);
-    is($length, 3);
+    is($length->value, 3);
   }
 
   # sum

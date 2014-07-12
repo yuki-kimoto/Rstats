@@ -374,10 +374,10 @@ sub seq {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   # Along
-  my $along = $opt->{along};
-  
-  if ($along) {
-    my $length = Rstats::Util::length($along);
+  my $_along = $opt->{along};
+  if ($_along) {
+    my $along = Rstats::ArrayUtil::to_array($_along);
+    my $length = @{$along->elements};
     return Rstats::ArrayUtil::seq(1,$length);
   }
   else {
@@ -874,7 +874,7 @@ sub as_character {
 }
 
 sub numeric {
-  my ($array, $num) = @_;
+  my $num = shift;
   
   return Rstats::ArrayUtil::c([(0) x $num]);
 }

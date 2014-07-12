@@ -31,6 +31,7 @@ my @methods = qw/
   colnames
   dim
   is_array
+  is_character
   is_complex
   is_matrix
   is_numeric
@@ -39,6 +40,7 @@ my @methods = qw/
   is_logical
   is_vector
   length
+  mode
   NA
   names
   NaN
@@ -50,6 +52,7 @@ my @methods = qw/
   rownames
   seq
   sum
+  typeof
 /;
 
 for my $method (@methods) {
@@ -111,7 +114,7 @@ sub append {
   my $element = shift;
   
   my $after = $opt->{after};
-  $after = Rstats::Util::length($v1) unless defined $after;
+  $after = @{$v1->elements} unless defined $after;
   
   if (ref $element eq 'ARRAY') {
     splice @{$v1->elements}, $after, 0, @$element;
@@ -376,7 +379,7 @@ sub head {
   $n = 6 unless defined $n;
   
   my $elements1 = $v1->{elements};
-  my $max = Rstats::Util::length($v1) < $n ? Rstats::Util::length($v1) : $n;
+  my $max = @{$v1->elements} < $n ? @{$v1->elements} : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
     push @elements2, $elements1->[$i];
@@ -543,8 +546,8 @@ sub max {
 sub mean {
   my ($self, $data) = @_;
   
-  my $v = $data;
-  my $mean = $self->sum($v)->value / $self->length($v);
+  my $v1 = $data;
+  my $mean = $self->sum($v1)->value / @{$v1->elements};
   
   return Rstats::ArrayUtil::c($mean);
 }
@@ -813,7 +816,7 @@ sub sample {
   # Replace
   my $replace = $opt->{replace};
   
-  my $v1_length = $self->length($v1);
+  my $v1_length = @{$v1->elements};
   $length = $v1_length unless defined $length;
   
   croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
@@ -821,7 +824,7 @@ sub sample {
   
   my @v2_elements;
   for my $i (0 .. $length - 1) {
-    my $rand_num = int(rand $self->length($v1));
+    my $rand_num = int(rand @{$v1->elements});
     my $rand_element = splice @{$v1->elements}, $rand_num, 1;
     push @v2_elements, $rand_element;
     push @{$v1->elements}, $rand_element if $replace;
@@ -915,10 +918,10 @@ sub tail {
   $n = 6 unless defined $n;
   
   my $elements1 = $v1->{elements};
-  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
+  my $max = @{$v1->elements} < $n ? @{$v1->elements} : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @elements2, $elements1->[$self->length($v1) - ($i  + 1)];
+    unshift @elements2, $elements1->[@{$v1->elements} - ($i  + 1)];
   }
   
   return $v1->new(elements => \@elements2);
@@ -972,7 +975,7 @@ sub var {
   my ($self, $v1) = @_;
 
   my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
-    / ($self->length($v1) - 1);
+    / (@{$v1->elements} - 1);
   
   return Rstats::ArrayUtil::c($var);
 }

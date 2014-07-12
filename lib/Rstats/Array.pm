@@ -46,7 +46,7 @@ sub bool {
 sub element {
   my $array = shift;
   
-  my $dim_values = Rstats::ArrayUtil::real_dim_values($array);
+  my $dim_values = Rstats::ArrayUtil::dim_as_array($array)->values;
   
   if (@_) {
     if (@$dim_values == 1) {
@@ -81,7 +81,7 @@ sub to_string {
 
   my $elements = $self->elements;
   
-  my $dim_values = Rstats::ArrayUtil::real_dim_values($self);
+  my $dim_values = Rstats::ArrayUtil::dim_as_array($self)->values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;

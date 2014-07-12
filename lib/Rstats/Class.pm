@@ -207,7 +207,7 @@ sub cbind {
       $col_count_total += Rstats::ArrayUtil::dim($a)->elements->[1];
     }
     elsif (Rstats::ArrayUtil::is_vector($a)) {
-      $row_count = Rstats::ArrayUtil::real_dim_values($a)->[0];
+      $row_count = Rstats::ArrayUtil::dim_as_array($a)->values->[0];
       $col_count_total += 1;
     }
     else {

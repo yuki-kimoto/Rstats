@@ -39,7 +39,8 @@ sub array {
   
   # Fix elements
   my $max_length = 1;
-  $max_length *= $_ for @{Rstats::ArrayUtil::real_dim_values($array) || [scalar @$elements]};
+  $DB::single = 1;
+  $max_length *= $_ for @{Rstats::ArrayUtil::dim_as_array($array)->values};
   if (@$elements > $max_length) {
     @$elements = splice @$elements, 0, $max_length;
   }
@@ -566,21 +567,15 @@ sub C {
   return $vector;
 }
 
-sub real_dim_values {
+sub dim_as_array {
   my $array = shift;
   
-  my $dim = Rstats::ArrayUtil::dim($array);
-  if (@{$dim->values}) {
-    return $dim->values;
+  if (@{$array->{dim}}) {
+    return Rstats::ArrayUtil::dim($array);
   }
   else {
-    if (defined $array->elements) {
-      my $length = @{$array->elements};
-      return [$length];
-    }
-    else {
-      return;
-    }
+    my $length = @{$array->elements};
+    return Rstats::ArrayUtil::c($length);
   }
 }
 
@@ -882,7 +877,7 @@ sub to_array {
 sub parse_index {
   my ($array, $drop, @_indexs) = @_;
   
-  my $a1_dim = Rstats::ArrayUtil::real_dim_values($array);
+  my $a1_dim = Rstats::ArrayUtil::dim_as_array($array)->values;
   my @indexs;
   my @a2_dim;
   
@@ -1059,7 +1054,7 @@ sub is_matrix {
 sub as_matrix {
   my $array = shift;
   
-  my $a1_dim_elements = Rstats::ArrayUtil::real_dim_values($array);
+  my $a1_dim_elements = Rstats::ArrayUtil::dim_as_array($array)->values;
   my $a1_dim_count = @$a1_dim_elements;
   my $a2_dim_elements = [];
   my $row;
@@ -1083,7 +1078,7 @@ sub as_array {
   my $array = shift;
   
   my $a1_elements = [@{$array->elements}];
-  my $a1_dim_elements = [@{Rstats::ArrayUtil::real_dim_values($array)}];
+  my $a1_dim_elements = [@{Rstats::ArrayUtil::dim_as_array($array)->values}];
   
   return $array->array($a1_elements, $a1_dim_elements);
 }

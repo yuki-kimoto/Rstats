@@ -315,7 +315,7 @@ sub cumsum {
 sub complex {
   my ($self, $re, $im) = @_;
   
-  return Rstats::ArrayUtil::c([Rstats::Util::complex($re, $im)]);
+  return Rstats::ArrayUtil::c(Rstats::Util::complex($re, $im));
 }
 
 sub exp {
@@ -634,7 +634,7 @@ sub range {
   my $min = $self->min($array);
   my $max = $self->max($array);
   
-  return Rstats::ArrayUtil::c([$min, $max]);
+  return Rstats::ArrayUtil::c($min, $max);
 }
 
 sub rbind {

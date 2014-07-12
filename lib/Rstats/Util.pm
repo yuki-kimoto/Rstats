@@ -121,23 +121,10 @@ sub looks_like_complex {
 sub element {
   my $value = shift;
   
-  if (!ref $value) {
-    if (is_perl_number($value)) {
-      return double($value);
-    }
-    else {
-      return character($value);
-    }
-  }
-  else {
-    return $value;
-  }
-  if (is_character($value) || is_integer($value) || is_double($value)) {
-    return $value->value;
-  }
-  else {
-    return $value;
-  }
+  return ref $value ? $value
+    : is_perl_number($value) ? double($value)
+    : character($value);
+
 }
 
 sub value {

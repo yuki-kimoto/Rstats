@@ -109,7 +109,7 @@ sub typeof {
   
   my $type = $array->{type};
   my $a1_elements = defined $type ? $type : "NULL";
-  my $a1 = Rstats::ArrayUtil::c([$a1_elements]);
+  my $a1 = Rstats::ArrayUtil::c($a1_elements);
   
   return $a1;
 }
@@ -146,7 +146,7 @@ sub mode {
       croak qq/could not find function "as_$type"/;
     }
 
-    return Rstats::ArrayUtil::c([$mode]);
+    return Rstats::ArrayUtil::c($mode);
   }
 }
 
@@ -449,42 +449,40 @@ sub seq {
 }
 
 sub c {
-  my @values = @_;
+  my @elements_tmp1 = @_;
   
-  # Array
-  my $array = Rstats::ArrayUtil::NULL();
-  
-  # Value
-  my $elements = [];
-  my $a1;
-  if (@values == 0) {
+  # Fix elements
+  my $elements_tmp2;
+  if (@elements_tmp1 == 0) {
     return Rstats::ArrayUtil::NULL();
   }
-  elsif (@values > 1) {
-    $a1 = \@values;
+  elsif (@elements_tmp1 > 1) {
+    $elements_tmp2 = \@elements_tmp1;
   }
   else {
-    $a1 = $values[0];
+    $elements_tmp2 = $elements_tmp1[0];
   }
-  if (defined $a1) {
-    if (ref $a1 eq 'ARRAY') {
-      for my $a (@$a1) {
-        if (ref $a eq 'ARRAY') {
-          push @$elements, @$a;
+
+  my $elements = [];
+  if (defined $elements_tmp2) {
+    if (ref $elements_tmp2 eq 'ARRAY') {
+      for my $element (@$elements_tmp2) {
+        if (ref $element eq 'ARRAY') {
+          push @$elements, @$element;
         }
-        elsif (ref $a eq 'Rstats::Array') {
-          push @$elements, @{$a->elements};
+        elsif (ref $element eq 'Rstats::Array') {
+          push @$elements, @{$element->elements};
         }
         else {
-          push @$elements, $a;
+          push @$elements, $element;
         }
       }
     }
-    elsif (ref $a1 eq 'Rstats::Array') {
-      $elements = $a1->elements;
+    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
+      $elements = $elements_tmp2->elements;
     }
     else {
-      $elements = [$a1];
+      $elements = [$elements_tmp2];
     }
   }
   else {
@@ -522,35 +520,26 @@ sub c {
     }
   }
 
+  # Array
+  my $array = Rstats::ArrayUtil::NULL();
+  $array->elements($elements);
+
   # Upgrade elements and type
   my @modes = keys %$mode_h;
   if (@modes > 1) {
     if ($mode_h->{character}) {
-      my $a1 = Rstats::ArrayUtil::as_character($a1->clone_without_elements);
-      $elements = $a1->elements;
-      Rstats::ArrayUtil::mode($array => 'character');
+      $array = Rstats::ArrayUtil::as_character($array);
     }
     elsif ($mode_h->{complex}) {
-      my $a1 = Rstats::ArrayUtil::as_complex($a1->clone_without_elements);
-      $elements = $a1->elements;
-      Rstats::ArrayUtil::mode($array => 'complex');
+      $array = Rstats::ArrayUtil::as_complex($array);
     }
     elsif ($mode_h->{double}) {
-      my $a1 = Rstats::ArrayUtil::as_elements($a1->clone_without_elements);
-      $elements = $a1->elements;
-      Rstats::ArrayUtil::mode($array => 'double');
-    }
-    elsif ($mode_h->{logical}) {
-      my $a1 = Rstats::ArrayUtil::as_logical($a1->clone_without_elements);
-      $elements = $a1->elements;
-      Rstats::ArrayUtil::mode($array => 'logical');
+      $array = Rstats::ArrayUtil::as_double($array);
     }
   }
   else {
     Rstats::ArrayUtil::mode($array => $modes[0] || 'logical');
   }
-  
-  $array->elements($elements);
   
   return $array;
 }
@@ -876,7 +865,7 @@ sub as_character {
 sub numeric {
   my $num = shift;
   
-  return Rstats::ArrayUtil::c([(0) x $num]);
+  return Rstats::ArrayUtil::c((0) x $num);
 }
 
 sub to_array {
@@ -1064,7 +1053,7 @@ sub is_matrix {
 
   my $is = @{Rstats::ArrayUtil::dim($array)->elements} == 2 ? Rstats::Util::TRUE() : Rstats::Util::FALSE();
   
-  return Rstats::ArrayUtil::c([$is]);
+  return Rstats::ArrayUtil::c($is);
 }
 
 sub as_matrix {

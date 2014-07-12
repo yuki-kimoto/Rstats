@@ -52,10 +52,10 @@ sub inner_product {
   my ($data, $reverse) = @_;
   
   # fix postion
-  my ($a1, $a2) = $array->_fix_position($data, $reverse);
+  my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
   # Upgrade mode if mode is different
-  ($a1, $a2) = $array->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = $self->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
 
   return Rstats::ArrayUtil::inner_product($a1, $a2);
 }
@@ -173,7 +173,7 @@ sub _operation {
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
   # Upgrade mode if mode is different
-  ($a1, $a2) = $self->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
   
   # Calculate
   my $a1_length = @{$a1->elements};
@@ -263,7 +263,7 @@ sub get {
     return Rstats::Array::Util::c(\@elements2);
   }
 
-  my ($positions, $a2_dim) = $self->_parse_index($drop, @$_indexs);
+  my ($positions, $a2_dim) = Rstas::ArrayUtil::parse_index($drop, @$_indexs);
   
   my @a2_elements = map { $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::Util::NA } @$positions;
   
@@ -285,7 +285,7 @@ sub set {
     $array = Rstats::ArrayUtil::to_array($_array);
   }
   
-  my ($positions, $a2_dim) = $self->_parse_index(0, @$_indexs);
+  my ($positions, $a2_dim) = Rstas::ArrayUtil::parse_index(0, @$_indexs);
   
   my $self_elements = $self->elements;
   if ($code) {
@@ -304,6 +304,29 @@ sub set {
   }
   
   return $self;
+}
+
+sub _fix_position {
+  my ($self, $data, $reverse) = @_;
+  
+  my $a1;
+  my $a2;
+  if (ref $data eq 'Rstats::Array') {
+    $a1 = $self;
+    $a2 = $data;
+  }
+  else {
+    if ($reverse) {
+      $a1 = Rstats::ArrayUtil::c($data);
+      $a2 = $self;
+    }
+    else {
+      $a1 = $self;
+      $a2 = Rstats::ArrayUtil::c($data);
+    }
+  }
+  
+  return ($a1, $a2);
 }
 
 

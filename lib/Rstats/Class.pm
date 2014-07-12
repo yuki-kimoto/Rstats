@@ -18,20 +18,42 @@ require Rstats::Array;
 
 {
   no strict 'refs';
-  my @methods = (
-    'as_array',
-    'as_vector',
-    'col',
-    'is_complex',
-    'is_numeric',
-    'is_double',
-    'is_integer',
-    'is_logical',
-    'nrow',
-    'row'
-  );
+  my @methods = qw/
+    as_array,
+    as_character
+    as_complex
+    as_integer
+    as_logical
+    as_matrix
+    as_numeric
+    as_vector
+    c
+    C
+    col
+    colnames
+    dim
+    is_array
+    is_complex
+    is_matrix
+    is_numeric
+    is_double
+    is_integer
+    is_logical
+    is_vector
+    length
+    NA
+    names
+    NaN
+    ncol
+    nrow
+    NULL
+    numeric
+    row
+    rownames
+    seq
+  /;
   for my $method (@methods) {
-    *{"$method"} = sub {
+    *{"Rstats::Class::$method"} = sub {
       my $self = shift;
       
       my $function = "Rstats::ArrayUtil::$method";
@@ -139,18 +161,6 @@ sub asinh {
   return $a2;
 }
 
-sub as_character {}
-
-sub as_complex {}
-
-sub as_integer {}
-
-sub as_logical {}
-
-sub as_matrix {}
-
-sub as_numeric {}
-
 sub atan {
   my ($self, $_a1) = @_;
   
@@ -178,10 +188,6 @@ sub atanh {
   
   return $a2;
 }
-
-sub c {}
-
-sub C {}
 
 sub cbind {
   my ($self, @arrays) = @_;
@@ -228,8 +234,6 @@ sub ceiling {
   
   return $a2;
 }
-
-sub colnames {}
 
 sub colMeans {
   my ($self, $m1) = @_;
@@ -311,8 +315,6 @@ sub complex {
   
   return Rstats::ArrayUtil::c([Rstats::Util::complex($re, $im)]);
 }
-
-sub dim {}
 
 sub exp {
   my ($self, $_a1) = @_;
@@ -429,8 +431,6 @@ sub is_finite {
   return $a2;
 }
 
-sub is_array {}
-
 sub is_infinite {
   my ($self, $_a1) = @_;
   
@@ -444,8 +444,6 @@ sub is_infinite {
 
   return $a1->clone_without_elements(elements => \@a2_elements);
 }
-
-sub is_matrix {}
 
 sub is_na {
   my ($self, $_a1) = @_;
@@ -486,10 +484,6 @@ sub is_null {
   
   return $a2;
 }
-
-sub is_vector {}
-
-sub length {}
 
 sub log {
   my ($self, $_a1) = @_;
@@ -562,26 +556,6 @@ sub min {
   my @all_values = map { @{$_->values} } @vs;
   my $min = List::Util::min(@all_values);
   return $min;
-}
-
-sub NA { shift->c(Rstats::Util::NA()) }
-
-sub names {}
-
-sub NaN { shift->c(Rstats::Util::NaN()) }
-
-sub ncol {}
-
-sub NULL {
-  my $self = shift;
-  
-  return Rstats::ArrayUtil::NULL;
-}
-
-sub numeric {
-  my $self = shift;
-  
-  return Rstats::ArrayUtil::numeric(@_);
 }
 
 sub order { shift->_order(1, @_) }
@@ -807,8 +781,6 @@ sub rowSums {
   }
 }
 
-sub rownames {}
-
 sub runif {
   my ($self, $count, $min, $max) = @_;
   
@@ -858,8 +830,6 @@ sub sample {
   
   return Rstats::ArrayUtil::c(\@v2_elements);
 }
-
-sub seq {}
 
 sub sequence {
   my ($self, $_v1) = @_;

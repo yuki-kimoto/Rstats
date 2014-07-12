@@ -147,6 +147,10 @@ sub mode {
   }
 }
 
+sub NA { Rstats::ArrayUtil::c(Rstats::Util::NA()) }
+
+sub NaN { Rstats::ArrayUtil::c(Rstats::Util::NaN()) }
+
 sub inner_product {
   my ($a1, $a2) = @_;
   
@@ -636,19 +640,19 @@ sub as {
     return Rstats::ArrayUtil::as_character($array);
   }
   elsif ($mode eq 'complex') {
-    return $array->as_complex;
+    return Rstats::ArrayUtil::as_complex($array);
   }
   elsif ($mode eq 'double') {
-    return $array->as_double;
+    return Rstats::ArrayUtil::as_double($array);
   }
   elsif ($mode eq 'numeric') {
-    return $array->as_numeric;
+    return Rstats::ArrayUtil::as_numeric($array);
   }
   elsif ($mode eq 'integer') {
-    return $array->as_integer;
+    return Rstats::ArrayUtil::as_integer($array);
   }
   elsif ($mode eq 'logical') {
-    return $array->as_logical;
+    return Rstats::ArrayUtil::as_logical($array);
   }
   else {
     croak "Invalid mode is passed";
@@ -877,7 +881,7 @@ sub to_array {
   return $array;
 }
 
-sub _parse_index {
+sub parse_index {
   my ($array, $drop, @_indexs) = @_;
   
   my $a1_dim = Rstats::ArrayUtil::_real_dim_values($array);
@@ -957,13 +961,13 @@ sub _parse_index {
   @a2_dim = (1) unless @a2_dim;
   
   my $index_values = [map { $_->values } @indexs];
-  my $ords = $array->_cross_product($index_values);
-  my @positions = map { $array->_pos($_, $a1_dim) } @$ords;
+  my $ords = Rstats::ArrayUtil::cross_product($index_values);
+  my @positions = map { Rstats::ArrayUtil::pos($_, $a1_dim) } @$ords;
   
   return (\@positions, \@a2_dim);
 }
 
-sub _cross_product {
+sub cross_product {
   my ($array, $values) = @_;
 
   my @idxs = (0) x @$values;
@@ -995,7 +999,7 @@ sub _cross_product {
   return $result;
 }
 
-sub _pos {
+sub pos {
   my ($array, $ord, $dim) = @_;
   
   my $pos = 0;
@@ -1011,81 +1015,6 @@ sub _pos {
   }
   
   return $pos;
-}
-
-sub _fix_position {
-  my ($array, $data, $reverse) = @_;
-  
-  my $a1;
-  my $a2;
-  if (ref $data eq 'Rstats::Array') {
-    $a1 = $array;
-    $a2 = $data;
-  }
-  else {
-    if ($reverse) {
-      $a1 = Rstats::ArrayUtil::array([$data]);
-      $a2 = $array;
-    }
-    else {
-      $a1 = $array;
-      $a2 = Rstats::ArrayUtil::array([$data]);
-    }
-  }
-  
-  return ($a1, $a2);
-}
-
-sub _upgrade_mode {
-  my ($array, @arrays) = @_;
-  
-  # Check elements
-  my $mode_h = {};
-  for my $array (@arrays) {
-    my $type = $array->{type} || '';
-    if ($type eq 'character') {
-      $mode_h->{character}++;
-    }
-    elsif ($type eq 'complex') {
-      $mode_h->{complex}++;
-    }
-    elsif ($type eq 'double') {
-      $mode_h->{double}++;
-    }
-    elsif ($type eq 'integer') {
-      $mode_h->{integer}++;
-    }
-    elsif ($type eq 'logical') {
-      $mode_h->{logical}++;
-    }
-    else {
-      croak "Invalid mode";
-    }
-  }
-
-  # Upgrade elements and type if mode is different
-  my @modes = keys %$mode_h;
-  if (@modes > 1) {
-    my $to_mode;
-    if ($mode_h->{character}) {
-      $to_mode = 'character';
-    }
-    elsif ($mode_h->{complex}) {
-      $to_mode = 'complex';
-    }
-    elsif ($mode_h->{double}) {
-      $to_mode = 'double';
-    }
-    elsif ($mode_h->{integer}) {
-      $to_mode = 'integer';
-    }
-    elsif ($mode_h->{logical}) {
-      $to_mode = 'logical';
-    }
-    $_ = Rstats::ArrayUtil::as($_ => $to_mode) for @arrays;
-  }
-  
-  return @arrays;
 }
 
 sub t {
@@ -1167,6 +1096,58 @@ sub as_vector {
   my $a1_elements = [@{$array->elements}];
   
   return Rstats::ArrayUtil::c($a1_elements);
+}
+
+sub upgrade_mode {
+  my (@arrays) = @_;
+  
+  # Check elements
+  my $mode_h = {};
+  for my $array (@arrays) {
+    my $type = $array->{type} || '';
+    if ($type eq 'character') {
+      $mode_h->{character}++;
+    }
+    elsif ($type eq 'complex') {
+      $mode_h->{complex}++;
+    }
+    elsif ($type eq 'double') {
+      $mode_h->{double}++;
+    }
+    elsif ($type eq 'integer') {
+      $mode_h->{integer}++;
+    }
+    elsif ($type eq 'logical') {
+      $mode_h->{logical}++;
+    }
+    else {
+      croak "Invalid mode";
+    }
+  }
+
+  # Upgrade elements and type if mode is different
+  my @modes = keys %$mode_h;
+  if (@modes > 1) {
+    my $to_mode;
+    if ($mode_h->{character}) {
+      $to_mode = 'character';
+    }
+    elsif ($mode_h->{complex}) {
+      $to_mode = 'complex';
+    }
+    elsif ($mode_h->{double}) {
+      $to_mode = 'double';
+    }
+    elsif ($mode_h->{integer}) {
+      $to_mode = 'integer';
+    }
+    elsif ($mode_h->{logical}) {
+      $to_mode = 'logical';
+    }
+    $_ = Rstats::ArrayUtil::as($_ => $to_mode) for @arrays;
+  }
+  
+  return @arrays;
 }
 
 1;

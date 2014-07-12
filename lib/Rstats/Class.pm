@@ -16,16 +16,40 @@ require Rstats::Array;
 #   lgamma
 #   complete_cases
 
+{
+  no strict 'refs';
+  my @methods = (
+    'as_array',
+    'as_vector',
+    'col',
+    'is_complex',
+    'is_numeric',
+    'is_double',
+    'is_integer',
+    'is_logical',
+    'nrow',
+    'row'
+  );
+  for my $method (@methods) {
+    *{"$method"} = sub {
+      my $self = shift;
+      
+      my $function = "Rstats::ArrayUtil::$method";
+      return &$function(@_);
+    };
+  }
+}
+
 sub abs {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(abs $_->value) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -33,13 +57,13 @@ sub abs {
 sub acos {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::acos $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -47,13 +71,13 @@ sub acos {
 sub acosh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::acosh $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -66,7 +90,7 @@ sub append {
   my $element = shift;
   
   my $after = $opt->{after};
-  $after = $self->length($v1) unless defined $after;
+  $after = Rstats::Util::length($v1) unless defined $after;
   
   if (ref $element eq 'ARRAY') {
     splice @{$v1->elements}, $after, 0, @$element;
@@ -84,19 +108,19 @@ sub append {
 sub array {
   my $self = shift;
   
-  return Rstats::Array->array(@_);
+  return Rstats::ArrayUtil::array(@_);
 }
 
 sub asin {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::asin $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -104,75 +128,39 @@ sub asin {
 sub asinh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::asinh $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
 
-sub as_array {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_array;
-}
+sub as_character {}
 
-sub as_character {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_character;
-}
+sub as_complex {}
 
-sub as_complex {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_complex;
-}
+sub as_integer {}
 
-sub as_integer {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_integer;
-}
+sub as_logical {}
 
-sub as_logical {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_logical;
-}
+sub as_matrix {}
 
-sub as_matrix {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_matrix;
-}
-
-sub as_numeric {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_numeric;
-}
-
-sub as_vector {
-  my ($self, $a1) = @_;
-  
-  return $a1->as_vector;
-}
+sub as_numeric {}
 
 sub atan {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::atan $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -180,28 +168,20 @@ sub atan {
 sub atanh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::atanh($_->value)) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
 
-sub c {
-  my $self = shift;
-  
-  return Rstats::Array->c(@_);
-}
+sub c {}
 
-sub C {
-  my $self = shift;
-  
-  return Rstats::Array->C(@_);
-}
+sub C {}
 
 sub cbind {
   my ($self, @arrays) = @_;
@@ -211,12 +191,12 @@ sub cbind {
   my $a2_elements = [];
   for my $_a (@arrays) {
     
-    my $a = Rstats::Array->to_array($_a);
+    my $a = Rstats::ArrayUtil::to_array($_a);
     
     my $row_count;
     if ($a->is_matrix) {
-      $row_count = $a->dim->elements->[0];
-      $col_count_total += $a->dim->elements->[1];
+      $row_count = Rstats::ArrayUtil::dim($a)->elements->[0];
+      $col_count_total += Rstats::ArrayUtil::dim($a)->elements->[1];
     }
     elsif ($a->is_vector) {
       $row_count = $a->_real_dim_values->[0];
@@ -239,33 +219,22 @@ sub cbind {
 sub ceiling {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   my @a2_elements = map { Rstats::Util::double(POSIX::ceil $_->value) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
 
-sub col {
-  my ($self, $m) = @_;
-  
-  return $m->col;
-}
-
-sub colnames {
-  my $self = shift;
-  my $m1 = shift;
-  
-  return $m1->colnames(@_);
-}
+sub colnames {}
 
 sub colMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
+  my $dim_values = Rstats::ArrayUtil::dim($m1)->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -273,7 +242,7 @@ sub colMeans {
       $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$v1_values, $v1_value / $dim_values->[1];
     }
-    return $self->c($v1_values);
+    return Rstats::ArrayUtil::c($v1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -283,7 +252,7 @@ sub colMeans {
 sub colSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
+  my $dim_values = Rstats::ArrayUtil::dim($m1)->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -291,7 +260,7 @@ sub colSums {
       $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$v1_values, $v1_value;
     }
-    return $self->c($v1_values);
+    return Rstats::ArrayUtil::c($v1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -301,13 +270,13 @@ sub colSums {
 sub cos {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(cos $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -315,13 +284,13 @@ sub cos {
 sub cosh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::cosh $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -329,37 +298,32 @@ sub cosh {
 sub cumsum {
   my ($self, $_v1) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my @v2_values;
   my $total = 0;
   push @v2_values, $total = $total + $_ for @{$v1->values};
   
-  return $self->c(\@v2_values);
+  return Rstats::ArrayUtil::c(\@v2_values);
 }
 
 sub complex {
   my ($self, $re, $im) = @_;
   
-  return $self->c([Rstats::Util::complex($re, $im)]);
+  return Rstats::ArrayUtil::c([Rstats::Util::complex($re, $im)]);
 }
 
-sub dim {
-  my $self = shift;
-  my $v1 = shift;
-  
-  return $v1->dim(@_);
-}
+sub dim {}
 
 sub exp {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(exp $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -367,7 +331,7 @@ sub exp {
 sub expm1 {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements
     = map {
@@ -380,7 +344,7 @@ sub expm1 {
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -390,13 +354,13 @@ sub FALSE { shift->c(Rstats::Util::FALSE()) }
 sub floor {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(POSIX::floor $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -411,7 +375,7 @@ sub head {
   $n = 6 unless defined $n;
   
   my $elements1 = $v1->{elements};
-  my $max = $self->length($v1) < $n ? $self->length($v1) : $n;
+  my $max = Rstats::Util::length($v1) < $n ? Rstats::Util::length($v1) : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
     push @elements2, $elements1->[$i];
@@ -425,13 +389,13 @@ sub i {
   
   my $i = Rstats::Util::complex(0, 1);
   
-  return $self->c($i);
+  return Rstats::ArrayUtil::c($i);
 }
 
 sub ifelse {
   my ($self, $_v1, $value1, $value2) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for my $v1_value (@$v1_values) {
@@ -452,55 +416,47 @@ sub Inf { shift->c(Rstats::Util::Inf()) }
 sub is_finite {
   my ($self, $_a1) = @_;
 
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map {
     !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
       ? Rstats::Util::TRUE()
       : Rstats::Util::FALSE()
   } @{$a1->elements};
-  my $a2 = Rstats::Array->array(\@a2_elements);
-  $a2->mode('logical');
+  my $a2 = Rstats::ArrayUtil::array(\@a2_elements);
+  Rstats::ArrayUtil::mode($a2 => 'logical');
   
   return $a2;
 }
 
-sub is_array {
-  my ($self, $a1) = @_;
-  
-  return $a1->is_array;
-}
+sub is_array {}
 
 sub is_infinite {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map {
     ref $_ eq 'Rstats::Inf' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->elements};
-  my $a2 = Rstats::Array->array(\@a2_elements);
-  $a2->mode('logical');
+  my $a2 = Rstats::ArrayUtil::array(\@a2_elements);
+  Rstats::ArrayUtil::mode($a2 => 'logical');
 
   return $a1->clone_without_elements(elements => \@a2_elements);
 }
 
-sub is_matrix {
-  my ($self, $a1) = @_;
-  
-  return $a1->is_matrix;
-}
+sub is_matrix {}
 
 sub is_na {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map {
     ref $_ eq  'Rstats::Type::NA' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->elements};
-  my $a2 = Rstats::Array->array(\@a2_elements);
-  $a2->mode('logical');
+  my $a2 = Rstats::ArrayUtil::array(\@a2_elements);
+  Rstats::ArrayUtil::mode($a2 => 'logical');
   
   return $a2;
 }
@@ -508,13 +464,13 @@ sub is_na {
 sub is_nan {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map {
     ref $_ eq  'Rstats::NaN' ? Rstats::Util::TRUE() : Rstats::Util::FALSE()
   } @{$a1->elements};
-  my $a2 = Rstats::Array->array(\@a2_elements);
-  $a2->mode('logical');
+  my $a2 = Rstats::ArrayUtil::array(\@a2_elements);
+  Rstats::ArrayUtil::mode($a2 => 'logical');
   
   return $a2;
 }
@@ -522,38 +478,29 @@ sub is_nan {
 sub is_null {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = [!@$a1->elements ? Rstats::Util::TRUE() : Rstats::Util::FALSE()];
-  my $a2 = Rstats::Array->array(\@a2_elements);
-  $a2->mode('logical');
+  my $a2 = Rstats::ArrayUtil::array(\@a2_elements);
+  Rstats::ArrayUtil::mode($a2 => 'logical');
   
   return $a2;
 }
 
-sub is_vector {
-  my ($self, $a1) = @_;
-  
-  return $a1->is_vector;
-}
+sub is_vector {}
 
-sub length {
-  my $self = shift;
-  my $v1 = shift;
-  
-  return $v1->length;
-}
+sub length {}
 
 sub log {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(log $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -563,13 +510,13 @@ sub logb { shift->log(@_) }
 sub log2 {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(CORE::log $_->value / CORE::log 2) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -577,19 +524,19 @@ sub log2 {
 sub log10 {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(CORE::log $_->value / CORE::log 10) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
 }
 
 sub matrix {
   my $self = shift;
   
-  return Rstats::Array->matrix(@_);
+  return Rstats::ArrayUtil::matrix(@_);
 }
 
 sub max {
@@ -606,7 +553,7 @@ sub mean {
   my $v = $data;
   my $mean = $self->sum($v)->value / $self->length($v);
   
-  return $self->c($mean);
+  return Rstats::ArrayUtil::c($mean);
 }
 
 sub min {
@@ -619,37 +566,22 @@ sub min {
 
 sub NA { shift->c(Rstats::Util::NA()) }
 
-sub names {
-  my $self = shift;
-  my $v1 = shift;
-  
-  return $v1->names(@_);
-}
+sub names {}
 
 sub NaN { shift->c(Rstats::Util::NaN()) }
 
-sub ncol {
-  my ($self, $m) = @_;
-  
-  return $m->ncol;
-}
-
-sub nrow {
-  my ($self, $m) = @_;
-  
-  return $m->nrow;
-}
+sub ncol {}
 
 sub NULL {
   my $self = shift;
   
-  return Rstats::Array->NULL;
+  return Rstats::ArrayUtil::NULL;
 }
 
 sub numeric {
   my $self = shift;
   
-  return Rstats::Array->numeric(@_);
+  return Rstats::ArrayUtil::numeric(@_);
 }
 
 sub order { shift->_order(1, @_) }
@@ -669,7 +601,7 @@ sub paste {
   my $v2_values = [];
   push @$v2_values, "$str$sep$_" for @$v1_values;
   
-  return Rstats::Array->c($v2_values);
+  return Rstats::ArrayUtil::c($v2_values);
 }
 
 sub pmax {
@@ -684,7 +616,7 @@ sub pmax {
     }
   }
   
-  my $v_max = $self->c(\@maxs);
+  my $v_max = Rstats::ArrayUtil::c(\@maxs);
   
   return $v_max;
 }
@@ -701,7 +633,7 @@ sub pmin {
     }
   }
   
-  my $v_min = $self->c(\@mins);
+  my $v_min = Rstats::ArrayUtil::c(\@mins);
   
   return $v_min;
 }
@@ -711,7 +643,7 @@ sub prod {
   
   my $v1_values = $v1->values;
   my $prod = List::Util::product(@$v1_values);
-  return $self->c($prod);
+  return Rstats::ArrayUtil::c($prod);
 }
 
 sub set_seed {
@@ -726,7 +658,7 @@ sub range {
   my $min = $self->min($array);
   my $max = $self->max($array);
   
-  return $self->c([$min, $max]);
+  return Rstats::ArrayUtil::c([$min, $max]);
 }
 
 sub rbind {
@@ -747,7 +679,7 @@ sub rep {
   
   my $elements = [];
   push @$elements, @{$v1->elements} for 1 .. $times;
-  my $v2 = $self->c($elements);
+  my $v2 = Rstats::ArrayUtil::c($elements);
   
   return $v2;
 }
@@ -755,9 +687,9 @@ sub rep {
 sub replace {
   my ($self, $_v1, $_v2, $_v3) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
-  my $v2 = Rstats::Array->to_array($_v2);
-  my $v3 = Rstats::Array->to_array($_v3);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
+  my $v2 = Rstats::ArrayUtil::to_array($_v2);
+  my $v3 = Rstats::ArrayUtil::to_array($_v3);
   
   my $v1_values = $v1->values;
   my $v2_values = $v2->values;
@@ -817,7 +749,7 @@ sub rnorm {
     push @v1_elements, $rnorm;
   }
   
-  return $self->c(\@v1_elements);
+  return Rstats::ArrayUtil::c(\@v1_elements);
 }
 
 sub round {
@@ -828,27 +760,21 @@ sub round {
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
 
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::Util::double(Math::Round::round_even($_->value * $r) / $r) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
-}
-
-sub row {
-  my ($self, $m) = @_;
-  
-  return $m->row;
 }
 
 sub rowMeans {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
+  my $dim_values = Rstats::ArrayUtil::dim($m1)->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -856,7 +782,7 @@ sub rowMeans {
       $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$v1_values, $v1_value / $dim_values->[0];
     }
-    return $self->c($v1_values);
+    return Rstats::ArrayUtil::c($v1_values);
   }
   else {
     croak "Can't culculate rowSums";
@@ -866,7 +792,7 @@ sub rowMeans {
 sub rowSums {
   my ($self, $m1) = @_;
   
-  my $dim_values = $m1->dim->values;
+  my $dim_values = Rstats::ArrayUtil::dim($m1)->values;
   if (@$dim_values == 2) {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -874,19 +800,14 @@ sub rowSums {
       $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$v1_values, $v1_value;
     }
-    return $self->c($v1_values);
+    return Rstats::ArrayUtil::c($v1_values);
   }
   else {
     croak "Can't culculate rowSums";
   }
 }
 
-sub rownames {
-  my $self = shift;
-  my $m1 = shift;
-  
-  return $m1->rownames(@_);
-}
+sub rownames {}
 
 sub runif {
   my ($self, $count, $min, $max) = @_;
@@ -907,7 +828,7 @@ sub runif {
     push @v1_elements, $rand;
   }
   
-  return $self->c(\@v1_elements);
+  return Rstats::ArrayUtil::c(\@v1_elements);
 }
 
 # TODO: prob option
@@ -916,7 +837,7 @@ sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_v1, $length) = @_;
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   
   # Replace
   my $replace = $opt->{replace};
@@ -935,39 +856,35 @@ sub sample {
     push @{$v1->elements}, $rand_element if $replace;
   }
   
-  return $self->c(\@v2_elements);
+  return Rstats::ArrayUtil::c(\@v2_elements);
 }
 
-sub seq {
-  my $self = shift;
-  
-  return Rstats::Array->seq(@_);
-}
+sub seq {}
 
 sub sequence {
   my ($self, $_v1) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   
   my @v2_values;
   for my $v1_value (@$v1_values) {
-    push @v2_values, $self->seq(1, $v1_value)->values;
+    push @v2_values, Rstats::ArrayUtil::seq(1, $v1_value)->values;
   }
   
-  return $self->c(\@v2_values);
+  return Rstats::ArrayUtil::c(\@v2_values);
 }
 
 sub sin {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(sin $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -975,13 +892,13 @@ sub sin {
 sub sinh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::sinh $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -989,13 +906,13 @@ sub sinh {
 sub sqrt {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(sqrt $_->value) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -1007,25 +924,25 @@ sub sort {
   my $decreasing = $opt->{decreasing};
   my $_v1 = shift;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
-  return $self->c($v2_values);
+  return Rstats::ArrayUtil::c($v2_values);
 }
 
 sub sum {
   my ($self, $_v1) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   my $sum = List::Util::sum(@$v1_values);
-  return $self->c($sum);
+  return Rstats::ArrayUtil::c($sum);
 }
 
 sub t {
   my $self = shift;
   
-  return Rstats::Array->t(@_);
+  return Rstats::ArrayUtil::t(@_);
 }
 
 sub tail {
@@ -1050,13 +967,13 @@ sub tail {
 sub tan {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::tan $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -1064,13 +981,13 @@ sub tan {
 sub tanh {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(Math::Trig::tanh $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -1080,13 +997,13 @@ sub TRUE { shift->c(Rstats::Util::TRUE()) }
 sub trunc {
   my ($self, $_a1) = @_;
   
-  my $a1 = Rstats::Array->to_array($_a1);
+  my $a1 = Rstats::ArrayUtil::to_array($_a1);
   
   my @a2_elements = map { Rstats::Util::double(int $_->value) } @{$a1->elements};
 
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
-  $a2->mode('double');
+  Rstats::ArrayUtil::mode($a2 => 'double');
   
   return $a2;
 }
@@ -1097,13 +1014,13 @@ sub var {
   my $var = $self->sum(($v1 - $self->mean($v1)) ** 2)->value
     / ($self->length($v1) - 1);
   
-  return $self->c($var);
+  return Rstats::ArrayUtil::c($var);
 }
 
 sub which {
   my ($self, $_v1, $cond_cb) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for (my $i = 0; $i < @$v1_values; $i++) {
@@ -1113,13 +1030,13 @@ sub which {
     }
   }
   
-  return $self->c(\@v2_values);
+  return Rstats::ArrayUtil::c(\@v2_values);
 }
 
 sub _order {
   my ($self, $asc, $_v1) = @_;
   
-  my $v1 = Rstats::Array->to_array($_v1);
+  my $v1 = Rstats::ArrayUtil::to_array($_v1);
   my $v1_values = $v1->values;
   
   my @pos_vals;
@@ -1129,7 +1046,7 @@ sub _order {
     : sort { $b->{val} <=> $a->{val} } @pos_vals;
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
-  return $self->c(\@orders);
+  return Rstats::ArrayUtil::c(\@orders);
 }
 
 1;

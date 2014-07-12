@@ -162,7 +162,7 @@ use Rstats;
     my $a1 = array(c(r->complex(1,2), r->complex(3,4)));
     my $a2 = array(c(1, 2));
     my $a3 = $a1 + $a2;
-    ok($a3->is_complex);
+    ok(r->is_complex($a3));
     is($a3->values->[0]->{re}, 2);
     is($a3->values->[0]->{im}, 2);
     is($a3->values->[1]->{re}, 5);
@@ -172,18 +172,18 @@ use Rstats;
   # numeric operator auto upgrade - numeric
   {
     my $a1 = array(c(1.1, 1.2));
-    my $a2 = array(c(1, 2))->as_integer;
+    my $a2 = r->as_integer(array(c(1, 2)));
     my $a3 = $a1 + $a2;
-    ok($a3->is_numeric);
+    ok(r->is_numeric($a3));
     is_deeply($a3->values, [2.1, 3.2])
   }
 
   # numeric operator auto upgrade - integer
   {
-    my $a1 = array(c(3, 5))->as_integer;
+    my $a1 = r->as_integer(array(c(3, 5)));
     my $a2 = array(c(r->TRUE, r->FALSE));
     my $a3 = $a1 + $a2;
-    ok($a3->is_integer);
+    ok(r->is_integer($a3));
     is_deeply($a3->values, [4, 5])
   }
     
@@ -368,13 +368,13 @@ use Rstats;
   # clone_without_elements - matrix
   {
     my $a1 = r->matrix(C('1:24'), 3, 2);
-    $a1->rownames(c('r1', 'r2', 'r3'));
-    $a1->colnames(c('c1', 'c2'));
+    r->rownames($a1 => c('r1', 'r2', 'r3'));
+    r->colnames($a1 => c('c1', 'c2'));
     my $a2 = $a1->clone_without_elements;
-    ok($a2->is_matrix->value);
-    is_deeply($a2->dim->values, [3, 2]);
-    is_deeply($a2->rownames->values, ['r1', 'r2', 'r3']);
-    is_deeply($a2->colnames->values, ['c1', 'c2']);
+    ok(r->is_matrix($a2));
+    is_deeply(r->dim($a2)->values, [3, 2]);
+    is_deeply(r->rownames($a2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($a2)->values, ['c1', 'c2']);
     is_deeply($a2->values, []);
   }
   
@@ -389,9 +389,9 @@ use Rstats;
   # clone_without_elements - vector
   {
     my $a1 = r->matrix(C('1:24'), 3, 2);
-    $a1->names(c('r1', 'r2', 'r3'));
+    r->names($a1 => c('r1', 'r2', 'r3'));
     my $a2 = $a1->clone_without_elements;
-    is_deeply($a2->names->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->names($a2)->values, ['r1', 'r2', 'r3']);
   }
 }
 
@@ -418,7 +418,7 @@ use Rstats;
   # value - two-dimention, as_vector
   {
     my $a1 = array(C('1:12'), c(4, 3));
-    is($a1->as_vector->value(5), 5);
+    is(r->as_vector($a1)->value(5), 5);
   }
   
   # value - three-dimention
@@ -474,7 +474,7 @@ EOS
   # to_string - 1-dimention, as_vector
   {
     my $a1 = array(C('1:4'));
-    my $a2 = $a1->as_vector;
+    my $a2 = r->as_vector($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -489,7 +489,7 @@ EOS
   # to_string - 1-dimention, as_matrix
   {
     my $a1 = array(C('1:4'));
-    my $a2 = $a1->as_matrix;
+    my $a2 = r->as_matrix($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -527,7 +527,7 @@ EOS
   # to_string - 2-dimention
   {
     my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = $a1->as_matrix;
+    my $a2 = r->as_matrix($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -546,7 +546,7 @@ EOS
   # to_string - 2-dimention, as_vector
   {
     my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = $a1->as_vector;
+    my $a2 = r->as_vector($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -561,7 +561,7 @@ EOS
   # to_string - 2-dimention, as_matrix
   {
     my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = $a1->as_matrix;
+    my $a2 = r->as_matrix($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -605,7 +605,7 @@ EOS
   # to_string - 3-dimention, as_vector
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a2 = $a1->as_vector;
+    my $a2 = r->as_vector($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
 
@@ -620,7 +620,7 @@ EOS
   # to_string - 3-dimention, as_matrix
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a2 = $a1->as_matrix;
+    my $a2 = r->as_matrix($a1);
     my $a2_str = "$a2";
     $a2_str =~ s/[ \t]+/ /;
     my $expected = <<'EOS';
@@ -865,23 +865,23 @@ EOS
   }
 }
 
-# _pos
+# pos
 {
   my $a1 = array(C('1:24'), c(4, 3, 2));
   my $dim = [4, 3, 2];
   
   {
-    my $value = $a1->_pos([4, 3, 2], $dim);
+    my $value = Rstats::ArrayUtil::pos([4, 3, 2], $dim);
     is($value, 24);
   }
   
   {
-    my $value = $a1->_pos([3, 3, 2], $dim);
+    my $value = Rstats::ArrayUtil::pos([3, 3, 2], $dim);
     is($value, 23);
   }
 }
 
-# _cross_product
+# cross_product
 {
   my $values = [
     ['a1', 'a2'],
@@ -890,7 +890,7 @@ EOS
   ];
   
   my $a1 = array(C('1:3'));
-  my $result = $a1->_cross_product($values);
+  my $result =  Rstats::ArrayUtil::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
     ['a2', 'b1', 'c1'],
@@ -911,7 +911,7 @@ EOS
     my $v1 = c(1);
     my $v2 = $v1->get(1);
     is_deeply($v2->values, [1]);
-    is_deeply($v2->dim->values, [1]);
+    is_deeply(r->dim($v2)->values, [1]);
   }
 
   # get - single index
@@ -975,7 +975,7 @@ EOS
   # get - as_logical
   {
     my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(0, 1, 0, 1, 1)->as_logical;
+    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
     my $v2 = $v1->get($logical_v);
     is_deeply($v2->values, [3, 7, Rstats::Util::NA]);
   }
@@ -983,12 +983,12 @@ EOS
   # get - as_vector
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));
-    is_deeply($a1->as_vector->get(5)->values, [5]);
+    is_deeply(r->as_vector($a1)->get(5)->values, [5]);
   }
 
   # get - as_matrix
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));
-    is_deeply($a1->as_vector->get(5, 1)->values, [5]);
+    is_deeply(r->as_vector($a1)->get(5, 1)->values, [5]);
   }
 }

@@ -17,7 +17,7 @@ require Rstats::Array;
 #   complete_cases
 
 my @methods = qw/
-  as_array,
+  as_array
   as_character
   as_complex
   as_integer

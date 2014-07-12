@@ -27,10 +27,26 @@ use overload
 
 has 'elements';
 
+sub bool {
+  my $self = shift;
+  
+  my $length = @{$self->elements};
+  if ($length == 0) {
+    croak 'Error in if (a) { : argument is of length zero';
+  }
+  elsif ($length > 1) {
+    carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
+  }
+  
+  my $element = $self->element;
+  
+  return Rstats::Util::bool($element);
+}
+
 sub element {
   my $array = shift;
   
-  my $dim_values = Rstats::ArrayUtil::_real_dim_values($array);
+  my $dim_values = Rstats::ArrayUtil::real_dim_values($array);
   
   if (@_) {
     if (@$dim_values == 1) {
@@ -49,13 +65,13 @@ sub element {
 }
 
 sub inner_product {
-  my ($data, $reverse) = @_;
+  my ($self, $data, $reverse) = @_;
   
   # fix postion
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
   # Upgrade mode if mode is different
-  ($a1, $a2) = $self->_upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
 
   return Rstats::ArrayUtil::inner_product($a1, $a2);
 }
@@ -65,7 +81,7 @@ sub to_string {
 
   my $elements = $self->elements;
   
-  my $dim_values = $self->_real_dim_values;
+  my $dim_values = Rstats::ArrayUtil::real_dim_values($self);
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
@@ -74,7 +90,7 @@ sub to_string {
   my $str;
   if (@$elements) {
     if ($dim_length == 1) {
-      my $names = $self->names->values;
+      my $names = Rstats::ArrayUtil::names($self)->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
@@ -260,10 +276,10 @@ sub get {
   
   if (ref $_indexs->[0] eq 'CODE') {
     my @elements2 = grep { $_indexs->[0]->() } @{$self->values};
-    return Rstats::Array::Util::c(\@elements2);
+    return Rstats::ArrayUtil::c(\@elements2);
   }
 
-  my ($positions, $a2_dim) = Rstas::ArrayUtil::parse_index($drop, @$_indexs);
+  my ($positions, $a2_dim) = Rstats::ArrayUtil::parse_index($self, $drop, @$_indexs);
   
   my @a2_elements = map { $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::Util::NA } @$positions;
   
@@ -285,7 +301,7 @@ sub set {
     $array = Rstats::ArrayUtil::to_array($_array);
   }
   
-  my ($positions, $a2_dim) = Rstas::ArrayUtil::parse_index(0, @$_indexs);
+  my ($positions, $a2_dim) = Rstats::ArrayUtil::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements;
   if ($code) {

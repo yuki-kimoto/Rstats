@@ -39,7 +39,7 @@ sub array {
   
   # Fix elements
   my $max_length = 1;
-  $max_length *= $_ for @{Rstats::ArrayUtil::_real_dim_values($array) || [scalar @$elements]};
+  $max_length *= $_ for @{Rstats::ArrayUtil::real_dim_values($array) || [scalar @$elements]};
   if (@$elements > $max_length) {
     @$elements = splice @$elements, 0, $max_length;
   }
@@ -360,7 +360,6 @@ sub length {
 }
 
 sub seq {
-  my $array = shift;
   
   # Option
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
@@ -548,7 +547,7 @@ sub c {
 }
 
 sub C {
-  my ($array, $seq_str) = @_;
+  my $seq_str = shift;
 
   my $by;
   my $mode;
@@ -569,7 +568,7 @@ sub C {
   return $vector;
 }
 
-sub _real_dim_values {
+sub real_dim_values {
   my $array = shift;
   
   my $dim = Rstats::ArrayUtil::dim($array);
@@ -854,7 +853,7 @@ sub as_logical {
 sub as_character {
   my $a1 = shift;
 
-  my $a1_elements = $1->elements;
+  my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
   my @a2_elements = map {
     Rstats::Util::character(Rstats::Util::to_string($_))
@@ -885,7 +884,7 @@ sub to_array {
 sub parse_index {
   my ($array, $drop, @_indexs) = @_;
   
-  my $a1_dim = Rstats::ArrayUtil::_real_dim_values($array);
+  my $a1_dim = Rstats::ArrayUtil::real_dim_values($array);
   my @indexs;
   my @a2_dim;
   
@@ -894,7 +893,7 @@ sub parse_index {
     
     my $index = Rstats::ArrayUtil::to_array($_index);
     my $index_values = $index->values;
-    if (@$index_values && !Rstats::ArrayUtil::is_character($index)->value && !Rstats::ArrayUtil::is_logical($index)->value) {
+    if (@$index_values && !Rstats::ArrayUtil::is_character($index) && !Rstats::ArrayUtil::is_logical($index)) {
       my $minus_count = 0;
       for my $index_value (@$index_values) {
         if ($index_value == 0) {
@@ -919,7 +918,7 @@ sub parse_index {
         for my $name (@{$index->values}) {
           my $i = 0;
           my $value;
-          for my $array_name (@{Rstats::Util::ArrayUtil::names($array)->values}) {
+          for my $array_name (@{Rstats::ArrayUtil::names($array)->values}) {
             if ($name eq $array_name) {
               $value = $array->values->[$i];
               last;
@@ -969,7 +968,7 @@ sub parse_index {
 }
 
 sub cross_product {
-  my ($array, $values) = @_;
+  my $values = shift;
 
   my @idxs = (0) x @$values;
   my @idx_idx = 0..(@idxs - 1);
@@ -1001,7 +1000,7 @@ sub cross_product {
 }
 
 sub pos {
-  my ($array, $ord, $dim) = @_;
+  my ($ord, $dim) = @_;
   
   my $pos = 0;
   for (my $d = 0; $d < @$dim; $d++) {
@@ -1062,7 +1061,7 @@ sub is_matrix {
 sub as_matrix {
   my $array = shift;
   
-  my $a1_dim_elements = Rstats::ArrayUtil::_real_dim_values($array);
+  my $a1_dim_elements = Rstats::ArrayUtil::real_dim_values($array);
   my $a1_dim_count = @$a1_dim_elements;
   my $a2_dim_elements = [];
   my $row;
@@ -1086,7 +1085,7 @@ sub as_array {
   my $array = shift;
   
   my $a1_elements = [@{$array->elements}];
-  my $a1_dim_elements = [@{Rstats::ArrayUtil::_real_dim_values($array)}];
+  my $a1_dim_elements = [@{Rstats::ArrayUtil::real_dim_values($array)}];
   
   return $array->array($a1_elements, $a1_dim_elements);
 }

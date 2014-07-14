@@ -70,11 +70,9 @@ sub equal { Rstats::ArrayUtil::operation('equal', @_)}
 sub not_equal { Rstats::ArrayUtil::operation('not_equal', @_)}
 
 sub abs {
-  my $_a1 = shift;
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
   
-  my $a1 = Rstats::ArrayUtil::to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(abs $_->value) } @{$a1->elements};
+  my @a2_elements = map { Rstats::Util::abs($_) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
@@ -1242,14 +1240,14 @@ sub names {
   if (@_) {
     my $_names = shift;
     my $names;
-    if (!defined $_names) {
+    if (ref $_names eq 'Rstats::Array') {
+      $names = $_names->elements;
+    }
+    elsif (!defined $_names) {
       $names = [];
     }
     elsif (ref $_names eq 'ARRAY') {
       $names = $_names;
-    }
-    elsif (ref $_names eq 'Rstats::Array') {
-      $names = $_names->elements;
     }
     else {
       $names = [$_names];
@@ -1275,14 +1273,14 @@ sub colnames {
   if (@_) {
     my $_colnames = shift;
     my $colnames;
-    if (!defined $_colnames) {
+    if (ref $_colnames eq 'Rstats::Array') {
+      $colnames = $_colnames->elements;
+    }
+    elsif (!defined $_colnames) {
       $colnames = [];
     }
     elsif (ref $_colnames eq 'ARRAY') {
       $colnames = $_colnames;
-    }
-    elsif (ref $_colnames eq 'Rstats::Array') {
-      $colnames = $_colnames->elements;
     }
     else {
       $colnames = [$_colnames];
@@ -1308,14 +1306,14 @@ sub rownames {
   if (@_) {
     my $_rownames = shift;
     my $rownames;
-    if (!defined $_rownames) {
+    if (ref $_rownames eq 'Rstats::Array') {
+      $rownames = $_rownames->elements;
+    }
+    elsif (!defined $_rownames) {
       $rownames = [];
     }
     elsif (ref $_rownames eq 'ARRAY') {
       $rownames = $_rownames;
-    }
-    elsif (ref $_rownames eq 'Rstats::Array') {
-      $rownames = $_rownames->elements;
     }
     else {
       $rownames = [$_rownames];

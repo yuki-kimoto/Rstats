@@ -47,12 +47,6 @@ sub is_finite {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
 
-sub is_character { ref $_[0] eq 'Rstats::Element::Character' }
-sub is_complex { ref $_[0] eq 'Rstats::Element::Complex' }
-sub is_double { ref $_[0] eq 'Rstats::Element::Double' }
-sub is_integer { ref $_[0] eq 'Rstats::Element::Integer' }
-sub is_logical { ref $_[0] eq 'Rstats::Element::Logical' }
-
 sub character { Rstats::Element::Character->new(value => shift) }
 sub complex {
   my ($re_value, $im_value) = @_;
@@ -893,17 +887,93 @@ sub conj {
   }
 }
 
+sub Re {
+  my $element = shift;
+  
+  if (is_complex($element)) {
+    return $element->{re};
+  }
+  else {
+    'Not implemented';
+  }
+}
+
+sub Im {
+  my $element = shift;
+  
+  if (is_complex($element)) {
+    return $element->{im};
+  }
+  else {
+    'Not implemented';
+  }
+}
+
 sub abs {
   my $element = shift;
   
   if (is_complex($element)) {
-    return double(
-      sqrt(Rstats::Util::value($element)->{re} ** 2 + Rstats::Util::value($element)->{im} ** 2)
-    );
+    return raise(add(raise(Re($element), double(2)), raise(Im($element), double(2))), double(1/2));
+  }
+  elsif (is_double($element) || is_integer($element)) {
+    my $type = typeof($element);
+    my $zero = Rstats::Util::create($type);
+    if (more_than($element, $zero)) {
+      return $element;
+    }
+    else {
+      return negation($element);
+    }
+  }
+  elsif (is_logical($element)) {
+    my $zero = Rstats::Util::create('logical');
+    if (more_than($element, $zero)) {
+      return logical_to_integer($element);
+    }
+    else {
+      return negation(logical_to_integer($element));
+    }
   }
   else {
-    croak 'Not implemented';
+    croak 'non-numeric argument to mathematical function';
   }
+}
+
+sub logical_to_integer {
+  my $element = shift;
+  
+  if (is_logical($element)) {
+    return integer($element->value);
+  }
+  else {
+    return $element;
+  }
+}
+
+sub typeof {
+  my $element = shift;
+  
+  my $type
+    = ref $element eq 'Rstats::Element::Character' ? 'character'
+    : ref $element eq 'Rstats::Element::Complex' ? 'complex'
+    : ref $element eq 'Rstats::Element::Double' ? 'double'
+    : ref $element eq 'Rstats::Element::Integer' ? 'integer'
+    : ref $element eq 'Rstats::Element::Logical' ? 'logical'
+    : undef;
+  
+  return $type;
+}
+
+sub is_character { (typeof($_[0]) || '') eq 'character' }
+sub is_complex { (typeof($_[0]) || '') eq 'complex' }
+sub is_double { (typeof($_[0]) || '') eq 'double' }
+sub is_integer { (typeof($_[0]) || '') eq 'integer' }
+sub is_logical { (typeof($_[0]) || '') eq 'logical' }
+
+sub sqrt {
+  my $element = shift;
+  
+  return raise($element, 1/2);
 }
 
 sub more_than {

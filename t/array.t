@@ -13,7 +13,8 @@ use Rstats;
 
   # comparison operator numeric - <
   {
-    my $a1 = array(c(1,2,3));
+    my $v1 = c(1, 2, 3);
+    my $a1 = array($v1);
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 < $a2;
     is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);

@@ -63,6 +63,19 @@ Rstats - R language build on Perl
   
   # all methods is called from r
   my $a1 = r->sum(c(1, 2, 3));
+  
+  # Register function
+  r->function(my_sum => sub {
+    my ($self, $a1) = @_;
+    
+    my $total = 0;
+    for my $value ($a1->values) {
+      $total += $value;
+    }
+    
+    return c($total);
+  });
+  my $a2 = r->my_sum(c(1, 2, 3));
 
 =head1 Corresponding to R
 

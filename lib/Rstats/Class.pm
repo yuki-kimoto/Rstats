@@ -114,13 +114,19 @@ my @methods = qw/
   which
 /;
 
-for my $method (@methods) {
-  my $function = "Rstats::ArrayUtil::$method";
-  my $code = "sub { shift; $function(\@_) }";
+sub new {
+  my $self = shift->SUPER::new(@_);
+  
+  for my $method (@methods) {
+    my $function = "Rstats::ArrayUtil::$method";
+    my $code = "sub { $function(\@_) }";
 
-  no strict 'refs';
-  *{"Rstats::Class::$method"} = eval $code;
-  croak $@ if $@;
+    no strict 'refs';
+    $self->function($method => eval $code);
+    croak $@ if $@;
+  }
+
+  return $self;
 }
 
 sub runif {
@@ -138,6 +144,33 @@ sub set_seed {
   my ($self, $seed) = @_;
   
   $self->{seed} = $seed;
+}
+
+has functions => sub { {} };
+
+sub AUTOLOAD {
+  my $self = shift;
+
+  my ($package, $method) = split /::(\w+)$/, our $AUTOLOAD;
+  Carp::croak "Undefined subroutine &${package}::$method called"
+    unless Scalar::Util::blessed $self && $self->isa(__PACKAGE__);
+
+  # Call helper with current controller
+  Carp::croak qq{Can't locate object method "$method" via package "$package"}
+    unless my $function = $self->functions->{$method};
+  return $function->(@_);
+}
+
+sub DESTROY { }
+
+sub function {
+  my $self = shift;
+  
+  # Merge
+  my $functions = ref $_[0] eq 'HASH' ? $_[0] : {@_};
+  $self->functions({%{$self->functions}, %$functions});
+  
+  return $self;
 }
 
 1;

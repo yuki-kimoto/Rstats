@@ -637,6 +637,7 @@ use Rstats::Array;
   
   # sort
   {
+    # sort - acending
     {
       my $v1 = c(2, 1, 5);
       my $v1_sorted = r->sort($v1);
@@ -648,6 +649,13 @@ use Rstats::Array;
       my $v1 = c(2, 1, 5);
       my $v1_sorted = r->sort($v1, {decreasing => 1});
       is_deeply($v1_sorted->values, [5, 2, 1]);
+    }
+    
+    # sort - contain NA or NaN
+    {
+      my $v1 = c(2, 1, 5, NA, NaN);
+      my $v1_sorted = r->sort($v1);
+      is_deeply($v1_sorted->values, [1, 2, 5]);
     }
   }
 }

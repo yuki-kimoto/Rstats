@@ -6,6 +6,22 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# median
+{
+  # median - odd number
+  {
+    my $v1 = c(2, 3, 3, 4, 5, 1);
+    my $v2 = r->median($v1);
+    is_deeply($v2->values, [3]);
+  }
+  # median - even number
+  {
+    my $v1 = c(2, 3, 3, 4, 5, 1, 6);
+    my $v2 = r->median($v1);
+    is_deeply($v2->values, [3.5]);
+  }
+}
+
 # unique
 {
   # uniqeu - numeric

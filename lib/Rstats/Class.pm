@@ -67,6 +67,7 @@ my @methods = qw/
   logb
   log2
   log10
+  median
   mode
   NA
   names

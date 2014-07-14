@@ -906,13 +906,16 @@ sub sqrt {
 sub sort {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
   my $decreasing = $opt->{decreasing};
-  my $_v1 = shift;
   
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my $v1_values = $v1->values;
-  my $v2_values = $decreasing ? [reverse sort(@$v1_values)] : [sort(@$v1_values)];
-  return Rstats::ArrayUtil::c($v2_values);
+  my @a2_elements = grep { !Rstats::Util::is_na($_) && !Rstats::Util::is_nan($_) } @{$a1->elements};
+  
+  my $a3_elements = $decreasing
+    ? [reverse sort { Rstats::Util::more_than($a, $b) ? 1 : Rstats::Util::equal($a, $b) ? 0 : -1 } @a2_elements]
+    : [sort { Rstats::Util::more_than($a, $b) ? 1 : Rstats::Util::equal($a, $b) ? 0 : -1 } @a2_elements];
+
+  return Rstats::ArrayUtil::c($a3_elements);
 }
 
 sub tail {
@@ -1007,9 +1010,28 @@ sub unique {
   }
 }
 
+sub median {
+  my $a1 = to_array(shift);
+  
+  my $a2 = unique($a1);
+  my $a3 = Rstats::ArrayUtil::sort($a2);
+  my $a3_length = @{$a3->elements};
+  
+  if ($a3_length % 2 == 0) {
+    my $middle = $a3_length / 2;
+    my $a4 = $a3->get($middle);
+    my $a5 = $a3->get($middle + 1);
+    
+    return ($a4 + $a5) / 2;
+  }
+  else {
+    my $middle = int($a3_length / 2) + 1;
+    return $a3->get($middle);
+  }
+}
 
 sub var {
-  my $a1 = shift;
+  my $a1 = to_array(shift);
 
   my $var = sum(($a1 - Rstats::ArrayUtil::mean($a1)) ** 2) / (@{$a1->elements} - 1);
   

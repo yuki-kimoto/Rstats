@@ -1009,12 +1009,11 @@ sub unique {
 
 
 sub var {
-  my $v1 = shift;
+  my $a1 = shift;
 
-  my $var = Rstats::ArrayUtil::sum(($v1 - Rstats::ArrayUtil::mean($v1)) ** 2)->value
-    / (@{$v1->elements} - 1);
+  my $var = sum(($a1 - Rstats::ArrayUtil::mean($a1)) ** 2) / (@{$a1->elements} - 1);
   
-  return Rstats::ArrayUtil::c($var);
+  return $var;
 }
 
 sub which {

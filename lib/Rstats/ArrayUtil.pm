@@ -17,6 +17,9 @@ sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 sub operation {
   my ($op, $a1, $a2) = @_;
   
+  $a1 = Rstats::ArrayUtil::to_array($a1);
+  $a2 = Rstats::ArrayUtil::to_array($a2);
+  
   # Upgrade mode if mode is different
   ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
   
@@ -575,7 +578,7 @@ sub max {
 sub mean {
   my $a1 = Rstats::ArrayUtil::to_array(shift);
   
-  my $a2 = Rstats::ArrayUtil::sum($a1) / @{$a1->elements};
+  my $a2 = Rstats::ArrayUtil::divide(Rstats::ArrayUtil::sum($a1), scalar @{$a1->elements});
   
   return $a2;
 }

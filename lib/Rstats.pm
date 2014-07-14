@@ -98,7 +98,7 @@ Rstats - R language build on Perl
   
   # NULL
   NULL
-
+  
   # names
     # names(a1)
     r->names($a1)
@@ -116,26 +116,74 @@ Rstats - R language build on Perl
     # matrix(1:12, 4, 3, byrow=TRUE)
     matrix(C('1:12'), 4, 3, {byrow => 1});
   
-  # a1 + a2
-  $a1 + $a2
+  # operation
+    # a1 + a2
+    $a1 + $a2
+    
+    # a1 - a2
+    $a1 - $a2
+    
+    # a1 * a2
+    $a1 * $a2
+    
+    # a1 / a2
+    $a1 / $a2
+    
+    # a1 ^ a2 (power)
+    $a1 ** $a2
+    
+    # a1 %% a2 (remainder)
+    $a1 % $a2
+
+    # a1 %*% a2 (vector inner product or matrix product)
+    $a1 x $a2
+    
+    # a1 %/% a2 (integer quotient)
+    r->tranc($a1 / $a2)
   
-  # a1 - a2
-  $a1 - $a2
+  # get
+    # a1[1]
+    $a1->get(1)
+
+    # a1[1, 2]
+    $a1->get(1, 2)
+    
+    # a1[c(1,2), c(3,4)]
+    $a1->get(c(1,2), c(3,4))
+    
+    # a1[,2]
+    $a1->get(NULL, 2)
+    
+    # a1[-1]
+    $a1->get(-1)
+    
+    # a1[TRUE, FALSE]
+    $a1->get(TRUE, FALSE)
+    
+    # a1[c("id", "title")]
+    $a1->get(c("id", "title"))
   
-  # a1 * a2
-  $a1 * $a2
-  
-  # a1 / a2
-  $a1 / $a2
-  
-  # a1 ^ a2 (power)
-  $a1 ** $a2
-  
-  # a1 %% a2 (remainder)
-  $a1 % $a2
-  
-  # a1 %/% a2 (integer quotient)
-  r->tranc($a1 / $a2)
+  # set
+    # a1[1] <- a2
+    $a1->at(1)->set($a2)
+
+    # a1[1, 2] <- a2
+    $a1->at(1, 2)->set($a2)
+    
+    # a1[c(1,2), c(3,4)] <- a2
+    $a1->at(c(1,2), c(3,4))->set($a2)
+    
+    # a1[,2] <- a2
+    $a1->at(NULL, 2)->set($a2)
+    
+    # a1[-1] <- a2
+    $a1->at(-1)->set($a2)
+    
+    # a1[TRUE, FALSE] <- a2
+    $a1->at(TRUE, FALSE)->set($a2);
+    
+    # a1[c("id", "title")] <- a2
+    $a1->at(c("id", "title"))->set($a2);
 
   # as.matrix(a1)
   r->as_matrix($a1)

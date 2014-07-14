@@ -3,6 +3,7 @@ use Object::Simple -base;
 
 use Carp 'croak', 'carp';
 use Rstats::ArrayUtil;
+use Rstats::Util;
 
 our @CARP_NOT = ('Rstats');
 

@@ -66,11 +66,11 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-sub create {
+sub create_zero {
   my $type = shift;
   
   if ($type eq 'character') {
-    return character("");
+    return character("0");
   }
   elsif ($type eq 'complex') {
     return complex(0, 0);
@@ -83,6 +83,29 @@ sub create {
   }
   elsif ($type eq 'logical') {
     return logical(Rstats::Util::FALSE);
+  }
+  else {
+    croak 'Invalid type';
+  }
+}
+
+sub create_one {
+  my $type = shift;
+  
+  if ($type eq 'character') {
+    return character("1");
+  }
+  elsif ($type eq 'complex') {
+    return complex(1, 0);
+  }
+  elsif ($type eq 'double') {
+    return double(1);
+  }
+  elsif ($type eq 'integer') {
+    return integer(1);
+  }
+  elsif ($type eq 'logical') {
+    return logical(Rstats::Util::TRUE);
   }
   else {
     croak 'Invalid type';
@@ -917,7 +940,7 @@ sub abs {
   }
   elsif (is_double($element) || is_integer($element)) {
     my $type = typeof($element);
-    my $zero = Rstats::Util::create($type);
+    my $zero = Rstats::Util::create_zero($type);
     if (more_than($element, $zero)) {
       return $element;
     }
@@ -926,7 +949,7 @@ sub abs {
     }
   }
   elsif (is_logical($element)) {
-    my $zero = Rstats::Util::create('logical');
+    my $zero = Rstats::Util::create_zero('logical');
     if (more_than($element, $zero)) {
       return logical_to_integer($element);
     }

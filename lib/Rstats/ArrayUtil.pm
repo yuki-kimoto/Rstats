@@ -678,10 +678,14 @@ sub pmin {
 }
 
 sub prod {
-  my $v1 = shift;
+  my $a1 = Rstats::ArrayUtil::c(@_);
   
-  my $v1_values = $v1->values;
-  my $prod = List::Util::product(@$v1_values);
+  my $type = $a1->{type};
+  my $prod = Rstats::Util::create_one($type);
+  for my $element (@{$a1->elements}) {
+    $prod = Rstats::Util::multiply($prod, $element);
+  }
+
   return Rstats::ArrayUtil::c($prod);
 }
 
@@ -1259,7 +1263,7 @@ sub sum {
   my $a1 = Rstats::ArrayUtil::to_array(shift);
   
   my $type = $a1->{type};
-  my $sum = Rstats::Util::create($type);
+  my $sum = Rstats::Util::create_zero($type);
   $sum = Rstats::Util::add($sum, $_) for @{$a1->elements};
   
   return Rstats::ArrayUtil::c($sum);

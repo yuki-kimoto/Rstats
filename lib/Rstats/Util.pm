@@ -72,6 +72,29 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub create {
+  my $type = shift;
+  
+  if ($type eq 'character') {
+    return character("");
+  }
+  elsif ($type eq 'complex') {
+    return complex(0, 0);
+  }
+  elsif ($type eq 'double') {
+    return double(0);
+  }
+  elsif ($type eq 'integer') {
+    return integer(0);
+  }
+  elsif ($type eq 'logical') {
+    return logical(Rstats::Util::FALSE);
+  }
+  else {
+    croak 'Invalid type';
+  }
+}
+
 sub looks_like_number {
   my $value = shift;
   

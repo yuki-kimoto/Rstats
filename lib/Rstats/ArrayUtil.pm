@@ -1147,11 +1147,12 @@ sub row {
 }
 
 sub sum {
-  my $_v1 = shift;
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
   
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my $v1_values = $v1->values;
-  my $sum = List::Util::sum(@$v1_values);
+  my $type = $a1->{type};
+  my $sum = Rstats::Util::create($type);
+  $sum = Rstats::Util::add($sum, $_) for @{$a1->elements};
+  
   return Rstats::ArrayUtil::c($sum);
 }
 

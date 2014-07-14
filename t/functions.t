@@ -6,6 +6,42 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# max
+{
+  # max
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = r->max($v1);
+    is_deeply($v2->values, [3]);
+  }
+
+  # max - multiple arrays
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = c(4, 5, 6);
+    my $v3 = r->max($v1, $v2);
+    is_deeply($v3->values, [6]);
+  }
+  
+  # max - no argument
+  {
+    my $v1 = r->max(NULL);
+    is_deeply($v1->values, [Rstats::Util::negativeInf]);
+  }
+  
+  # max - contain NA
+  {
+    my $v1 = r->max(c(1, 2, NaN, NA));
+    is_deeply($v1->values, [Rstats::Util::NA]);
+  }
+  
+  # max - contain NaN
+  {
+    my $v1 = r->max(c(1, 2, NaN));
+    is_deeply($v1->values, [Rstats::Util::NaN]);
+  }
+}
+
 # median
 {
   # median - odd number

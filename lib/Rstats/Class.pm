@@ -8,6 +8,7 @@ require Rstats::ArrayUtil;
 #   gamma
 #   lgamma
 #   complete_cases
+#   cor
 
 my @methods = qw/
   abs

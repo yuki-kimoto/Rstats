@@ -14,6 +14,10 @@ my %types_h = map { $_ => 1 } qw/character complex numeric double integer logica
 
 sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 
+sub NA { Rstats::ArrayUtil::c(Rstats::Util::NA) }
+
+sub NaN { Rstats::ArrayUtil::c(Rstats::Util::NaN) }
+
 sub operation {
   my ($op, $a1, $a2) = @_;
   
@@ -451,7 +455,9 @@ sub ifelse {
   return Rstats::ArrayUtil::array(\@v2_values);
 }
 
-sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf()) }
+sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
+
+sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
 sub is_finite {
   my $_a1 = shift;
@@ -566,11 +572,28 @@ sub log10 {
 }
 
 sub max {
-  my @vs = @_;
+  my $a1 = Rstats::ArrayUtil::c(@_);
   
-  my @all_values = map { @{$_->values} } @vs;
-  my $max = List::Util::max(@all_values);
-  return $max;
+  unless (@{$a1->elements}) {
+    carp 'no non-missing arguments to max; returning -Inf';
+    return -Inf();
+  }
+  
+  my $max = shift @{$a1->elements};
+  for my $element (@{$a1->elements}) {
+    
+    if (Rstats::Util::is_na($element)) {
+      return NA;
+    }
+    elsif (Rstats::Util::is_nan($element)) {
+      $max = $element;
+    }
+    if (Rstats::Util::more_than($element, $max) && !Rstats::Util::is_nan($max)) {
+      $max = $element;
+    }
+  }
+  
+  return c($max);
 }
 
 sub mean {
@@ -1166,10 +1189,6 @@ sub mode {
     return Rstats::ArrayUtil::c($mode);
   }
 }
-
-sub NA { Rstats::ArrayUtil::c(Rstats::Util::NA()) }
-
-sub NaN { Rstats::ArrayUtil::c(Rstats::Util::NaN()) }
 
 sub inner_product {
   my ($a1, $a2) = @_;

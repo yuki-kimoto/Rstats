@@ -547,21 +547,6 @@ use Rstats::Array;
     is_deeply($v1->values, [0, 0, 0]);
   }
 
-  # max
-  {
-    my $v = c(1, 2, 3);
-    my $max = r->max($v);
-    is($max, 3);
-  }
-  
-  # max - multiple vectors
-  {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c(4, 5, 6);
-    my $max = r->max($v1, $v2);
-    is($max, 6);
-  }
-  
   # min
   {
     my $v = c(1, 2, 3);

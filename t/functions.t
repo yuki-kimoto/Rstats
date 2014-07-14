@@ -6,6 +6,14 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# unique
+{
+  # uniqeu - numeric
+  my $v1 = c(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
+  my $v2 = r->unique($v1);
+  is_deeply($v2->values, [1, 2, 3, Rstats::Util::NA, Rstats::Util::Inf]);
+}
+
 # NA
 {
   my $na = NA;

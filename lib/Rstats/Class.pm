@@ -110,6 +110,7 @@ my @methods = qw/
   typeof
   TRUE
   trunc
+  unique
   var
   which
 /;

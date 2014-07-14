@@ -925,8 +925,39 @@ sub trunc {
   return $a2;
 }
 
+sub unique {
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
+  
+  if (Rstats::ArrayUtil::is_vector($a1)) {
+    my $a2_elements = [];
+    my $elements_count = {};
+    my $na_count;
+    for my $a1_element (@{$a1->elements}) {
+      if (Rstats::Util::is_na($a1_element)) {
+        unless ($na_count) {
+          push @$a2_elements, $a1_element;
+        }
+        $na_count++;
+      }
+      else {
+        my $str = Rstats::Util::to_string($a1_element);
+        unless ($elements_count->{$str}) {
+          push @$a2_elements, $a1_element;
+        }
+        $elements_count->{$str}++;
+      }
+    }
+
+    return Rstats::ArrayUtil::c($a2_elements);
+  }
+  else {
+    return $a1;
+  }
+}
+
+
 sub var {
-  my ($v1) = @_;
+  my $v1 = shift;
 
   my $var = Rstats::ArrayUtil::sum(($v1 - Rstats::ArrayUtil::mean($v1)) ** 2)->value
     / (@{$v1->elements} - 1);

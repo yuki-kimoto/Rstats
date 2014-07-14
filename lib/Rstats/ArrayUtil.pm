@@ -576,7 +576,7 @@ sub max {
   
   unless (@{$a1->elements}) {
     carp 'no non-missing arguments to max; returning -Inf';
-    return -Inf();
+    return negativeInf;
   }
   
   my $max = shift @{$a1->elements};
@@ -605,11 +605,28 @@ sub mean {
 }
 
 sub min {
-  my @vs = @_;
+  my $a1 = Rstats::ArrayUtil::c(@_);
   
-  my @all_values = map { @{$_->values} } @vs;
-  my $min = List::Util::min(@all_values);
-  return $min;
+  unless (@{$a1->elements}) {
+    carp 'no non-missing arguments to min; returning -Inf';
+    return Inf;
+  }
+  
+  my $min = shift @{$a1->elements};
+  for my $element (@{$a1->elements}) {
+    
+    if (Rstats::Util::is_na($element)) {
+      return NA;
+    }
+    elsif (Rstats::Util::is_nan($element)) {
+      $min = $element;
+    }
+    if (Rstats::Util::less_than($element, $min) && !Rstats::Util::is_nan($min)) {
+      $min = $element;
+    }
+  }
+  
+  return c($min);
 }
 
 sub order { Rstats::ArrayUtil::_order(1, @_) }

@@ -547,13 +547,6 @@ use Rstats::Array;
     is_deeply($v1->values, [0, 0, 0]);
   }
 
-  # min
-  {
-    my $v = c(1, 2, 3);
-    my $min = r->min($v);
-    is($min, 1);
-  }
-  
   # pmax
   {
     my $v1 = c(1, 6, 3, 8);
@@ -562,14 +555,6 @@ use Rstats::Array;
     is_deeply($pmax->values, [5, 6, 7, 8]);
   }
 
-  # min - multiple vectors
-  {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c(4, 5, 6);
-    my $min = r->min($v1, $v2);
-    is($min, 1);
-  }
-  
   # pmin
   {
     my $v1 = c(1, 6, 3, 8);

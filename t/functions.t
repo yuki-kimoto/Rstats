@@ -6,6 +6,42 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# min
+{
+  # min
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = r->min($v1);
+    is_deeply($v2->values, [1]);
+  }
+
+  # min - multiple arrays
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = c(4, 5, 6);
+    my $v3 = r->min($v1, $v2);
+    is_deeply($v3->values, [1]);
+  }
+  
+  # min - no argument
+  {
+    my $v1 = r->min(NULL);
+    is_deeply($v1->values, [Rstats::Util::Inf]);
+  }
+  
+  # min - contain NA
+  {
+    my $v1 = r->min(c(1, 2, NaN, NA));
+    is_deeply($v1->values, [Rstats::Util::NA]);
+  }
+  
+  # min - contain NaN
+  {
+    my $v1 = r->min(c(1, 2, NaN));
+    is_deeply($v1->values, [Rstats::Util::NaN]);
+  }
+}
+
 # max
 {
   # max

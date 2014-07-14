@@ -521,12 +521,11 @@ sub max {
 }
 
 sub mean {
-  my $data = shift;
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
   
-  my $v1 = $data;
-  my $mean = Rstats::ArrayUtil::sum($v1)->value / @{$v1->elements};
+  my $a2 = Rstats::ArrayUtil::sum($a1) / @{$a1->elements};
   
-  return Rstats::ArrayUtil::c($mean);
+  return $a2;
 }
 
 sub min {

@@ -14,6 +14,58 @@ my %types_h = map { $_ => 1 } qw/character complex numeric double integer logica
 
 sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 
+sub operation {
+  my ($op, $a1, $a2) = @_;
+  
+  # Upgrade mode if mode is different
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  
+  # Calculate
+  my $a1_length = @{$a1->elements};
+  my $a2_length = @{$a2->elements};
+  my $longer_length = $a1_length > $a2_length ? $a1_length : $a2_length;
+  
+  no strict 'refs';
+  my $operation = "Rstats::Util::$op";
+  my @a3_elements = map {
+    &$operation($a1->elements->[$_ % $a1_length], $a2->elements->[$_ % $a2_length])
+  } (0 .. $longer_length - 1);
+  
+  my $a3 = Rstats::ArrayUtil::array(\@a3_elements);
+  if ($op eq '/') {
+    $a3->{type} = 'double';
+  }
+  else {
+    $a3->{type} = $a1->{type};
+  }
+  
+  return $a3;
+}
+
+sub add { Rstats::ArrayUtil::operation('add', @_) }
+
+sub subtract { Rstats::ArrayUtil::operation('subtract', @_)}
+
+sub multiply { Rstats::ArrayUtil::operation('multiply', @_)}
+
+sub divide { Rstats::ArrayUtil::operation('divide', @_)}
+
+sub raise { Rstats::ArrayUtil::operation('raise', @_)}
+
+sub remainder { Rstats::ArrayUtil::operation('remainder', @_)}
+
+sub more_than { Rstats::ArrayUtil::operation('more_than', @_)}
+
+sub more_than_or_equal { Rstats::ArrayUtil::operation('more_than_or_equal', @_)}
+
+sub less_than { Rstats::ArrayUtil::operation('less_than', @_)}
+
+sub less_than_or_equal { Rstats::ArrayUtil::operation('less_than_or_equal', @_)}
+
+sub equal { Rstats::ArrayUtil::operation('equal', @_)}
+
+sub not_equal { Rstats::ArrayUtil::operation('not_equal', @_)}
+
 sub abs {
   my $_a1 = shift;
   

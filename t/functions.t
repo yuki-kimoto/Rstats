@@ -8,11 +8,18 @@ use Math::Trig ();
 
 # sqrt
 {
-  # sqrt
+  # sqrt - numeric
   {
     my $e1 = c(4, 9);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->values, [2, 3]);
+  }
+
+  # sqrt - complex
+  {
+    my $e1 = c(-1 + 0*i);
+    my $e2 = r->sqrt($e1);
+    is_deeply($e2->value, {re => 0, im => 1});
   }
 }
 # min

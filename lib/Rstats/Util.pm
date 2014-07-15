@@ -222,22 +222,22 @@ sub to_string {
 }
 
 sub negation {
-  my $element1 = shift;
+  my $e1 = shift;
   
-  if (is_na($element1)) {
+  if (is_na($e1)) {
     return NA;
   }
-  elsif (is_character($element1)) {
+  elsif (is_character($e1)) {
     croak 'argument is not interpretable as logical'
   }
-  elsif (is_complex($element1)) {
-    return complex_double(negation($element1->re), negation($element1->im));
+  elsif (is_complex($e1)) {
+    return complex_double(negation($e1->re), negation($e1->im));
   }
-  elsif (is_double($element1)) {
+  elsif (is_double($e1)) {
     
-    my $flag = $element1->flag;
-    if (defined $element1->value) {
-      return double(-$element1->value);
+    my $flag = $e1->flag;
+    if (defined $e1->value) {
+      return double(-$e1->value);
     }
     elsif ($flag eq 'nan') {
       return NaN;
@@ -249,8 +249,8 @@ sub negation {
       return Inf;
     }
   }
-  elsif (is_integer($element1) || is_logical($element1)) {
-    return integer(-$element1->value);
+  elsif (is_integer($e1) || is_logical($e1)) {
+    return integer(-$e1->value);
   }
   else {
     croak "Invalid type";
@@ -258,21 +258,21 @@ sub negation {
 }
 
 sub bool {
-  my $element1 = shift;
+  my $e1 = shift;
   
-  if (is_na($element1)) {
+  if (is_na($e1)) {
     croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
   }
-  elsif (is_character($element1) || is_complex($element1)) {
+  elsif (is_character($e1) || is_complex($e1)) {
     croak 'Error in -a : invalid argument to unary operator ';
   }
-  elsif (is_double($element1)) {
+  elsif (is_double($e1)) {
 
-    if (defined $element1->value) {
-      return $element1->value;
+    if (defined $e1->value) {
+      return $e1->value;
     }
     else {
-      if (is_infinite($element1)) {
+      if (is_infinite($e1)) {
         1;
       }
       # NaN
@@ -281,8 +281,8 @@ sub bool {
       }
     }
   }
-  elsif (is_integer($element1) || is_logical($element1)) {
-    return $element1->value;
+  elsif (is_integer($e1) || is_logical($e1)) {
+    return $e1->value;
   }
   else {
     croak "Invalid type";
@@ -290,60 +290,60 @@ sub bool {
 }
 
 sub add {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
-    my $re = add($element1->{re}, $element2->{re});
-    my $im = add($element1->{im}, $element2->{im});
+  elsif (is_complex($e1)) {
+    my $re = add($e1->{re}, $e2->{re});
+    my $im = add($e1->{im}, $e2->{im});
     
     return complex($re->value, $im->value);
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return double($element1->value + $element2->value);
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return double($e1->value + $e2->value);
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return Inf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return negativeInf;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return Inf;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return Inf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return NaN;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return negativeInf;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return NaN;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return negativeInf;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return integer($element1->value + $element2->value);
+  elsif (is_integer($e1)) {
+    return integer($e1->value + $e2->value);
   }
-  elsif (is_logical($element1)) {
-    return integer($element1->value + $element2->value);
+  elsif (is_logical($e1)) {
+    return integer($e1->value + $e2->value);
   }
   else {
     croak "Invalid type";
@@ -351,60 +351,60 @@ sub add {
 }
 
 sub subtract {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
-    my $re = subtract($element1->{re}, $element2->{re});
-    my $im = subtract($element1->{im}, $element2->{im});
+  elsif (is_complex($e1)) {
+    my $re = subtract($e1->{re}, $e2->{re});
+    my $im = subtract($e1->{im}, $e2->{im});
     
     return complex_double($re, $im);
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return double($element1->value - $element2->value);
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return double($e1->value - $e2->value);
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return negativeInf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return Inf;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return Inf;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return NaN;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return Inf;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return negativeInf;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return negativeInf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return NaN;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return integer($element1->value + $element2->value);
+  elsif (is_integer($e1)) {
+    return integer($e1->value + $e2->value);
   }
-  elsif (is_logical($element1)) {
-    return integer($element1->value + $element2->value);
+  elsif (is_logical($e1)) {
+    return integer($e1->value + $e2->value);
   }
   else {
     croak "Invalid type";
@@ -412,92 +412,92 @@ sub subtract {
 }
 
 sub multiply {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
-    my $re = double($element1->re->value * $element2->re->value - $element1->im->value * $element2->im->value);
-    my $im = double($element1->re->value * $element2->im->value + $element1->im->value * $element2->re->value);
+  elsif (is_complex($e1)) {
+    my $re = double($e1->re->value * $e2->re->value - $e1->im->value * $e2->im->value);
+    my $im = double($e1->re->value * $e2->im->value + $e1->im->value * $e2->re->value);
     
     return complex_double($re, $im);
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return double($element1->value * $element2->value);
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return double($e1->value * $e2->value);
       }
-      elsif (is_positive_infinite($element2)) {
-        if ($element1->value == 0) {
+      elsif (is_positive_infinite($e2)) {
+        if ($e1->value == 0) {
           return NaN;
         }
-        elsif ($element1->value > 0) {
+        elsif ($e1->value > 0) {
           return Inf;
         }
-        elsif ($element1->value < 0) {
+        elsif ($e1->value < 0) {
           return negativeInf;
         }
       }
-      elsif (is_negative_infinite($element2)) {
-        if ($element1->value == 0) {
+      elsif (is_negative_infinite($e2)) {
+        if ($e1->value == 0) {
           return NaN;
         }
-        elsif ($element1->value > 0) {
+        elsif ($e1->value > 0) {
           return negativeInf;
         }
-        elsif ($element1->value < 0) {
+        elsif ($e1->value < 0) {
           return Inf;
         }
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value == 0) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value == 0) {
           return NaN;
         }
-        elsif ($element2->value > 0) {
+        elsif ($e2->value > 0) {
           return Inf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return negativeInf;
         }
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return Inf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return negativeInf;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value == 0) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value == 0) {
           return NaN;
         }
-        elsif ($element2->value > 0) {
+        elsif ($e2->value > 0) {
           return negativeInf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return Inf;
         }
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return negativeInf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return Inf;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return integer($element1->value * $element2->value);
+  elsif (is_integer($e1)) {
+    return integer($e1->value * $e2->value);
   }
-  elsif (is_logical($element1)) {
-    return integer($element1->value * $element2->value);
+  elsif (is_logical($e1)) {
+    return integer($e1->value * $e2->value);
   }
   else {
     croak "Invalid type";
@@ -505,131 +505,131 @@ sub multiply {
 }
 
 sub divide {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
-    my $v3 = multiply($element1, conj($element2));
-    my $abs2 = double(value($element2->re) ** 2 + value($element2->im) ** 2);
+  elsif (is_complex($e1)) {
+    my $v3 = multiply($e1, conj($e2));
+    my $abs2 = double(value($e2->re) ** 2 + value($e2->im) ** 2);
     my $re = divide($v3->re, $abs2);
     my $im = divide($v3->im, $abs2);
     
     return complex_double($re, $im);
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if ($element1->value == 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if ($e1->value == 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return NaN;
           }
           else {
             return double(0)
           }
         }
-        elsif (is_infinite($element2)) {
+        elsif (is_infinite($e2)) {
           return double(0);
         }
       }
-      elsif ($element1->value > 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+      elsif ($e1->value > 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return Inf;
           }
           else {
-            return double($element1->value / $element2->value);
+            return double($e1->value / $e2->value);
           }
         }
-        elsif (is_infinite($element2)) {
+        elsif (is_infinite($e2)) {
           return double(0);
         }
       }
-      elsif ($element1->value < 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+      elsif ($e1->value < 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return negativeInf;
           }
           else {
-            return double($element1->value / $element2->value);
+            return double($e1->value / $e2->value);
           }
         }
-        elsif (is_infinite($element2)) {
+        elsif (is_infinite($e2)) {
           return double(0);
         }
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value >= 0) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value >= 0) {
           return Inf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return negativeInf;
         }
       }
-      elsif (is_infinite($element2)) {
+      elsif (is_infinite($e2)) {
         return NaN;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value >= 0) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value >= 0) {
           return negativeInf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return Inf;
         }
       }
-      elsif (is_infinite($element2)) {
+      elsif (is_infinite($e2)) {
         return NaN;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    if ($element1->value == 0) {
-      if ($element2->value == 0) {
+  elsif (is_integer($e1)) {
+    if ($e1->value == 0) {
+      if ($e2->value == 0) {
         return NaN;
       }
       else {
         return double(0);
       }
     }
-    elsif ($element1->value > 0) {
-      if ($element2->value == 0) {
+    elsif ($e1->value > 0) {
+      if ($e2->value == 0) {
         return Inf;
       }
       else  {
-        return double($element1->value / $element2->value);
+        return double($e1->value / $e2->value);
       }
     }
-    elsif ($element1->value < 0) {
-      if ($element2->value == 0) {
+    elsif ($e1->value < 0) {
+      if ($e2->value == 0) {
         return negativeInf;
       }
       else {
-        return double($element1->value / $element2->value);
+        return double($e1->value / $e2->value);
       }
     }
   }
-  elsif (is_logical($element1)) {
-    if ($element1->value == 0) {
-      if ($element2->value == 0) {
+  elsif (is_logical($e1)) {
+    if ($e1->value == 0) {
+      if ($e2->value == 0) {
         return NaN;
       }
-      elsif ($element2->value == 1) {
+      elsif ($e2->value == 1) {
         return double(0);
       }
     }
-    elsif ($element1->value == 1) {
-      if ($element2->value == 0) {
+    elsif ($e1->value == 1) {
+      if ($e2->value == 0) {
         return Inf;
       }
-      elsif ($element2->value == 1)  {
+      elsif ($e2->value == 1)  {
         return double(1);
       }
     }
@@ -640,192 +640,198 @@ sub divide {
 }
 
 sub raise {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
-    my $element1_c = Math::Complex->make(Rstats::Util::value($element1->re), Rstats::Util::value($element1->im));
-    my $element2_c = Math::Complex->make(Rstats::Util::value($element2->re), Rstats::Util::value($element2->im));
+  elsif (is_complex($e1)) {
+    my $e1_c = Math::Complex->make(Rstats::Util::value($e1->re), Rstats::Util::value($e1->im));
+    my $e2_c = Math::Complex->make(Rstats::Util::value($e2->re), Rstats::Util::value($e2->im));
     
-    my $v3_c = $element1_c ** $element2_c;
+    my $v3_c;
+    if ($e2->re->value == 1/2 && $e2->im->value == 0) {
+      $v3_c = Math::Complex::sqrt($e1_c);
+    }
+    else {
+      $v3_c = $e1_c ** $e2_c;
+    }
     my $re = Math::Complex::Re($v3_c);
     my $im = Math::Complex::Im($v3_c);
     
     return complex($re, $im);
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if ($element1->value == 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if ($e1->value == 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return double(1);
           }
-          elsif ($element2->value > 0) {
+          elsif ($e2->value > 0) {
             return double(0);
           }
-          elsif ($element2->value < 0) {
+          elsif ($e2->value < 0) {
             return Inf;
           }
         }
-        elsif (is_positive_infinite($element2)) {
+        elsif (is_positive_infinite($e2)) {
           return double(0);
         }
-        elsif (is_negative_infinite($element2)) {
+        elsif (is_negative_infinite($e2)) {
           return Inf
         }
       }
-      elsif ($element1->value > 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+      elsif ($e1->value > 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return double(1);
           }
           else {
-            return double($element1->value ** $element2->value);
+            return double($e1->value ** $e2->value);
           }
         }
-        elsif (is_positive_infinite($element2)) {
-          if ($element1->value < 1) {
+        elsif (is_positive_infinite($e2)) {
+          if ($e1->value < 1) {
             return double(0);
           }
-          elsif ($element1->value == 1) {
+          elsif ($e1->value == 1) {
             return double(1);
           }
-          elsif ($element1->value > 1) {
+          elsif ($e1->value > 1) {
             return Inf;
           }
         }
-        elsif (is_negative_infinite($element2)) {
-          if ($element1->value < 1) {
+        elsif (is_negative_infinite($e2)) {
+          if ($e1->value < 1) {
             return double(0);
           }
-          elsif ($element1->value == 1) {
+          elsif ($e1->value == 1) {
             return double(1);
           }
-          elsif ($element1->value > 1) {
+          elsif ($e1->value > 1) {
             return double(0);
           }
         }
       }
-      elsif ($element1->value < 0) {
-        if (defined $element2) {
-          if ($element2->value == 0) {
+      elsif ($e1->value < 0) {
+        if (defined $e2) {
+          if ($e2->value == 0) {
             return double(-1);
           }
           else {
-            return double($element1->value ** $element2->value);
+            return double($e1->value ** $e2->value);
           }
         }
-        elsif (is_positive_infinite($element2)) {
-          if ($element1->value > -1) {
+        elsif (is_positive_infinite($e2)) {
+          if ($e1->value > -1) {
             return double(0);
           }
-          elsif ($element1->value == -1) {
+          elsif ($e1->value == -1) {
             return double(-1);
           }
-          elsif ($element1->value < -1) {
+          elsif ($e1->value < -1) {
             return negativeInf;
           }
         }
-        elsif (is_negative_infinite($element2)) {
-          if ($element1->value > -1) {
+        elsif (is_negative_infinite($e2)) {
+          if ($e1->value > -1) {
             return Inf;
           }
-          elsif ($element1->value == -1) {
+          elsif ($e1->value == -1) {
             return double(-1);
           }
-          elsif ($element1->value < -1) {
+          elsif ($e1->value < -1) {
             return double(0);
           }
         }
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value == 0) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value == 0) {
           return double(1);
         }
-        elsif ($element2->value > 0) {
+        elsif ($e2->value > 0) {
           return Inf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return double(0);
         }
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return Inf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return double(0);
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
-        if ($element2->value == 0) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
+        if ($e2->value == 0) {
           return double(-1);
         }
-        elsif ($element2->value > 0) {
+        elsif ($e2->value > 0) {
           return negativeInf;
         }
-        elsif ($element2->value < 0) {
+        elsif ($e2->value < 0) {
           return double(0);
         }
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return negativeInf;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return double(0);
       }
     }
   }
-  elsif (is_integer($element1)) {
-    if ($element1->value == 0) {
-      if ($element2->value == 0) {
+  elsif (is_integer($e1)) {
+    if ($e1->value == 0) {
+      if ($e2->value == 0) {
         return double(1);
       }
-      elsif ($element2->value > 0) {
+      elsif ($e2->value > 0) {
         return double(0);
       }
-      elsif ($element2->value < 0) {
+      elsif ($e2->value < 0) {
         return Inf;
       }
     }
-    elsif ($element1->value > 0) {
-      if ($element2->value == 0) {
+    elsif ($e1->value > 0) {
+      if ($e2->value == 0) {
         return double(1);
       }
       else {
-        return double($element1->value ** $element2->value);
+        return double($e1->value ** $e2->value);
       }
     }
-    elsif ($element1->value < 0) {
-      if ($element2->value == 0) {
+    elsif ($e1->value < 0) {
+      if ($e2->value == 0) {
         return double(-1);
       }
       else {
-        return double($element1->value ** $element2->value);
+        return double($e1->value ** $e2->value);
       }
     }
   }
-  elsif (is_logical($element1)) {
-    if ($element1->value == 0) {
-      if ($element2->value == 0) {
+  elsif (is_logical($e1)) {
+    if ($e1->value == 0) {
+      if ($e2->value == 0) {
         return double(1);
       }
-      elsif ($element2->value == 1) {
+      elsif ($e2->value == 1) {
         return double(0);
       }
     }
-    elsif ($element1->value ==  1) {
-      if ($element2->value == 0) {
+    elsif ($e1->value ==  1) {
+      if ($e2->value == 0) {
         return double(1);
       }
-      elsif ($element2->value == 1) {
+      elsif ($e2->value == 1) {
         return double(1);
       }
     }
@@ -836,41 +842,41 @@ sub raise {
 }
 
 sub remainder {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
+  if (is_character($e1)) {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
-  elsif (is_complex($element1)) {
+  elsif (is_complex($e1)) {
     croak "unimplemented complex operation";
   }
-  elsif (is_double($element1)) {
-    return NaN if is_nan($element1) || is_nan($element2) || is_infinite($element1) || is_infinite($element2);
+  elsif (is_double($e1)) {
+    return NaN if is_nan($e1) || is_nan($e2) || is_infinite($e1) || is_infinite($e2);
     
-    if ($element2->value == 0) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
-      my $v3_value = $element1->value - POSIX::floor($element1->value/$element2->value) * $element2->value;
+      my $v3_value = $e1->value - POSIX::floor($e1->value/$e2->value) * $e2->value;
       return double($v3_value);
     }
   }
-  elsif (is_integer($element1)) {
-    if ($element2->value == 0) {
+  elsif (is_integer($e1)) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
-      return double($element1 % $element2);
+      return double($e1 % $e2);
     }
   }
-  elsif (is_logical($element1)) {
-    if ($element2->value == 0) {
+  elsif (is_logical($e1)) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
-      return double($element1->value % $element2->value);
+      return double($e1->value % $e2->value);
     }
   }
   else {
@@ -1169,57 +1175,57 @@ sub sqrt {
 }
 
 sub more_than {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value gt $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value gt $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
+  elsif (is_complex($e1)) {
     croak "invalid comparison with complex values";
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value > $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value > $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value > $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value > $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value > $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value > $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1227,57 +1233,57 @@ sub more_than {
 }
 
 sub more_than_or_equal {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value ge $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value ge $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
+  elsif (is_complex($e1)) {
     croak "invalid comparison with complex values";
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value >= $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value >= $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value >= $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value >= $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value >= $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value >= $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1285,57 +1291,57 @@ sub more_than_or_equal {
 }
 
 sub less_than {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value lt $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value lt $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
+  elsif (is_complex($e1)) {
     croak "invalid comparison with complex values";
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value < $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value < $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value < $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value < $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value < $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value < $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1343,57 +1349,57 @@ sub less_than {
 }
 
 sub less_than_or_equal {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value le $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value le $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
+  elsif (is_complex($e1)) {
     croak "invalid comparison with complex values";
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value <= $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value <= $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value <= $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value <= $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value <= $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value <= $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1401,57 +1407,57 @@ sub less_than_or_equal {
 }
 
 sub equal {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value eq $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value eq $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
-    return $element1->re->value == $element2->re->value && $element1->im->value == $element2->im->value ? TRUE : FALSE;
+  elsif (is_complex($e1)) {
+    return $e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value ? TRUE : FALSE;
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value == $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value == $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value == $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value == $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value == $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value == $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1459,57 +1465,57 @@ sub equal {
 }
 
 sub not_equal {
-  my ($element1, $element2) = @_;
+  my ($e1, $e2) = @_;
   
-  return NA if is_na($element1) || is_na($element2);
+  return NA if is_na($e1) || is_na($e2);
   
-  if (is_character($element1)) {
-    return $element1->value ne $element2->value ? TRUE : FALSE;
+  if (is_character($e1)) {
+    return $e1->value ne $e2->value ? TRUE : FALSE;
   }
-  elsif (is_complex($element1)) {
-    return !($element1->re->value == $element2->re->value && $element1->im->value == $element2->im->value) ? TRUE : FALSE;
+  elsif (is_complex($e1)) {
+    return !($e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value) ? TRUE : FALSE;
   }
-  elsif (is_double($element1)) {
-    return NA if is_nan($element1) || is_nan($element2);
-    if (defined $element1->value) {
-      if (defined $element2) {
-        return $element1->value != $element2->value ? TRUE : FALSE;
+  elsif (is_double($e1)) {
+    return NA if is_nan($e1) || is_nan($e2);
+    if (defined $e1->value) {
+      if (defined $e2) {
+        return $e1->value != $e2->value ? TRUE : FALSE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_positive_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_positive_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return FALSE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return TRUE;
       }
     }
-    elsif (is_negative_infinite($element1)) {
-      if (defined $element2) {
+    elsif (is_negative_infinite($e1)) {
+      if (defined $e2) {
         return TRUE;
       }
-      elsif (is_positive_infinite($element2)) {
+      elsif (is_positive_infinite($e2)) {
         return TRUE;
       }
-      elsif (is_negative_infinite($element2)) {
+      elsif (is_negative_infinite($e2)) {
         return FALSE;
       }
     }
   }
-  elsif (is_integer($element1)) {
-    return $element1->value != $element2->value ? TRUE : FALSE;
+  elsif (is_integer($e1)) {
+    return $e1->value != $e2->value ? TRUE : FALSE;
   }
-  elsif (is_logical($element1)) {
-    return $element1->value != $element2->value ? TRUE : FALSE;
+  elsif (is_logical($e1)) {
+    return $e1->value != $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";

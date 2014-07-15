@@ -2,7 +2,7 @@ package Rstats::Util;
 
 use strict;
 use warnings;
-use Carp 'croak';
+use Carp 'croak', 'carp';
 
 require Rstats::Element::NA;
 require Rstats::Element::Logical;
@@ -66,46 +66,25 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-sub create_zero {
-  my $type = shift;
+sub create {
+  my ($type, $value) = @_;
   
-  if ($type eq 'character') {
-    return character("0");
-  }
-  elsif ($type eq 'complex') {
-    return complex(0, 0);
-  }
-  elsif ($type eq 'double') {
-    return double(0);
-  }
-  elsif ($type eq 'integer') {
-    return integer(0);
-  }
-  elsif ($type eq 'logical') {
-    return logical(Rstats::Util::FALSE);
-  }
-  else {
-    croak 'Invalid type';
-  }
-}
+  $value = 0 unless defined $value;
 
-sub create_one {
-  my $type = shift;
-  
   if ($type eq 'character') {
-    return character("1");
+    return character("$value");
   }
   elsif ($type eq 'complex') {
-    return complex(1, 0);
+    return complex($value, 0);
   }
   elsif ($type eq 'double') {
-    return double(1);
+    return double($value);
   }
   elsif ($type eq 'integer') {
-    return integer(1);
+    return integer($value);
   }
   elsif ($type eq 'logical') {
-    return logical(Rstats::Util::TRUE);
+    return logical($value ? Rstats::Util::TRUE : Rstats::Util::FALSE);
   }
   else {
     croak 'Invalid type';
@@ -940,7 +919,7 @@ sub abs {
   }
   elsif (is_double($element) || is_integer($element)) {
     my $type = typeof($element);
-    my $zero = Rstats::Util::create_zero($type);
+    my $zero = Rstats::Util::create($type);
     if (more_than($element, $zero)) {
       return $element;
     }
@@ -949,7 +928,7 @@ sub abs {
     }
   }
   elsif (is_logical($element)) {
-    my $zero = Rstats::Util::create_zero('logical');
+    my $zero = Rstats::Util::create('logical');
     if (more_than($element, $zero)) {
       return logical_to_integer($element);
     }
@@ -1002,15 +981,114 @@ sub as_character {
 }
 
 sub as_complex {
-  
+  my $e1 = shift;
+
+  if (is_na($e1)) {
+    return $e1;
+  }
+  elsif (is_character($e1)) {
+    my $z = looks_like_complex($e1->value);
+    if (defined $z) {
+      return complex($z->{re}, $z->{im});
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      return NA;
+    }
+  }
+  elsif (is_complex($e1)) {
+    return $e1;
+  }
+  elsif (is_double($e1)) {
+    if (is_nan($e1)) {
+      return NA;
+    }
+    else {
+      return complex_double($e1, double(0));
+    }
+  }
+  elsif (is_integer($e1)) {
+    return complex($e1->value, 0);
+  }
+  elsif (Rstats::Util::is_logical($e1)) {
+    return complex($e1->value ? 1 : 0, 0);
+  }
+  else {
+    croak "unexpected type";
+  }
 }
 
+sub as_numeric { as_double(@_) }
+
 sub as_double {
-  
+  my $e1 = shift;
+
+  if (Rstats::Util::is_na($e1)) {
+    return $e1;
+  }
+  elsif (is_character($e1)) {
+    if (my $num = Rstats::Util::looks_like_number($e1->value)) {
+      return double($num + 0);
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      return NA;
+    }
+  }
+  elsif (is_complex($e1)) {
+    carp "imaginary parts discarded in coercion";
+    return double($e1->re->value);
+  }
+  elsif (is_double($e1)) {
+    return $e1;
+  }
+  elsif (is_integer($e1)) {
+    return double($e1->value);
+  }
+  elsif (is_logical($e1)) {
+    return double($e1->value ? 1 : 0);
+  }
+  else {
+    croak "unexpected type";
+  }
 }
 
 sub as_integer {
-  
+  my $e1 = shift;
+
+  if (is_na($e1)) {
+    return $e1;
+  }
+  elsif (is_character($e1)) {
+    if (my $num = Rstats::Util::looks_like_number($e1->value)) {
+      return Rstats::Util::integer(int $num);
+    }
+    else {
+      carp 'NAs introduced by coercion';
+      return NA;
+    }
+  }
+  elsif (is_complex($e1)) {
+    carp "imaginary parts discarded in coercion";
+    return integer(int($e1->re->value));
+  }
+  elsif (is_double($e1)) {
+    if (is_nan($e1) || is_infinite($e1)) {
+      return NA;
+    }
+    else {
+      return Rstats::Util::integer($e1->value);
+    }
+  }
+  elsif (is_integer($e1)) {
+    return $e1; 
+  }
+  elsif (is_logical($e1)) {
+    return integer($e1->value ? 1 : 0);
+  }
+  else {
+    croak "unexpected type";
+  }
 }
 
 sub as_logical {
@@ -1055,19 +1133,39 @@ sub as_logical {
   }
 }
 
+sub as {
+  my ($type, $e1) = @_;
+  
+  if ($type eq 'character') {
+    return as_character($e1);
+  }
+  elsif ($type eq 'complex') {
+    return as_complex($e1);
+  }
+  elsif ($type eq 'double') {
+    return as_double($e1);
+  }
+  elsif ($type eq 'numeric') {
+    return as_numeric($e1);
+  }
+  elsif ($type eq 'integer') {
+    return as_integer($e1);
+  }
+  elsif ($type eq 'logical') {
+    return as_logical($e1);
+  }
+  else {
+    croak "Invalid mode is passed";
+  }
+}
+
 sub sqrt {
   my $e1 = shift;
   
-  my $type = typeof($element);
-  my $e2 = create_zero($type);
+  my $type = typeof($e1);
+  my $e2 = create($type, 1/2);
   
-  return raise($e2, (1/2));
-}
-
-sub upgrade {
-  my ($e1, $type) = @_;
-  
-  
+  return raise($e1, $e2);
 }
 
 sub more_than {

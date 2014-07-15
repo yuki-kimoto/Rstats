@@ -6,6 +6,15 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# sqrt
+{
+  # sqrt
+  {
+    my $e1 = c(4, 9);
+    my $e2 = r->sqrt($e1);
+    is_deeply($e2->values, [2, 3]);
+  }
+}
 # min
 {
   # min

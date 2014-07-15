@@ -348,7 +348,7 @@ sub cosh {
 sub cumsum {
   my $a1 = Rstats::ArrayUtil::to_array(shift);
   my $type = $a1->{type};
-  my $total = Rstats::Util::create_zero($type);
+  my $total = Rstats::Util::create($type);
   my @a2_elements;
   push @a2_elements, $total = Rstats::Util::add($total, $_) for @{$a1->elements};
   
@@ -680,7 +680,7 @@ sub prod {
   my $a1 = Rstats::ArrayUtil::c(@_);
   
   my $type = $a1->{type};
-  my $prod = Rstats::Util::create_one($type);
+  my $prod = Rstats::Util::create($type, 1);
   for my $element (@{$a1->elements}) {
     $prod = Rstats::Util::multiply($prod, $element);
   }
@@ -1268,7 +1268,7 @@ sub sum {
   my $a1 = Rstats::ArrayUtil::to_array(shift);
   
   my $type = $a1->{type};
-  my $sum = Rstats::Util::create_zero($type);
+  my $sum = Rstats::Util::create($type);
   $sum = Rstats::Util::add($sum, $_) for @{$a1->elements};
   
   return Rstats::ArrayUtil::c($sum);
@@ -1691,24 +1691,24 @@ sub is_logical {
 }
 
 sub as {
-  my ($array, $mode) = @_;
+  my ($type, $array) = @_;
   
-  if ($mode eq 'character') {
+  if ($type eq 'character') {
     return Rstats::ArrayUtil::as_character($array);
   }
-  elsif ($mode eq 'complex') {
+  elsif ($type eq 'complex') {
     return Rstats::ArrayUtil::as_complex($array);
   }
-  elsif ($mode eq 'double') {
+  elsif ($type eq 'double') {
     return Rstats::ArrayUtil::as_double($array);
   }
-  elsif ($mode eq 'numeric') {
+  elsif ($type eq 'numeric') {
     return Rstats::ArrayUtil::as_numeric($array);
   }
-  elsif ($mode eq 'integer') {
+  elsif ($type eq 'integer') {
     return Rstats::ArrayUtil::as_integer($array);
   }
-  elsif ($mode eq 'logical') {
+  elsif ($type eq 'logical') {
     return Rstats::ArrayUtil::as_logical($array);
   }
   else {
@@ -1722,41 +1722,7 @@ sub as_complex {
   my $a1 = $array;
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map {
-    if (Rstats::Util::is_na($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_character($_)) {
-      my $z = Rstats::Util::looks_like_complex($_->value);
-      if (defined $z) {
-        Rstats::Util::complex($z->{re}, $z->{im});
-      }
-      else {
-        carp 'NAs introduced by coercion';
-        Rstats::Util::NA;
-      }
-    }
-    elsif (Rstats::Util::is_complex($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_double($_)) {
-      if (Rstats::Util::is_nan($_)) {
-        Rstats::Util::NA;
-      }
-      else {
-        Rstats::Util::complex_double($_, Rstats::Util::double(0));
-      }
-    }
-    elsif (Rstats::Util::is_integer($_)) {
-      Rstats::Util::complex($_->value, 0);
-    }
-    elsif (Rstats::Util::is_logical($_)) {
-      Rstats::Util::complex($_->value ? 1 : 0, 0);
-    }
-    else {
-      croak "unexpected type";
-    }
-  } @$a1_elements;
+  my @a2_elements = map { Rstats::Util::as('complex', $_) } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'complex';
 
@@ -1771,36 +1737,7 @@ sub as_double {
   my $a1 = $array;
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map {
-    if (Rstats::Util::is_na($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_character($_)) {
-      if (my $num = Rstats::Util::looks_like_number($_->value)) {
-        Rstats::Util::double($num + 0);
-      }
-      else {
-        carp 'NAs introduced by coercion';
-        Rstats::Util::NA;
-      }
-    }
-    elsif (Rstats::Util::is_complex($_)) {
-      carp "imaginary parts discarded in coercion";
-      Rstats::Util::double($_->re->value);
-    }
-    elsif (Rstats::Util::is_double($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_integer($_)) {
-      Rstats::Util::double($_->value);
-    }
-    elsif (Rstats::Util::is_logical($_)) {
-      Rstats::Util::double($_->value ? 1 : 0);
-    }
-    else {
-      croak "unexpected type";
-    }
-  } @$a1_elements;
+  my @a2_elements = map { Rstats::Util::as('double', $_) } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'double';
 
@@ -1813,41 +1750,7 @@ sub as_integer {
   my $a1 = $array;
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map {
-    if (Rstats::Util::is_na($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_character($_)) {
-      if (my $num = Rstats::Util::looks_like_number($_->value)) {
-        Rstats::Util::integer(int $num);
-      }
-      else {
-        carp 'NAs introduced by coercion';
-        Rstats::Util::NA;
-      }
-    }
-    elsif (Rstats::Util::is_complex($_)) {
-      carp "imaginary parts discarded in coercion";
-      Rstats::Util::integer(int($_->re->value));
-    }
-    elsif (Rstats::Util::is_double($_)) {
-      if (Rstats::Util::is_nan($_) || Rstats::Util::is_infinite($_)) {
-        Rstats::Util::NA;
-      }
-      else {
-        Rstats::Util::integer($_->value);
-      }
-    }
-    elsif (Rstats::Util::is_integer($_)) {
-      $_; 
-    }
-    elsif (Rstats::Util::is_logical($_)) {
-      Rstats::Util::integer($_->value ? 1 : 0);
-    }
-    else {
-      croak "unexpected type";
-    }
-  } @$a1_elements;
+  my @a2_elements = map { Rstats::Util::as('integer', $_)  } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'integer';
 
@@ -1860,7 +1763,7 @@ sub as_logical {
   my $a1 = $array;
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map { Rstats::Util::as('logical', $_) } } @$a1_elements;
+  my @a2_elements = map { Rstats::Util::as('logical', $_) } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'logical';
 
@@ -2117,49 +2020,49 @@ sub upgrade_type {
   my (@arrays) = @_;
   
   # Check elements
-  my $mode_h = {};
+  my $type_h = {};
   for my $array (@arrays) {
     my $type = $array->{type} || '';
     if ($type eq 'character') {
-      $mode_h->{character}++;
+      $type_h->{character}++;
     }
     elsif ($type eq 'complex') {
-      $mode_h->{complex}++;
+      $type_h->{complex}++;
     }
     elsif ($type eq 'double') {
-      $mode_h->{double}++;
+      $type_h->{double}++;
     }
     elsif ($type eq 'integer') {
-      $mode_h->{integer}++;
+      $type_h->{integer}++;
     }
     elsif ($type eq 'logical') {
-      $mode_h->{logical}++;
+      $type_h->{logical}++;
     }
     else {
-      croak "Invalid mode";
+      croak "Invalid type";
     }
   }
 
-  # Upgrade elements and type if mode is different
-  my @modes = keys %$mode_h;
-  if (@modes > 1) {
-    my $to_mode;
-    if ($mode_h->{character}) {
-      $to_mode = 'character';
+  # Upgrade elements and type if type is different
+  my @types = keys %$type_h;
+  if (@types > 1) {
+    my $to_type;
+    if ($type_h->{character}) {
+      $to_type = 'character';
     }
-    elsif ($mode_h->{complex}) {
-      $to_mode = 'complex';
+    elsif ($type_h->{complex}) {
+      $to_type = 'complex';
     }
-    elsif ($mode_h->{double}) {
-      $to_mode = 'double';
+    elsif ($type_h->{double}) {
+      $to_type = 'double';
     }
-    elsif ($mode_h->{integer}) {
-      $to_mode = 'integer';
+    elsif ($type_h->{integer}) {
+      $to_type = 'integer';
     }
-    elsif ($mode_h->{logical}) {
-      $to_mode = 'logical';
+    elsif ($type_h->{logical}) {
+      $to_type = 'logical';
     }
-    $_ = Rstats::ArrayUtil::as($_ => $to_mode) for @arrays;
+    $_ = Rstats::ArrayUtil::as($to_type, $_) for @arrays;
   }
   
   return @arrays;

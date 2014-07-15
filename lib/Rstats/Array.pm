@@ -71,8 +71,8 @@ sub inner_product {
   # fix postion
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
-  # Upgrade mode if mode is different
-  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  # Upgrade type if type is different
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_type($a1, $a2) if $a1->{type} ne $a2->{type};
 
   return Rstats::ArrayUtil::inner_product($a1, $a2);
 }
@@ -190,7 +190,7 @@ sub _operation {
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
   # Upgrade mode if mode is different
-  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_type($a1, $a2) if $a1->{type} ne $a2->{type};
   
   # Calculate
   my $a1_length = @{$a1->elements};

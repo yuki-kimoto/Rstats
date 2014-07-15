@@ -4,6 +4,8 @@ use warnings;
 
 use Rstats::Util;
 
+ok(1);
+
 # sqrt
 {
   my $e1 = Rstats::Util::double(4);

@@ -993,10 +993,81 @@ sub is_double { (typeof($_[0]) || '') eq 'double' }
 sub is_integer { (typeof($_[0]) || '') eq 'integer' }
 sub is_logical { (typeof($_[0]) || '') eq 'logical' }
 
-sub sqrt {
-  my $element = shift;
+sub as_character {
+  my $e1 = shift;
   
-  return raise($element, 1/2);
+  my $e2 = character(to_string($e1));
+  
+  return $e2;
+}
+
+sub as_complex {
+  
+}
+
+sub as_double {
+  
+}
+
+sub as_integer {
+  
+}
+
+sub as_logical {
+  my $e1 = shift;
+  
+  if (is_na($e1)) {
+    return $e1;
+  }
+  elsif (is_character($e1)) {
+    return NA;
+  }
+  elsif (is_complex($e1)) {
+    carp "imaginary parts discarded in coercion";
+    my $re = $e1->re->value;
+    my $im = $e1->im->value;
+    if (defined $re && $re == 0 && defined $im && $im == 0) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
+  }
+  elsif (is_double($e1)) {
+    if (is_nan($e1)) {
+      return NA;
+    }
+    elsif (is_infinite($e1)) {
+      return TRUE;
+    }
+    else {
+      return $e1->value == 0 ? FALSE : TRUE;
+    }
+  }
+  elsif (is_integer($e1)) {
+    return $e1->value == 0 ? FALSE : TRUE;
+  }
+  elsif (is_logical($e1)) {
+    return $e1->value == 0 ? FALSE : TRUE;
+  }
+  else {
+    croak "unexpected type";
+  }
+}
+
+sub sqrt {
+  my $e1 = shift;
+  
+  my $type = typeof($element);
+  my $e2 = create_zero($type);
+  
+  return raise($e2, (1/2));
+}
+
+sub upgrade {
+  my ($e1, $type) = @_;
+  
+  
 }
 
 sub more_than {

@@ -25,7 +25,7 @@ sub operation {
   $a2 = Rstats::ArrayUtil::to_array($a2);
   
   # Upgrade mode if mode is different
-  ($a1, $a2) = Rstats::ArrayUtil::upgrade_mode($a1, $a2) if $a1->{type} ne $a2->{type};
+  ($a1, $a2) = Rstats::ArrayUtil::upgrade_type($a1, $a2) if $a1->{type} ne $a2->{type};
   
   # Calculate
   my $a1_length = @{$a1->elements};
@@ -346,14 +346,13 @@ sub cosh {
 }
 
 sub cumsum {
-  my $_v1 = shift;
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
+  my $type = $a1->{type};
+  my $total = Rstats::Util::create_zero($type);
+  my @a2_elements;
+  push @a2_elements, $total = Rstats::Util::add($total, $_) for @{$a1->elements};
   
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my @v2_values;
-  my $total = 0;
-  push @v2_values, $total = $total + $_ for @{$v1->values};
-  
-  return Rstats::ArrayUtil::c(\@v2_values);
+  return Rstats::ArrayUtil::c(\@a2_elements);
 }
 
 sub complex {
@@ -934,11 +933,9 @@ sub sinh {
 }
 
 sub sqrt {
-  my $_a1 = shift;
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
   
-  my $a1 = Rstats::ArrayUtil::to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(sqrt $_->value) } @{$a1->elements};
+  my @a2_elements = map { Rstats::Util::sqrt($_) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
@@ -1072,6 +1069,14 @@ sub median {
     my $middle = int($a3_length / 2) + 1;
     return $a3->get($middle);
   }
+}
+
+sub sd {
+  my $a1 = to_array(shift);
+  
+  my $sd = Rstats::ArrayUtil::sqrt(var($a1));
+  
+  return $sd;
 }
 
 sub var {
@@ -1855,45 +1860,7 @@ sub as_logical {
   my $a1 = $array;
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map {
-    if (Rstats::Util::is_na($_)) {
-      $_;
-    }
-    elsif (Rstats::Util::is_character($_)) {
-      Rstats::Util::NA;
-    }
-    elsif (Rstats::Util::is_complex($_)) {
-      carp "imaginary parts discarded in coercion";
-      my $re = $_->re->value;
-      my $im = $_->im->value;
-      if (defined $re && $re == 0 && defined $im && $im == 0) {
-        Rstats::Util::FALSE;
-      }
-      else {
-        Rstats::Util::TRUE;
-      }
-    }
-    elsif (Rstats::Util::is_double($_)) {
-      if (Rstats::Util::is_nan($_)) {
-        Rstats::Util::NA;
-      }
-      elsif (Rstats::Util::is_infinite($_)) {
-        Rstats::Util::TRUE;
-      }
-      else {
-        $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
-      }
-    }
-    elsif (Rstats::Util::is_integer($_)) {
-      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
-    }
-    elsif (Rstats::Util::is_logical($_)) {
-      $_->value == 0 ? Rstats::Util::FALSE : Rstats::Util::TRUE;
-    }
-    else {
-      croak "unexpected type";
-    }
-  } @$a1_elements;
+  my @a2_elements = map { Rstats::Util::as('logical', $_) } } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'logical';
 
@@ -1904,10 +1871,8 @@ sub as_character {
   my $a1 = shift;
 
   my $a1_elements = $a1->elements;
+  my @a2_elements = map { Rstats::Util::as('character', $_) } @$a1_elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map {
-    Rstats::Util::character(Rstats::Util::to_string($_))
-  } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'character';
 
@@ -2148,7 +2113,7 @@ sub as_vector {
   return Rstats::ArrayUtil::c($a1_elements);
 }
 
-sub upgrade_mode {
+sub upgrade_type {
   my (@arrays) = @_;
   
   # Check elements

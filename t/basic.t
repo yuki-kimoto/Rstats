@@ -224,13 +224,6 @@ use Rstats::Array;
   is_deeply($v2->values, [4, 1, 3, 2]);
 }
 
-# rev
-{
-  my $v1 = c(2, 4, 3, 1);
-  my $v2 = r->rev($v1);
-  is_deeply($v2->values, [2, 3, 1, 4]);
-}
-
 # runif
 {
   {

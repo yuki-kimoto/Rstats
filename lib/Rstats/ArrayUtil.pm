@@ -630,7 +630,22 @@ sub min {
   return c($min);
 }
 
-sub order { Rstats::ArrayUtil::_order(1, @_) }
+sub order {
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = Rstats::ArrayUtil::to_array(shift);
+  my $decreasing = $opt->{decreasing};
+  
+  my $v1_values = $v1->values;
+  
+  my @pos_vals;
+  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  my @sorted_pos_values = !$decreasing
+    ? sort { $a->{val} <=> $b->{val} } @pos_vals
+    : sort { $b->{val} <=> $a->{val} } @pos_vals;
+  my @orders = map { $_->{pos} } @sorted_pos_values;
+  
+  return Rstats::ArrayUtil::c(\@orders);
+}
 
 sub paste {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
@@ -754,7 +769,16 @@ sub replace {
   return Rstats::ArrayUtil::array($v4_values);
 }
 
-sub rev { Rstats::ArrayUtil::_order(0, @_) }
+sub rev {
+  my $a1 = shift;
+  
+  # Reverse elements
+  my $a2 = $a1->clone_without_elements;
+  my @a2_elements = reverse @{$a1->elements};
+  $a2->elements(\@a2_elements);
+  
+  return $a2;
+}
 
 sub rnorm {
   
@@ -1105,22 +1129,6 @@ sub which {
   }
   
   return Rstats::ArrayUtil::c(\@v2_values);
-}
-
-sub _order {
-  my ($asc, $_v1) = @_;
-  
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my $v1_values = $v1->values;
-  
-  my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
-  my @sorted_pos_values = $asc
-    ? sort { $a->{val} <=> $b->{val} } @pos_vals
-    : sort { $b->{val} <=> $a->{val} } @pos_vals;
-  my @orders = map { $_->{pos} } @sorted_pos_values;
-  
-  return Rstats::ArrayUtil::c(\@orders);
 }
 
 sub matrix {

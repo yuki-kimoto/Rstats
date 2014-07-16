@@ -6,6 +6,13 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# rev
+{
+  my $v1 = c(2, 4, 3, 1);
+  my $v2 = r->rev($v1);
+  is_deeply($v2->values, [1, 3, 4, 2]);
+}
+
 # T, F
 {
   my $v1 = c(T, F);

@@ -6,6 +6,12 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# T, F
+{
+  my $v1 = c(T, F);
+  is_deeply($v1->values, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
+}
+
 # sqrt
 {
   # sqrt - numeric

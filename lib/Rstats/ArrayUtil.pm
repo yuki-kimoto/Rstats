@@ -396,6 +396,8 @@ sub expm1 {
   return $a2;
 }
 
+sub F { FALSE() }
+
 sub FALSE { Rstats::ArrayUtil::c(Rstats::Util::FALSE()) }
 
 sub floor {
@@ -1004,6 +1006,8 @@ sub tanh {
   
   return $a2;
 }
+
+sub T { TRUE() }
 
 sub TRUE { Rstats::ArrayUtil::c(Rstats::Util::TRUE()) }
 

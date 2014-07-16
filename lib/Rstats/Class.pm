@@ -43,6 +43,7 @@ my @methods = qw/
   dim
   exp
   expm1
+  F
   FALSE
   floor
   head
@@ -110,6 +111,7 @@ my @methods = qw/
   tan
   tanh
   typeof
+  T
   TRUE
   trunc
   unique

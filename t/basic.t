@@ -540,29 +540,6 @@ use Rstats::Array;
     is_deeply($v1->values, [0, 0, 0]);
   }
 
-  # pmax
-  {
-    my $v1 = c(1, 6, 3, 8);
-    my $v2 = c(5, 2, 7, 4);
-    my $pmax = r->pmax($v1, $v2);
-    is_deeply($pmax->values, [5, 6, 7, 8]);
-  }
-
-  # pmin
-  {
-    my $v1 = c(1, 6, 3, 8);
-    my $v2 = c(5, 2, 7, 4);
-    my $pmin = r->pmin($v1, $v2);
-    is_deeply($pmin->values, [1, 2, 3, 4]);
-  }
-
-  # range
-  {
-    my $v1 = c(1, 2, 3);
-    my $v2 = r->range($v1);
-    is_deeply($v2->values, [1, 3]);
-  }
-  
   # length
   {
     my $v1 = c(1, 2, 4);

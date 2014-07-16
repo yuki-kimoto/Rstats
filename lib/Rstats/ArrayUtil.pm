@@ -708,10 +708,10 @@ sub prod {
 sub range {
   my $array = shift;
   
-  my $min = Rstats::ArrayUtil::min($array);
-  my $max = Rstats::ArrayUtil::max($array);
+  my $min = min($array);
+  my $max = max($array);
   
-  return Rstats::ArrayUtil::c($min, $max);
+  return c($min, $max);
 }
 
 sub rbind {

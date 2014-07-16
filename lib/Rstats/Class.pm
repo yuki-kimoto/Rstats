@@ -45,6 +45,7 @@ my @methods = qw/
   cosh
   cumsum
   complex
+  diff
   dim
   exp
   expm1

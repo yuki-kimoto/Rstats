@@ -384,20 +384,6 @@ use Rstats::Array;
   is_deeply($array->get(1)->values, [5]);
 }
 
-# paste
-{
-  # paste($str, $vector);
-  {
-    my $v = r->paste('x', C('1:3'));
-    is_deeply($v->values, ['x 1', 'x 2', 'x 3']);
-  }
-  # paste($str, $vector, {sep => ''});
-  {
-    my $v = r->paste('x', C('1:3'), {sep => ''});
-    is_deeply($v->values, ['x1', 'x2', 'x3']);
-  }
-}
-
 # c
 {
   # c($array)

@@ -10,6 +10,22 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
+sub diff {
+  my $a1 = to_array(shift);
+  
+  my $a2_elements = [];
+  for (my $i = 0; $i < @{$a1->elements} - 1; $i++) {
+    my $a1_element1 = $a1->elements->[$i];
+    my $a1_element2 = $a1->elements->[$i + 1];
+    my $a2_element = Rstats::Util::subtract($a1_element2, $a1_element1);
+    push @$a2_elements, $a2_element;
+  }
+  my $a2 = $a1->clone_without_elements;
+  $a2->elements($a2_elements);
+  
+  return $a2;
+}
+
 sub nchar {
   my $a1 = to_array(shift);
   
@@ -744,7 +760,6 @@ sub order {
 
 sub paste {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
   my $sep = $opt->{sep};
   $sep = ' ' unless defined $sep;
   

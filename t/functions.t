@@ -6,6 +6,37 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# diff
+{
+  # diff - numeric
+  {
+    my $v1 = c(1, 5, 10, NA);
+    my $v2 = r->diff($v1);
+    is_deeply($v2->values, [4, 5, Rstats::Util::NA]);
+  }
+  
+  # diff - complex
+  {
+    my $v1 = c(1 + 2*i, 5 + 3*i, NA);
+    my $v2 = r->diff($v1);
+    is_deeply($v2->values, [{re => 4, im => 1}, Rstats::Util::NA]);
+  }
+}
+
+# paste
+{
+  # paste($str, $vector);
+  {
+    my $v1 = r->paste('x', C('1:3'));
+    is_deeply($v1->values, ['x 1', 'x 2', 'x 3']);
+  }
+  # paste($str, $vector, {sep => ''});
+  {
+    my $v1 = r->paste('x', C('1:3'), {sep => ''});
+    is_deeply($v1->values, ['x1', 'x2', 'x3']);
+  }
+}
+
 # nchar
 {
   my $v1 = c("AAA", "BB", NA);

@@ -668,10 +668,10 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $values = $v->values;
-    for (my $i = 0; $i <@$values; $i++) {
-      $maxs[$i] = $values->[$i]
-        if !defined $maxs[$i] || $values->[$i] > $maxs[$i]
+    my $elements = $v->elements;
+    for (my $i = 0; $i <@$elements; $i++) {
+      $maxs[$i] = $elements->[$i]
+        if !defined $maxs[$i] || Rstats::Util::more_than($elements->[$i], $maxs[$i])
     }
   }
   
@@ -683,10 +683,10 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $values = $v->values;
-    for (my $i = 0; $i <@$values; $i++) {
-      $mins[$i] = $values->[$i]
-        if !defined $mins[$i] || $values->[$i] < $mins[$i]
+    my $elements = $v->elements;
+    for (my $i = 0; $i <@$elements; $i++) {
+      $mins[$i] = $elements->[$i]
+        if !defined $mins[$i] || Rstats::Util::less_than($elements->[$i], $mins[$i])
     }
   }
   

@@ -93,12 +93,18 @@ Rstats - R language build on Perl
 
   # 3 + 2i
   3 + 2*i
-
+  
   # TRUE
   TRUE
   
+  # T
+  T
+  
   # FALSE
   FALSE
+  
+  # F
+  F
   
   # NA
   NA
@@ -116,8 +122,8 @@ Rstats - R language build on Perl
     # names(a1)
     r->names($a1)
   
-    # names(a1) = c("n1", "n2")
-    r->names($a1 => c("n1", "n2"));
+    # names(a1) <- c("n1", "n2")
+    r->names($a1, c("n1", "n2"));
   
   # matrix
     # matrix(1:12, 4, 3)
@@ -315,14 +321,14 @@ Rstats - R language build on Perl
     r->rownames($a1)
     
     # rownames(a1) = c("r1", "r2")
-    r->rownames($a1 => c("r1", "r2"))
+    r->rownames($a1, c("r1", "r2"))
     
   # colnames
     # colnames(a1)
     r->colnames($a1)
     
     # colnames(a1) = c("r1", "r2")
-    r->colnames($a1 => c("r1", "r2"))
+    r->colnames($a1, c("r1", "r2"))
 
   # nrow(a1)
   r->nrow($a1)

@@ -88,6 +88,7 @@ my @methods = qw/
   max
   mean
   min
+  nchar
   order
   paste
   pmax

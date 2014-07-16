@@ -6,6 +6,13 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# nchar
+{
+  my $v1 = c("AAA", "BB", NA);
+  my $v2 = r->nchar($v1);
+  is_deeply($v2->values, [3, 2, Rstats::Util::NA])
+}
+
 # tolower
 {
   my $v1 = c("AA", "BB", NA);

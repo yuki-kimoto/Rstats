@@ -4,11 +4,16 @@ use Object::Simple -base;
 require Rstats::ArrayUtil;
 
 # TODO
-#   logp1x
-#   gamma
-#   lgamma
-#   complete_cases
-#   cor
+# logp1x
+# gamma
+# lgamma
+# complete_cases
+# cor
+# match charmatch pmatch grep regexpr
+# substr substring
+# sub gsub chartr
+# paste
+# strsplit
 
 my @methods = qw/
   abs
@@ -69,6 +74,7 @@ my @methods = qw/
   logb
   log2
   log10
+  match
   median
   mode
   NA

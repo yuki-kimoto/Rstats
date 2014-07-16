@@ -6,6 +6,14 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# match
+{
+  my $v1 = c("ATG", "GC", "AT", "GCGC");
+  my $v2 = c("CGCA", "GC", "AT", "AT", "ATA");
+  my $v3 = r->match($v1, $v2);
+  is_deeply($v3->values, [Rstats::Util::NA, 2, 3, Rstats::Util::NA])
+}
+
 # range
 {
   my $v1 = c(1, 2, 3);

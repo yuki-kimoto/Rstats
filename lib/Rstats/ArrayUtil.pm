@@ -10,7 +10,30 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
-my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+sub match {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  my @matches;
+  for my $a1_element (@{$a1->elements}) {
+    my $i = 1;
+    my $match;
+    for my $a2_element (@{$a2->elements}) {
+      if (Rstats::Util::equal($a1_element, $a2_element)) {
+        $match = 1;
+        last;
+      }
+      $i++;
+    }
+    if ($match) {
+      push @matches, Rstats::Util::double($i);
+    }
+    else {
+      push @matches, Rstats::Util::NA;
+    }
+  }
+  
+  return Rstats::ArrayUtil::c(\@matches);
+}
 
 sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
 
@@ -1191,6 +1214,8 @@ sub typeof {
   
   return $a1;
 }
+
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 sub mode {
   my $array = shift;

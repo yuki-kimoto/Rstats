@@ -10,6 +10,30 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
+sub tolower {
+  my $a1 = to_array(shift);
+  
+  if ($a1->{type} eq 'character') {
+    my $a2 = $a1->clone_without_elements;
+    my $a2_elements = [];
+    for my $a1_element (@{$a1->elements}) {
+      if (Rstats::Util::is_na($a1_element)) {
+        push $a2_elements, $a1_element;
+      }
+      else {
+        my $a2_element = Rstats::Util::character(lc $a1_element->value);
+        push $a2_elements, $a2_element;
+      }
+    }
+    $a2->elements($a2_elements);
+      
+    return $a2;
+  }
+  else {
+    return $a1;
+  }
+}
+
 sub toupper {
   my $a1 = to_array(shift);
   

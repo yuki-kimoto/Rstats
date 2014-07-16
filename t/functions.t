@@ -6,11 +6,18 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# tolower
+{
+  my $v1 = c("AA", "BB", NA);
+  my $v2 = r->tolower($v1);
+  is_deeply($v2->values, ["aa", "bb", Rstats::Util::NA])
+}
+
 # toupper
 {
-  my $v1 = c("a", "b", NA);
+  my $v1 = c("aa", "bb", NA);
   my $v2 = r->toupper($v1);
-  is_deeply($v2->values, ["A", "B", Rstats::Util::NA])
+  is_deeply($v2->values, ["AA", "BB", Rstats::Util::NA])
 }
 
 # match

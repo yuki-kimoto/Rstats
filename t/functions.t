@@ -6,6 +6,13 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# toupper
+{
+  my $v1 = c("a", "b", NA);
+  my $v2 = r->toupper($v1);
+  is_deeply($v2->values, ["A", "B", Rstats::Util::NA])
+}
+
 # match
 {
   my $v1 = c("ATG", "GC", "AT", "GCGC");

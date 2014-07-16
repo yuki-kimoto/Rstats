@@ -116,6 +116,7 @@ my @methods = qw/
   tail
   tan
   tanh
+  toupper
   typeof
   T
   TRUE

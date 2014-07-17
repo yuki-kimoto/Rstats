@@ -326,25 +326,21 @@ sub acosh {
 }
 
 sub append {
-
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = shift;
-  my $element = shift;
+  my $a1 = shift;
+  my $a2 = shift;
   
   my $after = $opt->{after};
-  $after = @{$v1->elements} unless defined $after;
+  $after = @{$a1->elements} unless defined $after;
   
-  if (ref $element eq 'ARRAY') {
-    splice @{$v1->elements}, $after, 0, @$element;
-  }
-  elsif (ref $element eq 'Rstats::Array') {
-    splice @{$v1->elements}, $after, 0, @{$element->elements};
+  if (ref $a2 eq 'Rstats::Array') {
+    splice @{$a1->elements}, $after, 0, @{$a2->elements};
   }
   else {
-    splice @{$v1->elements}, $after, 0, $element;
+    splice @{$a1->elements}, $after, 0, $a2;
   }
   
-  return $v1
+  return $a1
 }
 
 sub array {

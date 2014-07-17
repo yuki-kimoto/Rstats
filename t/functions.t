@@ -6,6 +6,14 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# union
+{
+  my $v1 = c(1, 2, 3, 4);
+  my $v2 = c(3, 4, 5, 6);
+  my $v3 = r->union($v1, $v2);
+  is_deeply($v3->values, [1, 2, 3, 4, 5, 6]);
+}
+
 # cummin
 {
   my $v1 = c(7, 3, 5, 1);

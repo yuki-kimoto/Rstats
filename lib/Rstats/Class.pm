@@ -131,6 +131,7 @@ my @methods = qw/
   TRUE
   trunc
   unique
+  union
   var
   which
 /;

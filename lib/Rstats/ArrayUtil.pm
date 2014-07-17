@@ -14,6 +14,15 @@ sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
 
 sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
+sub union {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  my $a3 = c($a1, $a2);
+  my $a4 = unique($a3);
+  
+  return $a4;
+}
+
 sub diff {
   my $a1 = to_array(shift);
   

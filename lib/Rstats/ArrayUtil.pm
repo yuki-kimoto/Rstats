@@ -1044,36 +1044,37 @@ sub rep {
 }
 
 sub replace {
-  my ($_v1, $_v2, $_v3) = @_;
+  my $v1 = Rstats::ArrayUtil::to_array(shift);
+  my $v2 = Rstats::ArrayUtil::to_array(shift);
+  my $v3 = Rstats::ArrayUtil::to_array(shift);
   
-  my $v1 = Rstats::ArrayUtil::to_array($_v1);
-  my $v2 = Rstats::ArrayUtil::to_array($_v2);
-  my $v3 = Rstats::ArrayUtil::to_array($_v3);
-  
-  my $v1_values = $v1->values;
-  my $v2_values = $v2->values;
-  my $v2_values_h = {};
-  for my $v2_value (@$v2_values) {
-    $v2_values_h->{$v2_value - 1}++;
+  my $v1_elements = $v1->elements;
+  my $v2_elements = $v2->elements;
+  my $v2_elements_h = {};
+  for my $v2_element (@$v2_elements) {
+    my $v2_element_hash = Rstats::Util::hash(Rstats::Util::as_double($v2_element));
+    
+    $v2_elements_h->{$v2_element_hash}++;
     croak "replace second argument can't have duplicate number"
-      if $v2_values_h->{$v2_value - 1} > 1;
+      if $v2_elements_h->{$v2_element_hash} > 1;
   }
-  my $v3_values = $v3->values;
-  my $v3_length = @{$v3_values};
+  my $v3_elements = $v3->elements;
+  my $v3_length = @{$v3_elements};
   
-  my $v4_values = [];
+  my $v4_elements = [];
   my $replace_count = 0;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    if ($v2_values_h->{$i}) {
-      push @$v4_values, $v3_values->[$replace_count % $v3_length];
+  for (my $i = 0; $i < @$v1_elements; $i++) {
+    my $hash = Rstats::Util::hash(Rstats::Util::double($i + 1));
+    if ($v2_elements_h->{$hash}) {
+      push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
     }
     else {
-      push @$v4_values, $v1_values->[$i];
+      push @$v4_elements, $v1_elements->[$i];
     }
   }
   
-  return Rstats::ArrayUtil::array($v4_values);
+  return Rstats::ArrayUtil::array($v4_elements);
 }
 
 sub rev {

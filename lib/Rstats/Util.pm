@@ -66,6 +66,14 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub hash {
+  my $e1 = shift;
+  
+  my $hash = typeof($e1) . '-' . to_string($e1);
+  
+  return $hash;
+}
+
 sub create {
   my ($type, $value) = @_;
   

@@ -307,7 +307,16 @@ sub add {
     return NaN if is_nan($e1) || is_nan($e2);
     if (defined $e1->value) {
       if (defined $e2) {
-        return double($e1->value + $e2->value);
+        my $value = $e1->value + $e2->value;
+        if ($value eq '1.#INF') {
+          return Inf;
+        }
+        elsif ($value eq '-1.#INF') {
+          return negativeInf;
+        }
+        else {
+          return double($value)
+        }
       }
       elsif (is_positive_infinite($e2)) {
         return Inf;
@@ -368,7 +377,16 @@ sub subtract {
     return NaN if is_nan($e1) || is_nan($e2);
     if (defined $e1->value) {
       if (defined $e2) {
-        return double($e1->value - $e2->value);
+        my $value = $e1->value - $e2->value;
+        if ($value eq '1.#INF') {
+          return Inf;
+        }
+        elsif ($value eq '-1.#INF') {
+          return negativeInf;
+        }
+        else {
+          return double($value)
+        }
       }
       elsif (is_positive_infinite($e2)) {
         return negativeInf;
@@ -429,7 +447,16 @@ sub multiply {
     return NaN if is_nan($e1) || is_nan($e2);
     if (defined $e1->value) {
       if (defined $e2) {
-        return double($e1->value * $e2->value);
+        my $value = $e1->value * $e2->value;
+        if ($value eq '1.#INF') {
+          return Inf;
+        }
+        elsif ($value eq '-1.#INF') {
+          return negativeInf;
+        }
+        else {
+          return double($value)
+        }
       }
       elsif (is_positive_infinite($e2)) {
         if ($e1->value == 0) {
@@ -542,7 +569,16 @@ sub divide {
             return Inf;
           }
           else {
-            return double($e1->value / $e2->value);
+            my $value = $e1->value / $e2->value;
+            if ($value eq '1.#INF') {
+              return Inf;
+            }
+            elsif ($value eq '-1.#INF') {
+              return negativeInf;
+            }
+            else {
+              return double($value)
+            }
           }
         }
         elsif (is_infinite($e2)) {
@@ -691,7 +727,16 @@ sub raise {
             return double(1);
           }
           else {
-            return double($e1->value ** $e2->value);
+            my $value = $e1->value ** $e2->value;
+            if ($value eq '1.#INF') {
+              return Inf;
+            }
+            elsif ($value eq '-1.#INF') {
+              return negativeInf;
+            }
+            else {
+              return double($value)
+            }
           }
         }
         elsif (is_positive_infinite($e2)) {

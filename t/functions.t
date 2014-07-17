@@ -6,6 +6,33 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# setequal
+{
+  # setequal - equal
+  {
+    my $v1 = c(2, 3, 1);
+    my $v2 = c(3, 2, 1);
+    my $v3 = r->setequal($v1, $v2);
+    is_deeply($v3->value, Rstats::Util::TRUE);
+  }
+
+  # setequal - not equal
+  {
+    my $v1 = c(2, 3, 1);
+    my $v2 = c(2, 3, 4);
+    my $v3 = r->setequal($v1, $v2);
+    is_deeply($v3->value, Rstats::Util::FALSE);
+  }
+    
+  # setequal - not equal, element count is diffrent
+  {
+    my $v1 = c(2, 3, 1);
+    my $v2 = c(2, 3, 1, 5);
+    my $v3 = r->setequal($v1, $v2);
+    is_deeply($v3->value, Rstats::Util::FALSE);
+  }
+}
+
 # setdiff
 {
   my $v1 = c(1, 2, 3, 4);

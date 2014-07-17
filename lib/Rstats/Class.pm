@@ -117,6 +117,7 @@ my @methods = qw/
   seq
   sequence
   setdiff
+  setequal
   sin
   sinh
   sum

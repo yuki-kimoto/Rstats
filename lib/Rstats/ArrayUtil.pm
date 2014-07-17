@@ -14,6 +14,35 @@ sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
 
 sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
+sub F { FALSE() }
+
+sub FALSE { Rstats::ArrayUtil::c(Rstats::Util::FALSE()) }
+
+sub T { TRUE() }
+
+sub TRUE { Rstats::ArrayUtil::c(Rstats::Util::TRUE()) }
+
+sub setequal {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  croak "mode is diffrence" if $a1->{type} ne $a2->{type};
+  
+  my $a3 = Rstats::ArrayUtil::sort($a1);
+  my $a4 = Rstats::ArrayUtil::sort($a2);
+  
+  return FALSE if @{$a3->elements} ne @{$a4->elements};
+  
+  my $not_equal;
+  for (my $i = 0; $i < @{$a3->elements}; $i++) {
+    unless (Rstats::Util::equal($a3->elements->[$i], $a4->elements->[$i])) {
+      $not_equal = 1;
+      last;
+    }
+  }
+  
+  return $not_equal ? FALSE : TRUE;
+}
+
 sub setdiff {
   my ($a1, $a2) = (to_array(shift), to_array(shift));
   
@@ -623,10 +652,6 @@ sub expm1 {
   
   return $a2;
 }
-
-sub F { FALSE() }
-
-sub FALSE { Rstats::ArrayUtil::c(Rstats::Util::FALSE()) }
 
 sub floor {
   my $_a1 = shift;
@@ -1292,10 +1317,6 @@ sub tanh {
   
   return $a2;
 }
-
-sub T { TRUE() }
-
-sub TRUE { Rstats::ArrayUtil::c(Rstats::Util::TRUE()) }
 
 sub trunc {
   my ($_a1) = @_;

@@ -14,6 +14,26 @@ sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
 
 sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
+sub setdiff {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  croak "mode is diffrence" if $a1->{type} ne $a2->{type};
+  
+  my $a3_elements = [];
+  for my $a1_element (@{$a1->elements}) {
+    my $match;
+    for my $a2_element (@{$a2->elements}) {
+      if (Rstats::Util::equal($a1_element, $a2_element)) {
+        $match = 1;
+        last;
+      }
+    }
+    push @$a3_elements, $a1_element unless $match;
+  }
+
+  return c($a3_elements);
+}
+
 sub intersect {
   my ($a1, $a2) = (to_array(shift), to_array(shift));
   

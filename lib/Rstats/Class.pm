@@ -116,6 +116,7 @@ my @methods = qw/
   sample
   seq
   sequence
+  setdiff
   sin
   sinh
   sum

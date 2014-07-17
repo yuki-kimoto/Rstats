@@ -6,6 +6,14 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# setdiff
+{
+  my $v1 = c(1, 2, 3, 4);
+  my $v2 = c(3, 4);
+  my $v3 = r->setdiff($v1, $v2);
+  is_deeply($v3->values, [1, 2]);
+}
+
 # intersect
 {
   my $v1 = c(1, 2, 3, 4);

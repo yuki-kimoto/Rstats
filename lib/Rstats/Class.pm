@@ -60,6 +60,7 @@ my @methods = qw/
   head
   i
   ifelse
+  is_element
   Inf
   intersect
   is_array

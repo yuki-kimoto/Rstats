@@ -6,6 +6,25 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# is_element
+{
+  # cumprod - numeric
+  {
+    my $v1 = c(1, 2, 3, 4);
+    my $v2 = c(1, 2, 3);
+    my $v3 = r->is_element($v1, $v2);
+    is_deeply($v3->values, [Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
+  }
+  
+  # cumprod - complex
+  {
+    my $v1 = c(1*i, 2*i, 3*i, 4*i);
+    my $v2 = c(1*i, 2*i, 3*i);
+    my $v3 = r->is_element($v1, $v2);
+    is_deeply($v3->values, [Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::FALSE])
+  }
+}
+
 # setequal
 {
   # setequal - equal

@@ -22,6 +22,26 @@ sub T { TRUE() }
 
 sub TRUE { Rstats::ArrayUtil::c(Rstats::Util::TRUE()) }
 
+sub is_element {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  croak "mode is diffrence" if $a1->{type} ne $a2->{type};
+  
+  my $a3_elements = [];
+  for my $a1_element (@{$a1->elements}) {
+    my $match;
+    for my $a2_element (@{$a2->elements}) {
+      if (Rstats::Util::equal($a1_element, $a2_element)) {
+        $match = 1;
+        last;
+      }
+    }
+    push @$a3_elements, $match ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+  }
+  
+  return c($a3_elements);
+}
+
 sub setequal {
   my ($a1, $a2) = (to_array(shift), to_array(shift));
   

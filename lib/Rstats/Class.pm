@@ -61,6 +61,7 @@ my @methods = qw/
   i
   ifelse
   Inf
+  intersect
   is_array
   is_character
   is_complex

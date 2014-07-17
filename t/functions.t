@@ -6,6 +6,14 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# intersect
+{
+  my $v1 = c(1, 2, 3, 4);
+  my $v2 = c(3, 4, 5, 6);
+  my $v3 = r->intersect($v1, $v2);
+  is_deeply($v3->values, [3, 4]);
+}
+
 # union
 {
   my $v1 = c(1, 2, 3, 4);

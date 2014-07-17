@@ -14,8 +14,27 @@ sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
 
 sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
+sub intersect {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  croak "mode is diffrence" if $a1->{type} ne $a2->{type};
+  
+  my $a3_elements = [];
+  for my $a1_element (@{$a1->elements}) {
+    for my $a2_element (@{$a2->elements}) {
+      if (Rstats::Util::equal($a1_element, $a2_element)) {
+        push @$a3_elements, $a1_element;
+      }
+    }
+  }
+  
+  return c($a3_elements);
+}
+
 sub union {
   my ($a1, $a2) = (to_array(shift), to_array(shift));
+
+  croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
   my $a3 = c($a1, $a2);
   my $a4 = unique($a3);

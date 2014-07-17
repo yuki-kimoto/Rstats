@@ -6,6 +6,40 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# cumprod
+{
+  # cumprod - numeric
+  {
+    my $v1 = c(2, 3, 4);
+    my $v2 = r->cumprod($v1);
+    is_deeply($v2->values, [2, 6, 24]);
+  }
+  
+  # cumprod - complex
+  {
+    my $v1 = c(2*i, 3*i, 4*i);
+    my $v2 = r->cumprod($v1);
+    is_deeply($v2->values, [{re => 0, im => 2}, {re => -6, im => 0}, {re => 0, im => -24}])
+  }
+}
+
+# cumsum
+{
+  # cumsum - numeric
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = r->cumsum($v1);
+    is_deeply($v2->values, [1, 3, 6]);
+  }
+  
+  # cumsum - complex
+  {
+    my $v1 = c(1*i, 2*i, 3*i);
+    my $v2 = r->cumsum($v1);
+    is_deeply($v2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
+  }
+}
+
 # rank
 {
   my $v1 = c(1, 5, 5, 5, 3, 3, 7);

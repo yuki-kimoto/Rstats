@@ -14,6 +14,9 @@ require Rstats::ArrayUtil;
 # sub gsub chartr
 # paste
 # strsplit
+# cumprod
+# cummax
+# cummin
 
 my @methods = qw/
   abs
@@ -44,6 +47,7 @@ my @methods = qw/
   cos
   cosh
   cumsum
+  cumprod
   complex
   diff
   dim

@@ -466,6 +466,16 @@ sub cumsum {
   return Rstats::ArrayUtil::c(\@a2_elements);
 }
 
+sub cumprod {
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
+  my $type = $a1->{type};
+  my $total = Rstats::Util::create($type, 1);
+  my @a2_elements;
+  push @a2_elements, $total = Rstats::Util::multiply($total, $_) for @{$a1->elements};
+  
+  return Rstats::ArrayUtil::c(\@a2_elements);
+}
+
 sub complex {
   my ($re, $im) = @_;
   
@@ -770,8 +780,6 @@ sub rank {
   my @pos_vals;
   push @pos_vals, {pos => $_ + 1, value => $v1_values->[$_]} for (0 .. @$v1_values - 1);
   my @sorted_pos_values = sort { $a->{value} <=> $b->{value} } @pos_vals;
-  
-  $DB::single = 1;
   
   # Rank
   for (my $i = 0; $i < @sorted_pos_values; $i++) {

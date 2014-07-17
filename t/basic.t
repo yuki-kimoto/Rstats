@@ -124,13 +124,6 @@ use Rstats::Array;
   }
 }
 
-# cumsum
-{
-  my $v1 = c(1, 2, 3);
-  my $v2 = r->cumsum($v1);
-  is_deeply($v2->values, [1, 3, 6]);
-}
-
 # rnorm
 {
   my $v1 = r->rnorm(100);

@@ -6,6 +6,20 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# cummin
+{
+  my $v1 = c(7, 3, 5, 1);
+  my $v2 = r->cummin($v1);
+  is_deeply($v2->values, [7, 3, 3, 1]);
+}
+
+# cummax
+{
+  my $v1 = c(1, 5, 3, 7);
+  my $v2 = r->cummax($v1);
+  is_deeply($v2->values, [1, 5, 5, 7]);
+}
+
 # cumprod
 {
   # cumprod - numeric

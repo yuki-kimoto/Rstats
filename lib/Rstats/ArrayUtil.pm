@@ -10,6 +10,10 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
+sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
+
+sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
+
 sub diff {
   my $a1 = to_array(shift);
   
@@ -456,6 +460,61 @@ sub cosh {
   return $a2;
 }
 
+sub cummax {
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
+  
+  unless (@{$a1->elements}) {
+    carp 'no non-missing arguments to max; returning -Inf';
+    return negativeInf;
+  }
+  
+  my @a2_elements;
+  my $max = shift @{$a1->elements};
+  push @a2_elements, $max;
+  for my $element (@{$a1->elements}) {
+    
+    if (Rstats::Util::is_na($element)) {
+      return NA;
+    }
+    elsif (Rstats::Util::is_nan($element)) {
+      $max = $element;
+    }
+    if (Rstats::Util::more_than($element, $max) && !Rstats::Util::is_nan($max)) {
+      $max = $element;
+    }
+    push @a2_elements, $max;
+  }
+  
+  return Rstats::ArrayUtil::c(\@a2_elements);
+}
+
+sub cummin {
+  my $a1 = Rstats::ArrayUtil::to_array(shift);
+  
+  unless (@{$a1->elements}) {
+    carp 'no non-missing arguments to max; returning -Inf';
+    return negativeInf;
+  }
+  
+  my @a2_elements;
+  my $min = shift @{$a1->elements};
+  push @a2_elements, $min;
+  for my $element (@{$a1->elements}) {
+    if (Rstats::Util::is_na($element)) {
+      return NA;
+    }
+    elsif (Rstats::Util::is_nan($element)) {
+      $min = $element;
+    }
+    if (Rstats::Util::less_than($element, $min) && !Rstats::Util::is_nan($min)) {
+      $min = $element;
+    }
+    push @a2_elements, $min;
+  }
+  
+  return Rstats::ArrayUtil::c(\@a2_elements);
+}
+
 sub cumsum {
   my $a1 = Rstats::ArrayUtil::to_array(shift);
   my $type = $a1->{type};
@@ -576,10 +635,6 @@ sub ifelse {
   
   return Rstats::ArrayUtil::array(\@v2_values);
 }
-
-sub Inf { Rstats::ArrayUtil::c(Rstats::Util::Inf) }
-
-sub negativeInf { Rstats::ArrayUtil::c(Rstats::Util::negativeInf) }
 
 sub is_finite {
   my $_a1 = shift;

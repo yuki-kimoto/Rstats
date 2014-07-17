@@ -14,7 +14,6 @@ require Rstats::ArrayUtil;
 # sub gsub chartr
 # paste
 # strsplit
-# cumprod
 # cummax
 # cummin
 
@@ -46,6 +45,8 @@ my @methods = qw/
   colSums
   cos
   cosh
+  cummax
+  cummin
   cumsum
   cumprod
   complex

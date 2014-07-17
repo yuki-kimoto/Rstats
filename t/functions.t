@@ -6,6 +6,30 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# rank
+{
+  my $v1 = c(1, 5, 5, 5, 3, 3, 7);
+  my $v2 = r->rank($v1);
+  is_deeply($v2->values, [1, 5, 5, 5, 2.5, 2.5, 7]);
+}
+
+# order
+{
+  # order - decreasing FALSE
+  {
+    my $v1 = c(2, 4, 3, 1);
+    my $v2 = r->order($v1);
+    is_deeply($v2->values, [4, 1, 3, 2]);
+  }
+  
+  # order - decreasing TRUE
+  {
+    my $v1 = c(2, 4, 3, 1);
+    my $v2 = r->order($v1, {decreasing => TRUE});
+    is_deeply($v2->values, [2, 3, 1, 4]);
+  }
+}
+
 # diff
 {
   # diff - numeric

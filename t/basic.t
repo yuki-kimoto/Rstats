@@ -217,13 +217,6 @@ use Rstats::Array;
   is_deeply($v1->values, [undef, undef, 5]);
 }
 
-# order
-{
-  my $v1 = c(2, 4, 3, 1);
-  my $v2 = r->order($v1);
-  is_deeply($v2->values, [4, 1, 3, 2]);
-}
-
 # runif
 {
   {

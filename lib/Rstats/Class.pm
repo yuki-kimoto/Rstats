@@ -96,6 +96,7 @@ my @methods = qw/
   pmin
   prod
   range
+  rank
   rbind
   rep
   replace

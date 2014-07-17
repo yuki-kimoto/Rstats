@@ -744,7 +744,7 @@ sub min {
 sub order {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $v1 = Rstats::ArrayUtil::to_array(shift);
-  my $decreasing = $opt->{decreasing};
+  my $decreasing = $opt->{decreasing} || Rstats::ArrayUtil::FALSE;
   
   my $v1_values = $v1->values;
   
@@ -756,6 +756,47 @@ sub order {
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
   return Rstats::ArrayUtil::c(\@orders);
+}
+
+# TODO
+# na.last
+sub rank {
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $v1 = Rstats::ArrayUtil::to_array(shift);
+  my $decreasing = $opt->{decreasing};
+  
+  my $v1_values = $v1->values;
+  
+  my @pos_vals;
+  push @pos_vals, {pos => $_ + 1, value => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  my @sorted_pos_values = sort { $a->{value} <=> $b->{value} } @pos_vals;
+  
+  $DB::single = 1;
+  
+  # Rank
+  for (my $i = 0; $i < @sorted_pos_values; $i++) {
+    $sorted_pos_values[$i]{rank} = $i + 1;
+  }
+  
+  # Average rank
+  my $element_info = {};
+  for my $sorted_pos_value (@sorted_pos_values) {
+    my $value = $sorted_pos_value->{value};
+    $element_info->{$value} ||= {};
+    $element_info->{$value}{rank_total} += $sorted_pos_value->{rank};
+    $element_info->{$value}{rank_count}++;
+  }
+  
+  for my $sorted_pos_value (@sorted_pos_values) {
+    my $value = $sorted_pos_value->{value};
+    $sorted_pos_value->{rank_average}
+      = $element_info->{$value}{rank_total} / $element_info->{$value}{rank_count};
+  }
+  
+  my @sorted_pos_values2 = sort { $a->{pos} <=> $b->{pos} } @sorted_pos_values;
+  my @rank = map { $_->{rank_average} } @sorted_pos_values2;
+  
+  return Rstats::ArrayUtil::c(\@rank);
 }
 
 sub paste {

@@ -26,6 +26,12 @@ use Math::Trig ();
     my $a1 = r->complex(c(1, 2), c(3, 4, 5));
     is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
   }
+
+  # complex - option
+  {
+    my $a1 = r->complex({re => c(1, 2), im => c(3, 4)});
+    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
+  }
 }
 
 # append

@@ -628,8 +628,25 @@ sub cumprod {
   return Rstats::ArrayUtil::c(\@a2_elements);
 }
 
+sub args {
+  my $names = shift;
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my @args;
+  for (my $i = 0; $i < @$names; $i++) {
+    my $name = $names->[$i];
+    my $arg = delete $opt->{$name};
+    $arg = $_[$i] unless defined $arg;
+    $arg = to_array($arg);
+    push @args, $arg;
+  }
+  
+  croak "unused argument ($_)" for keys %$opt;
+  
+  return @args;
+}
+
 sub complex {
-  my ($a1_re, $a1_im) = (to_array(shift), to_array(shift));
+  my ($a1_re, $a1_im) = args(['re', 'im'], @_);
   
   croak "mode should be numeric" unless is_numeric($a1_re) && is_numeric($a1_im);
 

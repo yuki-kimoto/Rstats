@@ -760,13 +760,6 @@ EOS
     my $a2 = $a1->at(2, [], 1)->set(c(31, 32, 33));
     is_deeply($a2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
   }
-
-  # set 3-dimention
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a2 = $a1->at(4, [], 1)->set(sub { $_ * 2 });
-    is_deeply($a2->values, [1, 2, 3, 8, 5, 6, 7, 16, 9, 10, 11, 24, 13 .. 24]);
-  }
 }
 # get 3-dimention
 {

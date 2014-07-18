@@ -89,7 +89,4 @@ sub _fix_position {
   return ($a1, $a2);
 }
 
-
-
 1;
-

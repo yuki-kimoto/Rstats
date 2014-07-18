@@ -589,12 +589,11 @@ sub acosh {
 }
 
 sub append {
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $a1 = shift;
-  my $a2 = shift;
+  my ($a1, $a2, $a_after) = args(['a1', 'a2', 'after'], @_);
   
-  my $after = $opt->{after};
-  $after = @{elements($a1)} unless defined $after;
+  my $a1_length = @{elements($a1)};
+  $a_after = c($a1_length) if is_null($a_after);
+  my $after = value($a_after);
   
   if (ref $a2 eq 'Rstats::Array') {
     splice @{elements($a1)}, $after, 0, @{elements($a2)};

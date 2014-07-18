@@ -6,16 +6,6 @@ use Rstats;
 use Math::Trig ();
 use Rstats::Array;
 
-# complex
-{
-  # complex
-  {
-    my $a1 = r->complex(1, 2);
-    is($a1->value->{re}, 1);
-    is($a1->value->{im}, 2);
-  }
-}
-
 # as_numeric
 {
   # as_numeric - from complex

@@ -629,9 +629,19 @@ sub cumprod {
 }
 
 sub complex {
-  my ($re, $im) = @_;
+  my ($a1_re, $a1_im) = (to_array(shift), to_array(shift));
   
-  return Rstats::ArrayUtil::c(Rstats::Util::complex($re, $im));
+  croak "mode should be numeric" unless is_numeric($a1_re) && is_numeric($a1_im);
+
+  my $a2_elements = [];
+  for (my $i = 0; $i <  @{$a1_im->elements}; $i++) {
+    my $re = $a1_re->elements->[$i] || Rstats::Util::double(0);
+    my $im = $a1_im->elements->[$i];
+    my $a2_element = Rstats::Util::complex_double($re, $im);
+    push @$a2_elements, $a2_element;
+  }
+  
+  return c($a2_elements);
 }
 
 sub exp {

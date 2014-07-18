@@ -6,6 +6,28 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# complex
+{
+  # complex
+  {
+    my $a1 = r->complex(1, 2);
+    is($a1->value->{re}, 1);
+    is($a1->value->{im}, 2);
+  }
+  
+  # complex - array
+  {
+    my $a1 = r->complex(c(1, 2), c(3, 4));
+    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
+  }
+
+  # complex - array, some elements lack
+  {
+    my $a1 = r->complex(c(1, 2), c(3, 4, 5));
+    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
+  }
+}
+
 # append
 {
   # append - after option

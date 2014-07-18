@@ -616,22 +616,12 @@ sub array {
 
   # Dimention
   my $elements = elements($a1);
-  my $dim;
-  if (defined $_dim) {
-    if (ref $_dim eq 'Rstats::Array') {
-      $dim = elements($_dim);
-    }
-    elsif (ref $_dim eq 'ARRAY') {
-      $dim = $_dim;
-    }
-    elsif(!ref $_dim) {
-      $dim = [$_dim];
-    }
+  my $dim = to_array($_dim);
+  unless (@{$dim->elements}) {
+    my $a1_length = @{$a1->elements};
+    $dim = c($a1_length);
   }
-  else {
-    $dim = [scalar @$elements]
-  }
-  dim($a1 => $dim);
+  dim($a1, $dim);
   
   # Fix elements
   my $max_length = 1;
@@ -2006,23 +1996,12 @@ sub dim {
   my $a1 = shift;
   
   if (@_) {
-    my $a2 = $_[0];
-    if (ref $a2 eq 'Rstats::Array') {
-      $a1->{dim} = $a2->elements;
-    }
-    elsif (ref $a2 eq 'ARRAY') {
-      $a1->{dim} = $a2;
-    }
-    elsif(!ref $a2) {
-      $a1->{dim} = [$a2];
-    }
-    else {
-      croak "Invalid elements is passed to dim argument";
-    }
+    $a1->{dim} = elements(to_array($_[0]));
+    
+    return $a1;
   }
   else {
-    $a1->{dim} = [] unless exists $a1->{dim};
-    return Rstats::ArrayUtil::c($a1->{dim});
+    return c($a1->{dim});
   }
 }
 
@@ -2235,7 +2214,7 @@ sub C {
 sub dim_as_array {
   my $a1 = shift;
   
-  if (@{$a1->{dim}}) {
+  if (@{elements(dim($a1))}) {
     return dim($a1);
   }
   else {

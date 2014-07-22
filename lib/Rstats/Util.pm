@@ -14,6 +14,7 @@ use Scalar::Util ();
 use B ();
 use Math::Complex ();
 use POSIX ();
+use Math::Trig ();
 
 # Special values
 my $na = Rstats::Element::NA->new;
@@ -22,6 +23,7 @@ my $inf = Rstats::Element::Double->new(flag => 'inf');
 my $negative_inf = Rstats::Element::Double->new(flag => '-inf');
 my $true = logical(1);
 my $false = logical(0);
+my $pi = double(Math::Trig::pi);
 
 # Address
 my $true_ad = Scalar::Util::refaddr $true;
@@ -37,6 +39,7 @@ sub NA { $na }
 sub NaN { $nan }
 sub Inf { $inf }
 sub negativeInf { $negative_inf }
+sub pi { $pi }
 
 sub is_nan { ref $_[0] && (Scalar::Util::refaddr $_[0] == $nan_ad) }
 sub is_na { ref $_[0] && (Scalar::Util::refaddr $_[0] == $na_ad) }

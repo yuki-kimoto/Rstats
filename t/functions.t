@@ -6,6 +6,12 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# pi
+{
+  my $a1 = pi;
+  is(sprintf('%.4f', $a1->value), 3.1416);
+}
+
 # complex
 {
   # complex

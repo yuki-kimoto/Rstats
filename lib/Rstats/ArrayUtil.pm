@@ -14,13 +14,13 @@ sub Inf { c(Rstats::Util::Inf) }
 
 sub negativeInf { c(Rstats::Util::negativeInf) }
 
-sub F { FALSE() }
+sub FALSE { c(Rstats::Util::FALSE) }
+sub F { FALSE }
 
-sub FALSE { c(Rstats::Util::FALSE()) }
+sub TRUE { c(Rstats::Util::TRUE) }
+sub T { TRUE }
 
-sub T { TRUE() }
-
-sub TRUE { c(Rstats::Util::TRUE()) }
+sub pi { c(Rstats::Util::pi) }
 
 sub elements {
   my $a1 = shift;

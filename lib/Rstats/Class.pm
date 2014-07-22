@@ -99,6 +99,7 @@ my @methods = qw/
   nchar
   order
   paste
+  pi
   pmax
   pmin
   prod

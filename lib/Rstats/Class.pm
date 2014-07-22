@@ -85,6 +85,7 @@ my @methods = qw/
   log10
   match
   median
+  Mod
   mode
   NA
   names

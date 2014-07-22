@@ -1812,6 +1812,8 @@ sub typeof {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub Mod { Rstats::ArrayUtil::abs(@_) }
+
 sub mode {
   my $a1 = shift;
   

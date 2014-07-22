@@ -1145,6 +1145,23 @@ use Math::Trig ();
     my $a1 = r->abs(matrix([-3, 4]));
     is_deeply($a1->values, [3, 4]);
   }
+  
+  # abs - complex
+  {
+    my $a1 = c(3 + 4*i, 6 + 8*i);
+    my $a2 = r->abs($a1);
+    is_deeply($a2->values, [5, 10]);
+  }
+}
+
+# Mod
+{
+  # Mod - complex
+  {
+    my $a1 = c(3 + 4*i, 6 + 8*i);
+    my $a2 = r->Mod($a1);
+    is_deeply($a2->values, [5, 10]);
+  }
 }
 
 # exp

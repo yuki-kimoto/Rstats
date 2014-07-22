@@ -9,13 +9,10 @@ require Rstats::ArrayUtil;
 # lgamma
 # complete_cases
 # cor
-# match charmatch pmatch grep regexpr
+# charmatch pmatch grep regexpr
 # substr substring
 # sub gsub chartr
-# paste
 # strsplit
-# cummax
-# cummin
 
 my @methods = qw/
   abs
@@ -37,6 +34,7 @@ my @methods = qw/
   atanh
   c
   C
+  charmatch
   cbind
   ceiling
   col

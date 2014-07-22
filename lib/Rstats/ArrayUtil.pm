@@ -22,6 +22,40 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub charmatch {
+  my ($a1_x, $a1_table) = args(['x', 'table'], @_);
+  
+  die "Not implemented"
+    unless $a1_x->{type} eq 'character' && $a1_table->{type} eq 'character';
+  
+  my $a2_elements = [];
+  for my $a1_x_element (@{$a1_x->elements}) {
+    my $a1_x_char = Rstats::Util::value($a1_x_element);
+    my $a1_x_char_q = quotemeta($a1_x_char);
+    my $match_count;
+    my $match_pos;
+    for (my $k = 0; $k < @{$a1_table->elements}; $k++) {
+      my $a1_table = $a1_table->elements->[$k];
+      my $a1_table_char = Rstats::Util::value($a1_table);
+      if ($a1_table_char =~ /$a1_x_char_q/) {
+        $match_count++;
+        $match_pos = $k;
+      }
+    }
+    if ($match_count == 0) {
+      push $a2_elements, Rstats::Util::NA;
+    }
+    elsif ($match_count == 1) {
+      push $a2_elements, Rstats::Util::double($match_pos + 1);
+    }
+    elsif ($match_count > 1) {
+      push $a2_elements, Rstats::Util::double(0);
+    }
+  }
+  
+  return c($a2_elements);
+}
+
 sub Re {
   my $a1 = to_array(shift);
   

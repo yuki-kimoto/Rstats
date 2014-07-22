@@ -6,6 +6,39 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# charmatch
+{
+  # charmatch - empty string
+  {
+    my $a1 = r->charmatch("", "");
+    is_deeply($a1->value, 1);
+  }
+  
+  # charmatch - multiple match
+  {
+    my $a1 = r->charmatch("m",   c("mean", "median", "mode"));
+    is_deeply($a1->value, 0);
+  }
+  
+  # charmatch - multiple match
+  {
+    my $a1 = r->charmatch("m",   c("mean", "median", "mode"));
+    is_deeply($a1->value, 0);
+  }
+
+  # charmatch - one match
+  {
+    my $a1 = r->charmatch("med",   c("mean", "median", "mode"));
+    is_deeply($a1->value, 2);
+  }
+    
+  # charmatch - one match, multiple elements
+  {
+    my $a1 = r->charmatch(c("med", "mod"),   c("mean", "median", "mode"));
+    is_deeply($a1->values, [2, 3]);
+  }
+}
+
 # Im
 {
   my $a1 = c(1 + 2*i, 2 + 3*i);

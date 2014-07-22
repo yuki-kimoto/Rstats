@@ -62,6 +62,7 @@ my @methods = qw/
   i
   ifelse
   is_element
+  Im
   Inf
   intersect
   is_array
@@ -108,6 +109,7 @@ my @methods = qw/
   range
   rank
   rbind
+  Re
   rep
   replace
   rev

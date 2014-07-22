@@ -22,6 +22,28 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub Re {
+  my $a1 = to_array(shift);
+  
+  my @a2_elements = map { Rstats::Util::Re($_) } @{$a1->elements};
+  my $a2 = clone_without_elements($a1);
+  $a2->{type} = 'double';
+  elements($a2, \@a2_elements);
+  
+  return $a2;
+}
+
+sub Im {
+  my $a1 = to_array(shift);
+  
+  my @a2_elements = map { Rstats::Util::Im($_) } @{$a1->elements};
+  my $a2 = clone_without_elements($a1);
+  $a2->{type} = 'double';
+  elements($a2, \@a2_elements);
+  
+  return $a2;
+}
+
 sub elements {
   my $a1 = shift;
   

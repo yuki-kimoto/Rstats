@@ -6,6 +6,20 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# Im
+{
+  my $a1 = c(1 + 2*i, 2 + 3*i);
+  my $a2 = r->Im($a1);
+  is_deeply($a2->values, [2, 3]);
+}
+
+# Re
+{
+  my $a1 = c(1 + 2*i, 2 + 3*i);
+  my $a2 = r->Re($a1);
+  is_deeply($a2->values, [1, 2]);
+}
+
 # Conj
 {
   my $a1 = c(1 + 2*i, 2 + 3*i);

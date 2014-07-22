@@ -782,7 +782,7 @@ sub cos {
   
   my $a1 = to_array($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(cos Rstats::Util::value($_)) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::cos($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
@@ -898,16 +898,44 @@ sub args {
 }
 
 sub complex {
-  my ($a1_re, $a1_im) = args(['re', 'im'], @_);
-  
-  croak "mode should be numeric" unless is_numeric($a1_re) && is_numeric($a1_im);
+  my ($a1_re, $a1_im, $a1_mod, $a1_arg) = args(['re', 'im', 'mod', 'arg'], @_);
 
   my $a2_elements = [];
-  for (my $i = 0; $i <  @{elements($a1_im)}; $i++) {
-    my $re = elements($a1_re)->[$i] || Rstats::Util::double(0);
-    my $im = elements($a1_im)->[$i];
-    my $a2_element = Rstats::Util::complex_double($re, $im);
-    push @$a2_elements, $a2_element;
+  # Create complex from mod and arg
+  if (@{$a1_mod->elements} || @{$a1_arg->elements}) {
+    my $a1_mod_length = @{$a1_mod->elements};
+    my $a1_arg_length = @{$a1_arg->elements};
+    my $longer_length = $a1_mod_length > $a1_arg_length ? $a1_mod_length : $a1_arg_length;
+    
+    for (my $i = 0; $i < $longer_length; $i++) {
+      my $mod = $a1_mod->elements->[$i];
+      $mod = Rstats::Util::double(1) unless $mod;
+      my $arg = $a1_arg->elements->[$i];
+      $arg = Rstats::Util::double(0) unless $arg;
+      
+      my $re = Rstats::Util::multiply(
+        $mod,
+        Rstats::Util::cos($arg)
+      );
+      my $im = Rstats::Util::multiply(
+        $mod,
+        Rstats::Util::sin($arg)
+      );
+      
+      my $a2_element = Rstats::Util::complex_double($re, $im);
+      push @$a2_elements, $a2_element;
+    }
+  }
+  # Create complex from re and im
+  else {
+    croak "mode should be numeric" unless is_numeric($a1_re) && is_numeric($a1_im);
+    
+    for (my $i = 0; $i <  @{elements($a1_im)}; $i++) {
+      my $re = elements($a1_re)->[$i] || Rstats::Util::double(0);
+      my $im = elements($a1_im)->[$i];
+      my $a2_element = Rstats::Util::complex_double($re, $im);
+      push @$a2_elements, $a2_element;
+    }
   }
   
   return c($a2_elements);
@@ -1518,7 +1546,7 @@ sub sin {
   
   my $a1 = to_array($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(sin Rstats::Util::value($_)) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::sin($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);

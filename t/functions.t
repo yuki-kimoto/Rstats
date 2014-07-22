@@ -33,10 +33,31 @@ use Math::Trig ();
     is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
   }
 
-  # complex - option
+  # complex - re and im option
   {
     my $a1 = r->complex({re => c(1, 2), im => c(3, 4)});
     is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
+  }
+  
+  # complex - mod and arg option
+  {
+    my $a1 = r->complex({mod => 2, arg => pi});
+    is($a1->value->{re}, -2);
+    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
+  }
+
+  # complex - mod and arg option, omit arg
+  {
+    my $a1 = r->complex({mod => 2});
+    is($a1->value->{re}, 2);
+    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
+  }
+
+  # complex - mod and arg option, omit mod
+  {
+    my $a1 = r->complex({arg => pi});
+    is($a1->value->{re}, -1);
+    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
   }
 }
 

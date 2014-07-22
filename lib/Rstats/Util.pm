@@ -77,6 +77,18 @@ sub hash {
   return $hash;
 }
 
+sub cos {
+  my $e1 = shift;
+  
+  return Rstats::Util::double(cos Rstats::Util::value($e1));
+}
+
+sub sin {
+  my $e1 = shift;
+  
+  return Rstats::Util::double(sin Rstats::Util::value($e1));
+}
+
 sub create {
   my ($type, $value) = @_;
   

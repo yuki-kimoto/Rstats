@@ -43,6 +43,7 @@ my @methods = qw/
   colMeans
   colnames
   colSums
+  Conj
   cos
   cosh
   cummax

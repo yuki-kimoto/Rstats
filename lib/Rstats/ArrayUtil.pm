@@ -85,6 +85,17 @@ sub element {
   }
 }
 
+sub Conj {
+  my $a1 = to_array(shift);
+  
+  $DB::single = 1;
+  my @a2_elements = map { Rstats::Util::Conj($_) } @{$a1->elements};
+  my $a2 = clone_without_elements($a1);
+  $a2->elements(\@a2_elements);
+  
+  return $a2;
+}
+
 sub to_string {
   my $a1 = shift;
 

@@ -69,6 +69,21 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub Mod { abs(@_) }
+
+sub Arg {
+  my $e1 = shift;
+  
+  my $z = Math::Complex->make(
+    Rstats::Util::value(Re($e1)),
+    Rstats::Util::value(Im($e1))
+  );
+  
+  my $arg = $z->arg;
+  
+  return double($arg);
+}
+
 sub hash {
   my $e1 = shift;
   
@@ -563,7 +578,7 @@ sub divide {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($e1)) {
-    my $v3 = multiply($e1, conj($e2));
+    my $v3 = multiply($e1, Conj($e2));
     my $abs2 = double(value($e2->re) ** 2 + value($e2->im) ** 2);
     my $re = divide($v3->re, $abs2);
     my $im = divide($v3->im, $abs2);
@@ -952,7 +967,7 @@ sub remainder {
   }
 }
 
-sub conj {
+sub Conj {
   my $value = shift;
   
   if (is_complex($value)) {

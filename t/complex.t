@@ -146,10 +146,10 @@ my $r = Rstats::Class->new;
     is(Rstats::Util::value($abs), 5);
   }
   
-  # operation - conj
+  # operation - Conj
   {
     my $z1 = Rstats::Util::complex(1, 2);
-    my $conj = Rstats::Util::conj($z1);
+    my $conj = Rstats::Util::Conj($z1);
     is(Rstats::Util::value($conj)->{re}, 1);
     is(Rstats::Util::value($conj)->{im}, -2);
   }

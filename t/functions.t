@@ -6,6 +6,13 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# Conj
+{
+  my $a1 = c(1 + 2*i, 2 + 3*i);
+  my $a2 = r->Conj($a1);
+  is_deeply($a2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
+}
+
 # pi
 {
   my $a1 = pi;

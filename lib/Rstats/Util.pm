@@ -112,7 +112,31 @@ sub cos {
 sub sin {
   my $e1 = shift;
   
-  return Rstats::Util::double(sin Rstats::Util::value($e1));
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value = value($e1);
+    
+    if (is_infinite($e1)) {
+      carp "In sin : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1) || is_na($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      $e2 = sin($value);
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
 }
 
 sub create {
@@ -496,7 +520,7 @@ sub multiply {
     return NaN if is_nan($e1) || is_nan($e2);
     if (defined $e1->value) {
       if (defined $e2) {
-        my $value = $e1->value * $e2->value;
+        my $value = value($e1) * value($e2);
         if ($value eq '1.#INF') {
           return Inf;
         }
@@ -1068,6 +1092,7 @@ sub typeof {
 
 sub is_character { (typeof($_[0]) || '') eq 'character' }
 sub is_complex { (typeof($_[0]) || '') eq 'complex' }
+sub is_numeric { is_double($_[0]) || is_integer($_[0]) }
 sub is_double { (typeof($_[0]) || '') eq 'double' }
 sub is_integer { (typeof($_[0]) || '') eq 'integer' }
 sub is_logical { (typeof($_[0]) || '') eq 'logical' }

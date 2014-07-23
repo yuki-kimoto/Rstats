@@ -109,6 +109,13 @@ sub cos {
   return Rstats::Util::double(cos Rstats::Util::value($e1));
 }
 
+sub exp {
+  my $e1 = shift;
+  
+  return Rstats::Util::double(exp Rstats::Util::value($e1));
+}
+
+
 sub sin {
   my $e1 = shift;
   
@@ -117,25 +124,14 @@ sub sin {
   my $e2;
   if (is_complex($e1)) {
     
-    my $value = Rstats::Util::value($e1);
+    my $e1_re = Rstats::Util::Re($e1);
+    my $e1_im = Rstats::Util::Im($e1);
     
-    my $re = $value->{re};
-    my $im = $value->{im};
+    my $e2_eim = Rstats::Util::exp($e1_im);
+    my $e2_sre = Rstats::Util::sin($e1_re);
+    my $e2_cre = Rstats::Util::cos($e1_re);
     
-    my $eim = CORE::exp($im);
-    my $sre = CORE::sin($re);
-    my $cre = CORE::cos($re);
-    
-    my $e2_eim = double($eim);
-    my $e2_sre = double($sre);
-    my $e2_cre = double($cre);
-    my $e2_eim_1;
-    if (equal($e2_eim, double(0))) {
-      $e2_eim_1 = Rstats::Util::Inf;
-    }
-    else {
-      $e2_eim_1 = divide(double(1), $e2_eim);
-    }
+    my $e2_eim_1 = divide(double(1), $e2_eim);
     
     my $e2_re = divide(
       multiply(
@@ -172,7 +168,7 @@ sub sin {
       $e2 = $e1;
     }
     else {
-      $e2 = sin($value);
+      $e2 = double(sin($value));
     }
   }
   else {

@@ -106,7 +106,63 @@ sub hash {
 sub cos {
   my $e1 = shift;
   
-  return Rstats::Util::double(cos Rstats::Util::value($e1));
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+    
+    my $e2_eim = Rstats::Util::exp($e1_im);
+    my $e2_sre = Rstats::Util::sin($e1_re);
+    my $e2_cre = Rstats::Util::cos($e1_re);
+    
+    my $e2_eim_1 = divide(double(1), $e2_eim);
+    
+    my $e2_re = divide(
+      multiply(
+        $e2_cre,
+        add(
+          $e2_eim,
+          $e2_eim_1
+        )
+      ),
+      double(2)
+    );
+    
+    my $e2_im = divide(
+      multiply(
+        $e2_sre,
+        subtract(
+          $e2_eim_1,
+          $e2_eim
+        )
+      ),
+      double(2)
+    );
+    
+    $e2 = complex_double($e2_re, $e2_im);
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value = value($e1);
+    
+    if (is_infinite($e1)) {
+      carp "In cos : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1) || is_na($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      $e2 = double(cos($value));
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
 }
 
 sub exp {

@@ -1042,35 +1042,6 @@ use Math::Trig ();
   }
 }
 
-# cos
-{
-  # cos - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->cos($a1);
-    is_deeply(
-      $a2->values,
-      [
-        cos $a1->values->[0],
-        cos $a1->values->[1],
-      ]
-    );
-  }
-
-  # cos - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->cos(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        cos $a1->values->[0],
-        cos $a1->values->[1],
-      ]
-    );
-  }
-}
-
 # log10
 {
   # log10 - array reference

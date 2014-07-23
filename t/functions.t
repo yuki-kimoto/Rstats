@@ -6,6 +6,23 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# Arg
+{
+  # Arg - non 0 values
+  {
+    my $a1 = c(1 + 1*i, 2 + 2*i);
+    my $a2 = r->Arg($a1);
+    is_deeply($a2->values, [Math::Trig::pi / 4, Math::Trig::pi / 4]);
+  }
+  
+  # Arg - 0 values
+  {
+    my $a1 = c(0 + 0*i);
+    my $a2 = r->Arg($a1);
+    is_deeply($a2->values, [0]);
+  }
+}
+
 # sub
 {
   # sub - case not ignore

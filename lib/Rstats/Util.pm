@@ -74,14 +74,25 @@ sub Mod { abs(@_) }
 sub Arg {
   my $e1 = shift;
   
-  my $z = Math::Complex->make(
-    Rstats::Util::value(Re($e1)),
-    Rstats::Util::value(Im($e1))
-  );
-  
-  my $arg = $z->arg;
-  
-  return double($arg);
+  if (is_complex($e1)) {
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+    my $re = value($e1_re);
+    my $im = value($e1_im);
+    
+    my $e2;
+    if ($re == 0 && $im == 0) {
+      $e2 = double(0);
+    }
+    else {
+      $e2 = double(CORE::atan2($im, $re));
+    }
+    
+    return $e2;
+  }
+  else {
+    croak "Not implemented";
+  }
 }
 
 sub hash {

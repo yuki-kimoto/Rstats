@@ -22,6 +22,18 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub Arg {
+  my $a1 = to_array(shift);
+
+  $DB::single = 1;
+  
+  my @a2_elements = map { Rstats::Util::Arg($_) } @{elements($a1)};
+  my $a2 = clone_without_elements($a1);
+  elements($a2, \@a2_elements);
+  
+  return $a2;
+}
+
 sub sub {
   my ($a1_pattern, $a1_replacement, $a1_x, $a1_ignore_case)
     = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);

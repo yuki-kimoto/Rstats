@@ -9,16 +9,16 @@ require Rstats::ArrayUtil;
 # lgamma
 # complete_cases
 # cor
-# charmatch pmatch grep regexpr
+# pmatch regexpr
 # substr substring
-# sub gsub chartr
-# strsplit
+# strsplit  strwrap
 
 my @methods = qw/
   abs
   acos
   acosh
   append
+  Arg
   array
   asin
   asinh

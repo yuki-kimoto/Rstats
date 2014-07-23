@@ -7,25 +7,35 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
-=pod
-# tan
 {
-  # tan - array reference
+  # tan - complex
   {
-    my $a1 = c(2, 3);
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->tan($a1);
+    my $exp = Math::Complex->make(1, 2)->tan;
+    my $exp_re = Math::Complex::Re($exp);
+    my $exp_im = Math::Complex::Im($exp);
+    
+    is($a2->value->{re}, $exp_re);
+    is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
+  }
+  
+  # tan - double, array
+  {
+    my $a1 = array(c(2, 3));
     my $a2 = r->tan($a1);
     is_deeply(
       $a2->values,
       [
         Math::Trig::tan(2),
-        Math::Trig::tan(2),
+        Math::Trig::tan(3),
       ]
     );
     is_deeply(r->dim($a2)->values, [2]);
-    ok(is_double($a2);
+    ok(r->is_double($a2));
   }
 }
-=cut
 
 # cos
 {

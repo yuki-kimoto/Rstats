@@ -1013,35 +1013,6 @@ use Math::Trig ();
   }
 }
 
-# tan
-{
-  # tan - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->tan($a1);
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::tan($a1->values->[0]),
-        Math::Trig::tan($a1->values->[1]),
-      ]
-    );
-  }
-
-  # tan - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->tan(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::tan($a1->values->[0]),
-        Math::Trig::tan($a1->values->[1]),
-      ]
-    );
-  }
-}
-
 # log10
 {
   # log10 - array reference

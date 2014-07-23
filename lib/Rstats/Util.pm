@@ -103,6 +103,14 @@ sub hash {
   return $hash;
 }
 
+sub tan {
+  my $e1 = shift;
+  
+  my $e2 = divide(Rstats::Util::sin($e1), Rstats::Util::cos($e1));
+  
+  return $e2;
+}
+
 sub cos {
   my $e1 = shift;
   

@@ -7,6 +7,26 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+=pod
+# tan
+{
+  # tan - array reference
+  {
+    my $a1 = c(2, 3);
+    my $a2 = r->tan($a1);
+    is_deeply(
+      $a2->values,
+      [
+        Math::Trig::tan(2),
+        Math::Trig::tan(2),
+      ]
+    );
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(is_double($a2);
+  }
+}
+=cut
+
 # cos
 {
   # cos - complex
@@ -19,15 +39,17 @@ use Math::Complex ();
     
     is($a2->value->{re}, $exp_re);
     is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
   }
   
-  # cos - array
+  # cos - double,array
   {
     my $a1 = array(c(pi/2, pi/3));
     my $a2 = r->cos($a1);
     is(sprintf("%.5f", $a2->values->[0]), '0.00000');
     is(sprintf("%.5f", $a2->values->[1]), '0.50000');
     is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
   }
 
   # cos - Inf
@@ -71,15 +93,17 @@ use Math::Complex ();
     
     is($a2->value->{re}, $exp_re);
     is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
   }
   
-  # sin - array
+  # sin - double,array
   {
     my $a1 = array(c(pi/2, pi/6));
     my $a2 = r->sin($a1);
     is(sprintf("%.5f", $a2->values->[0]), '1.00000');
     is(sprintf("%.5f", $a2->values->[1]), '0.50000');
     is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
   }
 
   # sin - Inf

@@ -14,12 +14,18 @@ sub import {
   my $r = Rstats::Class->new;
   
   # Export primary methods
-  my @methods = qw/c C array matrix i T TRUE F FALSE NA NaN Inf NULL pi/;
   no strict 'refs';
+  my @methods = qw/c C array matrix/;
   for my $method (@methods) {
     *{"${class}::$method"} = sub { $r->$method(@_) }
   }
   *{"${class}::r"} = sub { $r };
+  
+  # Export none argument methods
+  my @methods_no_args = qw/i T TRUE F FALSE NA NaN Inf NULL pi/;
+  for my $method (@methods_no_args) {
+    *{"${class}::$method"} = sub () { $r->$method };
+  }
   
   warnings->unimport('ambiguous');
 }

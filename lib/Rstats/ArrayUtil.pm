@@ -12,15 +12,15 @@ use Math::Round ();
 
 sub Inf () { c(Rstats::Util::Inf) }
 
-sub negativeInf { c(Rstats::Util::negativeInf) }
+sub negativeInf () { c(Rstats::Util::negativeInf) }
 
-sub FALSE { c(Rstats::Util::FALSE) }
-sub F { FALSE }
+sub FALSE () { c(Rstats::Util::FALSE) }
+sub F () { FALSE }
 
-sub TRUE { c(Rstats::Util::TRUE) }
-sub T { TRUE }
+sub TRUE () { c(Rstats::Util::TRUE) }
+sub T () { TRUE }
 
-sub pi  { c(Rstats::Util::pi) }
+sub pi () { c(Rstats::Util::pi) }
 
 sub Arg {
   my $a1 = to_array(shift);

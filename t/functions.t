@@ -6,6 +6,18 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# chartr
+{
+  # chartr
+  {
+    my $a1 = c("a-z");
+    my $a2 = c("A-Z");
+    my $a3 = c("abc", "def", NA);
+    my $a4 = r->chartr($a1, $a2, $a3);
+    is_deeply($a4->values, ["ABC", "DEF", Rstats::Util::NA]);
+  }
+}
+
 # charmatch
 {
   # charmatch - empty string

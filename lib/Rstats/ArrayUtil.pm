@@ -22,6 +22,29 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub chartr {
+  my ($a1_old, $a1_new, $a1_x) = args(['old', 'new', 'x'], @_);
+  
+  my $old = value($a1_old);
+  my $new = value($a1_new);
+  
+  my $a2_elements = [];
+  for my $x (@{Rstats::ArrayUtil::values($a1_x)}) {
+    unless (Rstats::Util::is_na($x)) {
+      $old =~ s#/#\/#;
+      $new =~ s#/#\/#;
+      eval "\$x =~ tr/$old/$new/";
+      croak $@ if $@;
+    }
+    push @$a2_elements, Rstats::Util::character($x);
+  }
+  
+  my $a2 = clone_without_elements($a1_x);
+  elements($a2, $a2_elements);
+  
+  return $a2;
+}
+
 sub charmatch {
   my ($a1_x, $a1_table) = args(['x', 'table'], @_);
   

@@ -35,6 +35,7 @@ my @methods = qw/
   c
   C
   charmatch
+  chartr
   cbind
   ceiling
   col

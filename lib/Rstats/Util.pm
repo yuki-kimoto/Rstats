@@ -117,6 +117,49 @@ sub sin {
   my $e2;
   if (is_complex($e1)) {
     
+    my $value = Rstats::Util::value($e1);
+    
+    my $re = $value->{re};
+    my $im = $value->{im};
+    
+    my $eim = CORE::exp($im);
+    my $sre = CORE::sin($re);
+    my $cre = CORE::cos($re);
+    
+    my $e2_eim = double($eim);
+    my $e2_sre = double($sre);
+    my $e2_cre = double($cre);
+    my $e2_eim_1;
+    if (equal($e2_eim, double(0))) {
+      $e2_eim_1 = Rstats::Util::Inf;
+    }
+    else {
+      $e2_eim_1 = divide(double(1), $e2_eim);
+    }
+    
+    my $e2_re = divide(
+      multiply(
+        $e2_sre,
+        add(
+          $e2_eim,
+          $e2_eim_1
+        )
+      ),
+      double(2)
+    );
+    
+    my $e2_im = divide(
+      multiply(
+        $e2_cre,
+        subtract(
+          $e2_eim,
+          $e2_eim_1
+        )
+      ),
+      double(2)
+    );
+    
+    $e2 = complex_double($e2_re, $e2_im);
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
     my $value = value($e1);

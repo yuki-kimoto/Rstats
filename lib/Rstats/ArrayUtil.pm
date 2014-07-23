@@ -10,7 +10,7 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
-sub Inf { c(Rstats::Util::Inf) }
+sub Inf () { c(Rstats::Util::Inf) }
 
 sub negativeInf { c(Rstats::Util::negativeInf) }
 

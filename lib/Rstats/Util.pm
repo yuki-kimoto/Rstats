@@ -33,20 +33,20 @@ my $nan_ad = Scalar::Util::refaddr $nan;
 my $inf_ad = Scalar::Util::refaddr $inf;
 my $negative_inf_ad = Scalar::Util::refaddr $negative_inf;
 
-sub TRUE { $true }
-sub FALSE { $false }
-sub NA { $na }
-sub NaN { $nan }
-sub Inf { $inf }
-sub negativeInf { $negative_inf }
-sub pi { $pi }
+sub TRUE () { $true }
+sub FALSE () { $false }
+sub NA () { $na }
+sub NaN () { $nan }
+sub Inf () { $inf }
+sub negativeInf () { $negative_inf }
+sub pi () { $pi }
 
-sub is_nan { ref $_[0] && (Scalar::Util::refaddr $_[0] == $nan_ad) }
-sub is_na { ref $_[0] && (Scalar::Util::refaddr $_[0] == $na_ad) }
-sub is_infinite { is_positive_infinite($_[0]) || is_negative_infinite($_[0]) }
-sub is_positive_infinite { ref $_[0] && (Scalar::Util::refaddr $_[0] == $inf_ad) }
-sub is_negative_infinite { ref $_[0] && (Scalar::Util::refaddr $_[0] == $negative_inf_ad) }
-sub is_finite {
+sub is_nan ($) { ref $_[0] && (Scalar::Util::refaddr $_[0] == $nan_ad) }
+sub is_na ($) { ref $_[0] && (Scalar::Util::refaddr $_[0] == $na_ad) }
+sub is_infinite ($) { is_positive_infinite($_[0]) || is_negative_infinite($_[0]) }
+sub is_positive_infinite ($) { ref $_[0] && (Scalar::Util::refaddr $_[0] == $inf_ad) }
+sub is_negative_infinite ($) { ref $_[0] && (Scalar::Util::refaddr $_[0] == $negative_inf_ad) }
+sub is_finite ($) {
   return is_integer($_[0]) || (is_double($_[0]) && defined $_[0]->value);
 }
 

@@ -20,6 +20,8 @@ sub import {
     *{"${class}::$method"} = sub { $r->$method(@_) }
   }
   *{"${class}::r"} = sub { $r };
+  
+  warnings->unimport('ambiguous');
 }
 
 1;

@@ -1073,10 +1073,10 @@ use Math::Trig ();
 
 # sin
 {
+  
   # sin - array
   {
-    my $pi = pi;
-    my $a1 = array(c($pi/2, $pi/6));
+    my $a1 = array(c(r->pi/2, r->pi/6));
     my $a2 = r->sin($a1);
     is(sprintf("%.5f", $a2->values->[0]), '1.00000');
     is(sprintf("%.5f", $a2->values->[1]), '0.50000');
@@ -1089,8 +1089,8 @@ use Math::Trig ();
     my $a2 = r->sin($a1);
     ok(Rstats::Util::is_nan($a2->value));
   }
-
-  # sin - -Inf
+  
+  # sin - Inf()
   {
     my $a1 = c(-Inf);
     my $a2 = r->sin($a1);

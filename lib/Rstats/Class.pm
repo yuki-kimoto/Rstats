@@ -147,12 +147,29 @@ my @methods = qw/
   which
 /;
 
+my %no_args_methods_h = map {$_ => 1} qw/
+  Inf
+  NaN
+  NA
+  TRUE
+  T
+  FALSE
+  F
+  pi
+/;
+
 sub new {
   my $self = shift->SUPER::new(@_);
   
   for my $method (@methods) {
     my $function = "Rstats::ArrayUtil::$method";
-    my $code = "sub { $function(\@_) }";
+    my $code;
+    if ($no_args_methods_h{$method}) {
+      $code = "sub { $function() }";
+    }
+    else {
+      $code = "sub { $function(\@_) }";
+    }
 
     no strict 'refs';
     $self->function($method => eval $code);

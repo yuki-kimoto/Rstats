@@ -58,6 +58,7 @@ my @methods = qw/
   FALSE
   floor
   grep
+  gsub
   head
   i
   ifelse
@@ -129,6 +130,7 @@ my @methods = qw/
   sum
   sqrt
   sort
+  sub
   t
   tail
   tan

@@ -22,6 +22,66 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub sub {
+  my ($a1_pattern, $a1_replacement, $a1_x, $a1_ignore_case)
+    = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+  
+  my $pattern = value($a1_pattern);
+  my $replacement = value($a1_replacement);
+  my $ignore_case = value($a1_ignore_case);
+  
+  my $a2_elements = [];
+  for my $x (@{Rstats::ArrayUtil::values($a1_x)}) {
+    if (Rstats::Util::is_na($x)) {
+      push @$a2_elements, Rstats::Util::character($x);
+    }
+    else {
+      if ($ignore_case) {
+        $x =~ s/$pattern/$replacement/i;
+      }
+      else {
+        $x =~ s/$pattern/$replacement/;
+      }
+      push @$a2_elements, Rstats::Util::character($x);
+    }
+  }
+  
+  my $a2 = clone_without_elements($a1_x);
+  elements($a2, $a2_elements);
+  
+  return $a2;
+}
+
+sub gsub {
+  my ($a1_pattern, $a1_replacement, $a1_x, $a1_ignore_case)
+    = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+  
+  my $pattern = value($a1_pattern);
+  my $replacement = value($a1_replacement);
+  my $ignore_case = value($a1_ignore_case);
+  
+  my $a2_elements = [];
+  for my $x (@{Rstats::ArrayUtil::values($a1_x)}) {
+    if (Rstats::Util::is_na($x)) {
+      push @$a2_elements, Rstats::Util::character($x);
+    }
+    else {
+      if ($ignore_case) {
+        $x =~ s/$pattern/$replacement/gi;
+      }
+      else {
+        $x =~ s/$pattern/$replacement/g;
+      }
+      push @$a2_elements, Rstats::Util::character($x);
+    }
+  }
+  
+  my $a2 = clone_without_elements($a1_x);
+  elements($a2, $a2_elements);
+  
+  return $a2;
+}
+
 sub grep {
   my ($a1_pattern, $a1_x, $a1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   

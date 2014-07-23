@@ -6,16 +6,32 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# grep
+{
+  # grep - case not ignore
+  {
+    my $a1 = c("abc");
+    my $a2 = c("abc", NA, "ABC");
+    my $a3 = r->grep($a1, $a2);
+    is_deeply($a3->values, [1]);
+  }
+
+  # grep - case ignore
+  {
+    my $a1 = c("abc");
+    my $a2 = c("abc", NA, "ABC");
+    my $a3 = r->grep($a1, $a2, {'ignore.case' => TRUE});
+    is_deeply($a3->values, [1, 3]);
+  }
+}
+
 # chartr
 {
-  # chartr
-  {
-    my $a1 = c("a-z");
-    my $a2 = c("A-Z");
-    my $a3 = c("abc", "def", NA);
-    my $a4 = r->chartr($a1, $a2, $a3);
-    is_deeply($a4->values, ["ABC", "DEF", Rstats::Util::NA]);
-  }
+  my $a1 = c("a-z");
+  my $a2 = c("A-Z");
+  my $a3 = c("abc", "def", NA);
+  my $a4 = r->chartr($a1, $a2, $a3);
+  is_deeply($a4->values, ["ABC", "DEF", Rstats::Util::NA]);
 }
 
 # charmatch

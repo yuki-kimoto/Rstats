@@ -22,6 +22,34 @@ sub T { TRUE }
 
 sub pi { c(Rstats::Util::pi) }
 
+sub grep {
+  my ($a1_pattern, $a1_x, $a1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
+  
+  my $pattern = value($a1_pattern);
+  my $ignore_case = value($a1_ignore_case);
+  
+  my $a2_elements = [];
+  my $a1_x_values = Rstats::ArrayUtil::values($a1_x);
+  for (my $i = 0; $i < @$a1_x_values; $i++) {
+    my $x = $a1_x_values->[$i];
+    
+    unless (Rstats::Util::is_na($x)) {
+      if ($ignore_case) {
+        if ($x =~ /$pattern/i) {
+          push $a2_elements, Rstats::Util::double($i + 1);
+        }
+      }
+      else {
+        if ($x =~ /$pattern/) {
+          push $a2_elements, Rstats::Util::double($i + 1);
+        }
+      }
+    }
+  }
+  
+  return c($a2_elements);
+}
+
 sub chartr {
   my ($a1_old, $a1_new, $a1_x) = args(['old', 'new', 'x'], @_);
   

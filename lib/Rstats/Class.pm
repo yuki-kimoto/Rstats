@@ -57,6 +57,7 @@ my @methods = qw/
   F
   FALSE
   floor
+  grep
   head
   i
   ifelse

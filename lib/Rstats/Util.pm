@@ -124,8 +124,8 @@ sub sin {
   my $e2;
   if (is_complex($e1)) {
     
-    my $e1_re = Rstats::Util::Re($e1);
-    my $e1_im = Rstats::Util::Im($e1);
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
     
     my $e2_eim = Rstats::Util::exp($e1_im);
     my $e2_sre = Rstats::Util::sin($e1_re);

@@ -8,20 +8,44 @@ use Math::Trig ();
 
 # sub
 {
-  my $a1 = c("a");
-  my $a2 = c("b");
-  my $a3 = c("ad1ad1", NA, "ad2ad2");
-  my $a4 = r->sub($a1, $a2, $a3);
-  is_deeply($a4->values, ["bd1ad1", Rstats::Util::NA, "bd2ad2"]);
+  # sub - case not ignore
+  {
+    my $a1 = c("a");
+    my $a2 = c("b");
+    my $a3 = c("ad1ad1", NA, "ad2ad2");
+    my $a4 = r->sub($a1, $a2, $a3);
+    is_deeply($a4->values, ["bd1ad1", Rstats::Util::NA, "bd2ad2"]);
+  }
+
+  # sub - case ignore
+  {
+    my $a1 = c("a");
+    my $a2 = c("b");
+    my $a3 = c("Ad1ad1", NA, "ad2ad2");
+    my $a4 = r->sub($a1, $a2, $a3, {'ignore.case' => TRUE});
+    is_deeply($a4->values, ["bd1ad1", Rstats::Util::NA, "bd2ad2"]);
+  }
 }
 
 # gsub
 {
-  my $a1 = c("a");
-  my $a2 = c("b");
-  my $a3 = c("ad1ad1", NA, "ad2ad2");
-  my $a4 = r->gsub($a1, $a2, $a3);
-  is_deeply($a4->values, ["bd1bd1", Rstats::Util::NA, "bd2bd2"]);
+  # gsub - case not ignore
+  {
+    my $a1 = c("a");
+    my $a2 = c("b");
+    my $a3 = c("ad1ad1", NA, "ad2ad2");
+    my $a4 = r->gsub($a1, $a2, $a3);
+    is_deeply($a4->values, ["bd1bd1", Rstats::Util::NA, "bd2bd2"]);
+  }
+
+  # sub - case ignore
+  {
+    my $a1 = c("a");
+    my $a2 = c("b");
+    my $a3 = c("Ad1Ad1", NA, "Ad2Ad2");
+    my $a4 = r->gsub($a1, $a2, $a3, {'ignore.case' => TRUE});
+    is_deeply($a4->values, ["bd1bd1", Rstats::Util::NA, "bd2bd2"]);
+  }
 }
 
 # grep

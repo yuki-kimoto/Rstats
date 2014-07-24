@@ -6,6 +6,62 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# log
+{
+  # log - complex
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->log($a1);
+    my $exp = Math::Complex->make(1, 2)->log;
+    my $exp_re = Math::Complex::Re($exp);
+    my $exp_im = Math::Complex::Im($exp);
+    
+    is($a2->value->{re}, $exp_re);
+    is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
+  }
+  
+  # log - double,array
+  {
+    my $a1 = array(c(1, 10, -1, 0));
+    my $a2 = r->log($a1);
+    is($a2->values->[0], 0);
+    is(sprintf("%.5f", $a2->values->[1]), '2.30259');
+    ok(Rstats::Util::is_nan($a2->values->[2]));
+    ok(Rstats::Util::is_negative_infinite($a2->values->[3]));
+    is_deeply(r->dim($a2)->values, [4]);
+    ok(r->is_double($a2));
+  }
+
+  # log - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->log($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+  
+  # log - Inf()
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->log($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+
+  # log - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->log($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # log - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->log($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # Arg
 {
   # Arg - non 0 values
@@ -1066,35 +1122,6 @@ use Math::Trig ();
       [
         log $a1->values->[0] / log 2,
         log $a1->values->[1] / log 2,
-      ]
-    );
-  }
-}
-
-# log
-{
-  # log - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log($a1);
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0],
-        log $a1->values->[1],
-      ]
-    );
-  }
-
-  # log - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0],
-        log $a1->values->[1],
       ]
     );
   }

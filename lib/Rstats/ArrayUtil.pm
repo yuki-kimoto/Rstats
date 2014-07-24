@@ -1315,11 +1315,20 @@ sub log {
   
   my $a1 = to_array($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(log Rstats::Util::value($_)) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::log($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  mode($a2 => 'double');
+
+  # mode
+  my $a2_mode;
+  if (is_complex($a1)) {
+    $a2_mode = 'complex';
+  }
+  else {
+    $a2_mode = 'double';
+  }
+  mode($a2 => $a2_mode);
   
   return $a2;
 }

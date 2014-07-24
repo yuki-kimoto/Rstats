@@ -7,6 +7,7 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# tan
 {
   # tan - complex
   {

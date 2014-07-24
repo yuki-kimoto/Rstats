@@ -69,7 +69,76 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-sub Mod { abs(@_) }
+sub log {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+
+    $DB::single = 1;
+    
+    my $e1_r = Mod($e1);
+    my $e1_t = Arg($e1);
+    
+    if (equal($e1_r, double(0))) {
+      $e2 = negativeInf;
+    }
+    else {
+      if (more_than($e1_t, pi)) {
+        $e1_t = subtract(
+          $e1_t,
+          multiply(
+            pi,
+            pi
+          )
+        )
+      }
+      elsif (less_than_or_equal($e1_t, negation(pi))) {
+        $e1_t = add(
+          $e1_t,
+          multiply(
+            pi,
+            pi
+          )
+        )
+      }
+      
+      $e2 = complex_double(Rstats::Util::log($e1_r), $e1_t);
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value = value($e1);
+    
+    if (is_infinite($e1)) {
+      carp "In cos : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1) || is_na($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      if ($value < 0) {
+        carp "In log : NaNs produced";
+        $e2 = NaN
+      }
+      elsif ($value == 0) {
+        $e2 = negativeInf;
+      }
+      else {
+        $e2 = double(log($value));
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
+sub Mod { Rstats::Util::abs(@_) }
 
 sub Arg {
   my $e1 = shift;
@@ -179,6 +248,126 @@ sub exp {
   return Rstats::Util::double(exp Rstats::Util::value($e1));
 }
 
+=pod
+sub asin {
+  my $e1 = shift;
+
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+    
+    if (equal($e1_re, double(0)) && equal($e1_im, double(0))) {
+      $e2 = complex(0, 0);
+    }
+    else {
+      
+      my $e2_t1 = Rstats::Util::sqrt(
+        add(
+          multiply(
+            add(
+              $e1_re,
+              double(1)
+            ),
+            add(
+              $e1_re,
+              double(1)
+            ),
+          ),
+          multiply(
+            $e1_im,
+            $e1_im
+          )
+        )
+      );
+
+      my $e2_t2 = Rstats::Util::sqrt(
+        add(
+          multiply(
+            subtract(
+              $e1_re,
+              double(1)
+            ),
+            subtract(
+              $e1_re,
+              double(1)
+            ),
+          ),
+          multiply(
+            $e1_im,
+            $e1_im
+          )
+        )
+      );
+      
+      my $e2_alpha = divide(
+        add(
+          $t1,
+          $t2
+        ),
+        double(2)
+      );
+
+      my $e2_beta = divide(
+        subtract(
+          $t1,
+          $t2
+        ),
+        double(2)
+      );
+      
+      $e2_$alpha = double(1) if less_than($e2_alpha, double(1));
+      
+      if (more_than($e2_beta,double(1)) {
+        $e2_beta =  double(1)
+      }
+      elsif (less_than($beta, double(-1)) {
+        $e2_beta = double(-1)
+      }
+      
+      my $u =  CORE::atan2($beta, CORE::sqrt(1-$beta*$beta));
+      my $v = -CORE::log($alpha + CORE::sqrt($alpha*$alpha-1));
+      $v = -$v if $im > 0 || ($im == 0 && $re < -1);
+      
+      my $e2_eim = Rstats::Util::exp($e1_im);
+      my $e2_sre = Rstats::Util::sin($e1_re);
+      my $e2_cre = Rstats::Util::cos($e1_re);
+      
+      my $e2_eim_1 = divide(double(1), $e2_eim);
+      
+      $e2 = complex_double($e2_re, $e2_im);
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value = value($e1);
+    
+    if (is_infinite($e1)) {
+      carp "In sin : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1) || is_na($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      if (CORE::abs($value) <= 1) {
+        $e2 = double(CORE::atan2($value, CORE::sqrt(1 - $value * $value)));
+      }
+      else {
+        carp 'In asin : NaNs produced';
+        $e2 = NaN;
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+=cut
 
 sub sin {
   my $e1 = shift;

@@ -1340,11 +1340,20 @@ sub log2 {
   
   my $a1 = to_array($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(CORE::log Rstats::Util::value($_) / CORE::log 2) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::log2($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  mode($a2 => 'double');
+
+  # mode
+  my $a2_mode;
+  if (is_complex($a1)) {
+    $a2_mode = 'complex';
+  }
+  else {
+    $a2_mode = 'double';
+  }
+  mode($a2 => $a2_mode);
   
   return $a2;
 }
@@ -1354,11 +1363,22 @@ sub log10 {
   
   my $a1 = to_array($_a1);
   
-  my @a2_elements = map { Rstats::Util::double(CORE::log Rstats::Util::value($_) / CORE::log 10) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::log10($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  mode($a2 => 'double');
+
+  # mode
+  my $a2_mode;
+  if (is_complex($a1)) {
+    $a2_mode = 'complex';
+  }
+  else {
+    $a2_mode = 'double';
+  }
+  mode($a2 => $a2_mode);
+  
+  return $a2;
 }
 
 sub max {

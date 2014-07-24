@@ -69,6 +69,28 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub log2 {
+  my $e1 = shift;
+  
+  my $e2 = divide(
+    Rstats::Util::log($e1),
+    is_complex($e1) ? Rstats::Util::log(complex(2, 0)) : Rstats::Util::log(double(2))
+  );
+  
+  return $e2;
+}
+
+sub log10 {
+  my $e1 = shift;
+  
+  my $e2 = divide(
+    Rstats::Util::log($e1),
+    is_complex($e1) ? Rstats::Util::log(complex(10, 0)) : Rstats::Util::log(double(10))
+  );
+  
+  return $e2;
+}
+
 sub log {
   my $e1 = shift;
   

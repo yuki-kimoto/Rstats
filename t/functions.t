@@ -6,6 +6,84 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# log10
+{
+  # log10 - complex
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->log10($a1);
+    my $exp = Math::Complex->make(1, 2)->log / Math::Complex->make(10, 0)->log;
+    my $exp_re = Math::Complex::Re($exp);
+    my $exp_im = Math::Complex::Im($exp);
+    
+    is($a2->value->{re}, $exp_re);
+    is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
+  }
+  
+  # log10 - double,array
+  {
+    my $a1 = array(c(10));
+    my $a2 = r->log10($a1);
+    is($a2->value, 1);
+    is_deeply(r->dim($a2)->values, [1]);
+    ok(r->is_double($a2));
+  }
+}
+
+# log2
+{
+  # log2 - complex
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->log2($a1);
+    my $exp = Math::Complex->make(1, 2)->log;
+    my $exp_re = Math::Complex::Re($exp);
+    my $exp_im = Math::Complex::Im($exp);
+    
+    is($a2->value->{re}, $exp_re / log(2));
+    is($a2->value->{im}, $exp_im / log(2));
+    ok(r->is_complex($a2));
+  }
+  
+  # log2 - double,array
+  {
+    my $a1 = array(c(2));
+    my $a2 = r->log2($a1);
+    is($a2->values->[0], 1);
+    is_deeply(r->dim($a2)->values, [1]);
+    ok(r->is_double($a2));
+  }
+}
+
+# logb
+{
+  # logb - complex
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->logb($a1);
+    my $exp = Math::Complex->make(1, 2)->log;
+    my $exp_re = Math::Complex::Re($exp);
+    my $exp_im = Math::Complex::Im($exp);
+    
+    is($a2->value->{re}, $exp_re);
+    is($a2->value->{im}, $exp_im);
+    ok(r->is_complex($a2));
+  }
+  
+  # logb - double,array
+  {
+    my $a1 = array(c(1, 10, -1, 0));
+    my $a2 = r->logb($a1);
+    is($a2->values->[0], 0);
+    is(sprintf("%.5f", $a2->values->[1]), '2.30259');
+    ok(Rstats::Util::is_nan($a2->values->[2]));
+    ok(Rstats::Util::is_negative_infinite($a2->values->[3]));
+    is_deeply(r->dim($a2)->values, [4]);
+    ok(r->is_double($a2));
+  }
+}
+
 # log
 {
   # log - complex
@@ -1064,93 +1142,6 @@ use Math::Trig ();
       [
         Math::Trig::asin($a1->values->[0]),
         Math::Trig::asin($a1->values->[1]),
-      ]
-    );
-  }
-}
-
-# log10
-{
-  # log10 - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log10($a1);
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0] / log 10,
-        log $a1->values->[1] / log 10,
-      ]
-    );
-  }
-
-  # log10 - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log10(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0] / log 10,
-        log $a1->values->[1] / log 10,
-      ]
-    );
-  }
-}
-
-# log2
-{
-  # log2 - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log2($a1);
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0] / log 2,
-        log $a1->values->[1] / log 2,
-      ]
-    );
-  }
-
-  # log2 - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->log2(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0] / log 2,
-        log $a1->values->[1] / log 2,
-      ]
-    );
-  }
-}
-
-# logb
-{
-  # logb - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->logb($a1);
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0],
-        log $a1->values->[1],
-      ]
-    );
-  }
-
-  # logb - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->logb(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        log $a1->values->[0],
-        log $a1->values->[1],
       ]
     );
   }

@@ -1165,25 +1165,42 @@ sub exp {
 }
 
 sub expm1 {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements
-    = map {
-      Rstats::Util::double(
-        CORE::abs(Rstats::Util::value($_)) < 1e-5
-          ? Rstats::Util::value($_) + 0.5 * Rstats::Util::value($_) * Rstats::Util::value($_)
-          : CORE::exp(Rstats::Util::value($_)) - 1.0
-      )
-    } @{elements($a1)};
+  my $a1 = to_array(shift);
+  my @a2_elements = map { Rstats::Util::expm1($_) } @{elements($a1)};
   
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  mode($a2 => 'double');
+
+  # mode
+  my $a2_mode;
+  if (is_complex($a1)) {
+    $a2_mode = 'complex';
+  }
+  else {
+    $a2_mode = 'double';
+  }
+  mode($a2 => $a2_mode);
   
   return $a2;
 }
+
+=pod
+sub max_type {
+  my @arrays = @_;
+  
+  my $type_h = {};
+  
+  for my $array (@arrays) {
+    my $array_type = value(typeof($array));
+    $type_h->{$array_type}++;
+    unless (is_null($array)) {
+      my $element = element($array);
+      my $element_type = Rstats::Util::typeof($element);
+      $type_h->{$element_type};
+    }
+  }
+}
+=cut
 
 sub floor {
   my $_a1 = shift;

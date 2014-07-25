@@ -289,7 +289,7 @@ sub exp {
     
     $e2 = complex_double($e2_re, $e2_im);
   }
-  elsif (is_numeric($e1) || is_logical($e1)) {
+  elsif (is_double($e1) || is_integer($e1) || is_logical($e1)) {
     my $value = value($e1);
     
     if (is_positive_infinite($e1)) {
@@ -310,6 +310,40 @@ sub exp {
   }
   
   return $e2;
+}
+
+sub expm1 {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    croak 'Error in expm1 : unimplemented complex function';
+  }
+  elsif (is_double($e1)) {
+    if (less_than($e1, double(1e-5)) && more_than($e1, negativeInf)) {
+      $e2 = add(
+        $e1,
+        multiply(
+          double(0.5),
+          multiply(
+            $e1,
+            $e1
+          )
+        )
+      );
+    }
+    else {
+      $e2 = Rstats::Util::subtract(Rstats::Util::exp($e1), double(1));
+    }
+  }
+  elsif (is_integer($e1) || is_logical($e1)) {
+    $e2 = Rstats::Util::subtract(Rstats::Util::exp($e1), double(1));
+  }
+  else {
+    croak 'Not implemented';
+  }
 }
 
 =pod

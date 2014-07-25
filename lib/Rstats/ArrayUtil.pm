@@ -1150,15 +1150,16 @@ sub complex {
 }
 
 sub exp {
-  my $_a1 = shift;
+  my $a1 = to_array(shift);
   
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(exp Rstats::Util::value($_)) } @{elements($a1)};
+  my @a2_elements = map { Rstats::Util::exp($_) } @{elements($a1)};
 
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  mode($a2 => 'double');
+  
+  if (is_integer($a2) || is_logical($a2)) {
+    mode($a2 => 'double');
+  }
   
   return $a2;
 }

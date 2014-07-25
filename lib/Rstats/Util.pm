@@ -267,7 +267,49 @@ sub cos {
 sub exp {
   my $e1 = shift;
   
-  return Rstats::Util::double(exp Rstats::Util::value($e1));
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+    
+    my $e2_mod = Rstats::Util::exp($e1_re);
+    my $e2_arg = $e1_im;
+
+    my $e2_re = Rstats::Util::multiply(
+      $e2_mod,
+      Rstats::Util::cos($e2_arg)
+    );
+    my $e2_im = Rstats::Util::multiply(
+      $e2_mod,
+      Rstats::Util::sin($e2_arg)
+    );
+    
+    $e2 = complex_double($e2_re, $e2_im);
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value = value($e1);
+    
+    if (is_positive_infinite($e1)) {
+      $e2 = Inf;
+    }
+    elsif (is_negative_infinite($e1)) {
+      $e2 = double(0);
+    }
+    elsif (is_nan($e1) || is_na($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      $e2 = double(exp($value));
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
 }
 
 =pod

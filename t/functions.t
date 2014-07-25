@@ -6,6 +6,56 @@ use Rstats;
 use Rstats::Util;
 use Math::Trig ();
 
+# exp
+{
+  # exp - complex
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->exp($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '-1.131204');
+    is(sprintf("%.6f", $a2->value->{im}), '2.471727');
+    ok(r->is_complex($a2));
+  }
+  
+  # exp - double,array
+  {
+    my $a1 = array(c(1, 2));
+    my $a2 = r->exp($a1);
+    is(sprintf("%.6f", $a2->values->[0]), '2.718282');
+    is(sprintf("%.6f", $a2->values->[1]), '7.389056');
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
+  }
+
+  # exp - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->exp($a1);
+    ok(Rstats::Util::is_positive_infinite($a2->value));
+  }
+  
+  # exp - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->exp($a1);
+    is($a2->value, 0);
+  }
+
+  # exp - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->exp($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # exp - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->exp($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # log10
 {
   # log10 - complex
@@ -1228,18 +1278,3 @@ use Math::Trig ();
     is_deeply($a2->values, [5, 10]);
   }
 }
-
-# exp
-{
-  my $v1 = r->c([2, 3, 4]);
-  my $v2 = r->exp($v1);
-  is_deeply(
-    $v2->values,
-    [
-      exp $v1->values->[0],
-      exp $v1->values->[1],
-      exp $v1->values->[2]
-    ]
-  );
-}
-

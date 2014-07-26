@@ -73,31 +73,48 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-=pod
-sub atan2 {
-	my ($z1, $z2, $inverted) = @_;
-	my ($re1, $im1, $re2, $im2);
-	if ($inverted) {
-	    ($re1, $im1) = ref $z2 ? @{$z2->_cartesian} : ($z2, 0);
-	    ($re2, $im2) = ref $z1 ? @{$z1->_cartesian} : ($z1, 0);
-	} else {
-	    ($re1, $im1) = ref $z1 ? @{$z1->_cartesian} : ($z1, 0);
-	    ($re2, $im2) = ref $z2 ? @{$z2->_cartesian} : ($z2, 0);
-	}
-	if ($im1 || $im2) {
-	    # In MATLAB the imaginary parts are ignored.
-	    # warn "atan2: Imaginary parts ignored";
-	    # http://documents.wolfram.com/mathematica/functions/ArcTan
-	    # NOTE: Mathematica ArcTan[x,y] while atan2(y,x)
-	    my $s = $z1 * $z1 + $z2 * $z2;
-	    _divbyzero("atan2") if $s == 0;
-	    my $i = &i;
-	    my $r = $z2 + $z1 * $i;
-	    return -$i * &log($r / &sqrt( $s ));
-	}
-	return CORE::atan2($re1, $re2);
+sub atan {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    
+    if (equal($e1, complex(0, 0))) {
+      $e2 = complex(0, 0);
+    }
+    elsif (equal($e1, complex(0, 1))) {
+      $e2 = complex(0, Inf);
+    }
+    elsif (equal($e1, complex(0, -1))) {
+      $e2 = complex(0, negativeInf);
+    }
+    else {
+      my $e2_i = complex(0, 1);
+      my $e2_log = Rstats::Util::log(
+        divide(
+          add($e2_i, $e1),
+          subtract($e2_i, $e1)
+        )
+      );
+      
+      $e2 = multiply(
+        divide($e2_i, complex(2, 0)),
+        $e2_log
+      );
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e2 = Rstats::Util::atan2(as_double($e1), double(1));
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
 }
-=cut
+
 
 sub atan2 {
   my ($e1, $e2) = @_;
@@ -1580,7 +1597,7 @@ sub typeof {
     : ref $element eq 'Rstats::Element::Complex' ? 'complex'
     : ref $element eq 'Rstats::Element::Double' ? 'double'
     : ref $element eq 'Rstats::Element::Integer' ? 'integer'
-    : ref $element eq 'Rstats::Element::Logical' ? 'logical'
+    : ref $element eq 'Rstats::Element::Logical' || ref $element eq 'Rstats::Element::NA' ? 'logical'
     : undef;
   
   return $type;

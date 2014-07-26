@@ -857,19 +857,7 @@ sub asinh {
   return $a2;
 }
 
-sub atan {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::atan Rstats::Util::value($_)) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  mode($a2 => 'double');
-  
-  return $a2;
-}
+sub atan { process(\&Rstats::Util::atan, @_) }
 
 sub atanh {
   my $_a1 = shift;
@@ -967,26 +955,7 @@ sub colSums {
   }
 }
 
-sub cos {
-  my $a1 = to_array(shift);
-  
-  my @a2_elements = map { Rstats::Util::cos($_) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
+sub cos { process(\&Rstats::Util::cos, @_) }
 
 sub atan2 {
   my ($a1, $a2) = (to_array(shift), to_array(shift));
@@ -1174,42 +1143,10 @@ sub complex {
   return c($a2_elements);
 }
 
-sub exp {
-  my $a1 = to_array(shift);
-  
-  my @a2_elements = map { Rstats::Util::exp($_) } @{elements($a1)};
+sub exp { process(\&Rstats::Util::exp, @_) }
 
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  
-  if (is_integer($a2) || is_logical($a2)) {
-    mode($a2 => 'double');
-  }
-  
-  return $a2;
-}
+sub expm1 { process(\&Rstats::Util::expm1, @_) }
 
-sub expm1 {
-  my $a1 = to_array(shift);
-  my @a2_elements = map { Rstats::Util::expm1($_) } @{elements($a1)};
-  
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
-
-=pod
 sub max_type {
   my @arrays = @_;
   
@@ -1221,11 +1158,26 @@ sub max_type {
     unless (is_null($array)) {
       my $element = element($array);
       my $element_type = Rstats::Util::typeof($element);
-      $type_h->{$element_type};
+      $type_h->{$element_type}++;
     }
   }
+  
+  if ($type_h->{character}) {
+    return 'character';
+  }
+  elsif ($type_h->{complex}) {
+    return 'complex';
+  }
+  elsif ($type_h->{double}) {
+    return 'double';
+  }
+  elsif ($type_h->{integer}) {
+    return 'integer';
+  }
+  else {
+    return 'logical';
+  }
 }
-=cut
 
 sub floor {
   my $_a1 = shift;
@@ -1353,76 +1305,13 @@ sub is_null {
   return $a2;
 }
 
-sub log {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::log($_) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
+sub log { process(\&Rstats::Util::log, @_) }
 
 sub logb { Rstats::ArrayUtil::log(@_) }
 
-sub log2 {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::log2($_) } @{elements($a1)};
+sub log2 { process(\&Rstats::Util::log2, @_) }
 
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
-
-sub log10 {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::log10($_) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
+sub log10 { process(\&Rstats::Util::log10, @_) }
 
 sub max {
   my $a1 = c(@_);
@@ -1821,28 +1710,7 @@ sub sequence {
   return c(\@v2_values);
 }
 
-sub sin {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::sin($_) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
-  
-  return $a2;
-}
+sub sin { process(\&Rstats::Util::sin, @_) }
 
 sub sinh {
   my $_a1 = shift;
@@ -1903,25 +1771,16 @@ sub tail {
   return $v1->new(elements => \@elements2);
 }
 
-sub tan {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::tan($_) } @{elements($a1)};
+sub tan { process(\&Rstats::Util::tan, @_) }
 
+sub process {
+  my $func = shift;
+  my $a1 = to_array(shift);
+  
+  my @a2_elements = map { $func->($_) } @{elements($a1)};
   my $a2 = clone_without_elements($a1);
   elements($a2, \@a2_elements);
-  
-  # mode
-  my $a2_mode;
-  if (is_complex($a1)) {
-    $a2_mode = 'complex';
-  }
-  else {
-    $a2_mode = 'double';
-  }
-  mode($a2 => $a2_mode);
+  mode($a2 => max_type($a1, $a2));
   
   return $a2;
 }

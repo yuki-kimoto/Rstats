@@ -69,6 +69,104 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+=pod
+sub atan2 {
+	my ($z1, $z2, $inverted) = @_;
+	my ($re1, $im1, $re2, $im2);
+	if ($inverted) {
+	    ($re1, $im1) = ref $z2 ? @{$z2->_cartesian} : ($z2, 0);
+	    ($re2, $im2) = ref $z1 ? @{$z1->_cartesian} : ($z1, 0);
+	} else {
+	    ($re1, $im1) = ref $z1 ? @{$z1->_cartesian} : ($z1, 0);
+	    ($re2, $im2) = ref $z2 ? @{$z2->_cartesian} : ($z2, 0);
+	}
+	if ($im1 || $im2) {
+	    # In MATLAB the imaginary parts are ignored.
+	    # warn "atan2: Imaginary parts ignored";
+	    # http://documents.wolfram.com/mathematica/functions/ArcTan
+	    # NOTE: Mathematica ArcTan[x,y] while atan2(y,x)
+	    my $s = $z1 * $z1 + $z2 * $z2;
+	    _divbyzero("atan2") if $s == 0;
+	    my $i = &i;
+	    my $r = $z2 + $z1 * $i;
+	    return -$i * &log($r / &sqrt( $s ));
+	}
+	return CORE::atan2($re1, $re2);
+}
+=cut
+
+=pod
+sub atan2 {
+  my ($e1, $e2) = @_;
+  
+  return $e1 if is_na($e1) || is_na($e2);
+  croak "two element should be same type" unless $e1->{type} ne $e2->{type};
+  
+  my $e2;
+  if (is_complex($e1)) {
+
+    my $e1_r = Mod($e1);
+    my $e1_t = Arg($e1);
+    
+    if (equal($e1_r, double(0))) {
+      $e2 = negativeInf;
+    }
+    else {
+      if (more_than($e1_t, pi)) {
+        $e1_t = subtract(
+          $e1_t,
+          multiply(
+            pi,
+            pi
+          )
+        )
+      }
+      elsif (less_than_or_equal($e1_t, negation(pi))) {
+        $e1_t = add(
+          $e1_t,
+          multiply(
+            pi,
+            pi
+          )
+        )
+      }
+      
+      $e2 = complex_double(Rstats::Util::atan2($e1_r), $e1_t);
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    my $value1 = value($e1);
+    my $value2 = value($e2);
+    
+    if (is_infinite($e1) && is_infinite($e2)) {
+      my $e3 = divide(
+      carp "In cos : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      if ($value < 0) {
+        carp "In atan2 : NaNs produced";
+        $e2 = NaN
+      }
+      elsif ($value == 0) {
+        $e2 = negativeInf;
+      }
+      else {
+        $e2 = double(atan2($value));
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e3;
+}
+
+=cut
 sub log2 {
   my $e1 = shift;
   
@@ -98,8 +196,6 @@ sub log {
   
   my $e2;
   if (is_complex($e1)) {
-
-    $DB::single = 1;
     
     my $e1_r = Mod($e1);
     my $e1_t = Arg($e1);
@@ -137,7 +233,7 @@ sub log {
       carp "In cos : NaNs produced";
       $e2 = NaN;
     }
-    elsif (is_nan($e1) || is_na($e1)) {
+    elsif (is_nan($e1)) {
       $e2 = $e1;
     }
     else {
@@ -250,7 +346,7 @@ sub cos {
       carp "In cos : NaNs produced";
       $e2 = NaN;
     }
-    elsif (is_nan($e1) || is_na($e1)) {
+    elsif (is_nan($e1)) {
       $e2 = $e1;
     }
     else {
@@ -298,7 +394,7 @@ sub exp {
     elsif (is_negative_infinite($e1)) {
       $e2 = double(0);
     }
-    elsif (is_nan($e1) || is_na($e1)) {
+    elsif (is_nan($e1)) {
       $e2 = $e1;
     }
     else {
@@ -446,7 +542,7 @@ sub asin {
       carp "In sin : NaNs produced";
       $e2 = NaN;
     }
-    elsif (is_nan($e1) || is_na($e1)) {
+    elsif (is_nan($e1)) {
       $e2 = $e1;
     }
     else {
@@ -515,7 +611,7 @@ sub sin {
       carp "In sin : NaNs produced";
       $e2 = NaN;
     }
-    elsif (is_nan($e1) || is_na($e1)) {
+    elsif (is_nan($e1)) {
       $e2 = $e1;
     }
     else {

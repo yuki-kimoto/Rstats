@@ -22,6 +22,7 @@ my @methods = qw/
   array
   asin
   asinh
+  atan2
   as_array
   as_character
   as_complex

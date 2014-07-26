@@ -16,6 +16,10 @@ use Math::Complex ();
 use POSIX ();
 use Math::Trig ();
 
+# Perl infinite values(this is value is only valid as return value)
+my $perl_inf_result = 9 ** 9 ** 9;
+my $perl_negative_inf_result = -9 ** 9 ** 9;
+
 # Special values
 my $na = Rstats::Element::NA->new;
 my $nan = Rstats::Element::Double->new(flag => 'nan');
@@ -95,68 +99,75 @@ sub atan2 {
 }
 =cut
 
-=pod
 sub atan2 {
   my ($e1, $e2) = @_;
   
-  return $e1 if is_na($e1) || is_na($e2);
-  croak "two element should be same type" unless $e1->{type} ne $e2->{type};
+  croak "argument x is missing" unless defined $e2;
+  return Rstats::Util::NA if is_na($e1) || is_na($e2);
+  croak "two element should be same type" unless typeof($e1) eq typeof($e2);
   
-  my $e2;
+  my $e3;
   if (is_complex($e1)) {
-
-    my $e1_r = Mod($e1);
-    my $e1_t = Arg($e1);
     
-    if (equal($e1_r, double(0))) {
-      $e2 = negativeInf;
+    my $e3_s = add(multiply($e1, $e1), multiply($e2, $e2));
+    if (equal($e3_s, complex(0, 0))) {
+      $e3 = complex(0, 0);
     }
     else {
-      if (more_than($e1_t, pi)) {
-        $e1_t = subtract(
-          $e1_t,
-          multiply(
-            pi,
-            pi
+      my $e3_i = complex(0, 1);
+      my $e3_r = add($e2, multiply($e1, $e3_i));
+      $e3 = multiply(
+        negation($e3_i),
+        Rstats::Util::log(
+          divide(
+            $e3_r,
+            Rstats::Util::sqrt($e3_s)
           )
         )
-      }
-      elsif (less_than_or_equal($e1_t, negation(pi))) {
-        $e1_t = add(
-          $e1_t,
-          multiply(
-            pi,
-            pi
-          )
-        )
-      }
-      
-      $e2 = complex_double(Rstats::Util::atan2($e1_r), $e1_t);
+      );
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    my $value1 = value($e1);
-    my $value2 = value($e2);
+    my $value1;
+    my $value2;
     
-    if (is_infinite($e1) && is_infinite($e2)) {
-      my $e3 = divide(
-      carp "In cos : NaNs produced";
-      $e2 = NaN;
+    if (is_nan($e1) || is_nan($e2)) {
+      $e3 = Rstats::Util::NaN;
     }
-    elsif (is_nan($e1)) {
-      $e2 = $e1;
+    elsif (is_positive_infinite($e1) && is_positive_infinite($e2)) {
+      $e3 = double(0.785398163397448);
     }
-    else {
-      if ($value < 0) {
-        carp "In atan2 : NaNs produced";
-        $e2 = NaN
-      }
-      elsif ($value == 0) {
-        $e2 = negativeInf;
+    elsif (is_positive_infinite($e1) && is_negative_infinite($e2)) {
+      $e3 = double(2.35619449019234);
+    }
+    elsif (is_negative_infinite($e1) && is_positive_infinite($e2)) {
+      $e3 = double(-0.785398163397448);
+    }
+    elsif (is_negative_infinite($e1) && is_negative_infinite($e2)) {
+      $e3 = double(-2.35619449019234);
+    }
+    elsif (is_positive_infinite($e1)) {
+      $e3 = double(1.5707963267949);
+    }
+    elsif (is_positive_infinite($e2)) {
+      $e3 = double(0)
+    }
+    elsif (is_negative_infinite($e1)) {
+      $e3 = double(-1.5707963267949);
+    }
+    elsif (is_negative_infinite($e2)) {
+      my $value1 = value($e1);
+      if ($value1 >= 0) {
+        $e3 = double(3.14159265358979);
       }
       else {
-        $e2 = double(atan2($value));
+        $e3 = double(-3.14159265358979);
       }
+    }
+    else {
+      my $value1 = value($e1);
+      my $value2 = value($e2);
+      $e3 = double(CORE::atan2($value1, $value2));
     }
   }
   else {
@@ -166,7 +177,6 @@ sub atan2 {
   return $e3;
 }
 
-=cut
 sub log2 {
   my $e1 = shift;
   
@@ -867,10 +877,10 @@ sub add {
     if (defined $e1->value) {
       if (defined $e2) {
         my $value = $e1->value + $e2->value;
-        if ($value eq '1.#INF') {
+        if ($value == $perl_inf_result) {
           return Inf;
         }
-        elsif ($value eq '-1.#INF') {
+        elsif ($value == $perl_negative_inf_result) {
           return negativeInf;
         }
         else {
@@ -937,10 +947,10 @@ sub subtract {
     if (defined $e1->value) {
       if (defined $e2) {
         my $value = $e1->value - $e2->value;
-        if ($value eq '1.#INF') {
+        if ($value == $perl_inf_result) {
           return Inf;
         }
-        elsif ($value eq '-1.#INF') {
+        elsif ($value == $perl_negative_inf_result) {
           return negativeInf;
         }
         else {
@@ -1007,10 +1017,10 @@ sub multiply {
     if (defined $e1->value) {
       if (defined $e2) {
         my $value = value($e1) * value($e2);
-        if ($value eq '1.#INF') {
+        if ($value == $perl_inf_result) {
           return Inf;
         }
-        elsif ($value eq '-1.#INF') {
+        elsif ($value == $perl_negative_inf_result) {
           return negativeInf;
         }
         else {
@@ -1129,10 +1139,10 @@ sub divide {
           }
           else {
             my $value = $e1->value / $e2->value;
-            if ($value eq '1.#INF') {
+            if ($value == $perl_inf_result) {
               return Inf;
             }
-            elsif ($value eq '-1.#INF') {
+            elsif ($value == $perl_negative_inf_result) {
               return negativeInf;
             }
             else {
@@ -1287,10 +1297,10 @@ sub raise {
           }
           else {
             my $value = $e1->value ** $e2->value;
-            if ($value eq '1.#INF') {
+            if ($value == $perl_inf_result) {
               return Inf;
             }
-            elsif ($value eq '-1.#INF') {
+            elsif ($value == $perl_negative_inf_result) {
               return negativeInf;
             }
             else {

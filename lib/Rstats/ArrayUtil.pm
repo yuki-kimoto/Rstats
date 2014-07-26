@@ -968,9 +968,7 @@ sub colSums {
 }
 
 sub cos {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
+  my $a1 = to_array(shift);
   
   my @a2_elements = map { Rstats::Util::cos($_) } @{elements($a1)};
 
@@ -988,6 +986,33 @@ sub cos {
   mode($a2 => $a2_mode);
   
   return $a2;
+}
+
+sub atan2 {
+  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  
+  my @a3_elements;
+  for (my $i = 0; $i < @{$a1->elements}; $i++) {
+    my $element1 = $a1->elements->[$i];
+    my $element2 = $a2->elements->[$i];
+    my $element3 = Rstats::Util::atan2($element1, $element2);
+    push @a3_elements, $element3;
+  }
+
+  my $a3 = clone_without_elements($a1);
+  elements($a3, \@a3_elements);
+
+  # mode
+  my $a3_mode;
+  if (is_complex($a1)) {
+    $a3_mode = 'complex';
+  }
+  else {
+    $a3_mode = 'double';
+  }
+  mode($a3 => $a3_mode);
+  
+  return $a3;
 }
 
 sub cosh {

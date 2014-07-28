@@ -9,31 +9,52 @@ use Math::Complex ();
 
 # asin
 {
-
-  # asin - complex
+  # asin - complex, 1 + 2*i
   {
-    my $a1 = c(
-      1 + 2*i,
-      0.5 + 0.5*i,
-      1 + 1*i,
-      1.5 + 1.5*i
-      -0.5 -0.5*i,
-      -1 -1*i,
-    );
+    my $a1 = c(1 + 2*i);
     my $a2 = r->asin($a1);
-    is(sprintf("%.6f", $a2->values->[0]{re}), '0.427079');
-    is(sprintf("%.6f", $a2->values->[0]{im}), '1.528571');
-    is(sprintf("%.6f", $a2->values->[1]{re}), '0.452278');
-    is(sprintf("%.6f", $a2->values->[1]{im}), '0.530638');
-    is(sprintf("%.6f", $a2->values->[2]{re}), '0.666239');
-    is(sprintf("%.6f", $a2->values->[2]{im}), '1.061275');
-    is(sprintf("%.6f", $a2->values->[3]{re}), '0.730401');
-    is(sprintf("%.6f", $a2->values->[3]{im}), '1.449734');
-    is(sprintf("%.6f", $a2->values->[4]{re}), '-0.452278');
-    is(sprintf("%.6f", $a2->values->[4]{im}), '-0.530638');
-    
-    is(sprintf("%.6f", $a2->values->[5]{re}), '-0.666239');
-    is(sprintf("%.6f", $a2->values->[5]{im}), '-1.061275');
+    is(sprintf("%.6f", $a2->value->{re}), '0.427079');
+    is(sprintf("%.6f", $a2->value->{im}), '1.528571');
+  }
+
+  # asin - complex, 0.5 + 0.5*i
+  {
+    my $a1 = c(0.5 + 0.5*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.452278');
+    is(sprintf("%.6f", $a2->value->{im}), '0.530638');
+  }
+
+  # asin - complex, 1 + 1*i
+  {
+    my $a1 = c(1 + 1*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.666239');
+    is(sprintf("%.6f", $a2->value->{im}), '1.061275');
+  }
+
+  # asin - complex, 1.5 + 1.5*i
+  {
+    my $a1 = c(1.5 + 1.5*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.730401');
+    is(sprintf("%.6f", $a2->value->{im}), '1.449734');
+  }
+
+  # asin - complex, -0.5 - 0.5*i
+  {
+    my $a1 = c(-0.5 - 0.5*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '-0.452278');
+    is(sprintf("%.6f", $a2->value->{im}), '-0.530638');
+  }
+
+  # asin - complex, -1 - 1*i
+  {
+    my $a1 = c(-1 - 1*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '-0.666239');
+    is(sprintf("%.6f", $a2->value->{im}), '-1.061275');
   }
 
   # asin - complex, 0
@@ -42,22 +63,17 @@ use Math::Complex ();
     my $a2 = r->asin($a1);
     is($a2->values->[0]{re}, 0);
     is($a2->values->[0]{im}, 0);
-  }
-
-=pod
-  # asin - complex
-  {
-    my $a1 = c(1 + 2*i, i, -i);
-    my $a2 = r->asin($a1);
-    is(sprintf("%.6f", $a2->values->[0]{re}), '1.338973');
-    is(sprintf("%.6f", $a2->values->[0]{im}), '0.402359');
-    is($a2->values->[1]{re}, 0);
-    is($a2->values->[1]{im}, Rstats::Util::Inf);
-    is($a2->values->[2]{re}, 0);
-    is($a2->values->[2]{im}, Rstats::Util::negativeInf);
     ok(r->is_complex($a2));
   }
-=cut
+    
+  # asin - complex, 0.5,
+  {
+    my $a1 = c(-1.5 + 0*i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->values->[0]{re}), '-1.570796');
+    is(sprintf("%.6f", $a2->values->[0]{im}), '0.962424');
+    ok(r->is_complex($a2));
+  }
 
   # asin - double,array
   {

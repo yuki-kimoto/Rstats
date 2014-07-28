@@ -7,6 +7,98 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# asin
+{
+
+  # asin - complex
+  {
+    my $a1 = c(
+      1 + 2*i,
+      0.5 + 0.5*i,
+      1 + 1*i,
+      1.5 + 1.5*i
+      -0.5 -0.5*i,
+      -1 -1*i,
+    );
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->values->[0]{re}), '0.427079');
+    is(sprintf("%.6f", $a2->values->[0]{im}), '1.528571');
+    is(sprintf("%.6f", $a2->values->[1]{re}), '0.452278');
+    is(sprintf("%.6f", $a2->values->[1]{im}), '0.530638');
+    is(sprintf("%.6f", $a2->values->[2]{re}), '0.666239');
+    is(sprintf("%.6f", $a2->values->[2]{im}), '1.061275');
+    is(sprintf("%.6f", $a2->values->[3]{re}), '0.730401');
+    is(sprintf("%.6f", $a2->values->[3]{im}), '1.449734');
+    is(sprintf("%.6f", $a2->values->[4]{re}), '-0.452278');
+    is(sprintf("%.6f", $a2->values->[4]{im}), '-0.530638');
+    
+    is(sprintf("%.6f", $a2->values->[5]{re}), '-0.666239');
+    is(sprintf("%.6f", $a2->values->[5]{im}), '-1.061275');
+  }
+
+  # asin - complex, 0
+  {
+    my $a1 = c(0*i);
+    my $a2 = r->asin($a1);
+    is($a2->values->[0]{re}, 0);
+    is($a2->values->[0]{im}, 0);
+  }
+
+=pod
+  # asin - complex
+  {
+    my $a1 = c(1 + 2*i, i, -i);
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->values->[0]{re}), '1.338973');
+    is(sprintf("%.6f", $a2->values->[0]{im}), '0.402359');
+    is($a2->values->[1]{re}, 0);
+    is($a2->values->[1]{im}, Rstats::Util::Inf);
+    is($a2->values->[2]{re}, 0);
+    is($a2->values->[2]{im}, Rstats::Util::negativeInf);
+    ok(r->is_complex($a2));
+  }
+=cut
+
+  # asin - double,array
+  {
+    my $a1 = array(c(1, 1.1, -1.1));
+    my $a2 = r->asin($a1);
+    is(sprintf("%.6f", $a2->values->[0]), '1.570796');
+    ok(Rstats::Util::is_nan($a2->values->[1]));
+    ok(Rstats::Util::is_nan($a2->values->[2]));
+    is_deeply(r->dim($a2)->values, [3]);
+    ok(r->is_double($a2));
+  }
+
+  # asin - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->asin($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+  
+  # asin - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->asin($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+
+  # asin - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->asin($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # asin - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->asin($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # atan
 {
   # atan - complex

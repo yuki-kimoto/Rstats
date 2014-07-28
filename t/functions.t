@@ -1234,35 +1234,6 @@ use Math::Trig ();
   }
 }
 
-# asin
-{
-  # asin - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->asin($a1);
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::asin($a1->values->[0]),
-        Math::Trig::asin($a1->values->[1]),
-      ]
-    );
-  }
-
-  # asin - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->asin(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::asin($a1->values->[0]),
-        Math::Trig::asin($a1->values->[1]),
-      ]
-    );
-  }
-}
-
 # sqrt
 {
   # sqrt - array reference

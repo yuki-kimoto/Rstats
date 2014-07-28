@@ -469,7 +469,6 @@ sub expm1 {
   }
 }
 
-=pod
 sub asin {
   my $e1 = shift;
 
@@ -485,86 +484,78 @@ sub asin {
       $e2 = complex(0, 0);
     }
     else {
-      
       my $e2_t1 = Rstats::Util::sqrt(
         add(
           multiply(
-            add(
-              $e1_re,
-              double(1)
-            ),
-            add(
-              $e1_re,
-              double(1)
-            ),
+            add($e1_re, double(1)),
+            add($e1_re, double(1))
           ),
-          multiply(
-            $e1_im,
-            $e1_im
-          )
+          multiply($e1_im, $e1_im)
         )
       );
-
       my $e2_t2 = Rstats::Util::sqrt(
         add(
           multiply(
-            subtract(
-              $e1_re,
-              double(1)
-            ),
-            subtract(
-              $e1_re,
-              double(1)
-            ),
+            subtract($e1_re, double(1)),
+            subtract($e1_re, double(1))
           ),
-          multiply(
-            $e1_im,
-            $e1_im
-          )
+          multiply($e1_im, $e1_im)
         )
       );
       
       my $e2_alpha = divide(
-        add(
-          $t1,
-          $t2
-        ),
-        double(2)
-      );
-
-      my $e2_beta = divide(
-        subtract(
-          $t1,
-          $t2
-        ),
+        add($e2_t1,  $e2_t2),
         double(2)
       );
       
-      $e2_$alpha = double(1) if less_than($e2_alpha, double(1));
+      my $e2_beta  = divide(
+        subtract($e2_t1, $e2_t2),
+        double(2)
+      );
       
-      if (more_than($e2_beta,double(1)) {
-        $e2_beta =  double(1)
+      if (less_than($e2_alpha, double(1))) {
+        $e2_alpha = double(1);
       }
-      elsif (less_than($beta, double(-1)) {
-        $e2_beta = double(-1)
+      
+      if (more_than($e2_beta,double(1))) {
+        $e2_beta =  double(1);
+      }
+      elsif (less_than($e2_beta, double(-1))) {
+        $e2_beta = double(-1);
       }
       
-      my $u =  CORE::atan2($beta, CORE::sqrt(1-$beta*$beta));
-      my $v = -CORE::log($alpha + CORE::sqrt($alpha*$alpha-1));
-      $v = -$v if $im > 0 || ($im == 0 && $re < -1);
+      my $e2_u =  Rstats::Util::atan2(
+        $e2_beta,
+        Rstats::Util::sqrt(
+          subtract(
+            double(1),
+            multiply($e2_beta, $e2_beta)
+          )
+        )
+      );
       
-      my $e2_eim = Rstats::Util::exp($e1_im);
-      my $e2_sre = Rstats::Util::sin($e1_re);
-      my $e2_cre = Rstats::Util::cos($e1_re);
+      my $e2_v = negation(
+        Rstats::Util::log(
+          add(
+            $e2_alpha,
+            Rstats::Util::sqrt(
+              subtract(
+                multiply($e2_alpha, $e2_alpha),
+                double(1)
+              )
+            )
+          )
+        )
+      );
       
-      my $e2_eim_1 = divide(double(1), $e2_eim);
+      if (more_than($e1_im, double(0)) || (equal($e1_im, double(0)) && less_than($e1_re, double(-1)))) {
+        $e2_v = negation($e2_v);
+      }
       
-      $e2 = complex_double($e2_re, $e2_im);
+      $e2 = complex_double($e2_u, $e2_v);
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    my $value = value($e1);
-    
     if (is_infinite($e1)) {
       carp "In sin : NaNs produced";
       $e2 = NaN;
@@ -573,8 +564,17 @@ sub asin {
       $e2 = $e1;
     }
     else {
-      if (CORE::abs($value) <= 1) {
-        $e2 = double(CORE::atan2($value, CORE::sqrt(1 - $value * $value)));
+      $e1 = as_double($e1);
+      if (less_than_or_equal(Rstats::Util::abs($e1), double(1))) {
+        $e2 = Rstats::Util::atan2(
+          $e1,
+          Rstats::Util::sqrt(
+            subtract(
+              double(1),
+              multiply($e1, $e1)
+            )
+          )
+        );
       }
       else {
         carp 'In asin : NaNs produced';
@@ -588,7 +588,6 @@ sub asin {
   
   return $e2;
 }
-=cut
 
 sub sin {
   my $e1 = shift;

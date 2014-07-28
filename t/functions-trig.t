@@ -7,6 +7,124 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# acos
+{
+  # acos - complex, 1 + 2*i
+  {
+  
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.143718');
+    is(sprintf("%.6f", $a2->value->{im}), '-1.528571');
+  }
+
+  # acos - complex, 0.5 + 0.5*i
+  {
+    my $a1 = c(0.5 + 0.5*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.118518');
+    is(sprintf("%.6f", $a2->value->{im}), '-0.530638');
+  }
+
+  # acos - complex, 1 + 1*i
+  {
+    my $a1 = c(1 + 1*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.904557');
+    is(sprintf("%.6f", $a2->value->{im}), '-1.061275');
+  }
+
+  # acos - complex, 1.5 + 1.5*i
+  {
+    my $a1 = c(1.5 + 1.5*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.840395');
+    is(sprintf("%.6f", $a2->value->{im}), '-1.449734');
+  }
+
+  # acos - complex, -0.5 - 0.5*i
+  {
+    my $a1 = c(-0.5 - 0.5*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '2.023075');
+    is(sprintf("%.6f", $a2->value->{im}), '0.530638');
+  }
+
+  # acos - complex, -1 - 1*i
+  {
+    my $a1 = c(-1 - 1*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '2.237036');
+    is(sprintf("%.6f", $a2->value->{im}), '1.061275');
+  }
+
+  # acos - complex, 0
+  {
+    my $a1 = c(0*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->values->[0]{re}), 1.570796);
+    is($a2->values->[0]{im}, 0);
+    ok(r->is_complex($a2));
+  }
+
+  # acos - complex, 1
+  {
+    my $a1 = c(1 + 0*i);
+    my $a2 = r->acos($a1);
+    is($a2->values->[0]{re}, 0);
+    is($a2->values->[0]{im}, 0);
+    ok(r->is_complex($a2));
+  }
+      
+  # acos - complex, -1.5
+  {
+    my $a1 = c(-1.5 + 0*i);
+    my $a2 = r->acos($a1);
+    is(sprintf("%.6f", $a2->values->[0]{re}), '3.141593');
+    is(sprintf("%.6f", $a2->values->[0]{im}), '-0.962424');
+    ok(r->is_complex($a2));
+  }
+
+  # acos - double,array
+  {
+    my $a1 = array(c(1, 1.1, -1.1));
+    my $a2 = r->acos($a1);
+    is($a2->values->[0], 0);
+    ok(Rstats::Util::is_nan($a2->values->[1]));
+    ok(Rstats::Util::is_nan($a2->values->[2]));
+    is_deeply(r->dim($a2)->values, [3]);
+    ok(r->is_double($a2));
+  }
+
+  # acos - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->acos($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+  
+  # acos - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->acos($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+
+  # acos - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->acos($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # acos - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->acos($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # asin
 {
   # asin - complex, 1 + 2*i

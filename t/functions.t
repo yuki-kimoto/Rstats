@@ -1205,35 +1205,6 @@ use Math::Trig ();
   }
 }
 
-# acos
-{
-  # acos - array reference
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->acos($a1);
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::acos($a1->values->[0]),
-        Math::Trig::acos($a1->values->[1]),
-      ]
-    );
-  }
-
-  # acos - matrix
-  {
-    my $a1 = c(2, 3);
-    my $a2 = r->acos(matrix($a1));
-    is_deeply(
-      $a2->values,
-      [
-        Math::Trig::acos($a1->values->[0]),
-        Math::Trig::acos($a1->values->[1]),
-      ]
-    );
-  }
-}
-
 # sqrt
 {
   # sqrt - array reference

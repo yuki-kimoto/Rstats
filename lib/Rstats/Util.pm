@@ -469,6 +469,124 @@ sub expm1 {
   }
 }
 
+sub acos {
+  my $e1 = shift;
+
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+    
+    if (equal($e1_re, double(1)) && equal($e1_im, double(0))) {
+      $e2 = complex(0, 0);
+    }
+    else {
+      my $e2_t1 = Rstats::Util::sqrt(
+        add(
+          multiply(
+            add($e1_re, double(1)),
+            add($e1_re, double(1))
+          ),
+          multiply($e1_im, $e1_im)
+        )
+      );
+      my $e2_t2 = Rstats::Util::sqrt(
+        add(
+          multiply(
+            subtract($e1_re, double(1)),
+            subtract($e1_re, double(1))
+          ),
+          multiply($e1_im, $e1_im)
+        )
+      );
+      
+      my $e2_alpha = divide(
+        add($e2_t1,  $e2_t2),
+        double(2)
+      );
+      
+      my $e2_beta  = divide(
+        subtract($e2_t1, $e2_t2),
+        double(2)
+      );
+      
+      if (less_than($e2_alpha, double(1))) {
+        $e2_alpha = double(1);
+      }
+      
+      if (more_than($e2_beta,double(1))) {
+        $e2_beta =  double(1);
+      }
+      elsif (less_than($e2_beta, double(-1))) {
+        $e2_beta = double(-1);
+      }
+      
+      my $e2_u =  Rstats::Util::atan2(
+        Rstats::Util::sqrt(
+          subtract(
+            double(1),
+            multiply($e2_beta, $e2_beta)
+          )
+        ),
+        $e2_beta
+      );
+      
+      my $e2_v = Rstats::Util::log(
+        add(
+          $e2_alpha,
+          Rstats::Util::sqrt(
+            subtract(
+              multiply($e2_alpha, $e2_alpha),
+              double(1)
+            )
+          )
+        )
+      );
+      
+      if (more_than($e1_im, double(0)) || (equal($e1_im, double(0)) && less_than($e1_re, double(-1)))) {
+        $e2_v = negation($e2_v);
+      }
+      
+      $e2 = complex_double($e2_u, $e2_v);
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    if (is_infinite($e1)) {
+      carp "In sin : NaNs produced";
+      $e2 = NaN;
+    }
+    elsif (is_nan($e1)) {
+      $e2 = $e1;
+    }
+    else {
+      $e1 = as_double($e1);
+      if (less_than_or_equal(Rstats::Util::abs($e1), double(1))) {
+        $e2 = Rstats::Util::atan2(
+          Rstats::Util::sqrt(
+            subtract(
+              double(1),
+              multiply($e1, $e1)
+            )
+          ),
+          $e1
+        );
+      }
+      else {
+        carp 'In asin : NaNs produced';
+        $e2 = NaN;
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
 sub asin {
   my $e1 = shift;
 

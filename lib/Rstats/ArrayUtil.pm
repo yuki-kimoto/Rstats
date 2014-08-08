@@ -265,7 +265,6 @@ sub element {
 sub Conj {
   my $a1 = to_array(shift);
   
-  $DB::single = 1;
   my @a2_elements = map { Rstats::Util::Conj($_) } @{$a1->elements};
   my $a2 = clone_without_elements($a1);
   $a2->elements(\@a2_elements);
@@ -1726,19 +1725,7 @@ sub process {
   return $a2;
 }
 
-sub tanh {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::tanh Rstats::Util::value($_)) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  mode($a2 => 'double');
-  
-  return $a2;
-}
+sub tanh { process(\&Rstats::Util::tanh, @_) }
 
 sub trunc {
   my ($_a1) = @_;

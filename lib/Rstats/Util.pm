@@ -73,6 +73,48 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub tanh {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    if (is_infinite(Im($e1))) {
+      $e2 = complex_double(NaN, NaN);
+    }
+    elsif (is_positive_infinite(Re($e1))) {
+      $e2 = complex(1, 0);
+    }
+    elsif (is_negative_infinite(Re($e1))) {
+      $e2 = complex(-1, 0);
+    }
+    else {
+      $e2 = divide(sinh($e1), cosh($e1));
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e1 = Rstats::Util::as_double($e1);
+    
+    return $e1 if is_nan($e1);
+    
+    if (is_positive_infinite($e1)) {
+      $e2 = double(1);
+    }
+    elsif (is_negative_infinite($e1)) {
+      $e2 = double(-1);
+    }
+    else {
+      $e2 = divide(sinh($e1), cosh($e1));
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
 sub cosh {
   my $e1 = shift;
   
@@ -554,7 +596,6 @@ sub exp {
       $e2 = $e1;
     }
     else {
-      $DB::single = 1 if $ENV{a};
       my $value = value($e1);
       $e2 = double(exp($value));
     }
@@ -1272,8 +1313,8 @@ sub multiply {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($e1)) {
-    my $re = double($e1->re->value * $e2->re->value - $e1->im->value * $e2->im->value);
-    my $im = double($e1->re->value * $e2->im->value + $e1->im->value * $e2->re->value);
+    my $re = subtract(multiply($e1->re, $e2->re), multiply($e1->im, $e2->im));
+    my $im = add(multiply($e1->re, $e2->im), multiply($e1->im, $e2->re));
     
     return complex_double($re, $im);
   }

@@ -7,6 +7,73 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# tanh
+{
+  # tanh - complex, 1 + 2i
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->tanh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.166736');
+    is(sprintf("%.6f", $a2->value->{im}), '-0.243458');
+    ok(r->is_complex($a2));
+  }
+
+  # tanh - complex, -Inf - 2i
+  {
+    my $a1 = c(-Inf - 2*i);
+    $ENV{a}++;
+    my $a2 = r->tanh($a1);
+    is($a2->value->{re}, '-1');
+    is($a2->value->{im}, '0');
+  }
+  
+  # tanh - complex, -Inf + 2i
+  {
+    my $a1 = c(-Inf + 2*i);
+    my $a2 = r->tanh($a1);
+    is($a2->value->{re}, '-1');
+    is($a2->value->{im}, '0');
+  }
+  
+  # tanh - double,array
+  {
+    my $a1 = array(c(0, 2));
+    my $a2 = r->tanh($a1);
+    is($a2->values->[0], '0');
+    is(sprintf("%.6f", $a2->values->[1]), '0.964028');
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
+  }
+
+  # tanh - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->tanh($a1);
+    is($a2->value, '1');
+  }
+  
+  # tanh - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->tanh($a1);
+    is($a2->value, '-1');
+  }
+
+  # tanh - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->tanh($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # tanh - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->tanh($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # cosh
 {
   # cosh - complex, 1 + 2i
@@ -57,7 +124,6 @@ use Math::Complex ();
   {
     my $a1 = c(-Inf);
     my $a2 = r->cosh($a1);
-    $DB::single = 1;
     ok(Rstats::Util::is_positive_infinite($a2->value));
   }
 

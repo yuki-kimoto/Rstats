@@ -1686,19 +1686,7 @@ sub sequence {
 
 sub sin { process(\&Rstats::Util::sin, @_) }
 
-sub sinh {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::sinh Rstats::Util::value($_)) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  mode($a2 => 'double');
-  
-  return $a2;
-}
+sub sinh { process(\&Rstats::Util::sinh, @_) }
 
 sub sqrt {
   my $a1 = to_array(shift);

@@ -4,6 +4,26 @@ use warnings;
 
 use Rstats;
 
+# numeric operator
+{
+  # numeric operator - -Inf + 2i
+  {
+    my $a1 = c(-Inf);
+    my $a2 = c(2*i);
+    my $a3 = $a1 + $a2;
+    ok(Rstats::Util::is_negative_infinite($a3->value->{re}));
+    is($a3->value->{im}, 2);
+  }
+  
+  # numeric operator - -0.2 * -Inf
+  {
+    my $a1 = c(-0.2);
+    my $a2 = c(-Inf);
+    my $a3 = $a1 * $a2;
+    is_deeply($a3->elements, [Rstats::Util::Inf]);
+  }
+}
+
 # comparison operator numeric
 {
 

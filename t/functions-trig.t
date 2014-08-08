@@ -7,6 +7,75 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# sinh
+{
+  # sinh - complex, 1 + 2i
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->sinh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '-0.489056');
+    is(sprintf("%.6f", $a2->value->{im}), '1.403119');
+    ok(r->is_complex($a2));
+  }
+
+  # sinh - complex, -Inf - 2i
+  {
+    my $a1 = c(-Inf - 2*i);
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_positive_infinite($a2->value->{re}));
+    ok(Rstats::Util::is_negative_infinite($a2->value->{im}));
+  }
+  
+  # sinh - complex, -Inf + 2i
+  {
+    $DB::single = 1;
+    my $a1 = c(-Inf + 2*i);
+    $ENV{a}++;
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_positive_infinite($a2->value->{re}));
+    ok(Rstats::Util::is_positive_infinite($a2->value->{im}));
+  }
+  
+  # sinh - double,array
+  {
+    my $a1 = array(c(0, Inf, 2));
+    my $a2 = r->sinh($a1);
+    is($a2->values->[0], '0');
+    ok(Rstats::Util::is_positive_infinite($a2->values->[1]));
+    is(sprintf("%.6f", $a2->values->[2]), '3.626860');
+    is_deeply(r->dim($a2)->values, [3]);
+    ok(r->is_double($a2));
+  }
+
+  # sinh - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_positive_infinite($a2->value));
+  }
+  
+  # sinh - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_negative_infinite($a2->value));
+  }
+
+  # sinh - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # sinh - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->sinh($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # atan
 {
   # atan - complex, 0

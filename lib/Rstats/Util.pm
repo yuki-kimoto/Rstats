@@ -110,14 +110,10 @@ sub cosh {
     $e1 = Rstats::Util::as_double($e1);
     return $e1 if is_nan($e1);
     
-    return double(0) if equal($e1, double(0));
     my $e2_ex = Rstats::Util::exp($e1);
     
-    if ($e2_ex) {
+    if (not_equal($e2_ex, double(0))) {
       if (is_positive_infinite($e2_ex)) {
-        $e2 = negativeInf;
-      }
-      elsif (is_negative_infinite($e2_ex)) {
         $e2 = Inf;
       }
       else {
@@ -131,7 +127,7 @@ sub cosh {
       }
     }
     else {
-      $e2 = negativeInf;
+      $e2 = Inf;
     }
   }
   else {

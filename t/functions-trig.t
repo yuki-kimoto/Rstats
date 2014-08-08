@@ -7,7 +7,6 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
-=pod
 # cosh
 {
   # cosh - complex, 1 + 2i
@@ -37,13 +36,13 @@ use Math::Complex ();
   
   # cosh - double,array
   {
-    my $a1 = array(c(0, Inf, 2));
+    my $a1 = array(c(0, Inf, 2, -Inf));
     my $a2 = r->cosh($a1);
-    $DB::single = 1;
     is($a2->values->[0], '1');
     ok(Rstats::Util::is_positive_infinite($a2->values->[1]));
     is(sprintf("%.6f", $a2->values->[2]), '3.762196');
-    is_deeply(r->dim($a2)->values, [3]);
+    ok(Rstats::Util::is_positive_infinite($a2->values->[3]));
+    is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
 
@@ -58,7 +57,8 @@ use Math::Complex ();
   {
     my $a1 = c(-Inf);
     my $a2 = r->cosh($a1);
-    ok(Rstats::Util::is_negative_infinite($a2->value));
+    $DB::single = 1;
+    ok(Rstats::Util::is_positive_infinite($a2->value));
   }
 
   # cosh - NA
@@ -75,8 +75,6 @@ use Math::Complex ();
     ok(Rstats::Util::is_nan($a2->value));
   }
 }
-
-=cut
 
 # sinh
 {

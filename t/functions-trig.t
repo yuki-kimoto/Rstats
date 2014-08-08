@@ -7,6 +7,82 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# atan
+{
+  # atan - complex, 0
+  {
+    my $a1 = c(0*i);
+    my $a2 = r->atan($a1);
+    is($a2->values->[0]{re}, 0);
+    is($a2->values->[0]{im}, 0);
+    ok(r->is_complex($a2));
+  }
+
+  # atan - complex, 1i
+  {
+    my $a1 = c(1*i);
+    my $a2 = r->atan($a1);
+    is($a2->values->[0]{re}, 0);
+    ok(Rstats::Util::is_positive_infinite($a2->values->[0]{im}));
+    ok(r->is_complex($a2));
+  }
+  
+  # atan - complex, -1
+  {
+    my $a1 = c(-1*i);
+    my $a2 = r->atan($a1);
+    is($a2->values->[0]{re}, 0);
+    ok(Rstats::Util::is_negative_infinite($a2->values->[0]{im}));
+    ok(r->is_complex($a2));
+  }
+
+  # atan - complex, 1 + 2i
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->atan($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.338973');
+    is(sprintf("%.6f", $a2->value->{im}), '0.402359');
+  }
+  
+  # atan - double,array
+  {
+    my $a1 = array(c(0.5, 0.6));
+    my $a2 = r->atan($a1);
+    is(sprintf("%.6f", $a2->values->[0]), '0.463648');
+    is(sprintf("%.6f", $a2->values->[1]), '0.540420');
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
+  }
+
+  # atan - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->atan($a1);
+    is(sprintf("%.6f", $a2->value), '1.570796');
+  }
+  
+  # atan - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->atan($a1);
+    is(sprintf("%.6f", $a2->value), '-1.570796');
+  }
+
+  # atan - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->atan($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }  
+
+  # atan - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->atan($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # acos
 {
   # acos - complex, 1 + 2*i

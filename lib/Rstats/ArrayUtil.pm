@@ -24,8 +24,6 @@ sub pi () { c(Rstats::Util::pi) }
 
 sub Arg {
   my $a1 = to_array(shift);
-
-  $DB::single = 1;
   
   my @a2_elements = map { Rstats::Util::Arg($_) } @{elements($a1)};
   my $a2 = clone_without_elements($a1);

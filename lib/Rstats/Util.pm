@@ -103,6 +103,7 @@ sub acosh {
   
   my $e2;
   if (is_complex($e1)) {
+    $DB::single = 1 if $ENV{a};
     my $e1_re = Re($e1);
     my $e1_im = Im($e1);
 
@@ -115,7 +116,7 @@ sub acosh {
       ),
       $e1
     );
-    my $e2_u = Rstats::Util::log($e1);
+    my $e2_u = Rstats::Util::log($e2_t);
     my $e2_re = Re($e2_u);
     my $e2_im = Im($e2_u);
     
@@ -145,7 +146,7 @@ sub acosh {
             $e1,
             Rstats::Util::sqrt(
               subtract(
-                multipy($e1, $e1),
+                multiply($e1, $e1),
                 double(1)
               )
             )

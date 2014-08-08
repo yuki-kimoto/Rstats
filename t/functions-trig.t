@@ -9,22 +9,60 @@ use Math::Complex ();
 
 # acosh
 {
-  # acosh - complex, 1 + 2i
+  # acosh - complex, -1 + 0i
   {
-    my $a1 = c(1 + 2*i);
+    my $a1 = c(-1 + 0*i);
     my $a2 = r->acosh($a1);
-    is(sprintf("%.6f", $a2->value->{re}), '1.469352');
-    is(sprintf("%.6f", $a2->value->{im}), '1.063440');
+    is($a2->value->{re}, 0);
+    is(sprintf("%.6f", $a2->value->{im}), '3.141593');
     ok(r->is_complex($a2));
   }
-  
+
+  # acosh - complex, -2 + 0i
+  {
+    my $a1 = c(-2 + 0*i);
+    my $a2 = r->acosh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.316958');
+    is(sprintf("%.6f", $a2->value->{im}), '3.141593');
+    ok(r->is_complex($a2));
+  }
+
+  # acosh - complex, 0 + 1i
+  {
+    my $a1 = c(0 + 1*i);
+    my $a2 = r->acosh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '0.881374');
+    is(sprintf("%.6f", $a2->value->{im}), '1.570796');
+    ok(r->is_complex($a2));
+  }
+
+  # acosh - complex, 1 + 1i
+  {
+    my $a1 = c(1 + 1*i);
+    my $a2 = r->acosh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.061275');
+    is(sprintf("%.6f", $a2->value->{im}), '0.904557');
+    ok(r->is_complex($a2));
+  }
+
+  # acosh - complex, -1 + 1i
+  {
+    my $a1 = c(-1 + 1*i);
+    $ENV{a}++;
+    my $a2 = r->acosh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.061275');
+    is(sprintf("%.6f", $a2->value->{im}), '2.237036');
+    ok(r->is_complex($a2));
+  }
+        
   # acosh - double,array
   {
-    my $a1 = array(c(0, 1));
+    my $a1 = array(c(0, 1, 2));
     my $a2 = r->acosh($a1);
-    is($a2->values->[0], '0');
-    is(sprintf("%.6f", $a2->values->[1]), '0.881374');
-    is_deeply(r->dim($a2)->values, [2]);
+    ok(Rstats::Util::is_nan($a2->values->[0]));
+    is($a2->values->[1], 0);
+    is(sprintf("%.6f", $a2->values->[2]), '1.316958');
+    is_deeply(r->dim($a2)->values, [3]);
     ok(r->is_double($a2));
   }
 
@@ -39,7 +77,7 @@ use Math::Complex ();
   {
     my $a1 = c(-Inf);
     my $a2 = r->acosh($a1);
-    ok(Rstats::Util::is_negative_infinite($a2->value));
+    ok(Rstats::Util::is_nan($a2->value));
   }
 
   # acosh - NA

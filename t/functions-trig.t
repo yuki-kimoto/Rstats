@@ -107,12 +107,13 @@ use Math::Complex ();
   
   # sinh - double,array
   {
-    my $a1 = array(c(0, Inf, 2));
+    my $a1 = array(c(0, Inf, 2, -Inf));
     my $a2 = r->sinh($a1);
     is($a2->values->[0], '0');
     ok(Rstats::Util::is_positive_infinite($a2->values->[1]));
     is(sprintf("%.6f", $a2->values->[2]), '3.626860');
-    is_deeply(r->dim($a2)->values, [3]);
+    ok(Rstats::Util::is_negative_infinite($a2->values->[3]));
+    is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
 

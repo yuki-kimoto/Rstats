@@ -73,6 +73,86 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+=pod
+sub atanh {
+	my ($z) = @_;
+	unless (ref $z) {
+	    return CORE::log((1 + $z)/(1 - $z))/2 if CORE::abs($z) < 1;
+	    $z = cplx($z, 0);
+	}
+	_divbyzero 'atanh(1)',  "1 - $z" if (1 - $z == 0);
+	_logofzero 'atanh(-1)'           if (1 + $z == 0);
+	return 0.5 * &log((1 + $z) / (1 - $z));
+}
+=cut
+
+sub atanh {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    if (equal($e1, complex(1, 0))) {
+      $e2 = complex_double(Inf, NaN);
+      carp("In atanh() : NaNs produced");
+    }
+    elsif (equal($e1, complex(-1, 0))) {
+      $e2 = complex_double(negativeInf, NaN);
+      carp("In atanh() : NaNs produced");
+    }
+    else {
+      $DB::single = 1;
+      $e2 = multiply(
+        complex(0.5, 0),
+        Rstats::Util::log(
+          divide(
+            add(complex(1, 0), $e1),
+            subtract(complex(1, 0), $e1)
+          )
+        )
+      );
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e1 = Rstats::Util::as_double($e1);
+    return $e1 if is_nan($e1);
+    
+    if (is_infinite($e1)) {
+        $e2 = NaN;
+        carp "In acosh() : NaNs produced";
+    }
+    else {
+      if (equal($e1, double(1))) {
+        $e2 = Inf;
+      }
+      elsif (equal($e1, double(-1))) {
+        $e2 = negativeInf;
+      }
+      elsif (less_than(Rstats::Util::abs($e1), double(1))) {
+        $e2 = divide(
+          Rstats::Util::log(
+            divide(
+              add(double(1), $e1),
+              subtract(double(1), $e1)
+            )
+          ),
+          double(2)
+        );
+      }
+      else {
+        $e2 = NaN;
+        carp "In acosh() : NaNs produced";
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
 sub acosh {
   my $e1 = shift;
   

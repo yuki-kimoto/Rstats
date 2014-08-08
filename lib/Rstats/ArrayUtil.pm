@@ -749,19 +749,7 @@ sub abs {
 
 sub acos { process(\&Rstats::Util::acos, @_) }
 
-sub acosh {
-  my $_a1 = shift;;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::acosh Rstats::Util::value($_)) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  mode($a2 => 'double');
-  
-  return $a2;
-}
+sub acosh { process(\&Rstats::Util::acosh, @_) }
 
 sub append {
   my ($a1, $a2, $a_after) = args(['a1', 'a2', 'after'], @_);
@@ -816,19 +804,7 @@ sub array {
 
 sub asin { process(\&Rstats::Util::asin, @_) }
 
-sub asinh {
-  my $_a1 = shift;
-  
-  my $a1 = to_array($_a1);
-  
-  my @a2_elements = map { Rstats::Util::double(Math::Trig::asinh Rstats::Util::value($_)) } @{elements($a1)};
-
-  my $a2 = clone_without_elements($a1);
-  elements($a2, \@a2_elements);
-  mode($a2 => 'double');
-  
-  return $a2;
-}
+sub asinh { process(\&Rstats::Util::asinh, @_) }
 
 sub atan { process(\&Rstats::Util::atan, @_) }
 

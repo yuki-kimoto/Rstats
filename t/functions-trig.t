@@ -7,6 +7,106 @@ use Rstats::Util;
 use Math::Trig ();
 use Math::Complex ();
 
+# acosh
+{
+  # acosh - complex, 1 + 2i
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->acosh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.469352');
+    is(sprintf("%.6f", $a2->value->{im}), '1.063440');
+    ok(r->is_complex($a2));
+  }
+  
+  # acosh - double,array
+  {
+    my $a1 = array(c(0, 1));
+    my $a2 = r->acosh($a1);
+    is($a2->values->[0], '0');
+    is(sprintf("%.6f", $a2->values->[1]), '0.881374');
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
+  }
+
+  # acosh - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->acosh($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+  
+  # acosh - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->acosh($a1);
+    ok(Rstats::Util::is_negative_infinite($a2->value));
+  }
+
+  # acosh - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->acosh($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }
+
+  # acosh - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->acosh($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
+# asinh
+{
+  # asinh - complex, 1 + 2i
+  {
+    my $a1 = c(1 + 2*i);
+    my $a2 = r->asinh($a1);
+    is(sprintf("%.6f", $a2->value->{re}), '1.469352');
+    is(sprintf("%.6f", $a2->value->{im}), '1.063440');
+    ok(r->is_complex($a2));
+  }
+  
+  # asinh - double,array
+  {
+    my $a1 = array(c(0, 1));
+    my $a2 = r->asinh($a1);
+    is($a2->values->[0], '0');
+    is(sprintf("%.6f", $a2->values->[1]), '0.881374');
+    is_deeply(r->dim($a2)->values, [2]);
+    ok(r->is_double($a2));
+  }
+
+  # asinh - Inf
+  {
+    my $a1 = c(Inf);
+    my $a2 = r->asinh($a1);
+    ok(Rstats::Util::is_positive_infinite($a2->value));
+  }
+  
+  # asinh - -Inf
+  {
+    my $a1 = c(-Inf);
+    my $a2 = r->asinh($a1);
+    ok(Rstats::Util::is_negative_infinite($a2->value));
+  }
+
+  # asinh - NA
+  {
+    my $a1 = c(NA);
+    my $a2 = r->asinh($a1);
+    ok(Rstats::Util::is_na($a2->value));
+  }
+
+  # asinh - NaN
+  {
+    my $a1 = c(NaN);
+    my $a2 = r->asinh($a1);
+    ok(Rstats::Util::is_nan($a2->value));
+  }
+}
+
 # tanh
 {
   # tanh - complex, 1 + 2i

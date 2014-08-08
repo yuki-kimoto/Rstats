@@ -73,6 +73,149 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+=pod
+	my ($z) = @_;
+	unless (ref $z) {
+	    $z = cplx($z, 0);
+	}
+	my ($re, $im) = @{$z->_cartesian};
+	if ($im == 0) {
+	    return CORE::log($re + CORE::sqrt($re*$re - 1))
+		if $re >= 1;
+	    return cplx(0, CORE::atan2(CORE::sqrt(1 - $re*$re), $re))
+		if CORE::abs($re) < 1;
+	}
+	my $t = &sqrt($z * $z - 1) + $z;
+	# Try Taylor if looking bad (this usually means that
+	# $z was large negative, therefore the sqrt is really
+	# close to abs(z), summing that with z...)
+	$t = 1/(2 * $z) - 1/(8 * $z**3) + 1/(16 * $z**5) - 5/(128 * $z**7)
+	    if $t == 0;
+	my $u = &log($t);
+	$u->Im(-$u->Im) if $re < 0 && $im == 0;
+	return $re < 0 ? -$u : $u;
+=cut
+
+sub acosh {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    my $e1_re = Re($e1);
+    my $e1_im = Im($e1);
+
+    my $e2_t = add(
+      Rstats::Util::sqrt(
+        subtract(
+          multiply($e1, $e1),
+          complex(1, 0)
+        ),
+      ),
+      $e1
+    );
+    my $e2_u = Rstats::Util::log($e1);
+    my $e2_re = Re($e2_u);
+    my $e2_im = Im($e2_u);
+    
+    if (less_than($e1_re, double(0)) && equal($e1_im, double(0))) {
+      $e2 = complex_double($e2_re, negation($e2_im));
+    }
+    else {
+      $e2 = complex_double($e2_re, $e2_im);
+    }
+    
+    if (less_than($e1_re, double(0))) {
+      $e2 = negation($e2);
+    }
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e1 = Rstats::Util::as_double($e1);
+    return $e1 if is_nan($e1);
+    
+    if (is_infinite($e1)) {
+        $e2 = NaN;
+        carp "In acosh() : NaNs produced";
+    }
+    else {
+      if (more_than_or_equal($e1, double(1))) {
+        $e2 = Rstats::Util::log(
+          add(
+            $e1,
+            Rstats::Util::sqrt(
+              subtract(
+                multipy($e1, $e1),
+                double(1)
+              )
+            )
+          )
+        );
+      }
+      else {
+        $e2 = NaN;
+        carp "In acosh() : NaNs produced";
+      }
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
+sub asinh {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+  
+    my $e2_t = add(
+      Rstats::Util::sqrt(
+        add(
+          multiply($e1, $e1),
+          complex(1, 0)
+        )
+      ),
+      $e1
+    );
+    
+    $e2 = Rstats::Util::log($e2_t);
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e1 = Rstats::Util::as_double($e1);
+    return $e1 if is_nan($e1);
+    
+    if (is_positive_infinite($e1)) {
+      $e2 = Inf;
+    }
+    elsif (is_negative_infinite($e1)) {
+      $e2 = negativeInf;
+    }
+    else {
+      my $e2_t = add(
+        $e1,
+        Rstats::Util::sqrt(
+          add(
+            multiply($e1, $e1),
+            double(1)
+          )
+        )
+      );
+      
+      $e2 = Rstats::Util::log($e2_t);
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
 sub tanh {
   my $e1 = shift;
   

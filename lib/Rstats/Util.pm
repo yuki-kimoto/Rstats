@@ -73,12 +73,79 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
+sub cosh {
+  my $e1 = shift;
+  
+  return $e1 if is_na($e1);
+  
+  my $e2;
+  if (is_complex($e1)) {
+    my $e1_x = Re($e1);
+    my $e1_y = Im($e1);
+    
+    my $e2_cy = Rstats::Util::cos($e1_y);
+    my $e2_sy = Rstats::Util::sin($e1_y);
+    my $e2_ex = Rstats::Util::exp($e1_x);
+    
+    my $e2_ex_1 = not_equal($e2_ex, double(0)) ? divide(double(1), $e2_ex) : Inf;
+
+    my $e2_x = divide(
+      multiply(
+        $e2_cy,
+        add($e2_ex, $e2_ex_1)
+      ),
+      double(2)
+    );
+    my $e2_y = divide(
+      multiply(
+        $e2_sy,
+        subtract($e2_ex, $e2_ex_1)
+      ),
+      double(2)
+    );
+    
+    $e2 = complex_double($e2_x, $e2_y);
+  }
+  elsif (is_numeric($e1) || is_logical($e1)) {
+    $e1 = Rstats::Util::as_double($e1);
+    return $e1 if is_nan($e1);
+    
+    return double(0) if equal($e1, double(0));
+    my $e2_ex = Rstats::Util::exp($e1);
+    
+    if ($e2_ex) {
+      if (is_positive_infinite($e2_ex)) {
+        $e2 = negativeInf;
+      }
+      elsif (is_negative_infinite($e2_ex)) {
+        $e2 = Inf;
+      }
+      else {
+        $e2 = divide(
+          add(
+            $e2_ex,
+            divide(double(1), $e2_ex)
+          ),
+          double(2)
+        )
+      }
+    }
+    else {
+      $e2 = negativeInf;
+    }
+  }
+  else {
+    croak "Not implemented";
+  }
+  
+  return $e2;
+}
+
 sub sinh {
   my $e1 = shift;
   
   return $e1 if is_na($e1);
   
-  $DB::single = 1 if $ENV{a};
   my $e2;
   if (is_complex($e1)) {
     my $e1_x = Re($e1);
@@ -114,12 +181,9 @@ sub sinh {
     return double(0) if equal($e1, double(0));
     my $e2_ex = Rstats::Util::exp($e1);
     
-    if ($e2_ex) {
+    if (not_equal($e2_ex, double(0))) {
       if (is_positive_infinite($e2_ex)) {
         $e2 = Inf;
-      }
-      elsif (is_negative_infinite($e2_ex)) {
-        $e2 = negativeInf;
       }
       else {
         $e2 = divide(

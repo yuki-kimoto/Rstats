@@ -73,29 +73,6 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-=pod
-	my ($z) = @_;
-	unless (ref $z) {
-	    $z = cplx($z, 0);
-	}
-	my ($re, $im) = @{$z->_cartesian};
-	if ($im == 0) {
-	    return CORE::log($re + CORE::sqrt($re*$re - 1))
-		if $re >= 1;
-	    return cplx(0, CORE::atan2(CORE::sqrt(1 - $re*$re), $re))
-		if CORE::abs($re) < 1;
-	}
-	my $t = &sqrt($z * $z - 1) + $z;
-	# Try Taylor if looking bad (this usually means that
-	# $z was large negative, therefore the sqrt is really
-	# close to abs(z), summing that with z...)
-	$t = 1/(2 * $z) - 1/(8 * $z**3) + 1/(16 * $z**5) - 5/(128 * $z**7)
-	    if $t == 0;
-	my $u = &log($t);
-	$u->Im(-$u->Im) if $re < 0 && $im == 0;
-	return $re < 0 ? -$u : $u;
-=cut
-
 sub acosh {
   my $e1 = shift;
   
@@ -103,7 +80,6 @@ sub acosh {
   
   my $e2;
   if (is_complex($e1)) {
-    $DB::single = 1 if $ENV{a};
     my $e1_re = Re($e1);
     my $e1_im = Im($e1);
 

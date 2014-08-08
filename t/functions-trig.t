@@ -48,7 +48,6 @@ use Math::Complex ();
   # acosh - complex, -1 + 1i
   {
     my $a1 = c(-1 + 1*i);
-    $ENV{a}++;
     my $a2 = r->acosh($a1);
     is(sprintf("%.6f", $a2->value->{re}), '1.061275');
     is(sprintf("%.6f", $a2->value->{im}), '2.237036');

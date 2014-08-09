@@ -9,12 +9,49 @@ use Rstats::ArrayUtil;
 #   which
 #   get - logical, undef
 
+=pod
+# kronecker
+{
+  # kronecker - 1
+  my $a1 = array(C('1:12'), c(3, 4));
+  my $a2 = array(C('1:23'), c(4, 3, 2));
+  my $a3 = r->kronecker($a1, $a2);
+  is_deeply($a3->values, [
+    qw/
+ 1   2   3   2   4   6   3   6   9   4   8  12   4   5   6   8  10  12  12  15  18  16  20
+ 24   7   8   9  14  16  18  21  24  27  28  32  36  10  11  12  20  22  24  30  33  36  40
+ 44  48   5  10  15   6  12  18   7  14  21   8  16  24  20  25  30  24  30  36  28  35  42
+ 32  40  48  35  40  45  42  48  54  49  56  63  56  64  72  50  55  60  60  66  72  70  77
+ 84  80  88  96   9  18  27  10  20  30  11  22  33  12  24  36  36  45  54  40  50  60  44
+ 55  66  48  60  72  63  72  81  70  80  90  77  88  99  84  96 108  90  99 108 100 110 120
+110 121 132 120 132 144  13  26  39  14  28  42  15  30  45  16  32  48  52  65  78  56  70
+ 84  60  75  90  64  80  96  91 104 117  98 112 126 105 120 135 112 128 144 130 143 156 140
+154 168 150 165 180 160 176 192  17  34  51  18  36  54  19  38  57  20  40  60  68  85 102
+ 72  90 108  76  95 114  80 100 120 119 136 153 126 144 162 133 152 171 140 160 180 170 187
+204 180 198 216 190 209 228 200 220 240  21  42  63  22  44  66  23  46  69  24  48  72  84
+105 126  88 110 132  92 115 138  96 120 144 147 168 189 154 176 198 161 184 207 168 192 216
+210 231 252 220 242 264 230 253 276 240 264 288
+    /]);
+  is_deeply($a3->dim->values, [12, 12, 2]);
+}
+=cut
+
 # pos_to_index
 {
+  # pos_to_index - first position
+  my $pos = 0;
+  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+  is_deeply($index, [1, 1, 1]);
+
+  # pos_to_index - some position
   my $pos = 21;
-  my $index = Rstats::ArrayUtil::pos_to_inxex($pos, [4, 3, 2]);
-  is_deeply($index, [3, 3, 2]);
-  
+  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+  is_deeply($index, [2, 3, 2]);
+
+  # pos_to_index - last position
+  my $pos = 23;
+  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+  is_deeply($index, [4, 3, 2]);
 }
 
 # outer

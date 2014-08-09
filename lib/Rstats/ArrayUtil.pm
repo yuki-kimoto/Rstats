@@ -33,18 +33,39 @@ sub kronecker {
   my $dim_max_length
     = @{$a1_dim->elements} > @{$a2_dim->elements} ? @{$a1_dim->elements} : @{$a2_dim->elements};
   
-  my $a3_dim = [];
+  my $a3_dim_values = [];
   my $a1_dim_values = $a1_dim->values;
   my $a2_dim_values = $a2_dim->values;
   for (my $i = 0; $i < $dim_max_length; $i++) {
     my $a1_dim_value = $a1_dim_values->[$i] || 1;
     my $a2_dim_value = $a2_dim_values->[$i] || 1;
     my $a3_dim_value = $a1_dim_value * $a2_dim_value;
-    push @$a3_dim, $a3_dim_value;
+    push @$a3_dim_values, $a3_dim_value;
   }
   
+  my $a3_dim_product = 1;
+  $a3_dim_product *= $_ for @{$a3_dim_values};
   
+  my $a3_elements = [];
+  for (my $i = 0; $i < $a3_dim_product; $i++) {
+    my $a3_index = pos_to_index($i, $a3_dim_values);
+    my $a1_index = [];
+    my $a2_index = [];
+    my $a1_dim_value = $a1_dim_values->[$i] || 1;
+    my $a2_dim_value = $a2_dim_values->[$i] || 1;
+    for my $a3_i (@$a3_index) {
+      my $a1_ind = int(($a3_index->[$i] - 1)/$a2_dim_value) + 1;
+      push @$a1_index, $a1_ind;
+      my $a2_ind = $a3_index->[$i] - $a2_dim_value * ($a1_dim_value - 1);
+      push @$a2_index, $a2_ind;
+    }
+    my $a3_element = multiply(element($a1, @$a1_index), element($a2, @$a2_index));
+    push @$a3_elements, $a3_element;
+  }
+
+  my $a3 = array($a3_elements, c($a3_dim_values));
   
+  return $a3;
 }
 
 sub outer {
@@ -2659,10 +2680,8 @@ sub pos {
   return $pos;
 }
 
-sub pos_to_inxex {
+sub pos_to_index {
   my ($pos, $dim) = @_;
-  
-  $pos += 1;
   
   my $index = [];
   my $before_dim_product = 1;
@@ -2678,7 +2697,6 @@ sub pos_to_inxex {
   
   return $index;
 }
-
 
 sub t {
   my $m1 = shift;

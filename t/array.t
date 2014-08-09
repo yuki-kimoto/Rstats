@@ -3,10 +3,19 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::ArrayUtil;
 
 # TODO
 #   which
 #   get - logical, undef
+
+# pos_to_index
+{
+  my $pos = 21;
+  my $index = Rstats::ArrayUtil::pos_to_inxex($pos, [4, 3, 2]);
+  is_deeply($index, [3, 3, 2]);
+  
+}
 
 # outer
 {

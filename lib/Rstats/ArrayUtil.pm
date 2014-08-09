@@ -22,6 +22,31 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
+sub kronecker {
+  my $a1 = to_array(shift);
+  my $a2 = to_array(shift);
+  
+  ($a1, $a2) = upgrade_type($a1, $a2) if $a1->type ne $a2->type;
+  
+  my $a1_dim = dim($a1);
+  my $a2_dim = dim($a2);
+  my $dim_max_length
+    = @{$a1_dim->elements} > @{$a2_dim->elements} ? @{$a1_dim->elements} : @{$a2_dim->elements};
+  
+  my $a3_dim = [];
+  my $a1_dim_values = $a1_dim->values;
+  my $a2_dim_values = $a2_dim->values;
+  for (my $i = 0; $i < $dim_max_length; $i++) {
+    my $a1_dim_value = $a1_dim_values->[$i] || 1;
+    my $a2_dim_value = $a2_dim_values->[$i] || 1;
+    my $a3_dim_value = $a1_dim_value * $a2_dim_value;
+    push @$a3_dim, $a3_dim_value;
+  }
+  
+  
+  
+}
+
 sub outer {
   my $a1 = to_array(shift);
   my $a2 = to_array(shift);
@@ -2633,6 +2658,27 @@ sub pos {
   
   return $pos;
 }
+
+sub pos_to_inxex {
+  my ($pos, $dim) = @_;
+  
+  $pos += 1;
+  
+  my $index = [];
+  my $before_dim_product = 1;
+  $before_dim_product *= $dim->[$_] for (0 .. @$dim - 1);
+  for (my $i = @{$dim} - 1; $i >= 0; $i--) {
+    my $dim_product = 1;
+    $dim_product *= $dim->[$_] for (0 .. $i - 1);
+    my $reminder = $pos % $before_dim_product;
+    my $quotient = int ($reminder / $dim_product);
+    unshift @$index, $quotient + 1;
+    $before_dim_product = $dim_product;
+  }
+  
+  return $index;
+}
+
 
 sub t {
   my $m1 = shift;

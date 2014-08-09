@@ -8,6 +8,16 @@ use Rstats;
 #   which
 #   get - logical, undef
 
+# outer
+{
+  # outer - basic
+  my $a1 = array(C('1:2'), c(1, 2));
+  my $a2 = array(C('1:24'), c(3, 4));
+  my $a3 = r->outer($a1, $a2);
+  is_deeply($a3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
+  is_deeply(r->dim($a3)->values, [1, 2, 3, 4]);
+}
+
 # comparison operator numeric
 {
 

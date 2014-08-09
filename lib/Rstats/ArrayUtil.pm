@@ -22,6 +22,39 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
+sub outer {
+  my $a1 = to_array(shift);
+  my $a2 = to_array(shift);
+  
+  ($a1, $a2) = upgrade_type($a1, $a2) if $a1->type ne $a2->type;
+  
+  my $a1_dim = dim($a1);
+  my $a2_dim = dim($a2);
+  my $a3_dim = [@{$a1_dim->values}, @{$a2_dim->values}];
+  
+  my $indexs = [];
+  for my $a3_d (@$a3_dim) {
+    push @$indexs, [1 .. $a3_d];
+  }
+  my $poses = cross_product($indexs);
+  
+  my $a1_dim_length = @{$a1_dim->elements};
+  my $a3_elements = [];
+  for my $pos (@$poses) {
+    my $pos_tmp = [@$pos];
+    my $a1_pos = [splice @$pos_tmp, 0, $a1_dim_length];
+    my $a2_pos = $pos_tmp;
+    my $a1_element = element($a1, @$a1_pos);
+    my $a2_element = element($a2, @$a2_pos);
+    my $a3_element = Rstats::Util::multiply($a1_element, $a2_element);
+    push @$a3_elements, $a3_element;
+  }
+  
+  my $a3 = array($a3_elements, c($a3_dim));
+  
+  return $a3;
+}
+
 sub Arg {
   my $a1 = to_array(shift);
   

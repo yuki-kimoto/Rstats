@@ -81,6 +81,7 @@ my @methods = qw/
   is_integer
   is_logical
   is_vector
+  kronecker
   length
   log
   logb
@@ -103,6 +104,7 @@ my @methods = qw/
   min
   nchar
   order
+  outer
   paste
   pi
   pmax

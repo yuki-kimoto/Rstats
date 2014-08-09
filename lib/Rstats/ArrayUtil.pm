@@ -780,24 +780,24 @@ sub array {
   # Dimention
   my $elements = elements($a1);
   my $dim = to_array($_dim);
+  my $a1_length = @{$a1->elements};
   unless (@{$dim->elements}) {
-    my $a1_length = @{$a1->elements};
     $dim = c($a1_length);
   }
-  dim($a1, $dim);
+  my $dim_product = 1;
+  $dim_product *= $_ for @{$dim->values};
   
   # Fix elements
-  my $max_length = 1;
-  $max_length *= $_ for @{Rstats::ArrayUtil::values(dim_as_array($a1))};
-  if (@$elements > $max_length) {
-    @$elements = splice @$elements, 0, $max_length;
+  if ($a1_length > $dim_product) {
+    @$elements = splice @$elements, 0, $dim_product;
   }
-  elsif (@$elements < $max_length) {
-    my $repeat_count = int($max_length / @$elements) + 1;
+  elsif ($a1_length < $dim_product) {
+    my $repeat_count = int($dim_product / @$elements) + 1;
     @$elements = (@$elements) x $repeat_count;
-    @$elements = splice @$elements, 0, $max_length;
+    @$elements = splice @$elements, 0, $dim_product;
   }
   elements($a1, $elements);
+  dim($a1, $dim);
   
   return $a1;
 }
@@ -2075,7 +2075,16 @@ sub dim {
   my $a1 = shift;
   
   if (@_) {
-    $a1->{dim} = elements(to_array($_[0]));
+    my $a_dim = to_array($_[0]);
+    my $a1_length = @{$a1->elements};
+    my $a1_lenght_by_dim = 1;
+    $a1_lenght_by_dim *= $_ for @{$a_dim->values};
+    
+    if ($a1_length != $a1_lenght_by_dim) {
+      croak "dims [product $a1_lenght_by_dim] do not match the length of object [$a1_length]";
+    }
+  
+    $a1->{dim} = elements($a_dim);
     
     return $a1;
   }

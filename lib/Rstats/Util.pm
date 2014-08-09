@@ -102,7 +102,6 @@ sub atanh {
       carp("In atanh() : NaNs produced");
     }
     else {
-      $DB::single = 1;
       $e2 = multiply(
         complex(0.5, 0),
         Rstats::Util::log(

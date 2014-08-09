@@ -9,6 +9,58 @@ use Rstats::ArrayUtil;
 #   which
 #   get - logical, undef
 
+# set_diag
+{
+  # set_diag - 3 x 3
+  {
+    my $a1 = matrix(4, 3, 3);
+    my $a2 = r->set_diag($a1, c(1, 2, 3));
+    is_deeply($a1->values, [1, 4, 4, 4, 2, 4, 4, 4, 3]);
+    is_deeply(r->dim($a1)->values, [3, 3]);
+  }  
+
+  # set_diag - repeat
+  {
+    my $a1 = matrix(4, 3, 3);
+    my $a2 = r->set_diag($a1, 1);
+    is_deeply($a1->values, [1, 4, 4, 4, 1, 4, 4, 4, 1]);
+    is_deeply(r->dim($a1)->values, [3, 3]);
+  }
+  
+  # set_diag - 2 x 3
+  {
+    my $a1 = matrix(4, 2, 3);
+    my $a2 = r->set_diag($a1, c(1, 2));
+    is_deeply($a1->values, [1, 4, 4, 2, 4, 4]);
+    is_deeply(r->dim($a1)->values, [2, 3]);
+  }  
+
+  # set_diag - 3 x 2
+  {
+    my $a1 = matrix(4, 3, 2);
+    my $a2 = r->set_diag($a1, c(1, 2));
+    is_deeply($a1->values, [1, 4, 4, 4, 2, 4]);
+    is_deeply(r->dim($a1)->values, [3, 2]);
+  } 
+}
+
+# diag
+{
+  # diag - unit matrix
+  {
+    my $a1 = r->diag(3);
+    is_deeply($a1->values, [1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    is_deeply(r->dim($a1)->values, [3, 3]);
+  }
+
+  # diag - basic
+  {
+    my $a1 = r->diag(c(1, 2, 3));
+    is_deeply($a1->values, [1, 0, 0, 0, 2, 0, 0, 0, 3]);
+    is_deeply(r->dim($a1)->values, [3, 3]);
+  }  
+}
+
 # kronecker
 {
   # kronecker - basic

@@ -22,6 +22,49 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
+sub diag {
+  my $a1 = to_array(shift);
+  
+  my $size;
+  my $a2_elements;
+  if (@{$a1->elements} == 1) {
+    $size = $a1->value;
+    $a2_elements = [];
+    push @$a2_elements, Rstats::Util::double(1) for (1 .. $size);
+  }
+  else {
+    $size = @{$a1->elements};
+    $a2_elements = $a1->elements;
+  }
+  
+  my $a2 = matrix(0, $size, $size);
+  for (my $i = 0; $i < $size; $i++) {
+    $a2->at($i + 1, $i + 1);
+    $a2->set($a2_elements->[$i]);
+  }
+  
+  return $a2;
+}
+
+sub set_diag {
+  my $a1 = to_array(shift);
+  my $a2 = to_array(shift);
+  
+  my $a2_elements;
+  my $a1_dim_values = dim($a1)->values;
+  my $size = $a1_dim_values->[0] < $a1_dim_values->[1] ? $a1_dim_values->[0] : $a1_dim_values->[1];
+  
+  $a2 = array($a2, $size);
+  $a2_elements = $a2->elements;
+  
+  for (my $i = 0; $i < $size; $i++) {
+    $a1->at($i + 1, $i + 1);
+    $a1->set($a2_elements->[$i]);
+  }
+  
+  return $a1;
+}
+
 sub kronecker {
   my $a1 = to_array(shift);
   my $a2 = to_array(shift);

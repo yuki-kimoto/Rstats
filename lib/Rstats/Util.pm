@@ -73,19 +73,6 @@ sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'norm
 sub integer { Rstats::Element::Integer->new(value => int(shift)) }
 sub logical { Rstats::Element::Logical->new(value => shift) }
 
-=pod
-sub atanh {
-	my ($z) = @_;
-	unless (ref $z) {
-	    return CORE::log((1 + $z)/(1 - $z))/2 if CORE::abs($z) < 1;
-	    $z = cplx($z, 0);
-	}
-	_divbyzero 'atanh(1)',  "1 - $z" if (1 - $z == 0);
-	_logofzero 'atanh(-1)'           if (1 + $z == 0);
-	return 0.5 * &log((1 + $z) / (1 - $z));
-}
-=cut
-
 sub atanh {
   my $e1 = shift;
   

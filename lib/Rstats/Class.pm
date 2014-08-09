@@ -12,6 +12,7 @@ require Rstats::ArrayUtil;
 # pmatch regexpr
 # substr substring
 # strsplit  strwrap
+# outer(x, y, f)
 
 my @methods = qw/
   abs
@@ -51,6 +52,7 @@ my @methods = qw/
   cumsum
   cumprod
   complex
+  diag
   diff
   dim
   exp
@@ -126,6 +128,7 @@ my @methods = qw/
   sample
   seq
   sequence
+  set_diag
   setdiff
   setequal
   sin

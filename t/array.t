@@ -9,15 +9,39 @@ use Rstats::ArrayUtil;
 #   which
 #   get - logical, undef
 
-=pod
 # kronecker
 {
-  # kronecker - 1
-  my $a1 = array(C('1:12'), c(3, 4));
-  my $a2 = array(C('1:23'), c(4, 3, 2));
-  my $a3 = r->kronecker($a1, $a2);
-  is_deeply($a3->values, [
-    qw/
+  # kronecker - basic
+  {
+    my $a1 = array(C('1:12'), c(3, 4));
+    my $a2 = array(C('1:24'), c(4, 3, 2));
+    my $a3 = r->kronecker($a1, $a2);
+    is_deeply($a3->values, [
+      qw/
+     1   2   3   4   2   4   6   8   3   6   9  12   5   6   7   8  10  12  14  16  15  18  21
+    24   9  10  11  12  18  20  22  24  27  30  33  36   4   8  12  16   5  10  15  20   6  12
+    18  24  20  24  28  32  25  30  35  40  30  36  42  48  36  40  44  48  45  50  55  60  54
+    60  66  72   7  14  21  28   8  16  24  32   9  18  27  36  35  42  49  56  40  48  56  64
+    45  54  63  72  63  70  77  84  72  80  88  96  81  90  99 108  10  20  30  40  11  22  33
+    44  12  24  36  48  50  60  70  80  55  66  77  88  60  72  84  96  90 100 110 120  99 110
+   121 132 108 120 132 144  13  14  15  16  26  28  30  32  39  42  45  48  17  18  19  20  34
+    36  38  40  51  54  57  60  21  22  23  24  42  44  46  48  63  66  69  72  52  56  60  64
+    65  70  75  80  78  84  90  96  68  72  76  80  85  90  95 100 102 108 114 120  84  88  92
+    96 105 110 115 120 126 132 138 144  91  98 105 112 104 112 120 128 117 126 135 144 119 126
+   133 140 136 144 152 160 153 162 171 180 147 154 161 168 168 176 184 192 189 198 207 216 130
+   140 150 160 143 154 165 176 156 168 180 192 170 180 190 200 187 198 209 220 204 216 228 240
+   210 220 230 240 231 242 253 264 252 264 276 288
+      /]);
+    is_deeply(r->dim($a3)->values, [12, 12, 2]);
+  }
+
+  # kronecker - reverse
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    my $a2 = array(C('1:12'), c(3, 4));
+    my $a3 = r->kronecker($a1, $a2);
+    is_deeply($a3->values, [
+      qw/
  1   2   3   2   4   6   3   6   9   4   8  12   4   5   6   8  10  12  12  15  18  16  20
  24   7   8   9  14  16  18  21  24  27  28  32  36  10  11  12  20  22  24  30  33  36  40
  44  48   5  10  15   6  12  18   7  14  21   8  16  24  20  25  30  24  30  36  28  35  42
@@ -31,27 +55,33 @@ use Rstats::ArrayUtil;
 204 180 198 216 190 209 228 200 220 240  21  42  63  22  44  66  23  46  69  24  48  72  84
 105 126  88 110 132  92 115 138  96 120 144 147 168 189 154 176 198 161 184 207 168 192 216
 210 231 252 220 242 264 230 253 276 240 264 288
-    /]);
-  is_deeply($a3->dim->values, [12, 12, 2]);
+      /]);
+    is_deeply(r->dim($a3)->values, [12, 12, 2]);
+  }
 }
-=cut
 
 # pos_to_index
 {
   # pos_to_index - first position
-  my $pos = 0;
-  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
-  is_deeply($index, [1, 1, 1]);
-
+  {
+    my $pos = 0;
+    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [1, 1, 1]);
+  }
+  
   # pos_to_index - some position
-  my $pos = 21;
-  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
-  is_deeply($index, [2, 3, 2]);
+  {
+    my $pos = 21;
+    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [2, 3, 2]);
+  }
 
   # pos_to_index - last position
-  my $pos = 23;
-  my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
-  is_deeply($index, [4, 3, 2]);
+  {
+    my $pos = 23;
+    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [4, 3, 2]);
+  }
 }
 
 # outer

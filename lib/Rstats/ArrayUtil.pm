@@ -51,15 +51,20 @@ sub kronecker {
     my $a3_index = pos_to_index($i, $a3_dim_values);
     my $a1_index = [];
     my $a2_index = [];
-    my $a1_dim_value = $a1_dim_values->[$i] || 1;
-    my $a2_dim_value = $a2_dim_values->[$i] || 1;
-    for my $a3_i (@$a3_index) {
-      my $a1_ind = int(($a3_index->[$i] - 1)/$a2_dim_value) + 1;
+    for (my $k = 0; $k < @$a3_index; $k++) {
+      my $a3_i = $a3_index->[$k];
+      
+      my $a1_dim_value = $a1_dim_values->[$k] || 1;
+      my $a2_dim_value = $a2_dim_values->[$k] || 1;
+
+      my $a1_ind = int(($a3_i - 1)/$a2_dim_value) + 1;
       push @$a1_index, $a1_ind;
-      my $a2_ind = $a3_index->[$i] - $a2_dim_value * ($a1_dim_value - 1);
+      my $a2_ind = $a3_i - $a2_dim_value * ($a1_ind - 1);
       push @$a2_index, $a2_ind;
     }
-    my $a3_element = multiply(element($a1, @$a1_index), element($a2, @$a2_index));
+    my $a1_element = element($a1, @$a1_index);
+    my $a2_element = element($a2, @$a2_index);
+    my $a3_element = multiply($a1_element, $a2_element);
     push @$a3_elements, $a3_element;
   }
 

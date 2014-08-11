@@ -9,6 +9,18 @@ use Rstats::ArrayUtil;
 #   which
 #   get - logical, undef
 
+# get logical array
+{
+  # get logical array - basic
+  {
+    my $a1 = matrix(C('1:9'), 3, 3);
+    my $a2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
+    my $a3 = $a1->get($a2);
+    is_deeply($a3->values, [1, 5, 9]);
+    is_deeply(r->dim($a3)->values, [3]);
+  }
+}
+
 # set_diag
 {
   # set_diag - 3 x 3
@@ -899,6 +911,7 @@ EOS
     is_deeply($a2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
   }
 }
+
 # get 3-dimention
 {
   # get 3-dimention - minus

@@ -644,6 +644,12 @@ sub get {
   return array(\@a2_elements, $a2_dim);
 }
 
+sub logical_array_to_index {
+  my $a1 = shift;
+  
+  
+}
+
 sub set {
   my ($a1, $_a2) = @_;
 
@@ -2664,84 +2670,98 @@ sub parse_index {
   my $a1_dim = Rstats::ArrayUtil::values(dim_as_array($a1));
   my @indexs;
   my @a2_dim;
-  
-  for (my $i = 0; $i < @$a1_dim; $i++) {
-    my $_index = $_indexs[$i];
+
+  if (is_array($_indexs[0]) && is_logical($_indexs[0]) && @{dim($_indexs[0])->elements} > 1) {
+    my $a2 = $_indexs[0];
+    my $a2_dim_values = Rstats::ArrayUtil::values(dim($a2));
+    my $a2_elements = elements($a2);
+    my $positions = [];
+    for (my $i = 0; $i < @$a2_elements; $i++) {
+      next unless $a2_elements->[$i];
+      push @$positions, $i + 1;
+    }
     
-    my $index = to_array($_index);
-    my $index_values = Rstats::ArrayUtil::values($index);
-    if (@$index_values && !is_character($index) && !is_logical($index)) {
-      my $minus_count = 0;
-      for my $index_value (@$index_values) {
-        if ($index_value == 0) {
-          croak "0 is invalid index";
+    return ($positions, []);
+  }
+  else {
+    for (my $i = 0; $i < @$a1_dim; $i++) {
+      my $_index = $_indexs[$i];
+      
+      my $index = to_array($_index);
+      my $index_values = Rstats::ArrayUtil::values($index);
+      if (@$index_values && !is_character($index) && !is_logical($index)) {
+        my $minus_count = 0;
+        for my $index_value (@$index_values) {
+          if ($index_value == 0) {
+            croak "0 is invalid index";
+          }
+          else {
+            $minus_count++ if $index_value < 0;
+          }
+        }
+        croak "Can't min minus sign and plus sign"
+          if $minus_count > 0 && $minus_count != @$index_values;
+        $index->{_minus} = 1 if $minus_count > 0;
+      }
+      
+      if (!@{Rstats::ArrayUtil::values($index)}) {
+        my $index_values_new = [1 .. $a1_dim->[$i]];
+        $index = array($index_values_new);
+      }
+      elsif (is_character($index)) {
+        if (is_vector($a1)) {
+          my $index_new_values = [];
+          for my $name (@{Rstats::ArrayUtil::values($index)}) {
+            my $i = 0;
+            my $value;
+            for my $a1_name (@{Rstats::ArrayUtil::values(names($a1))}) {
+              if ($name eq $a1_name) {
+                $value = Rstats::ArrayUtil::values($a1)->[$i];
+                last;
+              }
+              $i++;
+            }
+            croak "Can't find name" unless defined $value;
+            push @$index_new_values, $value;
+          }
+          $indexs[$i] = array($index_new_values);
+        }
+        elsif (is_matrix($a1)) {
+          
         }
         else {
-          $minus_count++ if $index_value < 0;
+          croak "Can't support name except vector and matrix";
         }
       }
-      croak "Can't min minus sign and plus sign"
-        if $minus_count > 0 && $minus_count != @$index_values;
-      $index->{_minus} = 1 if $minus_count > 0;
-    }
-    
-    if (!@{Rstats::ArrayUtil::values($index)}) {
-      my $index_values_new = [1 .. $a1_dim->[$i]];
-      $index = array($index_values_new);
-    }
-    elsif (is_character($index)) {
-      if (is_vector($a1)) {
-        my $index_new_values = [];
-        for my $name (@{Rstats::ArrayUtil::values($index)}) {
-          my $i = 0;
-          my $value;
-          for my $a1_name (@{Rstats::ArrayUtil::values(names($a1))}) {
-            if ($name eq $a1_name) {
-              $value = Rstats::ArrayUtil::values($a1)->[$i];
-              last;
-            }
-            $i++;
-          }
-          croak "Can't find name" unless defined $value;
-          push @$index_new_values, $value;
+      elsif (is_logical($index)) {
+        my $index_values_new = [];
+        for (my $i = 0; $i < @{Rstats::ArrayUtil::values($index)}; $i++) {
+          push @$index_values_new, $i + 1 if Rstats::Util::bool(elements($index)->[$i]);
         }
-        $indexs[$i] = array($index_new_values);
+        $index = array($index_values_new);
       }
-      elsif (is_matrix($a1)) {
+      elsif ($index->{_minus}) {
+        my $index_value_new = [];
         
+        for my $k (1 .. $a1_dim->[$i]) {
+          push @$index_value_new, $k unless grep { $_ == -$k } @{Rstats::ArrayUtil::values($index)};
+        }
+        $index = array($index_value_new);
       }
-      else {
-        croak "Can't support name except vector and matrix";
-      }
-    }
-    elsif (is_logical($index)) {
-      my $index_values_new = [];
-      for (my $i = 0; $i < @{Rstats::ArrayUtil::values($index)}; $i++) {
-        push @$index_values_new, $i + 1 if Rstats::Util::bool(elements($index)->[$i]);
-      }
-      $index = array($index_values_new);
-    }
-    elsif ($index->{_minus}) {
-      my $index_value_new = [];
-      
-      for my $k (1 .. $a1_dim->[$i]) {
-        push @$index_value_new, $k unless grep { $_ == -$k } @{Rstats::ArrayUtil::values($index)};
-      }
-      $index = array($index_value_new);
-    }
 
-    push @indexs, $index;
+      push @indexs, $index;
 
-    my $count = @{elements($index)};
-    push @a2_dim, $count unless $count == 1 && $drop;
+      my $count = @{elements($index)};
+      push @a2_dim, $count unless $count == 1 && $drop;
+    }
+    @a2_dim = (1) unless @a2_dim;
+    
+    my $index_values = [map { Rstats::ArrayUtil::values($_) } @indexs];
+    my $ords = cross_product($index_values);
+    my @positions = map { Rstats::ArrayUtil::pos($_, $a1_dim) } @$ords;
+  
+    return (\@positions, \@a2_dim);
   }
-  @a2_dim = (1) unless @a2_dim;
-  
-  my $index_values = [map { Rstats::ArrayUtil::values($_) } @indexs];
-  my $ords = cross_product($index_values);
-  my @positions = map { Rstats::ArrayUtil::pos($_, $a1_dim) } @$ords;
-  
-  return (\@positions, \@a2_dim);
 }
 
 sub cross_product {
@@ -2834,7 +2854,7 @@ sub t {
 sub is_array {
   my $a1 = shift;
   
-  return c(Rstats::Util::TRUE());
+  return ref $a1 eq 'Rstats::Array' ? TRUE : FALSE;
 }
 
 sub is_vector {

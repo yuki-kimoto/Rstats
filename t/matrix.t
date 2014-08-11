@@ -3,8 +3,99 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Util;
 
 # arr.ind=TRUE
+
+# upper_tri
+{
+  # upper_tri - basic
+  {
+    my $a1 = matrix(C('1:12'), 3, 4);
+    my $a2 = r->lower_tri($a1);
+    is_deeply($a2->values, [
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE
+    ]);
+    is_deeply(r->dim($a2)->values, [3, 4]);
+  }
+
+  # upper_tri - diag = TRUE
+  {
+    my $a1 = matrix(C('1:12'), 3, 4);
+    my $a2 = r->lower_tri($a1, {diag => TRUE});
+    is_deeply($a2->values, [
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE
+    ]);
+    is_deeply(r->dim($a2)->values, [3, 4]);
+  }
+}
+
+# upper_tri
+{
+  # upper_tri - basic
+  {
+    my $a1 = matrix(C('1:12'), 3, 4);
+    my $a2 = r->upper_tri($a1);
+    is_deeply($a2->values, [
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE
+    ]);
+    is_deeply(r->dim($a2)->values, [3, 4]);
+  }
+
+  # upper_tri - diag = TRUE
+  {
+    my $a1 = matrix(C('1:12'), 3, 4);
+    my $a2 = r->upper_tri($a1, {diag => TRUE});
+    is_deeply($a2->values, [
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::FALSE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE,
+      Rstats::Util::TRUE
+    ]);
+    is_deeply(r->dim($a2)->values, [3, 4]);
+  }
+}
 
 # t
 {

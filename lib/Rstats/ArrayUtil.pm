@@ -22,6 +22,72 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
+sub upper_tri {
+  my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
+  
+  my $diag = value($a1_diag);
+  
+  my $a2_elements = [];
+  if (is_matrix($a1_m)) {
+    my $a1_dim_values = Rstats::ArrayUtil::values(dim($a1_m));
+    my $rows_count = $a1_dim_values->[0];
+    my $cols_count = $a1_dim_values->[1];
+    
+    for (my $col = 0; $col < $cols_count; $col++) {
+      for (my $row = 0; $row < $rows_count; $row++) {
+        my $a2_element;
+        if ($diag) {
+          $a2_element = $col >= $row ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+        }
+        else {
+          $a2_element = $col > $row ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+        }
+        push @$a2_elements, $a2_element;
+      }
+    }
+    
+    my $a2 = matrix($a2_elements, $rows_count, $cols_count);
+    
+    return $a2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
+sub lower_tri {
+  my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
+
+  my $diag = value($a1_diag);
+  
+  my $a2_elements = [];
+  if (is_matrix($a1_m)) {
+    my $a1_dim_values = Rstats::ArrayUtil::values(dim($a1_m));
+    my $rows_count = $a1_dim_values->[0];
+    my $cols_count = $a1_dim_values->[1];
+    
+    for (my $col = 0; $col < $cols_count; $col++) {
+      for (my $row = 0; $row < $rows_count; $row++) {
+        my $a2_element;
+        if ($diag) {
+          $a2_element = $col <= $row ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+        }
+        else {
+          $a2_element = $col < $row ? Rstats::Util::TRUE : Rstats::Util::FALSE;
+        }
+        push @$a2_elements, $a2_element;
+      }
+    }
+    
+    my $a2 = matrix($a2_elements, $rows_count, $cols_count);
+    
+    return $a2;
+  }
+  else {
+    croak 'Not implemented';
+  }
+}
+
 sub diag {
   my $a1 = to_array(shift);
   

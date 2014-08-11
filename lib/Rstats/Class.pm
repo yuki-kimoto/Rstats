@@ -89,6 +89,7 @@ my @methods = qw/
   logb
   log2
   log10
+  lower_tri
   match
   median
   Mod
@@ -149,6 +150,7 @@ my @methods = qw/
   trunc
   unique
   union
+  upper_tri
   var
   which
 /;

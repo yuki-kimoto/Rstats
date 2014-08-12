@@ -85,6 +85,7 @@ my @methods = qw/
   is_vector
   kronecker
   length
+  list
   log
   logb
   log2

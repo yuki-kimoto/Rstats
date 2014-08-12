@@ -9,6 +9,7 @@ use List::Util;
 use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
+use Rstats::List;
 
 sub Inf () { c(Rstats::Util::Inf) }
 
@@ -21,6 +22,28 @@ sub TRUE () { c(Rstats::Util::TRUE) }
 sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
+
+sub list {
+  my @elements = @_;
+  
+  @elements = map { ref $_ ne 'Rstats::List' ? to_array($_) : $_ } @elements;
+  
+  my $list = Rstats::List->new;
+  $list->elements(\@elements);
+  
+  return $list;
+}
+
+=pod
+sub det {
+  my $a1 = to_array(shift);
+  
+  
+  
+  
+  return $a2;
+}
+=cut
 
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);

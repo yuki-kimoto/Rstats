@@ -85,7 +85,6 @@ my @methods = qw/
   is_logical
   is_vector
   kronecker
-  list
   log
   logb
   log2
@@ -182,6 +181,17 @@ sub is_list {
   my ($self, $container) = @_;
   
   return ref $container eq 'Rstats::List' ? $self->TRUE : $self->FALSE;
+}
+
+sub list {
+  my ($self, @elements) = @_;
+  
+  @elements = map { ref $_ ne 'Rstats::List' ? Rstats::ArrayUtil::to_array($_) : $_ } @elements;
+  
+  my $list = Rstats::List->new;
+  $list->elements(\@elements);
+  
+  return $list;
 }
 
 sub length {

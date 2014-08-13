@@ -16,7 +16,15 @@ use Rstats;
       [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]
     );
   }
-  
+
+  # list - argument is not array
+  {
+    my $l1 = r->list(1, 2, 3);
+    is_deeply($l1->elements->[0]->values, [1]);
+    is_deeply($l1->elements->[1]->values, [2]);
+    is_deeply($l1->elements->[2]->values, [3]);
+  }
+    
   # list - to_string
   {
     my $l1 = r->list(c(1, 2, 3), r->list("Hello", c(T, F, F)));
@@ -55,5 +63,72 @@ EOS
     my $l1 = r->as_list($a1);
     ok(r->is_list($l1));
     is_deeply($a1->values, ["a", "b"]);
+  }
+
+  # list - get
+  {
+    my $l1 = r->list("a", "b", r->list("c", "d", r->list("e")));
+    my $a1 = $l1->get(1);
+    is_deeply($a1->values, ["a"]);
+    
+    my $a2 = $l1->get(3, 2);
+    is_deeply($a2->values, ["d"]);
+
+    my $a2 = $l1->get(3, 3, 1);
+    is_deeply($a2->values, ["e"]);
+  }
+
+  # list - get_list
+  {
+    my $l1 = r->list(1, 2, 3);
+    my $l2 = $l1->get_list(1);
+    ok(r->is_list($l2));
+    is_deeply($l2->get(1)->values, [1]);
+  }
+
+  # list - get_list, multiple
+  {
+    my $l1 = r->list(1, 2, 3);
+    my $l2 = $l1->get_list(c(1, 3));
+    ok(r->is_list($l2));
+    is_deeply($l2->get(1)->values, [1]);
+    is_deeply($l2->get(2)->values, [3]);
+  }
+
+  # list - get_list, multiple
+  {
+    my $l1 = r->list(1, 2, 3);
+    my $l2 = $l1->get_list(c(1, 3));
+    ok(r->is_list($l2));
+    is_deeply($l2->get(1)->values, [1]);
+    is_deeply($l2->get(2)->values, [3]);
+  }
+  
+  # list - set
+  {
+    my $l1 = r->list(1, 2, 3);
+    $l1->at(2);
+    $l1->set(5);
+    is_deeply($l1->get(1)->values, [1]);
+    is_deeply($l1->get(2)->values, [5]);
+    is_deeply($l1->get(3)->values, [3]);
+  }
+
+  # list - set, two index
+  {
+    my $l1 = r->list(1, r->list(2, 3));
+    $l1->at(2, 2);
+    $l1->set(5);
+    is_deeply($l1->get(1)->values, [1]);
+    is_deeply($l1->get(2, 1)->values, [2]);
+    is_deeply($l1->get(2, 2)->values, [5]);
+  }
+
+  # list - set, tree index
+  {
+    my $l1 = r->list(1, r->list(2, 3, r->list(4)));
+    $l1->at(2, 3, 1);
+    $l1->set(5);
+    is_deeply($l1->get(2, 3, 1)->values, [5]);
   }
 }

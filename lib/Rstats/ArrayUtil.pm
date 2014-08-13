@@ -23,17 +23,6 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
-sub list {
-  my @elements = @_;
-  
-  @elements = map { ref $_ ne 'Rstats::List' ? to_array($_) : $_ } @elements;
-  
-  my $list = Rstats::List->new;
-  $list->elements(\@elements);
-  
-  return $list;
-}
-
 =pod
 sub det {
   my $a1 = to_array(shift);

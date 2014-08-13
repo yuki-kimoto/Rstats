@@ -2,6 +2,7 @@ package Rstats::Class;
 
 use Object::Simple -base;
 require Rstats::ArrayUtil;
+use Rstats::List;
 
 # TODO
 # logp1x
@@ -165,6 +166,17 @@ my %no_args_methods_h = map {$_ => 1} qw/
   F
   pi
 /;
+
+sub as_list {
+  my ($self, $container) = @_;
+  
+  return $container if $self->is_list($container);
+
+  my $list = Rstats::List->new;
+  $list->elements($container->elements);
+  
+  return $list;
+}
 
 sub is_list {
   my ($self, $container) = @_;

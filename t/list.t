@@ -41,4 +41,19 @@ EOS
     my $l1 = r->list("a", "b");
     is_deeply(r->length($l1)->values, [2]);
   }
+
+  # list - as_list, input is list
+  {
+    my $l1 = r->list("a", "b");
+    my $l2 = r->as_list($l1);
+    is($l1, $l2);
+  }
+  
+  # list - as_list, input is array
+  {
+    my $a1 = c("a", "b");
+    my $l1 = r->as_list($a1);
+    ok(r->is_list($l1));
+    is_deeply($a1->values, ["a", "b"]);
+  }
 }

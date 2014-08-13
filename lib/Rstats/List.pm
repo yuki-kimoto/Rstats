@@ -4,7 +4,17 @@ use Object::Simple -base;
 use overload '""' => \&to_string,
   fallback => 1;
 
+use Rstats::ArrayUtil;
+
 has 'elements' => sub { [] };
+
+sub length {
+  my $self = shift;
+  
+  my $length = @{$self->elements};
+  
+  return Rstats::ArrayUtil::c($length);
+}
 
 sub to_string {
   my $self = shift;

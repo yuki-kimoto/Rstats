@@ -24,6 +24,14 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
+sub length {
+  my $self = shift;
+  
+  my $length = @{$self->elements};
+  
+  return Rstats::ArrayUtil::c($length);
+}
+
 sub elements { Rstats::ArrayUtil::elements(@_) }
 
 sub type { Rstats::ArrayUtil::type(@_) }

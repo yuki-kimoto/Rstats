@@ -38,6 +38,7 @@ sub list {
 sub det {
   my $a1 = to_array(shift);
   
+  struct base
   
   
   

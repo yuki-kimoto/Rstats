@@ -84,7 +84,6 @@ my @methods = qw/
   is_logical
   is_vector
   kronecker
-  length
   list
   log
   logb
@@ -166,6 +165,18 @@ my %no_args_methods_h = map {$_ => 1} qw/
   F
   pi
 /;
+
+sub is_list {
+  my ($self, $container) = @_;
+  
+  return ref $container eq 'Rstats::List' ? $self->TRUE : $self->FALSE;
+}
+
+sub length {
+  my ($self, $container) = @_;
+  
+  return $container->length;
+}
 
 sub new {
   my $self = shift->SUPER::new(@_);

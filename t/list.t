@@ -36,5 +36,9 @@ EOS
     is($str, $expected);
   }
 
-  1;
+  # list - length
+  {
+    my $l1 = r->list("a", "b");
+    is_deeply(r->length($l1)->values, [2]);
+  }
 }

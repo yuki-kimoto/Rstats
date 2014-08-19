@@ -2,8 +2,8 @@ package Rstats::Class;
 
 use Object::Simple -base;
 require Rstats::ArrayUtil;
-use Rstats::List;
-use Rstats::DataFrame;
+use Rstats::Container::List;
+use Rstats::Container::DataFrame;
 use Carp 'croak';
 
 # TODO
@@ -175,8 +175,8 @@ sub data_frame {
   
   # count
   my $counts = [];
-  my $columns = [];
-  while (my ($column, $v) = splice(@data, 0, 2)) {
+  my $names = [];
+  while (my ($name, $v) = splice(@data, 0, 2)) {
     my $dim_values = Rstats::ArrayUtil::dim($v)->values;
     if (@$dim_values > 1) {
       my $count = $dim_values->[0];
@@ -185,14 +185,14 @@ sub data_frame {
       
       for my $num (1 .. $dim_product) {
         push @$counts, $count;
-        push @$columns, "$column.$num";
+        push @$names, "$name.$num";
         push @$elements, splice(@{$v->elements}, 0, $count);
       }
     }
     else {
       my $count = @{$v->elements};
       push @$counts, $count;
-      push @$columns, $column;
+      push @$names, $name;
       push @$elements, $v;
     }
   }
@@ -217,9 +217,9 @@ sub data_frame {
     }
   }
 
-  my $data_frame = Rstats::DataFrame->new;
+  my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->elements($elements);
-  $data_frame->columns($columns);
+  $data_frame->names($names);
   
   return $data_frame;
 }
@@ -229,7 +229,7 @@ sub as_list {
   
   return $container if $self->is_list($container);
 
-  my $list = Rstats::List->new;
+  my $list = Rstats::Container::List->new;
   $list->elements($container->elements);
   
   return $list;
@@ -238,15 +238,15 @@ sub as_list {
 sub is_list {
   my ($self, $container) = @_;
   
-  return ref $container eq 'Rstats::List' ? $self->TRUE : $self->FALSE;
+  return ref $container eq 'Rstats::Container::List' ? $self->TRUE : $self->FALSE;
 }
 
 sub list {
   my ($self, @elements) = @_;
   
-  @elements = map { ref $_ ne 'Rstats::List' ? Rstats::ArrayUtil::to_array($_) : $_ } @elements;
+  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::ArrayUtil::to_array($_) : $_ } @elements;
   
-  my $list = Rstats::List->new;
+  my $list = Rstats::Container::List->new;
   $list->elements(\@elements);
   
   return $list;

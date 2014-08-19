@@ -1,5 +1,5 @@
-package Rstats::Array;
-use Object::Simple -base;
+package Rstats::::Container::Array;
+use Rstats::Container -base;
 
 use Rstats::ArrayUtil;
 
@@ -79,7 +79,7 @@ sub _fix_position {
   
   my $a1;
   my $a2;
-  if (ref $data eq 'Rstats::Array') {
+  if (ref $data eq 'Rstats::::Container::Array') {
     $a1 = $self;
     $a2 = $data;
   }

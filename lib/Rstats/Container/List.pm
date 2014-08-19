@@ -1,5 +1,5 @@
-package Rstats::List;
-use Object::Simple -base;
+package Rstats::Container::List;
+use Rstats::Container -base;
 
 use overload '""' => \&to_string,
   fallback => 1;
@@ -7,6 +7,7 @@ use overload '""' => \&to_string,
 use Rstats::ArrayUtil;
 
 has 'elements' => sub { [] };
+has 'names' => sub { [] };
 
 sub at {
   my $a1 = shift;
@@ -48,7 +49,7 @@ sub get_list {
   
   my $elements = $self->elements;
   
-  my $list = Rstats::List->new;
+  my $list = Rstats::Container::List->new;
   my $list_elements = $list->elements;
   for my $i (@{$index->values}) {
     push @$list_elements, $elements->[$i - 1];
@@ -116,7 +117,7 @@ sub _to_string {
     $$str_ref .= join('', map { "[[$_]]" } @$poses) . "\n";
     
     my $element = $elements->[$i];
-    if (ref $element eq 'Rstats::List') {
+    if (ref $element eq 'Rstats::Container::List') {
       $self->_to_string($element, $poses, $str_ref);
     }
     else {

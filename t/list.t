@@ -74,8 +74,8 @@ EOS
     my $a2 = $l1->get(3, 2);
     is_deeply($a2->values, ["d"]);
 
-    my $a2 = $l1->get(3, 3, 1);
-    is_deeply($a2->values, ["e"]);
+    my $a3 = $l1->get(3, 3, 1);
+    is_deeply($a3->values, ["e"]);
   }
 
   # list - get_list

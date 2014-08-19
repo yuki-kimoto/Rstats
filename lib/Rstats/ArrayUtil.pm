@@ -3,13 +3,13 @@ package Rstats::ArrayUtil;
 use strict;
 use warnings;
 use Carp qw/croak carp/;
-use Rstats::Array;
+use Rstats::::Container::Array;
 use Rstats::Util;
 use List::Util;
 use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
-use Rstats::List;
+use Rstats::Container::List;
 
 sub Inf () { c(Rstats::Util::Inf) }
 
@@ -575,7 +575,7 @@ sub negation {
 sub clone_without_elements {
   my ($a1, %opt) = @_;
   
-  my $a2 = Rstats::Array->new;
+  my $a2 = Rstats::::Container::Array->new;
   $a2->{type} = $a1->{type};
   $a2->{names} = [@{$a1->{names} || []}];
   $a2->{rownames} = [@{$a1->{rownames} || []}];
@@ -873,7 +873,7 @@ sub match {
   return c(\@matches);
 }
 
-sub NULL { Rstats::Array->new(elements => [], dim => [], type => 'logical') }
+sub NULL { Rstats::::Container::Array->new(elements => [], dim => [], type => 'logical') }
 
 sub NA { c(Rstats::Util::NA) }
 
@@ -958,7 +958,7 @@ sub append {
   $a_after = c($a1_length) if is_null($a_after);
   my $after = value($a_after);
   
-  if (ref $a2 eq 'Rstats::Array') {
+  if (ref $a2 eq 'Rstats::::Container::Array') {
     splice @{elements($a1)}, $after, 0, @{elements($a2)};
   }
   else {
@@ -2178,7 +2178,7 @@ sub names {
   if (@_) {
     my $_names = shift;
     my $names;
-    if (ref $_names eq 'Rstats::Array') {
+    if (ref $_names eq 'Rstats::::Container::Array') {
       $names = elements($_names);
     }
     elsif (!defined $_names) {
@@ -2211,7 +2211,7 @@ sub colnames {
   if (@_) {
     my $_colnames = shift;
     my $colnames;
-    if (ref $_colnames eq 'Rstats::Array') {
+    if (ref $_colnames eq 'Rstats::::Container::Array') {
       $colnames = elements($_colnames);
     }
     elsif (!defined $_colnames) {
@@ -2244,7 +2244,7 @@ sub rownames {
   if (@_) {
     my $_rownames = shift;
     my $rownames;
-    if (ref $_rownames eq 'Rstats::Array') {
+    if (ref $_rownames eq 'Rstats::::Container::Array') {
       $rownames = elements($_rownames);
     }
     elsif (!defined $_rownames) {
@@ -2403,7 +2403,7 @@ sub c {
         if (ref $element eq 'ARRAY') {
           push @$elements, @$element;
         }
-        elsif (ref $element eq 'Rstats::Array') {
+        elsif (ref $element eq 'Rstats::::Container::Array') {
           push @$elements, @{elements($element)};
         }
         else {
@@ -2411,7 +2411,7 @@ sub c {
         }
       }
     }
-    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
+    elsif (ref $elements_tmp2 eq 'Rstats::::Container::Array') {
       $elements = elements($elements_tmp2);
     }
     else {
@@ -2659,7 +2659,7 @@ sub to_array {
   
   my $a1
    = !defined $_array ? NULL
-   : ref $_array eq 'Rstats::Array' ? $_array
+   : ref $_array eq 'Rstats::::Container::Array' ? $_array
    : c($_array);
   
   return $a1;
@@ -2855,7 +2855,7 @@ sub t {
 sub is_array {
   my $a1 = shift;
   
-  return ref $a1 eq 'Rstats::Array' ? TRUE : FALSE;
+  return ref $a1 eq 'Rstats::::Container::Array' ? TRUE : FALSE;
 }
 
 sub is_vector {

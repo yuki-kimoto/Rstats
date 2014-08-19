@@ -12,7 +12,10 @@ use Rstats;
     my $height = c(172, 168, 155);
     
     my $d1 = data_frame(sex => $sex, heigth => $height);
+    $d1->get(1);
     
     1;
   }
+  
+  ok(1);
 }

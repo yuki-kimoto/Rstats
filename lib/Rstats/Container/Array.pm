@@ -24,6 +24,22 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
+sub clone_without_elements {
+  my ($a1, %opt) = @_;
+  
+  my $a2 = Rstats::::Container::Array->new;
+  $a2->{type} = $a1->{type};
+  $a2->{names} = [@{$a1->{names} || []}];
+  $a2->{rownames} = [@{$a1->{rownames} || []}];
+  $a2->{colnames} = [@{$a1->{colnames} || []}];
+  $a2->{dimnames} = $a1->{dimnames};
+
+  $a2->{dim} = [@{$a1->{dim} || []}];
+  $a2->{elements} = $opt{elements} ? $opt{elements} : [];
+  
+  return $a2;
+}
+
 sub is_array { Rstats::ArrayUtil::TRUE() }
 
 sub is_list { Rstats::ArrayUtil::FALSE() }
@@ -37,8 +53,6 @@ sub length {
   
   return Rstats::ArrayUtil::c($length);
 }
-
-sub elements { Rstats::ArrayUtil::elements(@_) }
 
 sub type { Rstats::ArrayUtil::type(@_) }
 
@@ -67,8 +81,6 @@ sub operation {
   
   return Rstats::ArrayUtil::operation($op, $a1, $a2);
 }
-
-sub clone_without_elements { Rstats::ArrayUtil::clone_without_elements(@_) }
 
 sub values { Rstats::ArrayUtil::values(@_) }
 

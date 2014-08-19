@@ -7,6 +7,18 @@ use overload '""' => \&to_string,
 use Rstats::ArrayUtil;
 
 has 'elements' => sub { [] };
+has 'mode' => sub { Rstats::Array::Util::c('list') };
+
+sub is_array { Rstats::ArrayUtil::FALSE }
+sub is_list { Rstats::ArrayUtil::TRUE }
+sub is_data_frame { Rstats::ArrayUtil::FALSE }
+
+use overload '""' => \&to_string,
+  fallback => 1;
+
+use Rstats::ArrayUtil;
+
+has 'elements' => sub { [] };
 has 'names' => sub { [] };
 
 sub at {

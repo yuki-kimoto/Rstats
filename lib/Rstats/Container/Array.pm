@@ -24,6 +24,12 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
+sub is_array { Rstats::ArrayUtil::TRUE() }
+
+sub is_list { Rstats::ArrayUtil::FALSE() }
+
+sub is_data_frame { Rstats::ArrayUtil::FALSE() }
+
 sub length {
   my $self = shift;
   

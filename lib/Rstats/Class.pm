@@ -17,7 +17,7 @@ use Carp 'croak';
 # strsplit  strwrap
 # outer(x, y, f)
 
-my @methods = qw/
+my @arrayutil_methods = qw/
   abs
   acos
   acosh
@@ -45,7 +45,6 @@ my @methods = qw/
   ceiling
   col
   colMeans
-  colnames
   colSums
   Conj
   cos
@@ -97,7 +96,6 @@ my @methods = qw/
   Mod
   mode
   NA
-  names
   NaN
   ncol
   nrow
@@ -126,7 +124,6 @@ my @methods = qw/
   round
   row
   rowMeans
-  rownames
   rowSums
   sample
   seq
@@ -157,6 +154,13 @@ my @methods = qw/
   which
 /;
 
+my @object_methods = qw/
+  names
+  dimnames
+  colnames
+  rownames
+/;
+
 my %no_args_methods_h = map {$_ => 1} qw/
   Inf
   NaN
@@ -167,6 +171,34 @@ my %no_args_methods_h = map {$_ => 1} qw/
   F
   pi
 /;
+
+sub new {
+  my $self = shift->SUPER::new(@_);
+  
+  for my $method (@arrayutil_methods) {
+    my $function = "Rstats::ArrayUtil::$method";
+    my $code;
+    if ($no_args_methods_h{$method}) {
+      $code = "sub { $function() }";
+    }
+    else {
+      $code = "sub { $function(\@_) }";
+    }
+
+    no strict 'refs';
+    $self->function($method => eval $code);
+    croak $@ if $@;
+  }
+  
+  for my $method (@object_methods) {
+    my $code = "sub { shift->$method(\@_) }";
+    no strict 'refs';
+    $self->function($method => eval $code);
+    croak $@ if $@;
+  }
+
+  return $self;
+}
 
 sub data_frame {
   my ($self, @data) = @_;
@@ -256,27 +288,6 @@ sub length {
   my ($self, $container) = @_;
   
   return $container->length;
-}
-
-sub new {
-  my $self = shift->SUPER::new(@_);
-  
-  for my $method (@methods) {
-    my $function = "Rstats::ArrayUtil::$method";
-    my $code;
-    if ($no_args_methods_h{$method}) {
-      $code = "sub { $function() }";
-    }
-    else {
-      $code = "sub { $function(\@_) }";
-    }
-
-    no strict 'refs';
-    $self->function($method => eval $code);
-    croak $@ if $@;
-  }
-
-  return $self;
 }
 
 sub runif {

@@ -480,7 +480,7 @@ sub to_string {
   my $str;
   if (@$elements) {
     if ($dim_length == 1) {
-      my $names = Rstats::ArrayUtil::values(names($a1));
+      my $names = Rstats::ArrayUtil::values($a1->names);
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
@@ -490,7 +490,7 @@ sub to_string {
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = Rstats::ArrayUtil::values(colnames($a1));
+      my $colnames = Rstats::ArrayUtil::values($a1->colnames);
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
@@ -500,7 +500,7 @@ sub to_string {
         }
       }
       
-      my $rownames = Rstats::ArrayUtil::values(rownames($a1));
+      my $rownames = Rstats::ArrayUtil::values($a1->rownames);
       my $use_rownames = @$rownames ? 1 : 0;
       for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
@@ -580,6 +580,8 @@ sub clone_without_elements {
   $a2->{names} = [@{$a1->{names} || []}];
   $a2->{rownames} = [@{$a1->{rownames} || []}];
   $a2->{colnames} = [@{$a1->{colnames} || []}];
+  $a2->{dimnames} = $a1->{dimnames};
+
   $a2->{dim} = [@{$a1->{dim} || []}];
   $a2->{elements} = $opt{elements} ? $opt{elements} : [];
   
@@ -2172,105 +2174,6 @@ sub ncol {
   return c(Rstats::ArrayUtil::values(dim($a1))->[1]);
 }
 
-sub names {
-  my $a1 = shift;
-  
-  if (@_) {
-    my $_names = shift;
-    my $names;
-    if (ref $_names eq 'Rstats::::Container::Array') {
-      $names = elements($_names);
-    }
-    elsif (!defined $_names) {
-      $names = [];
-    }
-    elsif (ref $_names eq 'ARRAY') {
-      $names = $_names;
-    }
-    else {
-      $names = [$_names];
-    }
-    
-    my $duplication = {};
-    for my $name (@$names) {
-      croak "Don't use same name in names arguments"
-        if $duplication->{$name};
-      $duplication->{$name}++;
-    }
-    $a1->{names} = $names;
-  }
-  else {
-    $a1->{names} = [] unless exists $a1->{names};
-    return array($a1->{names});
-  }
-}
-
-sub colnames {
-  my $a1 = shift;
-  
-  if (@_) {
-    my $_colnames = shift;
-    my $colnames;
-    if (ref $_colnames eq 'Rstats::::Container::Array') {
-      $colnames = elements($_colnames);
-    }
-    elsif (!defined $_colnames) {
-      $colnames = [];
-    }
-    elsif (ref $_colnames eq 'ARRAY') {
-      $colnames = $_colnames;
-    }
-    else {
-      $colnames = [$_colnames];
-    }
-    
-    my $duplication = {};
-    for my $name (@$colnames) {
-      croak "Don't use same name in colnames arguments"
-        if $duplication->{$name};
-      $duplication->{$name}++;
-    }
-    $a1->{colnames} = $colnames;
-  }
-  else {
-    $a1->{colnames} = [] unless exists $a1->{colnames};
-    return array($a1->{colnames});
-  }
-}
-
-sub rownames {
-  my $a1 = shift;
-  
-  if (@_) {
-    my $_rownames = shift;
-    my $rownames;
-    if (ref $_rownames eq 'Rstats::::Container::Array') {
-      $rownames = elements($_rownames);
-    }
-    elsif (!defined $_rownames) {
-      $rownames = [];
-    }
-    elsif (ref $_rownames eq 'ARRAY') {
-      $rownames = $_rownames;
-    }
-    else {
-      $rownames = [$_rownames];
-    }
-    
-    my $duplication = {};
-    for my $name (@$rownames) {
-      croak "Don't use same name in rownames arguments"
-        if $duplication->{$name};
-      $duplication->{$name}++;
-    }
-    $a1->{rownames} = $rownames;
-  }
-  else {
-    $a1->{rownames} = [] unless exists $a1->{rownames};
-    return array($a1->{rownames});
-  }
-}
-
 sub dim {
   my $a1 = shift;
   
@@ -2715,7 +2618,7 @@ sub parse_index {
           for my $name (@{Rstats::ArrayUtil::values($index)}) {
             my $i = 0;
             my $value;
-            for my $a1_name (@{Rstats::ArrayUtil::values(names($a1))}) {
+            for my $a1_name (@{Rstats::ArrayUtil::values($a1->names)}) {
               if ($name eq $a1_name) {
                 $value = Rstats::ArrayUtil::values($a1)->[$i];
                 last;

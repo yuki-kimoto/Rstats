@@ -23,18 +23,6 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::Util::pi) }
 
-=pod
-sub det {
-  my $a1 = to_array(shift);
-  
-  struct base
-  
-  
-  
-  return $a2;
-}
-=cut
-
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   

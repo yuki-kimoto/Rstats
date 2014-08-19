@@ -3,6 +3,8 @@ package Rstats::Class;
 use Object::Simple -base;
 require Rstats::ArrayUtil;
 use Rstats::List;
+use Rstats::DataFrame;
+use Carp 'croak';
 
 # TODO
 # logp1x
@@ -165,6 +167,62 @@ my %no_args_methods_h = map {$_ => 1} qw/
   F
   pi
 /;
+
+sub data_frame {
+  my ($self, @data) = @_;
+  
+  my $elements = [];
+  
+  # count
+  my $counts = [];
+  my $columns = [];
+  while (my ($column, $v) = splice(@data, 0, 2)) {
+    my $dim_values = Rstats::ArrayUtil::dim($v)->values;
+    if (@$dim_values > 1) {
+      my $count = $dim_values->[0];
+      my $dim_product = 1;
+      $dim_product *= $dim_values->[$_] for (1 .. @$dim_values - 1);
+      
+      for my $num (1 .. $dim_product) {
+        push @$counts, $count;
+        push @$columns, "$column.$num";
+        push @$elements, splice(@{$v->elements}, 0, $count);
+      }
+    }
+    else {
+      my $count = @{$v->elements};
+      push @$counts, $count;
+      push @$columns, $column;
+      push @$elements, $v;
+    }
+  }
+  
+  # Max count
+  my $max_count = List::Util::max @$counts;
+  
+  # Check multiple number
+  for my $count (@$counts) {
+    if ($max_count % $count != 0) {
+      croak "Error in data.frame: arguments imply differing number of rows: @$counts";
+    }
+  }
+  
+  # Fill vector
+  for (my $i = 0; $i < @$counts; $i++) {
+    my $count = $counts->[$i];
+    
+    my $repeat = $max_count / $count;
+    if ($repeat > 1) {
+      $elements->[$i] = Rstats::ArrayUtil::c(($elements->[$i]) x $repeat);
+    }
+  }
+
+  my $data_frame = Rstats::DataFrame->new;
+  $data_frame->elements($elements);
+  $data_frame->columns($columns);
+  
+  return $data_frame;
+}
 
 sub as_list {
   my ($self, $container) = @_;

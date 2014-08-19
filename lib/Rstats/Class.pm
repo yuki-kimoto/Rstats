@@ -56,7 +56,6 @@ my @arrayutil_methods = qw/
   complex
   diag
   diff
-  dim
   exp
   expm1
   F
@@ -155,6 +154,7 @@ my @arrayutil_methods = qw/
 /;
 
 my @object_methods = qw/
+  dim
   names
   dimnames
   colnames
@@ -209,7 +209,7 @@ sub data_frame {
   my $counts = [];
   my $names = [];
   while (my ($name, $v) = splice(@data, 0, 2)) {
-    my $dim_values = Rstats::ArrayUtil::dim($v)->values;
+    my $dim_values = $v->dim->values;
     if (@$dim_values > 1) {
       my $count = $dim_values->[0];
       my $dim_product = 1;

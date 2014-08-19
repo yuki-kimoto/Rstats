@@ -1,7 +1,8 @@
-package Rstats::::Container::Array;
+package Rstats::Container::Array;
 use Rstats::Container -base;
 
 use Rstats::ArrayUtil;
+use Carp 'croak';
 
 our @CARP_NOT = ('Rstats');
 
@@ -24,10 +25,44 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
+sub dim_as_array {
+  my $a1 = shift;
+  
+  if (@{dim($a1)->elements}) {
+    return dim($a1);
+  }
+  else {
+    my $length = @{$a1->elements};
+    return Rstats::ArrayUtil::c($length);
+  }
+}
+
+sub dim {
+  my $a1 = shift;
+  
+  if (@_) {
+    my $a_dim = Rstats::ArrayUtil::to_array($_[0]);
+    my $a1_length = @{$a1->elements};
+    my $a1_lenght_by_dim = 1;
+    $a1_lenght_by_dim *= $_ for @{$a_dim->values};
+    
+    if ($a1_length != $a1_lenght_by_dim) {
+      croak "dims [product $a1_lenght_by_dim] do not match the length of object [$a1_length]";
+    }
+  
+    $a1->{dim} = $a_dim->elements;
+    
+    return $a1;
+  }
+  else {
+    return Rstats::ArrayUtil::c($a1->{dim});
+  }
+}
+
 sub clone_without_elements {
   my ($a1, %opt) = @_;
   
-  my $a2 = Rstats::::Container::Array->new;
+  my $a2 = Rstats::Container::Array->new;
   $a2->{type} = $a1->{type};
   $a2->{names} = [@{$a1->{names} || []}];
   $a2->{rownames} = [@{$a1->{rownames} || []}];
@@ -82,7 +117,19 @@ sub operation {
   return Rstats::ArrayUtil::operation($op, $a1, $a2);
 }
 
-sub values { Rstats::ArrayUtil::values(@_) }
+sub values {
+  my $a1 = shift;
+  
+  if (@_) {
+    my @elements = map { Rstats::Util::element($_) } @{$_[0]};
+    $a1->{elements} = \@elements;
+  }
+  else {
+    my @values = map { Rstats::Util::value($_) } @{$a1->elements};
+  
+    return \@values;
+  }
+}
 
 sub value { Rstats::ArrayUtil::value(@_) }
 
@@ -97,7 +144,7 @@ sub _fix_position {
   
   my $a1;
   my $a2;
-  if (ref $data eq 'Rstats::::Container::Array') {
+  if (ref $data eq 'Rstats::Container::Array') {
     $a1 = $self;
     $a2 = $data;
   }

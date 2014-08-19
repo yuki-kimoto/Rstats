@@ -26,7 +26,7 @@ sub pi () { c(Rstats::Util::pi) }
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = value($a1_diag);
+  my $diag = $a1_diag->value;
   
   my $a2_elements = [];
   if (is_matrix($a1_m)) {
@@ -59,7 +59,7 @@ sub upper_tri {
 sub lower_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
 
-  my $diag = value($a1_diag);
+  my $diag = $a1_diag->value;
   
   my $a2_elements = [];
   if (is_matrix($a1_m)) {
@@ -230,9 +230,9 @@ sub sub {
   my ($a1_pattern, $a1_replacement, $a1_x, $a1_ignore_case)
     = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
-  my $pattern = value($a1_pattern);
-  my $replacement = value($a1_replacement);
-  my $ignore_case = value($a1_ignore_case);
+  my $pattern = $a1_pattern->value;
+  my $replacement = $a1_replacement->value;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   for my $x (@{$a1_x->values}) {
@@ -260,9 +260,9 @@ sub gsub {
   my ($a1_pattern, $a1_replacement, $a1_x, $a1_ignore_case)
     = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
-  my $pattern = value($a1_pattern);
-  my $replacement = value($a1_replacement);
-  my $ignore_case = value($a1_ignore_case);
+  my $pattern = $a1_pattern->value;
+  my $replacement = $a1_replacement->value;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   for my $x (@{$a1_x->values}) {
@@ -289,8 +289,8 @@ sub gsub {
 sub grep {
   my ($a1_pattern, $a1_x, $a1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   
-  my $pattern = value($a1_pattern);
-  my $ignore_case = value($a1_ignore_case);
+  my $pattern = $a1_pattern->value;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   my $a1_x_values = $a1_x->values;
@@ -317,8 +317,8 @@ sub grep {
 sub chartr {
   my ($a1_old, $a1_new, $a1_x) = args(['old', 'new', 'x'], @_);
   
-  my $old = value($a1_old);
-  my $new = value($a1_new);
+  my $old = $a1_old->value;
+  my $new = $a1_new->value;
   
   my $a2_elements = [];
   for my $x (@{$a1_x->values}) {
@@ -345,13 +345,13 @@ sub charmatch {
   
   my $a2_elements = [];
   for my $a1_x_element (@{$a1_x->elements}) {
-    my $a1_x_char = Rstats::Util::value($a1_x_element);
+    my $a1_x_char = $a1_x_element->value;
     my $a1_x_char_q = quotemeta($a1_x_char);
     my $match_count;
     my $match_pos;
     for (my $k = 0; $k < @{$a1_table->elements}; $k++) {
       my $a1_table = $a1_table->elements->[$k];
-      my $a1_table_char = Rstats::Util::value($a1_table);
+      my $a1_table_char = $a1_table->value;
       if ($a1_table_char =~ /$a1_x_char_q/) {
         $match_count++;
         $match_pos = $k;
@@ -559,8 +559,6 @@ sub negation {
   return $a2;
 }
 
-sub value { Rstats::Util::value(element(@_)) }
-
 sub at {
   my $a1 = shift;
   
@@ -746,7 +744,7 @@ sub nchar {
         push $a2_elements, $a1_element;
       }
       else {
-        my $a2_element = Rstats::Util::double(length Rstats::Util::value($a1_element));
+        my $a2_element = Rstats::Util::double(length $a1_element->value);
         push $a2_elements, $a2_element;
       }
     }
@@ -770,7 +768,7 @@ sub tolower {
         push $a2_elements, $a1_element;
       }
       else {
-        my $a2_element = Rstats::Util::character(lc Rstats::Util::value($a1_element));
+        my $a2_element = Rstats::Util::character(lc $a1_element->value);
         push $a2_elements, $a2_element;
       }
     }
@@ -794,7 +792,7 @@ sub toupper {
         push $a2_elements, $a1_element;
       }
       else {
-        my $a2_element = Rstats::Util::character(uc Rstats::Util::value($a1_element));
+        my $a2_element = Rstats::Util::character(uc $a1_element->value);
         push $a2_elements, $a2_element;
       }
     }
@@ -915,7 +913,7 @@ sub append {
   
   my $a1_length = @{$a1->elements};
   $a_after = c($a1_length) if is_null($a_after);
-  my $after = value($a_after);
+  my $after = $a_after->value;
   
   if (ref $a2 eq 'Rstats::Container::Array') {
     splice @{$a1->elements}, $after, 0, @{$a2->elements};
@@ -1023,7 +1021,7 @@ sub colMeans {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
       my $v1_value = 0;
-      $v1_value += value($m1, $row, $_) for (1 .. $dim_values->[1]);
+      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$v1_values, $v1_value / $dim_values->[1];
     }
     return c($v1_values);
@@ -1041,7 +1039,7 @@ sub colSums {
     my $v1_values = [];
     for my $row (1 .. $dim_values->[0]) {
       my $v1_value = 0;
-      $v1_value += value($m1, $row, $_) for (1 .. $dim_values->[1]);
+      $v1_value += $m1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$v1_values, $v1_value;
     }
     return c($v1_values);
@@ -1228,7 +1226,7 @@ sub max_type {
   my $type_h = {};
   
   for my $array (@arrays) {
-    my $array_type = value(typeof($array));
+    my $array_type = typeof($array)->value;
     $type_h->{$array_type}++;
     unless (is_null($array)) {
       my $element = element($array);
@@ -1693,7 +1691,7 @@ sub rowMeans {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
       my $v1_value = 0;
-      $v1_value += value($m1, $_, $col) for (1 .. $dim_values->[0]);
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$v1_values, $v1_value / $dim_values->[0];
     }
     return c($v1_values);
@@ -1711,7 +1709,7 @@ sub rowSums {
     my $v1_values = [];
     for my $col (1 .. $dim_values->[1]) {
       my $v1_value = 0;
-      $v1_value += value($m1, $_, $col) for (1 .. $dim_values->[0]);
+      $v1_value += $m1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$v1_values, $v1_value;
     }
     return c($v1_values);
@@ -2087,8 +2085,8 @@ sub inner_product {
 sub row {
   my $a1 = shift;
   
-  my $nrow = value(nrow($a1));
-  my $ncol = value(ncol($a1));
+  my $nrow = nrow($a1)->value;
+  my $ncol = ncol($a1)->value;
   
   my @values = (1 .. $nrow) x $ncol;
   
@@ -2108,8 +2106,8 @@ sub sum {
 sub col {
   my $a1 = shift;
   
-  my $nrow = value(nrow($a1));
-  my $ncol = value(ncol($a1));
+  my $nrow = nrow($a1)->value;
+  my $ncol = ncol($a1)->value;
   
   my @values;
   for my $col (1 .. $ncol) {
@@ -2275,7 +2273,7 @@ sub c {
       $mode_h->{double}++;
     }
     elsif (Rstats::Util::is_integer($element)) {
-      $element = Rstats::Util::double(value($element));
+      $element = Rstats::Util::double($element->value);
       $mode_h->{double}++;
     }
     elsif (Rstats::Util::is_logical($element)) {

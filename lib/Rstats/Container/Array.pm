@@ -2,6 +2,7 @@ package Rstats::Container::Array;
 use Rstats::Container -base;
 
 use Rstats::ArrayUtil;
+use Rstats::Util;
 use Carp 'croak';
 
 our @CARP_NOT = ('Rstats');
@@ -131,7 +132,7 @@ sub values {
   }
 }
 
-sub value { Rstats::ArrayUtil::value(@_) }
+sub value { Rstats::Util::value(element(@_)) }
 
 sub at { Rstats::ArrayUtil::at(@_) }
 

@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c C array matrix/;
+  my @methods = qw/c C array matrix list/;
   for my $method (@methods) {
     *{"${class}::$method"} = sub { $r->$method(@_) }
   }

@@ -8,7 +8,7 @@ use Rstats;
 {
   # list - basic
   {
-    my $l1 = r->list(c(1, 2, 3), r->list("Hello", c(T, F, F)));
+    my $l1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
     is_deeply($l1->elements->[0]->values, [1, 2, 3]);
     is_deeply($l1->elements->[1]->elements->[0]->values, ["Hello"]);
     is_deeply(
@@ -19,7 +19,7 @@ use Rstats;
 
   # list - argument is not array
   {
-    my $l1 = r->list(1, 2, 3);
+    my $l1 = list(1, 2, 3);
     is_deeply($l1->elements->[0]->values, [1]);
     is_deeply($l1->elements->[1]->values, [2]);
     is_deeply($l1->elements->[2]->values, [3]);
@@ -27,7 +27,7 @@ use Rstats;
     
   # list - to_string
   {
-    my $l1 = r->list(c(1, 2, 3), r->list("Hello", c(T, F, F)));
+    my $l1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
     my $str = $l1->to_string;
     my $expected = <<"EOS";
 [[1]]
@@ -46,13 +46,13 @@ EOS
 
   # list - length
   {
-    my $l1 = r->list("a", "b");
+    my $l1 = list("a", "b");
     is_deeply(r->length($l1)->values, [2]);
   }
 
   # list - as_list, input is list
   {
-    my $l1 = r->list("a", "b");
+    my $l1 = list("a", "b");
     my $l2 = r->as_list($l1);
     is($l1, $l2);
   }
@@ -67,7 +67,7 @@ EOS
 
   # list - get
   {
-    my $l1 = r->list("a", "b", r->list("c", "d", r->list("e")));
+    my $l1 = list("a", "b", list("c", "d", list("e")));
     my $a1 = $l1->get(1);
     is_deeply($a1->values, ["a"]);
     
@@ -80,7 +80,7 @@ EOS
 
   # list - get_list
   {
-    my $l1 = r->list(1, 2, 3);
+    my $l1 = list(1, 2, 3);
     my $l2 = $l1->get_list(1);
     ok(r->is_list($l2));
     is_deeply($l2->get(1)->values, [1]);
@@ -88,7 +88,7 @@ EOS
 
   # list - get_list, multiple
   {
-    my $l1 = r->list(1, 2, 3);
+    my $l1 = list(1, 2, 3);
     my $l2 = $l1->get_list(c(1, 3));
     ok(r->is_list($l2));
     is_deeply($l2->get(1)->values, [1]);
@@ -97,7 +97,7 @@ EOS
 
   # list - get_list, multiple
   {
-    my $l1 = r->list(1, 2, 3);
+    my $l1 = list(1, 2, 3);
     my $l2 = $l1->get_list(c(1, 3));
     ok(r->is_list($l2));
     is_deeply($l2->get(1)->values, [1]);
@@ -106,7 +106,7 @@ EOS
   
   # list - set
   {
-    my $l1 = r->list(1, 2, 3);
+    my $l1 = list(1, 2, 3);
     $l1->at(2);
     $l1->set(5);
     is_deeply($l1->get(1)->values, [1]);
@@ -116,7 +116,7 @@ EOS
 
   # list - set, two index
   {
-    my $l1 = r->list(1, r->list(2, 3));
+    my $l1 = list(1, list(2, 3));
     $l1->at(2, 2);
     $l1->set(5);
     is_deeply($l1->get(1)->values, [1]);
@@ -126,7 +126,7 @@ EOS
 
   # list - set, tree index
   {
-    my $l1 = r->list(1, r->list(2, 3, r->list(4)));
+    my $l1 = list(1, list(2, 3, list(4)));
     $l1->at(2, 3, 1);
     $l1->set(5);
     is_deeply($l1->get(2, 3, 1)->values, [5]);

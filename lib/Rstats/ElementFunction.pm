@@ -1,4 +1,4 @@
-package Rstats::Util;
+package Rstats::ElementFunction;
 
 use strict;
 use warnings;
@@ -91,7 +91,7 @@ sub atanh {
     else {
       $e2 = multiply(
         complex(0.5, 0),
-        Rstats::Util::log(
+        Rstats::ElementFunction::log(
           divide(
             add(complex(1, 0), $e1),
             subtract(complex(1, 0), $e1)
@@ -101,7 +101,7 @@ sub atanh {
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     return $e1 if is_nan($e1);
     
     if (is_infinite($e1)) {
@@ -115,9 +115,9 @@ sub atanh {
       elsif (equal($e1, double(-1))) {
         $e2 = negativeInf;
       }
-      elsif (less_than(Rstats::Util::abs($e1), double(1))) {
+      elsif (less_than(Rstats::ElementFunction::abs($e1), double(1))) {
         $e2 = divide(
-          Rstats::Util::log(
+          Rstats::ElementFunction::log(
             divide(
               add(double(1), $e1),
               subtract(double(1), $e1)
@@ -150,7 +150,7 @@ sub acosh {
     my $e1_im = Im($e1);
 
     my $e2_t = add(
-      Rstats::Util::sqrt(
+      Rstats::ElementFunction::sqrt(
         subtract(
           multiply($e1, $e1),
           complex(1, 0)
@@ -158,7 +158,7 @@ sub acosh {
       ),
       $e1
     );
-    my $e2_u = Rstats::Util::log($e2_t);
+    my $e2_u = Rstats::ElementFunction::log($e2_t);
     my $e2_re = Re($e2_u);
     my $e2_im = Im($e2_u);
     
@@ -174,7 +174,7 @@ sub acosh {
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     return $e1 if is_nan($e1);
     
     if (is_infinite($e1)) {
@@ -183,10 +183,10 @@ sub acosh {
     }
     else {
       if (more_than_or_equal($e1, double(1))) {
-        $e2 = Rstats::Util::log(
+        $e2 = Rstats::ElementFunction::log(
           add(
             $e1,
-            Rstats::Util::sqrt(
+            Rstats::ElementFunction::sqrt(
               subtract(
                 multiply($e1, $e1),
                 double(1)
@@ -217,7 +217,7 @@ sub asinh {
   if (is_complex($e1)) {
   
     my $e2_t = add(
-      Rstats::Util::sqrt(
+      Rstats::ElementFunction::sqrt(
         add(
           multiply($e1, $e1),
           complex(1, 0)
@@ -226,10 +226,10 @@ sub asinh {
       $e1
     );
     
-    $e2 = Rstats::Util::log($e2_t);
+    $e2 = Rstats::ElementFunction::log($e2_t);
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     return $e1 if is_nan($e1);
     
     if (is_positive_infinite($e1)) {
@@ -241,7 +241,7 @@ sub asinh {
     else {
       my $e2_t = add(
         $e1,
-        Rstats::Util::sqrt(
+        Rstats::ElementFunction::sqrt(
           add(
             multiply($e1, $e1),
             double(1)
@@ -249,7 +249,7 @@ sub asinh {
         )
       );
       
-      $e2 = Rstats::Util::log($e2_t);
+      $e2 = Rstats::ElementFunction::log($e2_t);
     }
   }
   else {
@@ -280,7 +280,7 @@ sub tanh {
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     
     return $e1 if is_nan($e1);
     
@@ -311,9 +311,9 @@ sub cosh {
     my $e1_x = Re($e1);
     my $e1_y = Im($e1);
     
-    my $e2_cy = Rstats::Util::cos($e1_y);
-    my $e2_sy = Rstats::Util::sin($e1_y);
-    my $e2_ex = Rstats::Util::exp($e1_x);
+    my $e2_cy = Rstats::ElementFunction::cos($e1_y);
+    my $e2_sy = Rstats::ElementFunction::sin($e1_y);
+    my $e2_ex = Rstats::ElementFunction::exp($e1_x);
     
     my $e2_ex_1 = not_equal($e2_ex, double(0)) ? divide(double(1), $e2_ex) : Inf;
 
@@ -335,10 +335,10 @@ sub cosh {
     $e2 = complex_double($e2_x, $e2_y);
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     return $e1 if is_nan($e1);
     
-    my $e2_ex = Rstats::Util::exp($e1);
+    my $e2_ex = Rstats::ElementFunction::exp($e1);
     
     if (not_equal($e2_ex, double(0))) {
       if (is_positive_infinite($e2_ex)) {
@@ -375,9 +375,9 @@ sub sinh {
     my $e1_x = Re($e1);
     my $e1_y = Im($e1);
     
-    my $e2_cy = Rstats::Util::cos($e1_y);
-    my $e2_sy = Rstats::Util::sin($e1_y);
-    my $e2_ex = Rstats::Util::exp($e1_x);
+    my $e2_cy = Rstats::ElementFunction::cos($e1_y);
+    my $e2_sy = Rstats::ElementFunction::sin($e1_y);
+    my $e2_ex = Rstats::ElementFunction::exp($e1_x);
     
     my $e2_ex_1 = not_equal($e2_ex, double(0)) ? divide(double(1), $e2_ex) : Inf;
 
@@ -399,11 +399,11 @@ sub sinh {
     $e2 = complex_double($e2_x, $e2_y);
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e1 = Rstats::Util::as_double($e1);
+    $e1 = Rstats::ElementFunction::as_double($e1);
     return $e1 if is_nan($e1);
     
     return double(0) if equal($e1, double(0));
-    my $e2_ex = Rstats::Util::exp($e1);
+    my $e2_ex = Rstats::ElementFunction::exp($e1);
     
     if (not_equal($e2_ex, double(0))) {
       if (is_positive_infinite($e2_ex)) {
@@ -449,7 +449,7 @@ sub atan {
     }
     else {
       my $e2_i = complex(0, 1);
-      my $e2_log = Rstats::Util::log(
+      my $e2_log = Rstats::ElementFunction::log(
         divide(
           add($e2_i, $e1),
           subtract($e2_i, $e1)
@@ -463,7 +463,7 @@ sub atan {
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
-    $e2 = Rstats::Util::atan2(as_double($e1), double(1));
+    $e2 = Rstats::ElementFunction::atan2(as_double($e1), double(1));
   }
   else {
     croak "Not implemented";
@@ -477,7 +477,7 @@ sub atan2 {
   my ($e1, $e2) = @_;
   
   croak "argument x is missing" unless defined $e2;
-  return Rstats::Util::NA if is_na($e1) || is_na($e2);
+  return Rstats::ElementFunction::NA if is_na($e1) || is_na($e2);
   croak "two element should be same type" unless typeof($e1) eq typeof($e2);
   
   my $e3;
@@ -492,10 +492,10 @@ sub atan2 {
       my $e3_r = add($e2, multiply($e1, $e3_i));
       $e3 = multiply(
         negation($e3_i),
-        Rstats::Util::log(
+        Rstats::ElementFunction::log(
           divide(
             $e3_r,
-            Rstats::Util::sqrt($e3_s)
+            Rstats::ElementFunction::sqrt($e3_s)
           )
         )
       );
@@ -506,7 +506,7 @@ sub atan2 {
     my $value2;
     
     if (is_nan($e1) || is_nan($e2)) {
-      $e3 = Rstats::Util::NaN;
+      $e3 = Rstats::ElementFunction::NaN;
     }
     elsif (is_positive_infinite($e1) && is_positive_infinite($e2)) {
       $e3 = double(0.785398163397448);
@@ -555,8 +555,8 @@ sub log2 {
   my $e1 = shift;
   
   my $e2 = divide(
-    Rstats::Util::log($e1),
-    is_complex($e1) ? Rstats::Util::log(complex(2, 0)) : Rstats::Util::log(double(2))
+    Rstats::ElementFunction::log($e1),
+    is_complex($e1) ? Rstats::ElementFunction::log(complex(2, 0)) : Rstats::ElementFunction::log(double(2))
   );
   
   return $e2;
@@ -566,8 +566,8 @@ sub log10 {
   my $e1 = shift;
   
   my $e2 = divide(
-    Rstats::Util::log($e1),
-    is_complex($e1) ? Rstats::Util::log(complex(10, 0)) : Rstats::Util::log(double(10))
+    Rstats::ElementFunction::log($e1),
+    is_complex($e1) ? Rstats::ElementFunction::log(complex(10, 0)) : Rstats::ElementFunction::log(double(10))
   );
   
   return $e2;
@@ -607,7 +607,7 @@ sub log {
         )
       }
       
-      $e2 = complex_double(Rstats::Util::log($e1_r), $e1_t);
+      $e2 = complex_double(Rstats::ElementFunction::log($e1_r), $e1_t);
     }
   }
   elsif (is_numeric($e1) || is_logical($e1)) {
@@ -640,7 +640,7 @@ sub log {
   return $e2;
 }
 
-sub Mod { Rstats::Util::abs(@_) }
+sub Mod { Rstats::ElementFunction::abs(@_) }
 
 sub Arg {
   my $e1 = shift;
@@ -677,7 +677,7 @@ sub hash {
 sub tan {
   my $e1 = shift;
   
-  my $e2 = divide(Rstats::Util::sin($e1), Rstats::Util::cos($e1));
+  my $e2 = divide(Rstats::ElementFunction::sin($e1), Rstats::ElementFunction::cos($e1));
   
   return $e2;
 }
@@ -693,9 +693,9 @@ sub cos {
     my $e1_re = Re($e1);
     my $e1_im = Im($e1);
     
-    my $e2_eim = Rstats::Util::exp($e1_im);
-    my $e2_sre = Rstats::Util::sin($e1_re);
-    my $e2_cre = Rstats::Util::cos($e1_re);
+    my $e2_eim = Rstats::ElementFunction::exp($e1_im);
+    my $e2_sre = Rstats::ElementFunction::sin($e1_re);
+    my $e2_cre = Rstats::ElementFunction::cos($e1_re);
     
     my $e2_eim_1 = divide(double(1), $e2_eim);
     
@@ -755,16 +755,16 @@ sub exp {
     my $e1_re = Re($e1);
     my $e1_im = Im($e1);
     
-    my $e2_mod = Rstats::Util::exp($e1_re);
+    my $e2_mod = Rstats::ElementFunction::exp($e1_re);
     my $e2_arg = $e1_im;
 
-    my $e2_re = Rstats::Util::multiply(
+    my $e2_re = Rstats::ElementFunction::multiply(
       $e2_mod,
-      Rstats::Util::cos($e2_arg)
+      Rstats::ElementFunction::cos($e2_arg)
     );
-    my $e2_im = Rstats::Util::multiply(
+    my $e2_im = Rstats::ElementFunction::multiply(
       $e2_mod,
-      Rstats::Util::sin($e2_arg)
+      Rstats::ElementFunction::sin($e2_arg)
     );
     
     $e2 = complex_double($e2_re, $e2_im);
@@ -816,11 +816,11 @@ sub expm1 {
       );
     }
     else {
-      $e2 = Rstats::Util::subtract(Rstats::Util::exp($e1), double(1));
+      $e2 = Rstats::ElementFunction::subtract(Rstats::ElementFunction::exp($e1), double(1));
     }
   }
   elsif (is_integer($e1) || is_logical($e1)) {
-    $e2 = Rstats::Util::subtract(Rstats::Util::exp($e1), double(1));
+    $e2 = Rstats::ElementFunction::subtract(Rstats::ElementFunction::exp($e1), double(1));
   }
   else {
     croak 'Not implemented';
@@ -842,7 +842,7 @@ sub acos {
       $e2 = complex(0, 0);
     }
     else {
-      my $e2_t1 = Rstats::Util::sqrt(
+      my $e2_t1 = Rstats::ElementFunction::sqrt(
         add(
           multiply(
             add($e1_re, double(1)),
@@ -851,7 +851,7 @@ sub acos {
           multiply($e1_im, $e1_im)
         )
       );
-      my $e2_t2 = Rstats::Util::sqrt(
+      my $e2_t2 = Rstats::ElementFunction::sqrt(
         add(
           multiply(
             subtract($e1_re, double(1)),
@@ -882,8 +882,8 @@ sub acos {
         $e2_beta = double(-1);
       }
       
-      my $e2_u =  Rstats::Util::atan2(
-        Rstats::Util::sqrt(
+      my $e2_u =  Rstats::ElementFunction::atan2(
+        Rstats::ElementFunction::sqrt(
           subtract(
             double(1),
             multiply($e2_beta, $e2_beta)
@@ -892,10 +892,10 @@ sub acos {
         $e2_beta
       );
       
-      my $e2_v = Rstats::Util::log(
+      my $e2_v = Rstats::ElementFunction::log(
         add(
           $e2_alpha,
-          Rstats::Util::sqrt(
+          Rstats::ElementFunction::sqrt(
             subtract(
               multiply($e2_alpha, $e2_alpha),
               double(1)
@@ -921,9 +921,9 @@ sub acos {
     }
     else {
       $e1 = as_double($e1);
-      if (less_than_or_equal(Rstats::Util::abs($e1), double(1))) {
-        $e2 = Rstats::Util::atan2(
-          Rstats::Util::sqrt(
+      if (less_than_or_equal(Rstats::ElementFunction::abs($e1), double(1))) {
+        $e2 = Rstats::ElementFunction::atan2(
+          Rstats::ElementFunction::sqrt(
             subtract(
               double(1),
               multiply($e1, $e1)
@@ -960,7 +960,7 @@ sub asin {
       $e2 = complex(0, 0);
     }
     else {
-      my $e2_t1 = Rstats::Util::sqrt(
+      my $e2_t1 = Rstats::ElementFunction::sqrt(
         add(
           multiply(
             add($e1_re, double(1)),
@@ -969,7 +969,7 @@ sub asin {
           multiply($e1_im, $e1_im)
         )
       );
-      my $e2_t2 = Rstats::Util::sqrt(
+      my $e2_t2 = Rstats::ElementFunction::sqrt(
         add(
           multiply(
             subtract($e1_re, double(1)),
@@ -1000,9 +1000,9 @@ sub asin {
         $e2_beta = double(-1);
       }
       
-      my $e2_u =  Rstats::Util::atan2(
+      my $e2_u =  Rstats::ElementFunction::atan2(
         $e2_beta,
-        Rstats::Util::sqrt(
+        Rstats::ElementFunction::sqrt(
           subtract(
             double(1),
             multiply($e2_beta, $e2_beta)
@@ -1011,10 +1011,10 @@ sub asin {
       );
       
       my $e2_v = negation(
-        Rstats::Util::log(
+        Rstats::ElementFunction::log(
           add(
             $e2_alpha,
-            Rstats::Util::sqrt(
+            Rstats::ElementFunction::sqrt(
               subtract(
                 multiply($e2_alpha, $e2_alpha),
                 double(1)
@@ -1041,10 +1041,10 @@ sub asin {
     }
     else {
       $e1 = as_double($e1);
-      if (less_than_or_equal(Rstats::Util::abs($e1), double(1))) {
-        $e2 = Rstats::Util::atan2(
+      if (less_than_or_equal(Rstats::ElementFunction::abs($e1), double(1))) {
+        $e2 = Rstats::ElementFunction::atan2(
           $e1,
-          Rstats::Util::sqrt(
+          Rstats::ElementFunction::sqrt(
             subtract(
               double(1),
               multiply($e1, $e1)
@@ -1076,9 +1076,9 @@ sub sin {
     my $e1_re = Re($e1);
     my $e1_im = Im($e1);
     
-    my $e2_eim = Rstats::Util::exp($e1_im);
-    my $e2_sre = Rstats::Util::sin($e1_re);
-    my $e2_cre = Rstats::Util::cos($e1_re);
+    my $e2_eim = Rstats::ElementFunction::exp($e1_im);
+    my $e2_sre = Rstats::ElementFunction::sin($e1_re);
+    my $e2_cre = Rstats::ElementFunction::cos($e1_re);
     
     my $e2_eim_1 = divide(double(1), $e2_eim);
     
@@ -1145,7 +1145,7 @@ sub create {
     return integer($value);
   }
   elsif ($type eq 'logical') {
-    return logical($value ? Rstats::Util::TRUE : Rstats::Util::FALSE);
+    return logical($value ? Rstats::ElementFunction::TRUE : Rstats::ElementFunction::FALSE);
   }
   else {
     croak 'Invalid type';
@@ -1190,7 +1190,7 @@ sub looks_like_complex {
     return;
   }
   
-  if (defined Rstats::Util::looks_like_number($re) && defined Rstats::Util::looks_like_number($im)) {
+  if (defined Rstats::ElementFunction::looks_like_number($re) && defined Rstats::ElementFunction::looks_like_number($im)) {
     return {re => $re + 0, im => $im + 0};
   }
   else {
@@ -1745,8 +1745,8 @@ sub raise {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif (is_complex($e1)) {
-    my $e1_c = Math::Complex->make(Rstats::Util::value($e1->re), Rstats::Util::value($e1->im));
-    my $e2_c = Math::Complex->make(Rstats::Util::value($e2->re), Rstats::Util::value($e2->im));
+    my $e1_c = Math::Complex->make(Rstats::ElementFunction::value($e1->re), Rstats::ElementFunction::value($e1->im));
+    my $e2_c = Math::Complex->make(Rstats::ElementFunction::value($e2->re), Rstats::ElementFunction::value($e2->im));
     
     my $v3_c;
     if ($e2->re->value == 1/2 && $e2->im->value == 0) {
@@ -1994,7 +1994,7 @@ sub Conj {
   my $value = shift;
   
   if (is_complex($value)) {
-    return complex_double($value->re, Rstats::Util::negation($value->im));
+    return complex_double($value->re, Rstats::ElementFunction::negation($value->im));
   }
   else {
     croak 'Invalid type';
@@ -2031,7 +2031,7 @@ sub abs {
   }
   elsif (is_double($element) || is_integer($element)) {
     my $type = typeof($element);
-    my $zero = Rstats::Util::create($type);
+    my $zero = Rstats::ElementFunction::create($type);
     if (more_than($element, $zero)) {
       return $element;
     }
@@ -2040,7 +2040,7 @@ sub abs {
     }
   }
   elsif (is_logical($element)) {
-    my $zero = Rstats::Util::create('logical');
+    my $zero = Rstats::ElementFunction::create('logical');
     if (more_than($element, $zero)) {
       return logical_to_integer($element);
     }
@@ -2123,7 +2123,7 @@ sub as_complex {
   elsif (is_integer($e1)) {
     return complex($e1->value, 0);
   }
-  elsif (Rstats::Util::is_logical($e1)) {
+  elsif (Rstats::ElementFunction::is_logical($e1)) {
     return complex($e1->value ? 1 : 0, 0);
   }
   else {
@@ -2136,11 +2136,11 @@ sub as_numeric { as_double(@_) }
 sub as_double {
   my $e1 = shift;
 
-  if (Rstats::Util::is_na($e1)) {
+  if (Rstats::ElementFunction::is_na($e1)) {
     return $e1;
   }
   elsif (is_character($e1)) {
-    if (my $num = Rstats::Util::looks_like_number($e1->value)) {
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->value)) {
       return double($num + 0);
     }
     else {
@@ -2173,8 +2173,8 @@ sub as_integer {
     return $e1;
   }
   elsif (is_character($e1)) {
-    if (my $num = Rstats::Util::looks_like_number($e1->value)) {
-      return Rstats::Util::integer(int $num);
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->value)) {
+      return Rstats::ElementFunction::integer(int $num);
     }
     else {
       carp 'NAs introduced by coercion';
@@ -2190,7 +2190,7 @@ sub as_integer {
       return NA;
     }
     else {
-      return Rstats::Util::integer($e1->value);
+      return Rstats::ElementFunction::integer($e1->value);
     }
   }
   elsif (is_integer($e1)) {

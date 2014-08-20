@@ -2,7 +2,7 @@ package Rstats::Container::Array;
 use Rstats::Container -base;
 
 use Rstats::Function;
-use Rstats::Util;
+use Rstats::ElementFunction;
 use Carp 'croak';
 
 our @CARP_NOT = ('Rstats');
@@ -122,17 +122,17 @@ sub values {
   my $a1 = shift;
   
   if (@_) {
-    my @elements = map { Rstats::Util::element($_) } @{$_[0]};
+    my @elements = map { Rstats::ElementFunction::element($_) } @{$_[0]};
     $a1->{elements} = \@elements;
   }
   else {
-    my @values = map { Rstats::Util::value($_) } @{$a1->elements};
+    my @values = map { Rstats::ElementFunction::value($_) } @{$a1->elements};
   
     return \@values;
   }
 }
 
-sub value { Rstats::Util::value(element(@_)) }
+sub value { Rstats::ElementFunction::value(element(@_)) }
 
 sub at { Rstats::Function::at(@_) }
 

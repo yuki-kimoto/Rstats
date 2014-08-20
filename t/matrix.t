@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::Util;
+use Rstats::ElementFunction;
 
 # arr.ind=TRUE
 
@@ -14,18 +14,18 @@ use Rstats::Util;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->lower_tri($a1);
     is_deeply($a2->values, [
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -35,18 +35,18 @@ use Rstats::Util;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->lower_tri($a1, {diag => TRUE});
     is_deeply($a2->values, [
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -59,18 +59,18 @@ use Rstats::Util;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->upper_tri($a1);
     is_deeply($a2->values, [
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -80,18 +80,18 @@ use Rstats::Util;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->upper_tri($a1, {diag => TRUE});
     is_deeply($a2->values, [
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::FALSE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE,
-      Rstats::Util::TRUE
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::FALSE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE,
+      Rstats::ElementFunction::TRUE
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }

@@ -2,53 +2,53 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats::Util;
+use Rstats::ElementFunction;
 use Scalar::Util 'refaddr';
 
 # Inf
 {
   # Inf - singleton
   {
-    my $inf = Rstats::Util::Inf;
-    my $inf2 = Rstats::Util::Inf;
+    my $inf = Rstats::ElementFunction::Inf;
+    my $inf2 = Rstats::ElementFunction::Inf;
   
     is(refaddr $inf, refaddr $inf2);
   }
   
   # Inf - singleton, minus
   {
-    my $inf = Rstats::Util::Inf;
-    my $negative_inf = Rstats::Util::negation($inf);
-    my $negative_inf2 = Rstats::Util::negativeInf;
+    my $inf = Rstats::ElementFunction::Inf;
+    my $negative_inf = Rstats::ElementFunction::negation($inf);
+    my $negative_inf2 = Rstats::ElementFunction::negativeInf;
     is(refaddr $negative_inf, refaddr $negative_inf2);
   }
   
   # Inf - negation
   {
-    my $inf = Rstats::Util::Inf;
-    my $negative_inf = Rstats::Util::negation($inf);
-    my $negative_inf2 = Rstats::Util::negativeInf;
+    my $inf = Rstats::ElementFunction::Inf;
+    my $negative_inf = Rstats::ElementFunction::negation($inf);
+    my $negative_inf2 = Rstats::ElementFunction::negativeInf;
     is(refaddr $negative_inf, refaddr $negative_inf2);
   }
 
   # Inf - negation repeat
   {
-    my $inf = Rstats::Util::Inf;
-    my $negative_inf = Rstats::Util::negation($inf);
-    my $inf2 = Rstats::Util::negation($negative_inf);
+    my $inf = Rstats::ElementFunction::Inf;
+    my $negative_inf = Rstats::ElementFunction::negation($inf);
+    my $inf2 = Rstats::ElementFunction::negation($negative_inf);
     is(refaddr $inf, refaddr $inf2);
   }
   
   # Inf - to_string, plus
   {
-    my $inf = Rstats::Util::Inf;
-    is(Rstats::Util::to_string($inf), 'Inf');
+    my $inf = Rstats::ElementFunction::Inf;
+    is(Rstats::ElementFunction::to_string($inf), 'Inf');
   }
 
   # Inf - to_string, minus
   {
-    my $negative_inf = Rstats::Util::negativeInf;
-    is(Rstats::Util::to_string($negative_inf), '-Inf');
+    my $negative_inf = Rstats::ElementFunction::negativeInf;
+    is(Rstats::ElementFunction::to_string($negative_inf), '-Inf');
   }
 }
 
@@ -56,20 +56,20 @@ use Scalar::Util 'refaddr';
 {
   # is_infinite - Inf, true
   {
-    my $inf = Rstats::Util::Inf;
-    ok(Rstats::Util::is_infinite($inf));
+    my $inf = Rstats::ElementFunction::Inf;
+    ok(Rstats::ElementFunction::is_infinite($inf));
   }
   
   # is_infinite - -Inf, true
   {
-    my $negative_inf = Rstats::Util::negativeInf;
-    ok(Rstats::Util::is_infinite($negative_inf));
+    my $negative_inf = Rstats::ElementFunction::negativeInf;
+    ok(Rstats::ElementFunction::is_infinite($negative_inf));
   }
   
   # is_infinite - Double, false
   {
     my $num = Rstats::Element::Double->new(value => 1);
-    ok(!Rstats::Util::is_infinite($num));
+    ok(!Rstats::ElementFunction::is_infinite($num));
   }
 }
 
@@ -77,25 +77,25 @@ use Scalar::Util 'refaddr';
 {
   # is_finite - Inf, false
   {
-    my $inf = Rstats::Util::Inf;
-    ok(!Rstats::Util::is_finite($inf));
+    my $inf = Rstats::ElementFunction::Inf;
+    ok(!Rstats::ElementFunction::is_finite($inf));
   }
   
   # is_finite - -Inf, false
   {
-    my $negative_inf = Rstats::Util::negativeInf;
-    ok(!Rstats::Util::is_finite($negative_inf));
+    my $negative_inf = Rstats::ElementFunction::negativeInf;
+    ok(!Rstats::ElementFunction::is_finite($negative_inf));
   }
   
   # is_finite - Double, true
   {
     my $num = Rstats::Element::Double->new(value => 1);
-    ok(Rstats::Util::is_finite($num));
+    ok(Rstats::ElementFunction::is_finite($num));
   }
   
   # is_finite - Integer, true
   {
     my $num = Rstats::Element::Integer->new(value => 1);
-    ok(Rstats::Util::is_finite($num));
+    ok(Rstats::ElementFunction::is_finite($num));
   }
 }

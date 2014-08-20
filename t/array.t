@@ -167,7 +167,7 @@ use Rstats::Function;
     my $a1 = array($v1);
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE, Rstats::ElementFunction::FALSE]);
   }
 
   # comparison operator numeric - <, arguments count is different
@@ -175,7 +175,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE, Rstats::ElementFunction::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -183,7 +183,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -191,7 +191,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -199,7 +199,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -207,7 +207,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::FALSE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -215,7 +215,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -223,7 +223,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -231,7 +231,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2,2));
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -239,7 +239,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2));
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [Rstats::Util::FALSE, Rstats::Util::TRUE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::FALSE, Rstats::ElementFunction::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -247,7 +247,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2,2));
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -255,7 +255,7 @@ use Rstats::Function;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2));
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [Rstats::Util::TRUE, Rstats::Util::FALSE]);
+    is_deeply($a3->elements, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
   }
 }
 
@@ -1114,7 +1114,7 @@ EOS
     my $v1 = c(1, 3, 5, 7);
     my $logical_v = c(r->FALSE, r->TRUE, r->FALSE, r->TRUE, r->TRUE);
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, Rstats::Util::NA]);
+    is_deeply($v2->values, [3, 7, Rstats::ElementFunction::NA]);
   }
 
   # get - as_logical
@@ -1122,7 +1122,7 @@ EOS
     my $v1 = c(1, 3, 5, 7);
     my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, Rstats::Util::NA]);
+    is_deeply($v2->values, [3, 7, Rstats::ElementFunction::NA]);
   }
 
   # get - as_vector

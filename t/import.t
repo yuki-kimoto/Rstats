@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::Util;
+use Rstats::ElementFunction;
 
 # c
 {
@@ -40,31 +40,31 @@ use Rstats::Util;
 # TRUE
 {
   my $true = TRUE;
-  is_deeply($true->values, [Rstats::Util::TRUE]);
+  is_deeply($true->values, [Rstats::ElementFunction::TRUE]);
 }
 
 # FALSE
 {
   my $false = FALSE;
-  is_deeply($false->values, [Rstats::Util::FALSE]);
+  is_deeply($false->values, [Rstats::ElementFunction::FALSE]);
 }
 
 # NA
 {
   my $na = NA;
-  is_deeply($na->values, [Rstats::Util::NA]);
+  is_deeply($na->values, [Rstats::ElementFunction::NA]);
 }
 
 # NaN
 {
   my $nan = NaN;
-  is_deeply($nan->values, [Rstats::Util::NaN]);
+  is_deeply($nan->values, [Rstats::ElementFunction::NaN]);
 }
 
 # Inf
 {
   my $inf = Inf;
-  is_deeply($inf->values, [Rstats::Util::Inf]);
+  is_deeply($inf->values, [Rstats::ElementFunction::Inf]);
 }
 
 # NULL

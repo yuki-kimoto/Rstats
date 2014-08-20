@@ -2,7 +2,7 @@ package Rstats::Element::Double;
 use Object::Simple -base;
 
 use Carp 'croak';
-require Rstats::Util;
+require Rstats::ElementFunction;
 
 has 'value';
 has 'flag';

@@ -1,8 +1,9 @@
 package Rstats::Element::Complex;
-use Object::Simple -base;
+use Rstats::Element -base;
 
 require Rstats::ElementFunction;
 
+has type => 'complex';
 has 're';
 has 'im';
 

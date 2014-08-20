@@ -1,6 +1,7 @@
 package Rstats::Element::Integer;
-use Object::Simple -base;
+use Rstats::Element -base;
 
+has type => 'integer';
 has 'value';
 
 1;

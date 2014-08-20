@@ -1,9 +1,10 @@
 package Rstats::Element::Double;
-use Object::Simple -base;
+use Rstats::Element -base;
 
 use Carp 'croak';
 require Rstats::ElementFunction;
 
+has type => 'double';
 has 'value';
 has 'flag';
 

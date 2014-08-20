@@ -1,6 +1,7 @@
 package Rstats::Element::Character;
-use Object::Simple -base;
+use Rstats::Element -base;
 
+has type => 'character';
 has 'value';
 
 1;

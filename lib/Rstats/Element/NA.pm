@@ -1,4 +1,6 @@
 package Rstats::Element::NA;
-use Object::Simple -base;
+use Rstats::Element -base;
+
+has type => 'na';
 
 1;

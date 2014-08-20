@@ -1,15 +1,15 @@
-package Rstats::ArrayUtil;
+package Rstats::Function;
 
 use strict;
 use warnings;
 use Carp qw/croak carp/;
-use Rstats::::Container::Array;
+use Rstats::Container::Array;
+use Rstats::Container::List;
 use Rstats::Util;
 use List::Util;
 use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
-use Rstats::Container::List;
 
 sub Inf () { c(Rstats::Util::Inf) }
 
@@ -616,7 +616,7 @@ sub set {
 
   my $a2 = to_array($_a2);
   
-  my ($positions, $a2_dim) = Rstats::ArrayUtil::parse_index($a1, 0, @$_indexs);
+  my ($positions, $a2_dim) = Rstats::Function::parse_index($a1, 0, @$_indexs);
   
   my $a1_elements = $a1->elements;
   my $a2_elements = $a2->elements;
@@ -653,8 +653,8 @@ sub setequal {
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
-  my $a3 = Rstats::ArrayUtil::sort($a1);
-  my $a4 = Rstats::ArrayUtil::sort($a2);
+  my $a3 = Rstats::Function::sort($a1);
+  my $a4 = Rstats::Function::sort($a2);
   
   return FALSE if @{$a3->elements} ne @{$a4->elements};
   
@@ -1380,7 +1380,7 @@ sub is_null {
 
 sub log { process(\&Rstats::Util::log, @_) }
 
-sub logb { Rstats::ArrayUtil::log(@_) }
+sub logb { Rstats::Function::log(@_) }
 
 sub log2 { process(\&Rstats::Util::log2, @_) }
 
@@ -1896,7 +1896,7 @@ sub median {
   my $a1 = to_array(shift);
   
   my $a2 = unique($a1);
-  my $a3 = Rstats::ArrayUtil::sort($a2);
+  my $a3 = Rstats::Function::sort($a2);
   my $a3_length = @{$a3->elements};
   
   if ($a3_length % 2 == 0) {
@@ -1915,7 +1915,7 @@ sub median {
 sub sd {
   my $a1 = to_array(shift);
   
-  my $sd = Rstats::ArrayUtil::sqrt(var($a1));
+  my $sd = Rstats::Function::sqrt(var($a1));
   
   return $sd;
 }
@@ -2007,7 +2007,7 @@ sub typeof {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
-sub Mod { Rstats::ArrayUtil::abs(@_) }
+sub Mod { Rstats::Function::abs(@_) }
 
 sub mode {
   my $a1 = shift;
@@ -2583,7 +2583,7 @@ sub parse_index {
     
     my $index_values = [map { $_->values } @indexs];
     my $ords = cross_product($index_values);
-    my @positions = map { Rstats::ArrayUtil::pos($_, $a1_dim) } @$ords;
+    my @positions = map { Rstats::Function::pos($_, $a1_dim) } @$ords;
   
     return (\@positions, \@a2_dim);
   }

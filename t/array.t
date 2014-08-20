@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::ArrayUtil;
+use Rstats::Function;
 
 # TODO
 #   which
@@ -129,21 +129,21 @@ use Rstats::ArrayUtil;
   # pos_to_index - first position
   {
     my $pos = 0;
-    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Function::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [1, 1, 1]);
   }
   
   # pos_to_index - some position
   {
     my $pos = 21;
-    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Function::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [2, 3, 2]);
   }
 
   # pos_to_index - last position
   {
     my $pos = 23;
-    my $index = Rstats::ArrayUtil::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Function::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [4, 3, 2]);
   }
 }
@@ -1016,12 +1016,12 @@ EOS
   my $dim = [4, 3, 2];
   
   {
-    my $value = Rstats::ArrayUtil::pos([4, 3, 2], $dim);
+    my $value = Rstats::Function::pos([4, 3, 2], $dim);
     is($value, 24);
   }
   
   {
-    my $value = Rstats::ArrayUtil::pos([3, 3, 2], $dim);
+    my $value = Rstats::Function::pos([3, 3, 2], $dim);
     is($value, 23);
   }
 }
@@ -1035,7 +1035,7 @@ EOS
   ];
   
   my $a1 = array(C('1:3'));
-  my $result =  Rstats::ArrayUtil::cross_product($values);
+  my $result =  Rstats::Function::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
     ['a2', 'b1', 'c1'],

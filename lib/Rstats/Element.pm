@@ -9,6 +9,7 @@ use overload 'bool' => \&bool,
 
 has 'type';
 has 'iv';
+has 'dv';
 has 'cv';
 has 're';
 has 'im';
@@ -35,8 +36,8 @@ sub to_string {
     
     my $flag = $e1->flag;
     
-    if (defined $e1->{re}) {
-      return $e1->{re} . "";
+    if (defined $e1->{dv}) {
+      return $e1->{dv} . "";
     }
     elsif ($flag eq 'nan') {
       return 'NaN';
@@ -70,8 +71,8 @@ sub bool {
   }
   elsif ($e1->is_double) {
 
-    if (defined $e1->{re}) {
-      return $e1->{re};
+    if (defined $e1->{dv}) {
+      return $e1->{dv};
     }
     else {
       if ($e1->is_infinite) {
@@ -127,7 +128,7 @@ sub value {
     return $self->{value};
   }
   elsif ($self->is_double) {
-    return $self->{re};
+    return $self->{dv};
   }
   else {
     croak "Invalid type";
@@ -173,7 +174,7 @@ sub is_negative_infinite {
 sub is_finite {
   my $self = shift;
   
-  return $self->is_integer || ($self->is_double && defined $self->{re});
+  return $self->is_integer || ($self->is_double && defined $self->{dv});
 }
 
 1;

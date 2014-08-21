@@ -50,10 +50,10 @@ sub to_string {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{value} . "";
+    return $e1->{iv} . "";
   }
   elsif ($e1->is_logical) {
-    return $e1->{value} ? 'TRUE' : 'FALSE'
+    return $e1->{iv} ? 'TRUE' : 'FALSE'
   }
   else {
     croak "Invalid type";
@@ -85,7 +85,7 @@ sub bool {
     }
   }
   elsif ($e1->is_integer || $e1->is_logical) {
-    return $e1->{value};
+    return $e1->{iv};
   }
   else {
     croak "Invalid type";
@@ -108,7 +108,7 @@ sub value {
     return '__NaN__';
   }
   elsif ($self->is_logical) {
-    if ($self->{value}) {
+    if ($self->{iv}) {
       return '__TRUE__';
     }
     else {
@@ -125,7 +125,7 @@ sub value {
     return $self->{cv};
   }
   elsif ($self->is_integer) {
-    return $self->{value};
+    return $self->{iv};
   }
   elsif ($self->is_double) {
     return $self->{dv};

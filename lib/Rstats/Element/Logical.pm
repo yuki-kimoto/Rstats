@@ -1,7 +1,7 @@
 package Rstats::Element::Logical;
 use Rstats::Element -base;
 
-use overload 'bool' => sub { shift->{value} },
+use overload 'bool' => sub { shift->{iv} },
   fallback => 1;
 
 has type => 'logical';

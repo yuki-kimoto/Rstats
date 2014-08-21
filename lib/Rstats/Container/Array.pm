@@ -3,7 +3,7 @@ use Rstats::Container -base;
 
 use Rstats::Function;
 use Rstats::ElementFunction;
-use Carp 'croak';
+use Carp 'croak', 'carp';
 
 our @CARP_NOT = ('Rstats');
 
@@ -92,7 +92,21 @@ sub length {
 
 sub type { Rstats::Function::type(@_) }
 
-sub bool { Rstats::Function::bool(@_) }
+sub bool {
+  my $self = shift;
+  
+  my $length = @{$self->elements};
+  if ($length == 0) {
+    croak 'Error in if (a) { : argument is of length zero';
+  }
+  elsif ($length > 1) {
+    carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
+  }
+  
+  my $element = element($self);
+  
+  return !!$element;
+}
 
 sub element { Rstats::Function::element(@_) }
 

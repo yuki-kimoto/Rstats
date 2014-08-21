@@ -30,7 +30,7 @@ use Scalar::Util 'refaddr';
   # logical - bool, FALSE
   {
     my $false = Rstats::ElementFunction::FALSE;
-    ok(!Rstats::ElementFunction::bool($false));
+    ok(!$false);
   }
   
   # negation, true
@@ -52,13 +52,13 @@ use Scalar::Util 'refaddr';
   # to_string, true
   {
     my $true = Rstats::ElementFunction::TRUE;
-    is(Rstats::ElementFunction::to_string($true), 'TRUE');
+    is("$true", 'TRUE');
   }
   
   # to_string, false
   {
     my $false = Rstats::ElementFunction::FALSE;
-    is(Rstats::ElementFunction::to_string($false), "FALSE");
+    is("$false", "FALSE");
   }
 }
 

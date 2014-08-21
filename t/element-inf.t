@@ -42,13 +42,13 @@ use Scalar::Util 'refaddr';
   # Inf - to_string, plus
   {
     my $inf = Rstats::ElementFunction::Inf;
-    is(Rstats::ElementFunction::to_string($inf), 'Inf');
+    is("$inf", 'Inf');
   }
 
   # Inf - to_string, minus
   {
     my $negative_inf = Rstats::ElementFunction::negativeInf;
-    is(Rstats::ElementFunction::to_string($negative_inf), '-Inf');
+    is("$negative_inf", '-Inf');
   }
 }
 

@@ -663,7 +663,7 @@ sub Arg {
 sub hash {
   my $e1 = shift;
   
-  my $hash = $e1->type . '-' . to_string($e1);
+  my $hash = $e1->type . '-' . "$e1";
   
   return $hash;
 }
@@ -798,6 +798,7 @@ sub expm1 {
     croak 'Error in expm1 : unimplemented complex function';
   }
   elsif ($e1->is_double) {
+    return $e1 if $e1->is_nan;
     if (less_than($e1, double(1e-5)) && more_than($e1, negativeInf)) {
       $e2 = add(
         $e1,
@@ -1213,51 +1214,6 @@ sub is_perl_number {
         && $value * 0 == 0
 }
 
-sub to_string {
-  my $e1 = shift;
-  
-  if ($e1->is_na) {
-    return 'NA';
-  }
-  elsif ($e1->is_character) {
-    return $e1->{cv} . "";
-  }
-  elsif ($e1->is_complex) {
-    my $re = to_string($e1->re);
-    my $im = to_string($e1->im);
-    
-    my $str = "$re";
-    $str .= '+' if $im >= 0;
-    $str .= $im . 'i';
-  }
-  elsif ($e1->is_double) {
-    
-    my $flag = $e1->flag;
-    
-    if (defined $e1->{re}) {
-      return $e1->{re} . "";
-    }
-    elsif ($flag eq 'nan') {
-      return 'NaN';
-    }
-    elsif ($flag eq 'inf') {
-      return 'Inf';
-    }
-    elsif ($flag eq '-inf') {
-      return '-Inf';
-    }
-  }
-  elsif ($e1->is_integer) {
-    return $e1->{value} . "";
-  }
-  elsif ($e1->is_logical) {
-    return $e1->{value} ? 'TRUE' : 'FALSE'
-  }
-  else {
-    croak "Invalid type";
-  }
-}
-
 sub negation {
   my $e1 = shift;
   
@@ -1288,38 +1244,6 @@ sub negation {
   }
   elsif ($e1->is_integer || $e1->is_logical) {
     return integer(-$e1->{value});
-  }
-  else {
-    croak "Invalid type";
-  }  
-}
-
-sub bool {
-  my $e1 = shift;
-  
-  if ($e1->is_na) {
-    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
-  }
-  elsif ($e1->is_character || $e1->is_complex) {
-    croak 'Error in -a : invalid argument to unary operator ';
-  }
-  elsif ($e1->is_double) {
-
-    if (defined $e1->{re}) {
-      return $e1->{re};
-    }
-    else {
-      if ($e1->is_infinite) {
-        1;
-      }
-      # NaN
-      else {
-        croak 'argument is not interpretable as logical'
-      }
-    }
-  }
-  elsif ($e1->is_integer || $e1->is_logical) {
-    return $e1->{value};
   }
   else {
     croak "Invalid type";
@@ -2043,7 +1967,7 @@ sub logical_to_integer {
 sub as_character {
   my $e1 = shift;
   
-  my $e2 = character(to_string($e1));
+  my $e2 = character("$e1");
   
   return $e2;
 }

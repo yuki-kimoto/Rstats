@@ -76,19 +76,19 @@ my $r = Rstats::Class->new;
   # to_string - basic
   {
     my $z1 = Rstats::ElementFunction::complex(1,2);
-    is(Rstats::ElementFunction::to_string($z1), "1+2i");
+    is("$z1", "1+2i");
   }
   
   # to_string - image number is 0
   {
     my $z1 = Rstats::ElementFunction::complex(1,0);
-    is(Rstats::ElementFunction::to_string($z1), "1+0i");
+    is("$z1", "1+0i");
   }
   
   # to_string - image number is minus
   {
     my $z1 = Rstats::ElementFunction::complex(1, -1);
-    is(Rstats::ElementFunction::to_string($z1), "1-1i");
+    is("$z1", "1-1i");
   }
 }
 

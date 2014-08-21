@@ -22,7 +22,7 @@ use Scalar::Util 'refaddr';
 {
   my $na1 = Rstats::ElementFunction::NA;
   my $na2 = Rstats::ElementFunction::negation($na1);
-  ok(Rstats::ElementFunction::is_na($na2));
+  ok($na2->is_na);
 }
 
 # bool
@@ -42,5 +42,5 @@ use Scalar::Util 'refaddr';
 # is_na
 {
   my $na = Rstats::ElementFunction::NA;
-  ok(Rstats::ElementFunction::is_na($na));
+  ok($na->is_na);
 }

@@ -47,7 +47,7 @@ use Math::Trig ();
   {
     my $a1 = c(Inf);
     my $a2 = r->expm1($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
   
   # expm1 - -Inf
@@ -61,14 +61,14 @@ use Math::Trig ();
   {
     my $a1 = c(NA);
     my $a2 = r->expm1($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
-  }  
+    ok($a2->element->is_na);
+  }
 
   # expm1 - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->expm1($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -97,7 +97,7 @@ use Math::Trig ();
   {
     my $a1 = c(Inf);
     my $a2 = r->exp($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
   
   # exp - -Inf
@@ -111,14 +111,14 @@ use Math::Trig ();
   {
     my $a1 = c(NA);
     my $a2 = r->exp($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # exp - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->exp($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -193,8 +193,8 @@ use Math::Trig ();
     my $a2 = r->logb($a1);
     is($a2->values->[0], 0);
     is(sprintf("%.5f", $a2->values->[1]), '2.30259');
-    ok(Rstats::ElementFunction::is_nan($a2->values->[2]));
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->values->[3]));
+    ok($a2->elements->[2]->is_nan);
+    ok($a2->elements->[3]->is_negative_infinite);
     is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
@@ -221,8 +221,8 @@ use Math::Trig ();
     my $a2 = r->log($a1);
     is($a2->values->[0], 0);
     is(sprintf("%.5f", $a2->values->[1]), '2.30259');
-    ok(Rstats::ElementFunction::is_nan($a2->values->[2]));
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->values->[3]));
+    ok($a2->elements->[2]->is_nan);
+    ok($a2->elements->[3]->is_negative_infinite);
     is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
@@ -231,28 +231,28 @@ use Math::Trig ();
   {
     my $a1 = c(Inf);
     my $a2 = r->log($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # log - Inf()
   {
     my $a1 = c(-Inf);
     my $a2 = r->log($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # log - NA
   {
     my $a1 = c(NA);
     my $a2 = r->log($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # log - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->log($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -281,7 +281,7 @@ use Math::Trig ();
     my $a2 = c("b");
     my $a3 = c("ad1ad1", NA, "ad2ad2");
     my $a4 = r->sub($a1, $a2, $a3);
-    is_deeply($a4->values, ["bd1ad1", Rstats::ElementFunction::NA, "bd2ad2"]);
+    is_deeply($a4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 
   # sub - case ignore
@@ -290,7 +290,7 @@ use Math::Trig ();
     my $a2 = c("b");
     my $a3 = c("Ad1ad1", NA, "ad2ad2");
     my $a4 = r->sub($a1, $a2, $a3, {'ignore.case' => TRUE});
-    is_deeply($a4->values, ["bd1ad1", Rstats::ElementFunction::NA, "bd2ad2"]);
+    is_deeply($a4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 }
 
@@ -302,7 +302,7 @@ use Math::Trig ();
     my $a2 = c("b");
     my $a3 = c("ad1ad1", NA, "ad2ad2");
     my $a4 = r->gsub($a1, $a2, $a3);
-    is_deeply($a4->values, ["bd1bd1", Rstats::ElementFunction::NA, "bd2bd2"]);
+    is_deeply($a4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
 
   # sub - case ignore
@@ -311,7 +311,7 @@ use Math::Trig ();
     my $a2 = c("b");
     my $a3 = c("Ad1Ad1", NA, "Ad2Ad2");
     my $a4 = r->gsub($a1, $a2, $a3, {'ignore.case' => TRUE});
-    is_deeply($a4->values, ["bd1bd1", Rstats::ElementFunction::NA, "bd2bd2"]);
+    is_deeply($a4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
 }
 
@@ -340,7 +340,7 @@ use Math::Trig ();
   my $a2 = c("A-Z");
   my $a3 = c("abc", "def", NA);
   my $a4 = r->chartr($a1, $a2, $a3);
-  is_deeply($a4->values, ["ABC", "DEF", Rstats::ElementFunction::NA]);
+  is_deeply($a4->values, ["ABC", "DEF", undef]);
 }
 
 # charmatch
@@ -510,7 +510,7 @@ use Math::Trig ();
     my $v1 = c(1, 2, 3, 4);
     my $v2 = c(1, 2, 3);
     my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
+    is_deeply($v3->values, ['__TRUE__', '__TRUE__', '__TRUE__', '__FALSE__']);
   }
   
   # cumprod - complex
@@ -518,7 +518,7 @@ use Math::Trig ();
     my $v1 = c(1*i, 2*i, 3*i, 4*i);
     my $v2 = c(1*i, 2*i, 3*i);
     my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE])
+    is_deeply($v3->values, ['__TRUE__', '__TRUE__', '__TRUE__', '__FALSE__'])
   }
 }
 
@@ -529,7 +529,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(3, 2, 1);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, Rstats::ElementFunction::TRUE);
+    is_deeply($v3->value, '__TRUE__');
   }
 
   # setequal - not equal
@@ -537,7 +537,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(2, 3, 4);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, Rstats::ElementFunction::FALSE);
+    is_deeply($v3->value, '__FALSE__');
   }
     
   # setequal - not equal, element count is diffrent
@@ -545,7 +545,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(2, 3, 1, 5);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, Rstats::ElementFunction::FALSE);
+    is_deeply($v3->value, '__FALSE__');
   }
 }
 
@@ -651,14 +651,14 @@ use Math::Trig ();
   {
     my $v1 = c(1, 5, 10, NA);
     my $v2 = r->diff($v1);
-    is_deeply($v2->values, [4, 5, Rstats::ElementFunction::NA]);
+    is_deeply($v2->values, [4, 5, undef]);
   }
   
   # diff - complex
   {
     my $v1 = c(1 + 2*i, 5 + 3*i, NA);
     my $v2 = r->diff($v1);
-    is_deeply($v2->values, [{re => 4, im => 1}, Rstats::ElementFunction::NA]);
+    is_deeply($v2->values, [{re => 4, im => 1}, undef]);
   }
 }
 
@@ -680,21 +680,21 @@ use Math::Trig ();
 {
   my $v1 = c("AAA", "BB", NA);
   my $v2 = r->nchar($v1);
-  is_deeply($v2->values, [3, 2, Rstats::ElementFunction::NA])
+  is_deeply($v2->values, [3, 2, undef])
 }
 
 # tolower
 {
   my $v1 = c("AA", "BB", NA);
   my $v2 = r->tolower($v1);
-  is_deeply($v2->values, ["aa", "bb", Rstats::ElementFunction::NA])
+  is_deeply($v2->values, ["aa", "bb", undef])
 }
 
 # toupper
 {
   my $v1 = c("aa", "bb", NA);
   my $v2 = r->toupper($v1);
-  is_deeply($v2->values, ["AA", "BB", Rstats::ElementFunction::NA])
+  is_deeply($v2->values, ["AA", "BB", undef])
 }
 
 # match
@@ -702,7 +702,7 @@ use Math::Trig ();
   my $v1 = c("ATG", "GC", "AT", "GCGC");
   my $v2 = c("CGCA", "GC", "AT", "AT", "ATA");
   my $v3 = r->match($v1, $v2);
-  is_deeply($v3->values, [Rstats::ElementFunction::NA, 2, 3, Rstats::ElementFunction::NA])
+  is_deeply($v3->values, [undef, 2, 3, undef])
 }
 
 # range
@@ -738,7 +738,7 @@ use Math::Trig ();
 # T, F
 {
   my $v1 = c(T, F);
-  is_deeply($v1->values, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
+  is_deeply($v1->values, ['__TRUE__', '__FALSE__']);
 }
 
 # sqrt
@@ -777,19 +777,19 @@ use Math::Trig ();
   # min - no argument
   {
     my $v1 = r->min(NULL);
-    is_deeply($v1->values, [Rstats::ElementFunction::Inf]);
+    is_deeply($v1->values, ['__Inf__']);
   }
   
   # min - contain NA
   {
     my $v1 = r->min(c(1, 2, NaN, NA));
-    is_deeply($v1->values, [Rstats::ElementFunction::NA]);
+    is_deeply($v1->values, [undef]);
   }
   
   # min - contain NaN
   {
     my $v1 = r->min(c(1, 2, NaN));
-    is_deeply($v1->values, [Rstats::ElementFunction::NaN]);
+    is_deeply($v1->values, ['__NaN__']);
   }
 }
 
@@ -813,19 +813,19 @@ use Math::Trig ();
   # max - no argument
   {
     my $v1 = r->max(NULL);
-    is_deeply($v1->values, [Rstats::ElementFunction::negativeInf]);
+    is_deeply($v1->values, ['__-Inf__']);
   }
   
   # max - contain NA
   {
     my $v1 = r->max(c(1, 2, NaN, NA));
-    is_deeply($v1->values, [Rstats::ElementFunction::NA]);
+    is_deeply($v1->values, [undef]);
   }
   
   # max - contain NaN
   {
     my $v1 = r->max(c(1, 2, NaN));
-    is_deeply($v1->values, [Rstats::ElementFunction::NaN]);
+    is_deeply($v1->values, ['__NaN__']);
   }
 }
 
@@ -850,7 +850,7 @@ use Math::Trig ();
   # uniqeu - numeric
   my $v1 = c(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
   my $v2 = r->unique($v1);
-  is_deeply($v2->values, [1, 2, 3, Rstats::ElementFunction::NA, Rstats::ElementFunction::Inf]);
+  is_deeply($v2->values, [1, 2, 3, undef, '__Inf__']);
 }
 
 # NA

@@ -4,7 +4,6 @@ use warnings;
 
 use Rstats;
 use Math::Trig ();
-use Rstats::::Container::Array;
 
 # as_numeric
 {

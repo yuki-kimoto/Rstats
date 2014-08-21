@@ -11,7 +11,7 @@ use Rstats;
     my $a1 = c(-Inf);
     my $a2 = c(2*i);
     my $a3 = $a1 + $a2;
-    ok(Rstats::ElementFunction::is_negative_infinite($a3->value->{re}));
+    ok($a3->element->re->is_negative_infinite);
     is($a3->value->{im}, 2);
   }
   

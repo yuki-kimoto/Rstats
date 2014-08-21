@@ -14,18 +14,18 @@ use Rstats::ElementFunction;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->lower_tri($a1);
     is_deeply($a2->values, [
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__'
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -35,18 +35,18 @@ use Rstats::ElementFunction;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->lower_tri($a1, {diag => TRUE});
     is_deeply($a2->values, [
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__'
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -59,18 +59,18 @@ use Rstats::ElementFunction;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->upper_tri($a1);
     is_deeply($a2->values, [
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE
+      '__FALSE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__'
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }
@@ -80,18 +80,18 @@ use Rstats::ElementFunction;
     my $a1 = matrix(C('1:12'), 3, 4);
     my $a2 = r->upper_tri($a1, {diag => TRUE});
     is_deeply($a2->values, [
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::FALSE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE,
-      Rstats::ElementFunction::TRUE
+      '__TRUE__',
+      '__FALSE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__FALSE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__',
+      '__TRUE__'
     ]);
     is_deeply(r->dim($a2)->values, [3, 4]);
   }

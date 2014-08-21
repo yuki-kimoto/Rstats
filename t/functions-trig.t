@@ -22,8 +22,8 @@ use Math::Complex ();
   {
     my $a1 = c(1 + 0*i);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_nan($a2->value->{im}));
+    ok($a2->element->re->is_positive_infinite);
+    ok($a2->element->im->is_nan);
     ok(r->is_complex($a2));
   }
 
@@ -31,8 +31,8 @@ use Math::Complex ();
   {
     my $a1 = c(-1 + 0*i);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_nan($a2->value->{im}));
+    ok($a2->element->re->is_negative_infinite);
+    ok($a2->element->im->is_nan);
     ok(r->is_complex($a2));
   }
         
@@ -42,11 +42,11 @@ use Math::Complex ();
     my $a2 = r->atanh($a1);
     is($a2->values->[0], 0);
     is(sprintf("%.6f", $a2->values->[1]), '0.549306');
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->values->[2]));
-    ok(Rstats::ElementFunction::is_nan($a2->values->[3]));
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->values->[4]));
+    ok($a2->elements->[2]->is_positive_infinite);
+    ok($a2->elements->[3]->is_nan);
+    ok($a2->elements->[4]->is_negative_infinite);
     is(sprintf("%.6f", $a2->values->[5]), '-0.549306');
-    ok(Rstats::ElementFunction::is_nan($a2->values->[6]));
+    ok($a2->elements->[6]->is_nan);
     is_deeply(r->dim($a2)->values, [7]);
     ok(r->is_double($a2));
   }
@@ -55,28 +55,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # atanh - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # atanh - NA
   {
     my $a1 = c(NA);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }
 
   # atanh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->atanh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -131,7 +131,7 @@ use Math::Complex ();
   {
     my $a1 = array(c(0, 1, 2));
     my $a2 = r->acosh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->values->[0]));
+    ok($a2->elements->[0]->is_nan);
     is($a2->values->[1], 0);
     is(sprintf("%.6f", $a2->values->[2]), '1.316958');
     is_deeply(r->dim($a2)->values, [3]);
@@ -142,28 +142,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->acosh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # acosh - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->acosh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # acosh - NA
   {
     my $a1 = c(NA);
     my $a2 = r->acosh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }
 
   # acosh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->acosh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -192,28 +192,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->asinh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
   
   # asinh - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->asinh($a1);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value));
+    ok($a2->element->is_negative_infinite);
   }
 
   # asinh - NA
   {
     my $a1 = c(NA);
     my $a2 = r->asinh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }
 
   # asinh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->asinh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -273,14 +273,14 @@ use Math::Complex ();
   {
     my $a1 = c(NA);
     my $a2 = r->tanh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # tanh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->tanh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -299,16 +299,16 @@ use Math::Complex ();
   {
     my $a1 = c(-Inf - 2*i);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value->{im}));
+    ok($a2->element->re->is_negative_infinite);
+    ok($a2->element->im->is_positive_infinite);
   }
   
   # cosh - complex, -Inf + 2i
   {
     my $a1 = c(-Inf + 2*i);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value->{im}));
+    ok($a2->element->re->is_negative_infinite);
+    ok($a2->element->im->is_negative_infinite);
   }
   
   # cosh - double,array
@@ -316,9 +316,9 @@ use Math::Complex ();
     my $a1 = array(c(0, Inf, 2, -Inf));
     my $a2 = r->cosh($a1);
     is($a2->values->[0], '1');
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->values->[1]));
+    ok($a2->elements->[1]->is_positive_infinite);
     is(sprintf("%.6f", $a2->values->[2]), '3.762196');
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->values->[3]));
+    ok($a2->elements->[3]->is_positive_infinite);
     is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
@@ -327,28 +327,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
   
   # cosh - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
 
   # cosh - NA
   {
     my $a1 = c(NA);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # cosh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->cosh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -367,16 +367,16 @@ use Math::Complex ();
   {
     my $a1 = c(-Inf - 2*i);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value->{im}));
+    ok($a2->element->re->is_positive_infinite);
+    ok($a2->element->im->is_negative_infinite);
   }
   
   # sinh - complex, -Inf + 2i
   {
     my $a1 = c(-Inf + 2*i);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value->{re}));
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value->{im}));
+    ok($a2->element->re->is_positive_infinite);
+    ok($a2->element->im->is_positive_infinite);
   }
   
   # sinh - double,array
@@ -384,9 +384,9 @@ use Math::Complex ();
     my $a1 = array(c(0, Inf, 2, -Inf));
     my $a2 = r->sinh($a1);
     is($a2->values->[0], '0');
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->values->[1]));
+    ok($a2->elements->[1]->is_positive_infinite);
     is(sprintf("%.6f", $a2->values->[2]), '3.626860');
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->values->[3]));
+    ok($a2->elements->[3]->is_negative_infinite);
     is_deeply(r->dim($a2)->values, [4]);
     ok(r->is_double($a2));
   }
@@ -395,28 +395,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->value));
+    ok($a2->element->is_positive_infinite);
   }
   
   # sinh - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->value));
+    ok($a2->element->is_negative_infinite);
   }
 
   # sinh - NA
   {
     my $a1 = c(NA);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # sinh - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->sinh($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -436,7 +436,7 @@ use Math::Complex ();
     my $a1 = c(1*i);
     my $a2 = r->atan($a1);
     is($a2->values->[0]{re}, 0);
-    ok(Rstats::ElementFunction::is_positive_infinite($a2->values->[0]{im}));
+    ok($a2->elements->[0]->im->is_positive_infinite);
     ok(r->is_complex($a2));
   }
   
@@ -445,7 +445,7 @@ use Math::Complex ();
     my $a1 = c(-1*i);
     my $a2 = r->atan($a1);
     is($a2->values->[0]{re}, 0);
-    ok(Rstats::ElementFunction::is_negative_infinite($a2->values->[0]{im}));
+    ok($a2->elements->[0]->im->is_negative_infinite);
     ok(r->is_complex($a2));
   }
 
@@ -485,14 +485,14 @@ use Math::Complex ();
   {
     my $a1 = c(NA);
     my $a2 = r->atan($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # atan - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->atan($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -579,8 +579,8 @@ use Math::Complex ();
     my $a1 = array(c(1, 1.1, -1.1));
     my $a2 = r->acos($a1);
     is($a2->values->[0], 0);
-    ok(Rstats::ElementFunction::is_nan($a2->values->[1]));
-    ok(Rstats::ElementFunction::is_nan($a2->values->[2]));
+    ok($a2->elements->[1]->is_nan);
+    ok($a2->elements->[2]->is_nan);
     is_deeply(r->dim($a2)->values, [3]);
     ok(r->is_double($a2));
   }
@@ -589,28 +589,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->acos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # acos - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->acos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # acos - NA
   {
     my $a1 = c(NA);
     my $a2 = r->acos($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # acos - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->acos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -687,8 +687,8 @@ use Math::Complex ();
     my $a1 = array(c(1, 1.1, -1.1));
     my $a2 = r->asin($a1);
     is(sprintf("%.6f", $a2->values->[0]), '1.570796');
-    ok(Rstats::ElementFunction::is_nan($a2->values->[1]));
-    ok(Rstats::ElementFunction::is_nan($a2->values->[2]));
+    ok($a2->elements->[1]->is_nan);
+    ok($a2->elements->[2]->is_nan);
     is_deeply(r->dim($a2)->values, [3]);
     ok(r->is_double($a2));
   }
@@ -697,28 +697,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->asin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # asin - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->asin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # asin - NA
   {
     my $a1 = c(NA);
     my $a2 = r->asin($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # asin - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->asin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -731,9 +731,9 @@ use Math::Complex ();
     is(sprintf("%.6f", $a2->values->[0]{re}), '1.338973');
     is(sprintf("%.6f", $a2->values->[0]{im}), '0.402359');
     is($a2->values->[1]{re}, 0);
-    is($a2->values->[1]{im}, Rstats::ElementFunction::Inf);
+    is($a2->values->[1]{im}, '__Inf__');
     is($a2->values->[2]{re}, 0);
-    is($a2->values->[2]{im}, Rstats::ElementFunction::negativeInf);
+    is($a2->values->[2]{im}, '__-Inf__');
     ok(r->is_complex($a2));
   }
   
@@ -765,14 +765,14 @@ use Math::Complex ();
   {
     my $a1 = c(NA);
     my $a2 = r->atan($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # atan - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->atan($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -875,25 +875,25 @@ use Math::Complex ();
   # atan2 - y is NA
   {
     my $a1 = r->atan2(NA, 0);
-    ok(Rstats::ElementFunction::is_na($a1->value));
+    ok($a1->element->is_na);
   }  
 
   # atan2 - x is NA
   {
     my $a1 = r->atan2(0, NA);
-    ok(Rstats::ElementFunction::is_na($a1->value));
+    ok($a1->element->is_na);
   }
 
   # atan2 - y is NaN
   {
     my $a1 = r->atan2(NaN, 0);
-    ok(Rstats::ElementFunction::is_nan($a1->value));
+    ok($a1->element->is_nan);
   }
   
   # atan2 - x is NaN
   {
     my $a1 = r->atan2(0, NaN);
-    ok(Rstats::ElementFunction::is_nan($a1->value));
+    ok($a1->element->is_nan);
   }
 }
 
@@ -957,28 +957,28 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->cos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # cos - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->cos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # cos - NA
   {
     my $a1 = c(NA);
     my $a2 = r->cos($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # cos - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->cos($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }
 
@@ -1011,27 +1011,27 @@ use Math::Complex ();
   {
     my $a1 = c(Inf);
     my $a2 = r->sin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
   
   # sin - -Inf
   {
     my $a1 = c(-Inf);
     my $a2 = r->sin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 
   # sin - NA
   {
     my $a1 = c(NA);
     my $a2 = r->sin($a1);
-    ok(Rstats::ElementFunction::is_na($a2->value));
+    ok($a2->element->is_na);
   }  
 
   # sin - NaN
   {
     my $a1 = c(NaN);
     my $a2 = r->sin($a1);
-    ok(Rstats::ElementFunction::is_nan($a2->value));
+    ok($a2->element->is_nan);
   }
 }

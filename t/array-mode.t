@@ -81,7 +81,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::Inf);
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::TRUE]);
+    is_deeply($a2->values, ['__TRUE__']);
   }
 
   # as_logical - NA
@@ -89,7 +89,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NA);
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_logical - NaN
@@ -97,7 +97,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NaN);
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
   
   # as_logical - character, number
@@ -105,7 +105,7 @@ use Rstats::ElementFunction;
     my $a1 = array(c("1.23"));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
 
   # as_logical - character, pre and trailing space
@@ -113,7 +113,7 @@ use Rstats::ElementFunction;
     my $a1 = array(c("  1  "));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
 
   # as_logical - character
@@ -121,7 +121,7 @@ use Rstats::ElementFunction;
     my $a1 = array(c("a"));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
   
   # as_logical - complex
@@ -129,7 +129,7 @@ use Rstats::ElementFunction;
     my $a1 = array(r->complex(1, 2));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], Rstats::ElementFunction::TRUE);
+    is($a2->values->[0], '__TRUE__');
   }
 
   # as_logical - complex, 0 + 0i
@@ -137,7 +137,7 @@ use Rstats::ElementFunction;
     my $a1 = array(r->complex(0, 0));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], Rstats::ElementFunction::FALSE);
+    is($a2->values->[0], '__FALSE__');
   }
   
   # as_logical - numeric
@@ -145,8 +145,8 @@ use Rstats::ElementFunction;
     my $a1 = array(c(1.1, 0));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], Rstats::ElementFunction::TRUE);
-    is($a2->values->[1], Rstats::ElementFunction::FALSE);
+    is($a2->values->[0], '__TRUE__');
+    is($a2->values->[1], '__FALSE__');
   }
   
   # as_logical - logical
@@ -154,8 +154,8 @@ use Rstats::ElementFunction;
     my $a1 = array(c(Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], Rstats::ElementFunction::TRUE);
-    is($a2->values->[1], Rstats::ElementFunction::FALSE);
+    is($a2->values->[0], '__TRUE__');
+    is($a2->values->[1], '__FALSE__');
   }
 }
 
@@ -166,7 +166,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::Inf);
     my $a2 = r->as_integer($a1);
     ok(r->is_integer($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_integer - NA
@@ -174,7 +174,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NA);
     my $a2 = r->as_integer($a1);
     ok(r->is_integer($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_integer - NaN
@@ -182,7 +182,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NaN);
     my $a2 = r->as_integer($a1);
     ok(r->is_integer($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
   
   # as_integer - character, only real number, no sign
@@ -222,7 +222,7 @@ use Rstats::ElementFunction;
     my $a1 = array(c("a"));
     my $a2 = r->as_integer($a1);
     ok(r->is_integer($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
   
   # as_integer - complex
@@ -266,7 +266,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::Inf);
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::Inf]);
+    is_deeply($a2->values, ['__Inf__']);
   }
 
   # as_numeric - NA
@@ -274,7 +274,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NA);
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_numeric - NaN
@@ -282,7 +282,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NaN);
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NaN]);
+    is_deeply($a2->values, ['__NaN__']);
   }
 
   # as_numeric - character, only real number, no sign
@@ -322,7 +322,7 @@ use Rstats::ElementFunction;
     my $a1 = array("a");
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
   
   # as_numeric - complex
@@ -366,7 +366,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::Inf);
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is($a2->values->[0]->{re}, Rstats::ElementFunction::Inf);
+    is($a2->values->[0]->{re}, '__Inf__');
     is($a2->values->[0]->{im}, 0);
   }
 
@@ -375,7 +375,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NA);
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_complex - NaN
@@ -383,7 +383,7 @@ use Rstats::ElementFunction;
     my $a1 = array(Rstats::ElementFunction::NaN);
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is_deeply($a2->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a2->elements, [Rstats::ElementFunction::NA]);
   }
 
   # as_complex - character, only real number, no sign
@@ -490,7 +490,7 @@ use Rstats::ElementFunction;
     my $a1 = array("a");
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
 
   # as_complex - error
@@ -498,7 +498,7 @@ use Rstats::ElementFunction;
     my $a1 = array("i");
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is(ref $a2->values->[0], 'Rstats::Element::NA');
+    is(ref $a2->elements->[0], 'Rstats::Element::NA');
   }
         
   # as_complex - complex
@@ -562,7 +562,7 @@ use Rstats::ElementFunction;
   # array decide type - logical
   {
     my $a1 = array(c(Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE));
-    is_deeply($a1->values, [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE]);
+    is_deeply($a1->values, ['__TRUE__', '__FALSE__']);
     ok(r->is_logical($a1));
   }
 
@@ -583,21 +583,21 @@ use Rstats::ElementFunction;
   # array decide type - Inf
   {
     my $a1 = array(Rstats::ElementFunction::Inf);
-    is_deeply($a1->values, [Rstats::ElementFunction::Inf]);
+    is_deeply($a1->values, ['__Inf__']);
     ok(r->is_numeric($a1));
   }
 
   # array decide type - NaN
   {
     my $a1 = array(Rstats::ElementFunction::NaN);
-    is_deeply($a1->values, [Rstats::ElementFunction::NaN]);
+    is_deeply($a1->values, ['__NaN__']);
     ok(r->is_numeric($a1));
   }
 
   # array decide type - NA
   {
     my $a1 = array(Rstats::ElementFunction::NA);
-    is_deeply($a1->values, [Rstats::ElementFunction::NA]);
+    is_deeply($a1->elements, [Rstats::ElementFunction::NA]);
     ok(r->is_logical($a1));
   }
 }

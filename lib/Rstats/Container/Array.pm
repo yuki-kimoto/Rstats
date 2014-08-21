@@ -119,20 +119,26 @@ sub operation {
 }
 
 sub values {
-  my $a1 = shift;
+  my $self = shift;
   
   if (@_) {
     my @elements = map { Rstats::ElementFunction::element($_) } @{$_[0]};
-    $a1->{elements} = \@elements;
+    $self->{elements} = \@elements;
   }
   else {
-    my @values = map { Rstats::ElementFunction::value($_) } @{$a1->elements};
+    my @values = map { defined $_ ? $_->value : undef } @{$self->elements};
   
     return \@values;
   }
 }
 
-sub value { Rstats::ElementFunction::value(element(@_)) }
+sub value {
+  my $self = shift;
+  
+  my $e1 = $self->element(@_);
+  
+  return defined $e1 ? $e1->value : Rstats::ElementFunction::NA;
+}
 
 sub at { Rstats::Function::at(@_) }
 

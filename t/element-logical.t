@@ -37,7 +37,7 @@ use Scalar::Util 'refaddr';
   {
     my $true = Rstats::ElementFunction::TRUE;
     my $num = Rstats::ElementFunction::negation($true);
-    ok(Rstats::ElementFunction::is_integer($num));
+    ok($num->is_integer);
     is($num->value, -1);
   }
 
@@ -45,7 +45,7 @@ use Scalar::Util 'refaddr';
   {
     my $false = Rstats::ElementFunction::FALSE;
     my $num = Rstats::ElementFunction::negation($false);
-    ok(Rstats::ElementFunction::is_integer($num));
+    ok($num->is_integer);
     is($num->value, 0);
   }
   

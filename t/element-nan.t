@@ -14,14 +14,14 @@ use Rstats::ElementFunction;
 # nan - nan is double
 {
   my $nan = Rstats::ElementFunction::NaN;
-  ok(Rstats::ElementFunction::is_double($nan));
+  ok($nan->is_double);
 }
 
 # negation
 {
   my $nan1 = Rstats::ElementFunction::NaN;
   my $nan2 = Rstats::ElementFunction::negation($nan1);
-  ok(Rstats::ElementFunction::is_nan($nan2));
+  ok($nan2->is_nan);
 }
 
 # non - boolean

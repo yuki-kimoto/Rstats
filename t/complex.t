@@ -97,8 +97,8 @@ my $r = Rstats::Class->new;
   # new
   {
     my $z1 = Rstats::ElementFunction::complex(1,2);
-    is(Rstats::ElementFunction::value($z1)->{re}, 1);
-    is(Rstats::ElementFunction::value($z1)->{im}, 2);
+    is($z1->re->value, 1);
+    is($z1->im->value, 2);
   }
 }
 
@@ -108,8 +108,8 @@ my $r = Rstats::Class->new;
   {
     my $z1 = Rstats::ElementFunction::complex(1,2);
     my $z2 = Rstats::ElementFunction::negation($z1);
-    is(Rstats::ElementFunction::value($z2)->{re}, -1);
-    is(Rstats::ElementFunction::value($z2)->{im}, -2);
+    is($z2->re->value, -1);
+    is($z2->im->value, -2);
   }
   
   # operation - add
@@ -117,8 +117,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::ElementFunction::complex(1,2);
     my $z2 = Rstats::ElementFunction::complex(3,4);
     my $z3 = Rstats::ElementFunction::add($z1, $z2);
-    is(Rstats::ElementFunction::value($z3)->{re}, 4);
-    is(Rstats::ElementFunction::value($z3)->{im}, 6);
+    is($z3->re->value, 4);
+    is($z3->im->value, 6);
   }
   
   # operation - subtract
@@ -126,8 +126,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::ElementFunction::complex(1,2);
     my $z2 = Rstats::ElementFunction::complex(3,4);
     my $z3 = Rstats::ElementFunction::subtract($z1, $z2);
-    is(Rstats::ElementFunction::value($z3)->{re}, -2);
-    is(Rstats::ElementFunction::value($z3)->{im}, -2);
+    is($z3->re->value, -2);
+    is($z3->im->value, -2);
   }
   
   # operation - multiply
@@ -135,23 +135,23 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::ElementFunction::complex(1, 2);
     my $z2 = Rstats::ElementFunction::complex(3, 4);
     my $z3 = Rstats::ElementFunction::multiply($z1, $z2);
-    is(Rstats::ElementFunction::value($z3)->{re}, -5);
-    is(Rstats::ElementFunction::value($z3)->{im}, 10);
+    is($z3->re->value, -5);
+    is($z3->im->value, 10);
   }
 
   # operation - abs
   {
     my $z1 = Rstats::ElementFunction::complex(3, 4);
     my $abs = Rstats::ElementFunction::abs($z1);
-    is(Rstats::ElementFunction::value($abs), 5);
+    is($abs->value, 5);
   }
   
   # operation - Conj
   {
     my $z1 = Rstats::ElementFunction::complex(1, 2);
     my $conj = Rstats::ElementFunction::Conj($z1);
-    is(Rstats::ElementFunction::value($conj)->{re}, 1);
-    is(Rstats::ElementFunction::value($conj)->{im}, -2);
+    is($conj->re->value, 1);
+    is($conj->im->value, -2);
   }
   
   # operation - divide
@@ -159,8 +159,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::ElementFunction::complex(5, -6);
     my $z2 = Rstats::ElementFunction::complex(3, 2);
     my $z3 = Rstats::ElementFunction::divide($z1, $z2);
-    is(Rstats::ElementFunction::value($z3)->{re}, 3/13);
-    is(Rstats::ElementFunction::value($z3)->{im}, -28/13);
+    is($z3->re->value, 3/13);
+    is($z3->im->value, -28/13);
   }
 
   # operation - raise
@@ -168,7 +168,7 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::ElementFunction::complex(1, 2);
     my $z2 = Rstats::ElementFunction::complex(3, 0);
     my $z3 = Rstats::ElementFunction::raise($z1, $z2);
-    is(Rstats::ElementFunction::value($z3)->{re}, -11);
-    is(Rstats::ElementFunction::value($z3)->{im}, -2);
+    is($z3->re->value, -11);
+    is($z3->im->value, -2);
   }
 }

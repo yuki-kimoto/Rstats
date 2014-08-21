@@ -57,19 +57,19 @@ use Scalar::Util 'refaddr';
   # is_infinite - Inf, true
   {
     my $inf = Rstats::ElementFunction::Inf;
-    ok(Rstats::ElementFunction::is_infinite($inf));
+    ok($inf->is_infinite);
   }
   
   # is_infinite - -Inf, true
   {
     my $negative_inf = Rstats::ElementFunction::negativeInf;
-    ok(Rstats::ElementFunction::is_infinite($negative_inf));
+    ok($negative_inf->is_infinite);
   }
   
   # is_infinite - Double, false
   {
     my $num = Rstats::Element::Double->new(value => 1);
-    ok(!Rstats::ElementFunction::is_infinite($num));
+    ok(!$num->is_infinite);
   }
 }
 
@@ -78,24 +78,24 @@ use Scalar::Util 'refaddr';
   # is_finite - Inf, false
   {
     my $inf = Rstats::ElementFunction::Inf;
-    ok(!Rstats::ElementFunction::is_finite($inf));
+    ok(!$inf->is_finite);
   }
   
   # is_finite - -Inf, false
   {
     my $negative_inf = Rstats::ElementFunction::negativeInf;
-    ok(!Rstats::ElementFunction::is_finite($negative_inf));
+    ok(!$negative_inf->is_finite);
   }
   
   # is_finite - Double, true
   {
     my $num = Rstats::Element::Double->new(value => 1);
-    ok(Rstats::ElementFunction::is_finite($num));
+    ok($num->is_finite);
   }
   
   # is_finite - Integer, true
   {
     my $num = Rstats::Element::Integer->new(value => 1);
-    ok(Rstats::ElementFunction::is_finite($num));
+    ok($num->is_finite);
   }
 }

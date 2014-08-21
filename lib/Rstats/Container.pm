@@ -11,7 +11,7 @@ sub names {
   if (@_) {
     my $_names = shift;
     my $names;
-    if (ref $_names eq 'Rstats::::Container::Array') {
+    if (ref $_names eq 'Rstats::Container::Array') {
       $names = $_names->elements;
     }
     elsif (!defined $_names) {
@@ -38,7 +38,7 @@ sub dimnames {
   if (@_) {
     my $_colnames = shift;
     my $colnames;
-    if (ref $_colnames eq 'Rstats::::Container::Array') {
+    if (ref $_colnames eq 'Rstats::Container::Array') {
       $colnames = $_colnames->elements;
     }
     elsif (!defined $_colnames) {
@@ -65,7 +65,7 @@ sub colnames {
   if (@_) {
     my $_colnames = shift;
     my $colnames;
-    if (ref $_colnames eq 'Rstats::::Container::Array') {
+    if (ref $_colnames eq 'Rstats::Container::Array') {
       $colnames = $_colnames->elements;
     }
     elsif (!defined $_colnames) {
@@ -92,7 +92,7 @@ sub rownames {
   if (@_) {
     my $_rownames = shift;
     my $rownames;
-    if (ref $_rownames eq 'Rstats::::Container::Array') {
+    if (ref $_rownames eq 'Rstats::Container::Array') {
       $rownames = $_rownames->elements;
     }
     elsif (!defined $_rownames) {

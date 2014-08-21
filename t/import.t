@@ -40,31 +40,31 @@ use Rstats::ElementFunction;
 # TRUE
 {
   my $true = TRUE;
-  is_deeply($true->values, [Rstats::ElementFunction::TRUE]);
+  is_deeply($true->values, ['__TRUE__']);
 }
 
 # FALSE
 {
   my $false = FALSE;
-  is_deeply($false->values, [Rstats::ElementFunction::FALSE]);
+  is_deeply($false->values, ['__FALSE__']);
 }
 
 # NA
 {
   my $na = NA;
-  is_deeply($na->values, [Rstats::ElementFunction::NA]);
+  is_deeply($na->values, [undef]);
 }
 
 # NaN
 {
   my $nan = NaN;
-  is_deeply($nan->values, [Rstats::ElementFunction::NaN]);
+  is_deeply($nan->values, ['__NaN__']);
 }
 
 # Inf
 {
   my $inf = Inf;
-  is_deeply($inf->values, [Rstats::ElementFunction::Inf]);
+  is_deeply($inf->values, ['__Inf__']);
 }
 
 # NULL

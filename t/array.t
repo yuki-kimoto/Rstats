@@ -1114,7 +1114,7 @@ EOS
     my $v1 = c(1, 3, 5, 7);
     my $logical_v = c(r->FALSE, r->TRUE, r->FALSE, r->TRUE, r->TRUE);
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, Rstats::ElementFunction::NA]);
+    is_deeply($v2->values, [3, 7, undef]);
   }
 
   # get - as_logical
@@ -1122,7 +1122,7 @@ EOS
     my $v1 = c(1, 3, 5, 7);
     my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
     my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, Rstats::ElementFunction::NA]);
+    is_deeply($v2->values, [3, 7, undef]);
   }
 
   # get - as_vector

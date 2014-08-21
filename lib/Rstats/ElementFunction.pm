@@ -4,8 +4,7 @@ use strict;
 use warnings;
 use Carp 'croak', 'carp';
 
-require Rstats::Element::NA;
-require Rstats::Element::Complex;
+use Rstats::Element;
 use Scalar::Util ();
 use B ();
 use Math::Complex ();
@@ -17,7 +16,7 @@ my $perl_inf_result = 9 ** 9 ** 9;
 my $perl_negative_inf_result = -9 ** 9 ** 9;
 
 # Special values
-my $na = Rstats::Element::NA->new;
+my $na = Rstats::Element->new(type => 'na');
 my $nan = Rstats::Element->new(type => 'double', flag => 'nan');
 my $inf = Rstats::Element->new(type => 'double', flag => 'inf');
 my $negative_inf = Rstats::Element->new(type => 'double', flag => '-inf');
@@ -55,7 +54,7 @@ sub complex {
 sub complex_double {
   my ($re, $im) = @_;
   
-  my $z = Rstats::Element::Complex->new(re => $re, im => $im);
+  my $z = Rstats::Element->new(type => 'complex', re => $re, im => $im);
 }
 sub double { Rstats::Element->new(dv => shift, type => 'double', flag => shift || 'normal') }
 sub integer { Rstats::Element->new(type => 'integer', iv => int(shift)) }

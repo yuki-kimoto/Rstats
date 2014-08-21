@@ -8,7 +8,7 @@ use Scalar::Util 'refaddr';
 # reference
 {
   my $na = Rstats::ElementFunction::NA;
-  is(ref $na, 'Rstats::Element::NA');
+  ok($na->is_na);
 }
 
 # singleton

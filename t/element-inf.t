@@ -95,7 +95,7 @@ use Scalar::Util 'refaddr';
   
   # is_finite - Integer, true
   {
-    my $num = Rstats::Element::Integer->new(value => 1);
+    my $num = Rstats::Element->new(type => 'integer', value => 1);
     ok($num->is_finite);
   }
 }

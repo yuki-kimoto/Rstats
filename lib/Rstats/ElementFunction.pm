@@ -5,9 +5,7 @@ use warnings;
 use Carp 'croak', 'carp';
 
 require Rstats::Element::NA;
-require Rstats::Element::Logical;
 require Rstats::Element::Complex;
-require Rstats::Element::Integer;
 use Scalar::Util ();
 use B ();
 use Math::Complex ();
@@ -60,8 +58,8 @@ sub complex_double {
   my $z = Rstats::Element::Complex->new(re => $re, im => $im);
 }
 sub double { Rstats::Element->new(dv => shift, type => 'double', flag => shift || 'normal') }
-sub integer { Rstats::Element::Integer->new(iv => int(shift)) }
-sub logical { Rstats::Element::Logical->new(iv => shift) }
+sub integer { Rstats::Element->new(type => 'integer', iv => int(shift)) }
+sub logical { Rstats::Element->new(type => 'logical', iv => shift) }
 
 sub atanh {
   my $e1 = shift;

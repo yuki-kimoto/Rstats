@@ -8,6 +8,7 @@ has 'iv';
 has 'cv';
 has 're';
 has 'im';
+has 'flag';
 
 sub value {
   my $self = shift;
@@ -41,8 +42,11 @@ sub value {
   elsif ($self->is_character) {
     return $self->{cv};
   }
-  elsif ($self->is_integer || $self->is_double) {
+  elsif ($self->is_integer) {
     return $self->{value};
+  }
+  elsif ($self->is_double) {
+    return $self->{re};
   }
   else {
     croak "Invalid type";
@@ -88,7 +92,7 @@ sub is_negative_infinite {
 sub is_finite {
   my $self = shift;
   
-  return $self->is_integer || ($self->is_double && defined $self->{value});
+  return $self->is_integer || ($self->is_double && defined $self->{re});
 }
 
 1;

@@ -68,7 +68,7 @@ use Scalar::Util 'refaddr';
   
   # is_infinite - Double, false
   {
-    my $num = Rstats::Element::Double->new(value => 1);
+    my $num = Rstats::Element->new(type => 'double', re => 1);
     ok(!$num->is_infinite);
   }
 }
@@ -89,7 +89,7 @@ use Scalar::Util 'refaddr';
   
   # is_finite - Double, true
   {
-    my $num = Rstats::Element::Double->new(value => 1);
+    my $num = Rstats::Element->new(type => 'double', re => 1);
     ok($num->is_finite);
   }
   

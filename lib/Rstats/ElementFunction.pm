@@ -1259,8 +1259,8 @@ sub add {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif ($e1->is_complex) {
-    my $re = add($e1->{re}, $e2->{re});
-    my $im = add($e1->{im}, $e2->{im});
+    my $re = add($e1->re, $e2->re);
+    my $im = add($e1->im, $e2->im);
     
     return complex_double($re, $im);
   }
@@ -1329,8 +1329,8 @@ sub subtract {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif ($e1->is_complex) {
-    my $re = subtract($e1->{re}, $e2->{re});
-    my $im = subtract($e1->{im}, $e2->{im});
+    my $re = subtract($e1->re, $e2->re);
+    my $im = subtract($e1->im, $e2->im);
     
     return complex_double($re, $im);
   }
@@ -1905,7 +1905,7 @@ sub Re {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->{re};
+    return $e1->re;
   }
   else {
     'Not implemented';
@@ -1916,7 +1916,7 @@ sub Im {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->{im};
+    return $e1->im;
   }
   else {
     'Not implemented';

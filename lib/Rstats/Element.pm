@@ -4,6 +4,10 @@ use Object::Simple -base;
 use Carp 'croak';
 
 has 'type';
+has 'iv';
+has 'cv';
+has 're';
+has 'im';
 
 sub value {
   my $self = shift;
@@ -34,7 +38,10 @@ sub value {
       im => $self->im->value
     };
   }
-  elsif ($self->is_character || $self->is_integer || $self->is_double) {
+  elsif ($self->is_character) {
+    return $self->{cv};
+  }
+  elsif ($self->is_integer || $self->is_double) {
     return $self->{value};
   }
   else {

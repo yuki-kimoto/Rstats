@@ -7,7 +7,6 @@ use Carp 'croak', 'carp';
 require Rstats::Element::NA;
 require Rstats::Element::Logical;
 require Rstats::Element::Complex;
-require Rstats::Element::Character;
 require Rstats::Element::Integer;
 require Rstats::Element::Double;
 use Scalar::Util ();
@@ -45,7 +44,8 @@ sub Inf () { $inf }
 sub negativeInf () { $negative_inf }
 sub pi () { $pi }
 
-sub character { Rstats::Element::Character->new(value => shift) }
+sub character { Rstats::Element->new(cv => shift, type => 'character') }
+
 sub complex {
   my ($re_value, $im_value) = @_;
   
@@ -1215,7 +1215,7 @@ sub to_string {
     return 'NA';
   }
   elsif ($e1->is_character) {
-    return $e1->{value} . "";
+    return $e1->{cv} . "";
   }
   elsif ($e1->is_complex) {
     my $re = to_string($e1->re);
@@ -2050,7 +2050,7 @@ sub as_complex {
     return $e1;
   }
   elsif ($e1->is_character) {
-    my $z = looks_like_complex($e1->{value});
+    my $z = looks_like_complex($e1->{cv});
     if (defined $z) {
       return complex($z->{re}, $z->{im});
     }
@@ -2090,7 +2090,7 @@ sub as_double {
     return $e1;
   }
   elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{value})) {
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
       return double($num + 0);
     }
     else {
@@ -2123,7 +2123,7 @@ sub as_integer {
     return $e1;
   }
   elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{value})) {
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
       return Rstats::ElementFunction::integer(int $num);
     }
     else {
@@ -2237,7 +2237,7 @@ sub more_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} gt $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} gt $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -2295,7 +2295,7 @@ sub more_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} ge $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} ge $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -2353,7 +2353,7 @@ sub less_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} lt $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} lt $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -2411,7 +2411,7 @@ sub less_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} le $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} le $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -2469,7 +2469,7 @@ sub equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} eq $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} eq $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return $e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value ? TRUE : FALSE;
@@ -2527,7 +2527,7 @@ sub not_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{value} ne $e2->{value} ? TRUE : FALSE;
+    return $e1->{cv} ne $e2->{cv} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return !($e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value) ? TRUE : FALSE;

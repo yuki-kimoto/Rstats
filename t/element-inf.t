@@ -42,13 +42,13 @@ use Scalar::Util 'refaddr';
   # Inf - to_string, plus
   {
     my $inf = Rstats::ElementFunction::Inf;
-    is("$inf", 'Inf');
+    is(Rstats::ElementFunction::to_string($inf), 'Inf');
   }
 
   # Inf - to_string, minus
   {
     my $negative_inf = Rstats::ElementFunction::negativeInf;
-    is("$negative_inf", '-Inf');
+    is(Rstats::ElementFunction::to_string($negative_inf), '-Inf');
   }
 }
 
@@ -68,7 +68,7 @@ use Scalar::Util 'refaddr';
   
   # is_infinite - Double, false
   {
-    my $num = Rstats::Element->new(type => 'double', re => 1);
+    my $num = Rstats::Element::Double->new(value => 1);
     ok(!$num->is_infinite);
   }
 }
@@ -89,13 +89,13 @@ use Scalar::Util 'refaddr';
   
   # is_finite - Double, true
   {
-    my $num = Rstats::Element->new(type => 'double', dv => 1);
+    my $num = Rstats::Element::Double->new(value => 1);
     ok($num->is_finite);
   }
   
   # is_finite - Integer, true
   {
-    my $num = Rstats::Element->new(type => 'integer', value => 1);
+    my $num = Rstats::Element::Integer->new(value => 1);
     ok($num->is_finite);
   }
 }

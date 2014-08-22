@@ -27,13 +27,13 @@ use Rstats::ElementFunction;
 # non - boolean
 {
   my $nan = Rstats::ElementFunction::NaN;
-  eval { !!$nan };
+  eval { Rstats::ElementFunction::bool($nan) };
   like($@, qr/logical/);
 }
 
 # non - to_string
 {
   my $nan = Rstats::ElementFunction::NaN;
-  is("$nan", 'NaN');
+  is(Rstats::ElementFunction::to_string($nan), 'NaN');
 }
 

@@ -4,7 +4,12 @@ use strict;
 use warnings;
 use Carp 'croak', 'carp';
 
-use Rstats::Element;
+require Rstats::Element::NA;
+require Rstats::Element::Logical;
+require Rstats::Element::Complex;
+require Rstats::Element::Character;
+require Rstats::Element::Integer;
+require Rstats::Element::Double;
 use Scalar::Util ();
 use B ();
 use Math::Complex ();
@@ -16,10 +21,10 @@ my $perl_inf_result = 9 ** 9 ** 9;
 my $perl_negative_inf_result = -9 ** 9 ** 9;
 
 # Special values
-my $na = Rstats::Element->new(type => 'na');
-my $nan = Rstats::Element->new(type => 'double', flag => 'nan');
-my $inf = Rstats::Element->new(type => 'double', flag => 'inf');
-my $negative_inf = Rstats::Element->new(type => 'double', flag => '-inf');
+my $na = Rstats::Element::NA->new;
+my $nan = Rstats::Element::Double->new(flag => 'nan');
+my $inf = Rstats::Element::Double->new(flag => 'inf');
+my $negative_inf = Rstats::Element::Double->new(flag => '-inf');
 my $true = logical(1);
 my $false = logical(0);
 my $pi = double(Math::Trig::pi);
@@ -40,8 +45,7 @@ sub Inf () { $inf }
 sub negativeInf () { $negative_inf }
 sub pi () { $pi }
 
-sub character { Rstats::Element->new(cv => shift, type => 'character') }
-
+sub character { Rstats::Element::Character->new(value => shift) }
 sub complex {
   my ($re_value, $im_value) = @_;
   
@@ -54,11 +58,11 @@ sub complex {
 sub complex_double {
   my ($re, $im) = @_;
   
-  my $z = Rstats::Element->new(type => 'complex', re => $re, im => $im);
+  my $z = Rstats::Element::Complex->new(re => $re, im => $im);
 }
-sub double { Rstats::Element->new(dv => shift, type => 'double', flag => shift || 'normal') }
-sub integer { Rstats::Element->new(type => 'integer', iv => int(shift)) }
-sub logical { Rstats::Element->new(type => 'logical', iv => shift) }
+sub double { Rstats::Element::Double->new(value => shift, flag => shift || 'normal') }
+sub integer { Rstats::Element::Integer->new(value => int(shift)) }
+sub logical { Rstats::Element::Logical->new(value => shift) }
 
 sub atanh {
   my $e1 = shift;
@@ -489,9 +493,6 @@ sub atan2 {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
-    $e2 = as_double($e2) unless $e2->is_double;
-
     my $value1;
     my $value2;
     
@@ -520,7 +521,7 @@ sub atan2 {
       $e3 = double(-1.5707963267949);
     }
     elsif ($e2->is_negative_infinite) {
-      my $value1 = $e1->{dv};
+      my $value1 = $e1->{value};
       if ($value1 >= 0) {
         $e3 = double(3.14159265358979);
       }
@@ -529,8 +530,8 @@ sub atan2 {
       }
     }
     else {
-      my $value1 = $e1->{dv};
-      my $value2 = $e2->{dv};
+      my $value1 = $e1->{value};
+      my $value2 = $e2->{value};
       $e3 = double(CORE::atan2($value1, $value2));
     }
   }
@@ -601,8 +602,7 @@ sub log {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
-    my $value = $e1->{dv};
+    my $value = $e1->{value};
     
     if ($e1->is_infinite) {
       carp "In cos : NaNs produced";
@@ -660,7 +660,7 @@ sub Arg {
 sub hash {
   my $e1 = shift;
   
-  my $hash = $e1->type . '-' . "$e1";
+  my $hash = $e1->type . '-' . to_string($e1);
   
   return $hash;
 }
@@ -715,8 +715,7 @@ sub cos {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
-    my $value = $e1->{dv};
+    my $value = $e1->{value};
     
     if ($e1->is_infinite) {
       carp "In cos : NaNs produced";
@@ -762,7 +761,7 @@ sub exp {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_double || $e1->is_integer || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
+    $e1 = as_double($e1);
     
     if ($e1->is_positive_infinite) {
       $e2 = Inf;
@@ -774,7 +773,7 @@ sub exp {
       $e2 = $e1;
     }
     else {
-      my $value = $e1->{dv};
+      my $value = $e1->{value};
       $e2 = double(exp($value));
     }
   }
@@ -795,7 +794,6 @@ sub expm1 {
     croak 'Error in expm1 : unimplemented complex function';
   }
   elsif ($e1->is_double) {
-    return $e1 if $e1->is_nan;
     if (less_than($e1, double(1e-5)) && more_than($e1, negativeInf)) {
       $e2 = add(
         $e1,
@@ -1100,8 +1098,7 @@ sub sin {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
-    my $value = $e1->{dv};
+    my $value = $e1->{value};
     
     if ($e1->is_infinite) {
       carp "In sin : NaNs produced";
@@ -1211,6 +1208,51 @@ sub is_perl_number {
         && $value * 0 == 0
 }
 
+sub to_string {
+  my $e1 = shift;
+  
+  if ($e1->is_na) {
+    return 'NA';
+  }
+  elsif ($e1->is_character) {
+    return $e1->{value} . "";
+  }
+  elsif ($e1->is_complex) {
+    my $re = to_string($e1->re);
+    my $im = to_string($e1->im);
+    
+    my $str = "$re";
+    $str .= '+' if $im >= 0;
+    $str .= $im . 'i';
+  }
+  elsif ($e1->is_double) {
+    
+    my $flag = $e1->flag;
+    
+    if (defined $e1->{value}) {
+      return $e1->{value} . "";
+    }
+    elsif ($flag eq 'nan') {
+      return 'NaN';
+    }
+    elsif ($flag eq 'inf') {
+      return 'Inf';
+    }
+    elsif ($flag eq '-inf') {
+      return '-Inf';
+    }
+  }
+  elsif ($e1->is_integer) {
+    return $e1->{value} . "";
+  }
+  elsif ($e1->is_logical) {
+    return $e1->{value} ? 'TRUE' : 'FALSE'
+  }
+  else {
+    croak "Invalid type";
+  }
+}
+
 sub negation {
   my $e1 = shift;
   
@@ -1226,8 +1268,8 @@ sub negation {
   elsif ($e1->is_double) {
     
     my $flag = $e1->flag;
-    if (defined $e1->{dv}) {
-      return double(-$e1->{dv});
+    if (defined $e1->{value}) {
+      return double(-$e1->{value});
     }
     elsif ($flag eq 'nan') {
       return NaN;
@@ -1240,7 +1282,39 @@ sub negation {
     }
   }
   elsif ($e1->is_integer || $e1->is_logical) {
-    return integer(-$e1->{iv});
+    return integer(-$e1->{value});
+  }
+  else {
+    croak "Invalid type";
+  }  
+}
+
+sub bool {
+  my $e1 = shift;
+  
+  if ($e1->is_na) {
+    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
+  }
+  elsif ($e1->is_character || $e1->is_complex) {
+    croak 'Error in -a : invalid argument to unary operator ';
+  }
+  elsif ($e1->is_double) {
+
+    if (defined $e1->{value}) {
+      return $e1->{value};
+    }
+    else {
+      if ($e1->is_infinite) {
+        1;
+      }
+      # NaN
+      else {
+        croak 'argument is not interpretable as logical'
+      }
+    }
+  }
+  elsif ($e1->is_integer || $e1->is_logical) {
+    return $e1->{value};
   }
   else {
     croak "Invalid type";
@@ -1256,16 +1330,16 @@ sub add {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif ($e1->is_complex) {
-    my $re = add($e1->re, $e2->re);
-    my $im = add($e1->im, $e2->im);
+    my $re = add($e1->{re}, $e2->{re});
+    my $im = add($e1->{im}, $e2->{im});
     
     return complex_double($re, $im);
   }
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        my $value = $e1->{dv} + $e2->{dv};
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        my $value = $e1->{value} + $e2->{value};
         if ($value == $perl_inf_result) {
           return Inf;
         }
@@ -1284,7 +1358,7 @@ sub add {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return Inf;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1295,7 +1369,7 @@ sub add {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return negativeInf;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1307,10 +1381,10 @@ sub add {
     }
   }
   elsif ($e1->is_integer) {
-    return integer($e1->{iv} + $e2->{iv});
+    return integer($e1->{value} + $e2->{value});
   }
   elsif ($e1->is_logical) {
-    return integer($e1->{iv} + $e2->{iv});
+    return integer($e1->{value} + $e2->{value});
   }
   else {
     croak "Invalid type";
@@ -1326,16 +1400,16 @@ sub subtract {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif ($e1->is_complex) {
-    my $re = subtract($e1->re, $e2->re);
-    my $im = subtract($e1->im, $e2->im);
+    my $re = subtract($e1->{re}, $e2->{re});
+    my $im = subtract($e1->{im}, $e2->{im});
     
     return complex_double($re, $im);
   }
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        my $value = $e1->{dv} - $e2->{dv};
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        my $value = $e1->{value} - $e2->{value};
         if ($value == $perl_inf_result) {
           return Inf;
         }
@@ -1354,7 +1428,7 @@ sub subtract {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return Inf;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1365,7 +1439,7 @@ sub subtract {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return negativeInf;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1377,10 +1451,10 @@ sub subtract {
     }
   }
   elsif ($e1->is_integer) {
-    return integer($e1->{iv} + $e2->{iv});
+    return integer($e1->{value} + $e2->{value});
   }
   elsif ($e1->is_logical) {
-    return integer($e1->{iv} + $e2->{iv});
+    return integer($e1->{value} + $e2->{value});
   }
   else {
     croak "Invalid type";
@@ -1403,9 +1477,9 @@ sub multiply {
   }
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        my $value = $e1->{dv} * $e2->{dv};
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        my $value = $e1->{value} * $e2->{value};
         if ($value == $perl_inf_result) {
           return Inf;
         }
@@ -1417,37 +1491,37 @@ sub multiply {
         }
       }
       elsif ($e2->is_positive_infinite) {
-        if ($e1->{dv} == 0) {
+        if ($e1->{value} == 0) {
           return NaN;
         }
-        elsif ($e1->{dv} > 0) {
+        elsif ($e1->{value} > 0) {
           return Inf;
         }
-        elsif ($e1->{dv} < 0) {
+        elsif ($e1->{value} < 0) {
           return negativeInf;
         }
       }
       elsif ($e2->is_negative_infinite) {
-        if ($e1->{dv} == 0) {
+        if ($e1->{value} == 0) {
           return NaN;
         }
-        elsif ($e1->{dv} > 0) {
+        elsif ($e1->{value} > 0) {
           return negativeInf;
         }
-        elsif ($e1->{dv} < 0) {
+        elsif ($e1->{value} < 0) {
           return Inf;
         }
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} == 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} == 0) {
           return NaN;
         }
-        elsif ($e2->{dv} > 0) {
+        elsif ($e2->{value} > 0) {
           return Inf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return negativeInf;
         }
       }
@@ -1459,14 +1533,14 @@ sub multiply {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} == 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} == 0) {
           return NaN;
         }
-        elsif ($e2->{dv} > 0) {
+        elsif ($e2->{value} > 0) {
           return negativeInf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return Inf;
         }
       }
@@ -1479,10 +1553,10 @@ sub multiply {
     }
   }
   elsif ($e1->is_integer) {
-    return integer($e1->{iv} * $e2->{iv});
+    return integer($e1->{value} * $e2->{value});
   }
   elsif ($e1->is_logical) {
-    return integer($e1->{iv} * $e2->{iv});
+    return integer($e1->{value} * $e2->{value});
   }
   else {
     croak "Invalid type";
@@ -1507,10 +1581,10 @@ sub divide {
   }
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if ($e1->{dv} == 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+    if (defined $e1->{value}) {
+      if ($e1->{value} == 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return NaN;
           }
           else {
@@ -1521,13 +1595,13 @@ sub divide {
           return double(0);
         }
       }
-      elsif ($e1->{dv} > 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+      elsif ($e1->{value} > 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return Inf;
           }
           else {
-            my $value = $e1->{dv} / $e2->{dv};
+            my $value = $e1->{value} / $e2->{value};
             if ($value == $perl_inf_result) {
               return Inf;
             }
@@ -1543,13 +1617,13 @@ sub divide {
           return double(0);
         }
       }
-      elsif ($e1->{dv} < 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+      elsif ($e1->{value} < 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return negativeInf;
           }
           else {
-            return double($e1->{dv} / $e2->{dv});
+            return double($e1->{value} / $e2->{value});
           }
         }
         elsif ($e2->is_infinite) {
@@ -1558,11 +1632,11 @@ sub divide {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} >= 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} >= 0) {
           return Inf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return negativeInf;
         }
       }
@@ -1571,11 +1645,11 @@ sub divide {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} >= 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} >= 0) {
           return negativeInf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return Inf;
         }
       }
@@ -1585,45 +1659,45 @@ sub divide {
     }
   }
   elsif ($e1->is_integer) {
-    if ($e1->{iv} == 0) {
-      if ($e2->{iv} == 0) {
+    if ($e1->{value} == 0) {
+      if ($e2->{value} == 0) {
         return NaN;
       }
       else {
         return double(0);
       }
     }
-    elsif ($e1->{iv} > 0) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} > 0) {
+      if ($e2->{value} == 0) {
         return Inf;
       }
       else  {
-        return double($e1->{iv} / $e2->{iv});
+        return double($e1->{value} / $e2->{value});
       }
     }
-    elsif ($e1->{iv} < 0) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} < 0) {
+      if ($e2->{value} == 0) {
         return negativeInf;
       }
       else {
-        return double($e1->{iv} / $e2->{iv});
+        return double($e1->{value} / $e2->{value});
       }
     }
   }
   elsif ($e1->is_logical) {
-    if ($e1->{iv} == 0) {
-      if ($e2->{iv} == 0) {
+    if ($e1->{value} == 0) {
+      if ($e2->{value} == 0) {
         return NaN;
       }
-      elsif ($e2->{iv} == 1) {
+      elsif ($e2->{value} == 1) {
         return double(0);
       }
     }
-    elsif ($e1->{iv} == 1) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} == 1) {
+      if ($e2->{value} == 0) {
         return Inf;
       }
-      elsif ($e2->{iv} == 1)  {
+      elsif ($e2->{value} == 1)  {
         return double(1);
       }
     }
@@ -1659,16 +1733,16 @@ sub raise {
   }
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if ($e1->{dv} == 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+    if (defined $e1->{value}) {
+      if ($e1->{value} == 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return double(1);
           }
-          elsif ($e2->{dv} > 0) {
+          elsif ($e2->{value} > 0) {
             return double(0);
           }
-          elsif ($e2->{dv} < 0) {
+          elsif ($e2->{value} < 0) {
             return Inf;
           }
         }
@@ -1679,13 +1753,13 @@ sub raise {
           return Inf
         }
       }
-      elsif ($e1->{dv} > 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+      elsif ($e1->{value} > 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return double(1);
           }
           else {
-            my $value = $e1->{dv} ** $e2->{dv};
+            my $value = $e1->{value} ** $e2->{value};
             if ($value == $perl_inf_result) {
               return Inf;
             }
@@ -1698,70 +1772,70 @@ sub raise {
           }
         }
         elsif ($e2->is_positive_infinite) {
-          if ($e1->{dv} < 1) {
+          if ($e1->{value} < 1) {
             return double(0);
           }
-          elsif ($e1->{dv} == 1) {
+          elsif ($e1->{value} == 1) {
             return double(1);
           }
-          elsif ($e1->{dv} > 1) {
+          elsif ($e1->{value} > 1) {
             return Inf;
           }
         }
         elsif ($e2->is_negative_infinite) {
-          if ($e1->{dv} < 1) {
+          if ($e1->{value} < 1) {
             return double(0);
           }
-          elsif ($e1->{dv} == 1) {
+          elsif ($e1->{value} == 1) {
             return double(1);
           }
-          elsif ($e1->{dv} > 1) {
+          elsif ($e1->{value} > 1) {
             return double(0);
           }
         }
       }
-      elsif ($e1->{dv} < 0) {
-        if (defined $e2->{dv}) {
-          if ($e2->{dv} == 0) {
+      elsif ($e1->{value} < 0) {
+        if (defined $e2->{value}) {
+          if ($e2->{value} == 0) {
             return double(-1);
           }
           else {
-            return double($e1->{dv} ** $e2->{dv});
+            return double($e1->{value} ** $e2->{value});
           }
         }
         elsif ($e2->is_positive_infinite) {
-          if ($e1->{dv} > -1) {
+          if ($e1->{value} > -1) {
             return double(0);
           }
-          elsif ($e1->{dv} == -1) {
+          elsif ($e1->{value} == -1) {
             return double(-1);
           }
-          elsif ($e1->{dv} < -1) {
+          elsif ($e1->{value} < -1) {
             return negativeInf;
           }
         }
         elsif ($e2->is_negative_infinite) {
-          if ($e1->{dv} > -1) {
+          if ($e1->{value} > -1) {
             return Inf;
           }
-          elsif ($e1->{dv} == -1) {
+          elsif ($e1->{value} == -1) {
             return double(-1);
           }
-          elsif ($e1->{dv} < -1) {
+          elsif ($e1->{value} < -1) {
             return double(0);
           }
         }
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} == 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} == 0) {
           return double(1);
         }
-        elsif ($e2->{dv} > 0) {
+        elsif ($e2->{value} > 0) {
           return Inf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return double(0);
         }
       }
@@ -1773,14 +1847,14 @@ sub raise {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
-        if ($e2->{dv} == 0) {
+      if (defined $e2->{value}) {
+        if ($e2->{value} == 0) {
           return double(-1);
         }
-        elsif ($e2->{dv} > 0) {
+        elsif ($e2->{value} > 0) {
           return negativeInf;
         }
-        elsif ($e2->{dv} < 0) {
+        elsif ($e2->{value} < 0) {
           return double(0);
         }
       }
@@ -1793,48 +1867,48 @@ sub raise {
     }
   }
   elsif ($e1->is_integer) {
-    if ($e1->{iv} == 0) {
-      if ($e2->{iv} == 0) {
+    if ($e1->{value} == 0) {
+      if ($e2->{value} == 0) {
         return double(1);
       }
-      elsif ($e2->{iv} > 0) {
+      elsif ($e2->{value} > 0) {
         return double(0);
       }
-      elsif ($e2->{iv} < 0) {
+      elsif ($e2->{value} < 0) {
         return Inf;
       }
     }
-    elsif ($e1->{iv} > 0) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} > 0) {
+      if ($e2->{value} == 0) {
         return double(1);
       }
       else {
-        return double($e1->{iv} ** $e2->{iv});
+        return double($e1->{value} ** $e2->{value});
       }
     }
-    elsif ($e1->{iv} < 0) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} < 0) {
+      if ($e2->{value} == 0) {
         return double(-1);
       }
       else {
-        return double($e1->{iv} ** $e2->{iv});
+        return double($e1->{value} ** $e2->{value});
       }
     }
   }
   elsif ($e1->is_logical) {
-    if ($e1->{iv} == 0) {
-      if ($e2->{iv} == 0) {
+    if ($e1->{value} == 0) {
+      if ($e2->{value} == 0) {
         return double(1);
       }
-      elsif ($e2->{iv} == 1) {
+      elsif ($e2->{value} == 1) {
         return double(0);
       }
     }
-    elsif ($e1->{iv} ==  1) {
-      if ($e2->{iv} == 0) {
+    elsif ($e1->{value} ==  1) {
+      if ($e2->{value} == 0) {
         return double(1);
       }
-      elsif ($e2->{iv} == 1) {
+      elsif ($e2->{value} == 1) {
         return double(1);
       }
     }
@@ -1858,16 +1932,16 @@ sub remainder {
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan || $e1->is_infinite || $e2->is_infinite;
     
-    if ($e2->{dv} == 0) {
+    if ($e2->{value} == 0) {
       return NaN;
     }
     else {
-      my $v3_value = $e1->{dv} - POSIX::floor($e1->{dv} / $e2->{dv}) * $e2->{dv};
+      my $v3_value = $e1->{value} - POSIX::floor($e1->{value}/$e2->{value}) * $e2->{value};
       return double($v3_value);
     }
   }
   elsif ($e1->is_integer) {
-    if ($e2->{iv} == 0) {
+    if ($e2->{value} == 0) {
       return NaN;
     }
     else {
@@ -1875,11 +1949,11 @@ sub remainder {
     }
   }
   elsif ($e1->is_logical) {
-    if ($e2->{iv} == 0) {
+    if ($e2->{value} == 0) {
       return NaN;
     }
     else {
-      return double($e1->{iv} % $e2->{iv});
+      return double($e1->{value} % $e2->{value});
     }
   }
   else {
@@ -1902,7 +1976,7 @@ sub Re {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->re;
+    return $e1->{re};
   }
   else {
     'Not implemented';
@@ -1913,7 +1987,7 @@ sub Im {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->im;
+    return $e1->{im};
   }
   else {
     'Not implemented';
@@ -1954,7 +2028,7 @@ sub logical_to_integer {
   my $e1 = shift;
   
   if ($e1->is_logical) {
-    return integer($e1->{iv});
+    return integer($e1->{value});
   }
   else {
     return $e1;
@@ -1964,7 +2038,7 @@ sub logical_to_integer {
 sub as_character {
   my $e1 = shift;
   
-  my $e2 = character("$e1");
+  my $e2 = character(to_string($e1));
   
   return $e2;
 }
@@ -1976,7 +2050,7 @@ sub as_complex {
     return $e1;
   }
   elsif ($e1->is_character) {
-    my $z = looks_like_complex($e1->{cv});
+    my $z = looks_like_complex($e1->{value});
     if (defined $z) {
       return complex($z->{re}, $z->{im});
     }
@@ -1997,10 +2071,10 @@ sub as_complex {
     }
   }
   elsif ($e1->is_integer) {
-    return complex($e1->{iv}, 0);
+    return complex($e1->{value}, 0);
   }
   elsif ($e1->is_logical) {
-    return complex($e1->{iv} ? 1 : 0, 0);
+    return complex($e1->{value} ? 1 : 0, 0);
   }
   else {
     croak "unexpected type";
@@ -2016,7 +2090,7 @@ sub as_double {
     return $e1;
   }
   elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{value})) {
       return double($num + 0);
     }
     else {
@@ -2032,10 +2106,10 @@ sub as_double {
     return $e1;
   }
   elsif ($e1->is_integer) {
-    return double($e1->{iv});
+    return double($e1->{value});
   }
   elsif ($e1->is_logical) {
-    return double($e1->{iv} ? 1 : 0);
+    return double($e1->{value} ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -2049,7 +2123,7 @@ sub as_integer {
     return $e1;
   }
   elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
+    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{value})) {
       return Rstats::ElementFunction::integer(int $num);
     }
     else {
@@ -2066,14 +2140,14 @@ sub as_integer {
       return NA;
     }
     else {
-      return Rstats::ElementFunction::integer($e1->{dv});
+      return Rstats::ElementFunction::integer($e1->{value});
     }
   }
   elsif ($e1->is_integer) {
     return $e1; 
   }
   elsif ($e1->is_logical) {
-    return integer($e1->{iv} ? 1 : 0);
+    return integer($e1->{value} ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -2108,14 +2182,14 @@ sub as_logical {
       return TRUE;
     }
     else {
-      return $e1->{dv} == 0 ? FALSE : TRUE;
+      return $e1->{value} == 0 ? FALSE : TRUE;
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} == 0 ? FALSE : TRUE;
+    return $e1->{value} == 0 ? FALSE : TRUE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} == 0 ? FALSE : TRUE;
+    return $e1->{value} == 0 ? FALSE : TRUE;
   }
   else {
     croak "unexpected type";
@@ -2163,16 +2237,16 @@ sub more_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} gt $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} gt $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} > $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} > $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -2182,7 +2256,7 @@ sub more_than {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2193,7 +2267,7 @@ sub more_than {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2205,10 +2279,10 @@ sub more_than {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} > $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} > $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} > $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} > $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -2221,16 +2295,16 @@ sub more_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} ge $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} ge $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} >= $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} >= $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -2240,7 +2314,7 @@ sub more_than_or_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2251,7 +2325,7 @@ sub more_than_or_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2263,10 +2337,10 @@ sub more_than_or_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} >= $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} >= $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} >= $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} >= $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -2279,16 +2353,16 @@ sub less_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} lt $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} lt $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} < $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} < $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -2298,7 +2372,7 @@ sub less_than {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2309,7 +2383,7 @@ sub less_than {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2321,10 +2395,10 @@ sub less_than {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} < $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} < $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} < $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} < $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -2337,16 +2411,16 @@ sub less_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} le $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} le $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} <= $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} <= $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -2356,7 +2430,7 @@ sub less_than_or_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2367,7 +2441,7 @@ sub less_than_or_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2379,10 +2453,10 @@ sub less_than_or_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} <= $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} <= $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} <= $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} <= $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -2395,16 +2469,16 @@ sub equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} eq $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} eq $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return $e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value ? TRUE : FALSE;
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} == $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} == $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -2414,7 +2488,7 @@ sub equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2425,7 +2499,7 @@ sub equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2437,10 +2511,10 @@ sub equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} == $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} == $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} == $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} == $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -2453,16 +2527,16 @@ sub not_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->{cv} ne $e2->{cv} ? TRUE : FALSE;
+    return $e1->{value} ne $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return !($e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value) ? TRUE : FALSE;
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->{dv}) {
-      if (defined $e2->{dv}) {
-        return $e1->{dv} != $e2->{dv} ? TRUE : FALSE;
+    if (defined $e1->{value}) {
+      if (defined $e2->{value}) {
+        return $e1->{value} != $e2->{value} ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -2472,7 +2546,7 @@ sub not_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2483,7 +2557,7 @@ sub not_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->{dv}) {
+      if (defined $e2->{value}) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -2495,10 +2569,10 @@ sub not_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->{iv} != $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} != $e2->{value} ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->{iv} != $e2->{iv} ? TRUE : FALSE;
+    return $e1->{value} != $e2->{value} ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";

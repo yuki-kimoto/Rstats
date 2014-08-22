@@ -26,7 +26,7 @@ sub pi () { c(Rstats::ElementFunction::pi) }
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = $a1_diag->element;
+  my $diag = $a1_diag->value;
   
   my $a2_elements = [];
   if (is_matrix($a1_m)) {
@@ -59,7 +59,7 @@ sub upper_tri {
 sub lower_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = $a1_diag->element;
+  my $diag = $a1_diag->value;
   
   my $a2_elements = [];
   if (is_matrix($a1_m)) {
@@ -232,7 +232,7 @@ sub sub {
   
   my $pattern = $a1_pattern->value;
   my $replacement = $a1_replacement->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   for my $x_e (@{$a1_x->elements}) {
@@ -263,7 +263,7 @@ sub gsub {
   
   my $pattern = $a1_pattern->value;
   my $replacement = $a1_replacement->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   for my $x_e (@{$a1_x->elements}) {
@@ -271,7 +271,7 @@ sub gsub {
       push @$a2_elements, $x_e;
     }
     else {
-      my $x = $x_e->{cv};
+      my $x = $x_e->value;
       if ($ignore_case) {
         $x =~ s/$pattern/$replacement/gi;
       }
@@ -292,7 +292,7 @@ sub grep {
   my ($a1_pattern, $a1_x, $a1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $a1_pattern->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = $a1_ignore_case->value;
   
   my $a2_elements = [];
   my $a1_x_elements = $a1_x->elements;
@@ -300,7 +300,7 @@ sub grep {
     my $x_e = $a1_x_elements->[$i];
     
     unless ($x_e->is_na) {
-      my $x = $x_e->{cv};
+      my $x = $x_e->{value};
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
           push $a2_elements, Rstats::ElementFunction::double($i + 1);
@@ -329,7 +329,7 @@ sub chartr {
       push @$a2_elements, $x_e;
     }
     else {
-      my $x = $x_e->{cv};
+      my $x = $x_e->{value};
       $old =~ s#/#\/#;
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";
@@ -413,6 +413,22 @@ sub type {
   }
 }
 
+sub bool {
+  my $a1 = shift;
+  
+  my $length = @{$a1->elements};
+  if ($length == 0) {
+    croak 'Error in if (a) { : argument is of length zero';
+  }
+  elsif ($length > 1) {
+    carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
+  }
+  
+  my $element = element($a1);
+  
+  return Rstats::ElementFunction::bool($element);
+}
+
 sub element {
   my $a1 = shift;
   
@@ -462,7 +478,7 @@ sub to_string {
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { "$_" } @$elements;
+      my @parts = map { Rstats::ElementFunction::to_string($_) } @$elements;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
@@ -491,7 +507,7 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @parts, element($a1, $d1, $d2)->to_string;
+          push @parts, Rstats::ElementFunction::to_string(element($a1, $d1, $d2));
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -521,7 +537,7 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                push @parts, element($a1, $d1, $d2, @$positions)->to_string;
+                push @parts, Rstats::ElementFunction::to_string(element($a1, $d1, $d2, @$positions));
               }
               
               $str .= join(' ', @parts) . "\n";
@@ -1394,7 +1410,7 @@ sub max {
     elsif ($element->is_nan) {
       $max = $element;
     }
-    if (!$max->is_nan && Rstats::ElementFunction::more_than($element, $max)) {
+    if (Rstats::ElementFunction::more_than($element, $max) && !$max->is_nan) {
       $max = $element;
     }
   }
@@ -1427,7 +1443,7 @@ sub min {
     elsif ($element->is_nan) {
       $min = $element;
     }
-    if (!$min->is_nan && Rstats::ElementFunction::less_than($element, $min)) {
+    if (Rstats::ElementFunction::less_than($element, $min) && !$min->is_nan) {
       $min = $element;
     }
   }
@@ -1868,7 +1884,7 @@ sub unique {
         $na_count++;
       }
       else {
-        my $str = $a1_element->to_string;
+        my $str = Rstats::ElementFunction::to_string($a1_element);
         unless ($elements_count->{$str}) {
           push @$a2_elements, $a1_element;
         }
@@ -2556,7 +2572,7 @@ sub parse_index {
       elsif (is_logical($index)) {
         my $index_values_new = [];
         for (my $i = 0; $i < @{$index->values}; $i++) {
-          push @$index_values_new, $i + 1 if $index->elements->[$i];
+          push @$index_values_new, $i + 1 if Rstats::ElementFunction::bool($index->elements->[$i]);
         }
         $index = array($index_values_new);
       }

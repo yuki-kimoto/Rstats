@@ -1588,7 +1588,7 @@ sub replace {
   my $v2_elements = $v2->elements;
   my $v2_elements_h = {};
   for my $v2_element (@$v2_elements) {
-    my $v2_element_hash = Rstats::ElementFunction::hash(Rstats::ElementFunction::as_double($v2_element));
+    my $v2_element_hash = Rstats::ElementFunction::hash($v2_element->as_double);
     
     $v2_elements_h->{$v2_element_hash}++;
     croak "replace second argument can't have duplicate number"
@@ -2410,7 +2410,7 @@ sub as_complex {
   
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map { Rstats::ElementFunction::as('complex', $_) } @$a1_elements;
+  my @a2_elements = map { $_->as('complex') } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'complex';
 
@@ -2424,7 +2424,7 @@ sub as_double {
   
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map { Rstats::ElementFunction::as('double', $_) } @$a1_elements;
+  my @a2_elements = map { $_->as('double') } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'double';
 
@@ -2436,7 +2436,7 @@ sub as_integer {
   
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map { Rstats::ElementFunction::as('integer', $_)  } @$a1_elements;
+  my @a2_elements = map { $_->as_integer  } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'integer';
 
@@ -2448,7 +2448,7 @@ sub as_logical {
   
   my $a1_elements = $a1->elements;
   my $a2 = $a1->clone_without_elements;
-  my @a2_elements = map { Rstats::ElementFunction::as('logical', $_) } @$a1_elements;
+  my @a2_elements = map { $_->as_logical } @$a1_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'logical';
 
@@ -2459,7 +2459,7 @@ sub as_character {
   my $a1 = shift;
 
   my $a1_elements = $a1->elements;
-  my @a2_elements = map { Rstats::ElementFunction::as('character', $_) } @$a1_elements;
+  my @a2_elements = map { $_->as_character } @$a1_elements;
   my $a2 = $a1->clone_without_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'character';

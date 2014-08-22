@@ -88,7 +88,7 @@ sub atanh {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     return $e1 if $e1->is_nan;
     
     if ($e1->is_infinite) {
@@ -161,7 +161,7 @@ sub acosh {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     return $e1 if $e1->is_nan;
     
     if ($e1->is_infinite) {
@@ -216,7 +216,7 @@ sub asinh {
     $e2 = Rstats::ElementFunction::log($e2_t);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     return $e1 if $e1->is_nan;
     
     if ($e1->is_positive_infinite) {
@@ -267,7 +267,7 @@ sub tanh {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     
     return $e1 if $e1->is_nan;
     
@@ -322,7 +322,7 @@ sub cosh {
     $e2 = complex_double($e2_x, $e2_y);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     return $e1 if $e1->is_nan;
     
     my $e2_ex = Rstats::ElementFunction::exp($e1);
@@ -386,7 +386,7 @@ sub sinh {
     $e2 = complex_double($e2_x, $e2_y);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = Rstats::ElementFunction::as_double($e1);
+    $e1 = $e1->as_double;
     return $e1 if $e1->is_nan;
     
     return double(0) if equal($e1, double(0));
@@ -450,7 +450,7 @@ sub atan {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e2 = Rstats::ElementFunction::atan2(as_double($e1), double(1));
+    $e2 = Rstats::ElementFunction::atan2($e1->as_double, double(1));
   }
   else {
     croak "Not implemented";
@@ -489,8 +489,8 @@ sub atan2 {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
-    $e2 = as_double($e2) unless $e2->is_double;
+    $e1 = $e1->as_double unless $e1->is_double;
+    $e2 = $e2->as_double unless $e2->is_double;
 
     my $value1;
     my $value2;
@@ -601,7 +601,7 @@ sub log {
     }
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
+    $e1 = $e1->as_double unless $e1->is_double;
     my $value = $e1->{dv};
     
     if ($e1->is_infinite) {
@@ -715,7 +715,7 @@ sub cos {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
+    $e1 = $e1->as_double unless $e1->is_double;
     my $value = $e1->{dv};
     
     if ($e1->is_infinite) {
@@ -762,7 +762,7 @@ sub exp {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_double || $e1->is_integer || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
+    $e1 = $e1->as_double unless $e1->is_double;
     
     if ($e1->is_positive_infinite) {
       $e2 = Inf;
@@ -913,7 +913,7 @@ sub acos {
       $e2 = $e1;
     }
     else {
-      $e1 = as_double($e1);
+      $e1 = $e1->as_double;
       if (less_than_or_equal(Rstats::ElementFunction::abs($e1), double(1))) {
         $e2 = Rstats::ElementFunction::atan2(
           Rstats::ElementFunction::sqrt(
@@ -1033,7 +1033,7 @@ sub asin {
       $e2 = $e1;
     }
     else {
-      $e1 = as_double($e1);
+      $e1 = $e1->as_double;
       if (less_than_or_equal(Rstats::ElementFunction::abs($e1), double(1))) {
         $e2 = Rstats::ElementFunction::atan2(
           $e1,
@@ -1100,7 +1100,7 @@ sub sin {
     $e2 = complex_double($e2_re, $e2_im);
   }
   elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = as_double($e1) unless $e1->is_double;
+    $e1 = $e1->as_double unless $e1->is_double;
     my $value = $e1->{dv};
     
     if ($e1->is_infinite) {
@@ -1958,193 +1958,6 @@ sub logical_to_integer {
   }
   else {
     return $e1;
-  }
-}
-
-sub as_character {
-  my $e1 = shift;
-  
-  my $e2 = character("$e1");
-  
-  return $e2;
-}
-
-sub as_complex {
-  my $e1 = shift;
-
-  if ($e1->is_na) {
-    return $e1;
-  }
-  elsif ($e1->is_character) {
-    my $z = looks_like_complex($e1->{cv});
-    if (defined $z) {
-      return complex($z->{re}, $z->{im});
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return NA;
-    }
-  }
-  elsif ($e1->is_complex) {
-    return $e1;
-  }
-  elsif ($e1->is_double) {
-    if ($e1->is_nan) {
-      return NA;
-    }
-    else {
-      return complex_double($e1, double(0));
-    }
-  }
-  elsif ($e1->is_integer) {
-    return complex($e1->{iv}, 0);
-  }
-  elsif ($e1->is_logical) {
-    return complex($e1->{iv} ? 1 : 0, 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
-sub as_numeric { as_double(@_) }
-
-sub as_double {
-  my $e1 = shift;
-
-  if ($e1->is_na) {
-    return $e1;
-  }
-  elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
-      return double($num + 0);
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return NA;
-    }
-  }
-  elsif ($e1->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    return double($e1->re->value);
-  }
-  elsif ($e1->is_double) {
-    return $e1;
-  }
-  elsif ($e1->is_integer) {
-    return double($e1->{iv});
-  }
-  elsif ($e1->is_logical) {
-    return double($e1->{iv} ? 1 : 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
-sub as_integer {
-  my $e1 = shift;
-
-  if ($e1->is_na) {
-    return $e1;
-  }
-  elsif ($e1->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($e1->{cv})) {
-      return Rstats::ElementFunction::integer(int $num);
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return NA;
-    }
-  }
-  elsif ($e1->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    return integer(int($e1->re->value));
-  }
-  elsif ($e1->is_double) {
-    if ($e1->is_nan || $e1->is_infinite) {
-      return NA;
-    }
-    else {
-      return Rstats::ElementFunction::integer($e1->{dv});
-    }
-  }
-  elsif ($e1->is_integer) {
-    return $e1; 
-  }
-  elsif ($e1->is_logical) {
-    return integer($e1->{iv} ? 1 : 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
-sub as_logical {
-  my $e1 = shift;
-  
-  if ($e1->is_na) {
-    return $e1;
-  }
-  elsif ($e1->is_character) {
-    return NA;
-  }
-  elsif ($e1->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    my $re = $e1->re->value;
-    my $im = $e1->im->value;
-    if (defined $re && $re == 0 && defined $im && $im == 0) {
-      return FALSE;
-    }
-    else {
-      return TRUE;
-    }
-  }
-  elsif ($e1->is_double) {
-    if ($e1->is_nan) {
-      return NA;
-    }
-    elsif ($e1->is_infinite) {
-      return TRUE;
-    }
-    else {
-      return $e1->{dv} == 0 ? FALSE : TRUE;
-    }
-  }
-  elsif ($e1->is_integer) {
-    return $e1->{iv} == 0 ? FALSE : TRUE;
-  }
-  elsif ($e1->is_logical) {
-    return $e1->{iv} == 0 ? FALSE : TRUE;
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
-sub as {
-  my ($type, $e1) = @_;
-  
-  if ($type eq 'character') {
-    return as_character($e1);
-  }
-  elsif ($type eq 'complex') {
-    return as_complex($e1);
-  }
-  elsif ($type eq 'double') {
-    return as_double($e1);
-  }
-  elsif ($type eq 'numeric') {
-    return as_numeric($e1);
-  }
-  elsif ($type eq 'integer') {
-    return as_integer($e1);
-  }
-  elsif ($type eq 'logical') {
-    return as_logical($e1);
-  }
-  else {
-    croak "Invalid mode is passed";
   }
 }
 

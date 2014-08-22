@@ -16,4 +16,9 @@ sub value {
     return '__FALSE__';
   }
 }
+
+sub is_logical { Rstats::ElementFunction::TRUE }
+
+sub is_finite { Rstats::ElementFunction::TRUE }
+
 1;

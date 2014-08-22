@@ -2,51 +2,31 @@ package Rstats::Element;
 use Object::Simple -base;
 
 use Carp 'croak';
+use Rstats::ElementFunction;
 
 has 'type';
 
-sub value { croak "must be override" }
+sub value { croak "virtual method" }
 
 sub typeof { shift->type }
 
-sub is_character { shift->type eq 'character' }
-sub is_complex { shift->type eq 'complex' }
-sub is_numeric {
-  my $self = shift;
-  return $self->is_double || $self->is_integer;
-}
-sub is_double { shift->type eq 'double' }
-sub is_integer { shift->type eq 'integer' }
-sub is_logical { shift->type eq 'logical' }
-sub is_na { shift->type eq 'na' }
+sub is_character { Rstats::ElementFunction::FALSE }
+sub is_complex { Rstats::ElementFunction::FALSE }
+sub is_numeric { Rstats::ElementFunction::FALSE }
+sub is_double { Rstats::ElementFunction::FALSE }
+sub is_integer { Rstats::ElementFunction::FALSE }
+sub is_logical { Rstats::ElementFunction::FALSE }
+sub is_na { Rstats::ElementFunction::FALSE }
 
-sub is_nan {
-  my $self = shift;
-  
-  return $self->type eq 'double' && $self->flag eq 'nan';
-}
+sub is_nan { Rstats::ElementFunction::FALSE }
 
-sub is_infinite {
-  my $self = shift;
-  return $self->is_positive_infinite || $self->is_negative_infinite;
-}
+sub is_infinite { Rstats::ElementFunction::FALSE }
 
-sub is_positive_infinite {
-  my $self = shift;
-  
-  return $self->type eq 'double' && $self->flag eq 'inf';
-}
+sub is_positive_infinite { Rstats::ElementFunction::FALSE }
 
-sub is_negative_infinite {
-  my $self = shift;
-  
-  return $self->type eq 'double' && $self->flag eq '-inf';
-}
+sub is_negative_infinite { Rstats::ElementFunction::FALSE }
 
-sub is_finite {
-  my $self = shift;
-  
-  return $self->is_integer || ($self->is_double && defined $self->{value});
-}
+sub is_finite { Rstats::ElementFunction::FALSE }
+
 
 1;

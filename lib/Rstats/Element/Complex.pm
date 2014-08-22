@@ -16,4 +16,17 @@ sub value {
   };
 }
 
+sub is_complex { Rstats::ElementFunction::TRUE }
+
+sub is_infinite {
+  my $self = shift;
+  return $self->re->is_infinite || $self->im->is_infinite;
+}
+
+sub is_finite {
+  my $self = shift;
+  
+  return !$self->is_infinite;
+}
+
 1;

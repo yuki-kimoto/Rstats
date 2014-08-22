@@ -21,4 +21,36 @@ sub value {
   }
 }
 
+sub is_nan {
+  my $self = shift;
+  
+  return $self->type eq 'double' && $self->flag eq 'nan';
+}
+
+sub is_infinite {
+  my $self = shift;
+  return $self->is_positive_infinite || $self->is_negative_infinite;
+}
+
+sub is_positive_infinite {
+  my $self = shift;
+  
+  return $self->type eq 'double' && $self->flag eq 'inf';
+}
+
+sub is_negative_infinite {
+  my $self = shift;
+  
+  return $self->type eq 'double' && $self->flag eq '-inf';
+}
+
+sub is_finite {
+  my $self = shift;
+  
+  return !$self->is_infinite;
+}
+
+sub is_double { Rstats::ElementFunction::TRUE }
+sub is_numeric { Rstats::ElementFunction::TRUE }
+
 1;

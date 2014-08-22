@@ -5,42 +5,7 @@ use Carp 'croak';
 
 has 'type';
 
-sub value {
-  my $self = shift;
-  
-  if ($self->is_na) {
-    return undef;
-  }
-  elsif ($self->is_positive_infinite) {
-    return '__Inf__';
-  }
-  elsif ($self->is_negative_infinite) {
-    return '__-Inf__';
-  }
-  elsif ($self->is_nan) {
-    return '__NaN__';
-  }
-  elsif ($self->is_logical) {
-    if ($self->{value}) {
-      return '__TRUE__';
-    }
-    else {
-      return '__FALSE__';
-    }
-  }
-  elsif ($self->is_complex) {
-    return {
-      re => $self->re->value,
-      im => $self->im->value
-    };
-  }
-  elsif ($self->is_character || $self->is_integer || $self->is_double) {
-    return $self->{value};
-  }
-  else {
-    croak "Invalid type";
-  }
-}
+sub value { croak "must be override" }
 
 sub typeof { shift->type }
 

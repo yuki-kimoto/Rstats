@@ -6,4 +6,6 @@ use overload 'bool' => sub { 0 },
 
 has type => 'na';
 
+sub value { undef }
+
 1;

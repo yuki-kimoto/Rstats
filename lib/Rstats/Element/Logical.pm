@@ -6,4 +6,14 @@ use overload 'bool' => sub { shift->{value} },
 
 has type => 'logical';
 
+sub value {
+  my $self = shift;
+  
+  if ($self->{value}) {
+    return '__TRUE__';
+  }
+  else {
+    return '__FALSE__';
+  }
+}
 1;

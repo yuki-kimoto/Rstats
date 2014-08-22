@@ -3,6 +3,7 @@ use Object::Simple -base;
 
 use Carp 'croak', 'carp';
 use Rstats::ElementFunction;
+use Rstats::Util;
 
 use overload 'bool' => \&bool,
   '""' => \&to_string,
@@ -31,7 +32,7 @@ sub as_complex {
     return $self;
   }
   elsif ($self->is_character) {
-    my $z = Rstats::ElementFunction::looks_like_complex($self->{cv});
+    my $z = Rstats::Util::looks_like_complex($self->{cv});
     if (defined $z) {
       return Rstats::ElementFunction::complex($z->{re}, $z->{im});
     }
@@ -71,7 +72,7 @@ sub as_double {
     return $self;
   }
   elsif ($self->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($self->{cv})) {
+    if (my $num = Rstats::Util::looks_like_number($self->{cv})) {
       return Rstats::ElementFunction::double($num + 0);
     }
     else {
@@ -104,7 +105,7 @@ sub as_integer {
     return $self;
   }
   elsif ($self->is_character) {
-    if (my $num = Rstats::ElementFunction::looks_like_number($self->{cv})) {
+    if (my $num = Rstats::Util::looks_like_number($self->{cv})) {
       return Rstats::ElementFunction::integer(int $num);
     }
     else {

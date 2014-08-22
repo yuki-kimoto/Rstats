@@ -2254,7 +2254,7 @@ sub c {
   for my $element (@$elements) {
     
     if (!ref $element) {
-      if (Rstats::ElementFunction::is_perl_number($element)) {
+      if (Rstats::Util::is_perl_number($element)) {
         $element = Rstats::ElementFunction::double($element);
         $mode_h->{double}++;
       }

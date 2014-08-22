@@ -6,7 +6,6 @@ use Carp 'croak', 'carp';
 
 use Rstats::Element;
 use Scalar::Util ();
-use B ();
 use Math::Complex ();
 use POSIX ();
 use Math::Trig ();
@@ -1150,19 +1149,9 @@ sub element {
   my $value = shift;
   
   return ref $value ? $value
-    : is_perl_number($value) ? double($value)
+    : Rstats::Util::is_perl_number($value) ? double($value)
     : character($value);
 
-}
-
-sub is_perl_number {
-  my ($value) = @_;
-  
-  return unless defined $value;
-  
-  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-        && 0 + $value eq $value
-        && $value * 0 == 0
 }
 
 sub negation {

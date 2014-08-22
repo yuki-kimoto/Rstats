@@ -8,7 +8,7 @@ use Scalar::Util 'refaddr';
 # reference
 {
   my $na = Rstats::ElementFunction::NA;
-  is(ref $na, 'Rstats::Element::NA');
+  ok($na->is_na);
 }
 
 # singleton
@@ -29,14 +29,14 @@ use Scalar::Util 'refaddr';
 {
   my $na = Rstats::ElementFunction::NA;
   
-  eval { Rstats::ElementFunction::bool($na) };
+  eval { !!$na };
   like($@, qr/bool/);
 }
 
 # to_string
 {
   my $na = Rstats::ElementFunction::NA;
-  is(Rstats::ElementFunction::to_string($na), 'NA');
+  is("$na", 'NA');
 }
 
 # is_na

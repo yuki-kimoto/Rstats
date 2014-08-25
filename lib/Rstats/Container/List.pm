@@ -33,28 +33,22 @@ sub at {
 }
 
 sub get {
-  my ($self, @indexes) = @_;
+  my ($self, $_index) = @_;
   
-  unless (@indexes) {
-    @indexes = @{$self->at};
+  unless (defined $_index) {
+    $_index = $self->at;
   }
-  $self->at(\@indexes);
+  $self->at($_index);
   
-  my $index = shift @indexes;
-  $index = $index->values->[0] if ref $index;
+  my $a1_index = Rstats::Func::to_array($_index);
+  my $index = $a1_index->values->[0];
   my $elements = $self->elements;
-  my $current_element = $elements->[$index - 1];
-
-  for my $index (@indexes) {
-    $index = $index->values->[0] if ref $index;
-    
-    $current_element = $current_element->elements->[$index - 1];
-  }
+  my $element = $elements->[$index - 1];
   
-  return $current_element;
+  return $element;
 }
 
-sub get_list {
+sub get_as_list {
   my $self = shift;
   my $index = Rstats::Func::to_array(shift);
   
@@ -72,33 +66,12 @@ sub get_list {
 sub set {
   my ($self, $element) = @_;
   
-  $element = Rstats::Func::to_array($element);
+  my $_index = $self->at;
+  my $a1_index = Rstats::Func::to_array($_index);
+  my $index = $a1_index->values->[0];
+  $self->elements->[$index - 1] = Rstats::Func::to_array($element);
   
-  my @indexes = @{$self->at};
-  
-  my $index = shift @indexes;
-  $index = $index->values->[0] if ref $index;
-  my $elements = $self->elements;
-  my $current_element;
-  if (@indexes) {
-    $current_element = $elements->[$index - 1];
-  }
-  else {
-    $elements->[$index - 1] = $element;
-    return;
-  }
-
-  for (my $k = 0; $k < @indexes; $k++) {
-    my $index = $indexes[$k];
-    $index = $index->values->[0] if ref $index;
-    
-    if ($k == @indexes - 1) {
-      $current_element->elements->[$index - 1] = $element;
-    }
-    else {
-      $current_element = $current_element->elements->[$index - 1];
-    }
-  }
+  return $self;
 }
 
 sub length { Rstats::Func::c(shift->_length) }

@@ -13,7 +13,7 @@ use Rstats;
     is_deeply($l1->elements->[1]->elements->[0]->values, ["Hello"]);
     is_deeply(
       $l1->elements->[1]->elements->[1]->elements,
-      [Rstats::ElementFunction::TRUE, Rstats::ElementFunction::FALSE, Rstats::ElementFunction::FALSE]
+      [Rstats::API::TRUE, Rstats::API::FALSE, Rstats::API::FALSE]
     );
   }
 

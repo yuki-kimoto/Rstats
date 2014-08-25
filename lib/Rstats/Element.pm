@@ -2,7 +2,7 @@ package Rstats::Element;
 use Object::Simple -base;
 
 use Carp 'croak', 'carp';
-use Rstats::ElementFunction;
+use Rstats::API;
 use Rstats::Util;
 
 use overload 'bool' => \&bool,
@@ -20,7 +20,7 @@ has 'flag';
 sub as_character {
   my $self = shift;
   
-  my $e2 = Rstats::ElementFunction::character("$self");
+  my $e2 = Rstats::API::character("$self");
   
   return $e2;
 }
@@ -34,11 +34,11 @@ sub as_complex {
   elsif ($self->is_character) {
     my $z = Rstats::Util::looks_like_complex($self->{cv});
     if (defined $z) {
-      return Rstats::ElementFunction::complex($z->{re}, $z->{im});
+      return Rstats::API::complex($z->{re}, $z->{im});
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
   }
   elsif ($self->is_complex) {
@@ -46,17 +46,17 @@ sub as_complex {
   }
   elsif ($self->is_double) {
     if ($self->is_nan) {
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
     else {
-      return Rstats::ElementFunction::complex_double($self, Rstats::ElementFunction::double(0));
+      return Rstats::API::complex_double($self, Rstats::API::double(0));
     }
   }
   elsif ($self->is_integer) {
-    return Rstats::ElementFunction::complex($self->{iv}, 0);
+    return Rstats::API::complex($self->{iv}, 0);
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunction::complex($self->{iv} ? 1 : 0, 0);
+    return Rstats::API::complex($self->{iv} ? 1 : 0, 0);
   }
   else {
     croak "unexpected type";
@@ -73,25 +73,25 @@ sub as_double {
   }
   elsif ($self->is_character) {
     if (my $num = Rstats::Util::looks_like_number($self->{cv})) {
-      return Rstats::ElementFunction::double($num + 0);
+      return Rstats::API::double($num + 0);
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunction::double($self->re->value);
+    return Rstats::API::double($self->re->value);
   }
   elsif ($self->is_double) {
     return $self;
   }
   elsif ($self->is_integer) {
-    return Rstats::ElementFunction::double($self->{iv});
+    return Rstats::API::double($self->{iv});
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunction::double($self->{iv} ? 1 : 0);
+    return Rstats::API::double($self->{iv} ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -106,30 +106,30 @@ sub as_integer {
   }
   elsif ($self->is_character) {
     if (my $num = Rstats::Util::looks_like_number($self->{cv})) {
-      return Rstats::ElementFunction::integer(int $num);
+      return Rstats::API::integer(int $num);
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunction::integer(int($self->re->value));
+    return Rstats::API::integer(int($self->re->value));
   }
   elsif ($self->is_double) {
     if ($self->is_nan || $self->is_infinite) {
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
     else {
-      return Rstats::ElementFunction::integer($self->{dv});
+      return Rstats::API::integer($self->{dv});
     }
   }
   elsif ($self->is_integer) {
     return $self; 
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunction::integer($self->{iv} ? 1 : 0);
+    return Rstats::API::integer($self->{iv} ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -143,35 +143,35 @@ sub as_logical {
     return $self;
   }
   elsif ($self->is_character) {
-    return Rstats::ElementFunction::NA();
+    return Rstats::API::NA();
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
     my $re = $self->re->value;
     my $im = $self->im->value;
     if (defined $re && $re == 0 && defined $im && $im == 0) {
-      return Rstats::ElementFunction::FALSE();
+      return Rstats::API::FALSE();
     }
     else {
-      return Rstats::ElementFunction::TRUE();
+      return Rstats::API::TRUE();
     }
   }
   elsif ($self->is_double) {
     if ($self->is_nan) {
-      return Rstats::ElementFunction::NA();
+      return Rstats::API::NA();
     }
     elsif ($self->is_infinite) {
-      return Rstats::ElementFunction::TRUE();
+      return Rstats::API::TRUE();
     }
     else {
-      return $self->{dv} == 0 ? Rstats::ElementFunction::FALSE() : Rstats::ElementFunction::TRUE();
+      return $self->{dv} == 0 ? Rstats::API::FALSE() : Rstats::API::TRUE();
     }
   }
   elsif ($self->is_integer) {
-    return $self->{iv} == 0 ? Rstats::ElementFunction::FALSE() : Rstats::ElementFunction::TRUE();
+    return $self->{iv} == 0 ? Rstats::API::FALSE() : Rstats::API::TRUE();
   }
   elsif ($self->is_logical) {
-    return $self->{iv} == 0 ? Rstats::ElementFunction::FALSE() : Rstats::ElementFunction::TRUE();
+    return $self->{iv} == 0 ? Rstats::API::FALSE() : Rstats::API::TRUE();
   }
   else {
     croak "unexpected type";

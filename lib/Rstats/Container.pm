@@ -1,7 +1,7 @@
 package Rstats::Container;
 use Object::Simple -base;
 
-use Rstats::Function;
+use Rstats::ArrayAPI;
 
 has 'elements' => sub { [] };
 
@@ -28,7 +28,7 @@ sub names {
   }
   else {
     $self->{names} = [] unless exists $self->{names};
-    return Rstats::Function::c($self->{names});
+    return Rstats::ArrayAPI::c($self->{names});
   }
 }
 
@@ -55,7 +55,7 @@ sub dimnames {
   }
   else {
     $self->{colnames} = [] unless exists $self->{colnames};
-    return Rstats::Function::c($self->{colnames});
+    return Rstats::ArrayAPI::c($self->{colnames});
   }
 }
 
@@ -82,7 +82,7 @@ sub colnames {
   }
   else {
     $self->{colnames} = [] unless exists $self->{colnames};
-    return Rstats::Function::c($self->{colnames});
+    return Rstats::ArrayAPI::c($self->{colnames});
   }
 }
 
@@ -108,7 +108,7 @@ sub rownames {
   }
   else {
     $self->{rownames} = [] unless exists $self->{rownames};
-    return Rstats::Function::c($self->{rownames});
+    return Rstats::ArrayAPI::c($self->{rownames});
   }
 }
 

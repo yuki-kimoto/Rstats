@@ -4,19 +4,19 @@ use Rstats::Container -base;
 use overload '""' => \&to_string,
   fallback => 1;
 
-use Rstats::Function;
+use Rstats::ArrayAPI;
 
 has 'elements' => sub { [] };
 has 'mode' => sub { Rstats::Array::Util::c('list') };
 
-sub is_array { Rstats::Function::FALSE }
-sub is_list { Rstats::Function::TRUE }
-sub is_data_frame { Rstats::Function::FALSE }
+sub is_array { Rstats::ArrayAPI::FALSE }
+sub is_list { Rstats::ArrayAPI::TRUE }
+sub is_data_frame { Rstats::ArrayAPI::FALSE }
 
 use overload '""' => \&to_string,
   fallback => 1;
 
-use Rstats::Function;
+use Rstats::ArrayAPI;
 
 has 'elements' => sub { [] };
 has 'names' => sub { [] };
@@ -57,7 +57,7 @@ sub get {
 
 sub get_list {
   my $self = shift;
-  my $index = Rstats::Function::to_array(shift);
+  my $index = Rstats::ArrayAPI::to_array(shift);
   
   my $elements = $self->elements;
   
@@ -73,7 +73,7 @@ sub get_list {
 sub set {
   my ($self, $element) = @_;
   
-  $element = Rstats::Function::to_array($element);
+  $element = Rstats::ArrayAPI::to_array($element);
   
   my @indexes = @{$self->at};
   
@@ -107,7 +107,7 @@ sub length {
   
   my $length = @{$self->elements};
   
-  return Rstats::Function::c($length);
+  return Rstats::ArrayAPI::c($length);
 }
 
 sub to_string {

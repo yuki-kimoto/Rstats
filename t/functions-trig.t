@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::ElementFunction;
+use Rstats::API;
 use Math::Trig ();
 use Math::Complex ();
 

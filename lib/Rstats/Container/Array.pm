@@ -1,8 +1,8 @@
 package Rstats::Container::Array;
 use Rstats::Container -base;
 
-use Rstats::Function;
-use Rstats::ElementFunction;
+use Rstats::ArrayAPI;
+use Rstats::API;
 use Carp 'croak', 'carp';
 
 our @CARP_NOT = ('Rstats');
@@ -34,7 +34,7 @@ sub dim_as_array {
   }
   else {
     my $length = @{$a1->elements};
-    return Rstats::Function::c($length);
+    return Rstats::ArrayAPI::c($length);
   }
 }
 
@@ -42,7 +42,7 @@ sub dim {
   my $a1 = shift;
   
   if (@_) {
-    my $a_dim = Rstats::Function::to_array($_[0]);
+    my $a_dim = Rstats::ArrayAPI::to_array($_[0]);
     my $a1_length = @{$a1->elements};
     my $a1_lenght_by_dim = 1;
     $a1_lenght_by_dim *= $_ for @{$a_dim->values};
@@ -56,7 +56,7 @@ sub dim {
     return $a1;
   }
   else {
-    return Rstats::Function::c($a1->{dim});
+    return Rstats::ArrayAPI::c($a1->{dim});
   }
 }
 
@@ -76,21 +76,21 @@ sub clone_without_elements {
   return $a2;
 }
 
-sub is_array { Rstats::Function::TRUE() }
+sub is_array { Rstats::ArrayAPI::TRUE() }
 
-sub is_list { Rstats::Function::FALSE() }
+sub is_list { Rstats::ArrayAPI::FALSE() }
 
-sub is_data_frame { Rstats::Function::FALSE() }
+sub is_data_frame { Rstats::ArrayAPI::FALSE() }
 
 sub length {
   my $self = shift;
   
   my $length = @{$self->elements};
   
-  return Rstats::Function::c($length);
+  return Rstats::ArrayAPI::c($length);
 }
 
-sub type { Rstats::Function::type(@_) }
+sub type { Rstats::ArrayAPI::type(@_) }
 
 sub bool {
   my $self = shift;
@@ -108,7 +108,7 @@ sub bool {
   return !!$element;
 }
 
-sub element { Rstats::Function::element(@_) }
+sub element { Rstats::ArrayAPI::element(@_) }
 
 sub inner_product {
   my ($self, $data, $reverse) = @_;
@@ -116,12 +116,12 @@ sub inner_product {
   # fix postion
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Function::inner_product($a1, $a2);
+  return Rstats::ArrayAPI::inner_product($a1, $a2);
 }
 
-sub to_string { Rstats::Function::to_string(@_) }
+sub to_string { Rstats::ArrayAPI::to_string(@_) }
 
-sub negation { Rstats::Function::negation(@_) }
+sub negation { Rstats::ArrayAPI::negation(@_) }
 
 sub operation {
   my ($self, $op, $data, $reverse) = @_;
@@ -129,14 +129,14 @@ sub operation {
   # fix postion
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Function::operation($op, $a1, $a2);
+  return Rstats::ArrayAPI::operation($op, $a1, $a2);
 }
 
 sub values {
   my $self = shift;
   
   if (@_) {
-    my @elements = map { Rstats::ElementFunction::element($_) } @{$_[0]};
+    my @elements = map { Rstats::API::element($_) } @{$_[0]};
     $self->{elements} = \@elements;
   }
   else {
@@ -151,14 +151,14 @@ sub value {
   
   my $e1 = $self->element(@_);
   
-  return defined $e1 ? $e1->value : Rstats::ElementFunction::NA;
+  return defined $e1 ? $e1->value : Rstats::API::NA;
 }
 
-sub at { Rstats::Function::at(@_) }
+sub at { Rstats::ArrayAPI::at(@_) }
 
-sub get { Rstats::Function::get(@_) }
+sub get { Rstats::ArrayAPI::get(@_) }
 
-sub set { Rstats::Function::set(@_) }
+sub set { Rstats::ArrayAPI::set(@_) }
 
 sub _fix_position {
   my ($self, $data, $reverse) = @_;
@@ -171,12 +171,12 @@ sub _fix_position {
   }
   else {
     if ($reverse) {
-      $a1 = Rstats::Function::c($data);
+      $a1 = Rstats::ArrayAPI::c($data);
       $a2 = $self;
     }
     else {
       $a1 = $self;
-      $a2 = Rstats::Function::c($data);
+      $a2 = Rstats::ArrayAPI::c($data);
     }
   }
   

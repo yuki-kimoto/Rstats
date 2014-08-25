@@ -9,6 +9,319 @@ use Rstats::ArrayAPI;
 #   which
 #   get - logical, undef
 
+# clone_without_elements
+{
+  # clone_without_elements - matrix
+  {
+    my $a1 = r->matrix(C('1:24'), 3, 2);
+    r->rownames($a1 => c('r1', 'r2', 'r3'));
+    r->colnames($a1 => c('c1', 'c2'));
+    my $a2 = $a1->clone_without_elements;
+    ok(r->is_matrix($a2));
+    is_deeply(r->dim($a2)->values, [3, 2]);
+    is_deeply(r->rownames($a2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($a2)->values, ['c1', 'c2']);
+    is_deeply($a2->values, []);
+  }
+  
+  # clone_without_elements - matrix with value
+  {
+    my $a1 = r->matrix(C('1:24'), 3, 2);
+    my $a2 = $a1->clone_without_elements;
+    $a2->values([2 .. 25]);
+    is_deeply($a2->values, [2 .. 25]);
+  }
+  
+  # clone_without_elements - vector
+  {
+    my $a1 = r->matrix(C('1:24'), 3, 2);
+    r->names($a1 => c('r1', 'r2', 'r3'));
+    my $a2 = $a1->clone_without_elements;
+    is_deeply(r->names($a2)->values, ['r1', 'r2', 'r3']);
+  }
+}
+
+# to_string
+{
+  # to_string - one element
+  {
+    my $a1 = array('0');
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+    my $expected = "[1] 0\n";
+    is($a1_str, $expected);
+  }
+
+  # to_string - 2-dimention
+  {
+    my $a1 = array(C('1:12'), c(4, 3));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 1-dimention
+  {
+    my $a1 = array(C('1:4'));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 1-dimention, as_vector
+  {
+    my $a1 = array(C('1:4'));
+    my $a2 = r->as_vector($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+
+  # to_string - 1-dimention, as_matrix
+  {
+    my $a1 = array(C('1:4'));
+    my $a2 = r->as_matrix($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+   [,1]
+[1,] 1
+[2,] 2
+[3,] 3
+[4,] 4
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+  
+
+  # to_string - 1-dimention, TRUE, FALSE
+  {
+    my $a1 = array(c(r->TRUE, r->FALSE));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] TRUE FALSE
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 2-dimention
+  {
+    my $a1 = array(C('1:12'), c(4, 3));
+    my $a2 = r->as_matrix($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+
+  # to_string - 2-dimention, as_vector
+  {
+    my $a1 = array(C('1:12'), c(4, 3));
+    my $a2 = r->as_vector($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4 5 6 7 8 9 10 11 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+
+  # to_string - 2-dimention, as_matrix
+  {
+    my $a1 = array(C('1:12'), c(4, 3));
+    my $a2 = r->as_matrix($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+  
+  # to_string - 3-dimention
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+,,1
+     [,1] [,2] [,3]
+[1,] 1 5 9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+,,2
+     [,1] [,2] [,3]
+[1,] 13 17 21
+[2,] 14 18 22
+[3,] 15 19 23
+[4,] 16 20 24
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
+  # to_string - 3-dimention, as_vector
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    my $a2 = r->as_vector($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+[1] 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+
+  # to_string - 3-dimention, as_matrix
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    my $a2 = r->as_matrix($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+    my $expected = <<'EOS';
+     [,1]
+[1,] 1
+[2,] 2
+[3,] 3
+[4,] 4
+[5,] 5
+[6,] 6
+[7,] 7
+[8,] 8
+[9,] 9
+[10,] 10
+[11,] 11
+[12,] 12
+[13,] 13
+[14,] 14
+[15,] 15
+[16,] 16
+[17,] 17
+[18,] 18
+[19,] 19
+[20,] 20
+[21,] 21
+[22,] 22
+[23,] 23
+[24,] 24
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+  
+  # to_string - 4 dimention
+  {
+    my $a1 = array(C('1:120'), c(5, 4, 3, 2));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+,,,1
+,,1
+     [,1] [,2] [,3] [,4]
+[1,] 1 6 11 16
+[2,] 2 7 12 17
+[3,] 3 8 13 18
+[4,] 4 9 14 19
+[5,] 5 10 15 20
+,,2
+     [,1] [,2] [,3] [,4]
+[1,] 21 26 31 36
+[2,] 22 27 32 37
+[3,] 23 28 33 38
+[4,] 24 29 34 39
+[5,] 25 30 35 40
+,,3
+     [,1] [,2] [,3] [,4]
+[1,] 41 46 51 56
+[2,] 42 47 52 57
+[3,] 43 48 53 58
+[4,] 44 49 54 59
+[5,] 45 50 55 60
+,,,2
+,,1
+     [,1] [,2] [,3] [,4]
+[1,] 61 66 71 76
+[2,] 62 67 72 77
+[3,] 63 68 73 78
+[4,] 64 69 74 79
+[5,] 65 70 75 80
+,,2
+     [,1] [,2] [,3] [,4]
+[1,] 81 86 91 96
+[2,] 82 87 92 97
+[3,] 83 88 93 98
+[4,] 84 89 94 99
+[5,] 85 90 95 100
+,,3
+     [,1] [,2] [,3] [,4]
+[1,] 101 106 111 116
+[2,] 102 107 112 117
+[3,] 103 108 113 118
+[4,] 104 109 114 119
+[5,] 105 110 115 120
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+}
+
 # get logical array
 {
   # get logical array - basic
@@ -514,38 +827,6 @@ use Rstats::ArrayAPI;
   }
 }
 
-# clone_without_elements
-{
-  # clone_without_elements - matrix
-  {
-    my $a1 = r->matrix(C('1:24'), 3, 2);
-    r->rownames($a1 => c('r1', 'r2', 'r3'));
-    r->colnames($a1 => c('c1', 'c2'));
-    my $a2 = $a1->clone_without_elements;
-    ok(r->is_matrix($a2));
-    is_deeply(r->dim($a2)->values, [3, 2]);
-    is_deeply(r->rownames($a2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($a2)->values, ['c1', 'c2']);
-    is_deeply($a2->values, []);
-  }
-  
-  # clone_without_elements - matrix with value
-  {
-    my $a1 = r->matrix(C('1:24'), 3, 2);
-    my $a2 = $a1->clone_without_elements;
-    $a2->values([2 .. 25]);
-    is_deeply($a2->values, [2 .. 25]);
-  }
-  
-  # clone_without_elements - vector
-  {
-    my $a1 = r->matrix(C('1:24'), 3, 2);
-    r->names($a1 => c('r1', 'r2', 'r3'));
-    my $a2 = $a1->clone_without_elements;
-    is_deeply(r->names($a2)->values, ['r1', 'r2', 'r3']);
-  }
-}
-
 # value
 {
   # value - none argument
@@ -576,291 +857,6 @@ use Rstats::ArrayAPI;
   {
     my $a1 = array(C('1:24'), c(4, 3, 1));
     is($a1->value(3, 2, 1), 7);
-  }
-}
-
-# to_string
-{
-  # to_string - one element
-  {
-    my $a1 = array('0');
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-    my $expected = "[1] 0\n";
-    is($a1_str, $expected);
-  }
-
-  # to_string - 2-dimention
-  {
-    my $a1 = array(C('1:12'), c(4, 3));
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-     [,1] [,2] [,3]
-[1,] 1 5 9
-[2,] 2 6 10
-[3,] 3 7 11
-[4,] 4 8 12
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a1_str, $expected);
-  }
-
-  # to_string - 1-dimention
-  {
-    my $a1 = array(C('1:4'));
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-[1] 1 2 3 4
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a1_str, $expected);
-  }
-
-  # to_string - 1-dimention, as_vector
-  {
-    my $a1 = array(C('1:4'));
-    my $a2 = r->as_vector($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-[1] 1 2 3 4
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-
-  # to_string - 1-dimention, as_matrix
-  {
-    my $a1 = array(C('1:4'));
-    my $a2 = r->as_matrix($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-   [,1]
-[1,] 1
-[2,] 2
-[3,] 3
-[4,] 4
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-  
-
-  # to_string - 1-dimention, TRUE, FALSE
-  {
-    my $a1 = array(c(r->TRUE, r->FALSE));
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-[1] TRUE FALSE
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a1_str, $expected);
-  }
-
-=pod
- NA NaN Inf -Inf
-=cut
-
-  # to_string - 2-dimention
-  {
-    my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = r->as_matrix($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-     [,1] [,2] [,3]
-[1,] 1 5 9
-[2,] 2 6 10
-[3,] 3 7 11
-[4,] 4 8 12
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-
-  # to_string - 2-dimention, as_vector
-  {
-    my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = r->as_vector($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-[1] 1 2 3 4 5 6 7 8 9 10 11 12
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-
-  # to_string - 2-dimention, as_matrix
-  {
-    my $a1 = array(C('1:12'), c(4, 3));
-    my $a2 = r->as_matrix($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-     [,1] [,2] [,3]
-[1,] 1 5 9
-[2,] 2 6 10
-[3,] 3 7 11
-[4,] 4 8 12
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-  
-  # to_string - 3-dimention
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-,,1
-     [,1] [,2] [,3]
-[1,] 1 5 9
-[2,] 2 6 10
-[3,] 3 7 11
-[4,] 4 8 12
-,,2
-     [,1] [,2] [,3]
-[1,] 13 17 21
-[2,] 14 18 22
-[3,] 15 19 23
-[4,] 16 20 24
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a1_str, $expected);
-  }
-
-  # to_string - 3-dimention, as_vector
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a2 = r->as_vector($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-[1] 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-
-  # to_string - 3-dimention, as_matrix
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    my $a2 = r->as_matrix($a1);
-    my $a2_str = "$a2";
-    $a2_str =~ s/[ \t]+/ /;
-    my $expected = <<'EOS';
-     [,1]
-[1,] 1
-[2,] 2
-[3,] 3
-[4,] 4
-[5,] 5
-[6,] 6
-[7,] 7
-[8,] 8
-[9,] 9
-[10,] 10
-[11,] 11
-[12,] 12
-[13,] 13
-[14,] 14
-[15,] 15
-[16,] 16
-[17,] 17
-[18,] 18
-[19,] 19
-[20,] 20
-[21,] 21
-[22,] 22
-[23,] 23
-[24,] 24
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a2_str, $expected);
-  }
-  
-  # to_string - 4 dimention
-  {
-    my $a1 = array(C('1:120'), c(5, 4, 3, 2));
-    my $a1_str = "$a1";
-    $a1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-,,,1
-,,1
-     [,1] [,2] [,3] [,4]
-[1,] 1 6 11 16
-[2,] 2 7 12 17
-[3,] 3 8 13 18
-[4,] 4 9 14 19
-[5,] 5 10 15 20
-,,2
-     [,1] [,2] [,3] [,4]
-[1,] 21 26 31 36
-[2,] 22 27 32 37
-[3,] 23 28 33 38
-[4,] 24 29 34 39
-[5,] 25 30 35 40
-,,3
-     [,1] [,2] [,3] [,4]
-[1,] 41 46 51 56
-[2,] 42 47 52 57
-[3,] 43 48 53 58
-[4,] 44 49 54 59
-[5,] 45 50 55 60
-,,,2
-,,1
-     [,1] [,2] [,3] [,4]
-[1,] 61 66 71 76
-[2,] 62 67 72 77
-[3,] 63 68 73 78
-[4,] 64 69 74 79
-[5,] 65 70 75 80
-,,2
-     [,1] [,2] [,3] [,4]
-[1,] 81 86 91 96
-[2,] 82 87 92 97
-[3,] 83 88 93 98
-[4,] 84 89 94 99
-[5,] 85 90 95 100
-,,3
-     [,1] [,2] [,3] [,4]
-[1,] 101 106 111 116
-[2,] 102 107 112 117
-[3,] 103 108 113 118
-[4,] 104 109 114 119
-[5,] 105 110 115 120
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($a1_str, $expected);
   }
 }
 

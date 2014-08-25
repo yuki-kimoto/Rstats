@@ -101,13 +101,9 @@ sub set {
   }
 }
 
-sub length {
-  my $self = shift;
-  
-  my $length = @{$self->elements};
-  
-  return Rstats::ArrayAPI::c($length);
-}
+sub length { Rstats::ArrayAPI::c(shift->_length) }
+
+sub _length { scalar @{shift->elements} }
 
 sub to_string {
   my $self = shift;

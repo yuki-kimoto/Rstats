@@ -66,8 +66,6 @@ sub clone_without_elements {
   my $a2 = Rstats::Container::Array->new;
   $a2->{type} = $a1->{type};
   $a2->{names} = [@{$a1->{names} || []}];
-  $a2->{rownames} = [@{$a1->{rownames} || []}];
-  $a2->{colnames} = [@{$a1->{colnames} || []}];
   $a2->{dimnames} = $a1->{dimnames};
 
   $a2->{dim} = [@{$a1->{dim} || []}];

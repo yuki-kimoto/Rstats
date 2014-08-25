@@ -20,7 +20,7 @@ use Rstats;
     my $a1 = c(-0.2);
     my $a2 = c(-Inf);
     my $a3 = $a1 * $a2;
-    is_deeply($a3->elements, [Rstats::API::Inf]);
+    is_deeply($a3->elements, [Rstats::EFunc::Inf]);
   }
 }
 
@@ -32,7 +32,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::FALSE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::FALSE, Rstats::EFunc::FALSE]);
   }
   
   # comparison operator numeric - <, arguments count is different
@@ -40,7 +40,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 < $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::FALSE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::FALSE, Rstats::EFunc::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -48,7 +48,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::FALSE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::FALSE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -56,7 +56,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 <= $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::TRUE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::TRUE, Rstats::EFunc::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -64,7 +64,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::TRUE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::TRUE, Rstats::EFunc::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -72,7 +72,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 > $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::FALSE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::FALSE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -80,7 +80,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2,1,3));
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::TRUE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::TRUE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -88,7 +88,7 @@ use Rstats;
     my $a1 = array(c(1,2,3));
     my $a2 = array(c(2));
     my $a3 = $a1 >= $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::TRUE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::TRUE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -96,7 +96,7 @@ use Rstats;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2,2));
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -104,7 +104,7 @@ use Rstats;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2));
     my $a3 = $a1 == $a2;
-    is_deeply($a3->elements, [Rstats::API::FALSE, Rstats::API::TRUE]);
+    is_deeply($a3->elements, [Rstats::EFunc::FALSE, Rstats::EFunc::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -112,7 +112,7 @@ use Rstats;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2,2));
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -120,6 +120,6 @@ use Rstats;
     my $a1 = array(c(1,2));
     my $a2 = array(c(2));
     my $a3 = $a1 != $a2;
-    is_deeply($a3->elements, [Rstats::API::TRUE, Rstats::API::FALSE]);
+    is_deeply($a3->elements, [Rstats::EFunc::TRUE, Rstats::EFunc::FALSE]);
   }
 }

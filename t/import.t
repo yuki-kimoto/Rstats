@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::API;
+use Rstats::EFunc;
 
 # c
 {

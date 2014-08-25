@@ -40,13 +40,13 @@ use Rstats::EFunc;
 # TRUE
 {
   my $true = TRUE;
-  is_deeply($true->values, ['__TRUE__']);
+  is_deeply($true->values, [1]);
 }
 
 # FALSE
 {
   my $false = FALSE;
-  is_deeply($false->values, ['__FALSE__']);
+  is_deeply($false->values, [0]);
 }
 
 # NA
@@ -58,13 +58,13 @@ use Rstats::EFunc;
 # NaN
 {
   my $nan = NaN;
-  is_deeply($nan->values, ['__NaN__']);
+  is_deeply($nan->values, ['NaN']);
 }
 
 # Inf
 {
   my $inf = Inf;
-  is_deeply($inf->values, ['__Inf__']);
+  is_deeply($inf->values, ['Inf']);
 }
 
 # NULL

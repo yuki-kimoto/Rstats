@@ -287,21 +287,26 @@ sub value {
   if ($self->is_na) {
     return undef;
   }
-  elsif ($self->is_positive_infinite) {
-    return '__Inf__';
-  }
-  elsif ($self->is_negative_infinite) {
-    return '__-Inf__';
-  }
-  elsif ($self->is_nan) {
-    return '__NaN__';
+  elsif ($self->is_double) {
+    if ($self->is_positive_infinite) {
+      return 'Inf';
+    }
+    elsif ($self->is_negative_infinite) {
+      return '-Inf';
+    }
+    elsif ($self->is_nan) {
+      return 'NaN';
+    }
+    else {
+      return $self->{dv};
+    }
   }
   elsif ($self->is_logical) {
     if ($self->{iv}) {
-      return '__TRUE__';
+      return 1;
     }
     else {
-      return '__FALSE__';
+      return 0;
     }
   }
   elsif ($self->is_complex) {
@@ -315,9 +320,6 @@ sub value {
   }
   elsif ($self->is_integer) {
     return $self->{iv};
-  }
-  elsif ($self->is_double) {
-    return $self->{dv};
   }
   else {
     croak "Invalid type";

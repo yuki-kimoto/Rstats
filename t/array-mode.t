@@ -81,7 +81,7 @@ use Rstats::EFunc;
     my $a1 = array(Rstats::EFunc::Inf);
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is_deeply($a2->values, ['__TRUE__']);
+    is_deeply($a2->values, [1]);
   }
 
   # as_logical - NA
@@ -129,7 +129,7 @@ use Rstats::EFunc;
     my $a1 = array(r->complex(1, 2));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], '__TRUE__');
+    is($a2->values->[0], 1);
   }
 
   # as_logical - complex, 0 + 0i
@@ -137,7 +137,7 @@ use Rstats::EFunc;
     my $a1 = array(r->complex(0, 0));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], '__FALSE__');
+    is($a2->values->[0], 0);
   }
   
   # as_logical - numeric
@@ -145,8 +145,8 @@ use Rstats::EFunc;
     my $a1 = array(c(1.1, 0));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], '__TRUE__');
-    is($a2->values->[1], '__FALSE__');
+    is($a2->values->[0], 1);
+    is($a2->values->[1], 0);
   }
   
   # as_logical - logical
@@ -154,8 +154,8 @@ use Rstats::EFunc;
     my $a1 = array(c(Rstats::EFunc::TRUE, Rstats::EFunc::FALSE));
     my $a2 = r->as_logical($a1);
     ok(r->is_logical($a2));
-    is($a2->values->[0], '__TRUE__');
-    is($a2->values->[1], '__FALSE__');
+    is($a2->values->[0], 1);
+    is($a2->values->[1], 0);
   }
 }
 
@@ -266,7 +266,7 @@ use Rstats::EFunc;
     my $a1 = array(Rstats::EFunc::Inf);
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is_deeply($a2->values, ['__Inf__']);
+    is_deeply($a2->values, ['Inf']);
   }
 
   # as_numeric - NA
@@ -282,7 +282,7 @@ use Rstats::EFunc;
     my $a1 = array(Rstats::EFunc::NaN);
     my $a2 = r->as_numeric($a1);
     ok(r->is_numeric($a2));
-    is_deeply($a2->values, ['__NaN__']);
+    is_deeply($a2->values, ['NaN']);
   }
 
   # as_numeric - character, only real number, no sign
@@ -366,7 +366,7 @@ use Rstats::EFunc;
     my $a1 = array(Rstats::EFunc::Inf);
     my $a2 = r->as_complex($a1);
     ok(r->is_complex($a2));
-    is($a2->values->[0]->{re}, '__Inf__');
+    is($a2->values->[0]->{re}, 'Inf');
     is($a2->values->[0]->{im}, 0);
   }
 
@@ -562,7 +562,7 @@ use Rstats::EFunc;
   # array decide type - logical
   {
     my $a1 = array(c(Rstats::EFunc::TRUE, Rstats::EFunc::FALSE));
-    is_deeply($a1->values, ['__TRUE__', '__FALSE__']);
+    is_deeply($a1->values, [1, 0]);
     ok(r->is_logical($a1));
   }
 
@@ -583,14 +583,14 @@ use Rstats::EFunc;
   # array decide type - Inf
   {
     my $a1 = array(Rstats::EFunc::Inf);
-    is_deeply($a1->values, ['__Inf__']);
+    is_deeply($a1->values, ['Inf']);
     ok(r->is_numeric($a1));
   }
 
   # array decide type - NaN
   {
     my $a1 = array(Rstats::EFunc::NaN);
-    is_deeply($a1->values, ['__NaN__']);
+    is_deeply($a1->values, ['NaN']);
     ok(r->is_numeric($a1));
   }
 

@@ -510,7 +510,7 @@ use Math::Trig ();
     my $v1 = c(1, 2, 3, 4);
     my $v2 = c(1, 2, 3);
     my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, ['__TRUE__', '__TRUE__', '__TRUE__', '__FALSE__']);
+    is_deeply($v3->values, [1, 1, 1, 0]);
   }
   
   # cumprod - complex
@@ -518,7 +518,7 @@ use Math::Trig ();
     my $v1 = c(1*i, 2*i, 3*i, 4*i);
     my $v2 = c(1*i, 2*i, 3*i);
     my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, ['__TRUE__', '__TRUE__', '__TRUE__', '__FALSE__'])
+    is_deeply($v3->values, [1, 1, 1, 0])
   }
 }
 
@@ -529,7 +529,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(3, 2, 1);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, '__TRUE__');
+    is_deeply($v3->value, 1);
   }
 
   # setequal - not equal
@@ -537,7 +537,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(2, 3, 4);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, '__FALSE__');
+    is_deeply($v3->value, 0);
   }
     
   # setequal - not equal, element count is diffrent
@@ -545,7 +545,7 @@ use Math::Trig ();
     my $v1 = c(2, 3, 1);
     my $v2 = c(2, 3, 1, 5);
     my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, '__FALSE__');
+    is_deeply($v3->value, 0);
   }
 }
 
@@ -738,7 +738,7 @@ use Math::Trig ();
 # T, F
 {
   my $v1 = c(T, F);
-  is_deeply($v1->values, ['__TRUE__', '__FALSE__']);
+  is_deeply($v1->values, [1, 0]);
 }
 
 # sqrt
@@ -777,7 +777,7 @@ use Math::Trig ();
   # min - no argument
   {
     my $v1 = r->min(NULL);
-    is_deeply($v1->values, ['__Inf__']);
+    is_deeply($v1->values, ['Inf']);
   }
   
   # min - contain NA
@@ -789,7 +789,7 @@ use Math::Trig ();
   # min - contain NaN
   {
     my $v1 = r->min(c(1, 2, NaN));
-    is_deeply($v1->values, ['__NaN__']);
+    is_deeply($v1->values, ['NaN']);
   }
 }
 
@@ -813,7 +813,7 @@ use Math::Trig ();
   # max - no argument
   {
     my $v1 = r->max(NULL);
-    is_deeply($v1->values, ['__-Inf__']);
+    is_deeply($v1->values, ['-Inf']);
   }
   
   # max - contain NA
@@ -825,7 +825,7 @@ use Math::Trig ();
   # max - contain NaN
   {
     my $v1 = r->max(c(1, 2, NaN));
-    is_deeply($v1->values, ['__NaN__']);
+    is_deeply($v1->values, ['NaN']);
   }
 }
 
@@ -850,7 +850,7 @@ use Math::Trig ();
   # uniqeu - numeric
   my $v1 = c(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
   my $v2 = r->unique($v1);
-  is_deeply($v2->values, [1, 2, 3, undef, '__Inf__']);
+  is_deeply($v2->values, [1, 2, 3, undef, 'Inf']);
 }
 
 # NA

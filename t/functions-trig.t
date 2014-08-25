@@ -731,9 +731,9 @@ use Math::Complex ();
     is(sprintf("%.6f", $a2->values->[0]{re}), '1.338973');
     is(sprintf("%.6f", $a2->values->[0]{im}), '0.402359');
     is($a2->values->[1]{re}, 0);
-    is($a2->values->[1]{im}, '__Inf__');
+    is($a2->values->[1]{im}, 'Inf');
     is($a2->values->[2]{re}, 0);
-    is($a2->values->[2]{im}, '__-Inf__');
+    is($a2->values->[2]{im}, '-Inf');
     ok(r->is_complex($a2));
   }
   

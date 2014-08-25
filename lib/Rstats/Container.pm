@@ -5,6 +5,9 @@ use Rstats::ArrayAPI;
 
 has 'elements' => sub { [] };
 
+sub is_array { Rstats::ArrayAPI::FALSE }
+sub is_data_frame { Rstats::ArrayAPI::FALSE }
+
 sub names {
   my $self = shift;
   

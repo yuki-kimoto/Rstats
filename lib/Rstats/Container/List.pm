@@ -9,7 +9,6 @@ use Rstats::ArrayAPI;
 has 'elements' => sub { [] };
 has 'mode' => sub { Rstats::Array::Util::c('list') };
 
-sub is_array { Rstats::ArrayAPI::FALSE }
 sub is_list { Rstats::ArrayAPI::TRUE }
 sub is_data_frame { Rstats::ArrayAPI::FALSE }
 

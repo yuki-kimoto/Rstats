@@ -27,14 +27,6 @@ my @arrayutil_methods = qw/
   asin
   asinh
   atan2
-  as_array
-  as_character
-  as_complex
-  as_integer
-  as_logical
-  as_matrix
-  as_numeric
-  as_vector
   atan
   atanh
   c
@@ -70,20 +62,6 @@ my @arrayutil_methods = qw/
   Im
   Inf
   intersect
-  is_array
-  is_character
-  is_complex
-  is_finite
-  is_infinite
-  is_matrix
-  is_na
-  is_nan
-  is_null
-  is_numeric
-  is_double
-  is_integer
-  is_logical
-  is_vector
   kronecker
   log
   logb
@@ -93,7 +71,6 @@ my @arrayutil_methods = qw/
   match
   median
   Mod
-  mode
   NA
   NaN
   ncol
@@ -142,7 +119,6 @@ my @arrayutil_methods = qw/
   tanh
   tolower
   toupper
-  typeof
   T
   TRUE
   trunc
@@ -154,11 +130,35 @@ my @arrayutil_methods = qw/
 /;
 
 my @object_methods = qw/
+  as_array
+  as_character
+  as_complex
+  as_integer
+  as_logical
+  as_matrix
+  as_numeric
+  as_vector
+  is_array
+  is_character
+  is_complex
+  is_finite
+  is_infinite
+  is_matrix
+  is_na
+  is_nan
+  is_null
+  is_numeric
+  is_double
+  is_integer
+  is_logical
+  is_vector
   dim
   names
   dimnames
   colnames
   rownames
+  mode
+  typeof
 /;
 
 my %no_args_methods_h = map {$_ => 1} qw/

@@ -15,8 +15,8 @@ sub new {
   return $self;
 }
 
-sub is_array { Rstats::ArrayAPI::FALSE }
-sub is_data_frame { Rstats::ArrayAPI::FALSE }
+sub is_array { Rstats::ArrayAPI::FALSE() }
+sub is_data_frame { Rstats::ArrayAPI::FALSE() }
 
 sub names {
   my $self = shift;
@@ -79,7 +79,7 @@ sub colnames {
   }
   else {
     my $colnames = $self->dimnames->get(1);
-    return defined $colnames ? $colnames : Rstats::ArrayAPI::NULL;
+    return defined $colnames ? $colnames : Rstats::ArrayAPI::NULL();
   }
 }
 
@@ -93,7 +93,7 @@ sub rownames {
   }
   else {
     my $rownames = $self->dimnames->get(2);
-    return defined $rownames ? $rownames : Rstats::ArrayAPI::NULL;
+    return defined $rownames ? $rownames : Rstats::ArrayAPI::NULL();
   }
 }
 

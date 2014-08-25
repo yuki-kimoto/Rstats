@@ -1,8 +1,9 @@
 package Rstats::Container::Array;
 use Rstats::Container -base;
 
-use Rstats::ArrayAPI;
 use Rstats::API;
+use Rstats::ArrayAPI;
+use Rstats::Util;
 use Carp 'croak', 'carp';
 
 our @CARP_NOT = ('Rstats');
@@ -25,6 +26,380 @@ use overload
   '!=' => sub { shift->operation('not_equal', @_) },
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
+
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+
+sub typeof {
+  my $a1 = shift;
+  
+  my $type = $a1->{type};
+  my $a2_elements = defined $type ? $type : "NULL";
+  my $a2 = Rstats::ArrayAPI::c($a2_elements);
+  
+  return $a2;
+}
+
+sub mode {
+  my $a1 = shift;
+  
+  if (@_) {
+    my $type = $_[0];
+    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
+      unless $types_h{$type};
+    
+    if ($type eq 'numeric') {
+      $a1->{type} = 'double';
+    }
+    else {
+      $a1->{type} = $type;
+    }
+    
+    return $a1;
+  }
+  else {
+    my $type = $a1->{type};
+    my $mode;
+    if (defined $type) {
+      if ($type eq 'integer' || $type eq 'double') {
+        $mode = 'numeric';
+      }
+      else {
+        $mode = $type;
+      }
+    }
+    else {
+      croak qq/could not find function "as_$type"/;
+    }
+
+    return Rstats::ArrayAPI::c($mode);
+  }
+}
+
+sub is_finite {
+  my $_a1 = shift;
+
+  my $a1 = Rstats::ArrayAPI::to_array($_a1);
+  
+  my @a2_elements = map {
+    !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
+      ? Rstats::API::TRUE()
+      : Rstats::API::FALSE()
+  } @{$a1->elements};
+  my $a2 = Rstats::ArrayAPI::array(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_infinite {
+  my $_a1 = shift;
+  
+  my $a1 = Rstats::ArrayAPI::to_array($_a1);
+  
+  my @a2_elements = map {
+    ref $_ eq 'Rstats::Inf' ? Rstats::API::TRUE() : Rstats::API::FALSE()
+  } @{$a1->elements};
+  my $a2 = Rstats::ArrayAPI::c(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_na {
+  my $_a1 = shift;
+  
+  my $a1 = Rstats::ArrayAPI::to_array($_a1);
+  
+  my @a2_elements = map {
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::API::TRUE() : Rstats::API::FALSE()
+  } @{$a1->elements};
+  my $a2 = Rstats::ArrayAPI::array(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_nan {
+  my $_a1 = shift;
+  
+  my $a1 = Rstats::ArrayAPI::to_array($_a1);
+  
+  my @a2_elements = map {
+    ref $_ eq  'Rstats::NaN' ? Rstats::API::TRUE() : Rstats::API::FALSE()
+  } @{$a1->elements};
+  my $a2 = Rstats::ArrayAPI::array(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub is_null {
+  my $_a1 = shift;
+  
+  my $a1 = Rstats::ArrayAPI::to_array($_a1);
+  
+  my @a2_elements = [!@{$a1->elements} ? Rstats::API::TRUE() : Rstats::API::FALSE()];
+  my $a2 = Rstats::ArrayAPI::array(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
+sub as_matrix {
+  my $a1 = shift;
+  
+  my $a1_dim_elements = $a1->dim_as_array->values;
+  my $a1_dim_count = @$a1_dim_elements;
+  my $a2_dim_elements = [];
+  my $row;
+  my $col;
+  if ($a1_dim_count == 2) {
+    $row = $a1_dim_elements->[0];
+    $col = $a1_dim_elements->[1];
+  }
+  else {
+    $row = 1;
+    $row *= $_ for @$a1_dim_elements;
+    $col = 1;
+  }
+  
+  my $a2_elements = [@{$a1->elements}];
+  
+  return Rstats::ArrayAPI::matrix($a2_elements, $row, $col);
+}
+
+sub as_array {
+  my $a1 = shift;
+  
+  my $a1_elements = [@{$a1->elements}];
+  my $a1_dim_elements = [@{$a1->dim_as_array->values}];
+  
+  return $a1->array($a1_elements, $a1_dim_elements);
+}
+
+sub as_vector {
+  my $a1 = shift;
+  
+  my $a1_elements = [@{$a1->elements}];
+  
+  return Rstats::ArrayAPI::c($a1_elements);
+}
+
+sub is_vector {
+  my $a1 = shift;
+  
+  my $is = @{$a1->dim->elements} == 0 ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_matrix {
+  my $a1 = shift;
+
+  my $is = @{$a1->dim->elements} == 2 ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_numeric {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'double' || ($a1->{type} || '') eq 'integer'
+    ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_double {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'double' ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_integer {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'integer' ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_complex {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'complex' ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_character {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'character' ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub is_logical {
+  my $a1 = shift;
+  
+  my $is = ($a1->{type} || '') eq 'logical' ? Rstats::API::TRUE() : Rstats::API::FALSE();
+  
+  return Rstats::ArrayAPI::c($is);
+}
+
+sub as {
+  my ($a1, $type) = @_;
+  
+  if ($type eq 'character') {
+    return as_character($a1);
+  }
+  elsif ($type eq 'complex') {
+    return as_complex($a1);
+  }
+  elsif ($type eq 'double') {
+    return as_double($a1);
+  }
+  elsif ($type eq 'numeric') {
+    return as_numeric($a1);
+  }
+  elsif ($type eq 'integer') {
+    return as_integer($a1);
+  }
+  elsif ($type eq 'logical') {
+    return as_logical($a1);
+  }
+  else {
+    croak "Invalid mode is passed";
+  }
+}
+
+sub as_complex {
+  my $a1 = shift;
+  
+  my $a1_elements = $a1->elements;
+  my $a2 = $a1->clone_without_elements;
+  my @a2_elements = map { $_->as('complex') } @$a1_elements;
+  $a2->elements(\@a2_elements);
+  $a2->{type} = 'complex';
+
+  return $a2;
+}
+
+sub as_numeric { as_double(@_) }
+
+sub as_double {
+  my $a1 = shift;
+  
+  my $a1_elements = $a1->elements;
+  my $a2 = $a1->clone_without_elements;
+  my @a2_elements = map { $_->as('double') } @$a1_elements;
+  $a2->elements(\@a2_elements);
+  $a2->{type} = 'double';
+
+  return $a2;
+}
+
+sub as_integer {
+  my $a1 = shift;
+  
+  my $a1_elements = $a1->elements;
+  my $a2 = $a1->clone_without_elements;
+  my @a2_elements = map { $_->as_integer  } @$a1_elements;
+  $a2->elements(\@a2_elements);
+  $a2->{type} = 'integer';
+
+  return $a2;
+}
+
+sub as_logical {
+  my $a1 = shift;
+  
+  my $a1_elements = $a1->elements;
+  my $a2 = $a1->clone_without_elements;
+  my @a2_elements = map { $_->as_logical } @$a1_elements;
+  $a2->elements(\@a2_elements);
+  $a2->{type} = 'logical';
+
+  return $a2;
+}
+
+sub as_character {
+  my $a1 = shift;
+
+  my $a1_elements = $a1->elements;
+  my @a2_elements = map { $_->as_character } @$a1_elements;
+  my $a2 = $a1->clone_without_elements;
+  $a2->elements(\@a2_elements);
+  $a2->{type} = 'character';
+
+  return $a2;
+}
+
+sub at {
+  my $self = shift;
+  
+  if (@_) {
+    $self->{at} = [@_];
+    
+    return $self;
+  }
+  
+  return $self->{at};
+}
+
+sub get {
+  my $self = shift;
+
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $drop = $opt->{drop};
+  $drop = 1 unless defined $drop;
+  
+  my @_indexs = @_;
+
+  my $_indexs;
+  if (@_indexs) {
+    $_indexs = \@_indexs;
+  }
+  else {
+    my $at = $self->at;
+    $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
+  }
+  $self->at($_indexs);
+  
+  if (ref $_indexs->[0] eq 'CODE') {
+    my @elements2 = grep { $_indexs->[0]->() } @{$self->values};
+    return Rstats::ArrayAPI::c(\@elements2);
+  }
+  
+  my ($positions, $a2_dim) = Rstats::Util::parse_index($self, $drop, @$_indexs);
+  
+  my @a2_elements = map { $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::API::NA() } @$positions;
+  
+  return Rstats::ArrayAPI::array(\@a2_elements, $a2_dim);
+}
+
+sub set {
+  my ($self, $_a2) = @_;
+
+  my $at = $self->at;
+  my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
+
+  my $a2 = Rstats::ArrayAPI::to_array($_a2);
+  
+  my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
+  
+  my $self_elements = $self->elements;
+  my $a2_elements = $a2->elements;
+  for (my $i = 0; $i < @$positions; $i++) {
+    my $pos = $positions->[$i];
+    $self_elements->[$pos - 1] = $a2_elements->[(($i + 1) % @$positions) - 1];
+  }
+  
+  return $self;
+}
 
 sub dim_as_array {
   my $a1 = shift;
@@ -149,14 +524,8 @@ sub value {
   
   my $e1 = $self->element(@_);
   
-  return defined $e1 ? $e1->value : Rstats::API::NA;
+  return defined $e1 ? $e1->value : Rstats::API::NA();
 }
-
-sub at { Rstats::ArrayAPI::at(@_) }
-
-sub get { Rstats::ArrayAPI::get(@_) }
-
-sub set { Rstats::ArrayAPI::set(@_) }
 
 sub _fix_position {
   my ($self, $data, $reverse) = @_;

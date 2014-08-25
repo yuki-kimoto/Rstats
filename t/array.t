@@ -9,6 +9,87 @@ use Rstats::ArrayAPI;
 #   which
 #   get - logical, undef
 
+# numeric operator auto upgrade
+{
+  # numeric operator auto upgrade - complex
+  {
+    my $a1 = array(c(r->complex(1,2), r->complex(3,4)));
+    my $a2 = array(c(1, 2));
+    my $a3 = $a1 + $a2;
+    ok(r->is_complex($a3));
+    is($a3->values->[0]->{re}, 2);
+    is($a3->values->[0]->{im}, 2);
+    is($a3->values->[1]->{re}, 5);
+    is($a3->values->[1]->{im}, 4);
+  }
+
+  # numeric operator auto upgrade - numeric
+  {
+    my $a1 = array(c(1.1, 1.2));
+    my $a2 = r->as_integer(array(c(1, 2)));
+    my $a3 = $a1 + $a2;
+    ok(r->is_numeric($a3));
+    is_deeply($a3->values, [2.1, 3.2])
+  }
+
+  # numeric operator auto upgrade - integer
+  {
+    my $a1 = r->as_integer(array(c(3, 5)));
+    my $a2 = array(c(r->TRUE, r->FALSE));
+    my $a3 = $a1 + $a2;
+    ok(r->is_integer($a3));
+    is_deeply($a3->values, [4, 5])
+  }
+    
+  # numeric operator auto upgrade - character, +
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 + $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, -
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 - $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, *
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 * $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, /
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 / $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, ^
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 ** $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+
+  # numeric operator auto upgrade - character, %
+  {
+    my $a1 = array(c("1", "2", "3"));
+    my $a2 = array(c(1, 2, 3));
+    eval { my $ret = $a1 % $a2 };
+    like($@, qr/non-numeric argument to binary operator/);
+  }
+}
+
 # clone_without_elements
 {
   # clone_without_elements - matrix
@@ -442,21 +523,21 @@ EOS
   # pos_to_index - first position
   {
     my $pos = 0;
-    my $index = Rstats::ArrayAPI::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [1, 1, 1]);
   }
   
   # pos_to_index - some position
   {
     my $pos = 21;
-    my $index = Rstats::ArrayAPI::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [2, 3, 2]);
   }
 
   # pos_to_index - last position
   {
     my $pos = 23;
-    my $index = Rstats::ArrayAPI::pos_to_index($pos, [4, 3, 2]);
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
     is_deeply($index, [4, 3, 2]);
   }
 }
@@ -616,87 +697,6 @@ EOS
       }
     };
     like($@, qr/zero/);
-  }
-}
-
-# numeric operator auto upgrade
-{
-  # numeric operator auto upgrade - complex
-  {
-    my $a1 = array(c(r->complex(1,2), r->complex(3,4)));
-    my $a2 = array(c(1, 2));
-    my $a3 = $a1 + $a2;
-    ok(r->is_complex($a3));
-    is($a3->values->[0]->{re}, 2);
-    is($a3->values->[0]->{im}, 2);
-    is($a3->values->[1]->{re}, 5);
-    is($a3->values->[1]->{im}, 4);
-  }
-
-  # numeric operator auto upgrade - numeric
-  {
-    my $a1 = array(c(1.1, 1.2));
-    my $a2 = r->as_integer(array(c(1, 2)));
-    my $a3 = $a1 + $a2;
-    ok(r->is_numeric($a3));
-    is_deeply($a3->values, [2.1, 3.2])
-  }
-
-  # numeric operator auto upgrade - integer
-  {
-    my $a1 = r->as_integer(array(c(3, 5)));
-    my $a2 = array(c(r->TRUE, r->FALSE));
-    my $a3 = $a1 + $a2;
-    ok(r->is_integer($a3));
-    is_deeply($a3->values, [4, 5])
-  }
-    
-  # numeric operator auto upgrade - character, +
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 + $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
-  }
-
-  # numeric operator auto upgrade - character, -
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 - $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
-  }
-
-  # numeric operator auto upgrade - character, *
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 * $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
-  }
-
-  # numeric operator auto upgrade - character, /
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 / $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
-  }
-
-  # numeric operator auto upgrade - character, ^
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 ** $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
-  }
-
-  # numeric operator auto upgrade - character, %
-  {
-    my $a1 = array(c("1", "2", "3"));
-    my $a2 = array(c(1, 2, 3));
-    eval { my $ret = $a1 % $a2 };
-    like($@, qr/non-numeric argument to binary operator/);
   }
 }
 
@@ -1012,12 +1012,12 @@ EOS
   my $dim = [4, 3, 2];
   
   {
-    my $value = Rstats::ArrayAPI::pos([4, 3, 2], $dim);
+    my $value = Rstats::Util::pos([4, 3, 2], $dim);
     is($value, 24);
   }
   
   {
-    my $value = Rstats::ArrayAPI::pos([3, 3, 2], $dim);
+    my $value = Rstats::Util::pos([3, 3, 2], $dim);
     is($value, 23);
   }
 }
@@ -1031,7 +1031,7 @@ EOS
   ];
   
   my $a1 = array(C('1:3'));
-  my $result =  Rstats::ArrayAPI::cross_product($values);
+  my $result =  Rstats::Util::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
     ['a2', 'b1', 'c1'],

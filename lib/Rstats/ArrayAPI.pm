@@ -593,12 +593,6 @@ sub get {
   return array(\@a2_elements, $a2_dim);
 }
 
-sub logical_array_to_index {
-  my $a1 = shift;
-  
-  
-}
-
 sub set {
   my ($a1, $_a2) = @_;
 

@@ -10,7 +10,8 @@ has 'elements' => sub { [] };
 sub new {
   my $self = shift->SUPER::new(@_);
   
-  $self->{dimnames} = [];
+  $self->{names} ||= [];
+  $self->{dimnames} ||= [];
   
   return $self;
 }
@@ -22,25 +23,13 @@ sub names {
   my $self = shift;
   
   if (@_) {
-    my $_names = shift;
-    my $names;
-    if (ref $_names eq 'Rstats::Container::Array') {
-      $names = $_names->elements;
-    }
-    elsif (!defined $_names) {
-      $names = [];
-    }
-    elsif (ref $_names eq 'ARRAY') {
-      $names = $_names;
-    }
-    else {
-      $names = [$_names];
-    }
+    my $names = Rstats::ArrayFunc::to_array(shift);
     
-    $self->{names} = $names;
+    $self->{names} = $names->elements;
+    
+    return $self;
   }
   else {
-    $self->{names} = [] unless exists $self->{names};
     return Rstats::ArrayFunc::c($self->{names});
   }
 }

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::EFunc;
+use Rstats::ElementFunc;
 use Math::Trig ();
 
 # expm1
@@ -857,7 +857,7 @@ use Math::Trig ();
 {
   my $na = NA;
   my $na_element = $na->element;
-  is($na_element, Rstats::EFunc::NA);
+  is($na_element, Rstats::ElementFunc::NA);
 }
 
 # round

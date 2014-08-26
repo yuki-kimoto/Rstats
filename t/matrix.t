@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::EFunc;
+use Rstats::ElementFunc;
 
 # arr.ind=TRUE
 

@@ -29,5 +29,4 @@ use Rstats;
     is_deeply($d1->get('sex.1')->values, ['a1', 'b1', 'c1']);
     is_deeply($d1->get('sex.2')->values, ['a2', 'b2', 'c2']);
   }
-
 }

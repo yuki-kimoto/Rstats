@@ -4,6 +4,27 @@ use warnings;
 
 use Rstats;
 
+# data_frame - to_string
+{
+  # data_frame - to_string
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height);
+    my $got = "$d1";
+    $got =~ s/\s+/ /g;
+my $expected = <<"EOS";
+    sex  heigth
+ 1    F     172
+ 2    M     168
+ 3    F     155
+EOS
+    $expected =~ s/\s+/ /g;
+    is($got, $expected);
+  }
+}
+
 # data_frame
 {
   # data_frame - basic

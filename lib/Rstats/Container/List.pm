@@ -5,6 +5,7 @@ use overload '""' => \&to_string,
   fallback => 1;
 
 use Rstats::ArrayFunc;
+use Carp 'croak';
 
 has 'elements' => sub { [] };
 has 'mode' => sub { Rstats::Array::Util::c('list') };
@@ -32,6 +33,27 @@ sub at {
   return $a1->{at};
 }
 
+sub _name_to_index {
+  my $self = shift;
+  my $a1_index = Rstats::ArrayFunc::to_array(shift);
+  
+  my $e1_name = $a1_index->element;
+  my $found;
+  my $names = $self->names->elements;
+  my $index;
+  for (my $i = 0; $i < @$names; $i++) {
+    my $name = $names->[$i];
+    if (Rstats::ElementFunc::equal($e1_name, $name)) {
+      $index = $i + 1;
+      $found = 1;
+      last;
+    }
+  }
+  croak "Not found $e1_name" unless $found;
+  
+  return $index;
+}
+
 sub get {
   my ($self, $_index) = @_;
   
@@ -41,7 +63,13 @@ sub get {
   $self->at($_index);
   
   my $a1_index = Rstats::ArrayFunc::to_array($_index);
-  my $index = $a1_index->values->[0];
+  my $index;
+  if ($a1_index->is_character) {
+    $index = $self->_name_to_index($a1_index);
+  }
+  else {
+    $index = $a1_index->values->[0];
+  }
   my $elements = $self->elements;
   my $element = $elements->[$index - 1];
   
@@ -56,7 +84,18 @@ sub get_as_list {
   
   my $list = Rstats::Container::List->new;
   my $list_elements = $list->elements;
-  for my $i (@{$index->values}) {
+  
+  my $index_values;
+  if ($index->is_character) {
+    $index_values = [];
+    for my $element (@{$index->elements}) {
+      push @$index_values, $self->_name_to_index($element);
+    }
+  }
+  else {
+    $index_values = $index->values;
+  }
+  for my $i (@{$index_values}) {
     push @$list_elements, $elements->[$i - 1];
   }
 
@@ -68,7 +107,13 @@ sub set {
   
   my $_index = $self->at;
   my $a1_index = Rstats::ArrayFunc::to_array($_index);
-  my $index = $a1_index->values->[0];
+  my $index;
+  if ($a1_index->is_character) {
+    $index = $self->_name_to_index($a1_index);
+  }
+  else {
+    $index = $a1_index->values->[0];
+  }
   $self->elements->[$index - 1] = Rstats::ArrayFunc::to_array($element);
   
   return $self;

@@ -205,6 +205,11 @@ sub data_frame {
   
   my $elements = [];
   
+  # name count
+  my $name_count = {
+    
+  };
+  
   # count
   my $counts = [];
   my $names = [];
@@ -217,16 +222,31 @@ sub data_frame {
       
       for my $num (1 .. $dim_product) {
         push @$counts, $count;
-        push @$names, "$name.$num";
+        my $fix_name;
+        if (my $count = $name_count->{$name}) {
+          $fix_name = "$name.$count";
+        }
+        else {
+          $fix_name = $name;
+        }
+        push @$names, $fix_name;
         push @$elements, splice(@{$v->elements}, 0, $count);
       }
     }
     else {
       my $count = @{$v->elements};
       push @$counts, $count;
-      push @$names, $name;
+      my $fix_name;
+      if (my $count = $name_count->{$name}) {
+        $fix_name = "$name.$count";
+      }
+      else {
+        $fix_name = $name;
+      }
+      push @$names, $fix_name;
       push @$elements, $v;
     }
+    $name_count->{$name}++;
   }
   
   # Max count
@@ -251,7 +271,7 @@ sub data_frame {
 
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->elements($elements);
-  $data_frame->names($names);
+  $data_frame->names(Rstats::ArrayFunc::c($names));
   
   return $data_frame;
 }

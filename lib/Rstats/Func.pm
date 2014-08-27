@@ -23,6 +23,37 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub factor {
+  my $a1 = shift;
+  
+  $a1 = $a1->as_character unless $a1->is_character;
+  my $a1_elements = $a1->elements;
+  
+  my $level_count = 0;
+  my $levels = {};
+  my $f1_elements = [];
+  for my $a1_element (@$a1_elements) {
+    if ($a1_element->is_na) {
+      push @$f1_elements, Rstats::ElementFunc::NA();
+    }
+    else {
+      my $value = $a1_element->value;
+      unless (defined $levels->{$value}) {
+        $levels->{$value} = $level_count;
+        $level_count++;
+      }
+      push @$f1_elements, Rstats::ElementFunc::integer($levels->{$value});
+    }
+  }
+  
+  my $f1 = Rstats::Container::Factor->new;
+  $f1->{type} = 'integer';
+  $f1->{class} = 'factor';
+  $f1->{levels} = $levels;
+  
+  return $f1;
+}
+
 sub length {
   my $container = shift;
   

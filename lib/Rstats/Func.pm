@@ -1,4 +1,4 @@
-package Rstats::ArrayFunc;
+package Rstats::Func;
 
 use strict;
 use warnings;
@@ -479,8 +479,8 @@ sub setequal {
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
-  my $a3 = Rstats::ArrayFunc::sort($a1);
-  my $a4 = Rstats::ArrayFunc::sort($a2);
+  my $a3 = Rstats::Func::sort($a1);
+  my $a4 = Rstats::Func::sort($a2);
   
   return FALSE if @{$a3->elements} ne @{$a4->elements};
   
@@ -1136,7 +1136,7 @@ sub ifelse {
 
 sub log { process(\&Rstats::ElementFunc::log, @_) }
 
-sub logb { Rstats::ArrayFunc::log(@_) }
+sub logb { Rstats::Func::log(@_) }
 
 sub log2 { process(\&Rstats::ElementFunc::log2, @_) }
 
@@ -1652,7 +1652,7 @@ sub median {
   my $a1 = to_array(shift);
   
   my $a2 = unique($a1);
-  my $a3 = Rstats::ArrayFunc::sort($a2);
+  my $a3 = Rstats::Func::sort($a2);
   my $a3_length = @{$a3->elements};
   
   if ($a3_length % 2 == 0) {
@@ -1671,7 +1671,7 @@ sub median {
 sub sd {
   my $a1 = to_array(shift);
   
-  my $sd = Rstats::ArrayFunc::sqrt(var($a1));
+  my $sd = Rstats::Func::sqrt(var($a1));
   
   return $sd;
 }
@@ -1751,7 +1751,7 @@ sub matrix {
   return $matrix;
 }
 
-sub Mod { Rstats::ArrayFunc::abs(@_) }
+sub Mod { Rstats::Func::abs(@_) }
 
 sub inner_product {
   my ($a1, $a2) = @_;

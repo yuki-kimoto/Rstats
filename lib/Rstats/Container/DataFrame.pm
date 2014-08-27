@@ -4,7 +4,7 @@ use Rstats::Container::List -base;
 use overload '""' => \&to_string,
   fallback => 1;
 
-use Rstats::ArrayFunc;
+use Rstats::Func;
 
 use Text::UnicodeTable::Simple;
 {
@@ -16,7 +16,7 @@ use Text::UnicodeTable::Simple;
   }
 }
 
-sub is_data_frame { Rstats::ArrayFunc::TRUE }
+sub is_data_frame { Rstats::Func::TRUE }
 
 sub to_string {
   my $self = shift;

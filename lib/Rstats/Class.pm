@@ -1,7 +1,7 @@
 package Rstats::Class;
 
 use Object::Simple -base;
-require Rstats::ArrayFunc;
+require Rstats::Func;
 use Rstats::Container::List;
 use Rstats::Container::DataFrame;
 use Carp 'croak';
@@ -176,7 +176,7 @@ sub new {
   my $self = shift->SUPER::new(@_);
   
   for my $method (@arrayutil_methods) {
-    my $function = "Rstats::ArrayFunc::$method";
+    my $function = "Rstats::Func::$method";
     my $code;
     if ($no_args_methods_h{$method}) {
       $code = "sub { $function() }";
@@ -265,13 +265,13 @@ sub data_frame {
     
     my $repeat = $max_count / $count;
     if ($repeat > 1) {
-      $elements->[$i] = Rstats::ArrayFunc::c(($elements->[$i]) x $repeat);
+      $elements->[$i] = Rstats::Func::c(($elements->[$i]) x $repeat);
     }
   }
 
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->elements($elements);
-  $data_frame->names(Rstats::ArrayFunc::c($names));
+  $data_frame->names(Rstats::Func::c($names));
   
   return $data_frame;
 }
@@ -296,7 +296,7 @@ sub is_list {
 sub list {
   my ($self, @elements) = @_;
   
-  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::ArrayFunc::to_array($_) : $_ } @elements;
+  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_array($_) : $_ } @elements;
   
   my $list = Rstats::Container::List->new;
   $list->elements(\@elements);
@@ -315,7 +315,7 @@ sub runif {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   $opt->{seed} = $self->{seed};
 
-  my $a1 = Rstats::ArrayFunc::runif(@_, $opt);
+  my $a1 = Rstats::Func::runif(@_, $opt);
   $self->{seed} = undef;
   
   return $a1;

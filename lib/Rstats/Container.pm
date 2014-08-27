@@ -1,7 +1,7 @@
 package Rstats::Container;
 use Object::Simple -base;
 
-use Rstats::ArrayFunc;
+use Rstats::Func;
 use Rstats::Container::List;
 use Carp 'croak';
 
@@ -16,21 +16,21 @@ sub new {
   return $self;
 }
 
-sub is_array { Rstats::ArrayFunc::FALSE() }
-sub is_data_frame { Rstats::ArrayFunc::FALSE() }
+sub is_array { Rstats::Func::FALSE() }
+sub is_data_frame { Rstats::Func::FALSE() }
 
 sub names {
   my $self = shift;
   
   if (@_) {
-    my $names = Rstats::ArrayFunc::to_array(shift);
+    my $names = Rstats::Func::to_array(shift);
     
     $self->{names} = $names->elements;
     
     return $self;
   }
   else {
-    return Rstats::ArrayFunc::c($self->{names});
+    return Rstats::Func::c($self->{names});
   }
 }
 
@@ -62,13 +62,13 @@ sub colnames {
   my $self = shift;
   
   if (@_) {
-    my $colnames = Rstats::ArrayFunc::to_array(shift);
+    my $colnames = Rstats::Func::to_array(shift);
     
     $self->dimnames->at(1)->set($colnames);
   }
   else {
     my $colnames = $self->dimnames->get(1);
-    return defined $colnames ? $colnames : Rstats::ArrayFunc::NULL();
+    return defined $colnames ? $colnames : Rstats::Func::NULL();
   }
 }
 
@@ -76,13 +76,13 @@ sub rownames {
   my $self = shift;
   
   if (@_) {
-    my $rownames = Rstats::ArrayFunc::to_array(shift);
+    my $rownames = Rstats::Func::to_array(shift);
     
     $self->dimnames->at(2)->set($rownames);
   }
   else {
     my $rownames = $self->dimnames->get(2);
-    return defined $rownames ? $rownames : Rstats::ArrayFunc::NULL();
+    return defined $rownames ? $rownames : Rstats::Func::NULL();
   }
 }
 

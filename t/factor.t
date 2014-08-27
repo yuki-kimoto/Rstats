@@ -6,6 +6,16 @@ use Rstats;
 
 # factor
 {
+  # factor - to_string
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
+    my $expected = <<'EOS';
+[1] a b c a b c
+Levels: a b c
+EOS
+    is("$f1", $expected);
+  }
+  
   # factor - basic
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));

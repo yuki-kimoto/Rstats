@@ -1,6 +1,9 @@
 package Rstats::Container::Factor;
 use Rstats::Container -base;
 
+use overload '""' => \&to_string,
+  fallback => 1;
+
 use Rstats::Func;
 
 sub levels {
@@ -31,6 +34,28 @@ sub levels {
     
     return $a1_levels;
   }
+}
+
+sub to_string {
+  my $self = shift;
+  
+  my $levels = $self->{levels};
+  my $levels_reverse = {reverse %$levels};
+  
+  my @str;
+  push @str, '[1]';
+  my $elements = $self->elements;
+  for my $element (@$elements) {
+    my $value = $element->value;
+    my $character = $levels_reverse->{$value};
+    push @str, $character;
+  }
+  
+  my $str = join(' ', @str) . "\n";
+  
+  $str .= join(' ', 'Levels:', sort keys %$levels) . "\n";
+  
+  return $str;
 }
 
 1;

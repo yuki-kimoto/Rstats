@@ -7,8 +7,8 @@ use Carp 'croak', 'carp';
 use Rstats::Element;
 use Scalar::Util ();
 use Math::Complex ();
-use POSIX ();
 use Math::Trig ();
+use POSIX ();
 
 # Perl infinite values(this is value is only valid as return value)
 my $perl_inf_result = 9 ** 9 ** 9;

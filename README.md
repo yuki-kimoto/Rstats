@@ -9,7 +9,12 @@ R language build on Perl (EXPERIMENTAL)
 
 # Installation
 
-curl -L cpanmin.us | perl - -n  git@github.com:yuki-kimoto/Rstats.git
+If you alrealdy install local perl by perlbrew or plenv,
+you can put only the following command.
+
+    git clone https://github.com/yuki-kimoto/Rstats.git
+    tar cfz Rstats.tar.gz Rstats;
+    curl -L cpanmin.us | perl - -n Rstats.tar.gz
 
 # Usage
 

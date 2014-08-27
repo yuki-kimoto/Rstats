@@ -16,7 +16,7 @@ use Text::UnicodeTable::Simple;
   }
 }
 
-sub is_data_frame { Rstats::Func::TRUE }
+sub is_data_frame { Rstats::Func::TRUE() }
 
 sub to_string {
   my $self = shift;

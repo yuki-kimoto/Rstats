@@ -2,8 +2,6 @@ package Rstats::Class;
 
 use Object::Simple -base;
 require Rstats::Func;
-use Rstats::Container::List;
-use Rstats::Container::DataFrame;
 use Carp 'croak';
 
 # TODO
@@ -17,7 +15,7 @@ use Carp 'croak';
 # strsplit  strwrap
 # outer(x, y, f)
 
-my @arrayutil_methods = qw/
+my @funcs = qw/
   as_list
   abs
   acos
@@ -52,6 +50,7 @@ my @arrayutil_methods = qw/
   diff
   exp
   expm1
+  factor
   F
   FALSE
   floor
@@ -180,10 +179,10 @@ my %no_args_methods_h = map {$_ => 1} qw/
 sub new {
   my $self = shift->SUPER::new(@_);
   
-  for my $method (@arrayutil_methods) {
-    my $function = "Rstats::Func::$method";
+  for my $func (@funcs) {
+    my $function = "Rstats::Func::$func";
     my $code;
-    if ($no_args_methods_h{$method}) {
+    if ($no_args_methods_h{$func}) {
       $code = "sub { $function() }";
     }
     else {
@@ -191,7 +190,7 @@ sub new {
     }
 
     no strict 'refs';
-    $self->function($method => eval $code);
+    $self->function($func => eval $code);
     croak $@ if $@;
   }
   

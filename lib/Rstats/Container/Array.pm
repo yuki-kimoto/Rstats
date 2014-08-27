@@ -281,71 +281,6 @@ sub as_vector {
   return Rstats::Func::c($a1_elements);
 }
 
-sub is_vector {
-  my $a1 = shift;
-  
-  my $is = @{$a1->dim->elements} == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_matrix {
-  my $a1 = shift;
-
-  my $is = @{$a1->dim->elements} == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_numeric {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'double' || ($a1->{type} || '') eq 'integer'
-    ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_double {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'double' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_integer {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'integer' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_complex {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'complex' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_character {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'character' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
-sub is_logical {
-  my $a1 = shift;
-  
-  my $is = ($a1->{type} || '') eq 'logical' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
-  
-  return Rstats::Func::c($is);
-}
-
 sub as {
   my ($a1, $type) = @_;
   
@@ -597,28 +532,6 @@ sub operation {
   my ($a1, $a2) = $self->_fix_position($data, $reverse);
   
   return Rstats::Func::operation($op, $a1, $a2);
-}
-
-sub values {
-  my $self = shift;
-  
-  if (@_) {
-    my @elements = map { Rstats::ElementFunc::element($_) } @{$_[0]};
-    $self->{elements} = \@elements;
-  }
-  else {
-    my @values = map { defined $_ ? $_->value : undef } @{$self->elements};
-  
-    return \@values;
-  }
-}
-
-sub value {
-  my $self = shift;
-  
-  my $e1 = $self->element(@_);
-  
-  return defined $e1 ? $e1->value : Rstats::ElementFunc::NA();
 }
 
 sub _fix_position {

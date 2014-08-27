@@ -3,13 +3,17 @@ package Rstats::Func;
 use strict;
 use warnings;
 use Carp qw/croak carp/;
+
+use Rstats::Container::Array;
 use Rstats::Container::List;
+use Rstats::Container::DataFrame;
+use Rstats::Container::Factor;
 use Rstats::ElementFunc;
+
 use List::Util;
 use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
-use Rstats::Container::Array;
 
 sub Inf () { c(Rstats::ElementFunc::Inf()) }
 
@@ -47,6 +51,7 @@ sub factor {
   }
   
   my $f1 = Rstats::Container::Factor->new;
+  $f1->elements($f1_elements);
   $f1->{type} = 'integer';
   $f1->{class} = 'factor';
   $f1->{levels} = $levels;

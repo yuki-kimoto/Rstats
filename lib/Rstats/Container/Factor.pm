@@ -27,9 +27,10 @@ sub levels {
   else {
     my $levels = $self->{levels};
     
-    my $a1_levels = Rstats::ArrayFunc::c(sort keys $levels);
+    my $a1_levels = Rstats::Func::c(sort keys $levels);
     
-    return $a1_leveles;
+    return $a1_levels;
   }
 }
 
+1;

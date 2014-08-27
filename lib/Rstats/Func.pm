@@ -23,6 +23,116 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub length {
+  my $container = shift;
+  
+  return $container->length;
+}
+
+sub as_list {
+  my $container = shift;
+  
+  return $container if Rstats::Func::is_list($container);
+
+  my $list = Rstats::Container::List->new;
+  $list->elements($container->elements);
+  
+  return $list;
+}
+
+sub list {
+  my @elements = @_;
+  
+  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_array($_) : $_ } @elements;
+  
+  my $list = Rstats::Container::List->new;
+  $list->elements(\@elements);
+  
+  return $list;
+}
+
+sub is_list {
+  my $container = shift;
+  
+  return ref $container eq 'Rstats::Container::List' ? Rstats::Func::TRUE : Rstats::Func::FALSE;
+}
+
+sub data_frame {
+  my @data = @_;
+  
+  my $elements = [];
+  
+  # name count
+  my $name_count = {
+    
+  };
+  
+  # count
+  my $counts = [];
+  my $names = [];
+  while (my ($name, $v) = splice(@data, 0, 2)) {
+    my $dim_values = $v->dim->values;
+    if (@$dim_values > 1) {
+      my $count = $dim_values->[0];
+      my $dim_product = 1;
+      $dim_product *= $dim_values->[$_] for (1 .. @$dim_values - 1);
+      
+      for my $num (1 .. $dim_product) {
+        push @$counts, $count;
+        my $fix_name;
+        if (my $count = $name_count->{$name}) {
+          $fix_name = "$name.$count";
+        }
+        else {
+          $fix_name = $name;
+        }
+        push @$names, $fix_name;
+        push @$elements, splice(@{$v->elements}, 0, $count);
+      }
+    }
+    else {
+      my $count = @{$v->elements};
+      push @$counts, $count;
+      my $fix_name;
+      if (my $count = $name_count->{$name}) {
+        $fix_name = "$name.$count";
+      }
+      else {
+        $fix_name = $name;
+      }
+      push @$names, $fix_name;
+      push @$elements, $v;
+    }
+    $name_count->{$name}++;
+  }
+  
+  # Max count
+  my $max_count = List::Util::max @$counts;
+  
+  # Check multiple number
+  for my $count (@$counts) {
+    if ($max_count % $count != 0) {
+      croak "Error in data.frame: arguments imply differing number of rows: @$counts";
+    }
+  }
+  
+  # Fill vector
+  for (my $i = 0; $i < @$counts; $i++) {
+    my $count = $counts->[$i];
+    
+    my $repeat = $max_count / $count;
+    if ($repeat > 1) {
+      $elements->[$i] = Rstats::Func::c(($elements->[$i]) x $repeat);
+    }
+  }
+
+  my $data_frame = Rstats::Container::DataFrame->new;
+  $data_frame->elements($elements);
+  $data_frame->names(Rstats::Func::c($names));
+  
+  return $data_frame;
+}
+
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
@@ -570,7 +680,7 @@ sub nchar {
         push $a2_elements, $a1_element;
       }
       else {
-        my $a2_element = Rstats::ElementFunc::double(length $a1_element->value);
+        my $a2_element = Rstats::ElementFunc::double(CORE::length $a1_element->value);
         push $a2_elements, $a2_element;
       }
     }
@@ -1835,14 +1945,6 @@ sub ncol {
   my $a1 = shift;
   
   return c($a1->dim->values->[1]);
-}
-
-sub length {
-  my $a1 = shift;
-  
-  my $length = @{$a1->elements};
-  
-  return c($length);
 }
 
 sub seq {

@@ -18,6 +18,7 @@ use Carp 'croak';
 # outer(x, y, f)
 
 my @arrayutil_methods = qw/
+  as_list
   abs
   acos
   acosh
@@ -46,6 +47,7 @@ my @arrayutil_methods = qw/
   cumsum
   cumprod
   complex
+  data_frame
   diag
   diff
   exp
@@ -59,10 +61,13 @@ my @arrayutil_methods = qw/
   i
   ifelse
   is_element
+  is_list
   Im
   Inf
   intersect
   kronecker
+  length
+  list
   log
   logb
   log2
@@ -198,116 +203,6 @@ sub new {
   }
 
   return $self;
-}
-
-sub data_frame {
-  my ($self, @data) = @_;
-  
-  my $elements = [];
-  
-  # name count
-  my $name_count = {
-    
-  };
-  
-  # count
-  my $counts = [];
-  my $names = [];
-  while (my ($name, $v) = splice(@data, 0, 2)) {
-    my $dim_values = $v->dim->values;
-    if (@$dim_values > 1) {
-      my $count = $dim_values->[0];
-      my $dim_product = 1;
-      $dim_product *= $dim_values->[$_] for (1 .. @$dim_values - 1);
-      
-      for my $num (1 .. $dim_product) {
-        push @$counts, $count;
-        my $fix_name;
-        if (my $count = $name_count->{$name}) {
-          $fix_name = "$name.$count";
-        }
-        else {
-          $fix_name = $name;
-        }
-        push @$names, $fix_name;
-        push @$elements, splice(@{$v->elements}, 0, $count);
-      }
-    }
-    else {
-      my $count = @{$v->elements};
-      push @$counts, $count;
-      my $fix_name;
-      if (my $count = $name_count->{$name}) {
-        $fix_name = "$name.$count";
-      }
-      else {
-        $fix_name = $name;
-      }
-      push @$names, $fix_name;
-      push @$elements, $v;
-    }
-    $name_count->{$name}++;
-  }
-  
-  # Max count
-  my $max_count = List::Util::max @$counts;
-  
-  # Check multiple number
-  for my $count (@$counts) {
-    if ($max_count % $count != 0) {
-      croak "Error in data.frame: arguments imply differing number of rows: @$counts";
-    }
-  }
-  
-  # Fill vector
-  for (my $i = 0; $i < @$counts; $i++) {
-    my $count = $counts->[$i];
-    
-    my $repeat = $max_count / $count;
-    if ($repeat > 1) {
-      $elements->[$i] = Rstats::Func::c(($elements->[$i]) x $repeat);
-    }
-  }
-
-  my $data_frame = Rstats::Container::DataFrame->new;
-  $data_frame->elements($elements);
-  $data_frame->names(Rstats::Func::c($names));
-  
-  return $data_frame;
-}
-
-sub as_list {
-  my ($self, $container) = @_;
-  
-  return $container if $self->is_list($container);
-
-  my $list = Rstats::Container::List->new;
-  $list->elements($container->elements);
-  
-  return $list;
-}
-
-sub is_list {
-  my ($self, $container) = @_;
-  
-  return ref $container eq 'Rstats::Container::List' ? $self->TRUE : $self->FALSE;
-}
-
-sub list {
-  my ($self, @elements) = @_;
-  
-  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_array($_) : $_ } @elements;
-  
-  my $list = Rstats::Container::List->new;
-  $list->elements(\@elements);
-  
-  return $list;
-}
-
-sub length {
-  my ($self, $container) = @_;
-  
-  return $container->length;
 }
 
 sub runif {

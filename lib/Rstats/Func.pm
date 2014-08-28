@@ -31,26 +31,42 @@ sub pi () { c(Rstats::ElementFunc::pi()) }
 # @@         labels = levels, exclude = NA, ordered = is.ordered(x)
 
 sub factor {
-  my ($a1_x, $a1_levels, $a1_labels, $a1_exclude, $a1_ordered)
+  my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
   
-  $a1_x = $a1_x->as_character unless $a1_x->is_character;
-  my $a1_x_elements = $a1_x->elements;
+  $a_x = $a_x->as_character unless $a_x->is_character;
+  my $a_x_elements = $a_x->elements;
   
+  my $levels_passed = $a_levels->is_null ? 0 : 1;
+  
+  my $levels;
   my $level_count = 0;
-  my $levels = {};
+  if ($levels_passed) {
+    my $a_levels_elements = $a_levels->elements;
+    for my $a_levels_element (@$a_levels_elements) {
+      my $value = $a_levels_element->value;
+      $levels->{$value} = $level_count;
+      $level_count++;
+    }
+  }
+  else {
+    $levels = {};
+  }
   my $f1_elements = [];
-  for my $a1_x_element (@$a1_x_elements) {
-    if ($a1_x_element->is_na) {
+  for my $a_x_element (@$a_x_elements) {
+    if ($a_x_element->is_na) {
       push @$f1_elements, Rstats::ElementFunc::NA();
     }
     else {
-      my $value = $a1_x_element->value;
-      unless (defined $levels->{$value}) {
+      my $value = $a_x_element->value;
+      if (!$levels_passed && !defined $levels->{$value}) {
         $levels->{$value} = $level_count;
         $level_count++;
       }
-      push @$f1_elements, Rstats::ElementFunc::integer($levels->{$value});
+      my $f1_element = exists $levels->{$value}
+        ? Rstats::ElementFunc::integer($levels->{$value})
+        : Rstats::ElementFunc::NA;
+      push @$f1_elements, $f1_element;
     }
   }
   

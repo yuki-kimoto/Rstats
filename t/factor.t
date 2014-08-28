@@ -6,6 +6,13 @@ use Rstats;
 
 # factor
 {
+  # factor - levels
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b")});
+    is_deeply($f1->values, [0, 1, undef, 0, 1 ,undef]);
+    is_deeply($f1->levels->values, ["a", "b"]);
+  }
+  
   # factor - to_string
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));

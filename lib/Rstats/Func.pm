@@ -39,19 +39,32 @@ sub factor {
   
   my $levels_passed = $a_levels->is_null ? 0 : 1;
   
+  if ($a_levels->is_null) {
+    $a_levels = Rstats::Func::sort(unique($a_x), {'na.last' => TRUE});
+  }
+  
+  my $labels_length = $a_labels->length->value;
+  my $levels_length = $a_levels->length->value;
+  if ($a_labels->is_null) {
+    $a_labels = $a_levels;
+  }
+  elsif ($labels_length == 1) {
+    my $value = $a_labels->value;
+    $a_labels = paste($value, C("1:$levels_length"), {sep => ""});
+  }
+  elsif ($labels_length != $levels_length) {
+    croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
+  }
+  
+  # Levels hash
   my $levels;
-  my $level_count = 0;
-  if ($levels_passed) {
-    my $a_levels_elements = $a_levels->elements;
-    for my $a_levels_element (@$a_levels_elements) {
-      my $value = $a_levels_element->value;
-      $levels->{$value} = $level_count;
-      $level_count++;
-    }
+  my $a_levels_elements = $a_levels->elements;
+  for (my $i = 0; $i < $levels_length; $i++) {
+    my $a_levels_element = $a_levels_elements->[$i];
+    my $value = $a_levels_element->value;
+    $levels->{$value} = $i;
   }
-  else {
-    $levels = {};
-  }
+  
   my $f1_elements = [];
   for my $a_x_element (@$a_x_elements) {
     if ($a_x_element->is_na) {
@@ -59,13 +72,9 @@ sub factor {
     }
     else {
       my $value = $a_x_element->value;
-      if (!$levels_passed && !defined $levels->{$value}) {
-        $levels->{$value} = $level_count;
-        $level_count++;
-      }
       my $f1_element = exists $levels->{$value}
         ? Rstats::ElementFunc::integer($levels->{$value})
-        : Rstats::ElementFunc::NA;
+        : Rstats::ElementFunc::NA();
       push @$f1_elements, $f1_element;
     }
   }
@@ -74,7 +83,8 @@ sub factor {
   $f1->elements($f1_elements);
   $f1->{type} = 'integer';
   $f1->{class} = 'factor';
-  $f1->{levels} = $levels;
+  $f1->{levels} = $a_levels;
+  $f1->{labels} = $a_labels;
   
   return $f1;
 }

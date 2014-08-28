@@ -6,6 +6,26 @@ use Rstats;
 
 # factor
 {
+
+  # factor - labels
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b", "c"), labels => c(1, 2, 3)});
+    my $expected = <<'EOS';
+[1] 1 2 3 1 2 3
+Levels: 1 2 3
+EOS
+    is("$f1", $expected);
+  }
+
+  # factor - labels, one element
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b", "c"), labels => "a"});
+    my $expected = <<'EOS';
+[1] a1 a2 a3 a1 a2 a3
+Levels: a1 a2 a3
+EOS
+    is("$f1", $expected);
+  }
   
   # factor - to_string
   {

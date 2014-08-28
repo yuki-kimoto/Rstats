@@ -27,21 +27,25 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+# x = character(), levels = sort(unique.default(x), na.last=TRUE),
+# @@         labels = levels, exclude = NA, ordered = is.ordered(x)
+
 sub factor {
-  my $a1 = shift;
+  my ($a1_x, $a1_levels, $a1_labels, $a1_exclude, $a1_ordered)
+    = args([qw/x levels labels exclude ordered/], @_);
   
-  $a1 = $a1->as_character unless $a1->is_character;
-  my $a1_elements = $a1->elements;
+  $a1_x = $a1_x->as_character unless $a1_x->is_character;
+  my $a1_x_elements = $a1_x->elements;
   
   my $level_count = 0;
   my $levels = {};
   my $f1_elements = [];
-  for my $a1_element (@$a1_elements) {
-    if ($a1_element->is_na) {
+  for my $a1_x_element (@$a1_x_elements) {
+    if ($a1_x_element->is_na) {
       push @$f1_elements, Rstats::ElementFunc::NA();
     }
     else {
-      my $value = $a1_element->value;
+      my $value = $a1_x_element->value;
       unless (defined $levels->{$value}) {
         $levels->{$value} = $level_count;
         $level_count++;

@@ -46,9 +46,14 @@ sub to_string {
   push @str, '[1]';
   my $elements = $self->elements;
   for my $element (@$elements) {
-    my $value = $element->value;
-    my $character = $levels_reverse->{$value};
-    push @str, $character;
+    if ($element->is_na) {
+      push @str, '<NA>';
+    }
+    else {
+      my $value = $element->value;
+      my $character = $levels_reverse->{$value};
+      push @str, $character;
+    }
   }
   
   my $str = join(' ', @str) . "\n";

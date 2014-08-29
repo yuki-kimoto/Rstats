@@ -55,7 +55,12 @@ sub to_string {
   
   my $str = join(' ', @str) . "\n";
   
-  $str .= join(' ', 'Levels:', @{$a_labels->values}) . "\n";
+  if ($self->is_ordered) {
+    $str .= 'Levels: ' . join(' < ', @{$a_labels->values}) . "\n";
+  }
+  else {
+    $str .= 'Levels: ' . join(' ', , @{$a_labels->values}) . "\n";
+  }
   
   return $str;
 }

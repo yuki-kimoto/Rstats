@@ -54,6 +54,16 @@ Levels: a b
 EOS
     is("$f1", $expected);
   }
+
+  # factor - to_string, ordered
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {ordered => TRUE});
+    my $expected = <<'EOS';
+[1] a b c a b c
+Levels: a < b < c
+EOS
+    is("$f1", $expected);
+  }
   
   # factor - levels
   {

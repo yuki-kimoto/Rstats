@@ -88,8 +88,8 @@ sub factor {
   # Levels hash
   my $levels;
   my $a_levels_elements = $a_levels->elements;
-  for (my $i = 0; $i < $levels_length; $i++) {
-    my $a_levels_element = $a_levels_elements->[$i];
+  for (my $i = 1; $i <= $levels_length; $i++) {
+    my $a_levels_element = $a_levels_elements->[$i - 1];
     my $value = $a_levels_element->value;
     $levels->{$value} = $i;
   }

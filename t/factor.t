@@ -10,7 +10,7 @@ use Rstats;
   # factor - exclude
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {exclude => "c"});
-    is_deeply($f1->values, [0, 1, undef, 0, 1, undef]);
+    is_deeply($f1->values, [1, 2, undef, 1, 2, undef]);
   }
   
   # factor - labels
@@ -46,7 +46,7 @@ EOS
   # factor - levels
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b")});
-    is_deeply($f1->values, [0, 1, undef, 0, 1 ,undef]);
+    is_deeply($f1->values, [1, 2, undef, 1, 2 ,undef]);
     is_deeply($f1->levels->values, ["a", "b"]);
   }
   
@@ -54,7 +54,7 @@ EOS
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
     ok($f1->is_integer);
-    is_deeply($f1->values, [0, 1, 2, 0, 1 ,2]);
+    is_deeply($f1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply($f1->levels->values, ["a", "b", "c"]);
   }
 }

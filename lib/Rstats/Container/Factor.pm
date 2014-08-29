@@ -33,9 +33,9 @@ sub to_string {
   my $a_labels_elements = $a_labels->elements;
   my $levels_length = $a_levels->length->value;
   my $labels = {};
-  for (my $i = 0; $i < $levels_length; $i++) {
-    my $a_levels_element = $a_levels->elements->[$i];
-    my $a_labels_element = $a_labels->elements->[$i];
+  for (my $i = 1; $i <= $levels_length; $i++) {
+    my $a_levels_element = $a_levels->elements->[$i - 1];
+    my $a_labels_element = $a_labels->elements->[$i - 1];
     $labels->{$i} = $a_labels_element->value;
   }
   

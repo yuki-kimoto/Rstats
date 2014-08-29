@@ -40,16 +40,38 @@ sub factor {
   my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
 
-  
-  # Default
+  # default - x
   $a_x = $a_x->as_character unless $a_x->is_character;
+  
+  # default - levels
   unless (defined $a_levels) {
     $a_levels = Rstats::Func::sort(unique($a_x), {'na.last' => TRUE});
   }
+  
+  # default - exclude
+  $a_exclude = NA unless defined $a_exclude;
+  
+  # fix levels
+  if (!$a_exclude->is_na && $a_exclude->length->value) {
+    my $new_a_levels_elements = [];
+    for my $a_levels_element (@{$a_levels->elements}) {
+      my $match;
+      for my $a_exclude_element (@{$a_exclude->elements}) {
+        my $is_equal = Rstats::ElementFunc::equal($a_levels_element, $a_exclude_element);
+        if (!$is_equal->is_na && $is_equal) {
+          $match = 1;
+          last;
+        }
+      }
+      push $new_a_levels_elements, $a_levels_element unless $match;
+    }
+    $a_levels = c($new_a_levels_elements);
+  }
+  
+  # default - labels
   unless (defined $a_labels) {
     $a_labels = $a_levels;
   }
-  $a_exclude = NA unless defined $a_exclude;
   
   my $a_x_elements = $a_x->elements;
   

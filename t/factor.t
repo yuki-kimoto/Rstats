@@ -7,6 +7,12 @@ use Rstats;
 # factor
 {
 
+  # factor - exclude
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {exclude => "c"});
+    is_deeply($f1->values, [0, 1, undef, 0, 1, undef]);
+  }
+  
   # factor - labels
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b", "c"), labels => c(1, 2, 3)});

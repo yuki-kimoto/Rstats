@@ -37,6 +37,7 @@ sub pi () { c(Rstats::ElementFunc::pi()) }
 # Å@Å@         labels = levels, exclude = NA, ordered = is.ordered(x)
 
 sub factor {
+  $DB::single = 1;
   my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
   
@@ -1168,9 +1169,13 @@ sub args {
   my @args;
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
-    my $arg = delete $opt->{$name};
-    $arg = $_[$i] unless defined $arg;
-    $arg = to_array($arg);
+    my $arg;
+    if (exists $opt->{$name}) {
+      $arg = to_array(delete $opt->{$name});
+    }
+    elsif (exists $_[$i]) {
+      $arg = to_array($_[$i]);
+    }
     push @args, $arg;
   }
   

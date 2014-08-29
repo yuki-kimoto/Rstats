@@ -37,27 +37,25 @@ sub pi () { c(Rstats::ElementFunc::pi()) }
 # @@         labels = levels, exclude = NA, ordered = is.ordered(x)
 
 sub factor {
-  $DB::single = 1;
   my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
+
   
   # Default
-  $a_levels = NULL unless defined $a_levels;
-  $a_labels = NULL unless defined $a_labels;
-  
   $a_x = $a_x->as_character unless $a_x->is_character;
-  my $a_x_elements = $a_x->elements;
-  
-  if ($a_levels->is_null) {
+  unless (defined $a_levels) {
     $a_levels = Rstats::Func::sort(unique($a_x), {'na.last' => TRUE});
   }
+  unless (defined $a_labels) {
+    $a_labels = $a_levels;
+  }
+  $a_exclude = NA unless defined $a_exclude;
+  
+  my $a_x_elements = $a_x->elements;
   
   my $labels_length = $a_labels->length->value;
   my $levels_length = $a_levels->length->value;
-  if ($a_labels->is_null) {
-    $a_labels = $a_levels;
-  }
-  elsif ($labels_length == 1) {
+  if ($labels_length == 1) {
     my $value = $a_labels->value;
     $a_labels = paste($value, C("1:$levels_length"), {sep => ""});
   }

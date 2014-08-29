@@ -7,6 +7,18 @@ use Rstats;
 # factor
 {
 
+  # factor - ordered
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {ordered => TRUE});
+    ok($f1->is_ordered);
+  }
+
+  # factor - ordered, default
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
+    ok(!$f1->is_ordered);
+  }
+  
   # factor - exclude
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {exclude => "c"});

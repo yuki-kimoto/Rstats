@@ -73,6 +73,9 @@ sub factor {
     $a_labels = $a_levels;
   }
   
+  # default - ordered
+  $a_ordered = FALSE unless defined $a_ordered;
+  
   my $a_x_elements = $a_x->elements;
   
   my $labels_length = $a_labels->length->value;
@@ -114,6 +117,7 @@ sub factor {
   $f1->{class} = 'factor';
   $f1->{levels} = $a_levels;
   $f1->{labels} = $a_labels;
+  $f1->{ordered} = $a_ordered;
   
   return $f1;
 }

@@ -38,6 +38,14 @@ sub value {
   return defined $e1 ? $e1->value : Rstats::ElementFunc::NA();
 }
 
+sub is_ordered {
+  my $a1 = shift;
+  
+  my $is = defined $a1->{ordered} ? $a1->{ordered} : Rstats::Func::FALSE();
+  
+  return $is;
+}
+
 sub is_vector {
   my $a1 = shift;
   

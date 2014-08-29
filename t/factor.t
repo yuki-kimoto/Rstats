@@ -13,12 +13,12 @@ use Rstats;
     ok($f1->is_ordered);
   }
 
-  # factor - ordered, default
+  # factor - ordered, default, FALSE
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
     ok(!$f1->is_ordered);
   }
-  
+
   # factor - exclude
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"), {exclude => "c"});

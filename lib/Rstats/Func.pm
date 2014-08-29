@@ -12,7 +12,7 @@ use Rstats::ElementFunc;
 
 use List::Util;
 use Math::Trig ();
-use POSIX ();;
+use POSIX ();
 use Math::Round ();
 
 sub NULL { Rstats::Container::Array->new(elements => [], dim => [], type => 'logical') }
@@ -74,7 +74,7 @@ sub factor {
   }
   
   # default - ordered
-  $a_ordered = FALSE unless defined $a_ordered;
+  $a_ordered = $a_x->is_ordered unless defined $a_ordered;
   
   my $a_x_elements = $a_x->elements;
   

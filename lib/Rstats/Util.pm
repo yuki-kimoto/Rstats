@@ -86,7 +86,7 @@ sub parse_index {
     for (my $i = 0; $i < @$a1_dim; $i++) {
       my $_index = $_indexs[$i];
       
-      my $index = Rstats::Func::to_array($_index);
+      my $index = defined $_index ? Rstats::Func::to_array($_index) : Rstats::Func::NULL();
       my $index_values = $index->values;
       if (@$index_values && !$index->is_character && !$index->is_logical) {
         my $minus_count = 0;

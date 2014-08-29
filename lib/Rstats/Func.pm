@@ -15,6 +15,12 @@ use Math::Trig ();
 use POSIX ();;
 use Math::Round ();
 
+sub NULL { Rstats::Container::Array->new(elements => [], dim => [], type => 'logical') }
+
+sub NA { c(Rstats::ElementFunc::NA()) }
+
+sub NaN { c(Rstats::ElementFunc::NaN()) }
+
 sub Inf () { c(Rstats::ElementFunc::Inf()) }
 
 sub negativeInf () { c(Rstats::ElementFunc::negativeInf()) }
@@ -34,10 +40,12 @@ sub factor {
   my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
   
+  # Default
+  $a_levels = NULL unless defined $a_levels;
+  $a_labels = NULL unless defined $a_labels;
+  
   $a_x = $a_x->as_character unless $a_x->is_character;
   my $a_x_elements = $a_x->elements;
-  
-  my $levels_passed = $a_levels->is_null ? 0 : 1;
   
   if ($a_levels->is_null) {
     $a_levels = Rstats::Func::sort(unique($a_x), {'na.last' => TRUE});
@@ -202,7 +210,7 @@ sub data_frame {
 sub upper_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = $a1_diag->element;
+  my $diag = defined $a1_diag ? $a1_diag->element : FALSE;
   
   my $a2_elements = [];
   if ($a1_m->is_matrix) {
@@ -235,7 +243,7 @@ sub upper_tri {
 sub lower_tri {
   my ($a1_m, $a1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = $a1_diag->element;
+  my $diag = defined $a1_diag ? $a1_diag->element : FALSE;
   
   my $a2_elements = [];
   if ($a1_m->is_matrix) {
@@ -408,7 +416,7 @@ sub sub {
   
   my $pattern = $a1_pattern->value;
   my $replacement = $a1_replacement->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = defined $a1_ignore_case ? $a1_ignore_case->element : FALSE;
   
   my $a2_elements = [];
   for my $x_e (@{$a1_x->elements}) {
@@ -439,7 +447,7 @@ sub gsub {
   
   my $pattern = $a1_pattern->value;
   my $replacement = $a1_replacement->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = defined $a1_ignore_case ? $a1_ignore_case->element : FALSE;
   
   my $a2_elements = [];
   for my $x_e (@{$a1_x->elements}) {
@@ -468,7 +476,7 @@ sub grep {
   my ($a1_pattern, $a1_x, $a1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $a1_pattern->value;
-  my $ignore_case = $a1_ignore_case->element;
+  my $ignore_case = defined $a1_ignore_case ? $a1_ignore_case->element : FALSE;
   
   my $a2_elements = [];
   my $a1_x_elements = $a1_x->elements;
@@ -832,12 +840,6 @@ sub match {
   return c(\@matches);
 }
 
-sub NULL { Rstats::Container::Array->new(elements => [], dim => [], type => 'logical') }
-
-sub NA { c(Rstats::ElementFunc::NA()) }
-
-sub NaN { c(Rstats::ElementFunc::NaN()) }
-
 sub operation {
   my ($op, $a1, $a2) = @_;
   
@@ -913,6 +915,9 @@ sub acosh { process(\&Rstats::ElementFunc::acosh, @_) }
 sub append {
   my ($a1, $a2, $a_after) = args(['a1', 'a2', 'after'], @_);
   
+  # Default
+  $a_after = NULL unless defined $a_after;
+  
   my $a1_length = @{$a1->elements};
   $a_after = c($a1_length) if $a_after->is_null;
   my $after = $a_after->value;
@@ -938,7 +943,7 @@ sub array {
 
   # Dimention
   my $elements = $a1->elements;
-  my $dim = to_array($_dim);
+  my $dim = defined $_dim ? to_array($_dim) : NULL;
   my $a1_length = @{$a1->elements};
   unless (@{$dim->elements}) {
     $dim = c($a1_length);
@@ -1176,6 +1181,9 @@ sub args {
 
 sub complex {
   my ($a1_re, $a1_im, $a1_mod, $a1_arg) = args(['re', 'im', 'mod', 'arg'], @_);
+  
+  $a1_mod = NULL unless defined $a1_mod;
+  $a1_arg = NULL unless defined $a1_arg;
 
   my $a2_elements = [];
   # Create complex from mod and arg
@@ -2224,10 +2232,9 @@ sub numeric {
 sub to_array {
   my $_array = shift;
   
-  my $a1
-   = !defined $_array ? NULL
-   : ref $_array eq 'Rstats::Container::Array' ? $_array
-   : c($_array);
+  return undef unless defined $_array;
+  
+  my $a1 = ref $_array eq 'Rstats::Container::Array' ? $_array : c($_array);
   
   return $a1;
 }

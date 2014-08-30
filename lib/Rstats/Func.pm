@@ -15,7 +15,7 @@ use Math::Trig ();
 use POSIX ();
 use Math::Round ();
 
-sub NULL { Rstats::Container::Array->new(elements => [], dim => [], type => 'logical') }
+sub NULL { Rstats::Container::Array->new(elements => [], type => 'logical') }
 
 sub NA { c(Rstats::ElementFunc::NA()) }
 
@@ -1210,7 +1210,7 @@ sub args {
 
 sub complex {
   my ($a1_re, $a1_im, $a1_mod, $a1_arg) = args(['re', 'im', 'mod', 'arg'], @_);
-  
+
   $a1_mod = NULL unless defined $a1_mod;
   $a1_arg = NULL unless defined $a1_arg;
 

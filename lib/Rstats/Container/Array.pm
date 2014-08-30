@@ -307,8 +307,8 @@ sub set {
 sub dim_as_array {
   my $a1 = shift;
   
-  if (@{dim($a1)->elements}) {
-    return dim($a1);
+  if (@{$a1->dim->elements}) {
+    return $a1->dim;
   }
   else {
     my $length = @{$a1->elements};
@@ -317,39 +317,41 @@ sub dim_as_array {
 }
 
 sub dim {
-  my $a1 = shift;
+  my $self = shift;
   
   if (@_) {
     my $a_dim = Rstats::Func::to_array($_[0]);
-    my $a1_length = @{$a1->elements};
-    my $a1_lenght_by_dim = 1;
-    $a1_lenght_by_dim *= $_ for @{$a_dim->values};
+    my $self_length = @{$self->elements};
+    my $self_lenght_by_dim = 1;
+    $self_lenght_by_dim *= $_ for @{$a_dim->values};
     
-    if ($a1_length != $a1_lenght_by_dim) {
-      croak "dims [product $a1_lenght_by_dim] do not match the length of object [$a1_length]";
+    if ($self_length != $self_lenght_by_dim) {
+      $DB::single = 1;
+      croak "dims [product $self_lenght_by_dim] do not match the length of object [$self_length]";
     }
   
-    $a1->{dim} = $a_dim->elements;
+    $self->{dim} = Rstats::Func::c($a_dim->elements);
     
-    return $a1;
+    return $self;
   }
   else {
-    return Rstats::Func::c($a1->{dim});
+    $self->{dim} = Rstats::Func::NULL() unless defined $self->{dim};
+    return $self->{dim};
   }
 }
 
 sub clone_without_elements {
-  my ($a1, %opt) = @_;
+  my ($self, %opt) = @_;
   
-  my $a2 = Rstats::Container::Array->new;
-  $a2->{type} = $a1->{type};
-  $a2->{names} = [@{$a1->{names} || []}];
-  $a2->{dimnames} = $a1->{dimnames};
-
-  $a2->{dim} = [@{$a1->{dim} || []}];
-  $a2->{elements} = $opt{elements} ? $opt{elements} : [];
+  my $clone = Rstats::Container::Array->new;
+  $clone->{type} = $self->{type};
+  $clone->{names} = [@{$self->{names} || []}];
+  $clone->{dimnames} = $self->{dimnames};
   
-  return $a2;
+  $clone->{dim} = $self->dim; 
+  $clone->{elements} = $opt{elements} ? $opt{elements} : [];
+  
+  return $clone;
 }
 
 sub is_array { Rstats::Func::TRUE() }
@@ -378,7 +380,7 @@ sub bool {
   elsif ($length > 1) {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
-  
+
   my $element = element($self);
   
   return !!$element;

@@ -27,8 +27,6 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
-my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
-
 sub to_string {
   my $a1 = shift;
 
@@ -123,52 +121,6 @@ sub to_string {
   }
   
   return $str;
-}
-
-sub typeof {
-  my $a1 = shift;
-  
-  my $type = $a1->{type};
-  my $a2_elements = defined $type ? $type : "NULL";
-  my $a2 = Rstats::Func::c($a2_elements);
-  
-  return $a2;
-}
-
-sub mode {
-  my $a1 = shift;
-  
-  if (@_) {
-    my $type = $_[0];
-    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
-      unless $types_h{$type};
-    
-    if ($type eq 'numeric') {
-      $a1->{type} = 'double';
-    }
-    else {
-      $a1->{type} = $type;
-    }
-    
-    return $a1;
-  }
-  else {
-    my $type = $a1->{type};
-    my $mode;
-    if (defined $type) {
-      if ($type eq 'integer' || $type eq 'double') {
-        $mode = 'numeric';
-      }
-      else {
-        $mode = $type;
-      }
-    }
-    else {
-      croak qq/could not find function "as_$type"/;
-    }
-
-    return Rstats::Func::c($mode);
-  }
 }
 
 sub is_finite {
@@ -367,8 +319,6 @@ sub length {
   
   return Rstats::Func::c($length);
 }
-
-sub type { Rstats::Func::type(@_) }
 
 sub bool {
   my $self = shift;

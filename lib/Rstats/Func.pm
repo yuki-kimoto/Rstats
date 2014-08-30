@@ -609,19 +609,6 @@ sub Im {
   return $a2;
 }
 
-sub type {
-  my $a1 = shift;
-  
-  if (@_) {
-    $a1->{type} = $_[0];
-    
-    return $a1;
-  }
-  else {
-    return $a1->{type};
-  }
-}
-
 sub Conj {
   my $a1 = to_array(shift);
   

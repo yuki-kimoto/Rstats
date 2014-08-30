@@ -7,6 +7,67 @@ use Carp 'croak';
 
 has 'elements' => sub { [] };
 
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+
+sub mode {
+  my $self = shift;
+  
+  if (@_) {
+    my $type = $_[0];
+    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
+      unless $types_h{$type};
+    
+    if ($type eq 'numeric') {
+      $self->{type} = 'double';
+    }
+    else {
+      $self->{type} = $type;
+    }
+    
+    return $self;
+  }
+  else {
+    my $type = $self->{type};
+    my $mode;
+    if (defined $type) {
+      if ($type eq 'integer' || $type eq 'double') {
+        $mode = 'numeric';
+      }
+      else {
+        $mode = $type;
+      }
+    }
+    else {
+      croak qq/could not find function "as_$type"/;
+    }
+
+    return Rstats::Func::c($mode);
+  }
+}
+
+sub typeof {
+  my $self = shift;
+  
+  my $type = $self->{type};
+  my $a2_elements = defined $type ? $type : "NULL";
+  my $a2 = Rstats::Func::c($a2_elements);
+  
+  return $a2;
+}
+
+sub type {
+  my $self = shift;
+  
+  if (@_) {
+    $self->{type} = $_[0];
+    
+    return $self;
+  }
+  else {
+    return $self->{type};
+  }
+}
+
 sub is_factor {
   my $self = shift;
 }

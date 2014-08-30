@@ -6,6 +6,15 @@ use Rstats;
 
 # factor
 {
+=pod
+  # factor - as_factor, character
+  {
+    my $a1 = c("a", "b", "c");
+    my $f1 = factor($a1);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 2, 3]);
+  }
+=cut
 
   # factor - ordered
   {

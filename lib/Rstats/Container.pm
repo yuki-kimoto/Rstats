@@ -7,6 +7,24 @@ use Carp 'croak';
 
 has 'elements' => sub { [] };
 
+sub is_factor {
+  my $self = shift;
+}
+
+sub as_factor {
+  my $self = shift;
+  
+  if ($self->is_factor) {
+    return $self;
+  }
+  else {
+    my $a = $self->is_character ? $self :  $self->as_character;
+    my $f = Rstats::Func::factor($a);
+    
+    return $f;
+  }
+}
+
 sub as_matrix {
   my $self = shift;
   

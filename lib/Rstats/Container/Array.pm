@@ -126,7 +126,7 @@ sub to_string {
 sub is_finite {
   my $_a1 = shift;
 
-  my $a1 = Rstats::Func::to_array($_a1);
+  my $a1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
@@ -142,7 +142,7 @@ sub is_finite {
 sub is_infinite {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_array($_a1);
+  my $a1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     ref $_ eq 'Rstats::Inf' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
@@ -156,7 +156,7 @@ sub is_infinite {
 sub is_nan {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_array($_a1);
+  my $a1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     ref $_ eq  'Rstats::NaN' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
@@ -170,7 +170,7 @@ sub is_nan {
 sub is_null {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_array($_a1);
+  my $a1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = [!@{$a1->elements} ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
   my $a2 = Rstats::Func::array(\@a2_elements);
@@ -228,7 +228,7 @@ sub set {
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   
-  my $a2 = Rstats::Func::to_array($_a2);
+  my $a2 = Rstats::Func::to_c($_a2);
 
   my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   

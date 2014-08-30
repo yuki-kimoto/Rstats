@@ -134,7 +134,7 @@ sub length {
 sub list {
   my @elements = @_;
   
-  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_array($_) : $_ } @elements;
+  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_c($_) : $_ } @elements;
   
   my $list = Rstats::Container::List->new;
   $list->elements(\@elements);
@@ -291,7 +291,7 @@ sub lower_tri {
 }
 
 sub diag {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $size;
   my $a2_elements;
@@ -315,8 +315,8 @@ sub diag {
 }
 
 sub set_diag {
-  my $a1 = to_array(shift);
-  my $a2 = to_array(shift);
+  my $a1 = to_c(shift);
+  my $a2 = to_c(shift);
   
   my $a2_elements;
   my $a1_dim_values = $a1->dim->values;
@@ -334,8 +334,8 @@ sub set_diag {
 }
 
 sub kronecker {
-  my $a1 = to_array(shift);
-  my $a2 = to_array(shift);
+  my $a1 = to_c(shift);
+  my $a2 = to_c(shift);
   
   ($a1, $a2) = upgrade_type($a1, $a2) if $a1->type ne $a2->type;
   
@@ -385,8 +385,8 @@ sub kronecker {
 }
 
 sub outer {
-  my $a1 = to_array(shift);
-  my $a2 = to_array(shift);
+  my $a1 = to_c(shift);
+  my $a2 = to_c(shift);
   
   ($a1, $a2) = upgrade_type($a1, $a2) if $a1->type ne $a2->type;
   
@@ -418,7 +418,7 @@ sub outer {
 }
 
 sub Arg {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Arg($_) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
@@ -580,7 +580,7 @@ sub charmatch {
 }
 
 sub Re {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Re($_) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
@@ -591,7 +591,7 @@ sub Re {
 }
 
 sub Im {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Im($_) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
@@ -602,7 +602,7 @@ sub Im {
 }
 
 sub Conj {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Conj($_) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
@@ -622,7 +622,7 @@ sub negation {
 }
 
 sub is_element {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
@@ -642,7 +642,7 @@ sub is_element {
 }
 
 sub setequal {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
@@ -663,7 +663,7 @@ sub setequal {
 }
 
 sub setdiff {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
@@ -683,7 +683,7 @@ sub setdiff {
 }
 
 sub intersect {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
@@ -700,7 +700,7 @@ sub intersect {
 }
 
 sub union {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
 
   croak "mode is diffrence" if $a1->{type} ne $a2->{type};
   
@@ -711,7 +711,7 @@ sub union {
 }
 
 sub diff {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $a2_elements = [];
   for (my $i = 0; $i < @{$a1->elements} - 1; $i++) {
@@ -727,7 +727,7 @@ sub diff {
 }
 
 sub nchar {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
     my $a2 = $a1->clone_without_elements;
@@ -751,7 +751,7 @@ sub nchar {
 }
 
 sub tolower {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
     my $a2 = $a1->clone_without_elements;
@@ -775,7 +775,7 @@ sub tolower {
 }
 
 sub toupper {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
     my $a2 = $a1->clone_without_elements;
@@ -799,7 +799,7 @@ sub toupper {
 }
 
 sub match {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   my @matches;
   for my $a1_element (@{$a1->elements}) {
@@ -826,8 +826,8 @@ sub match {
 sub operation {
   my ($op, $a1, $a2) = @_;
   
-  $a1 = to_array($a1);
-  $a2 = to_array($a2);
+  $a1 = to_c($a1);
+  $a2 = to_c($a2);
   
   # Upgrade mode if type is different
   ($a1, $a2) = upgrade_type($a1, $a2) if $a1->{type} ne $a2->{type};
@@ -880,7 +880,7 @@ sub equal { operation('equal', @_)}
 sub not_equal { operation('not_equal', @_)}
 
 sub abs {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::abs($_) } @{$a1->elements};
   
@@ -926,7 +926,7 @@ sub array {
 
   # Dimention
   my $elements = $a1->elements;
-  my $dim = defined $_dim ? to_array($_dim) : NULL;
+  my $dim = defined $_dim ? to_c($_dim) : NULL;
   my $a1_length = @{$a1->elements};
   unless (@{$dim->elements}) {
     $dim = c($a1_length);
@@ -965,7 +965,7 @@ sub cbind {
   my $a2_elements = [];
   for my $_a (@arrays) {
     
-    my $a = to_array($_a);
+    my $a = to_c($_a);
     
     my $row_count;
     if ($a->is_matrix) {
@@ -993,7 +993,7 @@ sub cbind {
 sub ceiling {
   my $_a1 = shift;
   
-  my $a1 = to_array($_a1);
+  my $a1 = to_c($_a1);
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::ceil $_->value) } @{$a1->elements};
   
   my $a2 = $a1->clone_without_elements;
@@ -1042,7 +1042,7 @@ sub colSums {
 sub cos { process(\&Rstats::ElementFunc::cos, @_) }
 
 sub atan2 {
-  my ($a1, $a2) = (to_array(shift), to_array(shift));
+  my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   my @a3_elements;
   for (my $i = 0; $i < @{$a1->elements}; $i++) {
@@ -1071,7 +1071,7 @@ sub atan2 {
 sub cosh { process(\&Rstats::ElementFunc::cosh, @_) }
 
 sub cummax {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   unless (@{$a1->elements}) {
     carp 'no non-missing arguments to max; returning -Inf';
@@ -1099,7 +1099,7 @@ sub cummax {
 }
 
 sub cummin {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   unless (@{$a1->elements}) {
     carp 'no non-missing arguments to max; returning -Inf';
@@ -1126,7 +1126,7 @@ sub cummin {
 }
 
 sub cumsum {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   my $type = $a1->{type};
   my $total = Rstats::ElementFunc::create($type);
   my @a2_elements;
@@ -1136,7 +1136,7 @@ sub cumsum {
 }
 
 sub cumprod {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   my $type = $a1->{type};
   my $total = Rstats::ElementFunc::create($type, 1);
   my @a2_elements;
@@ -1153,10 +1153,10 @@ sub args {
     my $name = $names->[$i];
     my $arg;
     if (exists $opt->{$name}) {
-      $arg = to_array(delete $opt->{$name});
+      $arg = to_c(delete $opt->{$name});
     }
     elsif (exists $_[$i]) {
-      $arg = to_array($_[$i]);
+      $arg = to_c($_[$i]);
     }
     push @args, $arg;
   }
@@ -1252,7 +1252,7 @@ sub max_type {
 sub floor {
   my $_a1 = shift;
   
-  my $a1 = to_array($_a1);
+  my $a1 = to_c($_a1);
   
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::floor $_->value) } @{$a1->elements};
 
@@ -1289,7 +1289,7 @@ sub i {
 sub ifelse {
   my ($_v1, $value1, $value2) = @_;
   
-  my $v1 = to_array($_v1);
+  my $v1 = to_c($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for my $v1_value (@$v1_values) {
@@ -1339,7 +1339,7 @@ sub max {
 }
 
 sub mean {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $a2 = divide(sum($a1), scalar @{$a1->elements});
   
@@ -1373,7 +1373,7 @@ sub min {
 
 sub order {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = to_array(shift);
+  my $v1 = to_c(shift);
   my $decreasing = $opt->{decreasing} || FALSE;
   
   my $v1_values = $v1->values;
@@ -1392,7 +1392,7 @@ sub order {
 # na.last
 sub rank {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = to_array(shift);
+  my $v1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
   
   my $v1_values = $v1->values;
@@ -1516,9 +1516,9 @@ sub rep {
 }
 
 sub replace {
-  my $v1 = to_array(shift);
-  my $v2 = to_array(shift);
-  my $v3 = to_array(shift);
+  my $v1 = to_c(shift);
+  my $v2 = to_c(shift);
+  my $v3 = to_c(shift);
   
   my $v1_elements = $v1->elements;
   my $v2_elements = $v2->elements;
@@ -1599,7 +1599,7 @@ sub round {
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $a1 = to_array($_a1);
+  my $a1 = to_c($_a1);
 
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::ElementFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$a1->elements};
@@ -1674,7 +1674,7 @@ sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_v1, $length) = @_;
-  my $v1 = to_array($_v1);
+  my $v1 = to_c($_v1);
   
   # Replace
   my $replace = $opt->{replace};
@@ -1699,7 +1699,7 @@ sub sample {
 sub sequence {
   my $_v1 = shift;
   
-  my $v1 = to_array($_v1);
+  my $v1 = to_c($_v1);
   my $v1_values = $v1->values;
   
   my @v2_values;
@@ -1715,7 +1715,7 @@ sub sin { process(\&Rstats::ElementFunc::sin, @_) }
 sub sinh { process(\&Rstats::ElementFunc::sinh, @_) }
 
 sub sqrt {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::sqrt($_) } @{$a1->elements};
   
@@ -1729,7 +1729,7 @@ sub sqrt {
 sub sort {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
   
   my @a2_elements = grep { !$_->is_na && !$_->is_nan } @{$a1->elements};
@@ -1763,7 +1763,7 @@ sub tan { process(\&Rstats::ElementFunc::tan, @_) }
 
 sub process {
   my $func = shift;
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my @a2_elements = map { $func->($_) } @{$a1->elements};
   my $a2 = $a1->clone_without_elements;
@@ -1778,7 +1778,7 @@ sub tanh { process(\&Rstats::ElementFunc::tanh, @_) }
 sub trunc {
   my ($_a1) = @_;
   
-  my $a1 = to_array($_a1);
+  my $a1 = to_c($_a1);
   
   my @a2_elements = map { Rstats::ElementFunc::double(int $_->value) } @{$a1->elements};
 
@@ -1790,7 +1790,7 @@ sub trunc {
 }
 
 sub unique {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   if ($a1->is_vector) {
     my $a2_elements = [];
@@ -1820,7 +1820,7 @@ sub unique {
 }
 
 sub median {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $a2 = unique($a1);
   my $a3 = Rstats::Func::sort($a2);
@@ -1840,7 +1840,7 @@ sub median {
 }
 
 sub sd {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $sd = Rstats::Func::sqrt(var($a1));
   
@@ -1848,7 +1848,7 @@ sub sd {
 }
 
 sub var {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
 
   my $var = sum(($a1 - mean($a1)) ** 2) / (@{$a1->elements} - 1);
   
@@ -1858,7 +1858,7 @@ sub var {
 sub which {
   my ($_v1, $cond_cb) = @_;
   
-  my $v1 = to_array($_v1);
+  my $v1 = to_c($_v1);
   my $v1_values = $v1->values;
   my @v2_values;
   for (my $i = 0; $i < @$v1_values; $i++) {
@@ -1880,7 +1880,7 @@ sub matrix {
   croak "matrix method need data as frist argument"
     unless defined $_a1;
   
-  my $a1 = to_array($_a1);
+  my $a1 = to_c($_a1);
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;
@@ -1974,7 +1974,7 @@ sub row {
 }
 
 sub sum {
-  my $a1 = to_array(shift);
+  my $a1 = to_c(shift);
   
   my $type = $a1->{type};
   my $sum = Rstats::ElementFunc::create($type);
@@ -2017,7 +2017,7 @@ sub seq {
   # Along
   my $_along = $opt->{along};
   if ($_along) {
-    my $along = to_array($_along);
+    my $along = to_c($_along);
     my $length = @{$along->elements};
     return seq(1,$length);
   }
@@ -2217,7 +2217,7 @@ sub numeric {
   return c((0) x $num);
 }
 
-sub to_array {
+sub to_c {
   my $_array = shift;
   
   my $is_container;

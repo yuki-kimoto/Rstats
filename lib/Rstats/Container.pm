@@ -12,7 +12,7 @@ my %types_h = map { $_ => 1 } qw/character complex numeric double integer logica
 sub is_na {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_array($_a1);
+  my $a1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
@@ -38,7 +38,7 @@ sub class {
   my $self = shift;
   
   if (@_) {
-    my $a_class = Rstats::Func::to_array($_[0]);
+    my $a_class = Rstats::Func::to_c($_[0]);
     
     $self->{class} = [$a_class->elements];
     
@@ -66,7 +66,7 @@ sub dim {
   my $self = shift;
   
   if (@_) {
-    my $a_dim = Rstats::Func::to_array($_[0]);
+    my $a_dim = Rstats::Func::to_c($_[0]);
     my $self_length = @{$self->elements};
     my $self_lenght_by_dim = 1;
     $self_lenght_by_dim *= $_ for @{$a_dim->values};
@@ -469,7 +469,7 @@ sub names {
   my $self = shift;
   
   if (@_) {
-    my $names = Rstats::Func::to_array(shift);
+    my $names = Rstats::Func::to_c(shift);
     
     $self->{names} = $names->elements;
     
@@ -508,7 +508,7 @@ sub colnames {
   my $self = shift;
   
   if (@_) {
-    my $colnames = Rstats::Func::to_array(shift);
+    my $colnames = Rstats::Func::to_c(shift);
     
     $self->dimnames->at(1)->set($colnames);
   }
@@ -522,7 +522,7 @@ sub rownames {
   my $self = shift;
   
   if (@_) {
-    my $rownames = Rstats::Func::to_array(shift);
+    my $rownames = Rstats::Func::to_c(shift);
     
     $self->dimnames->at(2)->set($rownames);
   }

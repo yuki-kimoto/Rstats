@@ -35,7 +35,7 @@ sub at {
 
 sub _name_to_index {
   my $self = shift;
-  my $a1_index = Rstats::Func::to_array(shift);
+  my $a1_index = Rstats::Func::to_c(shift);
   
   my $e1_name = $a1_index->element;
   my $found;
@@ -62,7 +62,7 @@ sub get {
   }
   $self->at($_index);
   
-  my $a1_index = Rstats::Func::to_array($_index);
+  my $a1_index = Rstats::Func::to_c($_index);
   my $index;
   if ($a1_index->is_character) {
     $index = $self->_name_to_index($a1_index);
@@ -78,7 +78,7 @@ sub get {
 
 sub get_as_list {
   my $self = shift;
-  my $index = Rstats::Func::to_array(shift);
+  my $index = Rstats::Func::to_c(shift);
   
   my $elements = $self->elements;
   
@@ -106,7 +106,7 @@ sub set {
   my ($self, $element) = @_;
   
   my $_index = $self->at;
-  my $a1_index = Rstats::Func::to_array($_index);
+  my $a1_index = Rstats::Func::to_c($_index);
   my $index;
   if ($a1_index->is_character) {
     $index = $self->_name_to_index($a1_index);
@@ -114,7 +114,7 @@ sub set {
   else {
     $index = $a1_index->values->[0];
   }
-  $self->elements->[$index - 1] = Rstats::Func::to_array($element);
+  $self->elements->[$index - 1] = Rstats::Func::to_c($element);
   
   return $self;
 }

@@ -10,7 +10,7 @@ sub levels {
   my $self = shift;
   
   if (@_) {
-    my $a1_levels = Rstats::Func::to_array(shift);
+    my $a1_levels = Rstats::Func::to_c(shift);
     $a1_levels = $a1_levels->as_character unless $a1_levels->is_character;
     
     $self->{levels} = $a1_levels;

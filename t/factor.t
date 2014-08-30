@@ -6,7 +6,14 @@ use Rstats;
 
 # factor
 {
-=pod
+  # factor - labels
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
+    my $a1 = $f1->labels;
+    ok($a1->is_character);
+    is_deeply($a1->values, ["a", "b", "c", "a", "b", "c"]);
+  }
+  
   # factor - as_character
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
@@ -14,7 +21,6 @@ use Rstats;
     ok($a1->is_character);
     is_deeply($a1->values, ["a", "b", "c", "a", "b", "c"]);
   }
-=cut
   
   # factor - as_logical
   {

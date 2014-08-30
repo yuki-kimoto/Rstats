@@ -311,21 +311,20 @@ sub as_logical {
   return $a2;
 }
 
+sub labels { shift->as_character(@_) }
+
 sub as_character {
   my $self = shift;
   
   my $a2;
   if ($self->is_factor) {
-    my $labels = {};
+    my $levels = {};
     my $a_levels = $self->levels;
-    my $a_labels = $self->labels;
     my $a_levels_elements = $a_levels->elements;
-    my $a_labels_elements = $a_labels->elements;
     my $levels_length = $a_levels->length->value;
     for (my $i = 1; $i <= $levels_length; $i++) {
       my $a_levels_element = $a_levels->elements->[$i - 1];
-      my $a_labels_element = $a_labels->elements->[$i - 1];
-      $labels->{$i} = $a_labels_element->value;
+      $levels->{$i} = $a_levels_element->value;
     }
 
     my $self_elements =  $self->elements;
@@ -336,7 +335,7 @@ sub as_character {
       }
       else {
         my $value = $self_element->value;
-        my $character = $labels->{$value};
+        my $character = $levels->{$value};
         push @$a2_elements, "$character";
       }
     }

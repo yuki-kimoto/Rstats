@@ -156,6 +156,7 @@ my @object_methods = qw/
   is_integer
   is_logical
   is_vector
+  labels
   dim
   names
   dimnames

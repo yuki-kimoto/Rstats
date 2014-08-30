@@ -1928,6 +1928,7 @@ sub inner_product {
   my ($a1, $a2) = @_;
   
   # Convert to matrix
+  $DB::single = 1;
   $a1 = t($a1->as_matrix) if $a1->is_vector;
   $a2 = $a2->as_matrix if $a2->is_vector;
   
@@ -2221,7 +2222,11 @@ sub to_array {
   
   return undef unless defined $_array;
   
-  my $a1 = ref $_array eq 'Rstats::Container::Array' ? $_array : c($_array);
+  my $is_container;
+  eval {
+    $is_container = $_array->isa('Rstats::Container');
+  };
+  my $a1 = $is_container ? $_array : c($_array);
   
   return $a1;
 }

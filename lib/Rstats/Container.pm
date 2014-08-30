@@ -9,6 +9,20 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub is_na {
+  my $_a1 = shift;
+  
+  my $a1 = Rstats::Func::to_array($_a1);
+  
+  my @a2_elements = map {
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
+  } @{$a1->elements};
+  my $a2 = Rstats::Func::array(\@a2_elements);
+  $a2->mode('logical');
+  
+  return $a2;
+}
+
 sub as_list {
   my $container = shift;
   
@@ -251,7 +265,7 @@ sub as_complex {
   return $a2;
 }
 
-sub as_numeric { as_double(@_) }
+sub as_numeric { shift->as_double(@_) }
 
 sub as_double {
   my $self = shift;
@@ -264,7 +278,7 @@ sub as_double {
   }
   else {
     my $self_elements = $self->elements;
-    my $a2 = $self->clone_without_elements;
+    $a2 = $self->clone_without_elements;
     my @a2_elements = map { $_->as('double') } @$self_elements;
     $a2->elements(\@a2_elements);
     $a2->{type} = 'double';

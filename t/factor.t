@@ -6,6 +6,16 @@ use Rstats;
 
 # factor
 {
+  # factor - as.numeric(levels(f))[f] 
+  {
+    my $f1 = factor(c(2, 3, 4, 2, 3, 4));
+    my $f1_levels = $f1->levels;
+    my $a1_levels = $f1_levels->as_numeric;
+    my $a2 = $a1_levels->get($f1);
+    ok($a2->is_numeric);
+    is_deeply($a2->values, [2, 3, 4, 2, 3, 4]);
+  }
+  
   # factor - labels
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));

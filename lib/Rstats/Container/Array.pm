@@ -153,20 +153,6 @@ sub is_infinite {
   return $a2;
 }
 
-sub is_na {
-  my $_a1 = shift;
-  
-  my $a1 = Rstats::Func::to_array($_a1);
-  
-  my @a2_elements = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
-  } @{$a1->elements};
-  my $a2 = Rstats::Func::array(\@a2_elements);
-  $a2->mode('logical');
-  
-  return $a2;
-}
-
 sub is_nan {
   my $_a1 = shift;
   
@@ -242,11 +228,14 @@ sub set {
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   
+  $DB::single = 1;
   my $a2 = Rstats::Func::to_array($_a2);
-  
+
   my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements;
+  
+
   my $a2_elements = $a2->elements;
   for (my $i = 0; $i < @$positions; $i++) {
     my $pos = $positions->[$i];

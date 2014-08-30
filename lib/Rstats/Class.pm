@@ -16,7 +16,6 @@ use Carp 'croak';
 # outer(x, y, f)
 
 my @funcs = qw/
-  as_list
   abs
   acos
   acosh
@@ -138,6 +137,7 @@ my @object_methods = qw/
   as_character
   as_complex
   as_integer
+  as_list
   as_logical
   as_matrix
   as_numeric

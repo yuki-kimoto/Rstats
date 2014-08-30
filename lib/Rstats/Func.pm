@@ -132,17 +132,6 @@ sub length {
   return $container->length;
 }
 
-sub as_list {
-  my $container = shift;
-  
-  return $container if Rstats::Func::is_list($container);
-
-  my $list = Rstats::Container::List->new;
-  $list->elements($container->elements);
-  
-  return $list;
-}
-
 sub list {
   my @elements = @_;
   

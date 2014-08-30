@@ -9,6 +9,17 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub as_list {
+  my $container = shift;
+  
+  return $container if Rstats::Func::is_list($container);
+
+  my $list = Rstats::Container::List->new;
+  $list->elements($container->elements);
+  
+  return $list;
+}
+
 sub class {
   my $self = shift;
   

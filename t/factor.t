@@ -6,15 +6,24 @@ use Rstats;
 
 # factor
 {
-=pod
+
+  # factor - as_factor, double
+  {
+    my $a1 = c(2, 3, 4);
+    my $f1 = factor($a1);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 2, 3]);
+    is_deeply($f1->levels->values, ["2", "3", "4"]);
+  }
+  
   # factor - as_factor, character
   {
     my $a1 = c("a", "b", "c");
     my $f1 = factor($a1);
     ok($f1->is_factor);
     is_deeply($f1->values, [1, 2, 3]);
+    is_deeply($f1->levels->values, ["a", "b", "c"]);
   }
-=cut
 
   # factor - ordered
   {

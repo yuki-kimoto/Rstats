@@ -76,7 +76,7 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @parts, element($a1, $d1, $d2)->to_string;
+          push @parts, $a1->element($d1, $d2)->to_string;
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -106,7 +106,7 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                push @parts, element($a1, $d1, $d2, @$positions)->to_string;
+                push @parts, $a1->element($d1, $d2, @$positions)->to_string;
               }
               
               $str .= join(' ', @parts) . "\n";
@@ -381,12 +381,31 @@ sub bool {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
 
-  my $element = element($self);
+  my $element = $self->element;
   
   return !!$element;
 }
 
-sub element { Rstats::Func::element(@_) }
+sub element {
+  my $self = shift;
+  
+  my $dim_values = $self->dim_as_array->values;
+  
+  if (@_) {
+    if (@$dim_values == 1) {
+      return $self->elements->[$_[0] - 1];
+    }
+    elsif (@$dim_values == 2) {
+      return $self->elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+    }
+    else {
+      return $self->get(@_)->elements->[0];
+    }
+  }
+  else {
+    return $self->elements->[0];
+  }
+}
 
 sub inner_product {
   my ($self, $data, $reverse) = @_;

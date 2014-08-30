@@ -381,8 +381,8 @@ sub kronecker {
       my $a2_ind = $a3_i - $a2_dim_value * ($a1_ind - 1);
       push @$a2_index, $a2_ind;
     }
-    my $a1_element = element($a1, @$a1_index);
-    my $a2_element = element($a2, @$a2_index);
+    my $a1_element = $a1->element(@$a1_index);
+    my $a2_element = $a2->element(@$a2_index);
     my $a3_element = multiply($a1_element, $a2_element);
     push @$a3_elements, $a3_element;
   }
@@ -414,8 +414,8 @@ sub outer {
     my $pos_tmp = [@$pos];
     my $a1_pos = [splice @$pos_tmp, 0, $a1_dim_length];
     my $a2_pos = $pos_tmp;
-    my $a1_element = element($a1, @$a1_pos);
-    my $a2_element = element($a2, @$a2_pos);
+    my $a1_element = $a1->element(@$a1_pos);
+    my $a2_element = $a2->element(@$a2_pos);
     my $a3_element = Rstats::ElementFunc::multiply($a1_element, $a2_element);
     push @$a3_elements, $a3_element;
   }
@@ -619,27 +619,6 @@ sub type {
   }
   else {
     return $a1->{type};
-  }
-}
-
-sub element {
-  my $a1 = shift;
-  
-  my $dim_values = $a1->dim_as_array->values;
-  
-  if (@_) {
-    if (@$dim_values == 1) {
-      return $a1->elements->[$_[0] - 1];
-    }
-    elsif (@$dim_values == 2) {
-      return $a1->elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
-    }
-    else {
-      return $a1->get(@_)->elements->[0];
-    }
-  }
-  else {
-    return $a1->elements->[0];
   }
 }
 
@@ -1268,7 +1247,7 @@ sub max_type {
     my $array_type = $array->typeof->value;
     $type_h->{$array_type}++;
     unless ($array->is_null) {
-      my $element = element($array);
+      my $element = $array->element;
       my $element_type = $element->typeof;
       $type_h->{$element_type}++;
     }
@@ -2278,7 +2257,7 @@ sub t {
   
   for my $row (1 .. $a1_row) {
     for my $col (1 .. $a1_col) {
-      my $element = element($a1, $row, $col);
+      my $element = $a1->element($row, $col);
       $a2->at($col, $row);
       $a2->set($element);
     }

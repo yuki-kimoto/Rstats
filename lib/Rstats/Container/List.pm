@@ -119,10 +119,6 @@ sub set {
   return $self;
 }
 
-sub length { Rstats::Func::c(shift->_length) }
-
-sub _length { scalar @{shift->elements} }
-
 sub to_string {
   my $self = shift;
   

@@ -182,7 +182,7 @@ sub data_frame {
       }
     }
     else {
-      my $count = @{$v->elements};
+      my $count = $v->length_value;
       push @$counts, $count;
       my $fix_name;
       if (my $count = $name_count->{$name}) {
@@ -295,13 +295,13 @@ sub diag {
   
   my $size;
   my $a2_elements;
-  if (@{$a1->elements} == 1) {
+  if ($a1->length_value == 1) {
     $size = $a1->value;
     $a2_elements = [];
     push @$a2_elements, Rstats::ElementFunc::double(1) for (1 .. $size);
   }
   else {
-    $size = @{$a1->elements};
+    $size = $a1->length_value;
     $a2_elements = $a1->elements;
   }
   
@@ -342,7 +342,7 @@ sub kronecker {
   my $a1_dim = $a1->dim;
   my $a2_dim = $a2->dim;
   my $dim_max_length
-    = @{$a1_dim->elements} > @{$a2_dim->elements} ? @{$a1_dim->elements} : @{$a2_dim->elements};
+    = $a1_dim->length_value > $a2_dim->length_value ? $a1_dim->length_value : $a2_dim->length_value;
   
   my $a3_dim_values = [];
   my $a1_dim_values = $a1_dim->values;
@@ -400,7 +400,7 @@ sub outer {
   }
   my $poses = Rstats::Util::cross_product($indexs);
   
-  my $a1_dim_length = @{$a1_dim->elements};
+  my $a1_dim_length = $a1_dim->length_value;
   my $a3_elements = [];
   for my $pos (@$poses) {
     my $pos_tmp = [@$pos];
@@ -557,7 +557,7 @@ sub charmatch {
     my $a1_x_char_q = quotemeta($a1_x_char);
     my $match_count;
     my $match_pos;
-    for (my $k = 0; $k < @{$a1_table->elements}; $k++) {
+    for (my $k = 0; $k < $a1_table->length_value; $k++) {
       my $a1_table = $a1_table->elements->[$k];
       my $a1_table_char = $a1_table->value;
       if ($a1_table_char =~ /$a1_x_char_q/) {
@@ -649,10 +649,10 @@ sub setequal {
   my $a3 = Rstats::Func::sort($a1);
   my $a4 = Rstats::Func::sort($a2);
   
-  return FALSE if @{$a3->elements} ne @{$a4->elements};
+  return FALSE if $a3->length_value ne $a4->length_value;
   
   my $not_equal;
-  for (my $i = 0; $i < @{$a3->elements}; $i++) {
+  for (my $i = 0; $i < $a3->length_value; $i++) {
     unless (Rstats::ElementFunc::equal($a3->elements->[$i], $a4->elements->[$i])) {
       $not_equal = 1;
       last;
@@ -714,7 +714,7 @@ sub diff {
   my $a1 = to_c(shift);
   
   my $a2_elements = [];
-  for (my $i = 0; $i < @{$a1->elements} - 1; $i++) {
+  for (my $i = 0; $i < $a1->length_value - 1; $i++) {
     my $a1_element1 = $a1->elements->[$i];
     my $a1_element2 = $a1->elements->[$i + 1];
     my $a2_element = Rstats::ElementFunc::subtract($a1_element2, $a1_element1);
@@ -833,8 +833,8 @@ sub operation {
   ($a1, $a2) = upgrade_type($a1, $a2) if $a1->{type} ne $a2->{type};
   
   # Calculate
-  my $a1_length = @{$a1->elements};
-  my $a2_length = @{$a2->elements};
+  my $a1_length = $a1->length_value;
+  my $a2_length = $a2->length_value;
   my $longer_length = $a1_length > $a2_length ? $a1_length : $a2_length;
   
   no strict 'refs';
@@ -901,7 +901,7 @@ sub append {
   # Default
   $a_after = NULL unless defined $a_after;
   
-  my $a1_length = @{$a1->elements};
+  my $a1_length = $a1->length_value;
   $a_after = c($a1_length) if $a_after->is_null;
   my $after = $a_after->value;
   
@@ -927,7 +927,7 @@ sub array {
   # Dimention
   my $elements = $a1->elements;
   my $dim = defined $_dim ? to_c($_dim) : NULL;
-  my $a1_length = @{$a1->elements};
+  my $a1_length = $a1->length_value;
   unless (@{$dim->elements}) {
     $dim = c($a1_length);
   }
@@ -1045,7 +1045,7 @@ sub atan2 {
   my ($a1, $a2) = (to_c(shift), to_c(shift));
   
   my @a3_elements;
-  for (my $i = 0; $i < @{$a1->elements}; $i++) {
+  for (my $i = 0; $i < $a1->length_value; $i++) {
     my $element1 = $a1->elements->[$i];
     my $element2 = $a2->elements->[$i];
     my $element3 = Rstats::ElementFunc::atan2($element1, $element2);
@@ -1073,15 +1073,16 @@ sub cosh { process(\&Rstats::ElementFunc::cosh, @_) }
 sub cummax {
   my $a1 = to_c(shift);
   
-  unless (@{$a1->elements}) {
+  unless ($a1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
     return negativeInf;
   }
   
   my @a2_elements;
-  my $max = shift @{$a1->elements};
+  my $a1_elements = $a1->elements;
+  my $max = shift @$a1_elements;
   push @a2_elements, $max;
-  for my $element (@{$a1->elements}) {
+  for my $element (@$a1_elements) {
     
     if ($element->is_na) {
       return NA;
@@ -1101,15 +1102,16 @@ sub cummax {
 sub cummin {
   my $a1 = to_c(shift);
   
-  unless (@{$a1->elements}) {
+  unless ($a1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
     return negativeInf;
   }
   
   my @a2_elements;
-  my $min = shift @{$a1->elements};
+  my $a1_elements = $a1->elements;
+  my $min = shift @$a1_elements;
   push @a2_elements, $min;
-  for my $element (@{$a1->elements}) {
+  for my $element (@$a1_elements) {
     if ($element->is_na) {
       return NA;
     }
@@ -1174,9 +1176,9 @@ sub complex {
 
   my $a2_elements = [];
   # Create complex from mod and arg
-  if (@{$a1_mod->elements} || @{$a1_arg->elements}) {
-    my $a1_mod_length = @{$a1_mod->elements};
-    my $a1_arg_length = @{$a1_arg->elements};
+  if ($a1_mod->length_value || $a1_arg->length_value) {
+    my $a1_mod_length = $a1_mod->length_value;
+    my $a1_arg_length = $a1_arg->length_value;
     my $longer_length = $a1_mod_length > $a1_arg_length ? $a1_mod_length : $a1_arg_length;
     
     for (my $i = 0; $i < $longer_length; $i++) {
@@ -1202,7 +1204,7 @@ sub complex {
   else {
     croak "mode should be numeric" unless $a1_re->is_numeric && $a1_im->is_numeric;
     
-    for (my $i = 0; $i <  @{$a1_im->elements}; $i++) {
+    for (my $i = 0; $i <  $a1_im->length_value; $i++) {
       my $re = $a1_re->elements->[$i] || Rstats::ElementFunc::double(0);
       my $im = $a1_im->elements->[$i];
       my $a2_element = Rstats::ElementFunc::complex_double($re, $im);
@@ -1271,7 +1273,7 @@ sub head {
   $n = 6 unless defined $n;
   
   my $elements1 = $v1->{elements};
-  my $max = @{$v1->elements} < $n ? @{$v1->elements} : $n;
+  my $max = $v1->length_value < $n ? $v1->length_value : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
     push @elements2, $elements1->[$i];
@@ -1316,13 +1318,14 @@ sub log10 { process(\&Rstats::ElementFunc::log10, @_) }
 sub max {
   my $a1 = c(@_);
   
-  unless (@{$a1->elements}) {
+  unless ($a1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
     return negativeInf;
   }
   
-  my $max = shift @{$a1->elements};
-  for my $element (@{$a1->elements}) {
+  my $a1_elements = $a1->elements;
+  my $max = shift @$a1_elements;
+  for my $element (@$a1_elements) {
     
     if ($element->is_na) {
       return NA;
@@ -1341,7 +1344,7 @@ sub max {
 sub mean {
   my $a1 = to_c(shift);
   
-  my $a2 = divide(sum($a1), scalar @{$a1->elements});
+  my $a2 = divide(sum($a1), $a1->length_value);
   
   return $a2;
 }
@@ -1349,13 +1352,14 @@ sub mean {
 sub min {
   my $a1 = c(@_);
   
-  unless (@{$a1->elements}) {
+  unless ($a1->length_value) {
     carp 'no non-missing arguments to min; returning -Inf';
     return Inf;
   }
   
-  my $min = shift @{$a1->elements};
-  for my $element (@{$a1->elements}) {
+  my $a1_elements = $a1->elements;
+  my $min = shift @$a1_elements;
+  for my $element (@$a1_elements) {
     
     if ($element->is_na) {
       return NA;
@@ -1679,18 +1683,19 @@ sub sample {
   # Replace
   my $replace = $opt->{replace};
   
-  my $v1_length = @{$v1->elements};
+  my $v1_length = $v1->length_value;
   $length = $v1_length unless defined $length;
   
   croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
     if $length > $v1_length && !$replace;
   
   my @v2_elements;
+  my $v1_elements = $v1->elements;
   for my $i (0 .. $length - 1) {
-    my $rand_num = int(rand @{$v1->elements});
-    my $rand_element = splice @{$v1->elements}, $rand_num, 1;
+    my $rand_num = int(rand @$v1_elements);
+    my $rand_element = splice @$v1_elements, $rand_num, 1;
     push @v2_elements, $rand_element;
-    push @{$v1->elements}, $rand_element if $replace;
+    push @$v1_elements, $rand_element if $replace;
   }
   
   return c(\@v2_elements);
@@ -1750,10 +1755,10 @@ sub tail {
   $n = 6 unless defined $n;
   
   my $elements1 = $v1->{elements};
-  my $max = @{$v1->elements} < $n ? @{$v1->elements} : $n;
+  my $max = $v1->length_value < $n ? $v1->length_value : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @elements2, $elements1->[@{$v1->elements} - ($i  + 1)];
+    unshift @elements2, $elements1->[$v1->length_value - ($i  + 1)];
   }
   
   return $v1->new(elements => \@elements2);
@@ -1824,7 +1829,7 @@ sub median {
   
   my $a2 = unique($a1);
   my $a3 = Rstats::Func::sort($a2);
-  my $a3_length = @{$a3->elements};
+  my $a3_length = $a3->length_value;
   
   if ($a3_length % 2 == 0) {
     my $middle = $a3_length / 2;
@@ -1850,7 +1855,7 @@ sub sd {
 sub var {
   my $a1 = to_c(shift);
 
-  my $var = sum(($a1 - mean($a1)) ** 2) / (@{$a1->elements} - 1);
+  my $var = sum(($a1 - mean($a1)) ** 2) / ($a1->length_value - 1);
   
   return $var;
 }
@@ -1936,7 +1941,7 @@ sub inner_product {
   if ($a1->is_matrix && $a2->is_matrix) {
     
     croak "requires numeric/complex matrix/vector arguments"
-      if @{$a1->elements} == 0 || @{$a2->elements} == 0;
+      if $a1->length_value == 0 || $a2->length_value == 0;
     croak "Error in a x b : non-conformable arguments"
       unless $a1->dim->values->[1] == $a2->dim->values->[0];
     
@@ -2018,7 +2023,7 @@ sub seq {
   my $_along = $opt->{along};
   if ($_along) {
     my $along = to_c($_along);
-    my $length = @{$along->elements};
+    my $length = $along->length_value;
     return seq(1,$length);
   }
   else {

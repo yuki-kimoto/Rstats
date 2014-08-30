@@ -9,6 +9,22 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub length {
+  my $self = shift;
+  
+  my $length = $self->length_value;
+  
+  return Rstats::Func::c($length);
+}
+
+sub length_value {
+  my $self = shift;
+  
+  my $length = @{$self->elements};
+  
+  return $length;
+}
+
 sub is_na {
   my $_a1 = shift;
   
@@ -53,11 +69,11 @@ sub class {
 sub dim_as_array {
   my $a1 = shift;
   
-  if (@{$a1->dim->elements}) {
+  if ($a1->dim->length_value) {
     return $a1->dim;
   }
   else {
-    my $length = @{$a1->elements};
+    my $length = $a1->length_value;
     return Rstats::Func::c($length);
   }
 }
@@ -67,7 +83,7 @@ sub dim {
   
   if (@_) {
     my $a_dim = Rstats::Func::to_c($_[0]);
-    my $self_length = @{$self->elements};
+    my $self_length = $self->length_value;
     my $self_lenght_by_dim = 1;
     $self_lenght_by_dim *= $_ for @{$a_dim->values};
     
@@ -400,7 +416,7 @@ sub value {
 sub is_vector {
   my $self = shift;
   
-  my $is = @{$self->dim->elements} == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = $self->dim->length_value == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -408,7 +424,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = @{$self->dim->elements} == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = $self->dim->length_value == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -486,7 +502,7 @@ sub dimnames {
   if (@_) {
     my $dimnames = shift;
     if (ref $dimnames eq 'Rstats::Container::List') {
-      my $length = $dimnames->_length;
+      my $length = $dimnames->length_value;
       for (my $i = 0; $i < $length; $i++) {
         my $self = $dimnames->get($i);
         if (!$self->is_character) {

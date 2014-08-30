@@ -172,7 +172,7 @@ sub is_null {
   
   my $a1 = Rstats::Func::to_c($_a1);
   
-  my @a2_elements = [!@{$a1->elements} ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
+  my @a2_elements = [!$a1->length_value ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
   my $a2 = Rstats::Func::array(\@a2_elements);
   $a2->mode('logical');
   
@@ -264,18 +264,10 @@ sub is_list { Rstats::Func::FALSE() }
 
 sub is_data_frame { Rstats::Func::FALSE() }
 
-sub length {
-  my $self = shift;
-  
-  my $length = @{$self->elements};
-  
-  return Rstats::Func::c($length);
-}
-
 sub bool {
   my $self = shift;
   
-  my $length = @{$self->elements};
+  my $length = $self->length_value;
   if ($length == 0) {
     croak 'Error in if (a) { : argument is of length zero';
   }

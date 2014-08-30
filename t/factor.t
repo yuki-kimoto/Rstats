@@ -85,6 +85,7 @@ EOS
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
     ok($f1->is_integer);
+    ok($f1->is_factor);
     is_deeply($f1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply($f1->levels->values, ["a", "b", "c"]);
   }

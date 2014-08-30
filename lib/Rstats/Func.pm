@@ -114,10 +114,14 @@ sub factor {
   my $f1 = Rstats::Container::Factor->new;
   $f1->elements($f1_elements);
   $f1->{type} = 'integer';
-  $f1->{class} = 'factor';
+  if ($a_ordered) {
+    $f1->{class} = ['factor', 'ordered'];
+  }
+  else {
+    $f1->{class} = ['factor'];
+  }
   $f1->{levels} = $a_levels;
   $f1->{labels} = $a_labels;
-  $f1->{ordered} = $a_ordered;
   
   return $f1;
 }

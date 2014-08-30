@@ -15,13 +15,13 @@ sub class {
   if (@_) {
     my $a_class = Rstats::Func::to_array($_[0]);
     
-    $self->{class} = Rstats::Func::c($a_class->elements);
+    $self->{class} = [$a_class->elements];
     
     return $self;
   }
   else {
-    $self->{class} = Rstats::Func::NULL() unless defined $self->{class};
-    return $self->{class};
+    $self->{class} = [] unless defined $self->{class};
+    return Rstats::Func::c($self->{class});
   }
 }
 
@@ -121,6 +121,22 @@ sub type {
 
 sub is_factor {
   my $self = shift;
+  
+  my $classes = $self->class->values;
+  
+  my $is = grep { $_ eq 'factor' } @$classes;
+  
+  return $is ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+}
+
+sub is_ordered {
+  my $self = shift;
+  
+  my $classes = $self->class->values;
+
+  my $is = grep { $_ eq 'ordered' } @$classes;
+  
+  return $is ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
 }
 
 sub as_factor {
@@ -294,14 +310,6 @@ sub value {
   my $e1 = $self->element(@_);
   
   return defined $e1 ? $e1->value : Rstats::ElementFunc::NA();
-}
-
-sub is_ordered {
-  my $self = shift;
-  
-  my $is = defined $self->{ordered} ? $self->{ordered} : Rstats::Func::FALSE();
-  
-  return $is;
 }
 
 sub is_vector {

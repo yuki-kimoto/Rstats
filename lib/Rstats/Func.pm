@@ -15,7 +15,7 @@ use Math::Trig ();
 use POSIX ();
 use Math::Round ();
 
-sub NULL { Rstats::Container::Array->new(elements => [], type => 'logical') }
+sub NULL { Rstats::Container::Array->new(elements => [], dim => [], type => 'logical') }
 
 sub NA { c(Rstats::ElementFunc::NA()) }
 

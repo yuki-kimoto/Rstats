@@ -12,7 +12,17 @@ my %types_h = map { $_ => 1 } qw/character complex numeric double integer logica
 sub class {
   my $self = shift;
   
-  
+  if (@_) {
+    my $a_class = Rstats::Func::to_array($_[0]);
+    
+    $self->{class} = Rstats::Func::c($a_class->elements);
+    
+    return $self;
+  }
+  else {
+    $self->{class} = Rstats::Func::NULL() unless defined $self->{class};
+    return $self->{class};
+  }
 }
 
 sub dim_as_array {
@@ -40,13 +50,13 @@ sub dim {
       croak "dims [product $self_lenght_by_dim] do not match the length of object [$self_length]";
     }
   
-    $self->{dim} = Rstats::Func::c($a_dim->elements);
+    $self->{dim} = [$a_dim->elements];
     
     return $self;
   }
   else {
-    $self->{dim} = Rstats::Func::NULL() unless defined $self->{dim};
-    return $self->{dim};
+    $self->{dim} = [] unless defined $self->{dim};
+    return Rstats::Func::c($self->{dim});
   }
 }
 

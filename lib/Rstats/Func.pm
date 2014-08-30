@@ -2220,8 +2220,6 @@ sub numeric {
 sub to_array {
   my $_array = shift;
   
-  return undef unless defined $_array;
-  
   my $is_container;
   eval {
     $is_container = $_array->isa('Rstats::Container');

@@ -228,7 +228,6 @@ sub set {
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   
-  $DB::single = 1;
   my $a2 = Rstats::Func::to_array($_a2);
 
   my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);

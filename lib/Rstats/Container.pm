@@ -9,6 +9,47 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub class {
+  my $self = shift;
+  
+  
+}
+
+sub dim_as_array {
+  my $a1 = shift;
+  
+  if (@{$a1->dim->elements}) {
+    return $a1->dim;
+  }
+  else {
+    my $length = @{$a1->elements};
+    return Rstats::Func::c($length);
+  }
+}
+
+sub dim {
+  my $self = shift;
+  
+  if (@_) {
+    my $a_dim = Rstats::Func::to_array($_[0]);
+    my $self_length = @{$self->elements};
+    my $self_lenght_by_dim = 1;
+    $self_lenght_by_dim *= $_ for @{$a_dim->values};
+    
+    if ($self_length != $self_lenght_by_dim) {
+      croak "dims [product $self_lenght_by_dim] do not match the length of object [$self_length]";
+    }
+  
+    $self->{dim} = Rstats::Func::c($a_dim->elements);
+    
+    return $self;
+  }
+  else {
+    $self->{dim} = Rstats::Func::NULL() unless defined $self->{dim};
+    return $self->{dim};
+  }
+}
+
 sub mode {
   my $self = shift;
   

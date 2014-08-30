@@ -6,6 +6,47 @@ use Rstats;
 
 # factor
 {
+=pod
+  # factor - as_character
+  {
+    my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
+    my $a1 = $f1->as_character;
+    ok($a1->is_character);
+    is_deeply($a1->values, ["a", "b", "c", "a", "b", "c"]);
+  }
+=cut
+  
+  # factor - as_logical
+  {
+    my $f1 = factor(c("a", "b", "c"));
+    my $a1 = $f1->as_logical;
+    ok($a1->is_logical);
+    is_deeply($a1->values, [1, 1, 1]);
+  }
+  
+  # factor - as_complex
+  {
+    my $f1 = factor(c("a", "b", "c"));
+    my $a1 = $f1->as_complex;
+    ok($a1->is_complex);
+    is_deeply($a1->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
+  }
+  
+  # factor - as_double
+  {
+    my $f1 = factor(c("a", "b", "c"));
+    my $a1 = $f1->as_double;
+    ok($a1->is_double);
+    is_deeply($a1->values, [1, 2, 3]);
+  }
+  
+  # factor - as_integer
+  {
+    my $f1 = factor(c("a", "b", "c"));
+    my $a1 = $f1->as_integer;
+    ok($a1->is_integer);
+    is_deeply($a1->values, [1, 2, 3]);
+  }
 
   # factor - as_factor, double
   {

@@ -232,10 +232,19 @@ sub as {
 
 sub as_complex {
   my $self = shift;
-  
-  my $self_elements = $self->elements;
-  my $a2 = $self->clone_without_elements;
-  my @a2_elements = map { $_->as('complex') } @$self_elements;
+
+  my $a_tmp;
+  if ($self->is_factor) {
+    $a_tmp = $self->as_integer;
+  }
+  else {
+    $a_tmp = $self;
+  }
+
+  my $a2;
+  my $a_tmp_elements = $a_tmp->elements;
+  $a2 = $a_tmp->clone_without_elements;
+  my @a2_elements = map { $_->as('complex') } @$a_tmp_elements;
   $a2->elements(\@a2_elements);
   $a2->{type} = 'complex';
 
@@ -247,11 +256,19 @@ sub as_numeric { as_double(@_) }
 sub as_double {
   my $self = shift;
   
-  my $self_elements = $self->elements;
-  my $a2 = $self->clone_without_elements;
-  my @a2_elements = map { $_->as('double') } @$self_elements;
-  $a2->elements(\@a2_elements);
-  $a2->{type} = 'double';
+  my $a2;
+  if ($self->is_factor) {
+    my $a2_elements = map { $_->as_double } @{$self->elements};
+    $a2 = Rstats::Func::c($self->elements);
+    $a2->{type} = 'double';
+  }
+  else {
+    my $self_elements = $self->elements;
+    my $a2 = $self->clone_without_elements;
+    my @a2_elements = map { $_->as('double') } @$self_elements;
+    $a2->elements(\@a2_elements);
+    $a2->{type} = 'double';
+  }
 
   return $a2;
 }
@@ -259,11 +276,18 @@ sub as_double {
 sub as_integer {
   my $self = shift;
   
-  my $self_elements = $self->elements;
-  my $a2 = $self->clone_without_elements;
-  my @a2_elements = map { $_->as_integer  } @$self_elements;
-  $a2->elements(\@a2_elements);
-  $a2->{type} = 'integer';
+  my $a2;
+  if ($self->is_factor) {
+    $a2 = Rstats::Func::c($self->elements);
+    $a2->{type} = 'integer';
+  }
+  else {
+   my $self_elements = $self->elements;
+    $a2 = $self->clone_without_elements;
+    my @a2_elements = map { $_->as_integer  } @$self_elements;
+    $a2->elements(\@a2_elements);
+    $a2->{type} = 'integer';
+  }
 
   return $a2;
 }
@@ -271,23 +295,60 @@ sub as_integer {
 sub as_logical {
   my $self = shift;
   
-  my $self_elements = $self->elements;
-  my $a2 = $self->clone_without_elements;
-  my @a2_elements = map { $_->as_logical } @$self_elements;
-  $a2->elements(\@a2_elements);
-  $a2->{type} = 'logical';
+  my $a2;
+  if ($self->is_factor) {
+    $a2 = Rstats::Func::c($self->elements);
+    $a2 = $a2->as_logical;
+  }
+  else {
+    my $self_elements = $self->elements;
+    $a2 = $self->clone_without_elements;
+    my @a2_elements = map { $_->as_logical } @$self_elements;
+    $a2->elements(\@a2_elements);
+    $a2->{type} = 'logical';
+  }
 
   return $a2;
 }
 
 sub as_character {
   my $self = shift;
+  
+  my $a2;
+  if ($self->is_factor) {
+    my $labels = {};
+    my $a_levels = $self->levels;
+    my $a_labels = $self->labels;
+    my $a_levels_elements = $a_levels->elements;
+    my $a_labels_elements = $a_labels->elements;
+    my $levels_length = $a_levels->length->value;
+    for (my $i = 1; $i <= $levels_length; $i++) {
+      my $a_levels_element = $a_levels->elements->[$i - 1];
+      my $a_labels_element = $a_labels->elements->[$i - 1];
+      $labels->{$i} = $a_labels_element->value;
+    }
 
-  my $self_elements = $self->elements;
-  my @a2_elements = map { $_->as_character } @$self_elements;
-  my $a2 = $self->clone_without_elements;
-  $a2->elements(\@a2_elements);
-  $a2->{type} = 'character';
+    my $self_elements =  $self->elements;
+    my $a2_elements = [];
+    for my $self_element (@$self_elements) {
+      if ($self_element->is_na) {
+        push @$a2_elements, Rstats::Funcc::NA();
+      }
+      else {
+        my $value = $self_element->value;
+        my $character = $labels->{$value};
+        push @$a2_elements, "$character";
+      }
+    }
+    $a2 = Rstats::Func::c($a2_elements);
+  }
+  else {
+    my $self_elements = $self->elements;
+    my @a2_elements = map { $_->as_character } @$self_elements;
+    $a2 = $self->clone_without_elements;
+    $a2->elements(\@a2_elements);
+    $a2->{type} = 'character';
+  }
 
   return $a2;
 }

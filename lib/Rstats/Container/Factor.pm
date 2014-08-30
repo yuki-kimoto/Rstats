@@ -27,16 +27,13 @@ sub to_string {
   my $self = shift;
   
   my $a_levels = $self->{levels};
-  my $a_labels = $self->{labels};
   
   my $a_levels_elements = $a_levels->elements;
-  my $a_labels_elements = $a_labels->elements;
   my $levels_length = $a_levels->length->value;
-  my $labels = {};
+  my $levels = {};
   for (my $i = 1; $i <= $levels_length; $i++) {
-    my $a_levels_element = $a_levels->elements->[$i - 1];
-    my $a_labels_element = $a_labels->elements->[$i - 1];
-    $labels->{$i} = $a_labels_element->value;
+    my $a_levels_element = $a_levels_elements->[$i - 1];
+    $levels->{$i} = $a_levels_element->value;
   }
   
   my @str;
@@ -48,7 +45,7 @@ sub to_string {
     }
     else {
       my $value = $element->value;
-      my $character = $labels->{$value};
+      my $character = $levels->{$value};
       push @str, $character;
     }
   }
@@ -56,10 +53,10 @@ sub to_string {
   my $str = join(' ', @str) . "\n";
   
   if ($self->is_ordered) {
-    $str .= 'Levels: ' . join(' < ', @{$a_labels->values}) . "\n";
+    $str .= 'Levels: ' . join(' < ', @{$a_levels->values}) . "\n";
   }
   else {
-    $str .= 'Levels: ' . join(' ', , @{$a_labels->values}) . "\n";
+    $str .= 'Levels: ' . join(' ', , @{$a_levels->values}) . "\n";
   }
   
   return $str;

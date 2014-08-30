@@ -120,8 +120,7 @@ sub factor {
   else {
     $f1->{class} = ['factor'];
   }
-  $f1->{levels} = $a_levels;
-  $f1->{labels} = $a_labels;
+  $f1->{levels} = $a_labels;
   
   return $f1;
 }

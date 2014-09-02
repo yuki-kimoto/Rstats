@@ -33,6 +33,62 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub interaction {
+  my $opt;
+  $opt = ref $_[-1] eq 'HASH' ? pop : {};
+  my @arrays = map { to_c($_)->as_factor } @_;
+  my ($a_drop, $a_sep);
+  ($a_drop, $a_sep) = args(['drop', 'sep'], $opt);
+  
+  $a_sep = c(".") unless defined $a_sep;
+  my $sep = $a_sep->value;
+  
+  $a_drop = Rstats::Func::FALSE unless defined $a_drop;
+  
+  my $max_length;
+  my $values_list = [];
+  for my $array (@arrays) {
+    my $length = $array->length->value;
+    $max_length = $length if !defined $max_length || $length > $max_length;
+  }
+  
+  # Elements
+  my $f1_elements = [];
+  for (my $i = 0; $i < $max_length; $i++) {
+    my $chars = [];
+    for my $array (@arrays) {
+      my $fix_array = $array->as_character;
+      my $length = $fix_array->length_value;
+      push @$chars, $fix_array->value(($i % $length) + 1)
+    }
+    my $value = join $sep, @$chars;
+    push @$f1_elements, $value;
+  }
+  
+  # Levels
+  my $f1;
+  my $f1_levels_elements = [];
+  if ($a_drop) {
+    $f1_levels_elements = $f1_elements;
+    $f1 = factor($f1_elements);
+  }
+  else {
+    my $levels = [];
+    for my $array (@arrays) {
+      push @$levels, $array->levels->values;
+    }
+    my $cps = Rstats::Util::cross_product($levels);
+    for my $cp (@$cps) {
+      my $value = join $sep, @$cp;
+      push @$f1_levels_elements, $value;
+    }
+    $f1_levels_elements = [sort {$a cmp $b} @$f1_levels_elements];
+    $f1 = factor($f1_elements, {levels => $f1_levels_elements});
+  }
+  
+  return $f1;
+}
+
 sub gl {
   my ($a_n, $a_k, $a_length, $a_labels, $a_ordered)
     = args([qw/n k length labels ordered/], @_);
@@ -120,7 +176,7 @@ sub factor {
   
   my $labels_length = $a_labels->length->value;
   my $levels_length = $a_levels->length->value;
-  if ($labels_length == 1) {
+  if ($labels_length == 1 && $a_x->length_value != 1) {
     my $value = $a_labels->value;
     $a_labels = paste($value, C("1:$levels_length"), {sep => ""});
   }

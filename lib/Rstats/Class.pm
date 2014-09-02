@@ -59,6 +59,7 @@ my @funcs = qw/
   head
   i
   ifelse
+  interaction
   is_element
   is_list
   Im

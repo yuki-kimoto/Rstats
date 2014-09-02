@@ -4,6 +4,67 @@ use warnings;
 
 use Rstats;
 
+# interaction
+{
+  # interaction - drop
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    my $f2 = factor(c("b1", "b2"));
+    my $f3 = r->interaction($f1, $f2, {drop => TRUE});
+    ok($f3->is_factor);
+    is_deeply($f3->values, [1, 2, 1, 2]);
+    is_deeply($f3->levels->values, ["a1.b1", "a2.b2"]);
+  }
+  
+  # interaction - sep
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    my $f2 = factor(c("b1", "b2"));
+    my $f3 = r->interaction($f1, $f2, {sep => ":"});
+    ok($f3->is_factor);
+    is_deeply($f3->values, [1, 4, 1, 4]);
+    is_deeply($f3->levels->values, ["a1:b1", "a1:b2", "a2:b1", "a2:b2"]);
+  }
+  
+  # interaction - tree elements
+  {
+    my $f1 = factor(c("a1", "a2", "a3"));
+    my $f2 = factor(c("b1", "b2"));
+    my $f3 = factor(c("c1"));
+    my $f4 = r->interaction($f1, $f2, $f3);
+    ok($f4->is_factor);
+    is_deeply($f4->values, [1, 4, 5]);
+    is_deeply($f4->levels->values, [
+      "a1.b1.c1",
+      "a1.b2.c1",
+      "a2.b1.c1",
+      "a2.b2.c1",
+      "a3.b1.c1",
+      "a3.b2.c1"
+    ]);
+  }
+
+  # interaction - basic 2
+  {
+    my $f1 = factor(c("a1", "a2", "a3"));
+    my $f2 = factor(c("b1", "b2"));
+    my $f3 = r->interaction($f1, $f2);
+    ok($f3->is_factor);
+    is_deeply($f3->values, [1, 4, 5]);
+    is_deeply($f3->levels->values, ["a1.b1", "a1.b2", "a2.b1", "a2.b2", "a3.b1", "a3.b2"]);
+  }
+  
+  # interaction - basic
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    my $f2 = factor(c("b1", "b2"));
+    my $f3 = r->interaction($f1, $f2);
+    ok($f3->is_factor);
+    is_deeply($f3->values, [1, 4, 1, 4]);
+    is_deeply($f3->levels->values, ["a1.b1", "a1.b2", "a2.b1", "a2.b2"]);
+  }
+}
+
 # gl
 {
   # gl - n, k, length
@@ -70,6 +131,13 @@ use Rstats;
 
 # factor
 {
+  # factor - one element
+  {
+    my $f1 = factor(c("a"));
+    is_deeply($f1->values, [1]);
+    is_deeply($f1->levels->values, ["a"]);
+  }
+  
   # factor - as.numeric(levels(f))[f] 
   {
     my $f1 = factor(c(2, 3, 4, 2, 3, 4));

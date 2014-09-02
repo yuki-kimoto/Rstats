@@ -33,6 +33,42 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub gl {
+  my ($a_n, $a_k, $a_length, $a_labels, $a_ordered)
+    = args([qw/n k length labels ordered/], @_);
+  
+  my $n = $a_n->value;
+  my $k = $a_k->value;
+  $a_length = c($n * $k) unless defined $a_length;
+  my $length = $a_length->value;
+  
+  my $a_levels = c(1 .. $n);
+  $a_levels = $a_levels->as_character;
+  my $levels = $a_levels->values;
+  
+  my $a_x_elements = [];
+  my $level = 1;
+  my $j = 1;
+  for (my $i = 0; $i < $length; $i++) {
+    if ($j > $k) {
+      $j = 1;
+      $level++;
+    }
+    if ($level > @$levels) {
+      $level = 1;
+    }
+    push @$a_x_elements, $level;
+    $j++;
+  }
+  
+  my $a_x = c($a_x_elements);
+  
+  $a_labels = $a_levels unless defined $a_labels;
+  $a_ordered = Rstats::Func::FALSE() unless defined $a_ordered;
+  
+  return factor($a_x, {levels => $a_levels, labels => $a_labels, ordered => $a_ordered});
+}
+
 sub ordered {
   my $opt = ref $_[-1] eq 'HASH' ? pop : {};
   $opt->{ordered} = Rstats::Func::TRUE();

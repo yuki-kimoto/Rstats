@@ -53,6 +53,7 @@ my @funcs = qw/
   F
   FALSE
   floor
+  gl
   grep
   gsub
   head

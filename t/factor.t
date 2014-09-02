@@ -4,6 +4,48 @@ use warnings;
 
 use Rstats;
 
+# gl
+{
+  # gl - n, k, length
+  {
+    my $f1 = r->gl(2, 2, 10);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 1, 2, 2, 1, 1, 2, 2, 1, 1]);
+  }
+  
+  # gl - n, k ,length, no fit length
+  {
+    my $f1 = r->gl(3, 3, 10);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3, 1]);
+  }
+
+  # gl - n, k
+  {
+    my $f1 = r->gl(3, 3);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
+    is_deeply($f1->levels->values, ["1", "2", "3"]);
+  }
+  
+  # gl - labels
+  {
+    my $f1 = r->gl(3, 3, {labels => c("a", "b", "c")});
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
+    is_deeply($f1->levels->values, ["a", "b", "c"]);
+  }
+
+  # gl - ordered
+  {
+    my $f1 = r->gl(3, 3, {ordered => TRUE});
+    ok($f1->is_factor);
+    ok($f1->is_ordered);
+    is_deeply($f1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
+    is_deeply($f1->levels->values, ["1", "2", "3"]);
+  }
+}
+
 # ordered
 {
   # ordered - basic
@@ -24,7 +66,6 @@ use Rstats;
     is_deeply($f1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply($f1->levels->values, ["a", "b", "c"]);
   }
-
 }
 
 # factor

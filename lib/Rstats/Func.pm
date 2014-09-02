@@ -33,8 +33,12 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
-# x = character(), levels = sort(unique.default(x), na.last=TRUE),
-# @@         labels = levels, exclude = NA, ordered = is.ordered(x)
+sub ordered {
+  my $opt = ref $_[-1] eq 'HASH' ? pop : {};
+  $opt->{ordered} = Rstats::Func::TRUE();
+  
+  factor(@_, $opt);
+}
 
 sub factor {
   my ($a_x, $a_levels, $a_labels, $a_exclude, $a_ordered)

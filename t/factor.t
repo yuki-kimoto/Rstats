@@ -4,6 +4,29 @@ use warnings;
 
 use Rstats;
 
+# ordered
+{
+  # ordered - basic
+  {
+    my $f1 = ordered(c("a", "b", "c", "a", "b", "c"));
+    ok($f1->is_ordered);
+    ok($f1->is_integer);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 2, 3, 1, 2 ,3]);
+    is_deeply($f1->levels->values, ["a", "b", "c"]);
+  }
+  # ordered - option
+  {
+    my $f1 = ordered(c("a", "b", "c", "a", "b", "c"), {levels => c("a", "b", "c")});
+    ok($f1->is_ordered);
+    ok($f1->is_integer);
+    ok($f1->is_factor);
+    is_deeply($f1->values, [1, 2, 3, 1, 2 ,3]);
+    is_deeply($f1->levels->values, ["a", "b", "c"]);
+  }
+
+}
+
 # factor
 {
   # factor - as.numeric(levels(f))[f] 

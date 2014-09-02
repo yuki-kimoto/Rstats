@@ -86,6 +86,7 @@ my @funcs = qw/
   min
   nchar
   order
+  ordered
   outer
   paste
   pi

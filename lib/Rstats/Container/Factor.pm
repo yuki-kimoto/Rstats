@@ -6,6 +6,63 @@ use overload '""' => \&to_string,
 
 use Rstats::Func;
 
+sub clone {
+  my $self = shift;
+  
+  my $clone = Rstats::Factor->new;
+  $clone->{levels} = $self->{levels};
+  $clone->{elements} = @_ ? $_[0] : $self->{elements};
+  $clone->{class} = $self->{class};
+  $clone->{names} = $self->{names};
+  
+  return $clone
+}
+
+sub get {
+  my $self = shift;
+  
+  my $opt = ref $_[-1] eq 'HASH' ? pop : {};
+  my ($a_drop) = args(['drop'], $opt);
+  $a_drop = Rstats::Func::FALSE() unless defined $a_drop;
+  
+  my $_index = shift;
+  
+  unless (defined $_index) {
+    $_index = $self->at;
+  }
+  $self->at($_index);
+  
+  my $a1_index = Rstats::Func::to_c($_index);
+  my $index;
+  if ($a1_index->is_character) {
+    $index = $self->_name_to_index($a1_index);
+  }
+  else {
+    $index = $a1_index->values->[0];
+  }
+  my $elements = $self->elements;
+  my $element = $elements->[$index - 1];
+  
+  return $element;
+}
+
+sub set {
+  my ($self, $element) = @_;
+  
+  my $_index = $self->at;
+  my $a1_index = Rstats::Func::to_c($_index);
+  my $index;
+  if ($a1_index->is_character) {
+    $index = $self->_name_to_index($a1_index);
+  }
+  else {
+    $index = $a1_index->values->[0];
+  }
+  $self->elements->[$index - 1] = Rstats::Func::to_c($element);
+  
+  return $self;
+}
+
 sub levels {
   my $self = shift;
   

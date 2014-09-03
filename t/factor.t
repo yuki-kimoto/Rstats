@@ -4,6 +4,13 @@ use warnings;
 
 use Rstats;
 
+=pod
+# get
+{
+  # get 
+}
+=cut
+
 # nlevels
 {
   # nlevels - set values

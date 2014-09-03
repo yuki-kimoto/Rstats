@@ -179,18 +179,6 @@ sub is_null {
   return $a2;
 }
 
-sub at {
-  my $self = shift;
-  
-  if (@_) {
-    $self->{at} = [@_];
-    
-    return $self;
-  }
-  
-  return $self->{at};
-}
-
 sub get {
   my $self = shift;
 

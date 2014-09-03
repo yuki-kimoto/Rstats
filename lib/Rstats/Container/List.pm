@@ -21,39 +21,6 @@ use Rstats::Func;
 has 'elements' => sub { [] };
 has 'names' => sub { [] };
 
-sub at {
-  my $a1 = shift;
-  
-  if (@_) {
-    $a1->{at} = [@_];
-    
-    return $a1;
-  }
-  
-  return $a1->{at};
-}
-
-sub _name_to_index {
-  my $self = shift;
-  my $a1_index = Rstats::Func::to_c(shift);
-  
-  my $e1_name = $a1_index->element;
-  my $found;
-  my $names = $self->names->elements;
-  my $index;
-  for (my $i = 0; $i < @$names; $i++) {
-    my $name = $names->[$i];
-    if (Rstats::ElementFunc::equal($e1_name, $name)) {
-      $index = $i + 1;
-      $found = 1;
-      last;
-    }
-  }
-  croak "Not found $e1_name" unless $found;
-  
-  return $index;
-}
-
 sub get {
   my ($self, $_index) = @_;
   

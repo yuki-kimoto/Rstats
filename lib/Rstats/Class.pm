@@ -160,8 +160,10 @@ my @object_methods = qw/
   is_logical
   is_vector
   labels
+  levels
   dim
   names
+  nlevels
   dimnames
   colnames
   rownames

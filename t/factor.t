@@ -4,6 +4,38 @@ use warnings;
 
 use Rstats;
 
+# nlevels
+{
+  # nlevels - set values
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    is_deeply($f1->nlevels->values, [2]);
+  }
+  
+  # nlevels - function
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    is_deeply(r->nlevels($f1)->values, [2]);
+  }
+}
+
+# levels
+{
+  # levels - set values
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    $f1->levels(c("A1", "A2"));
+    is_deeply($f1->levels->values, ["A1", "A2"]);
+  }
+  
+  # levels - function
+  {
+    my $f1 = factor(c("a1", "a2", "a1", "a2"));
+    r->levels($f1, (c("A1", "A2")));
+    is_deeply($f1->levels->values, ["A1", "A2"]);
+  }
+}
+
 # interaction
 {
   # interaction - drop

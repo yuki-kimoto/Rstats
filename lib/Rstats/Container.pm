@@ -9,6 +9,12 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub nlevels {
+  my $self = shift;
+  
+  return Rstats::Func::c($self->levels->length_value);
+}
+
 sub length {
   my $self = shift;
   

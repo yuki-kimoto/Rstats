@@ -517,8 +517,7 @@ sub Arg {
   my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Arg($_) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   
   return $a2;
 }
@@ -548,8 +547,7 @@ sub sub {
     }
   }
   
-  my $a2 = $a1_x->clone_without_elements;
-  $a2->elements($a2_elements);
+  my $a2 = $a1_x->clone(elements => $a2_elements);
   
   return $a2;
 }
@@ -579,8 +577,7 @@ sub gsub {
     }
   }
   
-  my $a2 = $a1_x->clone_without_elements;
-  $a2->elements($a2_elements);
+  my $a2 = $a1_x->clone(elements => $a2_elements);
   
   return $a2;
 }
@@ -635,8 +632,7 @@ sub chartr {
     }
   }
   
-  my $a2 = $a1_x->clone_without_elements;
-  $a2->elements($a2_elements);
+  my $a2 = $a1_x->clone(elements => $a2_elements);
   
   return $a2;
 }
@@ -679,9 +675,8 @@ sub Re {
   my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Re($_) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->{type} = 'double';
-  $a2->elements(\@a2_elements);
   
   return $a2;
 }
@@ -690,9 +685,8 @@ sub Im {
   my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Im($_) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->{type} = 'double';
-  $a2->elements(\@a2_elements);
   
   return $a2;
 }
@@ -701,8 +695,7 @@ sub Conj {
   my $a1 = to_c(shift);
   
   my @a2_elements = map { Rstats::ElementFunc::Conj($_) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   
   return $a2;
 }
@@ -711,8 +704,7 @@ sub negation {
   my $a1 = shift;
   
   my $a2_elements = [map { Rstats::ElementFunc::negation($_) } @{$a1->elements}];
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements($a2_elements);
+  my $a2 = $a1->clone(elements => $a2_elements);
   
   return $a2;
 }
@@ -816,9 +808,8 @@ sub diff {
     my $a2_element = Rstats::ElementFunc::subtract($a1_element2, $a1_element1);
     push @$a2_elements, $a2_element;
   }
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements($a2_elements);
-  
+  my $a2 = $a1->clone(elements => $a2_elements);
+    
   return $a2;
 }
 
@@ -826,7 +817,6 @@ sub nchar {
   my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
-    my $a2 = $a1->clone_without_elements;
     my $a2_elements = [];
     for my $a1_element (@{$a1->elements}) {
       if ($a1_element->is_na) {
@@ -837,7 +827,7 @@ sub nchar {
         push $a2_elements, $a2_element;
       }
     }
-    $a2->elements($a2_elements);
+    my $a2 = $a1->clone(elements => $a2_elements);
     
     return $a2;
   }
@@ -850,7 +840,6 @@ sub tolower {
   my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
-    my $a2 = $a1->clone_without_elements;
     my $a2_elements = [];
     for my $a1_element (@{$a1->elements}) {
       if ($a1_element->is_na) {
@@ -861,8 +850,8 @@ sub tolower {
         push $a2_elements, $a2_element;
       }
     }
-    $a2->elements($a2_elements);
-      
+    my $a2 = $a1->clone(elements => $a2_elements);
+    
     return $a2;
   }
   else {
@@ -874,7 +863,6 @@ sub toupper {
   my $a1 = to_c(shift);
   
   if ($a1->{type} eq 'character') {
-    my $a2 = $a1->clone_without_elements;
     my $a2_elements = [];
     for my $a1_element (@{$a1->elements}) {
       if ($a1_element->is_na) {
@@ -885,7 +873,7 @@ sub toupper {
         push $a2_elements, $a2_element;
       }
     }
-    $a2->elements($a2_elements);
+    my $a2 = $a1->clone(elements => $a2_elements);
       
     return $a2;
   }
@@ -939,8 +927,7 @@ sub operation {
     &$operation($a1->elements->[$_ % $a1_length], $a2->elements->[$_ % $a2_length])
   } (0 .. $longer_length - 1);
   
-  my $a3 = $a1->clone_without_elements;
-  $a3->elements(\@a3_elements);
+  my $a3 = $a1->clone(elements => \@a3_elements);
   if ($op eq '/') {
     $a3->{type} = 'double';
   }
@@ -980,8 +967,7 @@ sub abs {
   
   my @a2_elements = map { Rstats::ElementFunc::abs($_) } @{$a1->elements};
   
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;
@@ -1092,8 +1078,7 @@ sub ceiling {
   my $a1 = to_c($_a1);
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::ceil $_->value) } @{$a1->elements};
   
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;
@@ -1148,8 +1133,7 @@ sub atan2 {
     push @a3_elements, $element3;
   }
 
-  my $a3 = $a1->clone_without_elements;
-  $a3->elements(\@a3_elements);
+  my $a3 = $a1->clone(elements => \@a3_elements);
 
   # mode
   my $a3_mode;
@@ -1354,8 +1338,7 @@ sub floor {
   
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::floor $_->value) } @{$a1->elements};
 
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;
@@ -1653,9 +1636,8 @@ sub rev {
   my $a1 = shift;
   
   # Reverse elements
-  my $a2 = $a1->clone_without_elements;
   my @a2_elements = reverse @{$a1->elements};
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   
   return $a2;
 }
@@ -1703,8 +1685,7 @@ sub round {
 
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::ElementFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;
@@ -1820,8 +1801,7 @@ sub sqrt {
   
   my @a2_elements = map { Rstats::ElementFunc::sqrt($_) } @{$a1->elements};
   
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;
@@ -1867,8 +1847,7 @@ sub process {
   my $a1 = to_c(shift);
   
   my @a2_elements = map { $func->($_) } @{$a1->elements};
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode(max_type($a1, $a2));
   
   return $a2;
@@ -1883,8 +1862,7 @@ sub trunc {
   
   my @a2_elements = map { Rstats::ElementFunc::double(int $_->value) } @{$a1->elements};
 
-  my $a2 = $a1->clone_without_elements;
-  $a2->elements(\@a2_elements);
+  my $a2 = $a1->clone(elements => \@a2_elements);
   $a2->mode('double');
   
   return $a2;

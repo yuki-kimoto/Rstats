@@ -6,18 +6,6 @@ use overload '""' => \&to_string,
 
 use Rstats::Func;
 
-sub clone {
-  my $self = shift;
-  
-  my $clone = Rstats::Factor->new;
-  $clone->{levels} = $self->{levels};
-  $clone->{elements} = @_ ? $_[0] : $self->{elements};
-  $clone->{class} = $self->{class};
-  $clone->{names} = $self->{names};
-  
-  return $clone
-}
-
 sub get {
   my $self = shift;
   

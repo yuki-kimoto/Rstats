@@ -9,6 +9,16 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub clone {
+  my ($self, %opt) = @_;
+  
+  my $clone = {%$self};
+  $clone = bless $clone, ref $self;
+  $clone->{elements} = $opt{elements} if $opt{elements};
+  
+  return $clone;
+}
+
 sub at {
   my $a1 = shift;
   
@@ -312,9 +322,8 @@ sub as_complex {
 
   my $a2;
   my $a_tmp_elements = $a_tmp->elements;
-  $a2 = $a_tmp->clone_without_elements;
   my @a2_elements = map { $_->as('complex') } @$a_tmp_elements;
-  $a2->elements(\@a2_elements);
+  $a2 = $a_tmp->clone(elements => \@a2_elements);
   $a2->{type} = 'complex';
 
   return $a2;
@@ -333,9 +342,8 @@ sub as_double {
   }
   else {
     my $self_elements = $self->elements;
-    $a2 = $self->clone_without_elements;
     my @a2_elements = map { $_->as('double') } @$self_elements;
-    $a2->elements(\@a2_elements);
+    $a2 = $self->clone(elements => \@a2_elements);
     $a2->{type} = 'double';
   }
 
@@ -352,9 +360,8 @@ sub as_integer {
   }
   else {
    my $self_elements = $self->elements;
-    $a2 = $self->clone_without_elements;
     my @a2_elements = map { $_->as_integer  } @$self_elements;
-    $a2->elements(\@a2_elements);
+    $a2 = $self->clone(elements => \@a2_elements);
     $a2->{type} = 'integer';
   }
 
@@ -371,9 +378,8 @@ sub as_logical {
   }
   else {
     my $self_elements = $self->elements;
-    $a2 = $self->clone_without_elements;
     my @a2_elements = map { $_->as_logical } @$self_elements;
-    $a2->elements(\@a2_elements);
+    $a2 = $self->clone(elements => \@a2_elements);
     $a2->{type} = 'logical';
   }
 
@@ -413,8 +419,7 @@ sub as_character {
   else {
     my $self_elements = $self->elements;
     my @a2_elements = map { $_->as_character } @$self_elements;
-    $a2 = $self->clone_without_elements;
-    $a2->elements(\@a2_elements);
+    $a2 = $self->clone(elements => \@a2_elements);
     $a2->{type} = 'character';
   }
 

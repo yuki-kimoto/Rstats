@@ -232,20 +232,6 @@ sub set {
   return $self;
 }
 
-sub clone_without_elements {
-  my ($self, %opt) = @_;
-  
-  my $clone = Rstats::Container::Array->new;
-  $clone->{type} = $self->{type};
-  $clone->{names} = [@{$self->{names} || []}];
-  $clone->{dimnames} = $self->{dimnames};
-  
-  $clone->{dim} = $self->dim; 
-  $clone->{elements} = $opt{elements} ? $opt{elements} : [];
-  
-  return $clone;
-}
-
 sub is_array { Rstats::Func::TRUE() }
 
 sub is_list { Rstats::Func::FALSE() }

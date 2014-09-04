@@ -124,7 +124,7 @@ use Rstats::Func;
 
 # to_string
 {
-  # to_string - character
+  # to_string - character, 1 dimention
   {
     my $a1 = array(c("a", "b"));
     my $a1_str = "$a1";
@@ -132,7 +132,53 @@ use Rstats::Func;
     my $expected = qq/[1] "a" "b"\n/;
     is($a1_str, $expected);
   }
-  
+
+  # to_string - character, 2 dimention
+  {
+    my $a1 = array(C('1:4'), c(4, 1));
+    my $a2 = r->as_character($a1);
+    my $a2_str = "$a2";
+    $a2_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+     [,1]
+[1,] "1"
+[2,] "2"
+[3,] "3"
+[4,] "4"
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a2_str, $expected);
+  }
+
+  # to_string - character,3 dimention
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    $a1 = $a1->as_character;
+    $DB::single = 1;
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+
+  my $expected = <<'EOS';
+,,1
+     [,1] [,2] [,3]
+[1,] "1" "5" "9"
+[2,] "2" "6" "10"
+[3,] "3" "7" "11"
+[4,] "4" "8" "12"
+,,2
+     [,1] [,2] [,3]
+[1,] "13" "17" "21"
+[2,] "14" "18" "22"
+[3,] "15" "19" "23"
+[4,] "16" "20" "24"
+EOS
+    $expected =~ s/[ \t]+/ /;
+    
+    is($a1_str, $expected);
+  }
+
   # to_string - one element
   {
     my $a1 = array(0);

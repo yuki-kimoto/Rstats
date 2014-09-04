@@ -299,12 +299,6 @@ use Math::Trig ();
   }
 }
 
-# to_string
-{
-  my $array = array(c(1, 2, 3));
-  is("$array", "[1] 1 2 3\n");
-}
-
 # length
 {
   my $array = array(c(1, 2, 3));

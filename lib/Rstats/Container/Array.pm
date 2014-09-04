@@ -37,6 +37,8 @@ sub to_string {
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
+
+  my $is_character = $self->is_character;
   
   my $str;
   if (@$elements) {
@@ -45,7 +47,6 @@ sub to_string {
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my $is_character = $self->is_character;
       my @parts = map { $is_character ? '"' . "$_" . '"' : "$_" } @$elements;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
@@ -75,7 +76,14 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @parts, $self->element($d1, $d2)->to_string;
+          my $part;
+          if ($is_character) {
+            $part = '"' . $self->element($d1, $d2)->to_string . '"';
+          }
+          else {
+            $part = $self->element($d1, $d2)->to_string
+          }
+          push @parts, $part;
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -115,7 +123,7 @@ sub to_string {
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
                 my $part;
-                if ($self->is_character) {
+                if ($is_character) {
                   $part = '"' . $self->element($d1, $d2, @$positions)->to_string . '"';
                 }
                 else {
@@ -222,7 +230,7 @@ sub get {
   
   my ($positions, $a2_dim) = Rstats::Util::parse_index($self, $drop, @$_indexs);
   
-  my @a2_elements = map { $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
+  my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
   
   return Rstats::Func::array(\@a2_elements, $a2_dim);
 }

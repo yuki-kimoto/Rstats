@@ -159,7 +159,7 @@ sub parse_index {
     my $ords = cross_product($index_values);
     my @positions = map { Rstats::Util::pos($_, $a1_dim) } @$ords;
   
-    return (\@positions, \@a2_dim);
+    return (\@positions, \@a2_dim, \@indexs);
   }
 }
 

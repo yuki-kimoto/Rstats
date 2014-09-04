@@ -258,11 +258,43 @@ sub get {
     return Rstats::Func::c(\@elements2);
   }
   
-  my ($positions, $a2_dim) = Rstats::Util::parse_index($self, $drop, @$_indexs);
+  my ($positions, $a2_dim, $new_indexs) = Rstats::Util::parse_index($self, $drop, @$_indexs);
   
   my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
   
-  return Rstats::Func::array(\@a2_elements, $a2_dim);
+  my $a2 = Rstats::Func::array(\@a2_elements, $a2_dim);
+  
+  # names
+  if (exists $self->{names}) {
+    my $names = [];
+    my $index = $new_indexs->[0];
+    if (defined $index) {
+      for my $i (@{$index->values}) {
+        push @$names, $self->{names}[$i - 1];
+      }
+    }
+    $a2->{names} = $names;
+  }
+  
+  if (exists $self->{dimnames}) {
+    my $new_dimnames = [];
+    my $dimnames = $self->{dimnames};
+    my $length = @$dimnames;
+    for (my $i = 0; $i < $length; $i++) {
+      my $dimname = $dimnames->[$i];
+      if (defined $dimname && !$dimname->is_null) {
+        my $index = $new_indexs->[$i];
+        my $new_dimname = [];
+        for my $k (@{$index->values}) {
+          push @$new_dimname, $dimname->get($k);
+        }
+        push @$new_dimnames, Rstats::Func::c($new_dimname);
+      }
+    }
+    $a2->{dimnames} = $new_dimnames;
+  }
+  
+  return $a2;
 }
 
 sub set {

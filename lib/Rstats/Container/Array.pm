@@ -264,6 +264,12 @@ sub get {
   
   my $a2 = Rstats::Func::array(\@a2_elements, $a2_dim);
   
+  # levels
+  $a2->{levels} = $self->{levels} if exists $self->{levels};
+  
+  # class
+  $a2->{class} =  $self->{class} if exists $self->{class};
+  
   # names
   if (exists $self->{names}) {
     my $names = [];
@@ -276,6 +282,7 @@ sub get {
     $a2->{names} = $names;
   }
   
+  # dimnames
   if (exists $self->{dimnames}) {
     my $new_dimnames = [];
     my $dimnames = $self->{dimnames};

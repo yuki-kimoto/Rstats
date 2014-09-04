@@ -4,12 +4,27 @@ use warnings;
 
 use Rstats;
 
-=pod
 # get
 {
-  # get 
+  # get - factor
+  {
+    my $f1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
+    my $f2 = $f1->get(c(4, 6));
+    ok($f2->is_factor);
+    is_deeply($f2->values, [1, 3]);
+    is_deeply($f2->levels->values, ["a1", "a2", "a3"]);
+  }
+  
+  # get - ordered
+  {
+    my $f1 = ordered(c("a1", "a2", "a3", "a1", "a2", "a3"));
+    my $f2 = $f1->get(c(4, 6));
+    ok($f2->is_factor);
+    ok($f2->is_ordered);
+    is_deeply($f2->values, [1, 3]);
+    is_deeply($f2->levels->values, ["a1", "a2", "a3"]);
+  }
 }
-=cut
 
 # nlevels
 {

@@ -238,8 +238,17 @@ sub get {
   my $self = shift;
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $drop = $opt->{drop};
-  $drop = 1 unless defined $drop;
+  my $dim_drop;
+  my $level_drop;
+  if ($self->is_factor) {
+    $level_drop = $opt->{drop};
+  }
+  else {
+    $dim_drop = $opt->{drop};
+  }
+  
+  $dim_drop = 1 unless defined $dim_drop;
+  $level_drop = 0 unless defined $level_drop;
   
   my @_indexs = @_;
 
@@ -258,17 +267,23 @@ sub get {
     return Rstats::Func::c(\@elements2);
   }
   
-  my ($positions, $a2_dim, $new_indexs) = Rstats::Util::parse_index($self, $drop, @$_indexs);
+  my ($positions, $a2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
   my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
   
+  # array
   my $a2 = Rstats::Func::array(\@a2_elements, $a2_dim);
-  
+
+  # class
+  $a2->{class} =  $self->{class} if exists $self->{class};
+
   # levels
   $a2->{levels} = $self->{levels} if exists $self->{levels};
   
-  # class
-  $a2->{class} =  $self->{class} if exists $self->{class};
+  # level drop
+  if ($level_drop) {
+    $a2 = Rstats::Func::factor($a2->as_character);
+  }
   
   # names
   if (exists $self->{names}) {

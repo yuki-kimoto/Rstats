@@ -6,6 +6,15 @@ use Rstats;
 
 # get
 {
+  # get - drop
+  {
+    my $f1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
+    my $f2 = $f1->get(c(4, 6), {drop => TRUE});
+    ok($f2->is_factor);
+    is_deeply($f2->values, [1, 2]);
+    is_deeply($f2->levels->values, ["a1", "a3"]);
+  }
+  
   # get - factor
   {
     my $f1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));

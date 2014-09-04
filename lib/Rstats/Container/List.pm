@@ -1,6 +1,8 @@
 package Rstats::Container::List;
 use Rstats::Container -base;
 
+use Rstats::Func;
+
 use overload '""' => \&to_string,
   fallback => 1;
 
@@ -8,10 +10,7 @@ use Rstats::Func;
 use Carp 'croak';
 
 has 'elements' => sub { [] };
-has 'mode' => sub { Rstats::Array::Util::c('list') };
-
-sub is_list { Rstats::Func::TRUE() }
-sub is_data_frame { Rstats::Func::FALSE() }
+has 'mode' => sub { Rstats::Func::c('list') };
 
 use overload '""' => \&to_string,
   fallback => 1;

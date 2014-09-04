@@ -238,12 +238,6 @@ sub list {
   return $list;
 }
 
-sub is_list {
-  my $container = shift;
-  
-  return ref $container eq 'Rstats::Container::List' ? Rstats::Func::TRUE : Rstats::Func::FALSE;
-}
-
 sub data_frame {
   my @data = @_;
   

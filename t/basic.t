@@ -5,6 +5,51 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
+# class
+{
+  # class - vector, numeric
+  {
+    my $a1 = c(1, 2);
+    is_deeply($a1->class->values, ['numeric']);
+  }
+  
+  # class - matrix
+  {
+    my $a1 = matrix(2, 2);
+    is_deeply($a1->class->values, ['matrix']);
+  }
+
+  # class - array
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    is_deeply($a1->class->values, ['array']);
+  }
+  
+  # class - factor
+  {
+    my $a1 = factor(c(1, 2, 3));
+    is_deeply($a1->class->values, ['factor']);
+  }
+  
+  # class - factor, ordered
+  {
+    my $a1 = ordered(c(1, 2, 3));
+    is_deeply($a1->class->values, ['factor', 'ordered']);
+  }
+  
+  # class - list
+  {
+    my $a1 = list(1, 2);
+    is_deeply($a1->class->values, ['list']);
+  }
+  
+  # class - data frame
+  {
+    my $a1 = data_frame(sex => c(1, 2));
+    is_deeply($a1->class->values, ['data.frame']);
+  }
+}
+
 # as_numeric
 {
   # as_numeric - from complex

@@ -61,7 +61,6 @@ my @funcs = qw/
   ifelse
   interaction
   is_element
-  is_list
   Im
   Inf
   intersect
@@ -150,6 +149,7 @@ my @object_methods = qw/
   is_complex
   is_finite
   is_infinite
+  is_list
   is_matrix
   is_na
   is_nan

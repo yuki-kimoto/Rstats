@@ -319,12 +319,6 @@ sub set {
   return $self;
 }
 
-sub is_array { Rstats::Func::TRUE() }
-
-sub is_list { Rstats::Func::FALSE() }
-
-sub is_data_frame { Rstats::Func::FALSE() }
-
 sub bool {
   my $self = shift;
   

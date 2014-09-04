@@ -107,12 +107,23 @@ sub is_na {
 sub as_list {
   my $container = shift;
   
-  return $container if Rstats::Func::is_list($container);
+  return $container if $container->is_list;
 
   my $list = Rstats::Container::List->new;
   $list->elements($container->elements);
   
   return $list;
+}
+
+sub is_list {
+  my $container = shift;
+  
+  my $is_list;
+  eval {
+    $is_list = $container->isa('Rstats::Container::List');
+  };
+
+  return $is_list ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
 }
 
 sub class {
@@ -121,13 +132,32 @@ sub class {
   if (@_) {
     my $a_class = Rstats::Func::to_c($_[0]);
     
-    $self->{class} = [$a_class->elements];
+    $self->{class} = $a_class->values;
     
     return $self;
   }
   else {
-    $self->{class} = [] unless defined $self->{class};
-    return Rstats::Func::c($self->{class});
+    if (exists $self->{class}) {
+      return Rstats::Func::c($self->{class});
+    }
+    elsif ($self->is_vector) {
+      return Rstats::Func::c($self->mode);
+    }
+    elsif ($self->is_matrix) {
+      return Rstats::Func::c('matrix');
+    }
+    elsif ($self->is_array) {
+      return Rstats::Func::c('array');
+    }
+    elsif ($self->is_data_frame) {
+      return Rstats::Func::c('data.frame');
+    }
+    elsif ($self->is_list) {
+      return Rstats::Func::c('list');
+    }
+    else {
+      Rstats::Func::NULL()
+    }
   }
 }
 
@@ -476,7 +506,7 @@ sub value {
 sub is_vector {
   my $self = shift;
   
-  my $is = $self->dim->length_value == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -484,7 +514,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = $self->dim->length_value == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -538,8 +568,19 @@ sub is_logical {
   return Rstats::Func::c($is);
 }
 
-sub is_array { Rstats::Func::FALSE() }
-sub is_data_frame { Rstats::Func::FALSE() }
+sub is_data_frame {
+  my $self = shift;
+  
+  return ref $self eq 'Rstats::Container::DataFrame' ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+}
+
+sub is_array {
+  my $self = shift;
+  
+  my $is = ref $self eq 'Rstats::Container::Array' && exists $self->{dim};
+  
+  return $is;
+}
 
 sub names {
   my $self = shift;

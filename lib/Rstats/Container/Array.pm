@@ -27,8 +27,43 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
+sub _element_to_string {
+  my ($self, $element, $is_character, $is_factor) = @_;
+  
+  my $string;
+  if ($is_factor) {
+    if ($element->is_na) {
+      $string = '<NA>';
+    }
+    else {
+      $string = "$element";
+    }
+  }
+  else {
+    if ($is_character) {
+      $string = '"' . $element . '"';
+    }
+    else {
+      $string = "$element";
+    }
+  }
+  
+  return $string;
+}
+
 sub to_string {
   my $self = shift;
+  
+  my $is_factor = $self->is_factor;
+  my $is_ordered = $self->is_ordered;
+  my $levels;
+  if ($is_factor) {
+    $levels = $self->levels->values;
+  }
+  
+  $self = $self->as_character if $self->is_factor;
+  
+  my $is_character = $self->is_character;
 
   my $elements = $self->elements;
   
@@ -37,8 +72,6 @@ sub to_string {
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
   my $positions = [];
-
-  my $is_character = $self->is_character;
   
   my $str;
   if (@$elements) {
@@ -47,7 +80,7 @@ sub to_string {
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { $is_character ? '"' . "$_" . '"' : "$_" } @$elements;
+      my @parts = map { $self->_element_to_string($_, $is_character, $is_factor) } @$elements;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
@@ -76,14 +109,8 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          my $part;
-          if ($is_character) {
-            $part = '"' . $self->element($d1, $d2)->to_string . '"';
-          }
-          else {
-            $part = $self->element($d1, $d2)->to_string
-          }
-          push @parts, $part;
+          my $part = $self->element($d1, $d2);
+          push @parts, $self->_element_to_string($part, $is_character, $is_factor);
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -122,14 +149,8 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                my $part;
-                if ($is_character) {
-                  $part = '"' . $self->element($d1, $d2, @$positions)->to_string . '"';
-                }
-                else {
-                  $part = $self->element($d1, $d2, @$positions)->to_string;
-                }
-                push @parts, $part;
+                my $part = $self->element($d1, $d2, @$positions);
+                push @parts, $self->_element_to_string($part, $is_character, $is_factor);
               }
               
               $str .= join(' ', @parts) . "\n";
@@ -139,6 +160,15 @@ sub to_string {
         }
       };
       $code->(@$dim_values);
+    }
+
+    if ($is_factor) {
+      if ($is_ordered) {
+        $str .= 'Levels: ' . join(' < ', @$levels) . "\n";
+      }
+      else {
+        $str .= 'Levels: ' . join(' ', , @$levels) . "\n";
+      }
     }
   }
   else {

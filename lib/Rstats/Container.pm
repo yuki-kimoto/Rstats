@@ -406,7 +406,7 @@ sub as_character {
     my $a2_elements = [];
     for my $self_element (@$self_elements) {
       if ($self_element->is_na) {
-        push @$a2_elements, Rstats::Funcc::NA();
+        push @$a2_elements, Rstats::Func::NA();
       }
       else {
         my $value = $self_element->value;

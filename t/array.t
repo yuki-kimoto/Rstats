@@ -156,7 +156,6 @@ EOS
   {
     my $a1 = array(C('1:24'), c(4, 3, 2));
     $a1 = $a1->as_character;
-    $DB::single = 1;
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
 

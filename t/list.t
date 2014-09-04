@@ -35,7 +35,7 @@ use Rstats;
 
 [[2]]
 [[2]][[1]]
-[1] Hello
+[1] "Hello"
 
 [[2]][[2]]
 [1] TRUE FALSE FALSE

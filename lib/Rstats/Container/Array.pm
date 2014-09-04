@@ -28,11 +28,11 @@ use overload
   fallback => 1;
 
 sub to_string {
-  my $a1 = shift;
+  my $self = shift;
 
-  my $elements = $a1->elements;
+  my $elements = $self->elements;
   
-  my $dim_values = $a1->dim_as_array->values;
+  my $dim_values = $self->dim_as_array->values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
@@ -41,17 +41,18 @@ sub to_string {
   my $str;
   if (@$elements) {
     if ($dim_length == 1) {
-      my $names = $a1->names->values;
+      my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { "$_" } @$elements;
+      my $is_character = $self->is_character;
+      my @parts = map { $is_character ? '"' . "$_" . '"' : "$_" } @$elements;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = $a1->colnames->values;
+      my $colnames = $self->colnames->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
@@ -61,7 +62,7 @@ sub to_string {
         }
       }
       
-      my $rownames = $a1->rownames->values;
+      my $rownames = $self->rownames->values;
       my $use_rownames = @$rownames ? 1 : 0;
       for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
@@ -74,7 +75,7 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          push @parts, $a1->element($d1, $d2)->to_string;
+          push @parts, $self->element($d1, $d2)->to_string;
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -96,15 +97,31 @@ sub to_string {
           }
           else {
             $str .= '     ';
-            for my $d2 (1 .. $dim_values[1]) {
-              $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
+            my $a_dimnames = $self->dimnames->get($i);
+            my $dimnames = defined $a_dimnames ? $a_dimnames->values : [];
+            
+            if (@$dimnames) {
+              $str .= join(' ', @$dimnames) . "\n";
             }
+            else {
+              for my $d2 (1 .. $dim_values[1]) {
+                $str .= $d2 == $dim_values[1] ? "[,$d2]\n" : "[,$d2] ";
+              }
+            }
+
             for my $d1 (1 .. $dim_values[0]) {
               $str .= "[$d1,] ";
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                push @parts, $a1->element($d1, $d2, @$positions)->to_string;
+                my $part;
+                if ($self->is_character) {
+                  $part = '"' . $self->element($d1, $d2, @$positions)->to_string . '"';
+                }
+                else {
+                  $part = $self->element($d1, $d2, @$positions)->to_string;
+                }
+                push @parts, $part;
               }
               
               $str .= join(' ', @parts) . "\n";

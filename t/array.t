@@ -124,9 +124,18 @@ use Rstats::Func;
 
 # to_string
 {
+  # to_string - character
+  {
+    my $a1 = array(c("a", "b"));
+    my $a1_str = "$a1";
+    $a1_str =~ s/[ \t]+/ /;
+    my $expected = qq/[1] "a" "b"\n/;
+    is($a1_str, $expected);
+  }
+  
   # to_string - one element
   {
-    my $a1 = array('0');
+    my $a1 = array(0);
     my $a1_str = "$a1";
     $a1_str =~ s/[ \t]+/ /;
     my $expected = "[1] 0\n";

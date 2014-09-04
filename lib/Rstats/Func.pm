@@ -207,7 +207,7 @@ sub factor {
     }
   }
   
-  my $f1 = Rstats::Container::Factor->new;
+  my $f1 = Rstats::Container::Array->new;
   $f1->elements($f1_elements);
   $f1->{type} = 'integer';
   if ($a_ordered) {

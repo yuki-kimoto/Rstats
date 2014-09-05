@@ -244,14 +244,13 @@ sub data_frame {
   my $elements = [];
   
   # name count
-  my $name_count = {
-    
-  };
+  my $name_count = {};
   
   # count
   my $counts = [];
   my $names = [];
   while (my ($name, $v) = splice(@data, 0, 2)) {
+    $v = $v->as_factor if $v->is_character;
     my $dim_values = $v->dim->values;
     if (@$dim_values > 1) {
       my $count = $dim_values->[0];

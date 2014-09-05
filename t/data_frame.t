@@ -33,8 +33,9 @@ EOS
     my $height = c(172, 168, 155);
     
     my $d1 = data_frame(sex => $sex, heigth => $height);
-    is_deeply($d1->get(1)->values, ['F', 'M', 'F']);
-    is_deeply($d1->get('sex')->values, ['F', 'M', 'F']);
+    ok($d1->get(1)->is_factor);
+    is_deeply($d1->get(1)->values, [1, 2, 1]);
+    is_deeply($d1->get('sex')->values, [1, 2, 1]);
     is_deeply($d1->get(2)->values, [172, 168, 155]);
     is_deeply($d1->get('heigth')->values, [172, 168, 155]);
   }
@@ -46,8 +47,11 @@ EOS
     my $sex2 = c('a2', 'b2', 'c2');
     
     my $d1 = data_frame(sex => $sex, sex => $sex1, sex => $sex2);
-    is_deeply($d1->get('sex')->values, ['a', 'b', 'c']);
-    is_deeply($d1->get('sex.1')->values, ['a1', 'b1', 'c1']);
-    is_deeply($d1->get('sex.2')->values, ['a2', 'b2', 'c2']);
+    is_deeply($d1->get('sex')->values, [1, 2, 3]);
+    is_deeply($d1->get('sex')->levels->values, ['a', 'b', 'c']);
+    is_deeply($d1->get('sex.1')->values, [1, 2, 3]);
+    is_deeply($d1->get('sex.1')->levels->values, ['a1', 'b1', 'c1']);
+    is_deeply($d1->get('sex.2')->values, [1, 2, 3]);
+    is_deeply($d1->get('sex.2')->levels->values, ['a2', 'b2', 'c2']);
   }
 }

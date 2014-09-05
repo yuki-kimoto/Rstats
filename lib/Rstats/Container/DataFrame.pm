@@ -28,7 +28,9 @@ sub to_string {
   # columns
   my $columns = [];
   for (my $i = 1; $i <= @$names; $i++) {
-    push @$columns, $self->get($i)->elements;
+    my $array = $self->get($i);
+    $array = $array->as_character if $array->is_factor;
+    push @$columns, $array->elements;
   }
   
   my $col_count = @{$columns};

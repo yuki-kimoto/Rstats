@@ -14,6 +14,8 @@ use Carp 'croak';
 # substr substring
 # strsplit  strwrap
 # outer(x, y, f)
+# reorder()
+# relevel()
 
 my @funcs = qw/
   abs

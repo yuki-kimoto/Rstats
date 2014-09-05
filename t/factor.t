@@ -4,6 +4,17 @@ use warnings;
 
 use Rstats;
 
+# set
+{
+  # set - basic
+  {
+    my $f1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
+    $f1->at(c(3, 6))->set(c("a2", "a1"));
+    is_deeply($f1->values, [1, 2, 2, 1, 2, 1]);
+    is_deeply($f1->levels->values, ["a1", "a2", "a3"]);
+  }
+}
+
 # get
 {
   # get - drop

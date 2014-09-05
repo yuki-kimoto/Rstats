@@ -319,23 +319,57 @@ sub get {
   return $a2;
 }
 
+sub _levels_h {
+  my $self = shift;
+  
+  my $levels_h = {};
+  my $levels = $self->levels->values;
+  for (my $i = 1; $i <= @$levels; $i++) {
+    $levels_h->{$levels->[$i - 1]} = Rstats::ElementFunc::integer($i);
+  }
+  
+  return $levels_h;
+}
+
 sub set {
-  my ($self, $_a2) = @_;
+  my $self = shift;
+  my $a2 = Rstats::Func::to_c(shift);
 
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  
-  my $a2 = Rstats::Func::to_c($_a2);
 
   my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements;
-  
 
-  my $a2_elements = $a2->elements;
-  for (my $i = 0; $i < @$positions; $i++) {
-    my $pos = $positions->[$i];
-    $self_elements->[$pos - 1] = $a2_elements->[(($i + 1) % @$positions) - 1];
+  if ($self->is_factor) {
+    $a2 = $a2->as_character unless $a2->is_character;
+    my $a2_elements = $a2->elements;
+    my $levels_h = $self->_levels_h;
+    for (my $i = 0; $i < @$positions; $i++) {
+      my $pos = $positions->[$i];
+      my $element = $a2_elements->[(($i + 1) % @$positions) - 1];
+      if ($element->is_na) {
+        $self_elements->[$pos - 1] = Rstats::ElementFunc::NA();
+      }
+      else {
+        my $value = $element->to_string;
+        if ($levels_h->{$value}) {
+          $self_elements->[$pos - 1] = $levels_h->{$value};
+        }
+        else {
+          carp "invalid factor level, NA generated";
+          $self_elements->[$pos - 1] = Rstats::ElementFunc::NA();
+        }
+      }
+    }
+  }
+  else {
+    my $a2_elements = $a2->elements;
+    for (my $i = 0; $i < @$positions; $i++) {
+      my $pos = $positions->[$i];
+      $self_elements->[$pos - 1] = $a2_elements->[(($i + 1) % @$positions) - 1];
+    }
   }
   
   return $self;

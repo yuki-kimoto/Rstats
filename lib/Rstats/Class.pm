@@ -171,6 +171,7 @@ my @object_methods = qw/
   colnames
   rownames
   mode
+  str
   typeof
 /;
 

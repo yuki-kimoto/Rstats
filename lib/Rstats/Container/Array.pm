@@ -27,30 +27,6 @@ use overload
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
-sub _element_to_string {
-  my ($self, $element, $is_character, $is_factor) = @_;
-  
-  my $string;
-  if ($is_factor) {
-    if ($element->is_na) {
-      $string = '<NA>';
-    }
-    else {
-      $string = "$element";
-    }
-  }
-  else {
-    if ($is_character) {
-      $string = '"' . $element . '"';
-    }
-    else {
-      $string = "$element";
-    }
-  }
-  
-  return $string;
-}
-
 sub to_string {
   my $self = shift;
   

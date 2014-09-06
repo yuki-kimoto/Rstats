@@ -9,6 +9,109 @@ has 'elements' => sub { [] };
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
+sub _element_to_string {
+  my ($self, $element, $is_character, $is_factor) = @_;
+  
+  my $string;
+  if ($is_factor) {
+    if ($element->is_na) {
+      $string = '<NA>';
+    }
+    else {
+      $string = "$element";
+    }
+  }
+  else {
+    if ($is_character) {
+      $string = '"' . $element . '"';
+    }
+    else {
+      $string = "$element";
+    }
+  }
+  
+  return $string;
+}
+
+sub str {
+  my $self = shift;
+  
+  my @str;
+  
+  if ($self->is_vector || $self->is_array) {
+    # Short type
+    my $type = $self->{type};
+    my $short_type;
+    if ($self->is_factor) {
+      $short_type = 'Factor';
+    }
+    elsif ($type eq 'character') {
+      $short_type = 'chr';
+    }
+    elsif ($type eq 'complex') {
+      $short_type = 'cplx';
+    }
+    elsif ($type eq 'double') {
+      $short_type = 'num';
+    }
+    elsif ($type eq 'integer') {
+      $short_type = 'int';
+    }
+    elsif ($type eq 'logical') {
+      $short_type = 'logi';
+    }
+    else {
+      $short_type = 'Unkonown';
+    }
+    push @str, $short_type;
+    
+    # Dimention
+    my @dim_str;
+    my $length = $self->length_value;
+    if (exists $self->{dim}) {
+      for (my $i = 0; $i < @{$self->{dim}}; $i++) {
+        my $d = $self->{dim}[$i];
+        my $d_str;
+        if ($d == 1) {
+          $d_str = "[1]";
+        }
+        else {
+          $d_str = "[1:$d]"
+        }
+        
+        if (@{$self->{dim}} == 1) {
+          $d_str .= "(" . ($i + 1) . "d)";
+        }
+        push @dim_str, $d_str;
+      }
+    }
+    else {
+      if ($length != 1) {
+        push @dim_str, "[1:$length]";
+      }
+    }
+    my $dim_str = join(' ', @dim_str);
+    push @str, $dim_str;
+    
+    # Elements
+    my @element_str;
+    my $max_count = $length > 10 ? 10 : $length;
+    my $is_character = $self->is_character;
+    for (my $i = 0; $i < $max_count; $i++) {
+      push @element_str, $self->_element_to_string($self->element($i + 1), $is_character);
+    }
+    if ($length > 10) {
+      push @element_str, '...';
+    }
+    my $element_str = join(' ', @element_str);
+    push @str, $element_str;
+  }
+  
+  my $str = join(' ', @str);
+  
+  return $str;
+}
+
 sub levels {
   my $self = shift;
   
@@ -191,8 +294,7 @@ sub dim {
     return $self;
   }
   else {
-    $self->{dim} = [] unless defined $self->{dim};
-    return Rstats::Func::c($self->{dim});
+    return defined $self->{dim} ? Rstats::Func::c($self->{dim}) : Rstats::Func::NULL();
   }
 }
 

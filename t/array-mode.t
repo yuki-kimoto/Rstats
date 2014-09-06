@@ -622,7 +622,7 @@ use Rstats::ElementFunc;
   {
     my $array = C('1:24');
     ok(r->is_vector($array));
-    ok(r->is_array($array));
+    ok(!r->is_array($array));
   }
 
   # is_* - is_vector

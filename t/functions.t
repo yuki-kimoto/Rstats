@@ -6,6 +6,13 @@ use Rstats;
 use Rstats::ElementFunc;
 use Math::Trig ();
 
+# str
+{
+  # str - vector
+  my $a1 = c(1, 2, 3);
+  is(r->str($a1), 'num [1:3] 1 2 3');
+}
+
 # expm1
 {
   # expm1 - complex

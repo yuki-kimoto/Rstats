@@ -861,6 +861,13 @@ use Math::Trig ();
     my $v2 = r->quantile($v1);
     is_deeply($v2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
   }
+
+  # quantile - one element
+  {
+    my $v1 = c(1);
+    my $v2 = r->quantile($v1);
+    is_deeply($v2->values, [1, 1, 1, 1, 1]);
+  }
 }
 
 # unique

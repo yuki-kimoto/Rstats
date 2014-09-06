@@ -8,9 +8,72 @@ use Math::Trig ();
 
 # str
 {
-  # str - vector
-  my $a1 = c(1, 2, 3);
-  is(r->str($a1), 'num [1:3] 1 2 3');
+
+  # str - array, one element
+  {
+    my $a1 = array(1, 1);
+    is(r->str($a1), 'num [1(1d)] 1');
+  }
+  
+  # str - array, one dimention
+  {
+    my $a1 = array(C('1:4'), c(4));
+    is(r->str($a1), 'num [1:4(1d)] 1 2 3 4');
+  }
+  
+  # str - array
+  {
+    my $a1 = array(C('1:12'), c(4, 3));
+    is(r->str($a1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
+  }
+  
+  # str - vector, more than 10 element
+  {
+    my $a1 = C('1:11');
+    is(r->str($a1), 'num [1:11] 1 2 3 4 5 6 7 8 9 10 ...');
+  }
+
+  # str - vector, 10 element
+  {
+    my $a1 = C('1:10');
+    is(r->str($a1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
+  }
+
+  # str - vector, logical
+  {
+    my $a1 = c(T, F);
+    is(r->str($a1), 'logi [1:2] TRUE FALSE');
+  }
+
+  # str - vector, integer
+  {
+    my $a1 = c(1, 2)->as_integer;
+    is(r->str($a1), 'int [1:2] 1 2');
+  }
+
+  # str - vector, complex
+  {
+    my $a1 = c(1 + 1*i, 1 + 2*i);
+    is(r->str($a1), 'cplx [1:2] 1+1i 1+2i');
+  }
+
+  # str - vector, character
+  {
+    my $a1 = c("a", "b", "c");
+    is(r->str($a1), 'chr [1:3] "a" "b" "c"');
+  }
+
+  # str - vector, one element
+  {
+    my $a1 = c(1);
+    is(r->str($a1), 'num 1');
+  }
+
+  # str - vector, double
+  {
+    my $a1 = c(1, 2, 3);
+    is(r->str($a1), 'num [1:3] 1 2 3');
+  }
 }
 
 # expm1

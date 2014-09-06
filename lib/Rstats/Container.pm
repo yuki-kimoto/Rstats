@@ -42,10 +42,7 @@ sub str {
     # Short type
     my $type = $self->{type};
     my $short_type;
-    if ($self->is_factor) {
-      $short_type = 'Factor';
-    }
-    elsif ($type eq 'character') {
+    if ($type eq 'character') {
       $short_type = 'chr';
     }
     elsif ($type eq 'complex') {
@@ -73,10 +70,10 @@ sub str {
         my $d = $self->{dim}[$i];
         my $d_str;
         if ($d == 1) {
-          $d_str = "[1]";
+          $d_str = "1";
         }
         else {
-          $d_str = "[1:$d]"
+          $d_str = "1:$d"
         }
         
         if (@{$self->{dim}} == 1) {
@@ -87,18 +84,21 @@ sub str {
     }
     else {
       if ($length != 1) {
-        push @dim_str, "[1:$length]";
+        push @dim_str, "1:$length";
       }
     }
-    my $dim_str = join(' ', @dim_str);
-    push @str, $dim_str;
+    if (@dim_str) {
+      my $dim_str = join(', ', @dim_str);
+      push @str, "[$dim_str]";
+    }
     
     # Elements
     my @element_str;
     my $max_count = $length > 10 ? 10 : $length;
     my $is_character = $self->is_character;
+    my $elements = $self->elements;
     for (my $i = 0; $i < $max_count; $i++) {
-      push @element_str, $self->_element_to_string($self->element($i + 1), $is_character);
+      push @element_str, $self->_element_to_string($elements->[$i], $is_character);
     }
     if ($length > 10) {
       push @element_str, '...';
@@ -289,7 +289,7 @@ sub dim {
       croak "dims [product $self_lenght_by_dim] do not match the length of object [$self_length]";
     }
   
-    $self->{dim} = [$a_dim->elements];
+    $self->{dim} = $a_dim->values;
     
     return $self;
   }

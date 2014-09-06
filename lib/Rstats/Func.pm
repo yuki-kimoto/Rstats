@@ -1911,6 +1911,66 @@ sub median {
   }
 }
 
+sub quantile {
+  my $a1 = to_c(shift);
+  
+  my $a2 = unique($a1);
+  my $a3 = Rstats::Func::sort($a2);
+  my $a3_length = $a3->length_value;
+  
+  my $quantile_elements = [];
+  
+  # Min
+  push $quantile_elements , $a3->get(1);
+  
+  # 1st quoter
+  if ($a3_length % 4 == 0) {
+    my $first_quoter = $a3_length * (1 / 4);
+    my $a4 = $a3->get($first_quoter);
+    my $a5 = $a3->get($first_quoter + 1);
+    
+    push @$quantile_elements, ((($a4 + $a5) / 2) + $a5) / 2;
+  }
+  else {
+    my $first_quoter = int($a3_length * (1 / 4)) + 1;
+    push @$quantile_elements, $a3->get($first_quoter);
+  }
+  
+  # middle
+  if ($a3_length % 2 == 0) {
+    my $middle = $a3_length / 2;
+    my $a4 = $a3->get($middle);
+    my $a5 = $a3->get($middle + 1);
+    
+    push @$quantile_elements, (($a4 + $a5) / 2);
+  }
+  else {
+    my $middle = int($a3_length / 2) + 1;
+    push @$quantile_elements, $a3->get($middle);
+  }
+  
+  # 3rd quoter
+  if ($a3_length % 4 == 0) {
+    my $third_quoter = $a3_length * (3 / 4);
+    my $a4 = $a3->get($third_quoter);
+    my $a5 = $a3->get($third_quoter + 1);
+    
+    push @$quantile_elements, (($a4 + (($a4 + $a5) / 2)) / 2);
+  }
+  else {
+    my $third_quoter = int($a3_length * (3 / 4)) + 1;
+    push @$quantile_elements, $a3->get($third_quoter);
+  }
+  
+  # Max
+  push $quantile_elements , $a3->get($a3_length);
+  
+  my $a4 = Rstats::Func::c($quantile_elements);
+  $a4->names(Rstats::Func::c(qw/0%  25%  50%  75% 100%/));
+  
+  return $a4;
+}
+
 sub sd {
   my $a1 = to_c(shift);
   

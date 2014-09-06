@@ -100,6 +100,7 @@ my @funcs = qw/
   rank
   rbind
   Re
+  quantile
   rep
   replace
   rev

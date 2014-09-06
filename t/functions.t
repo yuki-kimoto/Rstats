@@ -845,6 +845,24 @@ use Math::Trig ();
   }
 }
 
+# quantile
+{
+  # quantile - odd number
+  {
+    my $v1 = C('0:100');
+    my $v2 = r->quantile($v1);
+    is_deeply($v2->values, [0, 25, 50, 75, 100]);
+    is_deeply($v2->names->values, [qw/0%  25%  50%  75% 100% /]);
+  }
+  
+  # quantile - even number
+  {
+    my $v1 = C('1:100');
+    my $v2 = r->quantile($v1);
+    is_deeply($v2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
+  }
+}
+
 # unique
 {
   # uniqeu - numeric

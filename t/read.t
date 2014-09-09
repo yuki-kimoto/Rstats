@@ -7,7 +7,7 @@ use FindBin;
 
 # read_table
 {
-  # read_table - basic
+  # read_table - character, complex, double, integer, logical, sep default(\s+)
   my $d1 = r->read_table("$FindBin::Bin/tdata/read/basic.txt");
   ok($d1->get(1)->is_factor);
   is_deeply($d1->get(1)->values, [qw/2 3 4 5 1/]);
@@ -16,5 +16,4 @@ use FindBin;
   is_deeply($d1->get(3)->values, [qw/1.1 1.2 1.3 1.4/, undef]);
   is_deeply($d1->get(4)->values, [qw/1 2 3 4/, undef]);
   is_deeply($d1->get(5)->values, [qw/1 0 1 0/, undef]);
-  1;
 }

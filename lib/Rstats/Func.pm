@@ -55,7 +55,7 @@ sub read_table {
     or croak "cannot open file '$file': $!";
   
   # Separater
-  my $sep = defined $a_sep ? $a_sep->value : qr/\s/;
+  my $sep = defined $a_sep ? $a_sep->value : qr/\s+/;
   my $encoding = defined $a_encoding ? $a_encoding->value : 'UTF-8';
   
   my $type_columns;

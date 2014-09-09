@@ -55,14 +55,21 @@ sub read_table {
     or croak "cannot open file '$file': $!";
   
   # Separater
-  my $sep = defined $a_sep ? $a_sep->value : qr/\s+/;
+  my $sep = defined $a_sep ? $a_sep->value : "\\s+";
   my $encoding = defined $a_encoding ? $a_encoding->value : 'UTF-8';
+  my $skip = defined $a_skip ? $a_skip->value : 0;
   
   my $type_columns;
   my $columns = [];
   my $row_size;
   while (my $line = <$fh>) {
+    if ($skip > 0) {
+      $skip--;
+      next;
+    }
     $line = Encode::decode($encoding, $line);
+    $line =~ s/\x0D?\x0A?$//;
+    
     my @row = split(/$sep/, $line);
     my $current_row_size = @row;
     $row_size ||= $current_row_size;

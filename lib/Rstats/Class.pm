@@ -101,6 +101,7 @@ my @funcs = qw/
   rbind
   Re
   quantile
+  read_table
   rep
   replace
   rev

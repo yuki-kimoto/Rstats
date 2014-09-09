@@ -143,7 +143,14 @@ sub as_logical {
     return $self;
   }
   elsif ($self->is_character) {
-    return Rstats::ElementFunc::NA();
+    my $value = $self->value;
+    
+    if (defined (my $e1 = Rstats::Util::looks_like_logical($value))) {
+      return $e1;
+    }
+    else {
+      return Rstats::ElementFunc::NA();
+    }
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";

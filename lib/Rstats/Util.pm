@@ -6,6 +6,7 @@ use Scalar::Util ();
 use B ();
 use Carp 'croak';
 use Rstats::Func;
+use Rstats::ElementFunc;
 
 sub is_perl_number {
   my ($value) = @_;
@@ -15,6 +16,70 @@ sub is_perl_number {
   return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
         && 0 + $value eq $value
         && $value * 0 == 0
+}
+
+my $type_level = {
+  character => 6,
+  complex => 5,
+  double => 4,
+  integer => 3,
+  logical => 2,
+  na => 1
+};
+
+sub higher_type {
+  my ($type1, $type2) = @_;
+  
+  if ($type_level->{$type1} > $type_level) {
+    return $type1;
+  }
+  else {
+    return $type2;
+  }
+}
+
+sub looks_like_na {
+  my $value = shift;
+  
+  return if !defined $value || !CORE::length $value;
+  
+  if ($value eq 'NA') {
+    return Rstats::ElementFunc::NA();
+  }
+  else {
+    return;
+  }
+}
+
+sub looks_like_logical {
+  my $value = shift;
+  
+  return if !defined $value || !CORE::length $value;
+  
+  if ($value =~ /^(T|TRUE|F|FALSE)$/) {
+    if ($value =~ /T/) {
+      return Rstats::ElementFunc::logical(1);
+    }
+    else {
+      return Rstats::ElementFunc::logical(0);
+    }
+  }
+  else {
+    return;
+  }
+}
+
+sub looks_like_integer {
+  my $value = shift;
+  
+  return if !defined $value || !CORE::length $value;
+  
+  if ($value =~ /^[-+]?[0-9]+$/) {
+    return $value + 0;
+  }
+  else {
+    return;
+  }
 }
 
 sub looks_like_number {

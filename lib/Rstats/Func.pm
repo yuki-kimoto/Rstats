@@ -14,6 +14,7 @@ use List::Util;
 use Math::Trig ();
 use POSIX ();
 use Math::Round ();
+use Encode ();
 
 sub NULL { Rstats::Container::Array->new(elements => [], type => 'logical') }
 
@@ -32,6 +33,103 @@ sub TRUE () { c(Rstats::ElementFunc::TRUE()) }
 sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
+
+=pod
+sep = ""
+skip = 0
+nrows = -1
+header = F
+comment.char
+row.names=NULL
+row.names="—ñ–¼"
+row.names=—ñ”Ô†
+row.names=•¶ŽšŒ^ƒxƒNƒgƒ‹
+=cut
+
+sub read_table {
+  my ($a_file, $a_sep, $a_skip, $a_nrows, $a_header, $a_comment_char, $a_row_names, $a_encoding)
+    = args([qw/file sep skip nrows header comment.char row.names encoding/], @_);
+  
+  my $file = $a_file->value;
+  open(my $fh, '<', $file)
+    or croak "cannot open file '$file': $!";
+  
+  # Separater
+  my $sep = defined $a_sep ? $a_sep->value : qr/\s/;
+  my $encoding = defined $a_encoding ? $a_encoding->value : 'UTF-8';
+  
+  my $type_columns;
+  my $columns = [];
+  my $row_size;
+  while (my $line = <$fh>) {
+    $line = Encode::decode($encoding, $line);
+    my @row = split(/$sep/, $line);
+    my $current_row_size = @row;
+    $row_size ||= $current_row_size;
+    
+    # Row size different
+    croak "line $. did not have $row_size elements"
+      if $current_row_size != $row_size;
+    
+    $type_columns ||= [('na') x $row_size];
+    
+    for (my $i = 0; $i < @row; $i++) {
+      
+      $columns->[$i] ||= [];
+      push @{$columns->[$i]}, $row[$i];
+      my $type;
+      if (defined Rstats::Util::looks_like_na($row[$i])) {
+        $type = 'na';
+      }
+      elsif (defined Rstats::Util::looks_like_logical($row[$i])) {
+        $type = 'logical';
+      }
+      elsif (defined Rstats::Util::looks_like_integer($row[$i])) {
+        $type = 'integer';
+      }
+      elsif (defined Rstats::Util::looks_like_number($row[$i])) {
+        $type = 'double';
+      }
+      elsif (defined Rstats::Util::looks_like_complex($row[$i])) {
+        $type = 'complex';
+      }
+      else {
+        $type = 'character';
+      }
+      $type_columns->[$i] = Rstats::Util::higher_type($type_columns->[$i], $type);
+    }
+  }
+
+  my $data_frame_args = [];
+  for (my $i = 0; $i < $row_size; $i++) {
+    push @$data_frame_args, "V$i";
+    my $type = $type_columns->[$i];
+    if ($type eq 'character') {
+      my $a1 = Rstats::Func::c($columns->[$i]);
+      push @$data_frame_args, $a1;
+    }
+    elsif ($type eq 'complex') {
+      my $a1 = Rstats::Func::c($columns->[$i]);
+      push @$data_frame_args, $a1->as_complex;
+    }
+    elsif ($type eq 'double') {
+      my $a1 = Rstats::Func::c($columns->[$i]);
+      push @$data_frame_args, $a1->as_double;
+    }
+    elsif ($type eq 'integer') {
+      my $a1 = Rstats::Func::c($columns->[$i]);
+      push @$data_frame_args, $a1->as_integer;
+    }
+    else {
+      my $a1 = Rstats::Func::c($columns->[$i]);
+      push @$data_frame_args, $a1->as_logical;
+    }
+  }
+  
+  my $d1 = Rstats::Func::data_frame(@$data_frame_args);
+  
+  return $d1;
+}
 
 sub interaction {
   my $opt;

@@ -71,7 +71,7 @@ sub read_table {
     croak "line $. did not have $row_size elements"
       if $current_row_size != $row_size;
     
-    $type_columns ||= [('na') x $row_size];
+    $type_columns ||= [('logical') x $row_size];
     
     for (my $i = 0; $i < @row; $i++) {
       
@@ -79,7 +79,7 @@ sub read_table {
       push @{$columns->[$i]}, $row[$i];
       my $type;
       if (defined Rstats::Util::looks_like_na($row[$i])) {
-        $type = 'na';
+        $type = 'logical';
       }
       elsif (defined Rstats::Util::looks_like_logical($row[$i])) {
         $type = 'logical';
@@ -99,14 +99,15 @@ sub read_table {
       $type_columns->[$i] = Rstats::Util::higher_type($type_columns->[$i], $type);
     }
   }
-
+  
+  
   my $data_frame_args = [];
   for (my $i = 0; $i < $row_size; $i++) {
     push @$data_frame_args, "V$i";
     my $type = $type_columns->[$i];
     if ($type eq 'character') {
       my $a1 = Rstats::Func::c($columns->[$i]);
-      push @$data_frame_args, $a1;
+      push @$data_frame_args, $a1->as_factor;
     }
     elsif ($type eq 'complex') {
       my $a1 = Rstats::Func::c($columns->[$i]);

@@ -30,7 +30,7 @@ my $type_level = {
 sub higher_type {
   my ($type1, $type2) = @_;
   
-  if ($type_level->{$type1} > $type_level) {
+  if ($type_level->{$type1} > $type_level->{$type2}) {
     return $type1;
   }
   else {

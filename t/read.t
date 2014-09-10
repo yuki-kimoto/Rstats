@@ -9,7 +9,7 @@ use FindBin;
 {
   # read_table - character, complex, double, integer, logical, sep default(\s+)
   {
-    my $d1 = r->read_table("$FindBin::Bin/tdata/read/basic.txt");
+    my $d1 = r->read_table("$FindBin::Bin/data/read.t/basic.txt");
     ok($d1->get(1)->is_factor);
     is_deeply($d1->get(1)->values, [qw/2 3 4 5 1/]);
     is_deeply($d1->get(1)->levels->values, [qw/NA NB NC ND NE/]);
@@ -25,14 +25,14 @@ use FindBin;
   
   # read_table - sep comma
   {
-    my $d1 = r->read_table("$FindBin::Bin/tdata/read/comma.txt",{sep => ','});
+    my $d1 = r->read_table("$FindBin::Bin/data/read.t/comma.txt",{sep => ','});
     is_deeply($d1->get(1)->values, [qw/1 2/]);
     is_deeply($d1->get(2)->values, [qw/1.1 1.2/]);
   }
 
   # read_table - skip
   {
-    my $d1 = r->read_table("$FindBin::Bin/tdata/read/skip.txt",{skip => 2});
+    my $d1 = r->read_table("$FindBin::Bin/data/read.t/skip.txt",{skip => 2});
     is_deeply($d1->get(1)->values, [qw/1 2/]);
     is_deeply($d1->get(2)->values, [qw/1.1 1.2/]);
   }

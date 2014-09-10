@@ -25,18 +25,20 @@ EOS
   }
 }
 
-# data_frame,getin
+# data_frame,get
 
 {
-  # data_frame,getin - multiple elements
+  # data_frame,get - multiple elements
   {
     my $sex = c('F', 'M', 'F');
     my $height = c(172, 168, 155);
     my $weight = c(5, 6, 7);
     
     my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
-    
-    is_deeply($d1->getin(1)->values, [1, 2, 1]);
+    my $d2 = $d1->get(c(1,3));
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['sex', 'weight']);
   }
 }
 

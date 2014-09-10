@@ -110,6 +110,7 @@ EOS
   {
     my $l1 = list(1, 2, 3);
     r->names($l1, c("n1", "n2", "n3"));
+    $DB::single = 1;
     my $l2 = $l1->get(c("n1", "n3"));
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);

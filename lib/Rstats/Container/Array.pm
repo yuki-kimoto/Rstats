@@ -249,47 +249,13 @@ sub get {
   
   # array
   my $a2 = Rstats::Func::array(\@a2_elements, $a2_dim);
-
-  # class
-  $a2->{class} =  $self->{class} if exists $self->{class};
-
-  # levels
-  $a2->{levels} = $self->{levels} if exists $self->{levels};
   
+  # Copy attributes
+  $self->_copy_attrs_to($a2, $new_indexs);
+
   # level drop
   if ($level_drop) {
     $a2 = Rstats::Func::factor($a2->as_character);
-  }
-  
-  # names
-  if (exists $self->{names}) {
-    my $names = [];
-    my $index = $new_indexs->[0];
-    if (defined $index) {
-      for my $i (@{$index->values}) {
-        push @$names, $self->{names}[$i - 1];
-      }
-    }
-    $a2->{names} = $names;
-  }
-  
-  # dimnames
-  if (exists $self->{dimnames}) {
-    my $new_dimnames = [];
-    my $dimnames = $self->{dimnames};
-    my $length = @$dimnames;
-    for (my $i = 0; $i < $length; $i++) {
-      my $dimname = $dimnames->[$i];
-      if (defined $dimname && !$dimname->is_null) {
-        my $index = $new_indexs->[$i];
-        my $new_dimname = [];
-        for my $k (@{$index->values}) {
-          push @$new_dimname, $dimname->get($k);
-        }
-        push @$new_dimnames, Rstats::Func::c($new_dimname);
-      }
-    }
-    $a2->{dimnames} = $new_dimnames;
   }
   
   return $a2;

@@ -18,7 +18,6 @@ use overload '""' => \&to_string,
 use Rstats::Func;
 
 has 'elements' => sub { [] };
-has 'names' => sub { [] };
 
 sub getin {
   my ($self, $_index) = @_;
@@ -48,7 +47,8 @@ sub get {
   
   my $elements = $self->elements;
   
-  my $list = Rstats::Container::List->new;
+  my $class = ref $self;
+  my $list = $class->new;
   my $list_elements = $list->elements;
   
   my $index_values;
@@ -64,6 +64,8 @@ sub get {
   for my $i (@{$index_values}) {
     push @$list_elements, $elements->[$i - 1];
   }
+
+  $self->_copy_attrs_to($list, [Rstats::Func::to_c($index_values)]);
 
   return $list;
 }

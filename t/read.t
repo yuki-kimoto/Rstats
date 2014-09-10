@@ -7,6 +7,14 @@ use FindBin;
 
 # read_table
 {
+  # read_table - header
+  {
+    my $d1 = r->read_table("$FindBin::Bin/data/read.t/header.txt",{header => T});
+    is_deeply($d1->names->values, [qw/a b/]);
+    is_deeply($d1->get(1)->values, [qw/1 2/]);
+    is_deeply($d1->get(2)->values, [qw/1.1 1.2/]);
+  }
+  
   # read_table - character, complex, double, integer, logical, sep default(\s+)
   {
     my $d1 = r->read_table("$FindBin::Bin/data/read.t/basic.txt");
@@ -21,6 +29,7 @@ use FindBin;
     is_deeply($d1->get(4)->values, [qw/1 2 3 4/, undef]);
     ok($d1->get(5)->is_logical);
     is_deeply($d1->get(5)->values, [qw/1 0 1 0/, undef]);
+    is_deeply($d1->names->values, [qw/V1 V2 V3 V4 V5/]);
   }
   
   # read_table - sep comma
@@ -33,7 +42,7 @@ use FindBin;
   # read_table - skip
   {
     my $d1 = r->read_table("$FindBin::Bin/data/read.t/skip.txt",{skip => 2});
-    is_deeply($d1->get(1)->values, [qw/1 2/]);
+    is_deeply($d1->get(1)->values, [qw/2 3/]);
     is_deeply($d1->get(2)->values, [qw/1.1 1.2/]);
   }
 }

@@ -58,10 +58,12 @@ sub read_table {
   my $sep = defined $a_sep ? $a_sep->value : "\\s+";
   my $encoding = defined $a_encoding ? $a_encoding->value : 'UTF-8';
   my $skip = defined $a_skip ? $a_skip->value : 0;
+  my $header_opt = defined $a_header ? $a_header->value : 0;
   
   my $type_columns;
   my $columns = [];
   my $row_size;
+  my $header;
   while (my $line = <$fh>) {
     if ($skip > 0) {
       $skip--;
@@ -69,6 +71,11 @@ sub read_table {
     }
     $line = Encode::decode($encoding, $line);
     $line =~ s/\x0D?\x0A?$//;
+    
+    if ($header_opt && !$header) {
+      $header = [split(/$sep/, $line)];
+      next;
+    }
     
     my @row = split(/$sep/, $line);
     my $current_row_size = @row;
@@ -110,7 +117,12 @@ sub read_table {
   
   my $data_frame_args = [];
   for (my $i = 0; $i < $row_size; $i++) {
-    push @$data_frame_args, "V$i";
+    if (defined $header->[$i]) {
+      push @$data_frame_args, $header->[$i];
+    }
+    else {
+      push @$data_frame_args, "V" . ($i + 1);
+    }
     my $type = $type_columns->[$i];
     if ($type eq 'character') {
       my $a1 = Rstats::Func::c($columns->[$i]);

@@ -707,7 +707,7 @@ sub dimnames {
     if (ref $dimnames eq 'Rstats::Container::List') {
       my $length = $dimnames->length_value;
       for (my $i = 0; $i < $length; $i++) {
-        my $self = $dimnames->get($i);
+        my $self = $dimnames->getin($i);
         if (!$self->is_character) {
           croak "dimnames must be character list";
         }
@@ -732,7 +732,7 @@ sub colnames {
     $self->dimnames->at(1)->set($colnames);
   }
   else {
-    my $colnames = $self->dimnames->get(1);
+    my $colnames = $self->dimnames->getin(1);
     return defined $colnames ? $colnames : Rstats::Func::NULL();
   }
 }
@@ -746,7 +746,7 @@ sub rownames {
     $self->dimnames->at(2)->set($rownames);
   }
   else {
-    my $rownames = $self->dimnames->get(2);
+    my $rownames = $self->dimnames->getin(2);
     return defined $rownames ? $rownames : Rstats::Func::NULL();
   }
 }

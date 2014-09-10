@@ -20,7 +20,7 @@ use Rstats::Func;
 has 'elements' => sub { [] };
 has 'names' => sub { [] };
 
-sub get {
+sub getin {
   my ($self, $_index) = @_;
   
   unless (defined $_index) {
@@ -42,7 +42,7 @@ sub get {
   return $element;
 }
 
-sub get_as_list {
+sub get {
   my $self = shift;
   my $index = Rstats::Func::to_c(shift);
   

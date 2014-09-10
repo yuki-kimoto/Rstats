@@ -65,64 +65,64 @@ EOS
     is_deeply($a1->values, ["a", "b"]);
   }
 
-  # list - get
+  # list - getin
   {
     my $l1 = list("a", "b", list("c", "d", list("e")));
-    my $a1 = $l1->get(1);
+    my $a1 = $l1->getin(1);
     is_deeply($a1->values, ["a"]);
     
-    my $a2 = $l1->get(3)->get(2);
+    my $a2 = $l1->getin(3)->getin(2);
     is_deeply($a2->values, ["d"]);
 
-    my $a3 = $l1->get(3)->get(3)->get(1);
+    my $a3 = $l1->getin(3)->getin(3)->getin(1);
     is_deeply($a3->values, ["e"]);
   }
 
-  # list - get,name
+  # list - getin,name
   {
     my $l1 = list("a", "b", list("c", "d", list("e")));
     r->names($l1, c("n1", "n2", "n3"));
-    my $a1 = $l1->get("n1");
+    my $a1 = $l1->getin("n1");
     is_deeply($a1->values, ["a"]);
 
-    my $a3 = $l1->get("n3")->get(3)->get(1);
+    my $a3 = $l1->getin("n3")->getin(3)->getin(1);
     is_deeply($a3->values, ["e"]);
   }
   
-  # list - get_as_list
+  # list - get
   {
     my $l1 = list(1, 2, 3);
-    my $l2 = $l1->get_as_list(1);
+    my $l2 = $l1->get(1);
     ok(r->is_list($l2));
-    is_deeply($l2->get(1)->values, [1]);
+    is_deeply($l2->getin(1)->values, [1]);
   }
 
-  # list - get_as_list, multiple
+  # list - get, multiple
   {
     my $l1 = list(1, 2, 3);
-    my $l2 = $l1->get_as_list(c(1, 3));
+    my $l2 = $l1->get(c(1, 3));
     ok(r->is_list($l2));
-    is_deeply($l2->get(1)->values, [1]);
-    is_deeply($l2->get(2)->values, [3]);
+    is_deeply($l2->getin(1)->values, [1]);
+    is_deeply($l2->getin(2)->values, [3]);
   }
 
-  # list - get_as_list, multiple, names
+  # list - get, multiple, names
   {
     my $l1 = list(1, 2, 3);
     r->names($l1, c("n1", "n2", "n3"));
-    my $l2 = $l1->get_as_list(c("n1", "n3"));
+    my $l2 = $l1->get(c("n1", "n3"));
     ok(r->is_list($l2));
-    is_deeply($l2->get(1)->values, [1]);
-    is_deeply($l2->get(2)->values, [3]);
+    is_deeply($l2->getin(1)->values, [1]);
+    is_deeply($l2->getin(2)->values, [3]);
   }
   
   # list - set
   {
     my $l1 = list(1, 2, 3);
     $l1->at(2)->set(5);
-    is_deeply($l1->get(1)->values, [1]);
-    is_deeply($l1->get(2)->values, [5]);
-    is_deeply($l1->get(3)->values, [3]);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->values, [5]);
+    is_deeply($l1->getin(3)->values, [3]);
   }
 
   # list - set,name
@@ -130,24 +130,24 @@ EOS
     my $l1 = list(1, 2, 3);
     r->names($l1, c("n1", "n2", "n3"));
     $l1->at("n2")->set(5);
-    is_deeply($l1->get(1)->values, [1]);
-    is_deeply($l1->get(2)->values, [5]);
-    is_deeply($l1->get(3)->values, [3]);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->values, [5]);
+    is_deeply($l1->getin(3)->values, [3]);
   }
   
   # list - set, two index
   {
     my $l1 = list(1, list(2, 3));
-    $l1->get(2)->at(2)->set(5);
-    is_deeply($l1->get(1)->values, [1]);
-    is_deeply($l1->get(2)->get(1)->values, [2]);
-    is_deeply($l1->get(2)->get(2)->values, [5]);
+    $l1->getin(2)->at(2)->set(5);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->getin(1)->values, [2]);
+    is_deeply($l1->getin(2)->getin(2)->values, [5]);
   }
 
   # list - set, tree index
   {
     my $l1 = list(1, list(2, 3, list(4)));
-    $l1->get(2)->get(3)->at(1)->set(5);
-    is_deeply($l1->get(2)->get(3)->get(1)->values, [5]);
+    $l1->getin(2)->getin(3)->at(1)->set(5);
+    is_deeply($l1->getin(2)->getin(3)->getin(1)->values, [5]);
   }
 }

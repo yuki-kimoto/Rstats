@@ -28,7 +28,7 @@ sub to_string {
   # columns
   my $columns = [];
   for (my $i = 1; $i <= @$names; $i++) {
-    my $array = $self->get($i);
+    my $array = $self->getin($i);
     $array = $array->as_character if $array->is_factor;
     push @$columns, $array->elements;
   }

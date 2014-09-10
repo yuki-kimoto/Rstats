@@ -16,6 +16,11 @@ use Carp 'croak';
 # outer(x, y, f)
 # reorder()
 # relevel()
+# read.csv()
+# read.csv2()
+# read.delim()
+# read.delim2()
+# read.fwf()
 
 my @funcs = qw/
   abs

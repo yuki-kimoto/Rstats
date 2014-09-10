@@ -108,7 +108,7 @@ sub to_string {
           }
           else {
             $str .= '     ';
-            my $a_dimnames = $self->dimnames->get($i);
+            my $a_dimnames = $self->dimnames->getin($i);
             my $dimnames = defined $a_dimnames ? $a_dimnames->values : [];
             
             if (@$dimnames) {

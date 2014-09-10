@@ -16,8 +16,8 @@ use Rstats::Func;
     my $a1 = r->matrix(C('1:24'), 3, 2);
     r->dimnames($a1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
     my $a2 = $a1->get(c(1, 3), c(2));
-    is_deeply($a2->dimnames->get(1)->values, ['r1', 'r3']);
-    is_deeply($a2->dimnames->get(2)->values, ['c2']);
+    is_deeply($a2->dimnames->getin(1)->values, ['r1', 'r3']);
+    is_deeply($a2->dimnames->getin(2)->values, ['c2']);
   }
   
   # get - have names

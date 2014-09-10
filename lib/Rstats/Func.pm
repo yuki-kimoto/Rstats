@@ -34,18 +34,17 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
-=pod
-sep = ""
-skip = 0
-nrows = -1
-header = F
-comment.char
-row.names=NULL
-row.names="óÒñº"
-row.names=óÒî‘çÜ
-row.names=ï∂éöå^ÉxÉNÉgÉã
-=cut
-
+# TODO
+#read.table(file, header = FALSE, sep = "", quote = "\"'",
+#           dec = ".", row.names, col.names,
+#           as.is = !stringsAsFactors,
+#           na.strings = "NA", colClasses = NA, nrows = -1,
+#           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
+#           strip.white = FALSE, blank.lines.skip = TRUE,
+#           comment.char = "#",
+#           allowEscapes = FALSE, flush = FALSE,
+#           stringsAsFactors = default.stringsAsFactors(),
+#           encoding = "unknown")
 sub read_table {
   my ($a_file, $a_sep, $a_skip, $a_nrows, $a_header, $a_comment_char, $a_row_names, $a_encoding)
     = args([qw/file sep skip nrows header comment.char row.names encoding/], @_);

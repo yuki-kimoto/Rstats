@@ -22,17 +22,16 @@ sub to_string {
   my $t = Text::UnicodeTable::Simple->new(border => 0);
   
   # Names
-  my $names = $self->names->values;
-  $t->set_header('', @$names);
+  my $column_names = $self->names->values;
+  $t->set_header('', @$column_names);
   
   # columns
   my $columns = [];
-  for (my $i = 1; $i <= @$names; $i++) {
+  for (my $i = 1; $i <= @$column_names; $i++) {
     my $array = $self->getin($i);
     $array = $array->as_character if $array->is_factor;
     push @$columns, $array->elements;
   }
-  
   my $col_count = @{$columns};
   my $row_count = @{$columns->[0]};
   

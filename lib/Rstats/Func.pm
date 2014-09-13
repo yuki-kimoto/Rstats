@@ -365,7 +365,9 @@ sub data_frame {
   
   # count
   my $counts = [];
-  my $names = [];
+  my $column_names = [];
+  my $row_names = [];
+  my $row_count = 1;
   while (my ($name, $v) = splice(@data, 0, 2)) {
     $v = $v->as_factor if $v->is_character;
     my $dim_values = $v->dim->values;
@@ -383,7 +385,7 @@ sub data_frame {
         else {
           $fix_name = $name;
         }
-        push @$names, $fix_name;
+        push @$column_names, $fix_name;
         push @$elements, splice(@{$v->elements}, 0, $count);
       }
     }
@@ -397,9 +399,11 @@ sub data_frame {
       else {
         $fix_name = $name;
       }
-      push @$names, $fix_name;
+      push @$column_names, $fix_name;
       push @$elements, $v;
     }
+    push @$row_names, "$row_count";
+    $row_count++;
     $name_count->{$name}++;
   }
   
@@ -425,7 +429,12 @@ sub data_frame {
 
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->elements($elements);
-  $data_frame->names(Rstats::Func::c($names));
+  $data_frame->dimnames(
+    Rstats::Func::list(
+      Rstats::Func::c($row_names),
+      Rstats::Func::c($column_names)
+    )
+  );
   
   return $data_frame;
 }

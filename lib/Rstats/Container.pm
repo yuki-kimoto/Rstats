@@ -37,13 +37,13 @@ sub _copy_attrs_to {
     my $length = @$dimnames;
     for (my $i = 0; $i < $length; $i++) {
       my $dimname = $dimnames->[$i];
-      if (defined $dimname && !$dimname->is_null) {
+      if (defined $dimname && @$dimname) {
         my $index = $new_indexs->[$i];
         my $new_dimname = [];
         for my $k (@{$index->values}) {
-          push @$new_dimname, $dimname->get($k);
+          push @$new_dimname, $dimname->[$k - 1];
         }
-        push @$new_dimnames, Rstats::Func::c($new_dimname);
+        push @$new_dimnames, $new_dimname;
       }
     }
     $a2->{dimnames} = $new_dimnames;
@@ -615,15 +615,6 @@ sub as_character {
   return $a2;
 }
 
-sub new {
-  my $self = shift->SUPER::new(@_);
-  
-  $self->{names} ||= [];
-  $self->{dimnames} ||= [];
-  
-  return $self;
-}
-
 sub values {
   my $self = shift;
   
@@ -731,12 +722,22 @@ sub names {
   if (@_) {
     my $names = Rstats::Func::to_c(shift);
     
-    $self->{names} = $names->elements;
+    $names = $names->as_character unless $names->is_character;
+    $self->{names} = $names->values;
+    
+    if ($self->is_data_frame) {
+      $self->{dimnames}->[1] = $self->{names};
+    }
     
     return $self;
   }
   else {
-    return Rstats::Func::c($self->{names});
+    if (exists $self->{names}) {
+      return Rstats::Func::c($self->{names});
+    }
+    else {
+      return Rstats::Func::NULL();
+    }
   }
 }
 
@@ -744,23 +745,37 @@ sub dimnames {
   my $self = shift;
   
   if (@_) {
-    my $dimnames = shift;
-    if (ref $dimnames eq 'Rstats::Container::List') {
-      my $length = $dimnames->length_value;
+    my $dimnames_list = shift;
+    if (ref $dimnames_list eq 'Rstats::Container::List') {
+      my $length = $dimnames_list->length_value;
+      my $dimnames = [];
       for (my $i = 0; $i < $length; $i++) {
-        my $self = $dimnames->getin($i);
-        if (!$self->is_character) {
+        my $a_dimname = $dimnames_list->getin($i + 1);
+        if ($a_dimname->is_character) {
+          my $dimname = $a_dimname->values;
+          push @$dimnames, $dimname;
+        }
+        else {
           croak "dimnames must be character list";
         }
       }
-      $self->{dimnames} = $dimnames->elements;
+      $self->{dimnames} = $dimnames;
+
+      if ($self->is_data_frame) {
+        $self->{names} = $self->{dimnames}->[1];
+      }
     }
     else {
       croak "dimnames must be list";
     }
   }
   else {
-    return Rstats::Container::List->new(elements => $self->{dimnames});
+    if (exists $self->{dimnames}) {
+      return Rstats::Func::list(@{$self->{dimnames}});
+    }
+    else {
+      return Rstats::Func::NULL();
+    }
   }
 }
 
@@ -770,11 +785,20 @@ sub colnames {
   if (@_) {
     my $colnames = Rstats::Func::to_c(shift);
     
-    $self->dimnames->at(1)->set($colnames);
+    if (exists $self->{dimnames}) {
+      $self->{dimnames}->[0] = [@{$colnames->values}];
+    }
+    else {
+      $self->{dimnames} = [[], [@{$colnames->values}]];
+    }
   }
   else {
-    my $colnames = $self->dimnames->getin(1);
-    return defined $colnames ? $colnames : Rstats::Func::NULL();
+    if (exists $self->{dimnames}) {
+      return Rstats::Func::c($self->{dimnames}[0]);
+    }
+    else {
+      return Rstats::Func::NULL()
+    }
   }
 }
 
@@ -782,13 +806,22 @@ sub rownames {
   my $self = shift;
   
   if (@_) {
-    my $rownames = Rstats::Func::to_c(shift);
+    my $colnames = Rstats::Func::to_c(shift);
     
-    $self->dimnames->at(2)->set($rownames);
+    if (exists $self->{dimnames}) {
+      $self->{dimnames}->[1] = [@{$colnames->values}];
+    }
+    else {
+      $self->{dimnames} = [[], [@{$colnames->values}]];
+    }
   }
   else {
-    my $rownames = $self->dimnames->getin(2);
-    return defined $rownames ? $rownames : Rstats::Func::NULL();
+    if (exists $self->{dimnames}) {
+      return Rstats::Func::c($self->{dimnames}[1]);
+    }
+    else {
+      return Rstats::Func::NULL()
+    }
   }
 }
 

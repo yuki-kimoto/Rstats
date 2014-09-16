@@ -21,7 +21,7 @@ sub _copy_attrs_to {
   # names
   if (exists $self->{names}) {
     my $names = [];
-    my $index = $new_indexs->[0];
+    my $index = $self->is_data_frame ? $new_indexs->[1] : $new_indexs->[0];
     if (defined $index) {
       for my $i (@{$index->values}) {
         push @$names, $self->{names}[$i - 1];
@@ -789,7 +789,7 @@ sub colnames {
       $self->{dimnames}->[0] = [@{$colnames->values}];
     }
     else {
-      $self->{dimnames} = [[], [@{$colnames->values}]];
+      $self->{dimnames} = [[@{$colnames->values}], []];
     }
   }
   else {

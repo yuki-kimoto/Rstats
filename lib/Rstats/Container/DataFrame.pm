@@ -16,6 +16,53 @@ use Text::UnicodeTable::Simple;
   }
 }
 
+sub get {
+  my $self = shift;
+  my $_row_index = shift;
+  my $_col_index = shift;
+  
+  # Fix column index and row index
+  unless (defined $_col_index) {
+    $_col_index = $_row_index;
+    $_row_index = [];
+  }
+  my $row_index = Rstats::Func::to_c($_row_index);
+  my $col_index = Rstats::Func::to_c($_col_index);
+  
+  # Convert name index to number index
+  my $col_index_values;
+  if ($col_index->is_character) {
+    $col_index_values = [];
+    for my $element (@{$col_index->elements}) {
+      push @$col_index_values, $self->_name_to_index($element);
+    }
+  }
+  else {
+    $col_index_values = $col_index->values;
+  }
+  
+  # Extract columns
+  my $new_elements = [];
+  my $elements = $self->elements;
+  for my $i (@{$col_index_values}) {
+    push @$new_elements, $elements->[$i - 1];
+  }
+  
+  # Extract rows
+  for my $new_element (@$new_elements) {
+    $new_element = $new_element->get($row_index) unless $row_index->is_null;
+  }
+
+  
+  # Create new data frame
+  my $data_frame = Rstats::Container::DataFrame->new;
+  $data_frame->elements($new_elements);
+  $self->_copy_attrs_to($data_frame, [$row_index, Rstats::Func::c($col_index_values)]);
+  
+
+  return $data_frame;
+}
+
 sub to_string {
   my $self = shift;
 

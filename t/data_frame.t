@@ -51,7 +51,7 @@ EOS
     ok($d2->is_data_frame);
     is_deeply($d2->class->values, ['data.frame']);
     is_deeply($d2->names->values, ['sex', 'weight']);
-    is_deeply($d2->dimnames->getin(1)->values, ['sex', 'weight']);
+    is_deeply($d2->dimnames->getin(2)->values, ['sex', 'weight']);
   }
 }
 

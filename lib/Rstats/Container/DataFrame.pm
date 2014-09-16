@@ -37,6 +37,11 @@ sub get {
       push @$col_index_values, $self->_name_to_index($element);
     }
   }
+  elsif ($col_index->is_logical) {
+    for (my $i = 0; $i < @{$col_index->values}; $i++) {
+      push @$col_index_values, $i + 1 if $col_index->elements->[$i];
+    }
+  }
   else {
     $col_index_values = $col_index->values;
   }

@@ -6,6 +6,40 @@ use Rstats;
 
 # get
 {
+  # get - logical, logical
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    my $d2 = $d1->get(c(T, F, T), c(T, F, T));
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['sex', 'weight']);
+    is_deeply($d2->rownames->values, [qw/1 2/]);
+    is_deeply($d2->colnames->values, ['sex', 'weight']);
+    is_deeply($d2->getin(1)->as_character->values, [qw/F F/]);
+    is_deeply($d2->getin(2)->values, [qw/5 7/]);
+  }
+  
+  # get - logical
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    my $d2 = $d1->get(c(T, F, T));
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['sex', 'weight']);
+    is_deeply($d2->rownames->values, [qw/1 2 3/]);
+    is_deeply($d2->colnames->values, ['sex', 'weight']);
+    is_deeply($d2->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($d2->getin(2)->values, [qw/5 6 7/]);
+  }
+  
   # get - row index and name, reverse
   {
     my $sex = c('F', 'M', 'F');

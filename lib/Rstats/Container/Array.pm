@@ -108,8 +108,16 @@ sub to_string {
           }
           else {
             $str .= '     ';
-            my $a_dimnames = $self->dimnames->getin($i);
-            my $dimnames = defined $a_dimnames ? $a_dimnames->values : [];
+            
+            my $l_dimnames = $self->dimnames;
+            my $dimnames;
+            if ($l_dimnames->is_null) {
+              $dimnames = [];
+            }
+            else {
+              my $a_dimnames = $l_dimnames->getin($i);
+              $dimnames = defined $l_dimnames ? $l_dimnames->values : [];
+            }
             
             if (@$dimnames) {
               $str .= join(' ', @$dimnames) . "\n";
@@ -209,6 +217,8 @@ sub is_null {
   
   return $a2;
 }
+
+sub getin { shift->get(@_) }
 
 sub get {
   my $self = shift;

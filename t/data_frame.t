@@ -4,6 +4,53 @@ use warnings;
 
 use Rstats;
 
+# get
+{
+  # get - row index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    my $d2 = $d1->get(NULL, c(1, 3));
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['sex', 'weight']);
+    is_deeply($d2->rownames->values, [qw/1 2 3/]);
+    is_deeply($d2->colnames->values, ['sex', 'weight']);
+    is_deeply($d2->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($d2->getin(2)->values, [qw/5 6 7/]);
+  }
+  
+  # get - name
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    my $d2 = $d1->get("weight");
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['weight']);
+  }
+  
+  # get - multiple elements
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    my $d2 = $d1->get(c(1,3));
+    ok($d2->is_data_frame);
+    is_deeply($d2->class->values, ['data.frame']);
+    is_deeply($d2->names->values, ['sex', 'weight']);
+    is_deeply($d2->dimnames->getin(2)->values, ['sex', 'weight']);
+  }
+}
+
 # data_frame - to_string
 {
   # data_frame - to_string
@@ -22,36 +69,6 @@ my $expected = <<"EOS";
 EOS
     $expected =~ s/\s+/ /g;
     is($got, $expected);
-  }
-}
-
-# data_frame,get
-{
-  # data_frame,get - name
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
-    my $d2 = $d1->get("weight");
-    ok($d2->is_data_frame);
-    is_deeply($d2->class->values, ['data.frame']);
-    is_deeply($d2->names->values, ['weight']);
-  }
-  
-  # data_frame,get - multiple elements
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
-    my $d2 = $d1->get(c(1,3));
-    ok($d2->is_data_frame);
-    is_deeply($d2->class->values, ['data.frame']);
-    is_deeply($d2->names->values, ['sex', 'weight']);
-    is_deeply($d2->dimnames->getin(2)->values, ['sex', 'weight']);
   }
 }
 

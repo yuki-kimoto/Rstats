@@ -779,17 +779,17 @@ sub dimnames {
   }
 }
 
-sub colnames {
+sub rownames {
   my $self = shift;
   
   if (@_) {
-    my $colnames = Rstats::Func::to_c(shift);
+    my $rownames = Rstats::Func::to_c(shift);
     
     if (exists $self->{dimnames}) {
-      $self->{dimnames}->[0] = [@{$colnames->values}];
+      $self->{dimnames}->[0] = [@{$rownames->values}];
     }
     else {
-      $self->{dimnames} = [[@{$colnames->values}], []];
+      $self->{dimnames} = [[@{$rownames->values}], []];
     }
   }
   else {
@@ -802,7 +802,7 @@ sub colnames {
   }
 }
 
-sub rownames {
+sub colnames {
   my $self = shift;
   
   if (@_) {

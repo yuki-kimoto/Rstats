@@ -5,9 +5,46 @@ use Carp 'croak', 'carp';
 use Rstats::ElementFunc;
 use Rstats::Util;
 
-use overload 'bool' => \&bool,
+use overload
+  bool => \&bool,
+  '+' => sub { Rstats::ElementFunc::add(shift->_fix_position(@_)) },
+  '-' => sub { Rstats::ElementFunc::subtract(shift->_fix_position(@_)) },
+  '*' => sub { Rstats::ElementFunc::multiply(shift->_fix_position(@_)) },
+  '/' => sub { Rstats::ElementFunc::divide(shift->_fix_position(@_)) },
+  '%' => sub { Rstats::ElementFunc::remainder(shift->_fix_position(@_)) },
+  'neg' => sub { Rstats::ElementFunc::negation(@_) },
+  '**' => sub { Rstats::ElementFunc::raise(shift->_fix_position(@_)) },
+  '<' => sub { Rstats::ElementFunc::less_than(shift->_fix_position(@_)) },
+  '<=' => sub { Rstats::ElementFunc::less_than_or_equal(shift->_fix_position(@_)) },
+  '>' => sub { Rstats::ElementFunc::more_than(shift->_fix_position(@_)) },
+  '>=' => sub { Rstats::ElementFunc::more_than_or_equal(shift->_fix_position(@_)) },
+  '==' => sub { Rstats::ElementFunc::equal(shift->_fix_position(@_)) },
+  '!=' => sub { Rstats::ElementFunc::not_equal(shift->_fix_position(@_)) },
   '""' => \&to_string,
   fallback => 1;
+
+sub _fix_position {
+  my ($self, $data, $reverse) = @_;
+  
+  my $e1;
+  my $e2;
+  if (ref $data eq 'Rstats::Element') {
+    $e1 = $self;
+    $e2 = $data;
+  }
+  else {
+    if ($reverse) {
+      $e1 = Rstats::ElementFunc::element($data);
+      $e2 = $self;
+    }
+    else {
+      $e1 = $self;
+      $e2 = Rstats::ElementFunc::element($data);
+    }
+  }
+  
+  return ($e1, $e2);
+}
 
 has 'type';
 has 'iv';

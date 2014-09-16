@@ -249,7 +249,7 @@ sub get {
   $self->at($_indexs);
   
   if (ref $_indexs->[0] eq 'CODE') {
-    my @elements2 = grep { $_indexs->[0]->() } @{$self->values};
+    my @elements2 = grep { $_indexs->[0]->() } @{$self->elements};
     return Rstats::Func::c(\@elements2);
   }
   

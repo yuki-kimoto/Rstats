@@ -99,3 +99,4 @@ use Scalar::Util 'refaddr';
     ok($num->is_finite);
   }
 }
+

@@ -1190,6 +1190,38 @@ sub negation {
   }  
 }
 
+sub and {
+  my ($e1, $e2) = @_;
+  
+  return NA if $e1->is_na || $e2->is_na;
+  
+  $e1 = $e1->as_logical unless $e1->is_logical;
+  $e2 = $e2->as_logical unless $e2->is_logical;
+  
+  if ($e1->iv && $e2->iv) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+sub or {
+  my ($e1, $e2) = @_;
+  
+  return NA if $e1->is_na || $e2->is_na;
+  
+  $e1 = $e1->as_logical unless $e1->is_logical;
+  $e2 = $e2->as_logical unless $e2->is_logical;
+  
+  if ($e1->iv || $e2->iv) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
 sub add {
   my ($e1, $e2) = @_;
   

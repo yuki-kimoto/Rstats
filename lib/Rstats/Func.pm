@@ -1035,6 +1035,8 @@ my %comparison_op = map { $_ => 1 } qw/
   not_equal
 /;
 
+my %logical_op = map { $_ => 1 } ('&&', '||');
+
 sub operation {
   my ($op, $a1, $a2) = @_;
   
@@ -1059,7 +1061,7 @@ sub operation {
   if ($op eq 'divide') {
     $a3->{type} = 'double';
   }
-  elsif ($comparison_op{$op}) {
+  elsif ($comparison_op{$op} || $logical_op{$op}) {
     $a3->{type} = 'logical';
   }
   else {
@@ -1068,6 +1070,10 @@ sub operation {
   
   return $a3;
 }
+
+sub and { operation('and', @_) }
+
+sub or { operation('or', @_) }
 
 sub add { operation('add', @_) }
 

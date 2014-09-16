@@ -9,6 +9,27 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# logical operator
+{
+  # logical operator - &
+  {
+    my $a1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $a2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $a3 = $a1 & $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/1 0 0 0/]);
+  }
+
+  # logical operator - |
+  {
+    my $a1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $a2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $a3 = $a1 | $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/1 1 1 0/]);
+  }
+}
+
 # comparison operator
 {
   # comparison operator - >

@@ -25,6 +25,8 @@ use overload
   '==' => sub { shift->operation('equal', @_) },
   '!=' => sub { shift->operation('not_equal', @_) },
   '""' => sub { shift->to_string(@_) },
+  '&' => sub { shift->operation('and', @_) },
+  '|' => sub { shift->operation('or', @_) },
   fallback => 1;
 
 sub to_string {

@@ -248,11 +248,6 @@ sub get {
   }
   $self->at($_indexs);
   
-  if (ref $_indexs->[0] eq 'CODE') {
-    my @elements2 = grep { $_indexs->[0]->() } @{$self->elements};
-    return Rstats::Func::c(\@elements2);
-  }
-  
   my ($positions, $a2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
   my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;

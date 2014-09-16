@@ -28,7 +28,7 @@ sub get {
   }
   my $row_index = Rstats::Func::to_c($_row_index);
   my $col_index = Rstats::Func::to_c($_col_index);
-  
+
   # Convert name index to number index
   my $col_index_values;
   if ($col_index->is_character) {
@@ -42,8 +42,8 @@ sub get {
   }
   
   # Extract columns
-  my $new_elements = [];
   my $elements = $self->elements;
+  my $new_elements = [];
   for my $i (@{$col_index_values}) {
     push @$new_elements, $elements->[$i - 1];
   }
@@ -52,7 +52,6 @@ sub get {
   for my $new_element (@$new_elements) {
     $new_element = $new_element->get($row_index) unless $row_index->is_null;
   }
-
   
   # Create new data frame
   my $data_frame = Rstats::Container::DataFrame->new;

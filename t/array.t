@@ -9,6 +9,171 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# comparison operator
+{
+  # comparison operator - >
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 > $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/0 0 1/]);
+  }
+
+  # comparison operator - >=
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 >= $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/0 1 1/]);
+  }
+
+  # comparison operator - <
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 < $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/1 0 0/]);
+  }
+
+  # comparison operator - <=
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 <= $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/1 1 0/]);
+  }
+
+  # comparison operator - ==
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 == $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/0 1 0/]);
+  }
+
+  # comparison operator - !=
+  {
+    my $a1 = array(c(0, 1, 2));
+    my $a2 = array(c(1, 1, 1));
+    my $a3 = $a1 != $a2;
+    ok($a3->is_logical);
+    is_deeply($a3->values, [qw/1 0 1/]);
+  }
+}
+
+# get
+{
+  # get - have dimnames
+  {
+    my $a1 = r->matrix(C('1:24'), 3, 2);
+    r->dimnames($a1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
+    my $a2 = $a1->get(c(1, 3), c(2));
+    is_deeply($a2->dimnames->getin(1)->values, ['r1', 'r3']);
+    is_deeply($a2->dimnames->getin(2)->values, ['c2']);
+  }
+  
+  # get - have names
+  {
+    my $v1 = c(4, 5, 6);
+    $v1->names(c("a", "b", "c"));
+    my $v2 = $v1->get(c(1, 3));
+    is_deeply($v2->values, [4, 6]);
+    is_deeply($v2->names->values, ["a", "c"]);
+  }
+
+  # get - one value
+  {
+    my $v1 = c(1);
+    my $v2 = $v1->get(1);
+    is_deeply($v2->values, [1]);
+    is_deeply(r->dim($v2)->values, [1]);
+  }
+
+  # get - single index
+  {
+    my $v1 = c(1, 2, 3, 4);
+    my $v2 = $v1->get(1);
+    is_deeply($v2->values, [1]);
+  }
+  
+  # get - array
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(1, 2));
+    is_deeply($v2->values, [1, 3]);
+  }
+  
+  # get - vector
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(1, 2));
+    is_deeply($v2->values, [1, 3]);
+  }
+  
+  # get - minus number
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(-1);
+    is_deeply($v2->values, [3, 5, 7]);
+  }
+
+  # get - minus number + array
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(-1, -2));
+    is_deeply($v2->values, [5, 7]);
+  }
+  
+  # get - character
+  {
+    my $v1 = c(1, 2, 3, 4);
+    r->names($v1 => c('a', 'b', 'c', 'd'));
+    my $v2 = $v1->get(c('b', 'd'));
+    is_deeply($v2->values, [2, 4]);
+  }
+
+  # get - logical
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
+  # get - grep
+  {
+    my $v1 = c(1, 2, 3, 4, 5);
+    my $v2 = $v1 > 3;
+    my $v3 = $v1->get($v2);
+    is_deeply($v3->values, [4, 5]);
+  }
+  
+  # get - as_logical
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
+  # get - as_vector
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    is_deeply(r->as_vector($a1)->get(5)->values, [5]);
+  }
+
+  # get - as_matrix
+  {
+    my $a1 = array(C('1:24'), c(4, 3, 2));
+    is_deeply(r->as_vector($a1)->get(5, 1)->values, [5]);
+  }
+}
+
 # to_string
 {
   # to_string - character, 1 dimention
@@ -341,113 +506,6 @@ EOS
     $expected =~ s/[ \t]+/ /;
     
     is($a1_str, $expected);
-  }
-}
-
-# get
-{
-  # get - have dimnames
-  {
-    my $a1 = r->matrix(C('1:24'), 3, 2);
-    r->dimnames($a1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
-    my $a2 = $a1->get(c(1, 3), c(2));
-    is_deeply($a2->dimnames->getin(1)->values, ['r1', 'r3']);
-    is_deeply($a2->dimnames->getin(2)->values, ['c2']);
-  }
-  
-  # get - have names
-  {
-    my $v1 = c(4, 5, 6);
-    $v1->names(c("a", "b", "c"));
-    my $v2 = $v1->get(c(1, 3));
-    is_deeply($v2->values, [4, 6]);
-    is_deeply($v2->names->values, ["a", "c"]);
-  }
-
-  # get - one value
-  {
-    my $v1 = c(1);
-    my $v2 = $v1->get(1);
-    is_deeply($v2->values, [1]);
-    is_deeply(r->dim($v2)->values, [1]);
-  }
-
-  # get - single index
-  {
-    my $v1 = c(1, 2, 3, 4);
-    my $v2 = $v1->get(1);
-    is_deeply($v2->values, [1]);
-  }
-  
-  # get - array
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(1, 2));
-    is_deeply($v2->values, [1, 3]);
-  }
-  
-  # get - vector
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(1, 2));
-    is_deeply($v2->values, [1, 3]);
-  }
-  
-  # get - minus number
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(-1);
-    is_deeply($v2->values, [3, 5, 7]);
-  }
-
-  # get - minus number + array
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(-1, -2));
-    is_deeply($v2->values, [5, 7]);
-  }
-  
-  # get - subroutine
-  {
-    my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = $v1->get(sub { $_ > 3});
-    is_deeply($v2->values, [4, 5]);
-  }
-  
-  # get - character
-  {
-    my $v1 = c(1, 2, 3, 4);
-    r->names($v1 => c('a', 'b', 'c', 'd'));
-    my $v2 = $v1->get(c('b', 'd'));
-    is_deeply($v2->values, [2, 4]);
-  }
-
-  # get - logical
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(r->FALSE, r->TRUE, r->FALSE, r->TRUE, r->TRUE);
-    my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
-  }
-
-  # get - as_logical
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
-    my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
-  }
-
-  # get - as_vector
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($a1)->get(5)->values, [5]);
-  }
-
-  # get - as_matrix
-  {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($a1)->get(5, 1)->values, [5]);
   }
 }
 
@@ -935,6 +993,15 @@ EOS
     my $a1 = c(1, 2, 3);
     my $a2 = $a1 * 2;
     is_deeply($a2->values, [2, 4, 6]);
+  }
+
+  # operator - divide
+  {
+    my $a1 = c(6, 3, 12)->as_integer;
+    my $a2 = c(2, 3, 4)->as_integer;
+    my $v3 = $a1 / $a2;
+    is_deeply($v3->values, [3, 1, 3]);
+    ok($v3->is_double);
   }
   
   # operator - divide

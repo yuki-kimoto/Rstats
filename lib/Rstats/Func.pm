@@ -1026,6 +1026,15 @@ sub match {
   return c(\@matches);
 }
 
+my %comparison_op = map { $_ => 1 } qw/
+  less_than
+  less_than_or_equal
+  more_than
+  more_than_or_equal
+  equal
+  not_equal
+/;
+
 sub operation {
   my ($op, $a1, $a2) = @_;
   
@@ -1047,8 +1056,11 @@ sub operation {
   } (0 .. $longer_length - 1);
   
   my $a3 = $a1->clone(elements => \@a3_elements);
-  if ($op eq '/') {
+  if ($op eq 'divide') {
     $a3->{type} = 'double';
+  }
+  elsif ($comparison_op{$op}) {
+    $a3->{type} = 'logical';
   }
   else {
     $a3->{type} = $a1->{type};

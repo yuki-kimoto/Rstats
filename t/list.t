@@ -4,6 +4,20 @@ use warnings;
 
 use Rstats;
 
+# ncol
+{
+  my $l1 = list(1, 2, 3);
+  my $a1 = r->ncol($l1);
+  ok($a1->is_null);
+}
+
+# nrow
+{
+  my $l1 = list(1, 2, 3);
+  my $a1 = r->nrow($l1);
+  ok($a1->is_null);
+}
+
 # set
 {
   # set - NULL, dimnames

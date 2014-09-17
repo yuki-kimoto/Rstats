@@ -4,6 +4,26 @@ use warnings;
 
 use Rstats;
 
+# ncol
+{
+  my $sex = c('F', 'M');
+  my $height = c(172, 168);
+  my $weight = c(5, 6);
+  my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+  my $a1 = r->ncol($d1);
+  ok($a1->values, [3]);
+}
+
+# nrow
+{
+  my $sex = c('F', 'M');
+  my $height = c(172, 168);
+  my $weight = c(5, 6);
+  my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+  my $a1 = r->nrow($d1);
+  ok($a1->values, [2]);
+}
+
 # set
 {
   # set - NULL

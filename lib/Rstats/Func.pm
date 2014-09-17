@@ -428,6 +428,7 @@ sub data_frame {
   }
 
   my $data_frame = Rstats::Container::DataFrame->new;
+  $data_frame->{row_length} = $max_count;
   $data_frame->elements($elements);
   $data_frame->dimnames(
     Rstats::Func::list(
@@ -2276,13 +2277,29 @@ sub col {
 sub nrow {
   my $a1 = shift;
   
-  return c($a1->dim->values->[0]);
+  if ($a1->is_data_frame) {
+    return c($a1->{row_length});
+  }
+  elsif ($a1->is_list) {
+    return Rstats::Func::NULL();
+  }
+  else {
+    return c($a1->dim->values->[0]);
+  }
 }
 
 sub ncol {
   my $a1 = shift;
   
-  return c($a1->dim->values->[1]);
+  if ($a1->is_data_frame) {
+    return c($a1->length_value);
+  }
+  elsif ($a1->is_list) {
+    return Rstats::Func::NULL();
+  }
+  else {
+    return c($a1->dim->values->[1]);
+  }
 }
 
 sub seq {

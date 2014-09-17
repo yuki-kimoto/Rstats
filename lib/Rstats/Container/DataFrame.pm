@@ -4,6 +4,7 @@ use Rstats::Container::List -base;
 use overload '""' => \&to_string,
   fallback => 1;
 
+use Carp 'croak';
 use Rstats::Func;
 
 use Text::UnicodeTable::Simple;

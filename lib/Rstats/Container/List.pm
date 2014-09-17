@@ -71,7 +71,7 @@ sub get {
 }
 
 sub set {
-  my ($self, $element) = @_;
+  my ($self, $v1) = @_;
   
   my $_index = $self->at;
   my $a1_index = Rstats::Func::to_c($_index);
@@ -82,7 +82,29 @@ sub set {
   else {
     $index = $a1_index->values->[0];
   }
-  $self->elements->[$index - 1] = Rstats::Func::to_c($element);
+  $v1 = Rstats::Func::to_c($v1);
+  
+  if ($v1->is_null) {
+    splice @{$self->elements}, $index - 1, 1;
+    if (exists $self->{names}) {
+      splice @{$self->{names}}, $index - 1, 1;
+    }
+    
+    if (exists $self->{dimnames}) {
+      splice @{$self->{dimnames}[1]}, $index - 1, 1;
+    }
+  }
+  else {
+    if ($self->is_data_frame) {
+      my $self_length = $self->length_value;
+      my $v1_length = $v1->length_value;
+      if ($self_length != $v1_length) {
+        croak "Error in data_frame set: replacement has $v1_length rows, data has $self_length";
+      }
+    }
+    
+    $self->elements->[$index - 1] = $v1;
+  }
   
   return $self;
 }

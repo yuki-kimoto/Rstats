@@ -4,6 +4,65 @@ use warnings;
 
 use Rstats;
 
+# set
+{
+  # set - NULL, dimnames
+  {
+    my $l1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $l1->dimnames(list(c("r1", "r2", "r3"), c("c1", "c2", "c3")));
+    $l1->at(2)->set(NULL);
+    is_deeply($l1->getin(1)->values, [1, 2, 3]);
+    is_deeply($l1->getin(2)->values, [7, 8, 9]);
+    is_deeply($l1->dimnames->getin(1)->values, ["r1", "r2", "r3"]);
+    is_deeply($l1->dimnames->getin(2)->values, ["c1", "c3"]);
+  }
+  
+  # set - NULL, names
+  {
+    my $l1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $l1->names(c("c1", "c2", "c3"));
+    $l1->at(2)->set(NULL);
+    is_deeply($l1->getin(1)->values, [1, 2, 3]);
+    is_deeply($l1->getin(2)->values, [7, 8, 9]);
+    is_deeply($l1->names->values, ["c1", "c3"]);
+  }
+  
+  # set - basic
+  {
+    my $l1 = list(1, 2, 3);
+    $l1->at(2)->set(5);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->values, [5]);
+    is_deeply($l1->getin(3)->values, [3]);
+  }
+
+  # set - name
+  {
+    my $l1 = list(1, 2, 3);
+    r->names($l1, c("n1", "n2", "n3"));
+    $l1->at("n2")->set(5);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->values, [5]);
+    is_deeply($l1->getin(3)->values, [3]);
+  }
+  
+  # set - two index
+  {
+    my $l1 = list(1, list(2, 3));
+    $l1->getin(2)->at(2)->set(5);
+    is_deeply($l1->getin(1)->values, [1]);
+    is_deeply($l1->getin(2)->getin(1)->values, [2]);
+    is_deeply($l1->getin(2)->getin(2)->values, [5]);
+  }
+
+  # set - tree index
+  {
+    my $l1 = list(1, list(2, 3, list(4)));
+    $l1->getin(2)->getin(3)->at(1)->set(5);
+    is_deeply($l1->getin(2)->getin(3)->getin(1)->values, [5]);
+  }
+}
+
 # list
 {
   # list - basic
@@ -110,45 +169,9 @@ EOS
   {
     my $l1 = list(1, 2, 3);
     r->names($l1, c("n1", "n2", "n3"));
-    $DB::single = 1;
     my $l2 = $l1->get(c("n1", "n3"));
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
-  }
-  
-  # list - set
-  {
-    my $l1 = list(1, 2, 3);
-    $l1->at(2)->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->values, [5]);
-    is_deeply($l1->getin(3)->values, [3]);
-  }
-
-  # list - set,name
-  {
-    my $l1 = list(1, 2, 3);
-    r->names($l1, c("n1", "n2", "n3"));
-    $l1->at("n2")->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->values, [5]);
-    is_deeply($l1->getin(3)->values, [3]);
-  }
-  
-  # list - set, two index
-  {
-    my $l1 = list(1, list(2, 3));
-    $l1->getin(2)->at(2)->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->getin(1)->values, [2]);
-    is_deeply($l1->getin(2)->getin(2)->values, [5]);
-  }
-
-  # list - set, tree index
-  {
-    my $l1 = list(1, list(2, 3, list(4)));
-    $l1->getin(2)->getin(3)->at(1)->set(5);
-    is_deeply($l1->getin(2)->getin(3)->getin(1)->values, [5]);
   }
 }

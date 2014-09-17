@@ -4,6 +4,34 @@ use warnings;
 
 use Rstats;
 
+# set
+{
+  # set - NULL
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    $d1->at(2)->set(NULL);
+    is_deeply($d1->getin(1)->as_character->values, ['F', 'M', 'F']);
+    is_deeply($d1->getin(2)->values, [5, 6, 7]);
+    is_deeply($d1->names->values, ['sex', 'weight']);
+    is_deeply($d1->colnames->values, ['sex', 'weight']);
+  }
+  
+  # set - index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $d1 = data_frame(sex => $sex, heigth => $height, weight => $weight);
+    $d1->at(2)->set(c(1, 2, 3));
+    is_deeply($d1->getin('heigth')->values, [1, 2, 3]);
+  }
+}
+
 # get
 {
   # get - logical, logical

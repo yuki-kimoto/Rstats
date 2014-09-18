@@ -4,6 +4,25 @@ use warnings;
 
 use Rstats;
 
+# cbind
+{
+  my $sex = c('F', 'M', 'F');
+  my $height = c(172, 168, 155);
+  my $weight = c(5, 6, 7);
+  
+  my $x1 = data_frame(sex => $sex, height => $height);
+  my $x2 = data_frame(weight => $weight);
+  my $x3 = r->cbind($x1, $x2);
+  
+  ok($x3->is_data_frame);
+  is_deeply($x3->class->values, ['data.frame']);
+  is_deeply($x3->names->values, ['sex', 'height', 'weight']);
+  ok($x3->getin(1)->is_factor);
+  is_deeply($x3->getin(1)->as_character->values, [qw/F M F/]);
+  is_deeply($x3->getin(2)->values, [172, 168, 155]);
+  is_deeply($x3->getin(3)->values, [5, 6, 7]);
+}
+
 # rbind
 {
   my $sex1 = c('F', 'M');
@@ -207,6 +226,25 @@ EOS
 
 # data_frame
 {
+  # data_frame - alias for cbind
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height);
+    my $x2 = data_frame(weight => $weight);
+    my $x3 = data_frame($x1, $x2);
+    
+    ok($x3->is_data_frame);
+    is_deeply($x3->class->values, ['data.frame']);
+    is_deeply($x3->names->values, ['sex', 'height', 'weight']);
+    ok($x3->getin(1)->is_factor);
+    is_deeply($x3->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($x3->getin(2)->values, [172, 168, 155]);
+    is_deeply($x3->getin(3)->values, [5, 6, 7]);
+  }
+  
   # data_frame - basic
   {
     my $sex = c('F', 'M', 'F');

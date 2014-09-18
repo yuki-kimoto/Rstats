@@ -357,6 +357,8 @@ sub list {
 sub data_frame {
   my @data = @_;
   
+  return cbind(@data) if ref $data[0] && $data[0]->is_data_frame;
+  
   my $elements = [];
   
   # name count

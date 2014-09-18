@@ -9,44 +9,44 @@ use Math::Trig ();
 {
   # class - vector, numeric
   {
-    my $a1 = c(1, 2);
-    is_deeply($a1->class->values, ['numeric']);
+    my $x1 = c(1, 2);
+    is_deeply($x1->class->values, ['numeric']);
   }
   
   # class - matrix
   {
-    my $a1 = matrix(2, 2);
-    is_deeply($a1->class->values, ['matrix']);
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->class->values, ['matrix']);
   }
 
   # class - array
   {
-    my $a1 = array(C('1:24'), c(4, 3, 2));
-    is_deeply($a1->class->values, ['array']);
+    my $x1 = array(C('1:24'), c(4, 3, 2));
+    is_deeply($x1->class->values, ['array']);
   }
   
   # class - factor
   {
-    my $a1 = factor(c(1, 2, 3));
-    is_deeply($a1->class->values, ['factor']);
+    my $x1 = factor(c(1, 2, 3));
+    is_deeply($x1->class->values, ['factor']);
   }
   
   # class - factor, ordered
   {
-    my $a1 = ordered(c(1, 2, 3));
-    is_deeply($a1->class->values, ['factor', 'ordered']);
+    my $x1 = ordered(c(1, 2, 3));
+    is_deeply($x1->class->values, ['factor', 'ordered']);
   }
   
   # class - list
   {
-    my $a1 = list(1, 2);
-    is_deeply($a1->class->values, ['list']);
+    my $x1 = list(1, 2);
+    is_deeply($x1->class->values, ['list']);
   }
   
   # class - data frame
   {
-    my $a1 = data_frame(sex => c(1, 2));
-    is_deeply($a1->class->values, ['data.frame']);
+    my $x1 = data_frame(sex => c(1, 2));
+    is_deeply($x1->class->values, ['data.frame']);
   }
 }
 
@@ -54,46 +54,46 @@ use Math::Trig ();
 {
   # as_numeric - from complex
   {
-    my $a1 = c(r->complex(1, 1), r->complex(2, 2));
-    r->mode($a1 => 'complex');
-    my $a2 = r->as_numeric($a1);
-    is(r->mode($a2)->value, 'numeric');
-    is_deeply($a2->values, [1, 2]);
+    my $x1 = c(r->complex(1, 1), r->complex(2, 2));
+    r->mode($x1 => 'complex');
+    my $x2 = r->as_numeric($x1);
+    is(r->mode($x2)->value, 'numeric');
+    is_deeply($x2->values, [1, 2]);
   }
 
   # as_numeric - from numeric
   {
-    my $a1 = c(0.1, 1.1, 2.2);
-    r->mode($a1 => 'numeric');
-    my $a2 = r->as_numeric($a1);
-    is(r->mode($a2)->value, 'numeric');
-    is_deeply($a2->values, [0.1, 1.1, 2.2]);
+    my $x1 = c(0.1, 1.1, 2.2);
+    r->mode($x1 => 'numeric');
+    my $x2 = r->as_numeric($x1);
+    is(r->mode($x2)->value, 'numeric');
+    is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
     
   # as_numeric - from integer
   {
-    my $a1 = c(0, 1, 2);
-    r->mode($a1 => 'integer');
-    my $a2 = r->as_numeric($a1);
-    is(r->mode($a2)->value, 'numeric');
-    is_deeply($a2->values, [0, 1, 2]);
+    my $x1 = c(0, 1, 2);
+    r->mode($x1 => 'integer');
+    my $x2 = r->as_numeric($x1);
+    is(r->mode($x2)->value, 'numeric');
+    is_deeply($x2->values, [0, 1, 2]);
   }
   
   # as_numeric - from logical
   {
-    my $a1 = c(r->TRUE, r->FALSE);
-    r->mode($a1 => 'logical');
-    my $a2 = r->as_numeric($a1);
-    is(r->mode($a2)->value, 'numeric');
-    is_deeply($a2->values, [1, 0]);
+    my $x1 = c(r->TRUE, r->FALSE);
+    r->mode($x1 => 'logical');
+    my $x2 = r->as_numeric($x1);
+    is(r->mode($x2)->value, 'numeric');
+    is_deeply($x2->values, [1, 0]);
   }
 
   # as_numeric - from character
   {
-    my $a1 = r->as_integer(c(0, 1, 2));
-    my $a2 = r->as_numeric($a1);
-    is(r->mode($a2)->value, 'numeric');
-    is_deeply($a2->values, [0, 1, 2]);
+    my $x1 = r->as_integer(c(0, 1, 2));
+    my $x2 = r->as_numeric($x1);
+    is(r->mode($x2)->value, 'numeric');
+    is_deeply($x2->values, [0, 1, 2]);
   }
 }
   
@@ -125,18 +125,18 @@ use Math::Trig ();
   
   # is_*, as_*, typeof - logical
   {
-    my $a1 = c(0, 1, 2);
-    my $a2 = r->as_logical($a1);
-    ok(r->is_logical($a2));
-    is(r->mode($a2)->value, 'logical');
-    is(r->typeof($a2)->value, 'logical');
+    my $x1 = c(0, 1, 2);
+    my $x2 = r->as_logical($x1);
+    ok(r->is_logical($x2));
+    is(r->mode($x2)->value, 'logical');
+    is(r->typeof($x2)->value, 'logical');
   }
 
   # is_*, as_*, typeof - NULL
   {
-    my $a1 = r->NULL;
-    is(r->mode($a1)->value, 'logical');
-    is(r->typeof($a1)->value, 'logical');
+    my $x1 = r->NULL;
+    is(r->mode($x1)->value, 'logical');
+    is(r->typeof($x1)->value, 'logical');
   }
 }
 
@@ -346,34 +346,34 @@ use Math::Trig ();
 
 # length
 {
-  my $array = array(c(1, 2, 3));
-  is(r->length($array)->value, 3);
+  my $x = array(c(1, 2, 3));
+  is(r->length($x)->value, 3);
 }
 
 # array
 {
   {
-    my $array = array(25);
-    is_deeply($array->values, [25]);
+    my $x = array(25);
+    is_deeply($x->values, [25]);
   }
   {
-    my $array = array(c(1, 2, 3));
-    is_deeply(r->dim($array)->values, [3]);
+    my $x = array(c(1, 2, 3));
+    is_deeply(r->dim($x)->values, [3]);
   }
 }
 
 # Array get and set
 {
-  my $array = array(c(1, 2, 3));
-  is_deeply($array->get(1)->values, [1]);
-  is_deeply($array->get(3)->values, [3]);
-  $array->at(1)->set(5);;
-  is_deeply($array->get(1)->values, [5]);
+  my $x = array(c(1, 2, 3));
+  is_deeply($x->get(1)->values, [1]);
+  is_deeply($x->get(3)->values, [3]);
+  $x->at(1)->set(5);;
+  is_deeply($x->get(1)->values, [5]);
 }
 
 # c
 {
-  # c($array)
+  # c($x)
   {
     my $v = c(1, 2, 3);
     is_deeply($v->values, [1, 2, 3]);

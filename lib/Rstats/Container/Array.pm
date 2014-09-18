@@ -117,7 +117,7 @@ sub to_string {
               $dimnames = [];
             }
             else {
-              my $a_dimnames = $l_dimnames->getin($i);
+              my $x_dimnames = $l_dimnames->getin($i);
               $dimnames = defined $l_dimnames ? $l_dimnames->values : [];
             }
             
@@ -167,57 +167,57 @@ sub to_string {
 sub is_finite {
   my $_a1 = shift;
 
-  my $a1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     !ref $_ || ref $_ eq 'Rstats::Type::Complex' || ref $_ eq 'Rstats::Logical' 
       ? Rstats::ElementFunc::TRUE()
       : Rstats::ElementFunc::FALSE()
-  } @{$a1->elements};
-  my $a2 = Rstats::Func::array(\@a2_elements);
-  $a2->mode('logical');
+  } @{$x1->elements};
+  my $x2 = Rstats::Func::array(\@a2_elements);
+  $x2->mode('logical');
   
-  return $a2;
+  return $x2;
 }
 
 sub is_infinite {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     ref $_ eq 'Rstats::Inf' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
-  } @{$a1->elements};
-  my $a2 = Rstats::Func::c(\@a2_elements);
-  $a2->mode('logical');
+  } @{$x1->elements};
+  my $x2 = Rstats::Func::c(\@a2_elements);
+  $x2->mode('logical');
   
-  return $a2;
+  return $x2;
 }
 
 sub is_nan {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
     ref $_ eq  'Rstats::NaN' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
-  } @{$a1->elements};
-  my $a2 = Rstats::Func::array(\@a2_elements);
-  $a2->mode('logical');
+  } @{$x1->elements};
+  my $x2 = Rstats::Func::array(\@a2_elements);
+  $x2->mode('logical');
   
-  return $a2;
+  return $x2;
 }
 
 sub is_null {
   my $_a1 = shift;
   
-  my $a1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c($_a1);
   
-  my @a2_elements = [!$a1->length_value ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
-  my $a2 = Rstats::Func::array(\@a2_elements);
-  $a2->mode('logical');
+  my @a2_elements = [!$x1->length_value ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
+  my $x2 = Rstats::Func::array(\@a2_elements);
+  $x2->mode('logical');
   
-  return $a2;
+  return $x2;
 }
 
 sub getin { shift->get(@_) }
@@ -250,22 +250,22 @@ sub get {
   }
   $self->at($_indexs);
   
-  my ($positions, $a2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
+  my ($positions, $x2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
   my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
   
   # array
-  my $a2 = Rstats::Func::array(\@a2_elements, $a2_dim);
+  my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
   
   # Copy attributes
-  $self->_copy_attrs_to($a2, $new_indexs);
+  $self->_copy_attrs_to($x2, $new_indexs);
 
   # level drop
   if ($level_drop) {
-    $a2 = Rstats::Func::factor($a2->as_character);
+    $x2 = Rstats::Func::factor($x2->as_character);
   }
   
-  return $a2;
+  return $x2;
 }
 
 sub _levels_h {
@@ -282,22 +282,22 @@ sub _levels_h {
 
 sub set {
   my $self = shift;
-  my $a2 = Rstats::Func::to_c(shift);
+  my $x2 = Rstats::Func::to_c(shift);
 
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
 
-  my ($positions, $a2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
+  my ($positions, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements;
 
   if ($self->is_factor) {
-    $a2 = $a2->as_character unless $a2->is_character;
-    my $a2_elements = $a2->elements;
+    $x2 = $x2->as_character unless $x2->is_character;
+    my $x2_elements = $x2->elements;
     my $levels_h = $self->_levels_h;
     for (my $i = 0; $i < @$positions; $i++) {
       my $pos = $positions->[$i];
-      my $element = $a2_elements->[(($i + 1) % @$positions) - 1];
+      my $element = $x2_elements->[(($i + 1) % @$positions) - 1];
       if ($element->is_na) {
         $self_elements->[$pos - 1] = Rstats::ElementFunc::NA();
       }
@@ -314,10 +314,10 @@ sub set {
     }
   }
   else {
-    my $a2_elements = $a2->elements;
+    my $x2_elements = $x2->elements;
     for (my $i = 0; $i < @$positions; $i++) {
       my $pos = $positions->[$i];
-      $self_elements->[$pos - 1] = $a2_elements->[(($i + 1) % @$positions) - 1];
+      $self_elements->[$pos - 1] = $x2_elements->[(($i + 1) % @$positions) - 1];
     }
   }
   
@@ -365,9 +365,9 @@ sub inner_product {
   my ($self, $data, $reverse) = @_;
   
   # fix postion
-  my ($a1, $a2) = $self->_fix_position($data, $reverse);
+  my ($x1, $x2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Func::inner_product($a1, $a2);
+  return Rstats::Func::inner_product($x1, $x2);
 }
 
 sub negation { Rstats::Func::negation(@_) }
@@ -376,32 +376,32 @@ sub operation {
   my ($self, $op, $data, $reverse) = @_;
   
   # fix postion
-  my ($a1, $a2) = $self->_fix_position($data, $reverse);
+  my ($x1, $x2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Func::operation($op, $a1, $a2);
+  return Rstats::Func::operation($op, $x1, $x2);
 }
 
 sub _fix_position {
   my ($self, $data, $reverse) = @_;
   
-  my $a1;
-  my $a2;
+  my $x1;
+  my $x2;
   if (ref $data eq 'Rstats::Container::Array') {
-    $a1 = $self;
-    $a2 = $data;
+    $x1 = $self;
+    $x2 = $data;
   }
   else {
     if ($reverse) {
-      $a1 = Rstats::Func::c($data);
-      $a2 = $self;
+      $x1 = Rstats::Func::c($data);
+      $x2 = $self;
     }
     else {
-      $a1 = $self;
-      $a2 = Rstats::Func::c($data);
+      $x1 = $self;
+      $x2 = Rstats::Func::c($data);
     }
   }
   
-  return ($a1, $a2);
+  return ($x1, $x2);
 }
 
 1;

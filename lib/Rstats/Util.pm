@@ -129,26 +129,26 @@ sub looks_like_complex {
 }
 
 sub parse_index {
-  my ($a1, $drop, @_indexs) = @_;
+  my ($x1, $drop, @_indexs) = @_;
   
-  my $a1_dim = $a1->dim_as_array->values;
+  my $x1_dim = $x1->dim_as_array->values;
   my @indexs;
   my @a2_dim;
 
   if (ref $_indexs[0] && $_indexs[0]->is_array && $_indexs[0]->is_logical && @{$_indexs[0]->dim->elements} > 1) {
-    my $a2 = $_indexs[0];
-    my $a2_dim_values = $a2->dim->values;
-    my $a2_elements = $a2->elements;
+    my $x2 = $_indexs[0];
+    my $x2_dim_values = $x2->dim->values;
+    my $x2_elements = $x2->elements;
     my $positions = [];
-    for (my $i = 0; $i < @$a2_elements; $i++) {
-      next unless $a2_elements->[$i];
+    for (my $i = 0; $i < @$x2_elements; $i++) {
+      next unless $x2_elements->[$i];
       push @$positions, $i + 1;
     }
     
     return ($positions, []);
   }
   else {
-    for (my $i = 0; $i < @$a1_dim; $i++) {
+    for (my $i = 0; $i < @$x1_dim; $i++) {
       my $_index = $_indexs[$i];
 
       my $index = defined $_index ? Rstats::Func::to_c($_index) : Rstats::Func::NULL();
@@ -169,18 +169,18 @@ sub parse_index {
       }
       
       if (!@{$index->values}) {
-        my $index_values_new = [1 .. $a1_dim->[$i]];
+        my $index_values_new = [1 .. $x1_dim->[$i]];
         $index = Rstats::Func::array($index_values_new);
       }
       elsif ($index->is_character) {
-        if ($a1->is_vector) {
+        if ($x1->is_vector) {
           my $index_new_values = [];
           for my $name (@{$index->values}) {
             my $i = 0;
             my $value;
-            for my $a1_name (@{$a1->names->values}) {
-              if ($name eq $a1_name) {
-                $value = $a1->values->[$i];
+            for my $x1_name (@{$x1->names->values}) {
+              if ($name eq $x1_name) {
+                $value = $x1->values->[$i];
                 last;
               }
               $i++;
@@ -190,7 +190,7 @@ sub parse_index {
           }
           $indexs[$i] = Rstats::Func::array($index_new_values);
         }
-        elsif ($a1->is_matrix) {
+        elsif ($x1->is_matrix) {
           
         }
         else {
@@ -207,7 +207,7 @@ sub parse_index {
       elsif ($index->{_minus}) {
         my $index_value_new = [];
         
-        for my $k (1 .. $a1_dim->[$i]) {
+        for my $k (1 .. $x1_dim->[$i]) {
           push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
         }
         $index = Rstats::Func::array($index_value_new);
@@ -222,7 +222,7 @@ sub parse_index {
     
     my $index_values = [map { $_->values } @indexs];
     my $ords = cross_product($index_values);
-    my @positions = map { Rstats::Util::pos($_, $a1_dim) } @$ords;
+    my @positions = map { Rstats::Util::pos($_, $x1_dim) } @$ords;
   
     return (\@positions, \@a2_dim, \@indexs);
   }
@@ -233,16 +233,16 @@ sub cross_product {
 
   my @idxs = (0) x @$values;
   my @idx_idx = 0..(@idxs - 1);
-  my @a1 = map { $_->[0] } @$values;
+  my @x1 = map { $_->[0] } @$values;
   my $result = [];
   
-  push @$result, [@a1];
+  push @$result, [@x1];
   my $end_loop;
   while (1) {
     foreach my $i (@idx_idx) {
       if( $idxs[$i] < @{$values->[$i]} - 1 ) {
-        $a1[$i] = $values->[$i][++$idxs[$i]];
-        push @$result, [@a1];
+        $x1[$i] = $values->[$i][++$idxs[$i]];
+        push @$result, [@x1];
         last;
       }
       
@@ -252,7 +252,7 @@ sub cross_product {
       }
       
       $idxs[$i] = 0;
-      $a1[$i] = $values->[$i][0];
+      $x1[$i] = $values->[$i][0];
     }
     last if $end_loop;
   }

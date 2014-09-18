@@ -7,15 +7,15 @@ use Rstats;
 # ncol
 {
   my $l1 = list(1, 2, 3);
-  my $a1 = r->ncol($l1);
-  ok($a1->is_null);
+  my $x1 = r->ncol($l1);
+  ok($x1->is_null);
 }
 
 # nrow
 {
   my $l1 = list(1, 2, 3);
-  my $a1 = r->nrow($l1);
-  ok($a1->is_null);
+  my $x1 = r->nrow($l1);
+  ok($x1->is_null);
 }
 
 # set
@@ -132,34 +132,34 @@ EOS
   
   # list - as_list, input is array
   {
-    my $a1 = c("a", "b");
-    my $l1 = r->as_list($a1);
+    my $x1 = c("a", "b");
+    my $l1 = r->as_list($x1);
     ok(r->is_list($l1));
-    is_deeply($a1->values, ["a", "b"]);
+    is_deeply($x1->values, ["a", "b"]);
   }
 
   # list - getin
   {
     my $l1 = list("a", "b", list("c", "d", list("e")));
-    my $a1 = $l1->getin(1);
-    is_deeply($a1->values, ["a"]);
+    my $x1 = $l1->getin(1);
+    is_deeply($x1->values, ["a"]);
     
-    my $a2 = $l1->getin(3)->getin(2);
-    is_deeply($a2->values, ["d"]);
+    my $x2 = $l1->getin(3)->getin(2);
+    is_deeply($x2->values, ["d"]);
 
-    my $a3 = $l1->getin(3)->getin(3)->getin(1);
-    is_deeply($a3->values, ["e"]);
+    my $x3 = $l1->getin(3)->getin(3)->getin(1);
+    is_deeply($x3->values, ["e"]);
   }
 
   # list - getin,name
   {
     my $l1 = list("a", "b", list("c", "d", list("e")));
     r->names($l1, c("n1", "n2", "n3"));
-    my $a1 = $l1->getin("n1");
-    is_deeply($a1->values, ["a"]);
+    my $x1 = $l1->getin("n1");
+    is_deeply($x1->values, ["a"]);
 
-    my $a3 = $l1->getin("n3")->getin(3)->getin(1);
-    is_deeply($a3->values, ["e"]);
+    my $x3 = $l1->getin("n3")->getin(3)->getin(1);
+    is_deeply($x3->values, ["e"]);
   }
   
   # list - get

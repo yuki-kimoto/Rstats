@@ -11,9 +11,9 @@ use Rstats::ElementFunc;
 {
   # upper_tri - basic
   {
-    my $a1 = matrix(C('1:12'), 3, 4);
-    my $a2 = r->lower_tri($a1);
-    is_deeply($a2->values, [
+    my $x1 = matrix(C('1:12'), 3, 4);
+    my $x2 = r->lower_tri($x1);
+    is_deeply($x2->values, [
       0,
       1,
       1,
@@ -27,14 +27,14 @@ use Rstats::ElementFunc;
       0,
       0
     ]);
-    is_deeply(r->dim($a2)->values, [3, 4]);
+    is_deeply(r->dim($x2)->values, [3, 4]);
   }
 
   # upper_tri - diag = TRUE
   {
-    my $a1 = matrix(C('1:12'), 3, 4);
-    my $a2 = r->lower_tri($a1, {diag => TRUE});
-    is_deeply($a2->values, [
+    my $x1 = matrix(C('1:12'), 3, 4);
+    my $x2 = r->lower_tri($x1, {diag => TRUE});
+    is_deeply($x2->values, [
       1,
       1,
       1,
@@ -48,7 +48,7 @@ use Rstats::ElementFunc;
       0,
       0
     ]);
-    is_deeply(r->dim($a2)->values, [3, 4]);
+    is_deeply(r->dim($x2)->values, [3, 4]);
   }
 }
 
@@ -56,9 +56,9 @@ use Rstats::ElementFunc;
 {
   # upper_tri - basic
   {
-    my $a1 = matrix(C('1:12'), 3, 4);
-    my $a2 = r->upper_tri($a1);
-    is_deeply($a2->values, [
+    my $x1 = matrix(C('1:12'), 3, 4);
+    my $x2 = r->upper_tri($x1);
+    is_deeply($x2->values, [
       0,
       0,
       0,
@@ -72,14 +72,14 @@ use Rstats::ElementFunc;
       1,
       1
     ]);
-    is_deeply(r->dim($a2)->values, [3, 4]);
+    is_deeply(r->dim($x2)->values, [3, 4]);
   }
 
   # upper_tri - diag = TRUE
   {
-    my $a1 = matrix(C('1:12'), 3, 4);
-    my $a2 = r->upper_tri($a1, {diag => TRUE});
-    is_deeply($a2->values, [
+    my $x1 = matrix(C('1:12'), 3, 4);
+    my $x2 = r->upper_tri($x1, {diag => TRUE});
+    is_deeply($x2->values, [
       1,
       0,
       0,
@@ -93,7 +93,7 @@ use Rstats::ElementFunc;
       1,
       1
     ]);
-    is_deeply(r->dim($a2)->values, [3, 4]);
+    is_deeply(r->dim($x2)->values, [3, 4]);
   }
 }
 

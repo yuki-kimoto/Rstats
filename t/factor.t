@@ -216,64 +216,64 @@ use Rstats;
   {
     my $f1 = factor(c(2, 3, 4, 2, 3, 4));
     my $f1_levels = $f1->levels;
-    my $a1_levels = $f1_levels->as_numeric;
-    my $a2 = $a1_levels->get($f1);
-    ok($a2->is_numeric);
-    is_deeply($a2->values, [2, 3, 4, 2, 3, 4]);
+    my $x1_levels = $f1_levels->as_numeric;
+    my $x2 = $x1_levels->get($f1);
+    ok($x2->is_numeric);
+    is_deeply($x2->values, [2, 3, 4, 2, 3, 4]);
   }
   
   # factor - labels
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $a1 = $f1->labels;
-    ok($a1->is_character);
-    is_deeply($a1->values, ["a", "b", "c", "a", "b", "c"]);
+    my $x1 = $f1->labels;
+    ok($x1->is_character);
+    is_deeply($x1->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
   # factor - as_character
   {
     my $f1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $a1 = $f1->as_character;
-    ok($a1->is_character);
-    is_deeply($a1->values, ["a", "b", "c", "a", "b", "c"]);
+    my $x1 = $f1->as_character;
+    ok($x1->is_character);
+    is_deeply($x1->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
   # factor - as_logical
   {
     my $f1 = factor(c("a", "b", "c"));
-    my $a1 = $f1->as_logical;
-    ok($a1->is_logical);
-    is_deeply($a1->values, [1, 1, 1]);
+    my $x1 = $f1->as_logical;
+    ok($x1->is_logical);
+    is_deeply($x1->values, [1, 1, 1]);
   }
   
   # factor - as_complex
   {
     my $f1 = factor(c("a", "b", "c"));
-    my $a1 = $f1->as_complex;
-    ok($a1->is_complex);
-    is_deeply($a1->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
+    my $x1 = $f1->as_complex;
+    ok($x1->is_complex);
+    is_deeply($x1->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
   }
   
   # factor - as_double
   {
     my $f1 = factor(c("a", "b", "c"));
-    my $a1 = $f1->as_double;
-    ok($a1->is_double);
-    is_deeply($a1->values, [1, 2, 3]);
+    my $x1 = $f1->as_double;
+    ok($x1->is_double);
+    is_deeply($x1->values, [1, 2, 3]);
   }
   
   # factor - as_integer
   {
     my $f1 = factor(c("a", "b", "c"));
-    my $a1 = $f1->as_integer;
-    ok($a1->is_integer);
-    is_deeply($a1->values, [1, 2, 3]);
+    my $x1 = $f1->as_integer;
+    ok($x1->is_integer);
+    is_deeply($x1->values, [1, 2, 3]);
   }
 
   # factor - as_factor, double
   {
-    my $a1 = c(2, 3, 4);
-    my $f1 = factor($a1);
+    my $x1 = c(2, 3, 4);
+    my $f1 = factor($x1);
     ok($f1->is_factor);
     is_deeply($f1->values, [1, 2, 3]);
     is_deeply($f1->levels->values, ["2", "3", "4"]);
@@ -281,8 +281,8 @@ use Rstats;
   
   # factor - as_factor, character
   {
-    my $a1 = c("a", "b", "c");
-    my $f1 = factor($a1);
+    my $x1 = c("a", "b", "c");
+    my $f1 = factor($x1);
     ok($f1->is_factor);
     is_deeply($f1->values, [1, 2, 3]);
     is_deeply($f1->levels->values, ["a", "b", "c"]);

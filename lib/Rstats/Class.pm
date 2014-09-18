@@ -225,10 +225,10 @@ sub runif {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   $opt->{seed} = $self->{seed};
 
-  my $a1 = Rstats::Func::runif(@_, $opt);
+  my $x1 = Rstats::Func::runif(@_, $opt);
   $self->{seed} = undef;
   
-  return $a1;
+  return $x1;
 }
 
 sub set_seed {

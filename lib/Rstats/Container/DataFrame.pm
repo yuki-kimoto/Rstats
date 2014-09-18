@@ -72,9 +72,9 @@ sub to_string {
   # columns
   my $columns = [];
   for (my $i = 1; $i <= @$column_names; $i++) {
-    my $array = $self->getin($i);
-    $array = $array->as_character if $array->is_factor;
-    push @$columns, $array->elements;
+    my $x = $self->getin($i);
+    $x = $x->as_character if $x->is_factor;
+    push @$columns, $x->elements;
   }
   my $col_count = @{$columns};
   my $row_count = @{$columns->[0]};

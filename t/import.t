@@ -19,9 +19,9 @@ use Rstats::ElementFunc;
 
 # array
 {
-  my $a1 = array(C('1:12'), c(4, 3));
-  is_deeply($a1->values, [1 .. 12]);
-  is_deeply(r->dim($a1)->values, [4, 3]);
+  my $x1 = array(C('1:12'), c(4, 3));
+  is_deeply($x1->values, [1 .. 12]);
+  is_deeply(r->dim($x1)->values, [4, 3]);
 }
 
 # matrix

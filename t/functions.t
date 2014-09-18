@@ -11,68 +11,68 @@ use Math::Trig ();
 
   # str - array, one element
   {
-    my $a1 = array(1, 1);
-    is(r->str($a1), 'num [1(1d)] 1');
+    my $x1 = array(1, 1);
+    is(r->str($x1), 'num [1(1d)] 1');
   }
   
   # str - array, one dimention
   {
-    my $a1 = array(C('1:4'), c(4));
-    is(r->str($a1), 'num [1:4(1d)] 1 2 3 4');
+    my $x1 = array(C('1:4'), c(4));
+    is(r->str($x1), 'num [1:4(1d)] 1 2 3 4');
   }
   
   # str - array
   {
-    my $a1 = array(C('1:12'), c(4, 3));
-    is(r->str($a1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
+    my $x1 = array(C('1:12'), c(4, 3));
+    is(r->str($x1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
   }
   
   # str - vector, more than 10 element
   {
-    my $a1 = C('1:11');
-    is(r->str($a1), 'num [1:11] 1 2 3 4 5 6 7 8 9 10 ...');
+    my $x1 = C('1:11');
+    is(r->str($x1), 'num [1:11] 1 2 3 4 5 6 7 8 9 10 ...');
   }
 
   # str - vector, 10 element
   {
-    my $a1 = C('1:10');
-    is(r->str($a1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
+    my $x1 = C('1:10');
+    is(r->str($x1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
   }
 
   # str - vector, logical
   {
-    my $a1 = c(T, F);
-    is(r->str($a1), 'logi [1:2] TRUE FALSE');
+    my $x1 = c(T, F);
+    is(r->str($x1), 'logi [1:2] TRUE FALSE');
   }
 
   # str - vector, integer
   {
-    my $a1 = c(1, 2)->as_integer;
-    is(r->str($a1), 'int [1:2] 1 2');
+    my $x1 = c(1, 2)->as_integer;
+    is(r->str($x1), 'int [1:2] 1 2');
   }
 
   # str - vector, complex
   {
-    my $a1 = c(1 + 1*i, 1 + 2*i);
-    is(r->str($a1), 'cplx [1:2] 1+1i 1+2i');
+    my $x1 = c(1 + 1*i, 1 + 2*i);
+    is(r->str($x1), 'cplx [1:2] 1+1i 1+2i');
   }
 
   # str - vector, character
   {
-    my $a1 = c("a", "b", "c");
-    is(r->str($a1), 'chr [1:3] "a" "b" "c"');
+    my $x1 = c("a", "b", "c");
+    is(r->str($x1), 'chr [1:3] "a" "b" "c"');
   }
 
   # str - vector, one element
   {
-    my $a1 = c(1);
-    is(r->str($a1), 'num 1');
+    my $x1 = c(1);
+    is(r->str($x1), 'num 1');
   }
 
   # str - vector, double
   {
-    my $a1 = c(1, 2, 3);
-    is(r->str($a1), 'num [1:3] 1 2 3');
+    my $x1 = c(1, 2, 3);
+    is(r->str($x1), 'num [1:3] 1 2 3');
   }
 }
 
@@ -80,65 +80,65 @@ use Math::Trig ();
 {
   # expm1 - complex
   {
-    my $a1 = c(1 + 2*i);
+    my $x1 = c(1 + 2*i);
     eval {
-      my $a2 = r->expm1($a1);
+      my $x2 = r->expm1($x1);
     };
     like($@, qr/unimplemented/);
   }
   
   # expm1 - double,array
   {
-    my $a1 = array(c(1, 2));
-    my $a2 = r->expm1($a1);
-    is(sprintf("%.6f", $a2->values->[0]), '1.718282');
-    is(sprintf("%.6f", $a2->values->[1]), '6.389056');
-    is_deeply(r->dim($a2)->values, [2]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(1, 2));
+    my $x2 = r->expm1($x1);
+    is(sprintf("%.6f", $x2->values->[0]), '1.718282');
+    is(sprintf("%.6f", $x2->values->[1]), '6.389056');
+    is_deeply(r->dim($x2)->values, [2]);
+    ok(r->is_double($x2));
   }
 
   # expm1 - double,less than 1e-5
   {
-    my $a1 = array(c(0.0000001234));
-    my $a2 = r->expm1($a1);
-    is(sprintf("%.13e", $a2->value), '1.2340000761378e-07');
-    ok(r->is_double($a2));
+    my $x1 = array(c(0.0000001234));
+    my $x2 = r->expm1($x1);
+    is(sprintf("%.13e", $x2->value), '1.2340000761378e-07');
+    ok(r->is_double($x2));
   }
 
   # expm1 - integer
   {
-    my $a1 = r->as_integer(array(c(2)));
-    my $a2 = r->expm1($a1);
-    is(sprintf("%.6f", $a2->value), '6.389056');
-    ok(r->is_double($a2));
+    my $x1 = r->as_integer(array(c(2)));
+    my $x2 = r->expm1($x1);
+    is(sprintf("%.6f", $x2->value), '6.389056');
+    ok(r->is_double($x2));
   }
     
   # expm1 - Inf
   {
-    my $a1 = c(Inf);
-    my $a2 = r->expm1($a1);
-    ok($a2->element->is_positive_infinite);
+    my $x1 = c(Inf);
+    my $x2 = r->expm1($x1);
+    ok($x2->element->is_positive_infinite);
   }
   
   # expm1 - -Inf
   {
-    my $a1 = c(-Inf);
-    my $a2 = r->expm1($a1);
-    is($a2->value, -1);
+    my $x1 = c(-Inf);
+    my $x2 = r->expm1($x1);
+    is($x2->value, -1);
   }
 
   # expm1 - NA
   {
-    my $a1 = c(NA);
-    my $a2 = r->expm1($a1);
-    ok($a2->element->is_na);
+    my $x1 = c(NA);
+    my $x2 = r->expm1($x1);
+    ok($x2->element->is_na);
   }
 
   # expm1 - NaN
   {
-    my $a1 = c(NaN);
-    my $a2 = r->expm1($a1);
-    ok($a2->element->is_nan);
+    my $x1 = c(NaN);
+    my $x2 = r->expm1($x1);
+    ok($x2->element->is_nan);
   }
 }
 
@@ -146,49 +146,49 @@ use Math::Trig ();
 {
   # exp - complex
   {
-    my $a1 = c(1 + 2*i);
-    my $a2 = r->exp($a1);
-    is(sprintf("%.6f", $a2->value->{re}), '-1.131204');
-    is(sprintf("%.6f", $a2->value->{im}), '2.471727');
-    ok(r->is_complex($a2));
+    my $x1 = c(1 + 2*i);
+    my $x2 = r->exp($x1);
+    is(sprintf("%.6f", $x2->value->{re}), '-1.131204');
+    is(sprintf("%.6f", $x2->value->{im}), '2.471727');
+    ok(r->is_complex($x2));
   }
   
   # exp - double,array
   {
-    my $a1 = array(c(1, 2));
-    my $a2 = r->exp($a1);
-    is(sprintf("%.6f", $a2->values->[0]), '2.718282');
-    is(sprintf("%.6f", $a2->values->[1]), '7.389056');
-    is_deeply(r->dim($a2)->values, [2]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(1, 2));
+    my $x2 = r->exp($x1);
+    is(sprintf("%.6f", $x2->values->[0]), '2.718282');
+    is(sprintf("%.6f", $x2->values->[1]), '7.389056');
+    is_deeply(r->dim($x2)->values, [2]);
+    ok(r->is_double($x2));
   }
 
   # exp - Inf
   {
-    my $a1 = c(Inf);
-    my $a2 = r->exp($a1);
-    ok($a2->element->is_positive_infinite);
+    my $x1 = c(Inf);
+    my $x2 = r->exp($x1);
+    ok($x2->element->is_positive_infinite);
   }
   
   # exp - -Inf
   {
-    my $a1 = c(-Inf);
-    my $a2 = r->exp($a1);
-    is($a2->value, 0);
+    my $x1 = c(-Inf);
+    my $x2 = r->exp($x1);
+    is($x2->value, 0);
   }
 
   # exp - NA
   {
-    my $a1 = c(NA);
-    my $a2 = r->exp($a1);
-    ok($a2->element->is_na);
+    my $x1 = c(NA);
+    my $x2 = r->exp($x1);
+    ok($x2->element->is_na);
   }  
 
   # exp - NaN
   {
-    my $a1 = c(NaN);
-    my $a2 = r->exp($a1);
-    ok($a2->element->is_nan);
+    my $x1 = c(NaN);
+    my $x2 = r->exp($x1);
+    ok($x2->element->is_nan);
   }
 }
 
@@ -196,24 +196,24 @@ use Math::Trig ();
 {
   # log10 - complex
   {
-    my $a1 = c(1 + 2*i);
-    my $a2 = r->log10($a1);
+    my $x1 = c(1 + 2*i);
+    my $x2 = r->log10($x1);
     my $exp = Math::Complex->make(1, 2)->log / Math::Complex->make(10, 0)->log;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
     
-    is($a2->value->{re}, $exp_re);
-    is($a2->value->{im}, $exp_im);
-    ok(r->is_complex($a2));
+    is($x2->value->{re}, $exp_re);
+    is($x2->value->{im}, $exp_im);
+    ok(r->is_complex($x2));
   }
   
   # log10 - double,array
   {
-    my $a1 = array(c(10));
-    my $a2 = r->log10($a1);
-    is($a2->value, 1);
-    is_deeply(r->dim($a2)->values, [1]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(10));
+    my $x2 = r->log10($x1);
+    is($x2->value, 1);
+    is_deeply(r->dim($x2)->values, [1]);
+    ok(r->is_double($x2));
   }
 }
 
@@ -221,24 +221,24 @@ use Math::Trig ();
 {
   # log2 - complex
   {
-    my $a1 = c(1 + 2*i);
-    my $a2 = r->log2($a1);
+    my $x1 = c(1 + 2*i);
+    my $x2 = r->log2($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
     
-    is($a2->value->{re}, $exp_re / log(2));
-    is($a2->value->{im}, $exp_im / log(2));
-    ok(r->is_complex($a2));
+    is($x2->value->{re}, $exp_re / log(2));
+    is($x2->value->{im}, $exp_im / log(2));
+    ok(r->is_complex($x2));
   }
   
   # log2 - double,array
   {
-    my $a1 = array(c(2));
-    my $a2 = r->log2($a1);
-    is($a2->values->[0], 1);
-    is_deeply(r->dim($a2)->values, [1]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(2));
+    my $x2 = r->log2($x1);
+    is($x2->values->[0], 1);
+    is_deeply(r->dim($x2)->values, [1]);
+    ok(r->is_double($x2));
   }
 }
 
@@ -246,27 +246,27 @@ use Math::Trig ();
 {
   # logb - complex
   {
-    my $a1 = c(1 + 2*i);
-    my $a2 = r->logb($a1);
+    my $x1 = c(1 + 2*i);
+    my $x2 = r->logb($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
     
-    is($a2->value->{re}, $exp_re);
-    is($a2->value->{im}, $exp_im);
-    ok(r->is_complex($a2));
+    is($x2->value->{re}, $exp_re);
+    is($x2->value->{im}, $exp_im);
+    ok(r->is_complex($x2));
   }
   
   # logb - double,array
   {
-    my $a1 = array(c(1, 10, -1, 0));
-    my $a2 = r->logb($a1);
-    is($a2->values->[0], 0);
-    is(sprintf("%.5f", $a2->values->[1]), '2.30259');
-    ok($a2->elements->[2]->is_nan);
-    ok($a2->elements->[3]->is_negative_infinite);
-    is_deeply(r->dim($a2)->values, [4]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(1, 10, -1, 0));
+    my $x2 = r->logb($x1);
+    is($x2->values->[0], 0);
+    is(sprintf("%.5f", $x2->values->[1]), '2.30259');
+    ok($x2->elements->[2]->is_nan);
+    ok($x2->elements->[3]->is_negative_infinite);
+    is_deeply(r->dim($x2)->values, [4]);
+    ok(r->is_double($x2));
   }
 }
 
@@ -274,55 +274,55 @@ use Math::Trig ();
 {
   # log - complex
   {
-    my $a1 = c(1 + 2*i);
-    my $a2 = r->log($a1);
+    my $x1 = c(1 + 2*i);
+    my $x2 = r->log($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
     
-    is($a2->value->{re}, $exp_re);
-    is($a2->value->{im}, $exp_im);
-    ok(r->is_complex($a2));
+    is($x2->value->{re}, $exp_re);
+    is($x2->value->{im}, $exp_im);
+    ok(r->is_complex($x2));
   }
   
   # log - double,array
   {
-    my $a1 = array(c(1, 10, -1, 0));
-    my $a2 = r->log($a1);
-    is($a2->values->[0], 0);
-    is(sprintf("%.5f", $a2->values->[1]), '2.30259');
-    ok($a2->elements->[2]->is_nan);
-    ok($a2->elements->[3]->is_negative_infinite);
-    is_deeply(r->dim($a2)->values, [4]);
-    ok(r->is_double($a2));
+    my $x1 = array(c(1, 10, -1, 0));
+    my $x2 = r->log($x1);
+    is($x2->values->[0], 0);
+    is(sprintf("%.5f", $x2->values->[1]), '2.30259');
+    ok($x2->elements->[2]->is_nan);
+    ok($x2->elements->[3]->is_negative_infinite);
+    is_deeply(r->dim($x2)->values, [4]);
+    ok(r->is_double($x2));
   }
 
   # log - Inf
   {
-    my $a1 = c(Inf);
-    my $a2 = r->log($a1);
-    ok($a2->element->is_nan);
+    my $x1 = c(Inf);
+    my $x2 = r->log($x1);
+    ok($x2->element->is_nan);
   }
   
   # log - Inf()
   {
-    my $a1 = c(-Inf);
-    my $a2 = r->log($a1);
-    ok($a2->element->is_nan);
+    my $x1 = c(-Inf);
+    my $x2 = r->log($x1);
+    ok($x2->element->is_nan);
   }
 
   # log - NA
   {
-    my $a1 = c(NA);
-    my $a2 = r->log($a1);
-    ok($a2->element->is_na);
+    my $x1 = c(NA);
+    my $x2 = r->log($x1);
+    ok($x2->element->is_na);
   }  
 
   # log - NaN
   {
-    my $a1 = c(NaN);
-    my $a2 = r->log($a1);
-    ok($a2->element->is_nan);
+    my $x1 = c(NaN);
+    my $x2 = r->log($x1);
+    ok($x2->element->is_nan);
   }
 }
 
@@ -330,16 +330,16 @@ use Math::Trig ();
 {
   # Arg - non 0 values
   {
-    my $a1 = c(1 + 1*i, 2 + 2*i);
-    my $a2 = r->Arg($a1);
-    is_deeply($a2->values, [Math::Trig::pi / 4, Math::Trig::pi / 4]);
+    my $x1 = c(1 + 1*i, 2 + 2*i);
+    my $x2 = r->Arg($x1);
+    is_deeply($x2->values, [Math::Trig::pi / 4, Math::Trig::pi / 4]);
   }
   
   # Arg - 0 values
   {
-    my $a1 = c(0 + 0*i);
-    my $a2 = r->Arg($a1);
-    is_deeply($a2->values, [0]);
+    my $x1 = c(0 + 0*i);
+    my $x2 = r->Arg($x1);
+    is_deeply($x2->values, [0]);
   }
 }
 
@@ -347,20 +347,20 @@ use Math::Trig ();
 {
   # sub - case not ignore
   {
-    my $a1 = c("a");
-    my $a2 = c("b");
-    my $a3 = c("ad1ad1", NA, "ad2ad2");
-    my $a4 = r->sub($a1, $a2, $a3);
-    is_deeply($a4->values, ["bd1ad1", undef, "bd2ad2"]);
+    my $x1 = c("a");
+    my $x2 = c("b");
+    my $x3 = c("ad1ad1", NA, "ad2ad2");
+    my $x4 = r->sub($x1, $x2, $x3);
+    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 
   # sub - case ignore
   {
-    my $a1 = c("a");
-    my $a2 = c("b");
-    my $a3 = c("Ad1ad1", NA, "ad2ad2");
-    my $a4 = r->sub($a1, $a2, $a3, {'ignore.case' => TRUE});
-    is_deeply($a4->values, ["bd1ad1", undef, "bd2ad2"]);
+    my $x1 = c("a");
+    my $x2 = c("b");
+    my $x3 = c("Ad1ad1", NA, "ad2ad2");
+    my $x4 = r->sub($x1, $x2, $x3, {'ignore.case' => TRUE});
+    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 }
 
@@ -368,20 +368,20 @@ use Math::Trig ();
 {
   # gsub - case not ignore
   {
-    my $a1 = c("a");
-    my $a2 = c("b");
-    my $a3 = c("ad1ad1", NA, "ad2ad2");
-    my $a4 = r->gsub($a1, $a2, $a3);
-    is_deeply($a4->values, ["bd1bd1", undef, "bd2bd2"]);
+    my $x1 = c("a");
+    my $x2 = c("b");
+    my $x3 = c("ad1ad1", NA, "ad2ad2");
+    my $x4 = r->gsub($x1, $x2, $x3);
+    is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
 
   # sub - case ignore
   {
-    my $a1 = c("a");
-    my $a2 = c("b");
-    my $a3 = c("Ad1Ad1", NA, "Ad2Ad2");
-    my $a4 = r->gsub($a1, $a2, $a3, {'ignore.case' => TRUE});
-    is_deeply($a4->values, ["bd1bd1", undef, "bd2bd2"]);
+    my $x1 = c("a");
+    my $x2 = c("b");
+    my $x3 = c("Ad1Ad1", NA, "Ad2Ad2");
+    my $x4 = r->gsub($x1, $x2, $x3, {'ignore.case' => TRUE});
+    is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
 }
 
@@ -389,136 +389,136 @@ use Math::Trig ();
 {
   # grep - case not ignore
   {
-    my $a1 = c("abc");
-    my $a2 = c("abc", NA, "ABC");
-    my $a3 = r->grep($a1, $a2);
-    is_deeply($a3->values, [1]);
+    my $x1 = c("abc");
+    my $x2 = c("abc", NA, "ABC");
+    my $x3 = r->grep($x1, $x2);
+    is_deeply($x3->values, [1]);
   }
 
   # grep - case ignore
   {
-    my $a1 = c("abc");
-    my $a2 = c("abc", NA, "ABC");
-    my $a3 = r->grep($a1, $a2, {'ignore.case' => TRUE});
-    is_deeply($a3->values, [1, 3]);
+    my $x1 = c("abc");
+    my $x2 = c("abc", NA, "ABC");
+    my $x3 = r->grep($x1, $x2, {'ignore.case' => TRUE});
+    is_deeply($x3->values, [1, 3]);
   }
 }
 
 # chartr
 {
-  my $a1 = c("a-z");
-  my $a2 = c("A-Z");
-  my $a3 = c("abc", "def", NA);
-  my $a4 = r->chartr($a1, $a2, $a3);
-  is_deeply($a4->values, ["ABC", "DEF", undef]);
+  my $x1 = c("a-z");
+  my $x2 = c("A-Z");
+  my $x3 = c("abc", "def", NA);
+  my $x4 = r->chartr($x1, $x2, $x3);
+  is_deeply($x4->values, ["ABC", "DEF", undef]);
 }
 
 # charmatch
 {
   # charmatch - empty string
   {
-    my $a1 = r->charmatch("", "");
-    is_deeply($a1->value, 1);
+    my $x1 = r->charmatch("", "");
+    is_deeply($x1->value, 1);
   }
   
   # charmatch - multiple match
   {
-    my $a1 = r->charmatch("m",   c("mean", "median", "mode"));
-    is_deeply($a1->value, 0);
+    my $x1 = r->charmatch("m",   c("mean", "median", "mode"));
+    is_deeply($x1->value, 0);
   }
   
   # charmatch - multiple match
   {
-    my $a1 = r->charmatch("m",   c("mean", "median", "mode"));
-    is_deeply($a1->value, 0);
+    my $x1 = r->charmatch("m",   c("mean", "median", "mode"));
+    is_deeply($x1->value, 0);
   }
 
   # charmatch - one match
   {
-    my $a1 = r->charmatch("med",   c("mean", "median", "mode"));
-    is_deeply($a1->value, 2);
+    my $x1 = r->charmatch("med",   c("mean", "median", "mode"));
+    is_deeply($x1->value, 2);
   }
     
   # charmatch - one match, multiple elements
   {
-    my $a1 = r->charmatch(c("med", "mod"),   c("mean", "median", "mode"));
-    is_deeply($a1->values, [2, 3]);
+    my $x1 = r->charmatch(c("med", "mod"),   c("mean", "median", "mode"));
+    is_deeply($x1->values, [2, 3]);
   }
 }
 
 # Im
 {
-  my $a1 = c(1 + 2*i, 2 + 3*i);
-  my $a2 = r->Im($a1);
-  is_deeply($a2->values, [2, 3]);
+  my $x1 = c(1 + 2*i, 2 + 3*i);
+  my $x2 = r->Im($x1);
+  is_deeply($x2->values, [2, 3]);
 }
 
 # Re
 {
-  my $a1 = c(1 + 2*i, 2 + 3*i);
-  my $a2 = r->Re($a1);
-  is_deeply($a2->values, [1, 2]);
+  my $x1 = c(1 + 2*i, 2 + 3*i);
+  my $x2 = r->Re($x1);
+  is_deeply($x2->values, [1, 2]);
 }
 
 # Conj
 {
-  my $a1 = c(1 + 2*i, 2 + 3*i);
-  my $a2 = r->Conj($a1);
-  is_deeply($a2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
+  my $x1 = c(1 + 2*i, 2 + 3*i);
+  my $x2 = r->Conj($x1);
+  is_deeply($x2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
 }
 
 # pi
 {
-  my $a1 = pi;
-  is(sprintf('%.4f', $a1->value), 3.1416);
+  my $x1 = pi;
+  is(sprintf('%.4f', $x1->value), 3.1416);
 }
 
 # complex
 {
   # complex
   {
-    my $a1 = r->complex(1, 2);
-    is($a1->value->{re}, 1);
-    is($a1->value->{im}, 2);
+    my $x1 = r->complex(1, 2);
+    is($x1->value->{re}, 1);
+    is($x1->value->{im}, 2);
   }
   
   # complex - array
   {
-    my $a1 = r->complex(c(1, 2), c(3, 4));
-    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
+    my $x1 = r->complex(c(1, 2), c(3, 4));
+    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
   }
 
   # complex - array, some elements lack
   {
-    my $a1 = r->complex(c(1, 2), c(3, 4, 5));
-    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
+    my $x1 = r->complex(c(1, 2), c(3, 4, 5));
+    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
   }
 
   # complex - re and im option
   {
-    my $a1 = r->complex({re => c(1, 2), im => c(3, 4)});
-    is_deeply($a1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
+    my $x1 = r->complex({re => c(1, 2), im => c(3, 4)});
+    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
   }
   
   # complex - mod and arg option
   {
-    my $a1 = r->complex({mod => 2, arg => pi});
-    is($a1->value->{re}, -2);
-    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
+    my $x1 = r->complex({mod => 2, arg => pi});
+    is($x1->value->{re}, -2);
+    is(sprintf("%.5f", $x1->value->{im}), '0.00000');
   }
 
   # complex - mod and arg option, omit arg
   {
-    my $a1 = r->complex({mod => 2});
-    is($a1->value->{re}, 2);
-    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
+    my $x1 = r->complex({mod => 2});
+    is($x1->value->{re}, 2);
+    is(sprintf("%.5f", $x1->value->{im}), '0.00000');
   }
 
   # complex - mod and arg option, omit mod
   {
-    my $a1 = r->complex({arg => pi});
-    is($a1->value->{re}, -1);
-    is(sprintf("%.5f", $a1->value->{im}), '0.00000');
+    my $x1 = r->complex({arg => pi});
+    is($x1->value->{re}, -1);
+    is(sprintf("%.5f", $x1->value->{im}), '0.00000');
   }
 }
 
@@ -959,70 +959,70 @@ use Math::Trig ();
 {
   # round - array reference
   {
-    my $a1 = c(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $a2 = r->round($a1);
+    my $x1 = c(-1.3, 2.4, 2.5, 2.51, 3.51);
+    my $x2 = r->round($x1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-1, 2, 2, 3, 4]
     );
   }
 
   # round - matrix
   {
-    my $a1 = c(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $a2 = r->round(matrix($a1));
+    my $x1 = c(-1.3, 2.4, 2.5, 2.51, 3.51);
+    my $x2 = r->round(matrix($x1));
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-1, 2, 2, 3, 4]
     );
   }
 
   # round - array reference
   {
-    my $a1 = c(-13, 24, 25, 25.1, 35.1);
-    my $a2 = r->round($a1, -1);
+    my $x1 = c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = r->round($x1, -1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-10, 20, 20, 30, 40]
     );
   }
 
   # round - array reference
   {
-    my $a1 = c(-13, 24, 25, 25.1, 35.1);
-    my $a2 = r->round($a1, {digits => -1});
+    my $x1 = c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = r->round($x1, {digits => -1});
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-10, 20, 20, 30, 40]
     );
   }
   
   # round - matrix
   {
-    my $a1 = c(-13, 24, 25, 25.1, 35.1);
-    my $a2 = r->round(matrix($a1), -1);
+    my $x1 = c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = r->round(matrix($x1), -1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-10, 20, 20, 30, 40]
     );
   }
   
   # round - array reference
   {
-    my $a1 = c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $a2 = r->round($a1, 1);
+    my $x1 = c(-0.13, 0.24, 0.25, 0.251, 0.351);
+    my $x2 = r->round($x1, 1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]
     );
   }
 
   # round - matrix
   {
-    my $a1 = c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $a2 = r->round(matrix($a1), 1);
+    my $x1 = c(-0.13, 0.24, 0.25, 0.251, 0.351);
+    my $x2 = r->round(matrix($x1), 1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]
     );
   }
@@ -1032,20 +1032,20 @@ use Math::Trig ();
 {
   # trunc - array reference
   {
-    my $a1 = c(-1.2, -1, 1, 1.2);
-    my $a2 = r->trunc($a1);
+    my $x1 = c(-1.2, -1, 1, 1.2);
+    my $x2 = r->trunc($x1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-1, -1, 1, 1]
     );
   }
 
   # trunc - matrix
   {
-    my $a1 = c(-1.2, -1, 1, 1.2);
-    my $a2 = r->trunc(matrix($a1));
+    my $x1 = c(-1.2, -1, 1, 1.2);
+    my $x2 = r->trunc(matrix($x1));
     is_deeply(
-      $a2->values,
+      $x2->values,
       [-1, -1, 1, 1]
     );
   }
@@ -1055,20 +1055,20 @@ use Math::Trig ();
 {
   # floor - array reference
   {
-    my $a1 = c(2.5, 2.0, -1.0, -1.3);
-    my $a2 = r->floor($a1);
+    my $x1 = c(2.5, 2.0, -1.0, -1.3);
+    my $x2 = r->floor($x1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [2, 2, -1, -2]
     );
   }
 
   # floor - matrix
   {
-    my $a1 = c(2.5, 2.0, -1.0, -1.3);
-    my $a2 = r->floor(matrix($a1));
+    my $x1 = c(2.5, 2.0, -1.0, -1.3);
+    my $x2 = r->floor(matrix($x1));
     is_deeply(
-      $a2->values,
+      $x2->values,
       [2, 2, -1, -2]
     );
   }
@@ -1078,20 +1078,20 @@ use Math::Trig ();
 {
   # ceiling - array reference
   {
-    my $a1 = c(2.5, 2.0, -1.0, -1.3);
-    my $a2 = r->ceiling($a1);
+    my $x1 = c(2.5, 2.0, -1.0, -1.3);
+    my $x2 = r->ceiling($x1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [3, 2, -1, -1]
     );
   }
 
   # ceiling - matrix
   {
-    my $a1 = c(2.5, 2.0, -1.0, -1.3);
-    my $a2 = r->ceiling(matrix($a1));
+    my $x1 = c(2.5, 2.0, -1.0, -1.3);
+    my $x2 = r->ceiling(matrix($x1));
     is_deeply(
-      $a2->values,
+      $x2->values,
       [3, 2, -1, -1]
     );
   }
@@ -1101,28 +1101,28 @@ use Math::Trig ();
 {
   # sqrt - array reference
   {
-    my $a1 = c(2, 3, 4);
-    my $a2 = r->sqrt($a1);
+    my $x1 = c(2, 3, 4);
+    my $x2 = r->sqrt($x1);
     is_deeply(
-      $a2->values,
+      $x2->values,
       [
-        sqrt $a1->values->[0],
-        sqrt $a1->values->[1],
-        sqrt $a1->values->[2]
+        sqrt $x1->values->[0],
+        sqrt $x1->values->[1],
+        sqrt $x1->values->[2]
       ]
     );
   }
 
   # sqrt - matrix
   {
-    my $a1 = c(2, 3, 4);
-    my $a2 = r->sqrt(matrix($a1));
+    my $x1 = c(2, 3, 4);
+    my $x2 = r->sqrt(matrix($x1));
     is_deeply(
-      $a2->values,
+      $x2->values,
       [
-        sqrt $a1->values->[0],
-        sqrt $a1->values->[1],
-        sqrt $a1->values->[2]
+        sqrt $x1->values->[0],
+        sqrt $x1->values->[1],
+        sqrt $x1->values->[2]
       ]
     );
   }
@@ -1132,21 +1132,21 @@ use Math::Trig ();
 {
   # abs - array refference
   {
-    my $a1 = r->abs([-3, 4]);
-    is_deeply($a1->values, [3, 4]);
+    my $x1 = r->abs([-3, 4]);
+    is_deeply($x1->values, [3, 4]);
   }
 
   # abs - matrix
   {
-    my $a1 = r->abs(matrix([-3, 4]));
-    is_deeply($a1->values, [3, 4]);
+    my $x1 = r->abs(matrix([-3, 4]));
+    is_deeply($x1->values, [3, 4]);
   }
   
   # abs - complex
   {
-    my $a1 = c(3 + 4*i, 6 + 8*i);
-    my $a2 = r->abs($a1);
-    is_deeply($a2->values, [5, 10]);
+    my $x1 = c(3 + 4*i, 6 + 8*i);
+    my $x2 = r->abs($x1);
+    is_deeply($x2->values, [5, 10]);
   }
 }
 
@@ -1154,8 +1154,8 @@ use Math::Trig ();
 {
   # Mod - complex
   {
-    my $a1 = c(3 + 4*i, 6 + 8*i);
-    my $a2 = r->Mod($a1);
-    is_deeply($a2->values, [5, 10]);
+    my $x1 = c(3 + 4*i, 6 + 8*i);
+    my $x2 = r->Mod($x1);
+    is_deeply($x2->values, [5, 10]);
   }
 }

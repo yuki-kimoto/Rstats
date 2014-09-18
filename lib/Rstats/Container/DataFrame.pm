@@ -8,14 +8,6 @@ use Carp 'croak';
 use Rstats::Func;
 
 use Text::UnicodeTable::Simple;
-{
-  package Text::UnicodeTable::Simple;
-  no warnings 'redefine';
-  sub _decide_alignment {
-    # always ALIGN_RIGHT;
-    return 2;
-  }
-}
 
 sub get {
   my $self = shift;
@@ -71,7 +63,7 @@ sub get {
 sub to_string {
   my $self = shift;
 
-  my $t = Text::UnicodeTable::Simple->new(border => 0);
+  my $t = Text::UnicodeTable::Simple->new(border => 0, alignment => 'right');
   
   # Names
   my $column_names = $self->names->values;

@@ -27,13 +27,13 @@ sub getin {
   }
   $self->at($_index);
   
-  my $a1_index = Rstats::Func::to_c($_index);
+  my $x1_index = Rstats::Func::to_c($_index);
   my $index;
-  if ($a1_index->is_character) {
-    $index = $self->_name_to_index($a1_index);
+  if ($x1_index->is_character) {
+    $index = $self->_name_to_index($x1_index);
   }
   else {
-    $index = $a1_index->values->[0];
+    $index = $x1_index->values->[0];
   }
   my $elements = $self->elements;
   my $element = $elements->[$index - 1];
@@ -74,13 +74,13 @@ sub set {
   my ($self, $v1) = @_;
   
   my $_index = $self->at;
-  my $a1_index = Rstats::Func::to_c($_index);
+  my $x1_index = Rstats::Func::to_c($_index);
   my $index;
-  if ($a1_index->is_character) {
-    $index = $self->_name_to_index($a1_index);
+  if ($x1_index->is_character) {
+    $index = $self->_name_to_index($x1_index);
   }
   else {
-    $index = $a1_index->values->[0];
+    $index = $x1_index->values->[0];
   }
   $v1 = Rstats::Func::to_c($v1);
   

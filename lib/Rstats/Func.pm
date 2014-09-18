@@ -7,7 +7,6 @@ use Carp qw/croak carp/;
 use Rstats::Container::Array;
 use Rstats::Container::List;
 use Rstats::Container::DataFrame;
-use Rstats::Container::Factor;
 use Rstats::ElementFunc;
 
 use List::Util;
@@ -219,7 +218,7 @@ sub gl {
   $x_levels = $x_levels->as_character;
   my $levels = $x_levels->values;
   
-  my $x_x_elements = [];
+  my $x1_elements = [];
   my $level = 1;
   my $j = 1;
   for (my $i = 0; $i < $length; $i++) {
@@ -230,16 +229,16 @@ sub gl {
     if ($level > @$levels) {
       $level = 1;
     }
-    push @$x_x_elements, $level;
+    push @$x1_elements, $level;
     $j++;
   }
   
-  my $x_x = c($x_x_elements);
+  my $x1 = c($x1_elements);
   
   $x_labels = $x_levels unless defined $x_labels;
   $x_ordered = Rstats::Func::FALSE() unless defined $x_ordered;
   
-  return factor($x_x, {levels => $x_levels, labels => $x_labels, ordered => $x_ordered});
+  return factor($x1, {levels => $x_levels, labels => $x_labels, ordered => $x_ordered});
 }
 
 sub ordered {
@@ -250,15 +249,15 @@ sub ordered {
 }
 
 sub factor {
-  my ($x_x, $x_levels, $x_labels, $x_exclude, $x_ordered)
+  my ($x1, $x_levels, $x_labels, $x_exclude, $x_ordered)
     = args([qw/x levels labels exclude ordered/], @_);
 
   # default - x
-  $x_x = $x_x->as_character unless $x_x->is_character;
+  $x1 = $x1->as_character unless $x1->is_character;
   
   # default - levels
   unless (defined $x_levels) {
-    $x_levels = Rstats::Func::sort(unique($x_x), {'na.last' => TRUE});
+    $x_levels = Rstats::Func::sort(unique($x1), {'na.last' => TRUE});
   }
   
   # default - exclude
@@ -287,13 +286,13 @@ sub factor {
   }
   
   # default - ordered
-  $x_ordered = $x_x->is_ordered unless defined $x_ordered;
+  $x_ordered = $x1->is_ordered unless defined $x_ordered;
   
-  my $x_x_elements = $x_x->elements;
+  my $x1_elements = $x1->elements;
   
   my $labels_length = $x_labels->length->value;
   my $levels_length = $x_levels->length->value;
-  if ($labels_length == 1 && $x_x->length_value != 1) {
+  if ($labels_length == 1 && $x1->length_value != 1) {
     my $value = $x_labels->value;
     $x_labels = paste($value, C("1:$levels_length"), {sep => ""});
   }
@@ -311,12 +310,12 @@ sub factor {
   }
   
   my $f1_elements = [];
-  for my $x_x_element (@$x_x_elements) {
-    if ($x_x_element->is_na) {
+  for my $x1_element (@$x1_elements) {
+    if ($x1_element->is_na) {
       push @$f1_elements, Rstats::ElementFunc::NA();
     }
     else {
-      my $value = $x_x_element->value;
+      my $value = $x1_element->value;
       my $f1_element = exists $levels->{$value}
         ? Rstats::ElementFunc::integer($levels->{$value})
         : Rstats::ElementFunc::NA();

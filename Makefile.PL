@@ -15,7 +15,7 @@ WriteMakefile(
         'Test::More' => 0,
         'Object::Simple' => '3.10',
         'Math::Round' => '0.06',
-        'Text::UnicodeTable::Simple' => '0.08'
+        'Text::UnicodeTable::Simple' => '0.09'
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },

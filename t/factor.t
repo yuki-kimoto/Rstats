@@ -216,76 +216,76 @@ use Rstats;
   {
     my $x1 = factor(c(2, 3, 4, 2, 3, 4));
     my $x1_levels = $x1->levels;
-    my $x1_levels = $x1_levels->as_numeric;
-    my $x2 = $x1_levels->get($x1);
-    ok($x2->is_numeric);
-    is_deeply($x2->values, [2, 3, 4, 2, 3, 4]);
+    my $x2_levels = $x1_levels->as_numeric;
+    my $x3 = $x2_levels->get($x1);
+    ok($x3->is_numeric);
+    is_deeply($x3->values, [2, 3, 4, 2, 3, 4]);
   }
   
   # factor - labels
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $x1 = $x1->labels;
-    ok($x1->is_character);
-    is_deeply($x1->values, ["a", "b", "c", "a", "b", "c"]);
+    my $x2 = $x1->labels;
+    ok($x2->is_character);
+    is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
   # factor - as_character
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $x1 = $x1->as_character;
-    ok($x1->is_character);
-    is_deeply($x1->values, ["a", "b", "c", "a", "b", "c"]);
+    my $x2 = $x1->as_character;
+    ok($x2->is_character);
+    is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
   # factor - as_logical
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x1 = $x1->as_logical;
-    ok($x1->is_logical);
-    is_deeply($x1->values, [1, 1, 1]);
+    my $x2 = $x1->as_logical;
+    ok($x2->is_logical);
+    is_deeply($x2->values, [1, 1, 1]);
   }
   
   # factor - as_complex
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x1 = $x1->as_complex;
-    ok($x1->is_complex);
-    is_deeply($x1->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
+    my $x2 = $x1->as_complex;
+    ok($x2->is_complex);
+    is_deeply($x2->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
   }
   
   # factor - as_double
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x1 = $x1->as_double;
-    ok($x1->is_double);
-    is_deeply($x1->values, [1, 2, 3]);
+    my $x2 = $x1->as_double;
+    ok($x2->is_double);
+    is_deeply($x2->values, [1, 2, 3]);
   }
   
   # factor - as_integer
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x1 = $x1->as_integer;
-    ok($x1->is_integer);
-    is_deeply($x1->values, [1, 2, 3]);
+    my $x2 = $x1->as_integer;
+    ok($x2->is_integer);
+    is_deeply($x2->values, [1, 2, 3]);
   }
 
   # factor - as_factor, double
   {
     my $x1 = c(2, 3, 4);
-    my $x1 = factor($x1);
-    ok($x1->is_factor);
-    is_deeply($x1->values, [1, 2, 3]);
-    is_deeply($x1->levels->values, ["2", "3", "4"]);
+    my $x2 = factor($x1);
+    ok($x2->is_factor);
+    is_deeply($x2->values, [1, 2, 3]);
+    is_deeply($x2->levels->values, ["2", "3", "4"]);
   }
   
   # factor - as_factor, character
   {
     my $x1 = c("a", "b", "c");
-    my $x1 = factor($x1);
-    ok($x1->is_factor);
-    is_deeply($x1->values, [1, 2, 3]);
-    is_deeply($x1->levels->values, ["a", "b", "c"]);
+    my $x2 = factor($x1);
+    ok($x2->is_factor);
+    is_deeply($x2->values, [1, 2, 3]);
+    is_deeply($x2->levels->values, ["a", "b", "c"]);
   }
 
   # factor - ordered

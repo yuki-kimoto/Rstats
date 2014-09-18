@@ -6,74 +6,74 @@ use Rstats;
 
 # ncol
 {
-  my $l1 = list(1, 2, 3);
-  my $x1 = r->ncol($l1);
-  ok($x1->is_null);
+  my $x1 = list(1, 2, 3);
+  my $x2 = r->ncol($x1);
+  ok($x2->is_null);
 }
 
 # nrow
 {
-  my $l1 = list(1, 2, 3);
-  my $x1 = r->nrow($l1);
-  ok($x1->is_null);
+  my $x1 = list(1, 2, 3);
+  my $x2 = r->nrow($x1);
+  ok($x2->is_null);
 }
 
 # set
 {
   # set - NULL, dimnames
   {
-    my $l1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
-    $l1->dimnames(list(c("r1", "r2", "r3"), c("c1", "c2", "c3")));
-    $l1->at(2)->set(NULL);
-    is_deeply($l1->getin(1)->values, [1, 2, 3]);
-    is_deeply($l1->getin(2)->values, [7, 8, 9]);
-    is_deeply($l1->dimnames->getin(1)->values, ["r1", "r2", "r3"]);
-    is_deeply($l1->dimnames->getin(2)->values, ["c1", "c3"]);
+    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $x1->dimnames(list(c("r1", "r2", "r3"), c("c1", "c2", "c3")));
+    $x1->at(2)->set(NULL);
+    is_deeply($x1->getin(1)->values, [1, 2, 3]);
+    is_deeply($x1->getin(2)->values, [7, 8, 9]);
+    is_deeply($x1->dimnames->getin(1)->values, ["r1", "r2", "r3"]);
+    is_deeply($x1->dimnames->getin(2)->values, ["c1", "c3"]);
   }
   
   # set - NULL, names
   {
-    my $l1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
-    $l1->names(c("c1", "c2", "c3"));
-    $l1->at(2)->set(NULL);
-    is_deeply($l1->getin(1)->values, [1, 2, 3]);
-    is_deeply($l1->getin(2)->values, [7, 8, 9]);
-    is_deeply($l1->names->values, ["c1", "c3"]);
+    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $x1->names(c("c1", "c2", "c3"));
+    $x1->at(2)->set(NULL);
+    is_deeply($x1->getin(1)->values, [1, 2, 3]);
+    is_deeply($x1->getin(2)->values, [7, 8, 9]);
+    is_deeply($x1->names->values, ["c1", "c3"]);
   }
   
   # set - basic
   {
-    my $l1 = list(1, 2, 3);
-    $l1->at(2)->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->values, [5]);
-    is_deeply($l1->getin(3)->values, [3]);
+    my $x1 = list(1, 2, 3);
+    $x1->at(2)->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->values, [5]);
+    is_deeply($x1->getin(3)->values, [3]);
   }
 
   # set - name
   {
-    my $l1 = list(1, 2, 3);
-    r->names($l1, c("n1", "n2", "n3"));
-    $l1->at("n2")->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->values, [5]);
-    is_deeply($l1->getin(3)->values, [3]);
+    my $x1 = list(1, 2, 3);
+    r->names($x1, c("n1", "n2", "n3"));
+    $x1->at("n2")->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->values, [5]);
+    is_deeply($x1->getin(3)->values, [3]);
   }
   
   # set - two index
   {
-    my $l1 = list(1, list(2, 3));
-    $l1->getin(2)->at(2)->set(5);
-    is_deeply($l1->getin(1)->values, [1]);
-    is_deeply($l1->getin(2)->getin(1)->values, [2]);
-    is_deeply($l1->getin(2)->getin(2)->values, [5]);
+    my $x1 = list(1, list(2, 3));
+    $x1->getin(2)->at(2)->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->getin(1)->values, [2]);
+    is_deeply($x1->getin(2)->getin(2)->values, [5]);
   }
 
   # set - tree index
   {
-    my $l1 = list(1, list(2, 3, list(4)));
-    $l1->getin(2)->getin(3)->at(1)->set(5);
-    is_deeply($l1->getin(2)->getin(3)->getin(1)->values, [5]);
+    my $x1 = list(1, list(2, 3, list(4)));
+    $x1->getin(2)->getin(3)->at(1)->set(5);
+    is_deeply($x1->getin(2)->getin(3)->getin(1)->values, [5]);
   }
 }
 
@@ -81,27 +81,27 @@ use Rstats;
 {
   # list - basic
   {
-    my $l1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
-    is_deeply($l1->elements->[0]->values, [1, 2, 3]);
-    is_deeply($l1->elements->[1]->elements->[0]->values, ["Hello"]);
+    my $x1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
+    is_deeply($x1->elements->[0]->values, [1, 2, 3]);
+    is_deeply($x1->elements->[1]->elements->[0]->values, ["Hello"]);
     is_deeply(
-      $l1->elements->[1]->elements->[1]->elements,
+      $x1->elements->[1]->elements->[1]->elements,
       [Rstats::ElementFunc::TRUE, Rstats::ElementFunc::FALSE, Rstats::ElementFunc::FALSE]
     );
   }
 
   # list - argument is not array
   {
-    my $l1 = list(1, 2, 3);
-    is_deeply($l1->elements->[0]->values, [1]);
-    is_deeply($l1->elements->[1]->values, [2]);
-    is_deeply($l1->elements->[2]->values, [3]);
+    my $x1 = list(1, 2, 3);
+    is_deeply($x1->elements->[0]->values, [1]);
+    is_deeply($x1->elements->[1]->values, [2]);
+    is_deeply($x1->elements->[2]->values, [3]);
   }
     
   # list - to_string
   {
-    my $l1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
-    my $str = $l1->to_string;
+    my $x1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
+    my $str = $x1->to_string;
     my $expected = <<"EOS";
 [[1]]
 [1] 1 2 3
@@ -119,61 +119,61 @@ EOS
 
   # list - length
   {
-    my $l1 = list("a", "b");
-    is_deeply(r->length($l1)->values, [2]);
+    my $x1 = list("a", "b");
+    is_deeply(r->length($x1)->values, [2]);
   }
 
   # list - as_list, input is list
   {
-    my $l1 = list("a", "b");
-    my $l2 = r->as_list($l1);
-    is($l1, $l2);
+    my $x1 = list("a", "b");
+    my $l2 = r->as_list($x1);
+    is($x1, $l2);
   }
   
   # list - as_list, input is array
   {
     my $x1 = c("a", "b");
-    my $l1 = r->as_list($x1);
-    ok(r->is_list($l1));
-    is_deeply($x1->values, ["a", "b"]);
+    my $x2 = r->as_list($x1);
+    ok(r->is_list($x2));
+    is_deeply($x2->values, ["a", "b"]);
   }
 
   # list - getin
   {
-    my $l1 = list("a", "b", list("c", "d", list("e")));
-    my $x1 = $l1->getin(1);
-    is_deeply($x1->values, ["a"]);
+    my $x1 = list("a", "b", list("c", "d", list("e")));
+    my $x2 = $x1->getin(1);
+    is_deeply($x2->values, ["a"]);
     
-    my $x2 = $l1->getin(3)->getin(2);
-    is_deeply($x2->values, ["d"]);
+    my $x3 = $x1->getin(3)->getin(2);
+    is_deeply($x3->values, ["d"]);
 
-    my $x3 = $l1->getin(3)->getin(3)->getin(1);
-    is_deeply($x3->values, ["e"]);
+    my $x4 = $x1->getin(3)->getin(3)->getin(1);
+    is_deeply($x4->values, ["e"]);
   }
 
   # list - getin,name
   {
-    my $l1 = list("a", "b", list("c", "d", list("e")));
-    r->names($l1, c("n1", "n2", "n3"));
-    my $x1 = $l1->getin("n1");
-    is_deeply($x1->values, ["a"]);
+    my $x1 = list("a", "b", list("c", "d", list("e")));
+    r->names($x1, c("n1", "n2", "n3"));
+    my $x2 = $x1->getin("n1");
+    is_deeply($x2->values, ["a"]);
 
-    my $x3 = $l1->getin("n3")->getin(3)->getin(1);
+    my $x3 = $x1->getin("n3")->getin(3)->getin(1);
     is_deeply($x3->values, ["e"]);
   }
   
   # list - get
   {
-    my $l1 = list(1, 2, 3);
-    my $l2 = $l1->get(1);
+    my $x1 = list(1, 2, 3);
+    my $l2 = $x1->get(1);
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);
   }
 
   # list - get, multiple
   {
-    my $l1 = list(1, 2, 3);
-    my $l2 = $l1->get(c(1, 3));
+    my $x1 = list(1, 2, 3);
+    my $l2 = $x1->get(c(1, 3));
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
@@ -181,9 +181,9 @@ EOS
 
   # list - get, multiple, names
   {
-    my $l1 = list(1, 2, 3);
-    r->names($l1, c("n1", "n2", "n3"));
-    my $l2 = $l1->get(c("n1", "n3"));
+    my $x1 = list(1, 2, 3);
+    r->names($x1, c("n1", "n2", "n3"));
+    my $l2 = $x1->get(c("n1", "n3"));
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);

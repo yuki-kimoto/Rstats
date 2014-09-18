@@ -425,7 +425,8 @@ sub data_frame {
       $elements->[$i] = Rstats::Func::c(($elements->[$i]) x $repeat);
     }
   }
-
+  
+  # Create data frame
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->{row_length} = $max_count;
   $data_frame->elements($elements);
@@ -1178,35 +1179,66 @@ sub atanh { process(\&Rstats::ElementFunc::atanh, @_) }
 
 sub cbind {
   my @xs = @_;
+
+  return Rstats::Func::NULL() unless @xs;
   
-  my $row_count_needed;
-  my $col_count_total;
-  my $x2_elements = [];
-  for my $_a (@xs) {
-    
-    my $a = to_c($_a);
-    
-    my $row_count;
-    if ($a->is_matrix) {
-      $row_count = $a->dim->elements->[0];
-      $col_count_total += $a->dim->elements->[1];
+  if ($xs[0]->is_data_frame) {
+    # Check row count
+    my $first_row_length;
+    my $different;
+    for my $x (@xs) {
+      if ($first_row_length) {
+        $different = 1 if $x->{row_length} != $first_row_length;
+      }
+      else {
+        $first_row_length = $x->{row_length};
+      }
     }
-    elsif ($a->is_vector) {
-      $row_count = $a->dim_as_array->values->[0];
-      $col_count_total += 1;
-    }
-    else {
-      croak "cbind or rbind can only receive matrix and vector";
-    }
+    croak "cbind need same row count data frame"
+      if $different;
     
-    $row_count_needed = $row_count unless defined $row_count_needed;
-    croak "Row count is different" if $row_count_needed ne $row_count;
+    # Create new data frame
+    my @data_frame_args;
+    for my $x (@xs) {
+      my $names = $x->names->values;
+      for my $name (@$names) {
+        push @data_frame_args, $name, $x->getin($name);
+      }
+    }
+    my $data_frame = data_frame(@data_frame_args);
     
-    push @$x2_elements, $a->elements;
+    return $data_frame;
   }
-  my $matrix = matrix($x2_elements, $row_count_needed, $col_count_total);
-  
-  return $matrix;
+  else {
+    my $row_count_needed;
+    my $col_count_total;
+    my $x2_elements = [];
+    for my $_a (@xs) {
+      
+      my $a = to_c($_a);
+      
+      my $row_count;
+      if ($a->is_matrix) {
+        $row_count = $a->dim->elements->[0];
+        $col_count_total += $a->dim->elements->[1];
+      }
+      elsif ($a->is_vector) {
+        $row_count = $a->dim_as_array->values->[0];
+        $col_count_total += 1;
+      }
+      else {
+        croak "cbind or rbind can only receive matrix and vector";
+      }
+      
+      $row_count_needed = $row_count unless defined $row_count_needed;
+      croak "Row count is different" if $row_count_needed ne $row_count;
+      
+      push @$x2_elements, $a->elements;
+    }
+    my $matrix = matrix($x2_elements, $row_count_needed, $col_count_total);
+    
+    return $matrix;
+  }
 }
 
 sub ceiling {
@@ -1716,9 +1748,59 @@ sub range {
 sub rbind {
   my (@xs) = @_;
   
-  my $matrix = cbind(@xs);
+  return Rstats::Func::NULL() unless @xs;
   
-  return t($matrix);
+  if ($xs[0]->is_data_frame) {
+    
+    # Check names
+    my $first_names;
+    for my $x (@xs) {
+      if ($first_names) {
+        my $names = $x->names->values;
+        my $different;
+        $different = 1 if @$first_names != @$names;
+        for (my $i = 0; $i < @$first_names; $i++) {
+          $different = 1 if $names->[$i] ne $first_names->[$i];
+        }
+        croak "rbind require same names having data frame"
+          if $different;
+      }
+      else {
+        $first_names = $x->names->values;
+      }
+    }
+    
+    # Create new vectors
+    my @new_vectors;
+    for my $name (@$first_names) {
+      my @vector_parts;
+      for my $x (@xs) {
+        my $v = $x->getin($name);
+        if ($v->is_factor) {
+          push @vector_parts, $v->as_character;
+        }
+        else {
+          push @vector_parts, $v;
+        }
+      }
+      my $new_vector = c(@vector_parts);
+      push @new_vectors, $new_vector;
+    }
+    
+    # Create new data frame
+    my @data_frame_args;
+    for (my $i = 0; $i < @$first_names; $i++) {
+      push @data_frame_args, $first_names->[$i], $new_vectors[$i];
+    }
+    my $data_frame = data_frame(@data_frame_args);
+    
+    return $data_frame;
+  }
+  else {
+    my $matrix = cbind(@xs);
+    
+    return t($matrix);
+  }
 }
 
 sub rep {

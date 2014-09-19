@@ -21,6 +21,7 @@ use Carp 'croak';
 # read.delim()
 # read.delim2()
 # read.fwf()
+# merge
 
 my @funcs = qw/
   abs
@@ -81,6 +82,7 @@ my @funcs = qw/
   lower_tri
   match
   median
+  merge
   Mod
   NA
   NaN

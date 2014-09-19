@@ -33,6 +33,39 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub merge {
+  my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
+    = args([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
+  
+  # Join way
+  $x_all = FALSE unless defined $x_all;
+  $x_all_x = FALSE unless defined $x_all_x;
+  $x_all_y = FALSE unless defined $x_all_y;
+  my $all;
+  if ($x_all) {
+    $all = 'both';
+  }
+  elsif ($x_all_x) {
+    $all = 'left';
+  }
+  elsif ($x_all_y) {
+    $all = 'rigth';
+  }
+  else {
+    $all = 'common';
+  }
+  
+  # ID
+  $x_by = $x1->names->get(1) unless defined $x_by;
+  $x_by_x = $x_by unless defined $x_by_x;
+  $x_by_y = $x_by unless defined $x_by_y;
+  my $by_x = $x_by_x->value;
+  my $by_y = $x_by_y->value;
+  
+  # Sort
+  my $sort = defined $x_sort ? $x_sort->value : 0;
+}
+
 # TODO
 #read.table(file, header = FALSE, sep = "", quote = "\"'",
 #           dec = ".", row.names, col.names,

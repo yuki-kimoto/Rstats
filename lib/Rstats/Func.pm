@@ -1660,16 +1660,40 @@ sub min {
 
 sub order {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = to_c(shift);
+  my @xs = map { to_c($_) } @_;
+  
+  my @xs_values;
+  for my $x (@xs) {
+    push @xs_values, $x->values;
+  }
+
   my $decreasing = $opt->{decreasing} || FALSE;
   
-  my $x1_values = $x1->values;
-  
   my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $x1_values->[$_]} for (0 .. @$x1_values - 1);
+  for my $i (0 .. @{$xs_values[0]} - 1) {
+    my $pos_val = {pos => $i + 1};
+    $pos_val->{val} = [];
+    push @{$pos_val->{val}}, $xs_values[$_][$i] for (0 .. @xs_values);
+    push @pos_vals, $pos_val;
+  }
+  
   my @sorted_pos_values = !$decreasing
-    ? sort { $a->{val} <=> $b->{val} } @pos_vals
-    : sort { $b->{val} <=> $a->{val} } @pos_vals;
+    ? sort {
+        my $comp;
+        for (my $i = 0; $i < @xs_values; $i++) {
+          $comp = $a->{val}[$i] <=> $b->{val}[$i];
+          last if $comp != 0;
+        }
+        $comp;
+      } @pos_vals
+    : sort {
+        my $comp;
+        for (my $i = 0; $i < @xs_values; $i++) {
+          $comp = $b->{val}[$i] <=> $a->{val}[$i];
+          last if $comp != 0;
+        }
+        $comp;
+      } @pos_vals;
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
   return c(\@orders);

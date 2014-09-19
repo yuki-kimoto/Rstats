@@ -700,10 +700,26 @@ use Math::Trig ();
 
 # order
 {
+  # order - 2 condition,decreasing TRUE
+  {
+    my $v1 = c(4, 3, 3, 3, 1, 5);
+    my $v2 = c(1, 2, 3, 1, 1, 1);
+    my $v3 = r->order($v1, $v2, {decreasing => TRUE});
+    is_deeply($v3->values, [6, 1, 3, 2, 4, 5]);
+  }
+  
+  # order - 2 condition,decreasing FALSE
+  {
+    my $v1 = c(4, 3, 3, 3, 1, 5);
+    my $v2 = c(1, 2, 3, 1, 1, 1);
+    my $v3 = r->order($v1, $v2);
+    is_deeply($v3->values, [5, 4, 2, 3, 1, 6]);
+  }
+  
   # order - decreasing FALSE
   {
     my $v1 = c(2, 4, 3, 1);
-    my $v2 = r->order($v1);
+    my $v2 = r->order($v1, {decreasing => FALSE});
     is_deeply($v2->values, [4, 1, 3, 2]);
   }
   
@@ -712,6 +728,13 @@ use Math::Trig ();
     my $v1 = c(2, 4, 3, 1);
     my $v2 = r->order($v1, {decreasing => TRUE});
     is_deeply($v2->values, [2, 3, 1, 4]);
+  }
+
+  # order - decreasing FALSE
+  {
+    my $v1 = c(2, 4, 3, 1);
+    my $v2 = r->order($v1);
+    is_deeply($v2->values, [4, 1, 3, 2]);
   }
 }
 

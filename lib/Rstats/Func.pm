@@ -1248,9 +1248,9 @@ sub cbind {
     my $row_count_needed;
     my $col_count_total;
     my $x2_elements = [];
-    for my $_a (@xs) {
+    for my $_x (@xs) {
       
-      my $a = to_c($_a);
+      my $a = to_c($_x);
       
       my $row_count;
       if ($a->is_matrix) {
@@ -1277,9 +1277,9 @@ sub cbind {
 }
 
 sub ceiling {
-  my $_a1 = shift;
+  my $_x1 = shift;
   
-  my $x1 = to_c($_a1);
+  my $x1 = to_c($_x1);
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::ceil $_->value) } @{$x1->elements};
   
   my $x2 = $x1->clone(elements => \@a2_elements);
@@ -1293,13 +1293,13 @@ sub colMeans {
   
   my $dim_values = $x1->dim->values;
   if (@$dim_values == 2) {
-    my $v1_values = [];
+    my $x1_values = [];
     for my $row (1 .. $dim_values->[0]) {
-      my $v1_value = 0;
-      $v1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
-      push @$v1_values, $v1_value / $dim_values->[1];
+      my $x1_value = 0;
+      $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
+      push @$x1_values, $x1_value / $dim_values->[1];
     }
-    return c($v1_values);
+    return c($x1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -1311,13 +1311,13 @@ sub colSums {
   
   my $dim_values = $x1->dim->values;
   if (@$dim_values == 2) {
-    my $v1_values = [];
+    my $x1_values = [];
     for my $row (1 .. $dim_values->[0]) {
-      my $v1_value = 0;
-      $v1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
-      push @$v1_values, $v1_value;
+      my $x1_value = 0;
+      $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
+      push @$x1_values, $x1_value;
     }
-    return c($v1_values);
+    return c($x1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -1536,9 +1536,9 @@ sub max_type {
 }
 
 sub floor {
-  my $_a1 = shift;
+  my $_x1 = shift;
   
-  my $x1 = to_c($_a1);
+  my $x1 = to_c($_x1);
   
   my @a2_elements = map { Rstats::ElementFunc::double(POSIX::floor $_->value) } @{$x1->elements};
 
@@ -1550,19 +1550,19 @@ sub floor {
 
 sub head {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = shift;
+  my $x1 = shift;
   
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $elements1 = $v1->{elements};
-  my $max = $v1->length_value < $n ? $v1->length_value : $n;
+  my $elements1 = $x1->{elements};
+  my $max = $x1->length_value < $n ? $x1->length_value : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
     push @elements2, $elements1->[$i];
   }
   
-  return $v1->new(elements => \@elements2);
+  return $x1->new(elements => \@elements2);
 }
 
 sub i {
@@ -1572,14 +1572,14 @@ sub i {
 }
 
 sub ifelse {
-  my ($_v1, $value1, $value2) = @_;
+  my ($_x1, $value1, $value2) = @_;
   
-  my $v1 = to_c($_v1);
-  my $v1_values = $v1->values;
+  my $x1 = to_c($_x1);
+  my $x1_values = $x1->values;
   my @v2_values;
-  for my $v1_value (@$v1_values) {
-    local $_ = $v1_value;
-    if ($v1_value) {
+  for my $x1_value (@$x1_values) {
+    local $_ = $x1_value;
+    if ($x1_value) {
       push @v2_values, $value1;
     }
     else {
@@ -1660,13 +1660,13 @@ sub min {
 
 sub order {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = to_c(shift);
+  my $x1 = to_c(shift);
   my $decreasing = $opt->{decreasing} || FALSE;
   
-  my $v1_values = $v1->values;
+  my $x1_values = $x1->values;
   
   my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, val => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  push @pos_vals, {pos => $_ + 1, val => $x1_values->[$_]} for (0 .. @$x1_values - 1);
   my @sorted_pos_values = !$decreasing
     ? sort { $a->{val} <=> $b->{val} } @pos_vals
     : sort { $b->{val} <=> $a->{val} } @pos_vals;
@@ -1679,13 +1679,13 @@ sub order {
 # na.last
 sub rank {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = to_c(shift);
+  my $x1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
   
-  my $v1_values = $v1->values;
+  my $x1_values = $x1->values;
   
   my @pos_vals;
-  push @pos_vals, {pos => $_ + 1, value => $v1_values->[$_]} for (0 .. @$v1_values - 1);
+  push @pos_vals, {pos => $_ + 1, value => $x1_values->[$_]} for (0 .. @$x1_values - 1);
   my @sorted_pos_values = sort { $a->{value} <=> $b->{value} } @pos_vals;
   
   # Rank
@@ -1720,13 +1720,13 @@ sub paste {
   $sep = ' ' unless defined $sep;
   
   my $str = shift;
-  my $v1 = shift;
+  my $x1 = shift;
   
-  my $v1_values = $v1->values;
-  my $v2_values = [];
-  push @$v2_values, "$str$sep$_" for @$v1_values;
+  my $x1_values = $x1->values;
+  my $x2_values = [];
+  push @$x2_values, "$str$sep$_" for @$x1_values;
   
-  return c($v2_values);
+  return c($x2_values);
 }
 
 sub pmax {
@@ -1842,44 +1842,44 @@ sub rep {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
-  my $v1 = shift;
+  my $x1 = shift;
   my $times = $opt->{times} || 1;
   
   my $elements = [];
-  push @$elements, @{$v1->elements} for 1 .. $times;
-  my $v2 = c($elements);
+  push @$elements, @{$x1->elements} for 1 .. $times;
+  my $x2 = c($elements);
   
-  return $v2;
+  return $x2;
 }
 
 sub replace {
-  my $v1 = to_c(shift);
-  my $v2 = to_c(shift);
+  my $x1 = to_c(shift);
+  my $x2 = to_c(shift);
   my $v3 = to_c(shift);
   
-  my $v1_elements = $v1->elements;
-  my $v2_elements = $v2->elements;
-  my $v2_elements_h = {};
-  for my $v2_element (@$v2_elements) {
-    my $v2_element_hash = Rstats::ElementFunc::hash($v2_element->as_double);
+  my $x1_elements = $x1->elements;
+  my $x2_elements = $x2->elements;
+  my $x2_elements_h = {};
+  for my $x2_element (@$x2_elements) {
+    my $x2_element_hash = Rstats::ElementFunc::hash($x2_element->as_double);
     
-    $v2_elements_h->{$v2_element_hash}++;
+    $x2_elements_h->{$x2_element_hash}++;
     croak "replace second argument can't have duplicate number"
-      if $v2_elements_h->{$v2_element_hash} > 1;
+      if $x2_elements_h->{$x2_element_hash} > 1;
   }
   my $v3_elements = $v3->elements;
   my $v3_length = @{$v3_elements};
   
   my $v4_elements = [];
   my $replace_count = 0;
-  for (my $i = 0; $i < @$v1_elements; $i++) {
+  for (my $i = 0; $i < @$x1_elements; $i++) {
     my $hash = Rstats::ElementFunc::hash(Rstats::ElementFunc::double($i + 1));
-    if ($v2_elements_h->{$hash}) {
+    if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
     }
     else {
-      push @$v4_elements, $v1_elements->[$i];
+      push @$v4_elements, $x1_elements->[$i];
     }
   }
   
@@ -1931,11 +1931,11 @@ sub rnorm {
 sub round {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($_a1, $digits) = @_;
+  my ($_x1, $digits) = @_;
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $x1 = to_c($_a1);
+  my $x1 = to_c($_x1);
 
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::ElementFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->elements};
@@ -1950,13 +1950,13 @@ sub rowMeans {
   
   my $dim_values = $x1->dim->values;
   if (@$dim_values == 2) {
-    my $v1_values = [];
+    my $x1_values = [];
     for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value / $dim_values->[0];
+      my $x1_value = 0;
+      $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$x1_values, $x1_value / $dim_values->[0];
     }
-    return c($v1_values);
+    return c($x1_values);
   }
   else {
     croak "Can't culculate rowMeans";
@@ -1968,13 +1968,13 @@ sub rowSums {
   
   my $dim_values = $x1->dim->values;
   if (@$dim_values == 2) {
-    my $v1_values = [];
+    my $x1_values = [];
     for my $col (1 .. $dim_values->[1]) {
-      my $v1_value = 0;
-      $v1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
-      push @$v1_values, $v1_value;
+      my $x1_value = 0;
+      $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
+      push @$x1_values, $x1_value;
     }
-    return c($v1_values);
+    return c($x1_values);
   }
   else {
     croak "Can't culculate rowSums";
@@ -2008,39 +2008,39 @@ sub runif {
 sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
-  my ($_v1, $length) = @_;
-  my $v1 = to_c($_v1);
+  my ($_x1, $length) = @_;
+  my $x1 = to_c($_x1);
   
   # Replace
   my $replace = $opt->{replace};
   
-  my $v1_length = $v1->length_value;
-  $length = $v1_length unless defined $length;
+  my $x1_length = $x1->length_value;
+  $length = $x1_length unless defined $length;
   
   croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
-    if $length > $v1_length && !$replace;
+    if $length > $x1_length && !$replace;
   
   my @v2_elements;
-  my $v1_elements = $v1->elements;
+  my $x1_elements = $x1->elements;
   for my $i (0 .. $length - 1) {
-    my $rand_num = int(rand @$v1_elements);
-    my $rand_element = splice @$v1_elements, $rand_num, 1;
+    my $rand_num = int(rand @$x1_elements);
+    my $rand_element = splice @$x1_elements, $rand_num, 1;
     push @v2_elements, $rand_element;
-    push @$v1_elements, $rand_element if $replace;
+    push @$x1_elements, $rand_element if $replace;
   }
   
   return c(\@v2_elements);
 }
 
 sub sequence {
-  my $_v1 = shift;
+  my $_x1 = shift;
   
-  my $v1 = to_c($_v1);
-  my $v1_values = $v1->values;
+  my $x1 = to_c($_x1);
+  my $x1_values = $x1->values;
   
   my @v2_values;
-  for my $v1_value (@$v1_values) {
-    push @v2_values, seq(1, $v1_value)->values;
+  for my $x1_value (@$x1_values) {
+    push @v2_values, seq(1, $x1_value)->values;
   }
   
   return c(\@v2_values);
@@ -2079,19 +2079,19 @@ sub sort {
 sub tail {
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $v1 = shift;
+  my $x1 = shift;
   
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $elements1 = $v1->{elements};
-  my $max = $v1->length_value < $n ? $v1->length_value : $n;
+  my $elements1 = $x1->{elements};
+  my $max = $x1->length_value < $n ? $x1->length_value : $n;
   my @elements2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @elements2, $elements1->[$v1->length_value - ($i  + 1)];
+    unshift @elements2, $elements1->[$x1->length_value - ($i  + 1)];
   }
   
-  return $v1->new(elements => \@elements2);
+  return $x1->new(elements => \@elements2);
 }
 
 sub tan { process(\&Rstats::ElementFunc::tan, @_) }
@@ -2110,9 +2110,9 @@ sub process {
 sub tanh { process(\&Rstats::ElementFunc::tanh, @_) }
 
 sub trunc {
-  my ($_a1) = @_;
+  my ($_x1) = @_;
   
-  my $x1 = to_c($_a1);
+  my $x1 = to_c($_x1);
   
   my @a2_elements = map { Rstats::ElementFunc::double(int $_->value) } @{$x1->elements};
 
@@ -2249,14 +2249,14 @@ sub var {
 }
 
 sub which {
-  my ($_v1, $cond_cb) = @_;
+  my ($_x1, $cond_cb) = @_;
   
-  my $v1 = to_c($_v1);
-  my $v1_values = $v1->values;
+  my $x1 = to_c($_x1);
+  my $x1_values = $x1->values;
   my @v2_values;
-  for (my $i = 0; $i < @$v1_values; $i++) {
-    local $_ = $v1_values->[$i];
-    if ($cond_cb->($v1_values->[$i])) {
+  for (my $i = 0; $i < @$x1_values; $i++) {
+    local $_ = $x1_values->[$i];
+    if ($cond_cb->($x1_values->[$i])) {
       push @v2_values, $i + 1;
     }
   }
@@ -2268,12 +2268,12 @@ sub matrix {
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
 
-  my ($_a1, $nrow, $ncol, $byrow, $dirnames) = @_;
+  my ($_x1, $nrow, $ncol, $byrow, $dirnames) = @_;
 
   croak "matrix method need data as frist argument"
-    unless defined $_a1;
+    unless defined $_x1;
   
-  my $x1 = to_c($_a1);
+  my $x1 = to_c($_x1);
   
   # Row count
   $nrow = $opt->{nrow} unless defined $nrow;
@@ -2338,10 +2338,10 @@ sub inner_product {
     my $x3_elements = [];
     for (my $col = 1; $col <= $col_max; $col++) {
       for (my $row = 1; $row <= $row_max; $row++) {
-        my $v1 = $x1->get($row);
-        my $v2 = $x2->get(NULL, $col);
-        my $v3 = sum($x1 * $x2);
-        push $x3_elements, $v3;
+        my $x1_part = $x1->get($row);
+        my $x2_part = $x2->get(NULL, $col);
+        my $x3_part = sum($x1 * $x2);
+        push $x3_elements, $x3_part;
       }
     }
     

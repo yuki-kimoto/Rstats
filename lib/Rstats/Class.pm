@@ -219,11 +219,14 @@ sub new {
     $self->function($method => eval $code);
     croak $@ if $@;
   }
+  
+  $self->function(runif => sub { $self->_runif(@_) });
+  $self->function(set_seed => sub { $self->_set_seed(@_) });
 
   return $self;
 }
 
-sub runif {
+sub _runif {
   my $self = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   $opt->{seed} = $self->{seed};
@@ -234,7 +237,7 @@ sub runif {
   return $x1;
 }
 
-sub set_seed {
+sub _set_seed {
   my ($self, $seed) = @_;
   
   $self->{seed} = $seed;

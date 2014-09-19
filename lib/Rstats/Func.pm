@@ -33,6 +33,10 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub apply {
+  
+}
+
 sub merge {
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
     = args([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
@@ -2290,23 +2294,23 @@ sub which {
 
 sub matrix {
   
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-
-  my ($_x1, $nrow, $ncol, $byrow, $dirnames) = @_;
+  my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
+    = args(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
   croak "matrix method need data as frist argument"
-    unless defined $_x1;
-  
-  my $x1 = to_c($_x1);
+    unless defined $x1;
   
   # Row count
-  $nrow = $opt->{nrow} unless defined $nrow;
+  my $nrow;
+  $nrow = $x_nrow->value if defined $x_nrow;
   
   # Column count
-  $ncol = $opt->{ncol} unless defined $ncol;
+  my $ncol;
+  $ncol = $x_ncol->value if defined $x_ncol;
   
   # By row
-  $byrow = $opt->{byrow} unless defined $byrow;
+  my $byrow;
+  $byrow = $x_byrow->value if defined $x_byrow;
   
   my $x1_elements = $x1->elements;
   my $x1_length = @$x1_elements;

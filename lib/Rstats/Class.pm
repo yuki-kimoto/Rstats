@@ -28,6 +28,7 @@ my @funcs = qw/
   acos
   acosh
   append
+  apply
   Arg
   array
   asin

@@ -1576,18 +1576,18 @@ sub ifelse {
   
   my $x1 = to_c($_x1);
   my $x1_values = $x1->values;
-  my @v2_values;
+  my @x2_values;
   for my $x1_value (@$x1_values) {
     local $_ = $x1_value;
     if ($x1_value) {
-      push @v2_values, $value1;
+      push @x2_values, $value1;
     }
     else {
-      push @v2_values, $value2;
+      push @x2_values, $value2;
     }
   }
   
-  return array(\@v2_values);
+  return array(\@x2_values);
 }
 
 sub log { process(\&Rstats::ElementFunc::log, @_) }
@@ -1913,7 +1913,7 @@ sub rnorm {
   $sd = 1 unless defined $sd;
   
   # Random numbers(standard deviation)
-  my @v1_elements;
+  my @x1_elements;
   for (1 .. $count) {
     my ($rand1, $rand2) = (rand, rand);
     while ($rand1 == 0) { $rand1 = rand(); }
@@ -1922,10 +1922,10 @@ sub rnorm {
       * sin(2 * Math::Trig::pi * $rand2))
       + $mean;
     
-    push @v1_elements, $rnorm;
+    push @x1_elements, $rnorm;
   }
   
-  return c(\@v1_elements);
+  return c(\@x1_elements);
 }
 
 sub round {
@@ -1992,16 +1992,16 @@ sub runif {
     if $min > $max;
   
   my $diff = $max - $min;
-  my @v1_elements;
+  my @x1_elements;
   if (defined $opt->{seed}) {
     srand $opt->{seed};
   }
   for (1 .. $count) {
     my $rand = rand($diff) + $min;
-    push @v1_elements, $rand;
+    push @x1_elements, $rand;
   }
   
-  return c(\@v1_elements);
+  return c(\@x1_elements);
 }
 
 # TODO: prob option
@@ -2020,16 +2020,16 @@ sub sample {
   croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
     if $length > $x1_length && !$replace;
   
-  my @v2_elements;
+  my @x2_elements;
   my $x1_elements = $x1->elements;
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand @$x1_elements);
     my $rand_element = splice @$x1_elements, $rand_num, 1;
-    push @v2_elements, $rand_element;
+    push @x2_elements, $rand_element;
     push @$x1_elements, $rand_element if $replace;
   }
   
-  return c(\@v2_elements);
+  return c(\@x2_elements);
 }
 
 sub sequence {
@@ -2038,12 +2038,12 @@ sub sequence {
   my $x1 = to_c($_x1);
   my $x1_values = $x1->values;
   
-  my @v2_values;
+  my @x2_values;
   for my $x1_value (@$x1_values) {
-    push @v2_values, seq(1, $x1_value)->values;
+    push @x2_values, seq(1, $x1_value)->values;
   }
   
-  return c(\@v2_values);
+  return c(\@x2_values);
 }
 
 sub sin { process(\&Rstats::ElementFunc::sin, @_) }
@@ -2253,15 +2253,15 @@ sub which {
   
   my $x1 = to_c($_x1);
   my $x1_values = $x1->values;
-  my @v2_values;
+  my @x2_values;
   for (my $i = 0; $i < @$x1_values; $i++) {
     local $_ = $x1_values->[$i];
     if ($cond_cb->($x1_values->[$i])) {
-      push @v2_values, $i + 1;
+      push @x2_values, $i + 1;
     }
   }
   
-  return c(\@v2_values);
+  return c(\@x2_values);
 }
 
 sub matrix {

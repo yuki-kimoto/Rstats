@@ -1261,12 +1261,12 @@ EOS
   my $dim = [4, 3, 2];
   
   {
-    my $value = Rstats::Util::pos([4, 3, 2], $dim);
+    my $value = Rstats::Util::index_to_pos([4, 3, 2], $dim);
     is($value, 24);
   }
   
   {
-    my $value = Rstats::Util::pos([3, 3, 2], $dim);
+    my $value = Rstats::Util::index_to_pos([3, 3, 2], $dim);
     is($value, 23);
   }
 }

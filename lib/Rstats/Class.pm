@@ -243,6 +243,26 @@ sub _set_seed {
   $self->{seed} = $seed;
 }
 
+=pod
+sub apply {
+  my ($x1, $x_margin, $x_func_name)
+    = args(['x1', 'margin', 'func_name'], @_);
+  
+  my $func_name = $x_func_name->value;
+  my $func = ref $func_name ? $func_name : $self->functions($func_name);
+  
+  my $dim_values = $x1->dim->values;
+  
+  my $margin_values = $x_margin->values;
+  
+  my $x1_length = $x1->length_value;
+  
+  for (my $i = 0; $i < @$x1_length; $i++) {
+    my $index = Rstats::Util::pos_to_index($i, 
+  }
+}
+=cut
+
 has functions => sub { {} };
 
 sub AUTOLOAD {

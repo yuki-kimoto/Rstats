@@ -33,12 +33,6 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
-=pod
-sub apply {
-  my ($x1, $x_margin, $x_func
-}
-=cut
-
 sub merge {
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
     = args([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);

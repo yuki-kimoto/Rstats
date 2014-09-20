@@ -222,7 +222,7 @@ sub parse_index {
     
     my $index_values = [map { $_->values } @indexs];
     my $ords = cross_product($index_values);
-    my @positions = map { Rstats::Util::pos($_, $x1_dim) } @$ords;
+    my @positions = map { Rstats::Util::index_to_pos($_, $x1_dim) } @$ords;
   
     return (\@positions, \@a2_dim, \@indexs);
   }
@@ -260,18 +260,18 @@ sub cross_product {
   return $result;
 }
 
-sub pos {
-  my ($ord, $dim) = @_;
+sub index_to_pos {
+  my ($index, $dim) = @_;
   
   my $pos = 0;
   for (my $d = 0; $d < @$dim; $d++) {
     if ($d > 0) {
       my $tmp = 1;
       $tmp *= $dim->[$_] for (0 .. $d - 1);
-      $pos += $tmp * ($ord->[$d] - 1);
+      $pos += $tmp * ($index->[$d] - 1);
     }
     else {
-      $pos += $ord->[$d];
+      $pos += $index->[$d];
     }
   }
   

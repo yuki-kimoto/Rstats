@@ -279,7 +279,7 @@ sub apply {
   }
   
   my $x2 = $x1->clone(elements => $new_elements);
-  if (@$new_dim_values = 1) {
+  if (@$new_dim_values == 1) {
     delete $x2->{dim};
   }
   else {

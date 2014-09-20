@@ -133,7 +133,7 @@ sub parse_index {
   
   my $x1_dim = $x1->dim_as_array->values;
   my @indexs;
-  my @a2_dim;
+  my @x2_dim;
 
   if (ref $_indexs[0] && $_indexs[0]->is_array && $_indexs[0]->is_logical && @{$_indexs[0]->dim->elements} > 1) {
     my $x2 = $_indexs[0];
@@ -216,15 +216,15 @@ sub parse_index {
       push @indexs, $index;
 
       my $count = @{$index->elements};
-      push @a2_dim, $count unless $count == 1 && $drop;
+      push @x2_dim, $count unless $count == 1 && $drop;
     }
-    @a2_dim = (1) unless @a2_dim;
+    @x2_dim = (1) unless @x2_dim;
     
     my $index_values = [map { $_->values } @indexs];
     my $ords = cross_product($index_values);
     my @poss = map { Rstats::Util::index_to_pos($_, $x1_dim) } @$ords;
   
-    return (\@poss, \@a2_dim, \@indexs);
+    return (\@poss, \@x2_dim, \@indexs);
   }
 }
 

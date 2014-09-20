@@ -275,7 +275,6 @@ sub apply {
   
   my $new_elements = [];
   for my $element_array (@$new_elements_array) {
-    $DB::single = 1;
     push @$new_elements, $func->($element_array);
   }
   

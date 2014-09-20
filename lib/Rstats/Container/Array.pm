@@ -49,7 +49,7 @@ sub to_string {
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
-  my $positions = [];
+  my $poss = [];
   
   my $str;
   if (@$elements) {
@@ -102,7 +102,7 @@ sub to_string {
         
         for (my $i = 1; $i <= $dim_value; $i++) {
           $str .= (',' x $dim_num) . "$i" . "\n";
-          unshift @$positions, $i;
+          unshift @$poss, $i;
           if (@dim_values > 2) {
             $dim_num--;
             $code->(@dim_values);
@@ -135,14 +135,14 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                my $part = $self->element($d1, $d2, @$positions);
+                my $part = $self->element($d1, $d2, @$poss);
                 push @parts, $self->_element_to_string($part, $is_character, $is_factor);
               }
               
               $str .= join(' ', @parts) . "\n";
             }
           }
-          shift @$positions;
+          shift @$poss;
         }
       };
       $code->(@$dim_values);
@@ -250,9 +250,9 @@ sub get {
   }
   $self->at($_indexs);
   
-  my ($positions, $x2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
+  my ($poss, $x2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
-  my @a2_elements = map { defined $self->elements->[$_ - 1] ? $self->elements->[$_ - 1] : Rstats::ElementFunc::NA() } @$positions;
+  my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementFunc::NA() } @$poss;
   
   # array
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
@@ -287,7 +287,7 @@ sub set {
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
 
-  my ($positions, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
+  my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements;
 
@@ -295,29 +295,29 @@ sub set {
     $x2 = $x2->as_character unless $x2->is_character;
     my $x2_elements = $x2->elements;
     my $levels_h = $self->_levels_h;
-    for (my $i = 0; $i < @$positions; $i++) {
-      my $pos = $positions->[$i];
-      my $element = $x2_elements->[(($i + 1) % @$positions) - 1];
+    for (my $i = 0; $i < @$poss; $i++) {
+      my $pos = $poss->[$i];
+      my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if ($element->is_na) {
-        $self_elements->[$pos - 1] = Rstats::ElementFunc::NA();
+        $self_elements->[$pos] = Rstats::ElementFunc::NA();
       }
       else {
         my $value = $element->to_string;
         if ($levels_h->{$value}) {
-          $self_elements->[$pos - 1] = $levels_h->{$value};
+          $self_elements->[$pos] = $levels_h->{$value};
         }
         else {
           carp "invalid factor level, NA generated";
-          $self_elements->[$pos - 1] = Rstats::ElementFunc::NA();
+          $self_elements->[$pos] = Rstats::ElementFunc::NA();
         }
       }
     }
   }
   else {
     my $x2_elements = $x2->elements;
-    for (my $i = 0; $i < @$positions; $i++) {
-      my $pos = $positions->[$i];
-      $self_elements->[$pos - 1] = $x2_elements->[(($i + 1) % @$positions) - 1];
+    for (my $i = 0; $i < @$poss; $i++) {
+      my $pos = $poss->[$i];
+      $self_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
   

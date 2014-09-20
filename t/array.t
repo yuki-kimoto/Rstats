@@ -782,6 +782,22 @@ EOS
   }
 }
 
+# index_to_pos
+{
+  my $x1 = array(C('1:24'), c(4, 3, 2));
+  my $dim = [4, 3, 2];
+  
+  {
+    my $value = Rstats::Util::index_to_pos([4, 3, 2], $dim);
+    is($value, 23);
+  }
+  
+  {
+    my $value = Rstats::Util::index_to_pos([3, 3, 2], $dim);
+    is($value, 22);
+  }
+}
+
 # outer
 {
   # outer - basic
@@ -1252,22 +1268,6 @@ EOS
     my $x2 = $x1->get(c(2, 3), c(1, 3), c(1, 2));
     is_deeply($x2->values, [2, 3, 10, 11, 14, 15, 22, 23]);
     is_deeply(r->dim($x2)->values, [2, 2, 2]);
-  }
-}
-
-# pos
-{
-  my $x1 = array(C('1:24'), c(4, 3, 2));
-  my $dim = [4, 3, 2];
-  
-  {
-    my $value = Rstats::Util::index_to_pos([4, 3, 2], $dim);
-    is($value, 24);
-  }
-  
-  {
-    my $value = Rstats::Util::index_to_pos([3, 3, 2], $dim);
-    is($value, 23);
   }
 }
 

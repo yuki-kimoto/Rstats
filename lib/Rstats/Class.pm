@@ -243,25 +243,52 @@ sub _set_seed {
   $self->{seed} = $seed;
 }
 
-=pod
 sub apply {
+  my $self = shift;
   my ($x1, $x_margin, $x_func_name)
-    = args(['x1', 'margin', 'func_name'], @_);
+    = Rstats::Func::args(['x1', 'margin', 'func_name'], @_);
   
   my $func_name = $x_func_name->value;
-  my $func = ref $func_name ? $func_name : $self->functions($func_name);
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
   
   my $dim_values = $x1->dim->values;
-  
   my $margin_values = $x_margin->values;
+  my $new_dim_values = [];
+  for my $i (@$margin_values) {
+    push @$new_dim_values, $dim_values->[$i - 1];
+  }
+  
   
   my $x1_length = $x1->length_value;
-  
-  for (my $i = 0; $i < @$x1_length; $i++) {
-    my $index = Rstats::Util::pos_to_index($i, 
+  my $new_elements_array = [];
+  for (my $i = 0; $i < $x1_length; $i++) {
+    my $index = Rstats::Util::pos_to_index($i, $dim_values);
+    my $e1 = $x1->element(@$index);
+    my $new_index = [];
+    for my $i (@$margin_values) {
+      push @$new_index, $index->[$i - 1];
+    }
+    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
+    $new_elements_array->[$new_pos] ||= [];
+    push @{$new_elements_array->[$new_pos]}, $e1;
   }
+  
+  my $new_elements = [];
+  for my $element_array (@$new_elements_array) {
+    $DB::single = 1;
+    push @$new_elements, $func->($element_array);
+  }
+  
+  my $x2 = $x1->clone(elements => $new_elements);
+  if (@$new_dim_values = 1) {
+    delete $x2->{dim};
+  }
+  else {
+    $x2->{dim} = $new_dim_values;
+  }
+  
+  return $x2;
 }
-=cut
 
 has functions => sub { {} };
 

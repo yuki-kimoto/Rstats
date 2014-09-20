@@ -139,13 +139,13 @@ sub parse_index {
     my $x2 = $_indexs[0];
     my $x2_dim_values = $x2->dim->values;
     my $x2_elements = $x2->elements;
-    my $positions = [];
+    my $poss = [];
     for (my $i = 0; $i < @$x2_elements; $i++) {
       next unless $x2_elements->[$i];
-      push @$positions, $i + 1;
+      push @$poss, $i;
     }
     
-    return ($positions, []);
+    return ($poss, []);
   }
   else {
     for (my $i = 0; $i < @$x1_dim; $i++) {
@@ -222,9 +222,9 @@ sub parse_index {
     
     my $index_values = [map { $_->values } @indexs];
     my $ords = cross_product($index_values);
-    my @positions = map { Rstats::Util::index_to_pos($_, $x1_dim) } @$ords;
+    my @poss = map { Rstats::Util::index_to_pos($_, $x1_dim) } @$ords;
   
-    return (\@positions, \@a2_dim, \@indexs);
+    return (\@poss, \@a2_dim, \@indexs);
   }
 }
 
@@ -261,21 +261,21 @@ sub cross_product {
 }
 
 sub index_to_pos {
-  my ($index, $dim) = @_;
+  my ($index, $dim_values) = @_;
   
   my $pos = 0;
-  for (my $d = 0; $d < @$dim; $d++) {
-    if ($d > 0) {
+  for (my $i = 0; $i < @$dim_values; $i++) {
+    if ($i > 0) {
       my $tmp = 1;
-      $tmp *= $dim->[$_] for (0 .. $d - 1);
-      $pos += $tmp * ($index->[$d] - 1);
+      $tmp *= $dim_values->[$_] for (0 .. $i - 1);
+      $pos += $tmp * ($index->[$i] - 1);
     }
     else {
-      $pos += $index->[$d];
+      $pos += $index->[$i];
     }
   }
   
-  return $pos;
+  return $pos - 1;
 }
 
 sub pos_to_index {

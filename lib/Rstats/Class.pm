@@ -22,6 +22,7 @@ use Carp 'croak';
 # read.delim2()
 # read.fwf()
 # merge
+# replicate
 
 my @funcs = qw/
   abs
@@ -242,6 +243,32 @@ sub _set_seed {
   my ($self, $seed) = @_;
   
   $self->{seed} = $seed;
+}
+
+sub sapply {
+  my $x1 = shift->lapply(@_);
+  
+  my $x2 = Rstats::Func::c($x1->elements);
+  
+  return $x2;
+}
+
+sub lapply {
+  my $self = shift;
+  my $func_name = splice(@_, 1, 1);
+  my ($x1)
+    = Rstats::Func::args(['x1'], @_);
+  
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  
+  my $new_elements = [];
+  for my $element (@{$x1->elements}) {
+    push @$new_elements, $func->($element);
+  }
+  
+  my $x2 = $x1->clone(elements => $new_elements);
+  
+  return $x2;
 }
 
 sub apply {

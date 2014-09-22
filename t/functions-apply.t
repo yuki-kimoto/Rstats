@@ -6,7 +6,55 @@ use Rstats;
 
 # sweep
 {
-  # sweep - minus, margin 1
+  # sweep - margin 1, %
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '%'});
+    is_deeply($x2->values, [qw/0 0 0 0 1 0/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+
+  # sweep - margin 1, **
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '**'});
+    is_deeply($x2->values, [qw/1 4 27 4 25 216/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+
+  # sweep - margin 1, /
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '/'});
+    is_deeply($x2->values, [qw/1 1 1 4 2.5 2/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+
+  # sweep - margin 1, *
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '*'});
+    is_deeply($x2->values, [qw/1 4 9 4 10 18/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+
+  # sweep - margin 1, -
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '-'});
+    is_deeply($x2->values, [qw/0 0 0 3 3 3/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+  
+  # sweep - margin 1, +
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3), {FUN => '+'});
+    is_deeply($x2->values, [qw/2 4 6 5 7 9/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+  
+  # sweep - margin 1
   {
     my $x1 = array(C('1:6'), c(3, 2));
     my $x2 = r->sweep($x1, 1, c(1, 2, 3));
@@ -14,14 +62,14 @@ use Rstats;
     is_deeply($x2->dim->values, [3, 2]);
   }
 
-  # sweep - minus, margin 2
+  # sweep - margin 2
   {
     my $x1 = array(C('1:6'), c(3, 2));
     my $x2 = r->sweep($x1, 2, c(1, 2));
     is_deeply($x2->values, [qw/0 1 2 2 3 4/]);
   }
 
-  # sweep - minus, margin 1, 2
+  # sweep - margin 1, 2
   {
     my $x1 = array(C('1:6'), c(3, 2));
     my $x2 = array(C('2:7'), c(3, 2));

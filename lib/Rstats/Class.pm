@@ -291,10 +291,11 @@ sub apply {
 sub sweep {
   my $self = shift;
 
-  my ($x1, $x_margin, $x2)
-    = Rstats::Func::args(['x1', 'margin', 'x2'], @_);
+  my ($x1, $x_margin, $x2, $x_func)
+    = Rstats::Func::args(['x1', 'margin', 'x2', 'FUN'], @_);
   
   my $x_margin_values = $x_margin->values;
+  my $func = defined $x_func ? $x_func->value : '-';
   
   my $x2_dim_values = $x2->dim->values;
   my $x1_dim_values = $x1->dim->values;
@@ -315,7 +316,25 @@ sub sweep {
   }
   my $x3 = $x1->clone(elements => $x_result_elements);
   
-  my $x4 = $x1 - $x3;
+  my $x4;
+  if ($func eq '+') {
+    $x4 = $x1 + $x3;
+  }
+  elsif ($func eq '-') {
+    $x4 = $x1 - $x3;
+  }
+  elsif ($func eq '*') {
+    $x4 = $x1 * $x3;
+  }
+  elsif ($func eq '/') {
+    $x4 = $x1 / $x3;
+  }
+  elsif ($func eq '**') {
+    $x4 = $x1 ** $x3;
+  }
+  elsif ($func eq '%') {
+    $x4 = $x1 % $x3;
+  }
   
   return $x4;
 }

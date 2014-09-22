@@ -6,6 +6,14 @@ use Rstats;
 
 # apply
 {
+  # apply - code reference
+  {
+    my $x1 = array(C('1:24'), c(4, 3, 2));
+    my $x2 = r->apply($x1, 1, sub { r->sum($_[0]) });
+    is_deeply($x2->values, [qw/66 72 78 84/]);
+    is_deeply($x2->dim->values, []);
+  }
+  
   # apply - three dimention, margin 3,2
   {
     my $x1 = array(C('1:24'), c(4, 3, 2));

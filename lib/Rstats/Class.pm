@@ -243,13 +243,8 @@ sub _set_seed {
   $self->{seed} = $seed;
 }
 
-sub apply {
-  my $self = shift;
-  my ($x1, $x_margin, $x_func_name)
-    = Rstats::Func::args(['x1', 'margin', 'func_name'], @_);
-  
-  my $func_name = $x_func_name->value;
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+sub _apply {
+  my ($self, $x1, $x_margin, $func) = @_;
   
   my $dim_values = $x1->dim->values;
   my $margin_values = $x_margin->values;
@@ -257,7 +252,6 @@ sub apply {
   for my $i (@$margin_values) {
     push @$new_dim_values, $dim_values->[$i - 1];
   }
-  
   
   my $x1_length = $x1->length_value;
   my $new_elements_array = [];
@@ -277,17 +271,54 @@ sub apply {
   for my $element_array (@$new_elements_array) {
     push @$new_elements, $func->($element_array);
   }
-  
+
   my $x2 = $x1->clone(elements => $new_elements);
-  if (@$new_dim_values == 1) {
+  $x2->{dim} = $new_dim_values;
+  
+  return $x2;
+}
+
+sub apply {
+  my $self = shift;
+  my $func_name = splice(@_, 2, 1);
+  my ($x1, $x_margin)
+    = Rstats::Func::args(['x1', 'margin'], @_);
+  
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  
+  my $x2 = $self->_apply($x1, $x_margin, $func);
+  
+  if (@{$x2->{dim}} == 1) {
     delete $x2->{dim};
-  }
-  else {
-    $x2->{dim} = $new_dim_values;
   }
   
   return $x2;
 }
+
+=pod
+sub sweep {
+  my $self = shift;
+  my $func_name = splice(@_, 2, 1);
+  my ($x1, $x_margin)
+    = Rstats::Func::args(['x1', 'margin'], @_);
+  
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  
+  my $x2 = $self->_apply($x1, $x_margin, $func);
+  
+  my $x3 = $self->_extend($x2, $x1);
+  
+  return $x2;
+}
+=cut
+
+=pod
+sub _extend {
+  my ($x_from, $x_to) = @_;
+  
+  
+}
+=cut
 
 has functions => sub { {} };
 

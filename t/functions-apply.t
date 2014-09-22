@@ -4,18 +4,31 @@ use warnings;
 
 use Rstats;
 
-=pod
 # sweep
 {
-  # sweep - minus
+  # sweep - minus, margin 1
   {
     my $x1 = array(C('1:6'), c(3, 2));
     my $x2 = r->sweep($x1, 1, c(1, 2, 3));
     is_deeply($x2->values, [qw/0 0 0 3 3 3/]);
     is_deeply($x2->dim->values, [3, 2]);
   }
+
+  # sweep - minus, margin 2
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 2, c(1, 2));
+    is_deeply($x2->values, [qw/0 1 2 2 3 4/]);
+  }
+
+  # sweep - minus, margin 1, 2
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = array(C('2:7'), c(3, 2));
+    my $x3 = r->sweep($x1, c(1, 2), $x2);
+    is_deeply($x3->values, [qw/-1 -1 -1 -1 -1 -1/]);
+  }
 }
-=cut
 
 # apply
 {

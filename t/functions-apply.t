@@ -4,6 +4,19 @@ use warnings;
 
 use Rstats;
 
+=pod
+# sweep
+{
+  # sweep - minus
+  {
+    my $x1 = array(C('1:6'), c(3, 2));
+    my $x2 = r->sweep($x1, 1, c(1, 2, 3));
+    is_deeply($x2->values, [qw/0 0 0 3 3 3/]);
+    is_deeply($x2->dim->values, [3, 2]);
+  }
+}
+=cut
+
 # apply
 {
   # apply - code reference

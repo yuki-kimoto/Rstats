@@ -130,6 +130,7 @@ my @funcs = qw/
   sqrt
   sort
   sub
+  sweep
   t
   tail
   tan
@@ -243,9 +244,14 @@ sub _set_seed {
   $self->{seed} = $seed;
 }
 
-sub _apply {
-  my ($self, $x1, $x_margin, $func) = @_;
+sub apply {
+  my $self = shift;
+  my $func_name = splice(@_, 2, 1);
+  my ($x1, $x_margin)
+    = Rstats::Func::args(['x1', 'margin'], @_);
   
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+
   my $dim_values = $x1->dim->values;
   my $margin_values = $x_margin->values;
   my $new_dim_values = [];
@@ -275,19 +281,6 @@ sub _apply {
   my $x2 = $x1->clone(elements => $new_elements);
   $x2->{dim} = $new_dim_values;
   
-  return $x2;
-}
-
-sub apply {
-  my $self = shift;
-  my $func_name = splice(@_, 2, 1);
-  my ($x1, $x_margin)
-    = Rstats::Func::args(['x1', 'margin'], @_);
-  
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
-  
-  my $x2 = $self->_apply($x1, $x_margin, $func);
-  
   if (@{$x2->{dim}} == 1) {
     delete $x2->{dim};
   }
@@ -295,30 +288,37 @@ sub apply {
   return $x2;
 }
 
-=pod
 sub sweep {
   my $self = shift;
-  my $func_name = splice(@_, 2, 1);
-  my ($x1, $x_margin)
-    = Rstats::Func::args(['x1', 'margin'], @_);
-  
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
-  
-  my $x2 = $self->_apply($x1, $x_margin, $func);
-  
-  my $x3 = $self->_extend($x2, $x1);
-  
-  return $x2;
-}
-=cut
 
-=pod
-sub _extend {
-  my ($x_from, $x_to) = @_;
+  my ($x1, $x_margin, $x2)
+    = Rstats::Func::args(['x1', 'margin', 'x2'], @_);
   
+  my $x_margin_values = $x_margin->values;
   
+  my $x2_dim_values = $x2->dim->values;
+  my $x1_dim_values = $x1->dim->values;
+  
+  my $x1_length = $x1->length_value;
+  
+  my $x_result_elements = [];
+  for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
+    my $x1_index = Rstats::Util::pos_to_index($x1_pos, $x1_dim_values);
+    
+    my $new_index = [];
+    for my $x_margin_value (@$x_margin_values) {
+      push $new_index, $x1_index->[$x_margin_value - 1];
+    }
+    
+    my $e1 = $x2->element(@{$new_index});
+    push @$x_result_elements, $e1;
+  }
+  my $x3 = $x1->clone(elements => $x_result_elements);
+  
+  my $x4 = $x1 - $x3;
+  
+  return $x4;
 }
-=cut
 
 has functions => sub { {} };
 

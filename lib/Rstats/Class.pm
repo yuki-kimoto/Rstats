@@ -3,6 +3,7 @@ package Rstats::Class;
 use Object::Simple -base;
 require Rstats::Func;
 use Carp 'croak';
+use List::Util ();
 
 # TODO
 # logp1x
@@ -293,7 +294,6 @@ sub tapply {
   }
   
   # Apply
-  $DB::single = 1;
   my $new_elements2 = [];
   for (my $i = 1; $i < @$new_elements; $i++) {
     my $x = $func->($new_elements->[$i]);
@@ -307,6 +307,38 @@ sub tapply {
   return $x4;
 }
 
+sub mapply {
+  my $self = shift;
+  my $func_name = splice(@_, 0, 1);
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+
+  my @xs = @_;
+  @xs = map { Rstats::Func::c($_) } @xs;
+  
+  # Fix length
+  my @xs_length = map { $_->length_value } @xs;
+  my $max_length = List::Util::max @xs_length;
+  for my $x (@xs) {
+    if ($x->length_value < $max_length) {
+      $x = Rstats::Func::array($x, $max_length);
+    }
+  }
+  
+  # Apply
+  my $new_xs = [];
+  for (my $i = 0; $i < $max_length; $i++) {
+    my @args = map { $_->element($i + 1) } @xs;
+    my $x = $func->(@args);
+    push @$new_xs, $x;
+  }
+  
+  if (@$new_xs == 1) {
+    return $new_xs->[0];
+  }
+  else {
+    return Rstats::Func::list(@$new_xs);
+  }
+}
 
 sub apply {
   my $self = shift;

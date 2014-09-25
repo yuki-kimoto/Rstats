@@ -1863,11 +1863,9 @@ sub rbind {
 }
 
 sub rep {
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my ($x1, $x_times) = args(['x1', 'times'], @_);
   
-  my $x1 = shift;
-  my $times = $opt->{times} || 1;
+  my $times = defined $x_times ? $x_times->value : 1;
   
   my $elements = [];
   push @$elements, @{$x1->elements} for 1 .. $times;

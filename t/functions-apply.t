@@ -4,6 +4,38 @@ use warnings;
 
 use Rstats;
 
+# mapply
+{
+  # mapply - same length
+  {
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(3, 2, 1);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    ok($x3->is_list);
+    is_deeply($x3->getin(1)->values, [1, 1, 1]);
+    is_deeply($x3->getin(2)->values, [2, 2]);
+    is_deeply($x3->getin(3)->values, [3]);
+  }
+  
+  # mapply - different length
+  {
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(6, 5, 4, 3, 2, 1);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    ok($x3->is_list);
+    is_deeply($x3->getin(1)->values, [1, 1, 1, 1, 1, 1]);
+    is_deeply($x3->getin(6)->values, [3]);
+  }
+
+  # mapply - only first element
+  {
+    my $x1 = c(1);
+    my $x2 = c(3);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    is_deeply($x3->values, [1, 1, 1]);
+  }
+}
+
 # tapply
 {
   my $x1 = c(1, 2, 4, 5, 4);

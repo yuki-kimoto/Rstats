@@ -136,6 +136,7 @@ my @funcs = qw/
   tail
   tan
   tanh
+  tapply
   tolower
   toupper
   T
@@ -270,6 +271,42 @@ sub lapply {
   
   return $x2;
 }
+
+sub tapply {
+  my $self = shift;
+  my $func_name = splice(@_, 2, 1);
+  my ($x1, $x2)
+    = Rstats::Func::args(['x1', 'x2'], @_);
+  
+  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  
+  my $new_elements = [];
+  my $x1_elements = $x1->elements;
+  my $x2_elements = $x2->elements;
+  
+  # Group elements
+  for (my $i = 0; $i < $x1->length_value; $i++) {
+    my $x1_element = $x1_elements->[$i];
+    my $index = $x2_elements->[$i];
+    $new_elements->[$index] ||= [];
+    push @{$new_elements->[$index]}, $x1_element;
+  }
+  
+  # Apply
+  $DB::single = 1;
+  my $new_elements2 = [];
+  for (my $i = 1; $i < @$new_elements; $i++) {
+    my $x = $func->($new_elements->[$i]);
+    push @$new_elements2, $x;
+  }
+  
+  my $x4_length = @$new_elements2;
+  my $x4 = Rstats::Func::array($new_elements2, $x4_length);
+  $x4->names($x2->levels);
+  
+  return $x4;
+}
+
 
 sub apply {
   my $self = shift;

@@ -4,6 +4,16 @@ use warnings;
 
 use Rstats;
 
+# tapply
+{
+  my $x1 = c(1, 2, 4, 5, 4);
+  my $x2 = factor(c("M", "L", "M", "L", "M"));
+  my $x3 = r->tapply($x1, $x2, 'mean');
+  is_deeply($x3->values, [3.5, 3]);
+  is_deeply($x3->names->values, ["L", "M"]);
+  is_deeply($x3->dim->values, [2]);
+}
+
 # sapply
 {
   my $x1 = list(c(1, 2), c(3.2, 4.2));

@@ -1549,20 +1549,20 @@ sub floor {
 }
 
 sub head {
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = shift;
+  my ($x1, $x_n) = args(['x1', 'n'], @_);
   
-  my $n = $opt->{n};
-  $n = 6 unless defined $n;
+  my $n = defined $x_n ? $x_n->value : 6;
   
-  my $elements1 = $x1->{elements};
+  my $x1_elements = $x1->elements;
   my $max = $x1->length_value < $n ? $x1->length_value : $n;
-  my @elements2;
+  my @x2_elements;
   for (my $i = 0; $i < $max; $i++) {
-    push @elements2, $elements1->[$i];
+    push @x2_elements, $x1_elements->[$i];
   }
   
-  return $x1->new(elements => \@elements2);
+  my $x2 = $x1->clone(elements => \@x2_elements);
+  
+  return $x2;
 }
 
 sub i {
@@ -2106,14 +2106,14 @@ sub tail {
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $elements1 = $x1->{elements};
+  my $e1 = $x1->{elements};
   my $max = $x1->length_value < $n ? $x1->length_value : $n;
-  my @elements2;
+  my @e2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @elements2, $elements1->[$x1->length_value - ($i  + 1)];
+    unshift @e2, $e1->[$x1->length_value - ($i  + 1)];
   }
   
-  return $x1->new(elements => \@elements2);
+  return $x1->new(elements => \@e2);
 }
 
 sub tan { process(\&Rstats::ElementFunc::tan, @_) }

@@ -1553,16 +1553,26 @@ sub head {
   
   my $n = defined $x_n ? $x_n->value : 6;
   
-  my $x1_elements = $x1->elements;
-  my $max = $x1->length_value < $n ? $x1->length_value : $n;
-  my @x2_elements;
-  for (my $i = 0; $i < $max; $i++) {
-    push @x2_elements, $x1_elements->[$i];
+  if ($x1->is_data_frame) {
+    my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
+    
+    my $x_range = C("1:$max");
+    my $x2 = $x1->get($x_range, Rstats::Func::NULL());
+    
+    return $x2;
   }
+  else {
+    my $x1_elements = $x1->elements;
+    my $max = $x1->length_value < $n ? $x1->length_value : $n;
+    my @x2_elements;
+    for (my $i = 0; $i < $max; $i++) {
+      push @x2_elements, $x1_elements->[$i];
+    }
+    
+    my $x2 = $x1->clone(elements => \@x2_elements);
   
-  my $x2 = $x1->clone(elements => \@x2_elements);
-  
-  return $x2;
+    return $x2;
+  }
 }
 
 sub i {

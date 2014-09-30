@@ -21,10 +21,13 @@ sub get {
   }
   my $row_index = Rstats::Func::to_c($_row_index);
   my $col_index = Rstats::Func::to_c($_col_index);
-
+  
   # Convert name index to number index
   my $col_index_values;
-  if ($col_index->is_character) {
+  if ($col_index->is_null) {
+    $col_index_values = [1 .. $self->names->length_value];
+  }
+  elsif ($col_index->is_character) {
     $col_index_values = [];
     for my $element (@{$col_index->elements}) {
       push @$col_index_values, $self->_name_to_index($element);

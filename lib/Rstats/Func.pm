@@ -33,7 +33,21 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub na_omit {
+  my $x1 = shift;
+  
+  my %poss;
+  for my $x (@{$x1->elements}) {
+    for (my $i = 0; $i < $x1->{row_length}; $i++) {
+      
+    }
+  }
+}
+
+# TODO: merge is not implemented yet
 sub merge {
+  die "merge is not implemented yet";
+  
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
     = args([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
   

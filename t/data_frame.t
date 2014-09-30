@@ -28,11 +28,41 @@ use Rstats;
     ok($x2->is_data_frame);
     is_deeply($x2->getin(1)->values, [1, 2, 3]);
     is_deeply($x2->getin(2)->values, [1, 2, 5]);
-  }  
+  }
 }
 
 # get
 {
+  # get - minus collum index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(NULL, c(-1, -3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->names->values, ['height']);
+    is_deeply($x2->getin(1)->values, [qw/172 168 155/]);
+  }
+  
+  # get - row index and column index is null
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(3, 2), NULL);
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/155 168/]);
+    is_deeply($x2->getin(3)->values, [qw/7 6/]);
+  }
+  
   # get - row index and column index is null
   {
     my $sex = c('F', 'M', 'F');

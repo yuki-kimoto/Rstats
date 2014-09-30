@@ -89,6 +89,7 @@ my @funcs = qw/
   Mod
   NA
   NaN
+  na_omit
   ncol
   nrow
   NULL

@@ -39,7 +39,23 @@ sub get {
     }
   }
   else {
-    $col_index_values = $col_index->values;
+    my $col_index_values_tmp = $col_index->values;
+    
+    if ($col_index_values_tmp->[0] < 0) {
+      my $delete_col_index_values_h = {};
+      for my $index (@$col_index_values_tmp) {
+        croak "Can't contain both plus and minus index" if $index > 0;
+        $delete_col_index_values_h->{-$index} = 1;
+      }
+      
+      $col_index_values = [];
+      for (my $index = 1; $index <= $self->names->length_value; $index++) {
+        push @$col_index_values, $index unless $delete_col_index_values_h->{$index};
+      }
+    }
+    else {
+      $col_index_values = $col_index_values_tmp;
+    }
   }
   
   # Extract columns

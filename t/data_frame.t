@@ -33,6 +33,20 @@ use Rstats;
 
 # get
 {
+  # get - minus row index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(-1, -3), NULL);
+    ok($x2->is_data_frame);
+    is_deeply($x2->getin(1)->values, [qw/2/]);
+    is_deeply($x2->getin(2)->values, [qw/168/]);
+    is_deeply($x2->getin(3)->values, [qw/6/]);
+  }
+  
   # get - minus collum index
   {
     my $sex = c('F', 'M', 'F');

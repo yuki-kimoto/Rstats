@@ -4,6 +4,23 @@ use warnings;
 
 use Rstats;
 
+# na_omit
+{
+  # na_omit - minus row index
+  {
+    my $sex = c(NA, 'M', 'F');
+    my $height = c(172, NA, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->na_omit($x1);
+    ok($x2->is_data_frame);
+    is_deeply($x2->getin(1)->values, [qw/1/]);
+    is_deeply($x2->getin(2)->values, [qw/155/]);
+    is_deeply($x2->getin(3)->values, [qw/7/]);
+  }
+}
+
 # head
 {
   # head - default

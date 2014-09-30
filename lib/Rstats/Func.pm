@@ -36,12 +36,16 @@ sub pi () { c(Rstats::ElementFunc::pi()) }
 sub na_omit {
   my $x1 = shift;
   
-  my %poss;
-  for my $x (@{$x1->elements}) {
-    for (my $i = 0; $i < $x1->{row_length}; $i++) {
-      
+  my @poss;
+  for my $v (@{$x1->elements}) {
+    for (my $index = 1; $index <= $x1->{row_length}; $index++) {
+      push @poss, $index if $v->element($index)->is_na;
     }
   }
+  
+  my $x2 = $x1->get(-(c(\@poss)), NULL);
+  
+  return $x2;
 }
 
 # TODO: merge is not implemented yet

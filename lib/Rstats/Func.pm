@@ -33,6 +33,54 @@ sub T () { TRUE }
 
 sub pi () { c(Rstats::ElementFunc::pi()) }
 
+sub I {
+  my $x1 = shift;
+  
+  my $x2 = $x1->clone;
+  $x2->class('AsIs');
+  
+  return $x2;
+}
+
+sub transform {
+  my $x1 = shift;
+  my @args = @_;
+
+  my $new_names = $x1->names->values;
+  my $new_elements = $x1->elements;
+  
+  my $names = $x1->names->values;
+  
+  while (my ($new_name, $new_v) = splice(@args, 0, 2)) {
+    my $found_pos = -1;
+    for (my $i = 0; $i < @$names; $i++) {
+      my $name = $names->[$i];
+      if ($new_name eq $name) {
+        $found_pos = $i;
+        last;
+      }
+    }
+    
+    if ($found_pos == -1) {
+      push @$new_names, $new_name;
+      push @$new_elements, $new_v;
+    }
+    else {
+      $new_elements->[$found_pos] = $new_v;
+    }
+  }
+  
+  
+  my @new_args;
+  for (my $i = 0; $i < @$new_names; $i++) {
+    push @new_args, $new_names->[$i], $new_elements->[$i];
+  }
+  
+  my $x2 = Rstats::Func::data_frame(@new_args);
+  
+  return $x2;
+}
+
 sub na_omit {
   my $x1 = shift;
   
@@ -421,7 +469,10 @@ sub data_frame {
   my $row_names = [];
   my $row_count = 1;
   while (my ($name, $v) = splice(@data, 0, 2)) {
-    $v = $v->as_factor if $v->is_character;
+    if ($v->is_character && !grep {$_ eq 'AsIs'} @{$v->class->values}) {
+      $v = $v->as_factor;
+    }
+
     my $dim_values = $v->dim->values;
     if (@$dim_values > 1) {
       my $count = $dim_values->[0];

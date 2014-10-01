@@ -4,6 +4,92 @@ use warnings;
 
 use Rstats;
 
+# data_frame
+{
+  # data_frame - with I
+  {
+    my $sex = r->I(c('F', 'M', 'F'));
+    my $height = c(172, 168, 155);
+    
+    my $x1 = data_frame(sex => $sex, height => $height);
+    ok($x1->getin(1)->is_character);
+    is_deeply($x1->getin(1)->values, ["F", "M", "F"]);
+    is_deeply($x1->getin(2)->values, [172, 168, 155]);
+  }
+  
+  # data_frame - basic
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    
+    my $x1 = data_frame(sex => $sex, height => $height);
+    ok($x1->getin(1)->is_factor);
+    is_deeply($x1->getin(1)->values, [1, 2, 1]);
+    is_deeply($x1->getin('sex')->values, [1, 2, 1]);
+    is_deeply($x1->getin(2)->values, [172, 168, 155]);
+    is_deeply($x1->getin('height')->values, [172, 168, 155]);
+  }
+  
+  # data_frame - alias for cbind
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height);
+    my $x2 = data_frame(weight => $weight);
+    my $x3 = data_frame($x1, $x2);
+    
+    ok($x3->is_data_frame);
+    is_deeply($x3->class->values, ['data.frame']);
+    is_deeply($x3->names->values, ['sex', 'height', 'weight']);
+    ok($x3->getin(1)->is_factor);
+    is_deeply($x3->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($x3->getin(2)->values, [172, 168, 155]);
+    is_deeply($x3->getin(3)->values, [5, 6, 7]);
+  }
+  
+  # data_frame - basic
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    
+    my $x1 = data_frame(sex => $sex, height => $height);
+    ok($x1->getin(1)->is_factor);
+    is_deeply($x1->getin(1)->values, [1, 2, 1]);
+    is_deeply($x1->getin('sex')->values, [1, 2, 1]);
+    is_deeply($x1->getin(2)->values, [172, 168, 155]);
+    is_deeply($x1->getin('height')->values, [172, 168, 155]);
+  }
+
+  # data_frame - name duplicate
+  {
+    my $sex = c('a', 'b', 'c');
+    my $sex1 = c('a1', 'b1', 'c1');
+    my $sex2 = c('a2', 'b2', 'c2');
+    
+    my $x1 = data_frame(sex => $sex, sex => $sex1, sex => $sex2);
+    is_deeply($x1->getin('sex')->values, [1, 2, 3]);
+    is_deeply($x1->getin('sex')->levels->values, ['a', 'b', 'c']);
+    is_deeply($x1->getin('sex.1')->values, [1, 2, 3]);
+    is_deeply($x1->getin('sex.1')->levels->values, ['a1', 'b1', 'c1']);
+    is_deeply($x1->getin('sex.2')->values, [1, 2, 3]);
+    is_deeply($x1->getin('sex.2')->levels->values, ['a2', 'b2', 'c2']);
+  }
+}
+
+# transform
+{
+  # transform - 
+  {
+    my $sex = c('F', 'M', 'F', 'M');
+    my $height = c(172, 163, 155, 222);
+    my $weight = c(5, 6, 7, 8);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+  }
+}
+
 # na_omit
 {
   # na_omit - minus row index
@@ -329,52 +415,3 @@ EOS
   }
 }
 
-# data_frame
-{
-  # data_frame - alias for cbind
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height);
-    my $x2 = data_frame(weight => $weight);
-    my $x3 = data_frame($x1, $x2);
-    
-    ok($x3->is_data_frame);
-    is_deeply($x3->class->values, ['data.frame']);
-    is_deeply($x3->names->values, ['sex', 'height', 'weight']);
-    ok($x3->getin(1)->is_factor);
-    is_deeply($x3->getin(1)->as_character->values, [qw/F M F/]);
-    is_deeply($x3->getin(2)->values, [172, 168, 155]);
-    is_deeply($x3->getin(3)->values, [5, 6, 7]);
-  }
-  
-  # data_frame - basic
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    
-    my $x1 = data_frame(sex => $sex, height => $height);
-    ok($x1->getin(1)->is_factor);
-    is_deeply($x1->getin(1)->values, [1, 2, 1]);
-    is_deeply($x1->getin('sex')->values, [1, 2, 1]);
-    is_deeply($x1->getin(2)->values, [172, 168, 155]);
-    is_deeply($x1->getin('height')->values, [172, 168, 155]);
-  }
-
-  # data_frame - name duplicate
-  {
-    my $sex = c('a', 'b', 'c');
-    my $sex1 = c('a1', 'b1', 'c1');
-    my $sex2 = c('a2', 'b2', 'c2');
-    
-    my $x1 = data_frame(sex => $sex, sex => $sex1, sex => $sex2);
-    is_deeply($x1->getin('sex')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex')->levels->values, ['a', 'b', 'c']);
-    is_deeply($x1->getin('sex.1')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex.1')->levels->values, ['a1', 'b1', 'c1']);
-    is_deeply($x1->getin('sex.2')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex.2')->levels->values, ['a2', 'b2', 'c2']);
-  }
-}

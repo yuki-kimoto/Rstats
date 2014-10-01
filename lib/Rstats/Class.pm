@@ -72,6 +72,7 @@ my @funcs = qw/
   ifelse
   interaction
   is_element
+  I
   Im
   Inf
   intersect
@@ -143,6 +144,7 @@ my @funcs = qw/
   toupper
   T
   TRUE
+  transform
   trunc
   unique
   union

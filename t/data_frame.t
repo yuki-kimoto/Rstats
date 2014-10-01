@@ -4,6 +4,34 @@ use warnings;
 
 use Rstats;
 
+# transform
+{
+  # transform - less elements
+  {
+    my $sex = c('F', 'M', 'F', 'M');
+    my $height = c(172, 163, 155, 222);
+    my $weight = c(5, 6, 7, 8);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->transform($x1, sex => c("P"));
+    is_deeply($x2->names->values, [qw/sex height weight/]);
+    is_deeply($x2->getin(1)->values, ["P", "P", "P", "P"]);
+  }
+  
+  # transform - basic
+  {
+    my $sex = c('F', 'M', 'F', 'M');
+    my $height = c(172, 163, 155, 222);
+    my $weight = c(5, 6, 7, 8);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->transform($x1, sex => c("P", "Q", "P", "Q"), new1 => c(1, 2, 3, 4));
+    is_deeply($x2->names->values, [qw/sex height weight new1/]);
+    is_deeply($x2->getin(1)->values, ["P", "Q", "P", "Q"]);
+    is_deeply($x2->getin(4)->values, [1, 2, 3, 4]);
+  }
+}
+
 # data_frame
 {
   # data_frame - with I
@@ -75,18 +103,6 @@ use Rstats;
     is_deeply($x1->getin('sex.1')->levels->values, ['a1', 'b1', 'c1']);
     is_deeply($x1->getin('sex.2')->values, [1, 2, 3]);
     is_deeply($x1->getin('sex.2')->levels->values, ['a2', 'b2', 'c2']);
-  }
-}
-
-# transform
-{
-  # transform - 
-  {
-    my $sex = c('F', 'M', 'F', 'M');
-    my $height = c(172, 163, 155, 222);
-    my $weight = c(5, 6, 7, 8);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
   }
 }
 

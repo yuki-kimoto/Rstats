@@ -52,6 +52,10 @@ sub transform {
   my $names = $x1->names->values;
   
   while (my ($new_name, $new_v) = splice(@args, 0, 2)) {
+    if ($new_v->is_character) {
+      $new_v = Rstats::Func::I($new_v);
+    }
+
     my $found_pos = -1;
     for (my $i = 0; $i < @$names; $i++) {
       my $name = $names->[$i];

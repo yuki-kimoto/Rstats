@@ -42,6 +42,17 @@ sub I {
   return $x2;
 }
 
+sub subset {
+  my ($x1, $x_condition, $x_names)
+    = args(['x1', 'condition', 'names'], @_);
+  
+  $x_names = Rstats::Func::NULL() unless defined $x_names;
+  
+  my $x2 = $x1->get($x_condition, $x_names);
+  
+  return $x2;
+}
+
 sub transform {
   my $x1 = shift;
   my @args = @_;

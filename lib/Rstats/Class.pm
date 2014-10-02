@@ -134,6 +134,7 @@ my @funcs = qw/
   sqrt
   sort
   sub
+  subset
   sweep
   t
   tail

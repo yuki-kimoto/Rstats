@@ -4,6 +4,38 @@ use warnings;
 
 use Rstats;
 
+# subset
+{
+  # subset - row condition
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->subset($x1, $x1->getin('height') > 160);
+    ok($x2->is_data_frame);
+    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/172 168/]);
+    is_deeply($x2->getin(3)->values, [qw/5 6/]);
+  }
+  
+  # subset - row condition and column names
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->subset($x1, $x1->getin('height') > 160, c('sex', 'weight'));
+    ok($x2->is_data_frame);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/5 6/]);
+  }
+}
+
 # transform
 {
   # transform - less elements

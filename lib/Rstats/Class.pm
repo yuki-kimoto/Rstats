@@ -4,6 +4,8 @@ use Object::Simple -base;
 require Rstats::Func;
 use Carp 'croak';
 use List::Util ();
+use Imager;
+use Imager::Graph::Line;
 
 # TODO
 # logp1x
@@ -24,6 +26,10 @@ use List::Util ();
 # read.fwf()
 # merge
 # replicate
+# split
+# by
+# aggregate
+# reshape
 
 my @funcs = qw/
   abs
@@ -232,6 +238,71 @@ sub new {
   $self->function(set_seed => sub { $self->_set_seed(@_) });
 
   return $self;
+}
+
+sub png {
+  my $self = shift;
+  
+  my ($x_file, $x_width, $x_height) = Rstats::Func::args(['x_file', 'width', 'height'], @_);
+  
+  my $file = $x_file->value;
+  my $width = $x_width->value;
+  my $height = $x_height->value;
+  
+  $self->{dev} = {
+    type => 'png',
+    file => $file,
+    width => $width,
+    height => $height
+  }
+}
+
+sub plot {
+  my $self = shift;
+  
+  my $x1 = shift;
+  
+  my $dev = $self->{dev};
+  croak "device is not selected" unless $dev;
+
+  use Imager::Font;
+  use FindBin;
+  $DB::single = 1;
+  my $font = Imager::Font->new(
+    file => "/usr/share/fonts/ja/TrueType/kochi-gothic-subst.ttf",
+    type => 'bmp'
+  );
+  
+  my $graph = Imager::Graph::Line->new;
+  $graph->set_image_width(400);
+  $graph->set_image_height(400);
+  $graph->set_font($font);
+  $graph->use_automatic_axis();
+  $graph->show_legend();
+  # $graph->set_title('iiii');
+  
+  
+  my @data = @{$x1->values};
+  my @labels = @data;
+  
+  $graph->add_data_series(\@data, 'Primes');
+  $graph->set_labels([qw(one two three five seven eleven)]);
+
+   $DB::single = 1;
+ my $img = $graph->draw() || die $graph->error;
+  
+  if ($dev->{type} eq 'png') {
+    my $file = $dev->{file};
+    $img->write(file => $file) or die $img->errstr;
+  }
+  else {
+    croak "$dev->{type} is not implemented";
+  }
+}
+
+sub dev_off {
+  my $self = shift;
+  delete $self->{dev};
 }
 
 sub _runif {

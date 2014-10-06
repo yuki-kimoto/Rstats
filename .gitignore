@@ -12,3 +12,4 @@ Makefile
 pm_to_blib
 MYMETA.json
 Makefile.old
+xt/tmp/*

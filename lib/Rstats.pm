@@ -54,7 +54,7 @@ Rstats - R language build on Perl
   my $m1 = matrix(C('1:12'), 4, 3);
   
   # Array
-  my $x1 = array(C(1:24), c(4, 3, 2));
+  my $a1 = array(C(1:24), c(4, 3, 2));
 
   # Complex
   my $z1 = 1 + 2 * i;
@@ -85,282 +85,615 @@ Rstats - R language build on Perl
   });
   my $x2 = r->my_sum(c(1, 2, 3));
 
-=head1 Corresponding to R
+=head1 Functions
 
-  # a1
-  print $x1
+=head2 c
 
   # c(1, 2, 3)
   c(1, 2, 3)
 
+=head2 C
+
   # 1:24
   C('1:24')
+
+C function is equal to C<m:n> of R.
+
+=head2 array
 
   # array(1:24, c(4, 3, 2))
   array(C('1:24'), c(4, 3, 2))
 
-  # 3 + 2i
-  3 + 2*i
-  
+=head2 TRUE
+
   # TRUE
   TRUE
-  
+
+=head2 T
+
   # T
   T
+
+=head2 FALSE
   
   # FALSE
   FALSE
+
+=head2 F
   
   # F
   F
-  
+
+=head2 NA
+
   # NA
   NA
+
+=head2 NaN
   
   # NaN
   NaN
-  
+
+=head2 Inf
+
   # Inf
   Inf
+
+=head2 NULL
   
   # NULL
   NULL
-  
-  # names
-    # names(a1)
-    r->names($x1)
-  
-    # names(a1) <- c("n1", "n2")
-    r->names($x1, c("n1", "n2"));
-  
-  # matrix
-    # matrix(1:12, 4, 3)
-    matrix(C('1:12'), 4, 3)
-    
-    # matrix(1:12, nrow=4, ncol=3)
-    matrix(C('1:12'), {nrow => 4, ncol => 3});
-    
-    # matrix(1:12, 4, 3, byrow=TRUE)
-    matrix(C('1:12'), 4, 3, {byrow => 1});
-  
-  # operation
-    # a1 + a2
-    $x1 + $x2
-    
-    # a1 - a2
-    $x1 - $x2
-    
-    # a1 * a2
-    $x1 * $x2
-    
-    # a1 / a2
-    $x1 / $x2
-    
-    # a1 ^ a2 (power)
-    $x1 ** $x2
-    
-    # a1 %% a2 (remainder)
-    $x1 % $x2
 
-    # a1 %*% a2 (vector inner product or matrix product)
-    $x1 x $x2
-    
-    # a1 %/% a2 (integer quotient)
-    r->tranc($x1 / $x2)
-  
-  # get
-    # a1[1]
-    $x1->get(1)
+=head2 matrix
 
-    # a1[1, 2]
-    $x1->get(1, 2)
-    
-    # a1[c(1,2), c(3,4)]
-    $x1->get(c(1,2), c(3,4))
-    
-    # a1[,2]
-    $x1->get(NULL, 2)
-    
-    # a1[-1]
-    $x1->get(-1)
-    
-    # a1[TRUE, FALSE]
-    $x1->get(TRUE, FALSE)
-    
-    # a1[c("id", "title")]
-    $x1->get(c("id", "title"))
+  # matrix(1:12, 4, 3)
+  matrix(C('1:12'), 4, 3)
   
-  # set
-    # a1[1] <- a2
-    $x1->at(1)->set($x2)
+  # matrix(1:12, nrow=4, ncol=3)
+  matrix(C('1:12'), {nrow => 4, ncol => 3});
+  
+  # matrix(1:12, 4, 3, byrow=TRUE)
+  matrix(C('1:12'), 4, 3, {byrow => TRUE});
 
-    # a1[1, 2] <- a2
-    $x1->at(1, 2)->set($x2)
-    
-    # a1[c(1,2), c(3,4)] <- a2
-    $x1->at(c(1,2), c(3,4))->set($x2)
-    
-    # a1[,2] <- a2
-    $x1->at(NULL, 2)->set($x2)
-    
-    # a1[-1] <- a2
-    $x1->at(-1)->set($x2)
-    
-    # a1[TRUE, FALSE] <- a2
-    $x1->at(TRUE, FALSE)->set($x2);
-    
-    # a1[c("id", "title")] <- a2
-    $x1->at(c("id", "title"))->set($x2);
+=head1 Vector access
 
-  # as.matrix(a1)
-  r->as_matrix($x1)
-  
-  # as.vector(a1)
-  r->as_vector($x1)
-  
-  # as.array(a1)
-  r->as_array($x1)
+=head2 Getter
 
-  # is.matrix(a1)
-  r->is_matrix($x1)
-  
-  # is.vector(a1)
-  r->is_vector($x1)
-  
-  # is.array(a1)
-  r->is_array($x1)
+  # x1[1]
+  $x1->get(1)
 
-  # abs(a1)
+  # x1[1, 2]
+  $x1->get(1, 2)
+  
+  # x1[c(1,2), c(3,4)]
+  $x1->get(c(1,2), c(3,4))
+  
+  # x1[,2]
+  $x1->get(NULL, 2)
+  
+  # x1[-1]
+  $x1->get(-1)
+  
+  # x1[TRUE, FALSE]
+  $x1->get(TRUE, FALSE)
+  
+  # x1[c("id", "title")]
+  $x1->get(c("id", "title"))
+
+=head2 Setter
+
+  # x1[1] <- x2
+  $x1->at(1)->set($x2)
+
+  # x1[1, 2] <- x2
+  $x1->at(1, 2)->set($x2)
+  
+  # x1[c(1,2), c(3,4)] <- x2
+  $x1->at(c(1,2), c(3,4))->set($x2)
+  
+  # x1[,2] <- x2
+  $x1->at(NULL, 2)->set($x2)
+  
+  # x1[-1] <- x2
+  $x1->at(-1)->set($x2)
+  
+  # x1[TRUE, FALSE] <- x2
+  $x1->at(TRUE, FALSE)->set($x2);
+  
+  # x1[c("id", "title")] <- x2
+  $x1->at(c("id", "title"))->set($x2);
+
+=head2 Operators
+
+  # x1 + x2
+  $x1 + $x2
+  
+  # x1 - x2
+  $x1 - $x2
+  
+  # x1 * x2
+  $x1 * $x2
+  
+  # x1 / x2
+  $x1 / $x2
+  
+  # x1 ^ x2 (power)
+  $x1 ** $x2
+  
+  # x1 %% x2 (remainder)
+  $x1 % $x2
+
+  # x1 %*% x2 (vector inner product or matrix product)
+  $x1 x $x2
+  
+  # x1 %/% x2 (integer quotient)
+  r->tranc($x1 / $x2)
+
+=head2 METHODS
+
+=head2 abs
+
+  # abs(x1)
   r->abs($x1)
-  
-  # sqrt(a1)
-  r->sqrt($x1)
 
-  # exp(a1)
-  r->exp($x1)
-  
-  # expm1(a1)
-  r->expm1($x1)
-  
-  # log(a1)
-  r->log($x1)
-  
-  # logb(a1)
-  r->logb($x1)
-  
-  # log2(a1)
-  r->log2($x1)
-  
-  # log10(a1)
-  r->log10($x1)
-  
-  # sin(a1)
-  r->sin($x1)
-  
-  # cos(a1)
-  r->cos($x1)
-  
-  # tan(a1)
-  r->tan($x1)
-  
-  # asin(a1)
-  r->asin($x1)
-  
-  # acos(a1)
+=head2 acos
+
+  # acos(x1)
   r->acos($x1)
-  
-  # atan(a1)
-  r->atan($x1)
-  
-  # sinh(a1)
-  r->sinh($x1)
-  
-  # sinh(a1)
-  r->sinh($x1)
-  
-  # cosh(a1)
-  r->cosh($x1)
-  
-  # cosh(a1)
-  r->cosh($x1)
-  
-  # atan(a1)
-  r->atan($x1)
-  
-  # tanh(a1)
-  r->tanh($x1)
-  
-  # asinh(a1)
+
+=head2 acosh
+
+  # acosh(x1)
+  r->acosh($x1)
+
+=head2 append
+
+=head2 apply
+
+=head2 Arg
+
+=head2 array
+
+=head2 asin
+
+  # asin(x1)
+  r->asin($x1)
+
+=head2 asinh
+
+  # asinh(x1)
   r->asinh($x1)
-  
-  # acosh(a1)
-  r->acosh($x1)
-  
-  # acosh(a1)
-  r->acosh($x1)
-  
-  # atanh(a1)
+
+=head2 atan2
+
+=head2 atan
+
+  # atan(x1)
+  r->atan($x1)
+
+=head2 atanh
+
+  # atanh(x1)
   r->atanh($x1)
-  
-  # ceiling(a1)
-  r->ceiling($x1)
-  
-  # floor(a1)
-  r->floor($x1)
-  
-  # trunc(a1)
-  r->trunc($x1)
-  
-  # round
-    # round(a1)
-    r->round($x1)
 
-    # round(a1, digit)
-    r->round($x1, $digits)
-    
-    # round(a1, digits=1)
-    r->round($x1, {digits => 1});
-  
-  # t
-  r->t($x1)
-  
-  # rownames
-    # rownames(a1)
-    r->rownames($x1)
-    
-    # rownames(a1) = c("r1", "r2")
-    r->rownames($x1, c("r1", "r2"))
-    
-  # colnames
-    # colnames(a1)
-    r->colnames($x1)
-    
-    # colnames(a1) = c("r1", "r2")
-    r->colnames($x1, c("r1", "r2"))
+=head2 c
 
-  # nrow(a1)
-  r->nrow($x1)
-  
-  # ncol(a1)
-  r->ncol($x1)
-  
-  # row(a1)
-  r->row($x1)
-  
-  # col(a1)
-  r->col($x1)
+=head2 C
 
-  # colMeans(a1)
-  r->colMeans($x1)
-  
-  # rowMeans(a1)
-  r->rowMeans($x1)
-  
-  # rowSums(a1)
-  r->rowSums($x1)
-  
-  # rbind(c(1, 2), c(3, 4), c(5, 6))
-  r->rbind(c(1, 2), c(3, 4), c(5, 6))
-  
+=head2 charmatch
+
+=head2 chartr
+
+=head2 cbind
+
   # cbind(c(1, 2), c(3, 4), c(5, 6))
   r->cbind(c(1, 2), c(3, 4), c(5, 6));
+
+=head2 ceiling
+
+  # ceiling(x1)
+  r->ceiling($x1)
+
+=head2 col
+
+  # col(x1)
+  r->col($x1)
+
+=head2 colMeans
+
+  # colMeans(x1)
+  r->colMeans($x1)
+
+=head2 colSums
+
+=head2 Conj
+
+=head2 cos
+
+  # cos(x1)
+  r->cos($x1)
+
+=head2 cosh
+
+  # cosh(x1)
+  r->cosh($x1)
+
+=head2 cummax
+
+=head2 cummin
+
+=head2 cumsum
+
+=head2 cumprod
+
+=head2 complex
+
+=head2 data_frame
+
+=head2 diag
+
+=head2 diff
+
+=head2 exp
+
+  # exp(x1)
+  r->exp($x1)
+
+=head2 expm1
+
+  # expm1(x1)
+  r->expm1($x1)
+
+=head2 factor
+
+=head2 F
+
+=head2 FALSE
+
+=head2 floor
+
+  # floor(x1)
+  r->floor($x1)
+
+=head2 gl
+
+=head2 grep
+
+=head2 gsub
+
+=head2 head
+
+=head2 i
+
+=head2 ifelse
+
+=head2 interaction
+
+=head2 is_element
+
+=head2 I
+
+=head2 Im
+
+=head2 Inf
+
+=head2 intersect
+
+=head2 kronecker
+
+=head2 length
+
+=head2 list
+
+=head2 log
+
+  # log(x1)
+  r->log($x1)
+
+=head2 logb
+
+  # logb(x1)
+  r->logb($x1)
+
+=head2 log2
+
+  # log2(x1)
+  r->log2($x1)
+
+=head2 log10
+
+  # log10(x1)
+  r->log10($x1)
+
+=head2 lower_tri
+
+=head2 match
+
+=head2 median
+
+=head2 merge
+
+=head2 Mod
+
+=head2 NA
+
+=head2 NaN
+
+=head2 na_omit
+
+=head2 ncol
+
+  # ncol(x1)
+  r->ncol($x1)
+
+=head2 nrow
+
+  # nrow(x1)
+  r->nrow($x1)
+
+=head2 NULL
+
+=head2 numeric
+
+=head2 matrix
+
+=head2 max
+
+=head2 mean
+
+=head2 min
+
+=head2 nchar
+
+=head2 order
+
+=head2 ordered
+
+=head2 outer
+
+=head2 paste
+
+=head2 pi
+
+=head2 pmax
+
+=head2 pmin
+
+=head2 prod
+
+=head2 range
+
+=head2 rank
+
+=head2 rbind
+
+  # rbind(c(1, 2), c(3, 4), c(5, 6))
+  r->rbind(c(1, 2), c(3, 4), c(5, 6))
+
+=head2 Re
+
+=head2 quantile
+
+=head2 read_table
+
+=head2 rep
+
+=head2 replace
+
+=head2 rev
+
+=head2 rnorm
+
+=head2 round
+
+  # round(x1)
+  r->round($x1)
+
+  # round(x1, digit)
+  r->round($x1, $digits)
+  
+  # round(x1, digits=1)
+  r->round($x1, {digits => TRUE});
+
+=head2 row
+
+  # row(x1)
+  r->row($x1)
+
+=head2 rowMeans
+
+  # rowMeans(x1)
+  r->rowMeans($x1)
+
+=head2 rowSums
+
+  # rowSums(x1)
+  r->rowSums($x1)
+
+=head2 sample
+
+=head2 seq
+
+=head2 sequence
+
+=head2 set_diag
+
+=head2 setdiff
+
+=head2 setequal
+
+=head2 sin
+
+  # sin(x1)
+  r->sin($x1)
+
+=head2 sinh
+
+  # sinh(x1)
+  r->sinh($x1)
+
+=head2 sum
+
+=head2 sqrt
+
+  # sqrt(x1)
+  r->sqrt($x1)
+
+=head2 sort
+
+=head2 sub
+
+=head2 subset
+
+=head2 sweep
+
+=head2 t
+
+  # t
+  r->t($x1)
+
+=head2 tail
+
+=head2 tan
+
+  # tan(x1)
+  r->tan($x1)
+
+=head2 tanh
+
+  # tanh(x1)
+  r->tanh($x1)
+
+=head2 tapply
+
+=head2 tolower
+
+=head2 toupper
+
+=head2 T
+
+=head2 TRUE
+
+=head2 transform
+
+=head2 trunc
+
+  # trunc(x1)
+  r->trunc($x1)
+
+=head2 unique
+
+=head2 union
+
+=head2 upper_tri
+
+=head2 var
+
+=head2 which
+
+=head2 as_array
+
+  # as.array(x1)
+  r->as_array($x1)
+
+=head2 as_character
+
+=head2 as_complex
+
+=head2 as_integer
+
+=head2 as_list
+
+=head2 as_logical
+
+=head2 as_matrix
+
+  # as.matrix(x1)
+  r->as_matrix($x1)
+
+=head2 as_numeric
+
+=head2 as_vector
+
+  # as.vector(x1)
+  r->as_vector($x1)
+
+=head2 is_array
+
+  # is.array(x1)
+  r->is_array($x1)
+
+=head2 is_character
+
+=head2 is_complex
+
+=head2 is_finite
+
+=head2 is_infinite
+
+=head2 is_list
+
+=head2 is_matrix
+
+  # is.matrix(x1)
+  r->is_matrix($x1)
+
+=head2 is_na
+
+=head2 is_nan
+
+=head2 is_null
+
+=head2 is_numeric
+
+=head2 is_double
+
+=head2 is_integer
+
+=head2 is_logical
+
+=head2 is_vector
+
+  # is.vector(x1)
+  r->is_vector($x1)
+
+=head2 labels
+
+=head2 levels
+
+=head2 dim
+
+=head2 names
+
+  # names(x1)
+  r->names($x1)
+
+  # names(x1) <- c("n1", "n2")
+  r->names($x1 =>  c("n1", "n2"));
+
+=head2 nlevels
+
+=head2 dimnames
+
+=head2 colnames
+
+  # colnames(x1)
+  r->colnames($x1)
+  
+  # colnames(x1) = c("r1", "r2")
+  r->colnames($x1 => c("r1", "r2"))
+
+=head2 rownames
+
+  # rownames(x1)
+  r->rownames($x1)
+  
+  # rownames(x1) = c("r1", "r2")
+  r->rownames($x1 => c("r1", "r2"))
+
+=head2 mode
+
+=head2 str
+
+=head2 typeof
+

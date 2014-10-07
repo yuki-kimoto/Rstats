@@ -101,7 +101,9 @@ use Math::Trig ();
   {
     my $x1 = array(c(0.0000001234));
     my $x2 = r->expm1($x1);
-    is(sprintf("%.13e", $x2->value), '1.2340000761378e-07');
+    my $x2_value_str = sprintf("%.13e", $x2->value);
+    $x2_value_str =~ s/e-0+/e-/;
+    is($x2_value_str, '1.2340000761378e-7');
     ok(r->is_double($x2));
   }
 

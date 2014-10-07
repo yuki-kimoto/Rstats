@@ -479,7 +479,7 @@ sub sweep {
     
     my $new_index = [];
     for my $x_margin_value (@$x_margin_values) {
-      push $new_index, $x1_index->[$x_margin_value - 1];
+      push @$new_index, $x1_index->[$x_margin_value - 1];
     }
     
     my $e1 = $x2->element(@{$new_index});

@@ -36,6 +36,8 @@ sub import {
 
 Rstats - R language build on Perl
 
+B<Rstats is yet experimental release. Uncompatible change will occur without warnings.>
+
 =head1 SYNOPSYS
   
   use Rstats;

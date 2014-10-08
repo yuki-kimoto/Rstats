@@ -506,8 +506,7 @@ use Math::Trig ();
   {
     my $x1 = r->complex({mod => 2, arg => pi});
     is($x1->value->{re}, -2);
-    cmp_ok($x1->value->{im}, '==', 0);
-    #is(sprintf("%.5f", $x1->value->{im}), '-0.00000');
+    like(sprintf("%.3e", $x1->value->{im}), qr/^2\.449e-0?16$/);
   }
 
   # complex - mod and arg option, omit arg
@@ -521,8 +520,7 @@ use Math::Trig ();
   {
     my $x1 = r->complex({arg => pi});
     is($x1->value->{re}, -1);
-    cmp_ok($x1->value->{im}, '==', 0);
-    #is(sprintf("%.5f", $x1->value->{im}), '-0.00000');
+    like(sprintf("%.3e", $x1->value->{im}), qr/^1\.225e-0?16$/);
   }
 }
 

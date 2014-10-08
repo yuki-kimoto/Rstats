@@ -86,7 +86,7 @@ use Math::Complex ();
   {
     my $x1 = c(-1 + 0*i);
     my $x2 = r->acosh($x1);
-    cmp_ok($x2->value->{re}, '==', '0);
+    cmp_ok($x2->value->{re}, '==', 0);
     #is($x2->value->{re}, -0);
     is(sprintf("%.6f", $x2->value->{im}), '3.141593');
     ok(r->is_complex($x2));
@@ -520,7 +520,7 @@ use Math::Complex ();
   {
     my $x1 = c(1 + 1*i);
     my $x2 = r->acos($x1);
-    is(sprintf("%.6f", $x2->value->{re}), '0.904557');
+    is(sprintf("%.6", $x2->value->{re}), '0.904557');
     is(sprintf("%.6f", $x2->value->{im}), '-1.061275');
   }
 
@@ -948,8 +948,7 @@ use Math::Complex ();
   {
     my $x1 = array(c(pi/2, pi/3));
     my $x2 = r->cos($x1);
-    cmp_ok($x2->values->[0], '==', 0);
-    #is(sprintf("%.5f", $x2->values->[0]), '-0.00000');
+    like(sprintf("%.3e", $x2->values->[0]), qr/^6\.123e-0?17$/);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply(r->dim($x2)->values, [2]);
     ok(r->is_double($x2));

@@ -2,7 +2,7 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.0102';
 
 use Rstats::Class;
 
@@ -600,13 +600,28 @@ C function is equal to C<m:n> of R.
 
 =head2 as_character
 
+  # as.character(x1)
+  r->as_character($x1)
+
 =head2 as_complex
+
+  # as.complex(x1)
+  r->as_complex($x1)
 
 =head2 as_integer
 
+  # as.integer(x1)
+  r->as_integer($x1)
+
 =head2 as_list
 
+  # as.list
+  r->as_list($x1)
+
 =head2 as_logical
+
+  # as.logical
+  r->as_logical($x1)
 
 =head2 as_matrix
 
@@ -614,6 +629,9 @@ C function is equal to C<m:n> of R.
   r->as_matrix($x1)
 
 =head2 as_numeric
+
+  # as.numeric(x1)
+  r->as_numeric($x1)
 
 =head2 as_vector
 
@@ -627,13 +645,28 @@ C function is equal to C<m:n> of R.
 
 =head2 is_character
 
+  # is.character(x1)
+  r->is_character($x1)
+
 =head2 is_complex
+
+  # is.complex(x1)
+  r->is_complex($x1)
 
 =head2 is_finite
 
+  # is.finite(x1)
+  r->is_finite($x1)
+
 =head2 is_infinite
 
+  # is.infinite(x1)
+  r->is_infinite($x1)
+
 =head2 is_list
+
+  # is.list(x1)
+  r->is_list($x1)
 
 =head2 is_matrix
 
@@ -642,17 +675,38 @@ C function is equal to C<m:n> of R.
 
 =head2 is_na
 
+  # is.na(x1)
+  r->is_na($x1)
+
 =head2 is_nan
+
+  # is.nan(x1)
+  r->is_nan($x1)
 
 =head2 is_null
 
+  # is.null(x1)
+  r->is_null($x1)
+
 =head2 is_numeric
+
+  # is.numeric(x1)
+  r->is_numeric($x1)
 
 =head2 is_double
 
+  # is.double(x1)
+  r->is_double($x1)
+
 =head2 is_integer
 
+  # is.integer(x1)
+  r->is_integer($x1)
+
 =head2 is_logical
+
+  # is.logical(x1)
+  r->is_logical($x1)
 
 =head2 is_vector
 
@@ -661,9 +715,24 @@ C function is equal to C<m:n> of R.
 
 =head2 labels
 
+  # labels(x1)
+  r->labels($x1)
+
 =head2 levels
 
+  # levels(x1)
+  r->levels($x1)
+  
+  # levels(x1) <- c("F", "M")
+  r->levels($x1 => c("F", "M"))
+
 =head2 dim
+
+  # dim(x1)
+  r->dim($x1)
+  
+  # dim(x1) <- c(1, 2)
+  r->dim($x1 => c(1, 2))
 
 =head2 names
 
@@ -671,18 +740,27 @@ C function is equal to C<m:n> of R.
   r->names($x1)
 
   # names(x1) <- c("n1", "n2")
-  r->names($x1 =>  c("n1", "n2"));
+  r->names($x1 =>  c("n1", "n2"))
 
 =head2 nlevels
 
+  # nlevels(x1)
+  r->nlevels($x1)
+
 =head2 dimnames
+
+  # dimnames(x1)
+  r->dimnames($x1)
+  
+  # dimnames(x1) <- list(c("r1", "r2"), c("c1", "c2"))
+  r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
 
 =head2 colnames
 
   # colnames(x1)
   r->colnames($x1)
   
-  # colnames(x1) = c("r1", "r2")
+  # colnames(x1) <- c("r1", "r2")
   r->colnames($x1 => c("r1", "r2"))
 
 =head2 rownames
@@ -690,12 +768,23 @@ C function is equal to C<m:n> of R.
   # rownames(x1)
   r->rownames($x1)
   
-  # rownames(x1) = c("r1", "r2")
+  # rownames(x1) <- c("r1", "r2")
   r->rownames($x1 => c("r1", "r2"))
 
 =head2 mode
 
+  # mode(x1)
+  r->mode($x1)
+  
+  # mode(x1) <- c("r1", "r2")
+  r->mode($x1 => c("r1", "r2"))
+
 =head2 str
+
+  # str(x1)
+  r->str($x1)
 
 =head2 typeof
 
+  # typeof(x1)
+  r->typeof($x1);

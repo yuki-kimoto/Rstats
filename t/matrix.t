@@ -10,6 +10,14 @@ use Rstats::ElementFunc;
 
 # matrix
 {
+  # matrix - omit col
+  {
+    my $m1 = matrix(C('1:12'), undef, 4);
+    is_deeply($m1->values, [1 .. 12]);
+    is_deeply(r->dim($m1)->values, [3, 4]);
+    ok(r->is_matrix($m1));
+  }
+  
   # matrix - basic
   {
     my $m1 = matrix(C('1:12'), 3, 4);
@@ -26,14 +34,6 @@ use Rstats::ElementFunc;
     ok(r->is_matrix($m1));
   }
   
-  # matrix - omit col
-  {
-    my $m1 = matrix(C('1:12'), undef, 4);
-    is_deeply($m1->values, [1 .. 12]);
-    is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
-  }
-
   # matrix - omit col
   {
     my $m1 = matrix(C('1:12'));

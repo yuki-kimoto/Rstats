@@ -1522,7 +1522,6 @@ sub args {
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
     my $arg;
-    $DB::single = 1;
     if (exists $opt->{$name}) {
       $arg = to_c(delete $opt->{$name});
     }

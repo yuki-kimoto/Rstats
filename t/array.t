@@ -9,6 +9,47 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# pos_to_index
+{
+  # pos_to_index - last position
+  {
+    my $pos = 23;
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [4, 3, 2]);
+  }
+
+  # pos_to_index - some position
+  {
+    my $pos = 21;
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [2, 3, 2]);
+  }
+
+  # pos_to_index - first position
+  {
+    my $pos = 0;
+    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
+    is_deeply($index, [1, 1, 1]);
+  }
+}
+
+
+# index_to_pos
+{
+  my $x1 = array(C('1:24'), c(4, 3, 2));
+  my $dim = [4, 3, 2];
+  
+  {
+    my $value = Rstats::Util::index_to_pos([4, 3, 2], $dim);
+    is($value, 23);
+  }
+  
+  {
+    my $value = Rstats::Util::index_to_pos([3, 3, 2], $dim);
+    is($value, 22);
+  }
+}
+
 # logical operator
 {
   # logical operator - &
@@ -755,46 +796,6 @@ EOS
 210 231 252 220 242 264 230 253 276 240 264 288
       /]);
     is_deeply(r->dim($x3)->values, [12, 12, 2]);
-  }
-}
-
-# pos_to_index
-{
-  # pos_to_index - first position
-  {
-    my $pos = 0;
-    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
-    is_deeply($index, [1, 1, 1]);
-  }
-  
-  # pos_to_index - some position
-  {
-    my $pos = 21;
-    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
-    is_deeply($index, [2, 3, 2]);
-  }
-
-  # pos_to_index - last position
-  {
-    my $pos = 23;
-    my $index = Rstats::Util::pos_to_index($pos, [4, 3, 2]);
-    is_deeply($index, [4, 3, 2]);
-  }
-}
-
-# index_to_pos
-{
-  my $x1 = array(C('1:24'), c(4, 3, 2));
-  my $dim = [4, 3, 2];
-  
-  {
-    my $value = Rstats::Util::index_to_pos([4, 3, 2], $dim);
-    is($value, 23);
-  }
-  
-  {
-    my $value = Rstats::Util::index_to_pos([3, 3, 2], $dim);
-    is($value, 22);
   }
 }
 

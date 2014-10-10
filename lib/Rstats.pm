@@ -30,6 +30,9 @@ sub import {
   warnings->unimport('ambiguous');
 }
 
+require XSLoader;
+XSLoader::load('Rstats', $VERSION);
+
 1;
 
 =head1 NAME

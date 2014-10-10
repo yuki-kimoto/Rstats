@@ -21,4 +21,10 @@ WriteMakefile(
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },
+    CC =>'g++',
+    LD => 'g++',
+    LIBS              => [''],
+    DEFINE            => '',
+    INC               => '-I.',
+    OBJECT            => '$(O_FILES)',
 );

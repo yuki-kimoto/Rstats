@@ -1,7 +1,7 @@
 #include <complex>
 namespace Rstats {
 
-  // Elementtype
+  // Rstats::Elementtype
   namespace ElementType {
     enum Enum {
       NA = 0,
@@ -14,7 +14,7 @@ namespace Rstats {
     };
   }
   
-  // Element
+  // Rstats::Element
   typedef struct {
     union {
       int iv;
@@ -25,6 +25,7 @@ namespace Rstats {
     Rstats::ElementType::Enum type;
   } Element;
   
+  // Rstats::ElementFunc
   namespace ElementFunc {
     
     Rstats::Element* integer(int iv) {
@@ -62,7 +63,8 @@ namespace Rstats {
       }
     }
   }
-
+  
+  // Rstats::ElementFunc
   namespace ElementsFunc {
     void process(void (*func)(Element*, const Element*), Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
       for (int i = 0; i < size; i++) {
@@ -72,6 +74,28 @@ namespace Rstats {
     
     void add(Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
       process(Rstats::ElementFunc::add, elements1, elements2, size);
+    }
+  }
+  
+  // Rstats::Util
+  namespace Util {
+    unsigned int index_to_pos (int* index, int index_len, int* dim_values, int dim_values_len) {
+      
+      int pos = 0;
+      for (int i = 0; i < dim_values_len; i++) {
+        if (i > 0) {
+          int tmp = 1;
+          for (int k = 0; k < i; k++) {
+            tmp *= dim_values[k];
+          }
+          pos += tmp * (index[i] - 1);
+        }
+        else {
+          pos += index[i];
+        }
+      }
+      
+      return pos - 1;
     }
   }
 }

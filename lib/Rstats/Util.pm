@@ -260,40 +260,9 @@ sub cross_product {
   return $result;
 }
 
-sub index_to_pos {
-  my ($index, $dim_values) = @_;
-  
-  my $pos = 0;
-  for (my $i = 0; $i < @$dim_values; $i++) {
-    if ($i > 0) {
-      my $tmp = 1;
-      $tmp *= $dim_values->[$_] for (0 .. $i - 1);
-      $pos += $tmp * ($index->[$i] - 1);
-    }
-    else {
-      $pos += $index->[$i];
-    }
-  }
-  
-  return $pos - 1;
-}
 
-sub pos_to_index {
-  my ($pos, $dim) = @_;
-  
-  my $index = [];
-  my $before_dim_product = 1;
-  $before_dim_product *= $dim->[$_] for (0 .. @$dim - 1);
-  for (my $i = @{$dim} - 1; $i >= 0; $i--) {
-    my $dim_product = 1;
-    $dim_product *= $dim->[$_] for (0 .. $i - 1);
-    my $reminder = $pos % $before_dim_product;
-    my $quotient = int ($reminder / $dim_product);
-    unshift @$index, $quotient + 1;
-    $before_dim_product = $dim_product;
-  }
-  
-  return $index;
-}
+# XS functions
+# sub index_to_pos { ... }
+# sub pos_to_index { ... }
 
 1;

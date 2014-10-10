@@ -11,6 +11,10 @@ class PerlAPI {
   I32 length (AV* av) {
     return av_len(av) + 1;
   }
+
+  I32 length (SV* av_ref) {
+    return av_len(av_deref(av_ref)) + 1;
+  }
   
   I32 to_iv (SV* sv) {
     return SvIV(sv);
@@ -27,7 +31,11 @@ class PerlAPI {
   char* to_pv(SV* sv) {
     return SvPV_nolen(sv);
   }
-
+  
+  SV* new_sv (SV* sv) {
+    return sv_2mortal(newSVsv(sv));
+  }
+  
   SV* to_sv(I32 iv) {
     return sv_2mortal(newSViv(iv));
   }
@@ -42,6 +50,16 @@ class PerlAPI {
   
   SV* to_sv(char* pv) {
     return sv_2mortal(newSVpvn(pv, strlen(pv)));
+  }
+  
+  SV* copy_av(SV* av_ref) {
+    SV* new_av_ref = this->new_av_ref();
+    
+    for (I32 i = 0; i < this->length(av_ref); i++) {
+      this->av_set(new_av_ref, i, this->new_sv(this->av_get(av_ref, i)));
+    }
+    
+    return new_av_ref;
   }
   
   AV* new_av() {
@@ -123,7 +141,7 @@ class PerlAPI {
   
   void av_set(SV* av_ref, I32 pos, SV* element) {
     AV* av = av_deref(av_ref);
-    av_store(av, pos, element);
+    av_store(av, pos, SvREFCNT_inc(element));
   }
   
   void hv_set(HV* hv, char* key, SV* element) {

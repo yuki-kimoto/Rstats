@@ -22,29 +22,66 @@
 #include "PerlAPI.h"
 #include "Rstats.h"
 
-/*
-sub pos_to_index {
-  my ($pos, $dim) = @_;
-  
-  my $index = [];
-  my $before_dim_product = 1;
-  $before_dim_product *= $dim->[$_] for (0 .. @$dim - 1);
-  for (my $i = @{$dim} - 1; $i >= 0; $i--) {
-    my $dim_product = 1;
-    $dim_product *= $dim->[$_] for (0 .. $i - 1);
-    my $reminder = $pos % $before_dim_product;
-    my $quotient = int ($reminder / $dim_product);
-    unshift @$index, $quotient + 1;
-    $before_dim_product = $dim_product;
-  }
-  
-  return $index;
-}
-*/
-
 PerlAPI* p = new PerlAPI;
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
+
+void
+cross_product(...)
+  PPCODE:
+{
+  SV* values_sv = ST(0);
+  
+  I32 values_length = p->length(values_sv);
+  SV* idxs_sv = p->new_av_ref();
+  for (I32 i = 0; i < values_length; i++) {
+    p->push(idxs_sv, p->to_sv(0)); 
+  }
+  
+  SV* idx_idx_sv = p->new_av_ref();
+  for (I32 i = 0; i < values_length; i++) {
+    p->push(idx_idx_sv, p->to_sv(i));
+  }
+  
+  SV* x1_sv = p->new_av_ref();
+  for (I32 i = 0; i < values_length; i++) {
+    SV* value_sv = p->av_get(values_sv, i);
+    p->push(x1_sv, p->av_get(value_sv, 0));
+  }
+
+  SV* result_sv = p->new_av_ref();
+  p->push(result_sv, p->copy_av(x1_sv));
+  I32 end_loop = 0;
+  while (1) {
+    for (I32 i = 0; i < values_length; i++) {
+      
+      if (p->to_iv(p->av_get(idxs_sv, i)) < p->length(p->av_get(values_sv, i)) - 1) {
+        
+        SV* idxs_tmp = p->av_get(idxs_sv, i);
+        Perl_sv_inc(idxs_tmp);
+        p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), p->to_iv(idxs_tmp)));
+        
+        p->push(result_sv, p->copy_av(x1_sv));
+        
+        break;
+      }
+      
+      if (i == p->to_iv(p->av_get(idx_idx_sv, values_length - 1))) {
+        end_loop = 1;
+        break;
+      }
+      
+      p->av_set(idxs_sv, i, p->to_sv(0));
+      p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), 0));
+    }
+    if (end_loop) {
+      break;
+    }
+  }
+
+  XPUSHs(result_sv);
+  XSRETURN(1);
+}
 
 void
 pos_to_index(...)

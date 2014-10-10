@@ -264,5 +264,6 @@ sub cross_product {
 # XS functions
 # sub index_to_pos { ... }
 # sub pos_to_index { ... }
+# sub cross_product { ... }
 
 1;

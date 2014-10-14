@@ -9,7 +9,8 @@ use Rstats::ElementFunc;
   # element - double
   {
     my $e1 = Rstats::ElementFunc::double_xs(2);
-    ok(1);
+    is($e1->type, 'double');
+    1;
   }
 }
 

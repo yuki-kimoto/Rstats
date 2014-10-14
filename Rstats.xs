@@ -29,9 +29,38 @@ void
 type(...)
   PPCODE:
 {
-  Rstats::ElementType::Enum type;
-    
-  XSRETURN(0);
+  SV* element_obj = ST(0);
+  SV* element_sv = SvROK(element_obj) ? SvRV(element_obj) : element_obj;
+  size_t element_iv = SvIV(element_sv);
+  Rstats::Element* element = INT2PTR(Rstats::Element*, element_iv);
+  
+  Rstats::ElementType::Enum type = element->type;
+  
+  SV* type_sv;
+  if (type == Rstats::ElementType::NA) {
+    type_sv = p->to_sv("na");
+  }
+  else if (type == Rstats::ElementType::LOGICAL) {
+    type_sv = p->to_sv("logical");
+  }
+  else if (type == Rstats::ElementType::INTEGER) {
+    type_sv = p->to_sv("integer");
+  }
+  else if (type == Rstats::ElementType::DOUBLE) {
+    type_sv = p->to_sv("double");
+  }
+  else if (type == Rstats::ElementType::COMPLEX) {
+    type_sv = p->to_sv("complex");
+  }
+  else if (type == Rstats::ElementType::CHARACTER) {
+    type_sv = p->to_sv("character");
+  }
+  else if (type == Rstats::ElementType::UNKNOWN) {
+    type_sv = p->to_sv("unknown");
+  }
+  
+  XPUSHs(type_sv);
+  XSRETURN(1);
 }
 
 void
@@ -124,10 +153,10 @@ double_xs(...)
   size_t element_iv = PTR2IV(element);
   SV* element_sv = sv_2mortal(newSViv(element_iv));
   SV* element_svrv = sv_2mortal(newRV_inc(element_sv));
-  SV* element_obj = sv_bless(element_svrv, gv_stashpv("Rstats::Element", 1));
+  SV* element_obj = sv_bless(element_svrv, gv_stashpv("Rstats::ElementXS", 1));
 
   XPUSHs(element_obj);
-  XSRETURN(0);
+  XSRETURN(1);
 }
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util

@@ -19,10 +19,9 @@
 #include <vector>
 #include <iostream>
 
-#include "PerlAPI.h"
 #include "Rstats.h"
 
-PerlAPI* p = new PerlAPI;
+Rstats::PerlAPI* p = new Rstats::PerlAPI;
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
 

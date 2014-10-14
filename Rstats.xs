@@ -24,6 +24,16 @@
 
 PerlAPI* p = new PerlAPI;
 
+MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
+
+void
+integer_xs(...)
+  PPCODE:
+{
+  
+  XSRETURN(0);
+}
+
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
 void

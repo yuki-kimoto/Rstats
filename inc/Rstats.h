@@ -76,26 +76,4 @@ namespace Rstats {
       process(Rstats::ElementFunc::add, elements1, elements2, size);
     }
   }
-  
-  // Rstats::Util
-  namespace Util {
-    unsigned int index_to_pos (int* index, int index_len, int* dim_values, int dim_values_len) {
-      
-      int pos = 0;
-      for (int i = 0; i < dim_values_len; i++) {
-        if (i > 0) {
-          int tmp = 1;
-          for (int k = 0; k < i; k++) {
-            tmp *= dim_values[k];
-          }
-          pos += tmp * (index[i] - 1);
-        }
-        else {
-          pos += index[i];
-        }
-      }
-      
-      return pos - 1;
-    }
-  }
 }

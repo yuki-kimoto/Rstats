@@ -29,7 +29,39 @@ void
 integer_xs(...)
   PPCODE:
 {
+  SV* value_sv = ST(0);
+  I32 iv = p->to_iv(value_sv);
   
+  Rstats::Element* element = new Rstats::Element;
+  element->iv = iv;
+  element->type = Rstats::ElementType::INTEGER;
+  
+  size_t element_iv = PTR2IV(element);
+  SV* element_sv = sv_2mortal(newSViv(element_iv));
+  SV* element_svrv = sv_2mortal(newRV_inc(element_sv));
+  SV* element_obj = sv_bless(element_svrv, gv_stashpv("Rstats::Element", 1));
+
+  XPUSHs(element_obj);
+  XSRETURN(0);
+}
+
+void
+double_xs(...)
+  PPCODE:
+{
+  SV* value_sv = ST(0);
+  I32 dv = p->to_nv(value_sv);
+  
+  Rstats::Element* element = new Rstats::Element;
+  element->dv = dv;
+  element->type = Rstats::ElementType::DOUBLE;
+  
+  size_t element_iv = PTR2IV(element);
+  SV* element_sv = sv_2mortal(newSViv(element_iv));
+  SV* element_svrv = sv_2mortal(newRV_inc(element_sv));
+  SV* element_obj = sv_bless(element_svrv, gv_stashpv("Rstats::Element", 1));
+
+  XPUSHs(element_obj);
   XSRETURN(0);
 }
 

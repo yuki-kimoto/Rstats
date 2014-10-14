@@ -25,19 +25,19 @@ namespace Rstats {
       return av_len(av_deref(av_ref)) + 1;
     }
     
-    I32 to_iv (SV* sv) {
+    I32 iv (SV* sv) {
       return SvIV(sv);
     }
     
-    U32 to_uv(SV* sv) {
+    U32 uv(SV* sv) {
       return SvUV(sv);
     }
 
-    double to_nv(SV* sv) {
+    double nv(SV* sv) {
       return SvNV(sv);
     }
       
-    char* to_pv(SV* sv) {
+    char* pv(SV* sv) {
       return SvPV_nolen(sv);
     }
     

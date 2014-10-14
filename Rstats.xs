@@ -121,7 +121,7 @@ integer_xs(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 iv = p->to_iv(value_sv);
+  I32 iv = p->iv(value_sv);
   
   Rstats::Element* element = new Rstats::Element;
   element->iv = iv;
@@ -141,7 +141,7 @@ double_xs(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 dv = p->to_nv(value_sv);
+  I32 dv = p->nv(value_sv);
   
   Rstats::Element* element = new Rstats::Element;
   element->dv = dv;
@@ -187,18 +187,18 @@ cross_product(...)
   while (1) {
     for (I32 i = 0; i < values_length; i++) {
       
-      if (p->to_iv(p->av_get(idxs_sv, i)) < p->length(p->av_get(values_sv, i)) - 1) {
+      if (p->iv(p->av_get(idxs_sv, i)) < p->length(p->av_get(values_sv, i)) - 1) {
         
         SV* idxs_tmp = p->av_get(idxs_sv, i);
         Perl_sv_inc(idxs_tmp);
-        p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), p->to_iv(idxs_tmp)));
+        p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), p->iv(idxs_tmp)));
         
         p->push(result_sv, p->copy_av(x1_sv));
         
         break;
       }
       
-      if (i == p->to_iv(p->av_get(idx_idx_sv, values_length - 1))) {
+      if (i == p->iv(p->av_get(idx_idx_sv, values_length - 1))) {
         end_loop = 1;
         break;
       }
@@ -223,16 +223,16 @@ pos_to_index(...)
   SV* dim_sv = ST(1);
   
   SV* index_sv = p->new_av_ref();
-  I32 pos = p->to_iv(pos_sv);
+  I32 pos = p->iv(pos_sv);
   I32 before_dim_product = 1;
   for (I32 i = 0; i < p->length(p->av_deref(dim_sv)); i++) {
-    before_dim_product *= p->to_iv(p->av_get(dim_sv, i));
+    before_dim_product *= p->iv(p->av_get(dim_sv, i));
   }
   
   for (I32 i = p->length(p->av_deref(dim_sv)) - 1; i >= 0; i--) {
     I32 dim_product = 1;
     for (I32 k = 0; k < i; k++) {
-      dim_product *= p->to_iv(p->av_get(dim_sv, k));
+      dim_product *= p->iv(p->av_get(dim_sv, k));
     }
     
     I32 reminder = pos % before_dim_product;
@@ -258,12 +258,12 @@ index_to_pos(...)
     if (i > 0) {
       U32 tmp = 1;
       for (U32 k = 0; k < i; k++) {
-        tmp *= p->to_uv(p->av_get(dim_values_sv, k));
+        tmp *= p->uv(p->av_get(dim_values_sv, k));
       }
-      pos += tmp * (p->to_uv(p->av_get(index_sv, i)) - 1);
+      pos += tmp * (p->uv(p->av_get(index_sv, i)) - 1);
     }
     else {
-      pos += p->to_uv(p->av_get(index_sv, i));
+      pos += p->uv(p->av_get(index_sv, i));
     }
   }
   

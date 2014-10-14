@@ -140,3 +140,6 @@ sub _to_string {
 
 1;
 
+=head1 NAME
+
+Rstats::Container::List - List

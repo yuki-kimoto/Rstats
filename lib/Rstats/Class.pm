@@ -541,7 +541,7 @@ sub function {
 
 =head1 NAME
 
-Rstats::Class - Rstats class interface
+Rstats::Class - Rstats Object-Oriented interface
 
 =head1 SYNOPSYS
   

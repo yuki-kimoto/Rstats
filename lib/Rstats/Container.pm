@@ -825,4 +825,8 @@ sub colnames {
   }
 }
 
+=head1 NAME
+
+Rstats::Container - Container base class
+
 1;

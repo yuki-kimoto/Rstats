@@ -413,3 +413,7 @@ sub is_finite {
 }
 
 1;
+
+=head1 NAME
+
+Rstats::Element - Element

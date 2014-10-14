@@ -111,3 +111,8 @@ sub to_string {
 }
 
 1;
+
+=head1 NAME
+
+Rstats::Container::DataFrame - Data frame
+

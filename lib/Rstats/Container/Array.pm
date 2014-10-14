@@ -404,4 +404,8 @@ sub _fix_position {
   return ($x1, $x2);
 }
 
+=head1 NAME
+
+Rstats::Container::Array - Array
+
 1;

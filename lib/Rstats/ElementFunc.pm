@@ -2293,4 +2293,8 @@ sub not_equal {
   }
 }
 
+=head1 NAME
+
+Rstats::ElementFunc - Element functions
+
 1;

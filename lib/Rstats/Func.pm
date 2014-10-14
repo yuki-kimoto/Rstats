@@ -541,7 +541,9 @@ sub data_frame {
     
     my $repeat = $max_count / $count;
     if ($repeat > 1) {
-      $elements->[$i] = Rstats::Func::c(($elements->[$i]) x $repeat);
+      my $repeat_elements = [];
+      push @$repeat_elements, $elements->[$i] for (1 .. $repeat);
+      $elements->[$i] = Rstats::Func::c($repeat_elements);
     }
   }
   
@@ -2822,5 +2824,9 @@ sub upgrade_type {
   
   return @xs;
 }
+
+=head1 NAME
+
+Rstats::Func - Functions
 
 1;

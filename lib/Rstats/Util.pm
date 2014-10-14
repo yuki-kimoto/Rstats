@@ -260,10 +260,13 @@ sub cross_product {
   return $result;
 }
 
-
 # XS functions
-# sub index_to_pos { ... }
-# sub pos_to_index { ... }
-# sub cross_product { ... }
+# index_to_pos()
+# pos_to_index()
+# cross_product()
+
+=head1 NAME
+
+Rstats::Util - Utility class
 
 1;

@@ -29,13 +29,10 @@ void
 type(...)
   PPCODE:
 {
-  SV* element_obj = ST(0);
-  SV* element_sv = SvROK(element_obj) ? SvRV(element_obj) : element_obj;
-  size_t element_iv = SvIV(element_sv);
-  Rstats::Element* element = INT2PTR(Rstats::Element*, element_iv);
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  Rstats::ElementType::Enum type = element->type;
-  
+  // Type
+  Rstats::ElementType::Enum type = self->type;
   SV* type_sv;
   if (type == Rstats::ElementType::NA) {
     type_sv = p->to_sv("na");

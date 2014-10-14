@@ -9,6 +9,14 @@ namespace Rstats {
   class PerlAPI {
     public:
     
+    template <class X> X to_c_obj(SV* perl_obj_tmp_sv) {
+      SV* perl_obj_sv = SvROK(perl_obj_tmp_sv) ? SvRV(perl_obj_tmp_sv) : perl_obj_tmp_sv;
+      size_t perl_obj_addr = SvIV(perl_obj_sv);
+      X c_obj = INT2PTR(X, perl_obj_addr);
+      
+      return c_obj;
+    }
+    
     I32 length (AV* av) {
       return av_len(av) + 1;
     }

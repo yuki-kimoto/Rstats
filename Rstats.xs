@@ -64,54 +64,69 @@ void
 iv(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
+  I32 iv = self->iv;
   
-  XSRETURN(0);
+  XPUSHs(p->new_sv(iv));
+  XSRETURN(1);
 }
 
 void
 dv(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
+  double dv = self->dv;
   
-  XSRETURN(0);
+  XPUSHs(p->new_sv(dv));
+  XSRETURN(1);
 }
 
 void
 cv(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
+  SV* chv_sv = p->new_sv(self->chv);
   
-  XSRETURN(0);
+  XPUSHs(chv_sv);
+  XSRETURN(1);
 }
 
 void
 re(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
+  double re = ((std::complex<double>*)self->pv)->real();
   
-  XSRETURN(0);
+  XPUSHs(p->new_sv(re));
+  XSRETURN(1);
 }
 
 void
 im(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
+  double im = ((std::complex<double>*)self->pv)->imag();
   
-  XSRETURN(0);
+  XPUSHs(p->new_sv(im));
+  XSRETURN(1);
 }
 
 void
 flag(...)
   PPCODE:
 {
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  
-  XSRETURN(0);
+  XSRETURN(1);
 }
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc

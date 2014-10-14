@@ -191,7 +191,7 @@ cross_product(...)
         
         SV* idxs_tmp = p->av_get(idxs_sv, i);
         Perl_sv_inc(idxs_tmp);
-        p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), p->iv(idxs_tmp)));
+        p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), idxs_tmp));
         
         p->push(result_sv, p->copy_av(x1_sv));
         

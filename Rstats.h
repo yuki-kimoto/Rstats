@@ -94,12 +94,20 @@ namespace Rstats {
       return element;
     }
 
+    SV* av_get(AV* av, SV* pos_sv) {
+      return av_get(av, this->iv(pos_sv));
+    }
+    
     SV* av_get(SV* av_ref, I32 pos) {
       AV* av = av_deref(av_ref);
       SV** const element_ptr = av_fetch(av, pos, FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
+    }
+
+    SV* av_get(SV* av_ref, SV* pos_sv) {
+      return av_get(av_ref, this->iv(pos_sv));
     }
     
     SV* hv_get(HV* hv, char* key) {
@@ -109,12 +117,20 @@ namespace Rstats {
       return element;
     }
 
+    SV* hv_get(HV* hv, SV* key_sv) {
+      return hv_get(hv, this->pv(key_sv));
+    }
+    
     SV* hv_get(SV* hv_ref, char* key) {
       HV* hv = hv_deref(hv_ref);
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
+    }
+
+    SV* hv_get(SV* hv_ref, SV* key_sv) {
+      return hv_get(hv_ref, this->pv(key_sv));
     }
     
     SV* sv_deref(SV* ref) {

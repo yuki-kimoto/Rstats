@@ -9,12 +9,33 @@ namespace Rstats {
   class PerlAPI {
     public:
     
-    template <class X> X to_c_obj(SV* perl_obj_tmp_sv) {
-      SV* perl_obj_sv = SvROK(perl_obj_tmp_sv) ? SvRV(perl_obj_tmp_sv) : perl_obj_tmp_sv;
-      size_t perl_obj_addr = SvIV(perl_obj_sv);
-      X c_obj = INT2PTR(X, perl_obj_addr);
+    template <class X> X to_c_obj(SV* perl_obj_ref) {
+      SV* perl_obj = SvROK(perl_obj_ref) ? SvRV(perl_obj_ref) : perl_obj_ref;
+      size_t obj_addr = SvIV(perl_obj);
+      X c_obj = INT2PTR(X, obj_addr);
       
       return c_obj;
+    }
+
+    template <class X> SV* to_perl_obj(X c_obj, char* class_name) {
+      size_t obj_addr = PTR2IV(c_obj);
+      SV* obj_addr_sv = this->new_sv((I32)obj_addr);
+      SV* obj_addr_sv_ref = this->new_ref(obj_addr_sv);
+      SV* perl_obj = sv_bless(obj_addr_sv_ref, gv_stashpv(class_name, 1));
+      
+      return perl_obj;
+    }
+    
+    SV* new_ref(SV* sv) {
+      return sv_2mortal(newRV_inc(sv));
+    }
+
+    SV* new_ref(AV* av) {
+      return sv_2mortal(newRV_inc((SV*)av));
+    }
+
+    SV* new_ref(HV* hv) {
+      return sv_2mortal(newRV_inc((SV*)hv));
     }
     
     I32 length (AV* av) {

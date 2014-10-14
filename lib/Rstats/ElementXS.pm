@@ -52,7 +52,7 @@ sub _fix_position {
 # has 'cv';
 # has 're';
 # has 'im';
-# has 'flag';
+has 'flag';
 
 sub as_character {
   my $self = shift;

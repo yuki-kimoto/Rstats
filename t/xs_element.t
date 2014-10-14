@@ -19,5 +19,12 @@ use Rstats::ElementFunc;
     is($e1->type, 'integer');
     is($e1->iv, 2);
   }
+
+  # element - logical_xs
+  {
+    my $e1 = Rstats::ElementFunc::logical_xs(1);
+    is($e1->type, 'logical');
+    is($e1->iv, 1);
+  }
 }
 

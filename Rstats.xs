@@ -121,6 +121,15 @@ im(...)
 }
 
 void
+flag(...)
+  PPCODE:
+{
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
+  
+  XSRETURN(0);
+}
+
+void
 DESTROY(...)
   PPCODE:
 {
@@ -129,6 +138,23 @@ DESTROY(...)
 }
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
+
+void
+logical_xs(...)
+  PPCODE:
+{
+  SV* value_sv = ST(0);
+  I32 iv = p->iv(value_sv);
+  
+  Rstats::Element* element = new Rstats::Element;
+  element->iv = iv;
+  element->type = Rstats::ElementType::LOGICAL;
+  
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
 
 void
 integer_xs(...)

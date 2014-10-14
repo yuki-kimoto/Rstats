@@ -45,19 +45,19 @@ namespace Rstats {
       return sv_2mortal(newSVsv(sv));
     }
     
-    SV* to_sv(I32 iv) {
+    SV* new_sv(I32 iv) {
       return sv_2mortal(newSViv(iv));
     }
 
-    SV* to_sv(U32 uv) {
+    SV* new_sv(U32 uv) {
       return sv_2mortal(newSVuv(uv));
     }
 
-    SV* to_sv(double nv) {
+    SV* new_sv(double nv) {
       return sv_2mortal(newSVnv(nv));
     }
     
-    SV* to_sv(char* pv) {
+    SV* new_sv(char* pv) {
       return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
     

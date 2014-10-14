@@ -35,25 +35,25 @@ type(...)
   Rstats::ElementType::Enum type = self->type;
   SV* type_sv;
   if (type == Rstats::ElementType::NA) {
-    type_sv = p->to_sv("na");
+    type_sv = p->new_sv("na");
   }
   else if (type == Rstats::ElementType::LOGICAL) {
-    type_sv = p->to_sv("logical");
+    type_sv = p->new_sv("logical");
   }
   else if (type == Rstats::ElementType::INTEGER) {
-    type_sv = p->to_sv("integer");
+    type_sv = p->new_sv("integer");
   }
   else if (type == Rstats::ElementType::DOUBLE) {
-    type_sv = p->to_sv("double");
+    type_sv = p->new_sv("double");
   }
   else if (type == Rstats::ElementType::COMPLEX) {
-    type_sv = p->to_sv("complex");
+    type_sv = p->new_sv("complex");
   }
   else if (type == Rstats::ElementType::CHARACTER) {
-    type_sv = p->to_sv("character");
+    type_sv = p->new_sv("character");
   }
   else if (type == Rstats::ElementType::UNKNOWN) {
-    type_sv = p->to_sv("unknown");
+    type_sv = p->new_sv("unknown");
   }
   
   XPUSHs(type_sv);
@@ -167,12 +167,12 @@ cross_product(...)
   I32 values_length = p->length(values_sv);
   SV* idxs_sv = p->new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    p->push(idxs_sv, p->to_sv(0)); 
+    p->push(idxs_sv, p->new_sv(0)); 
   }
   
   SV* idx_idx_sv = p->new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    p->push(idx_idx_sv, p->to_sv(i));
+    p->push(idx_idx_sv, p->new_sv(i));
   }
   
   SV* x1_sv = p->new_av_ref();
@@ -203,7 +203,7 @@ cross_product(...)
         break;
       }
       
-      p->av_set(idxs_sv, i, p->to_sv(0));
+      p->av_set(idxs_sv, i, p->new_sv(0));
       p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), 0));
     }
     if (end_loop) {
@@ -238,7 +238,7 @@ pos_to_index(...)
     I32 reminder = pos % before_dim_product;
     I32 quotient = (int)(reminder / dim_product);
     
-    p->unshift(index_sv, p->to_sv(quotient + 1));
+    p->unshift(index_sv, p->new_sv(quotient + 1));
     before_dim_product = dim_product;
   }
   
@@ -267,7 +267,7 @@ index_to_pos(...)
     }
   }
   
-  SV* pos_sv = p->to_sv(pos - 1);
+  SV* pos_sv = p->new_sv(pos - 1);
   
   XPUSHs(pos_sv);
   XSRETURN(1);

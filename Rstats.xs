@@ -134,10 +134,55 @@ DESTROY(...)
   PPCODE:
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
+  if (self->type == Rstats::ElementType::COMPLEX) {
+    delete (std::complex<double>*)self->pv;
+  }
+  else if (self->type == Rstats::ElementType::CHARACTER) {
+    delete self->chv;
+  }
   delete self;
 }
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
+
+void
+character_xs(...)
+  PPCODE:
+{
+  SV* value_sv = ST(0);
+  char* chv = p->pv(value_sv);
+  
+  Rstats::Element* element = new Rstats::Element;
+  element->chv = chv;
+  element->type = Rstats::ElementType::CHARACTER;
+  
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
+
+void
+complex_xs(...)
+  PPCODE:
+{
+  SV* re_sv = ST(0);
+  SV* im_sv = ST(1);
+
+  double re = p->nv(re_sv);
+  double im = p->nv(im_sv);
+  
+  std::complex<double>* z = new std::complex<double>(re, im);
+  
+  Rstats::Element* element = new Rstats::Element;
+  element->pv = (void*)z;
+  element->type = Rstats::ElementType::COMPLEX;
+  
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
 
 void
 logical_xs(...)

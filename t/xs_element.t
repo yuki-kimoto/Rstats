@@ -26,5 +26,20 @@ use Rstats::ElementFunc;
     is($e1->type, 'logical');
     is($e1->iv, 1);
   }
+  
+  # element - complex_xs
+  {
+    my $e1 = Rstats::ElementFunc::complex_xs(1.5, 2.5);
+    is($e1->type, 'complex');
+    is($e1->re, 1.5);
+    is($e1->im, 2.5);
+  }
+
+  # element - character_xs
+  {
+    my $e1 = Rstats::ElementFunc::character_xs("foo");
+    is($e1->type, 'character');
+    is($e1->cv, "foo");
+  }
 }
 

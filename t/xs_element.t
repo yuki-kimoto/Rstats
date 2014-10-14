@@ -42,4 +42,3 @@ use Rstats::ElementFunc;
     is($e1->cv, "foo");
   }
 }
-

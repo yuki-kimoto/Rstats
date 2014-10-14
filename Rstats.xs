@@ -126,7 +126,29 @@ flag(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  XSRETURN(0);
+  SV* flag_sv;
+  if (self->type == Rstats::ElementType::DOUBLE) {
+    if (isinf(self->dv)) {
+      if (self->dv > 0) {
+        flag_sv = p->new_sv("inf");
+      }
+      else {
+        flag_sv = p->new_sv("-inf");
+      }
+    }
+    else if(isnan(self->dv)) {
+      flag_sv = p->new_sv("nan");
+    }
+    else {
+      flag_sv = p->new_sv("normal");
+    }
+  }
+  else {
+    flag_sv = p->new_sv("normal");
+  }
+  
+  XPUSHs(flag_sv);
+  XSRETURN(1);
 }
 
 void

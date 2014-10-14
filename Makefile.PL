@@ -25,6 +25,6 @@ WriteMakefile(
     LD => 'g++',
     LIBS              => [''],
     DEFINE            => '',
-    INC               => '-I.',
+    INC               => '-I./inc',
     OBJECT            => '$(O_FILES)',
 );

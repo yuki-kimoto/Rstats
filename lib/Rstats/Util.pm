@@ -2,6 +2,7 @@ package Rstats::Util;
 use strict;
 use warnings;
 
+require Rstats;
 use Scalar::Util ();
 use B ();
 use Carp 'croak';

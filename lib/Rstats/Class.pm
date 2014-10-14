@@ -32,6 +32,7 @@ use Imager::Graph::Line;
 # reshape
 
 my @funcs = qw/
+  double_xs
   abs
   acos
   acosh

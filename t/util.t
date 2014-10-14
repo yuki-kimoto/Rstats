@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::Func;
+use Rstats::Util;
 
 # TODO
 #   which

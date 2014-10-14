@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Carp 'croak', 'carp';
 
+require Rstats;
 use Rstats::Element;
 use Scalar::Util ();
 use Math::Complex ();

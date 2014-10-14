@@ -23,6 +23,71 @@
 
 Rstats::PerlAPI* p = new Rstats::PerlAPI;
 
+MODULE = Rstats::ElementXS PACKAGE = Rstats::ElementXS
+
+void
+type(...)
+  PPCODE:
+{
+  Rstats::ElementType::Enum type;
+    
+  XSRETURN(0);
+}
+
+void
+iv(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
+void
+dv(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
+void
+cv(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
+void
+re(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
+void
+im(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
+void
+flag(...)
+  PPCODE:
+{
+  
+  
+  XSRETURN(0);
+}
+
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
 
 void

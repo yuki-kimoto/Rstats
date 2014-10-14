@@ -46,13 +46,13 @@ sub _fix_position {
   return ($e1, $e2);
 }
 
-has 'type';
-has 'iv';
-has 'dv';
-has 'cv';
-has 're';
-has 'im';
-has 'flag';
+# has 'type';
+# has 'iv';
+# has 'dv';
+# has 'cv';
+# has 're';
+# has 'im';
+# has 'flag';
 
 sub as_character {
   my $self = shift;

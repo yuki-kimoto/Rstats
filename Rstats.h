@@ -173,7 +173,7 @@ namespace Rstats {
     }
   };
 
-  // Rstats::Elementtype
+  // Rstats::ElementType
   namespace ElementType {
     enum Enum {
       NA = 0,

@@ -71,7 +71,7 @@ namespace Rstats {
   }
   
   // Rstats::ElementFunc
-  namespace ElementsFunc {
+  namespace ElementFunc {
     void process(void (*func)(Element*, const Element*), Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
       for (int i = 0; i < size; i++) {
         (*func)(elements1 + i, elements2 + i);
@@ -80,6 +80,15 @@ namespace Rstats {
     
     void add(Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
       process(Rstats::ElementFunc::add, elements1, elements2, size);
+    }
+
+    Rstats::Element* create_double(double dv)
+    {
+      Rstats::Element* element = new Rstats::Element;
+      element->dv = dv;
+      element->type = Rstats::ElementType::DOUBLE;
+      
+      return element;
     }
   }
 }

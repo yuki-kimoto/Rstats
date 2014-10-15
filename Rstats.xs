@@ -22,6 +22,24 @@ Rstats::PerlAPI* p = new Rstats::PerlAPI;
 MODULE = Rstats::ElementXS PACKAGE = Rstats::ElementXS
 
 void
+is_nan(...)
+  PPCODE:
+{
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
+  
+  SV* ret_sv;
+  if (self->type == Rstats::ElementType::DOUBLE && isnan(self->dv)) {
+    ret_sv = p->new_sv((I32)1);
+  }
+  else {
+    ret_sv = p->new_sv((I32)0);
+  }
+  
+  XPUSHs(ret_sv);
+  XSRETURN(1);
+}
+
+void
 type(...)
   PPCODE:
 {
@@ -275,12 +293,10 @@ double_xs(...)
   SV* value_sv = ST(0);
   double dv = p->nv(value_sv);
   
-  Rstats::Element* element = new Rstats::Element;
-  element->dv = dv;
-  element->type = Rstats::ElementType::DOUBLE;
+  Rstats::Element* element = Rstats::ElementFunc::create_double(dv);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
-
+  
   XPUSHs(element_obj);
   XSRETURN(1);
 }

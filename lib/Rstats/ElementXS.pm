@@ -383,11 +383,7 @@ sub is_integer { shift->type eq 'integer' }
 sub is_logical { shift->type eq 'logical' }
 sub is_na { shift->type eq 'na' }
 
-sub is_nan {
-  my $self = shift;
-  
-  return $self->type eq 'double' && $self->flag eq 'nan';
-}
+# is_nan
 
 sub is_infinite {
   my $self = shift;

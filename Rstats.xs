@@ -1,8 +1,11 @@
+/* Rstats headers */
+#include "Rstats.h"
+
+/* Perl headers */
 #define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-
 #include "ppport.h"
 
 /* avoid symbol collisions*/
@@ -13,7 +16,7 @@
 #undef ENTER
 #endif
 
-#include "Rstats.h"
+#include "RstatsPerlAPI.h"
 
 Rstats::PerlAPI* p = new Rstats::PerlAPI;
 

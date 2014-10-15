@@ -102,7 +102,7 @@ re(...)
   double re = ((std::complex<double>*)self->pv)->real();
   
   SV* re_sv;
-  if (isinf(re)) {
+  if (std::isinf(re)) {
     if (re > 0) {
       re_sv = p->new_sv("Inf");
     }
@@ -130,7 +130,7 @@ im(...)
   double im = ((std::complex<double>*)self->pv)->imag();
   
   SV* im_sv;
-  if (isinf(im)) {
+  if (std::isinf(im)) {
     if (im > 0) {
       im_sv = p->new_sv("Inf");
     }
@@ -157,7 +157,7 @@ flag(...)
   
   SV* flag_sv;
   if (self->type == Rstats::ElementType::DOUBLE) {
-    if (isinf(self->dv)) {
+    if (std::isinf(self->dv)) {
       if (self->dv > 0) {
         flag_sv = p->new_sv("inf");
       }

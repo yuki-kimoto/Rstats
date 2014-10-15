@@ -2,7 +2,14 @@
 #include "perl.h"
 #include "XSUB.h"
 
+/* C library */
+#include <math.h>
+
+/* C++ library */
+#include <vector>
+#include <iostream>
 #include <complex>
+
 namespace Rstats {
 
   // Rstats::PerlAPI

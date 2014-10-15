@@ -2,7 +2,7 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.0105';
+our $VERSION = '0.0106';
 
 use Rstats::Class;
 
@@ -90,7 +90,7 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   });
   my $x2 = r->my_sum(c(1, 2, 3));
 
-=head1 Functions
+=head1 FUNCTIONS
 
 =head2 c
 
@@ -160,7 +160,7 @@ C function is equal to C<m:n> of R.
   # matrix(1:12, 4, 3, byrow=TRUE)
   matrix(C('1:12'), 4, 3, {byrow => TRUE});
 
-=head1 Vector access
+=head1 VECTOR ACCESS
 
 =head2 Getter
 
@@ -208,7 +208,7 @@ C function is equal to C<m:n> of R.
   # x1[c("id", "title")] <- x2
   $x1->at(c("id", "title"))->set($x2);
 
-=head2 Operators
+=head1 OPERATORS
 
   # x1 + x2
   $x1 + $x2
@@ -234,7 +234,7 @@ C function is equal to C<m:n> of R.
   # x1 %/% x2 (integer quotient)
   r->tranc($x1 / $x2)
 
-=head2 METHODS
+=head1 METHODS
 
 =head2 abs
 

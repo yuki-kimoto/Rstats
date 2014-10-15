@@ -1,3 +1,4 @@
+#define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
@@ -11,13 +12,6 @@
 #ifdef ENTER
 #undef ENTER
 #endif
-
-/* C library */
-#include <math.h>
-
-/* C++ library */
-#include <vector>
-#include <iostream>
 
 #include "Rstats.h"
 
@@ -104,7 +98,23 @@ re(...)
   
   double re = ((std::complex<double>*)self->pv)->real();
   
-  XPUSHs(p->new_sv(re));
+  SV* re_sv;
+  if (isinf(re)) {
+    if (re > 0) {
+      re_sv = p->new_sv("Inf");
+    }
+    else {
+      re_sv = p->new_sv("-Inf");
+    }
+  }
+  else if(isnan(re)) {
+    re_sv = p->new_sv("NaN");
+  }
+  else {
+    re_sv = p->new_sv(re);
+  }
+
+  XPUSHs(re_sv);
   XSRETURN(1);
 }
 
@@ -116,7 +126,23 @@ im(...)
   
   double im = ((std::complex<double>*)self->pv)->imag();
   
-  XPUSHs(p->new_sv(im));
+  SV* im_sv;
+  if (isinf(im)) {
+    if (im > 0) {
+      im_sv = p->new_sv("Inf");
+    }
+    else {
+      im_sv = p->new_sv("-Inf");
+    }
+  }
+  else if(isnan(im)) {
+    im_sv = p->new_sv("NaN");
+  }
+  else {
+    im_sv = p->new_sv(im);
+  }
+
+  XPUSHs(im_sv);
   XSRETURN(1);
 }
 
@@ -268,7 +294,7 @@ cross_product(...)
   I32 values_length = p->length(values_sv);
   SV* idxs_sv = p->new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    p->push(idxs_sv, p->new_sv(0)); 
+    p->push(idxs_sv, p->new_sv((I32)0)); 
   }
   
   SV* idx_idx_sv = p->new_av_ref();
@@ -279,7 +305,7 @@ cross_product(...)
   SV* x1_sv = p->new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
     SV* value_sv = p->av_get(values_sv, i);
-    p->push(x1_sv, p->av_get(value_sv, 0));
+    p->push(x1_sv, p->av_get(value_sv, (I32)0));
   }
 
   SV* result_sv = p->new_av_ref();
@@ -291,7 +317,7 @@ cross_product(...)
       if (p->iv(p->av_get(idxs_sv, i)) < p->length(p->av_get(values_sv, i)) - 1) {
         
         SV* idxs_tmp = p->av_get(idxs_sv, i);
-        Perl_sv_inc(idxs_tmp);
+        sv_inc(idxs_tmp);
         p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), idxs_tmp));
         
         p->push(result_sv, p->copy_av(x1_sv));
@@ -304,8 +330,8 @@ cross_product(...)
         break;
       }
       
-      p->av_set(idxs_sv, i, p->new_sv(0));
-      p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), 0));
+      p->av_set(idxs_sv, i, p->new_sv((I32)0));
+      p->av_set(x1_sv, i, p->av_get(p->av_get(values_sv, i), (I32)0));
     }
     if (end_loop) {
       break;

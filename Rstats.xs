@@ -214,6 +214,17 @@ DESTROY(...)
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
 
 void
+NaN_xs(...)
+  PPCODE:
+{
+  Rstats::Element* element = Rstats::ElementFunc::create_double(NAN);
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
+
+void
 character_xs(...)
   PPCODE:
 {

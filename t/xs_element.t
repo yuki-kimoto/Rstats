@@ -6,6 +6,13 @@ use Rstats::ElementFunc;
 
 # element
 {
+  # element - NaN_xs
+  {
+    my $e1 = Rstats::ElementFunc::NaN_xs();
+    is($e1->type, 'double');
+    ok($e1->is_nan);
+  }
+  
   # element - double_xs
   {
     my $e1 = Rstats::ElementFunc::double_xs(2.5);

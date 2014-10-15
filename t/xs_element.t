@@ -6,6 +6,70 @@ use Rstats::ElementFunc;
 
 # element
 {
+  # element - is_finite
+  {
+    # element - is_finite - double
+    {
+      my $e1 = Rstats::ElementFunc::double_xs(1.2);
+      ok($e1->is_finite);
+    }
+    
+    # element - is_finite - integer
+    {
+      my $e1 = Rstats::ElementFunc::integer_xs(3);
+      ok($e1->is_finite);
+    }
+
+    # element - is_finite - NaN
+    {
+      my $e1 = Rstats::ElementFunc::NaN_xs();
+      is($e1->type, 'double');
+      ok(!$e1->is_finite);
+    }
+
+    # element - is_finite - Inf
+    {
+      my $e1 = Rstats::ElementFunc::Inf_xs();
+      ok(!$e1->is_finite);
+    }
+
+    # element - is_finite - -Inf
+    {
+      my $e1 = Rstats::ElementFunc::negativeInf_xs();
+      ok(!$e1->is_finite);
+    }
+  }
+  
+  # element - Inf_xs
+  {
+    my $e1 = Rstats::ElementFunc::Inf_xs();
+    is($e1->type, 'double');
+    ok($e1->is_infinite);
+    ok($e1->dv > 0);
+  }
+  
+  # element - negativeInf_xs
+  {
+    my $e1 = Rstats::ElementFunc::negativeInf_xs();
+    is($e1->type, 'double');
+    ok($e1->is_infinite);
+    ok($e1->dv < 0);
+  }
+  
+  # element - NaN_xs
+  {
+    my $e1 = Rstats::ElementFunc::NaN_xs();
+    is($e1->type, 'double');
+    ok($e1->is_nan);
+  }
+
+  # element - NaN_xs
+  {
+    my $e1 = Rstats::ElementFunc::NaN_xs();
+    is($e1->type, 'double');
+    ok($e1->is_nan);
+  }
+  
   # element - NaN_xs
   {
     my $e1 = Rstats::ElementFunc::NaN_xs();

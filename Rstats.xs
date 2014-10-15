@@ -22,6 +22,42 @@ Rstats::PerlAPI* p = new Rstats::PerlAPI;
 MODULE = Rstats::ElementXS PACKAGE = Rstats::ElementXS
 
 void
+is_finite(...)
+  PPCODE:
+{
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
+  
+  SV* ret_sv;
+  if (self->type == Rstats::ElementType::INTEGER || (self->type == Rstats::ElementType::DOUBLE && std::isfinite(self->dv))) {
+    ret_sv = p->new_sv((I32)1);
+  }
+  else {
+    ret_sv = p->new_sv((I32)0);
+  }
+  
+  XPUSHs(ret_sv);
+  XSRETURN(1);
+}
+
+void
+is_infinite(...)
+  PPCODE:
+{
+  Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
+  
+  SV* ret_sv;
+  if (self->type == Rstats::ElementType::DOUBLE && std::isinf(self->dv)) {
+    ret_sv = p->new_sv((I32)1);
+  }
+  else {
+    ret_sv = p->new_sv((I32)0);
+  }
+  
+  XPUSHs(ret_sv);
+  XSRETURN(1);
+}
+
+void
 is_nan(...)
   PPCODE:
 {
@@ -212,6 +248,28 @@ DESTROY(...)
 }
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
+
+void
+negativeInf_xs(...)
+  PPCODE:
+{
+  Rstats::Element* element = Rstats::ElementFunc::create_double(-(INFINITY));
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
+
+void
+Inf_xs(...)
+  PPCODE:
+{
+  Rstats::Element* element = Rstats::ElementFunc::create_double(INFINITY);
+  SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
+  
+  XPUSHs(element_obj);
+  XSRETURN(1);
+}
 
 void
 NaN_xs(...)

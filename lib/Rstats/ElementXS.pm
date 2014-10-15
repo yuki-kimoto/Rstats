@@ -383,30 +383,22 @@ sub is_integer { shift->type eq 'integer' }
 sub is_logical { shift->type eq 'logical' }
 sub is_na { shift->type eq 'na' }
 
-# is_nan
-
-sub is_infinite {
-  my $self = shift;
-  return $self->is_positive_infinite || $self->is_negative_infinite;
-}
-
 sub is_positive_infinite {
   my $self = shift;
   
-  return $self->type eq 'double' && $self->flag eq 'inf';
+  return $self->is_infinite && $self->dv > 0;
 }
 
 sub is_negative_infinite {
   my $self = shift;
   
-  return $self->type eq 'double' && $self->flag eq '-inf';
+  return $self->is_infinite && $self->dv < 0;
 }
 
-sub is_finite {
-  my $self = shift;
-  
-  return $self->is_integer || ($self->is_double && defined $self->dv);
-}
+# XS
+# is_nan
+# is_infinite
+# is_finite
 
 1;
 

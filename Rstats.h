@@ -6,6 +6,8 @@
 #include <iostream>
 #include <complex>
 
+using namespace std;
+
 namespace Rstats {
   // Rstats::ElementType
   namespace ElementType {
@@ -65,7 +67,7 @@ namespace Rstats {
         e1->dv += e2->dv;
       }
       else if (e2->type == Rstats::ElementType::COMPLEX) {
-        *((std::complex<double>*)e1->pv) += *((std::complex<double>*)e2->pv);
+        *((complex<double>*)e1->pv) += *((complex<double>*)e2->pv);
       }
     }
   }

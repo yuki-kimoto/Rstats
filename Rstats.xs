@@ -19,6 +19,8 @@
 
 Rstats::PerlAPI* p = new Rstats::PerlAPI;
 
+using namespace std;
+
 MODULE = Rstats::ElementXS PACKAGE = Rstats::ElementXS
 
 void
@@ -28,7 +30,7 @@ is_finite(...)
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
   SV* ret_sv;
-  if (self->type == Rstats::ElementType::INTEGER || (self->type == Rstats::ElementType::DOUBLE && std::isfinite(self->dv))) {
+  if (self->type == Rstats::ElementType::INTEGER || (self->type == Rstats::ElementType::DOUBLE && isfinite(self->dv))) {
     ret_sv = p->new_sv((I32)1);
   }
   else {
@@ -46,7 +48,7 @@ is_infinite(...)
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
   SV* ret_sv;
-  if (self->type == Rstats::ElementType::DOUBLE && std::isinf(self->dv)) {
+  if (self->type == Rstats::ElementType::DOUBLE && isinf(self->dv)) {
     ret_sv = p->new_sv((I32)1);
   }
   else {
@@ -152,10 +154,10 @@ re(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  double re = ((std::complex<double>*)self->pv)->real();
+  double re = ((complex<double>*)self->pv)->real();
   
   SV* re_sv;
-  if (std::isinf(re)) {
+  if (isinf(re)) {
     if (re > 0) {
       re_sv = p->new_sv("Inf");
     }
@@ -180,10 +182,10 @@ im(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  double im = ((std::complex<double>*)self->pv)->imag();
+  double im = ((complex<double>*)self->pv)->imag();
   
   SV* im_sv;
-  if (std::isinf(im)) {
+  if (isinf(im)) {
     if (im > 0) {
       im_sv = p->new_sv("Inf");
     }
@@ -210,7 +212,7 @@ flag(...)
   
   SV* flag_sv;
   if (self->type == Rstats::ElementType::DOUBLE) {
-    if (std::isinf(self->dv)) {
+    if (isinf(self->dv)) {
       if (self->dv > 0) {
         flag_sv = p->new_sv("inf");
       }
@@ -239,7 +241,7 @@ DESTROY(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   if (self->type == Rstats::ElementType::COMPLEX) {
-    delete (std::complex<double>*)self->pv;
+    delete (complex<double>*)self->pv;
   }
   else if (self->type == Rstats::ElementType::CHARACTER) {
     delete self->chv;
@@ -309,7 +311,7 @@ complex_xs(...)
   double re = p->nv(re_sv);
   double im = p->nv(im_sv);
   
-  std::complex<double>* z = new std::complex<double>(re, im);
+  complex<double>* z = new complex<double>(re, im);
   
   Rstats::Element* element = new Rstats::Element;
   element->pv = (void*)z;

@@ -1,10 +1,8 @@
-/* C library */
-#include <math.h>
-
 /* C++ library */
 #include <vector>
 #include <iostream>
 #include <complex>
+#include <cmath>
 
 using namespace std;
 

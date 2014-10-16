@@ -1,3 +1,5 @@
+#define return_sv(x) XPUSHs(x); XSRETURN(1)
+
 namespace Rstats {
 
   // Rstats::PerlAPI

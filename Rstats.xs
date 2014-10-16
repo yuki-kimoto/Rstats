@@ -37,8 +37,7 @@ is_finite(...)
     ret_sv = p->new_sv((I32)0);
   }
   
-  XPUSHs(ret_sv);
-  XSRETURN(1);
+  return_sv(ret_sv);
 }
 
 void
@@ -55,8 +54,7 @@ is_infinite(...)
     ret_sv = p->new_sv((I32)0);
   }
   
-  XPUSHs(ret_sv);
-  XSRETURN(1);
+  return_sv(ret_sv);
 }
 
 void
@@ -73,8 +71,7 @@ is_nan(...)
     ret_sv = p->new_sv((I32)0);
   }
   
-  XPUSHs(ret_sv);
-  XSRETURN(1);
+  return_sv(ret_sv);
 }
 
 void
@@ -108,8 +105,7 @@ type(...)
     type_sv = p->new_sv("unknown");
   }
   
-  XPUSHs(type_sv);
-  XSRETURN(1);
+  return_sv(type_sv);
 }
 
 void
@@ -120,8 +116,7 @@ iv(...)
   
   I32 iv = self->iv;
   
-  XPUSHs(p->new_sv(iv));
-  XSRETURN(1);
+  return_sv(p->new_sv(iv));
 }
 
 void
@@ -132,8 +127,7 @@ dv(...)
   
   double dv = self->dv;
   
-  XPUSHs(p->new_sv(dv));
-  XSRETURN(1);
+  return_sv(p->new_sv(dv));
 }
 
 void
@@ -144,8 +138,7 @@ cv(...)
   
   SV* chv_sv = p->new_sv(self->chv);
   
-  XPUSHs(chv_sv);
-  XSRETURN(1);
+  return_sv(chv_sv);
 }
 
 void
@@ -172,8 +165,7 @@ re(...)
     re_sv = p->new_sv(re);
   }
 
-  XPUSHs(re_sv);
-  XSRETURN(1);
+  return_sv(re_sv);
 }
 
 void
@@ -200,8 +192,7 @@ im(...)
     im_sv = p->new_sv(im);
   }
 
-  XPUSHs(im_sv);
-  XSRETURN(1);
+  return_sv(im_sv);
 }
 
 void
@@ -231,8 +222,7 @@ flag(...)
     flag_sv = p->new_sv("normal");
   }
   
-  XPUSHs(flag_sv);
-  XSRETURN(1);
+  return_sv(flag_sv);
 }
 
 void
@@ -258,8 +248,7 @@ negativeInf_xs(...)
   Rstats::Element* element = Rstats::ElementFunc::create_double(-(INFINITY));
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -269,8 +258,7 @@ Inf_xs(...)
   Rstats::Element* element = Rstats::ElementFunc::create_double(INFINITY);
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -280,8 +268,7 @@ NaN_xs(...)
   Rstats::Element* element = Rstats::ElementFunc::create_double(NAN);
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -297,8 +284,7 @@ character_xs(...)
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -319,8 +305,7 @@ complex_xs(...)
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -336,8 +321,7 @@ logical_xs(...)
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -353,8 +337,7 @@ integer_xs(...)
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 void
@@ -368,8 +351,7 @@ double_xs(...)
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::ElementXS");
   
-  XPUSHs(element_obj);
-  XSRETURN(1);
+  return_sv(element_obj);
 }
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
@@ -427,8 +409,7 @@ cross_product(...)
     }
   }
 
-  XPUSHs(result_sv);
-  XSRETURN(1);
+  return_sv(result_sv);
 }
 
 void
@@ -458,8 +439,7 @@ pos_to_index(...)
     before_dim_product = dim_product;
   }
   
-  XPUSHs(index_sv);
-  XSRETURN(1);
+  return_sv(index_sv);
 }
 
 void
@@ -485,8 +465,7 @@ index_to_pos(...)
   
   SV* pos_sv = p->new_sv(pos - 1);
   
-  XPUSHs(pos_sv);
-  XSRETURN(1);
+  return_sv(pos_sv);
 }
 
 MODULE = Rstats PACKAGE = Rstats

@@ -301,18 +301,14 @@ sub bool {
     croak 'Error in -a : invalid argument to unary operator ';
   }
   elsif ($self->is_double) {
-
-    if (defined $self->dv) {
-      return $self->dv;
+    if ($self->is_infinite) {
+      return 1;
+    }
+    elsif ($self->is_nan) {
+      croak 'argument is not interpretable as logical';
     }
     else {
-      if ($self->is_infinite) {
-        1;
-      }
-      # NaN
-      else {
-        croak 'argument is not interpretable as logical'
-      }
+      return $self->dv;
     }
   }
   elsif ($self->is_integer || $self->is_logical) {

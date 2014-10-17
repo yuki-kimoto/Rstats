@@ -36,13 +36,7 @@ is_finite(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  Rstats::Element * ret;
-  if (self->type == Rstats::ElementType::INTEGER || (self->type == Rstats::ElementType::DOUBLE && isfinite(self->dv))) {
-    ret = Rstats::ElementFunc::new_true();
-  }
-  else {
-    ret = Rstats::ElementFunc::new_false();
-  }
+  Rstats::Element* ret = Rstats::ElementFunc::is_finite(self);
 
   SV* ret_sv = p->to_perl_obj(ret, "Rstats::Element");
   
@@ -67,14 +61,10 @@ is_nan(...)
   PPCODE:
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
-  
-  SV* ret_sv;
-  if (self->type == Rstats::ElementType::DOUBLE && isnan(self->dv)) {
-    ret_sv = p->new_sv((I32)1);
-  }
-  else {
-    ret_sv = p->new_sv((I32)0);
-  }
+
+  Rstats::Element* ret = Rstats::ElementFunc::is_nan(self);
+
+  SV* ret_sv = p->to_perl_obj(ret, "Rstats::Element");
   
   return_sv(ret_sv);
 }

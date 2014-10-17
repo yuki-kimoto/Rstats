@@ -171,5 +171,31 @@ namespace Rstats {
       
       return ret;
     }
+
+    Rstats::Element* is_finite(Rstats::Element* element) {
+      
+      Rstats::Element* ret;
+      if (element->type == Rstats::ElementType::INTEGER || (element->type == Rstats::ElementType::DOUBLE && isfinite(element->dv))) {
+        ret = new_true();
+      }
+      else {
+        ret = new_false();
+      }
+
+      return ret;
+    }
+
+    Rstats::Element* is_nan(Rstats::Element* element) {
+      Rstats::Element* ret;
+
+      if (element->type == Rstats::ElementType::DOUBLE && isnan(element->dv)) {
+        ret = new_true();
+      }
+      else {
+        ret = new_false();
+      }
+      
+      return ret;
+    }
   }
 }

@@ -10,10 +10,7 @@
 /* Rstats headers */
 #include "Rstats.h"
 
-/* Shortcut of return sv */
-#define return_sv(x) XPUSHs(x); XSRETURN(1)
-
-/* avoid symbol collisions*/
+/* aSV* symbol collisions*/
 #undef init_tm
 #undef do_open
 #undef do_close
@@ -21,11 +18,14 @@
 #undef ENTER
 #endif
 
+/* Shortcut of return sv */
+#define return_sv(x) XPUSHs(x); XSRETURN(1)
+
 namespace my = Rstats::Perl;
 
 MODULE = Rstats::Element PACKAGE = Rstats::Element
 
-void
+SV*
 is_finite(...)
   PPCODE:
 {
@@ -38,7 +38,7 @@ is_finite(...)
   return_sv(ret_sv);
 }
 
-void
+SV*
 is_infinite(...)
   PPCODE:
 {
@@ -51,7 +51,7 @@ is_infinite(...)
   return_sv(ret_sv);
 }
 
-void
+SV*
 is_nan(...)
   PPCODE:
 {
@@ -64,7 +64,7 @@ is_nan(...)
   return_sv(ret_sv);
 }
 
-void
+SV*
 type(...)
   PPCODE:
 {
@@ -98,7 +98,7 @@ type(...)
   return_sv(type_sv);
 }
 
-void
+SV*
 iv(...)
   PPCODE:
 {
@@ -109,7 +109,7 @@ iv(...)
   return_sv(my::new_sv(iv));
 }
 
-void
+SV*
 dv(...)
   PPCODE:
 {
@@ -120,7 +120,7 @@ dv(...)
   return_sv(my::new_sv(dv));
 }
 
-void
+SV*
 cv(...)
   PPCODE:
 {
@@ -137,7 +137,7 @@ cv(...)
   return_sv(str_sv);
 }
 
-void
+SV*
 re(...)
   PPCODE:
 {
@@ -151,7 +151,7 @@ re(...)
   return_sv(re_element_sv);
 }
 
-void
+SV*
 im(...)
   PPCODE:
 {
@@ -165,7 +165,7 @@ im(...)
   return_sv(im_element_sv);
 }
 
-void
+SV*
 flag(...)
   PPCODE:
 {
@@ -195,7 +195,7 @@ flag(...)
   return_sv(flag_sv);
 }
 
-void
+SV*
 DESTROY(...)
   PPCODE:
 {
@@ -211,7 +211,7 @@ DESTROY(...)
 
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
 
-void
+SV*
 complex_double (...)
   PPCODE:
 {
@@ -225,7 +225,7 @@ complex_double (...)
   return_sv(z_sv);
 }
 
-void
+SV*
 new_negativeInf(...)
   PPCODE:
 {
@@ -235,7 +235,7 @@ new_negativeInf(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_Inf(...)
   PPCODE:
 {
@@ -245,7 +245,7 @@ new_Inf(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_NaN(...)
   PPCODE:
 {
@@ -255,7 +255,7 @@ new_NaN(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_NA(...)
   PPCODE:
 {
@@ -265,7 +265,7 @@ new_NA(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_character(...)
   PPCODE:
 {
@@ -278,7 +278,7 @@ new_character(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_complex(...)
   PPCODE:
 {
@@ -295,7 +295,7 @@ new_complex(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_logical(...)
   PPCODE:
 {
@@ -309,7 +309,7 @@ new_logical(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_true(...)
   PPCODE:
 {
@@ -323,7 +323,7 @@ new_true(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_false(...)
   PPCODE:
 {
@@ -337,7 +337,7 @@ new_false(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_double(...)
   PPCODE:
 {
@@ -351,7 +351,7 @@ new_double(...)
   return_sv(element_obj);
 }
 
-void
+SV*
 new_integer(...)
   PPCODE:
 {
@@ -367,7 +367,7 @@ new_integer(...)
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
-void
+SV*
 cross_product(...)
   PPCODE:
 {
@@ -423,7 +423,7 @@ cross_product(...)
   return_sv(result_sv);
 }
 
-void
+SV*
 pos_to_index(...)
   PPCODE:
 {
@@ -453,7 +453,7 @@ pos_to_index(...)
   return_sv(index_sv);
 }
 
-void
+SV*
 index_to_pos(...)
   PPCODE :
 {

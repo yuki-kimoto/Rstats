@@ -4,8 +4,6 @@ use Object::Simple -base;
 require Rstats::Func;
 use Carp 'croak';
 use List::Util ();
-use Imager;
-use Imager::Graph::Line;
 
 # TODO
 # logp1x

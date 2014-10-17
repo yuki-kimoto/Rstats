@@ -1,11 +1,22 @@
-/* Rstats headers */
-#include "Rstats.h"
+/* C++ library */
+#include <vector>
+#include <iostream>
+#include <complex>
+#include <cmath>
 
 /* Perl headers */
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+
+/* Perl API */
+#include "RstatsPerlAPI.h"
+
+Rstats::PerlAPI* p = new Rstats::PerlAPI;
+
+/* Rstats headers */
+#include "Rstats.h"
 
 /* avoid symbol collisions*/
 #undef init_tm
@@ -14,10 +25,6 @@
 #ifdef ENTER
 #undef ENTER
 #endif
-
-#include "RstatsPerlAPI.h"
-
-Rstats::PerlAPI* p = new Rstats::PerlAPI;
 
 using namespace std;
 
@@ -29,13 +36,15 @@ is_finite(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  SV* ret_sv;
+  Rstats::Element * ret;
   if (self->type == Rstats::ElementType::INTEGER || (self->type == Rstats::ElementType::DOUBLE && isfinite(self->dv))) {
-    ret_sv = p->new_sv((I32)1);
+    ret = Rstats::ElementFunc::new_true();
   }
   else {
-    ret_sv = p->new_sv((I32)0);
+    ret = Rstats::ElementFunc::new_false();
   }
+
+  SV* ret_sv = p->to_perl_obj(ret, "Rstats::Element");
   
   return_sv(ret_sv);
 }
@@ -46,9 +55,11 @@ is_infinite(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  int ret = Rstats::ElementFunc::is_infinite(self);
+  Rstats::Element* ret = Rstats::ElementFunc::is_infinite(self);
   
-  return_sv(p->new_sv((I32)ret));
+  SV* ret_sv = p->to_perl_obj(ret, "Rstats::Element");
+  
+  return_sv(ret_sv);
 }
 
 void
@@ -259,13 +270,9 @@ void
 new_character(...)
   PPCODE:
 {
-  SV* value_sv = ST(0);
+  SV* str_sv = ST(0);
   
-  Rstats::Element* element = new Rstats::Element;
-  SV* new_value_sv = p->new_sv(value_sv);
-  SvREFCNT_inc(new_value_sv);
-  element->pv = new_value_sv;
-  element->type = Rstats::ElementType::CHARACTER;
+  Rstats::Element* element = Rstats::ElementFunc::new_character(str_sv);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
@@ -282,11 +289,7 @@ new_complex(...)
   double re = p->nv(re_sv);
   double im = p->nv(im_sv);
   
-  complex<double>* z = new complex<double>(re, im);
-  
-  Rstats::Element* element = new Rstats::Element;
-  element->pv = (void*)z;
-  element->type = Rstats::ElementType::COMPLEX;
+  Rstats::Element* element = Rstats::ElementFunc::new_complex(re, im);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
@@ -300,9 +303,7 @@ new_logical(...)
   SV* value_sv = ST(0);
   I32 iv = p->iv(value_sv);
   
-  Rstats::Element* element = new Rstats::Element;
-  element->iv = iv;
-  element->type = Rstats::ElementType::LOGICAL;
+  Rstats::Element* element = Rstats::ElementFunc::new_logical((bool)iv);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
@@ -310,15 +311,27 @@ new_logical(...)
 }
 
 void
-new_integer(...)
+new_true(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
   I32 iv = p->iv(value_sv);
   
-  Rstats::Element* element = new Rstats::Element;
-  element->iv = iv;
-  element->type = Rstats::ElementType::INTEGER;
+  Rstats::Element* element = Rstats::ElementFunc::new_true();
+  
+  SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
+  
+  return_sv(element_obj);
+}
+
+void
+new_false(...)
+  PPCODE:
+{
+  SV* value_sv = ST(0);
+  I32 iv = p->iv(value_sv);
+  
+  Rstats::Element* element = Rstats::ElementFunc::new_false();
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
@@ -333,6 +346,20 @@ new_double(...)
   double dv = p->nv(value_sv);
   
   Rstats::Element* element = Rstats::ElementFunc::new_double(dv);
+  
+  SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
+  
+  return_sv(element_obj);
+}
+
+void
+new_integer(...)
+  PPCODE:
+{
+  SV* value_sv = ST(0);
+  int iv = p->iv(value_sv);
+  
+  Rstats::Element* element = Rstats::ElementFunc::new_integer(iv);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   

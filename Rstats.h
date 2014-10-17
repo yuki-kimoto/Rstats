@@ -1,9 +1,3 @@
-/* C++ library */
-#include <vector>
-#include <iostream>
-#include <complex>
-#include <cmath>
-
 using namespace std;
 
 namespace Rstats {
@@ -91,6 +85,58 @@ namespace Rstats {
       return element;
     }
 
+    Rstats::Element* new_character(SV* str_sv) {
+      Rstats::Element* element = new Rstats::Element;
+      SV* new_str_sv = p->new_sv(str_sv);
+      SvREFCNT_inc(new_str_sv);
+      element->pv = new_str_sv;
+      element->type = Rstats::ElementType::CHARACTER;
+      
+      return element;
+    }
+
+    Rstats::Element* new_complex(double re, double im) {
+      
+      complex<double>* z = new complex<double>(re, im);
+      Rstats::Element* element = new Rstats::Element;
+      element->pv = (void*)z;
+      element->type = Rstats::ElementType::COMPLEX;
+      
+      return element;
+    }
+
+    Rstats::Element* new_true() {
+      Rstats::Element* element = new Rstats::Element;
+      element->iv = 1;
+      element->type = Rstats::ElementType::LOGICAL;
+      
+      return element;
+    }
+
+    Rstats::Element* new_logical(bool b) {
+      Rstats::Element* element = new Rstats::Element;
+      element->iv = b ? 1 : 0;
+      element->type = Rstats::ElementType::LOGICAL;
+      
+      return element;
+    }
+    
+    Rstats::Element* new_false() {
+      Rstats::Element* element = new Rstats::Element;
+      element->iv = 0;
+      element->type = Rstats::ElementType::LOGICAL;
+      
+      return element;
+    }
+    
+    Rstats::Element* new_integer(int iv) {
+      Rstats::Element* element = new Rstats::Element;
+      element->iv = iv;
+      element->type = Rstats::ElementType::INTEGER;
+      
+      return element;
+    }
+
     Rstats::Element* new_NaN() {
       Rstats::Element* element = new_double(NAN);
       
@@ -107,22 +153,20 @@ namespace Rstats {
       return element;
     }
     
-    Rstats::Element* new_NA()
-    {
+    Rstats::Element* new_NA() {
       Rstats::Element* element = new Rstats::Element;
       element->type = Rstats::ElementType::NA;
       
       return element;
     }
     
-    int is_infinite(Rstats::Element* element)
-    {
-      int ret;
+    Rstats::Element* is_infinite(Rstats::Element* element) {
+      Rstats::Element* ret;
       if (element->type == Rstats::ElementType::DOUBLE && isinf(element->dv)) {
-        ret = 1;
+        ret = new_true();
       }
       else {
-        ret = 0;
+        ret = new_false();
       }
       
       return ret;

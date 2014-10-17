@@ -27,12 +27,6 @@ sub character { new_character(@_) }
 
 sub complex { new_complex(@_) }
 
-sub complex_double {
-  my ($re, $im) = @_;
-  
-  my $z = complex($re->value, $im->value);
-}
-
 sub double { new_double(shift) }
 sub integer { new_integer(shift) }
 sub logical { new_logical(shift) }

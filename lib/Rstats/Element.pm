@@ -266,20 +266,18 @@ sub to_string {
     $str .= $im . 'i';
   }
   elsif ($self->is_double) {
-    
-    my $flag = $self->flag;
-    
-    if (defined $self->dv) {
-      return $self->dv . "";
-    }
-    elsif ($flag eq 'nan') {
-      return 'NaN';
-    }
-    elsif ($flag eq 'inf') {
+  
+    if ($self->is_positive_infinite) {
       return 'Inf';
     }
-    elsif ($flag eq '-inf') {
+    elsif ($self->is_negative_infinite) {
       return '-Inf';
+    }
+    elsif ($self->is_nan) {
+      return 'NaN';
+    }
+    else {
+      $self->dv . "";
     }
   }
   elsif ($self->is_integer) {

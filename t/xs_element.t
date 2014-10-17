@@ -12,7 +12,6 @@ use Rstats::ElementFunc;
     my $e1 = Rstats::ElementFunc::new_character("foo");
     is($e1->type, 'character');
     is($e1->cv, "foo");
-    1;
   }
 
   # element - is_finite

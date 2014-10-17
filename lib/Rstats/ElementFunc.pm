@@ -1349,7 +1349,6 @@ sub multiply {
     croak "Error in a + b : non-numeric argument to binary operator";
   }
   elsif ($e1->is_complex) {
-    $DB::single = 1;
     my $re = subtract(multiply($e1->re, $e2->re), multiply($e1->im, $e2->im));
     my $im = add(multiply($e1->re, $e2->im), multiply($e1->im, $e2->re));
     

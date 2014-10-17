@@ -217,6 +217,20 @@ DESTROY(...)
 MODULE = Rstats::ElementFunc PACKAGE = Rstats::ElementFunc
 
 void
+complex_double (...)
+  PPCODE:
+{
+  Rstats::Element* re = p->to_c_obj<Rstats::Element*>(ST(0));
+  Rstats::Element* im = p->to_c_obj<Rstats::Element*>(ST(1));
+  
+  Rstats::Element* z = Rstats::ElementFunc::new_complex(re->dv, im->dv);
+  
+  SV* z_sv = p->to_perl_obj(z, "Rstats::Element");
+  
+  return_sv(z_sv);
+}
+
+void
 new_negativeInf(...)
   PPCODE:
 {

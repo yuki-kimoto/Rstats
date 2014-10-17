@@ -18,6 +18,9 @@ Rstats::PerlAPI* p = new Rstats::PerlAPI;
 /* Rstats headers */
 #include "Rstats.h"
 
+/* Shortcut of return sv
+#define return_sv(x) XPUSHs(x); XSRETURN(1)
+
 /* avoid symbol collisions*/
 #undef init_tm
 #undef do_open
@@ -25,8 +28,6 @@ Rstats::PerlAPI* p = new Rstats::PerlAPI;
 #ifdef ENTER
 #undef ENTER
 #endif
-
-using namespace std;
 
 MODULE = Rstats::Element PACKAGE = Rstats::Element
 
@@ -148,7 +149,7 @@ re(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  double re = ((complex<double>*)self->pv)->real();
+  double re = ((std::complex<double>*)self->pv)->real();
   
   Rstats::Element* re_element = Rstats::ElementFunc::new_double(re);
   SV* re_element_sv = p->to_perl_obj(re_element, "Rstats::Element");
@@ -162,7 +163,7 @@ im(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  double im = ((complex<double>*)self->pv)->imag();
+  double im = ((std::complex<double>*)self->pv)->imag();
   
   Rstats::Element* im_element = Rstats::ElementFunc::new_double(im);
   SV* im_element_sv = p->to_perl_obj(im_element, "Rstats::Element");
@@ -178,7 +179,7 @@ flag(...)
   
   SV* flag_sv;
   if (self->type == Rstats::ElementType::DOUBLE) {
-    if (isinf(self->dv)) {
+    if (std::isinf(self->dv)) {
       if (self->dv > 0) {
         flag_sv = p->new_sv("inf");
       }
@@ -206,7 +207,7 @@ DESTROY(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   if (self->type == Rstats::ElementType::COMPLEX) {
-    delete (complex<double>*)self->pv;
+    delete (std::complex<double>*)self->pv;
   }
   else if (self->type == Rstats::ElementType::CHARACTER) {
     SvREFCNT_dec((SV*)self->pv);

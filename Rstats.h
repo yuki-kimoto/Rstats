@@ -1,5 +1,3 @@
-using namespace std;
-
 namespace Rstats {
   // Rstats::ElementType
   namespace ElementType {
@@ -59,7 +57,7 @@ namespace Rstats {
         e1->dv += e2->dv;
       }
       else if (e2->type == Rstats::ElementType::COMPLEX) {
-        *((complex<double>*)e1->pv) += *((complex<double>*)e2->pv);
+        *((std::complex<double>*)e1->pv) += *((std::complex<double>*)e2->pv);
       }
     }
   }
@@ -97,7 +95,7 @@ namespace Rstats {
 
     Rstats::Element* new_complex(double re, double im) {
       
-      complex<double>* z = new complex<double>(re, im);
+      std::complex<double>* z = new std::complex<double>(re, im);
       Rstats::Element* element = new Rstats::Element;
       element->pv = (void*)z;
       element->type = Rstats::ElementType::COMPLEX;
@@ -162,7 +160,7 @@ namespace Rstats {
     
     Rstats::Element* is_infinite(Rstats::Element* element) {
       Rstats::Element* ret;
-      if (element->type == Rstats::ElementType::DOUBLE && isinf(element->dv)) {
+      if (element->type == Rstats::ElementType::DOUBLE && std::isinf(element->dv)) {
         ret = new_true();
       }
       else {
@@ -175,7 +173,7 @@ namespace Rstats {
     Rstats::Element* is_finite(Rstats::Element* element) {
       
       Rstats::Element* ret;
-      if (element->type == Rstats::ElementType::INTEGER || (element->type == Rstats::ElementType::DOUBLE && isfinite(element->dv))) {
+      if (element->type == Rstats::ElementType::INTEGER || (element->type == Rstats::ElementType::DOUBLE && std::isfinite(element->dv))) {
         ret = new_true();
       }
       else {

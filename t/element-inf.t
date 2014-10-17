@@ -7,28 +7,11 @@ use Scalar::Util 'refaddr';
 
 # Inf
 {
-  # Inf - singleton
-  {
-    my $inf = Rstats::ElementFunc::Inf;
-    my $inf2 = Rstats::ElementFunc::Inf;
-  
-    is(refaddr $inf, refaddr $inf2);
-  }
-  
-  # Inf - singleton, minus
-  {
-    my $inf = Rstats::ElementFunc::Inf;
-    my $negative_inf = Rstats::ElementFunc::negation($inf);
-    my $negative_inf2 = Rstats::ElementFunc::negativeInf;
-    is(refaddr $negative_inf, refaddr $negative_inf2);
-  }
-  
   # Inf - negation
   {
     my $inf = Rstats::ElementFunc::Inf;
     my $negative_inf = Rstats::ElementFunc::negation($inf);
-    my $negative_inf2 = Rstats::ElementFunc::negativeInf;
-    is(refaddr $negative_inf, refaddr $negative_inf2);
+    ok($negative_inf->is_negative_infinite);
   }
 
   # Inf - negation repeat
@@ -36,7 +19,7 @@ use Scalar::Util 'refaddr';
     my $inf = Rstats::ElementFunc::Inf;
     my $negative_inf = Rstats::ElementFunc::negation($inf);
     my $inf2 = Rstats::ElementFunc::negation($negative_inf);
-    is(refaddr $inf, refaddr $inf2);
+    ok($inf2->is_positive_infinite);
   }
   
   # Inf - to_string, plus
@@ -68,7 +51,7 @@ use Scalar::Util 'refaddr';
   
   # is_infinite - Double, false
   {
-    my $num = Rstats::Element->new(type => 'double', re => 1);
+    my $num = Rstats::ElementFunc::new_double(1);
     ok(!$num->is_infinite);
   }
 }
@@ -89,13 +72,13 @@ use Scalar::Util 'refaddr';
   
   # is_finite - Double, true
   {
-    my $num = Rstats::Element->new(type => 'double', dv => 1);
+    my $num = Rstats::ElementFunc::new_double(1);
     ok($num->is_finite);
   }
   
   # is_finite - Integer, true
   {
-    my $num = Rstats::Element->new(type => 'integer', value => 1);
+    my $num = Rstats::ElementFunc::new_integer(1);
     ok($num->is_finite);
   }
 }

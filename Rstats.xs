@@ -130,9 +130,15 @@ cv(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  SV* chv_sv = p->new_sv(self->chv);
+  SV* str_sv;
+  if (self->type == Rstats::ElementType::CHARACTER) {
+    str_sv = p->new_sv((SV*)self->pv);
+  }
+  else {
+    str_sv = p->new_sv("");
+  }
   
-  return_sv(chv_sv);
+  return_sv(str_sv);
 }
 
 void
@@ -228,7 +234,7 @@ DESTROY(...)
     delete (complex<double>*)self->pv;
   }
   else if (self->type == Rstats::ElementType::CHARACTER) {
-    delete self->chv;
+    delete (SV*)self->pv;
   }
   delete self;
 }
@@ -440,7 +446,7 @@ DESTROY(...)
     delete (complex<double>*)self->pv;
   }
   else if (self->type == Rstats::ElementType::CHARACTER) {
-    delete self->chv;
+    SvREFCNT_dec((SV*)self->pv);
   }
   delete self;
 }
@@ -492,11 +498,11 @@ new_character(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  char* chv = p->pv(value_sv);
   
   Rstats::Element* element = new Rstats::Element;
-  element->chv = chv;
-  
+  SV* new_value_sv = p->new_sv(value_sv);
+  SvREFCNT_inc(new_value_sv);
+  element->pv = new_value_sv;
   element->type = Rstats::ElementType::CHARACTER;
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");

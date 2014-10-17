@@ -6,6 +6,15 @@ use Rstats::ElementFunc;
 
 # element
 {
+  
+  # element - character_xs
+  {
+    my $e1 = Rstats::ElementFunc::new_character("foo");
+    is($e1->type, 'character');
+    is($e1->cv, "foo");
+    1;
+  }
+  
   # element - is_finite
   {
     # element - is_finite - double
@@ -96,12 +105,5 @@ use Rstats::ElementFunc;
   {
     my $e1 = Rstats::ElementFunc::new_NA();
     is($e1->type, 'na');
-  }
-  
-  # element - character_xs
-  {
-    my $e1 = Rstats::ElementFunc::new_character("foo");
-    is($e1->type, 'character');
-    is($e1->cv, "foo");
   }
 }

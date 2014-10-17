@@ -3,24 +3,9 @@ use strict;
 use warnings;
 
 use Rstats::ElementFunc;
-use Scalar::Util 'refaddr';
 
 # logical
 {
-  # logical - singleton, true
-  {
-    my $true1 = Rstats::ElementFunc::TRUE;
-    my $true2 = Rstats::ElementFunc::TRUE;
-    is(refaddr $true1, refaddr $true2);
-  }
-  
-  # logical - singleton, false
-  {
-    my $false1 = Rstats::ElementFunc::FALSE;
-    my $false2 = Rstats::ElementFunc::FALSE;
-    is(refaddr $false1, refaddr $false2);
-  }
-  
   # logical - bool, TRUE
   {
     my $true = Rstats::ElementFunc::TRUE;

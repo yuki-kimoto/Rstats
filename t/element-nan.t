@@ -4,13 +4,6 @@ use warnings;
 
 use Rstats::ElementFunc;
 
-# nan - singleton
-{
-  my $nan1 = Rstats::ElementFunc::NaN;
-  my $nan2 = Rstats::ElementFunc::NaN;
-  is($nan1, $nan2);
-}
-
 # nan - nan is double
 {
   my $nan = Rstats::ElementFunc::NaN;

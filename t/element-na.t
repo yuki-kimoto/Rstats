@@ -3,19 +3,11 @@ use strict;
 use warnings;
 
 use Rstats::ElementFunc;
-use Scalar::Util 'refaddr';
 
 # reference
 {
   my $na = Rstats::ElementFunc::NA;
   ok($na->is_na);
-}
-
-# singleton
-{
-  my $na1 = Rstats::ElementFunc::NA;
-  my $na2 = Rstats::ElementFunc::NA;
-  is(refaddr $na1, refaddr $na2);
 }
 
 # negation

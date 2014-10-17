@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Rstats::ElementFunc;
-use Scalar::Util 'refaddr';
 
 # Inf
 {

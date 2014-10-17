@@ -18,7 +18,7 @@ Rstats::PerlAPI* p = new Rstats::PerlAPI;
 /* Rstats headers */
 #include "Rstats.h"
 
-/* Shortcut of return sv
+/* Shortcut of return sv */
 #define return_sv(x) XPUSHs(x); XSRETURN(1)
 
 /* avoid symbol collisions*/
@@ -179,7 +179,7 @@ flag(...)
   
   SV* flag_sv;
   if (self->type == Rstats::ElementType::DOUBLE) {
-    if (std::isinf(self->dv)) {
+    if (Rstats::ElementFunc::is_infinite(self)) {
       if (self->dv > 0) {
         flag_sv = p->new_sv("inf");
       }
@@ -187,7 +187,7 @@ flag(...)
         flag_sv = p->new_sv("-inf");
       }
     }
-    else if(isnan(self->dv)) {
+    else if(Rstats::ElementFunc::is_nan(self)) {
       flag_sv = p->new_sv("nan");
     }
     else {

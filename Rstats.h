@@ -90,5 +90,18 @@ namespace Rstats {
       
       return element;
     }
+
+    int is_infinite(Rstats::Element* element)
+    {
+      int ret;
+      if (element->type == Rstats::ElementType::DOUBLE && isinf(element->dv)) {
+        ret = 1;
+      }
+      else {
+        ret = 0;
+      }
+      
+      return ret;
+    }
   }
 }

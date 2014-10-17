@@ -241,6 +241,7 @@ sub read_table {
       push @$data_frame_args, $x1->as_factor;
     }
     elsif ($type eq 'complex') {
+      $DB::single = 1;
       my $x1 = Rstats::Func::c($columns->[$i]);
       push @$data_frame_args, $x1->as_complex;
     }

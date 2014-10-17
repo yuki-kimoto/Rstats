@@ -46,15 +46,9 @@ is_infinite(...)
 {
   Rstats::Element* self = p->to_c_obj<Rstats::Element*>(ST(0));
   
-  SV* ret_sv;
-  if (self->type == Rstats::ElementType::DOUBLE && isinf(self->dv)) {
-    ret_sv = p->new_sv((I32)1);
-  }
-  else {
-    ret_sv = p->new_sv((I32)0);
-  }
+  int ret = Rstats::ElementFunc::is_infinite(self);
   
-  return_sv(ret_sv);
+  return_sv(p->new_sv((I32)ret));
 }
 
 void

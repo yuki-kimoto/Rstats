@@ -12,7 +12,6 @@ WriteMakefile(
       : ()),
     PL_FILES            => {},
     PREREQ_PM => {
-        'Test::More' => 0,
         'Object::Simple' => '3.10',
         'Math::Round' => '0.06',
         'Text::UnicodeTable::Simple' => '0.09'

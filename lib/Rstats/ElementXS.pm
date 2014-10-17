@@ -52,7 +52,7 @@ sub _fix_position {
 # has 'cv';
 # has 're';
 # has 'im';
-has 'flag';
+# has 'flag';
 
 sub as_character {
   my $self = shift;
@@ -71,7 +71,7 @@ sub as_complex {
   elsif ($self->is_character) {
     my $z = Rstats::Util::looks_like_complex($self->cv);
     if (defined $z) {
-      return Rstats::ElementFunc::complex($z->re, $z->im);
+      return Rstats::ElementFunc::complex($z->{re}, $z->{im});
     }
     else {
       carp 'NAs introduced by coercion';

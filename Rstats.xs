@@ -457,7 +457,7 @@ SV*
 index_to_pos(...)
   PPCODE :
 {
-  SV* index_sv =ST(0);
+  SV* index_sv = ST(0);
   SV* dim_values_sv = ST(1);
   
   U32 pos = 0;

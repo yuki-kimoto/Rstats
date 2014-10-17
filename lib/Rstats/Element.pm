@@ -46,13 +46,13 @@ sub _fix_position {
   return ($e1, $e2);
 }
 
-has 'type';
-has 'iv';
-has 'dv';
-has 'cv';
-has 're';
-has 'im';
-has 'flag';
+# has 'type';
+# has 'iv';
+# has 'dv';
+# has 'cv';
+# has 're';
+# has 'im';
+# has 'flag';
 
 sub as_character {
   my $self = shift;
@@ -258,8 +258,8 @@ sub to_string {
     return $self->cv . "";
   }
   elsif ($self->is_complex) {
-    my $re = $self->re->to_string;
-    my $im = $self->im->to_string;
+    my $re = $self->re;
+    my $im = $self->im;
     
     my $str = "$re";
     $str .= '+' if $im >= 0;
@@ -383,34 +383,22 @@ sub is_integer { shift->type eq 'integer' }
 sub is_logical { shift->type eq 'logical' }
 sub is_na { shift->type eq 'na' }
 
-sub is_nan {
-  my $self = shift;
-  
-  return $self->type eq 'double' && $self->flag eq 'nan';
-}
-
-sub is_infinite {
-  my $self = shift;
-  return $self->is_positive_infinite || $self->is_negative_infinite;
-}
-
 sub is_positive_infinite {
   my $self = shift;
   
-  return $self->type eq 'double' && $self->flag eq 'inf';
+  return $self->is_infinite && $self->dv > 0;
 }
 
 sub is_negative_infinite {
   my $self = shift;
   
-  return $self->type eq 'double' && $self->flag eq '-inf';
+  return $self->is_infinite && $self->dv < 0;
 }
 
-sub is_finite {
-  my $self = shift;
-  
-  return $self->is_integer || ($self->is_double && defined $self->dv);
-}
+# XS
+# is_nan
+# is_infinite
+# is_finite
 
 1;
 

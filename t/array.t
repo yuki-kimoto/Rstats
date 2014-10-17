@@ -9,81 +9,11 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
-# logical operator
+# create element
 {
-  # logical operator - &
+  # create element - character
   {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 & $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/1 0 0 0/]);
-  }
-
-  # logical operator - |
-  {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 | $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/1 1 1 0/]);
-  }
-}
-
-# comparison operator
-{
-  # comparison operator - >
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 > $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/0 0 1/]);
-  }
-
-  # comparison operator - >=
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 >= $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/0 1 1/]);
-  }
-
-  # comparison operator - <
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 < $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/1 0 0/]);
-  }
-
-  # comparison operator - <=
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 <= $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/1 1 0/]);
-  }
-
-  # comparison operator - ==
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 == $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/0 1 0/]);
-  }
-
-  # comparison operator - !=
-  {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
-    my $x3 = $x1 != $x2;
-    ok($x3->is_logical);
-    is_deeply($x3->values, [qw/1 0 1/]);
+    my $x1 = c("a", "b", "c");
   }
 }
 
@@ -192,6 +122,84 @@ use Rstats::Func;
   {
     my $x1 = array(C('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+  }
+}
+
+# logical operator
+{
+  # logical operator - &
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 & $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/1 0 0 0/]);
+  }
+
+  # logical operator - |
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 | $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/1 1 1 0/]);
+  }
+}
+
+# comparison operator
+{
+  # comparison operator - >
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 > $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/0 0 1/]);
+  }
+
+  # comparison operator - >=
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 >= $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/0 1 1/]);
+  }
+
+  # comparison operator - <
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 < $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/1 0 0/]);
+  }
+
+  # comparison operator - <=
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 <= $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/1 1 0/]);
+  }
+
+  # comparison operator - ==
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 == $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/0 1 0/]);
+  }
+
+  # comparison operator - !=
+  {
+    my $x1 = array(c(0, 1, 2));
+    my $x2 = array(c(1, 1, 1));
+    my $x3 = $x1 != $x2;
+    ok($x3->is_logical);
+    is_deeply($x3->values, [qw/1 0 1/]);
   }
 }
 

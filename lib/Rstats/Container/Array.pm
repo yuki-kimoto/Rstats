@@ -334,7 +334,7 @@ sub bool {
   elsif ($length > 1) {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
-
+  
   my $element = $self->element;
   
   return !!$element;
@@ -342,7 +342,7 @@ sub bool {
 
 sub element {
   my $self = shift;
-  
+
   my $dim_values = $self->dim_as_array->values;
   
   if (@_) {

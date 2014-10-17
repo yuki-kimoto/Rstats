@@ -241,7 +241,6 @@ sub read_table {
       push @$data_frame_args, $x1->as_factor;
     }
     elsif ($type eq 'complex') {
-      $DB::single = 1;
       my $x1 = Rstats::Func::c($columns->[$i]);
       push @$data_frame_args, $x1->as_complex;
     }
@@ -853,6 +852,142 @@ sub grep {
   return c($x2_elements);
 }
 
+sub c {
+  my @elements_tmp1 = @_;
+  
+  # Fix elements
+  my $elements_tmp2;
+  if (@elements_tmp1 == 0) {
+    return NULL();
+  }
+  elsif (@elements_tmp1 > 1) {
+    $elements_tmp2 = \@elements_tmp1;
+  }
+  else {
+    $elements_tmp2 = $elements_tmp1[0];
+  }
+
+  my $elements = [];
+  if (defined $elements_tmp2) {
+    if (ref $elements_tmp2 eq 'ARRAY') {
+      for my $element (@$elements_tmp2) {
+        if (ref $element eq 'ARRAY') {
+          push @$elements, @$element;
+        }
+        elsif (ref $element eq 'Rstats::Container::Array') {
+          push @$elements, @{$element->elements};
+        }
+        else {
+          push @$elements, $element;
+        }
+      }
+    }
+    elsif (ref $elements_tmp2 eq 'Rstats::Container::Array') {
+      $elements = $elements_tmp2->elements;
+    }
+    else {
+      $elements = [$elements_tmp2];
+    }
+  }
+  else {
+    return NA();
+  }
+  
+  # Check elements
+  my $mode_h = {};
+  for my $element (@$elements) {
+    
+    if (!ref $element) {
+      if (Rstats::Util::is_perl_number($element)) {
+        $element = Rstats::ElementFunc::double($element);
+        $mode_h->{double}++;
+      }
+      else {
+        $element = Rstats::ElementFunc::character("$element");
+        $mode_h->{character}++;
+      }
+    }
+    elsif ($element->is_na) {
+      next;
+    }
+    elsif ($element->is_character) {
+      $mode_h->{character}++;
+    }
+    elsif ($element->is_complex) {
+      $mode_h->{complex}++;
+    }
+    elsif ($element->is_double) {
+      $mode_h->{double}++;
+    }
+    elsif ($element->is_integer) {
+      $element = Rstats::ElementFunc::double($element->value);
+      $mode_h->{double}++;
+    }
+    elsif ($element->is_logical) {
+      $mode_h->{logical}++;
+    }
+  }
+
+  # Array
+  my $x1 = NULL();
+  $x1->elements($elements);
+
+  # Upgrade elements and type
+  my @modes = keys %$mode_h;
+  if (@modes > 1) {
+    if ($mode_h->{character}) {
+      $x1 = $x1->as_character;
+    }
+    elsif ($mode_h->{complex}) {
+      $x1 = $x1->as_complex;
+    }
+    elsif ($mode_h->{double}) {
+      $x1 = $x1->as_double;
+    }
+  }
+  else {
+    $x1->mode($modes[0] || 'logical');
+  }
+  
+  return $x1;
+}
+
+sub C {
+  my $seq_str = shift;
+
+  my $by;
+  my $mode;
+  if ($seq_str =~ s/^(.+)\*//) {
+    $by = $1;
+  }
+  
+  my $from;
+  my $to;
+  if ($seq_str =~ /([^\:]+)(?:\:(.+))?/) {
+    $from = $1;
+    $to = $2;
+    $to = $from unless defined $to;
+  }
+  
+  my $vector = seq({from => $from, to => $to, by => $by});
+  
+  return $vector;
+}
+
+sub col {
+  my $x1 = shift;
+  
+  my $nrow = nrow($x1)->value;
+  my $ncol = ncol($x1)->value;
+  
+  my @values;
+  for my $col (1 .. $ncol) {
+    push @values, ($col) x $nrow;
+  }
+  
+  return array(\@values, [$nrow, $ncol]);
+}
+
 sub chartr {
   my ($x1_old, $x1_new, $x1_x) = args(['old', 'new', 'x'], @_);
   
@@ -913,6 +1048,15 @@ sub charmatch {
   return c($x2_elements);
 }
 
+sub Conj {
+  my $x1 = to_c(shift);
+  
+  my @a2_elements = map { Rstats::ElementFunc::Conj($_) } @{$x1->elements};
+  my $x2 = $x1->clone(elements => \@a2_elements);
+  
+  return $x2;
+}
+
 sub Re {
   my $x1 = to_c(shift);
   
@@ -933,14 +1077,20 @@ sub Im {
   return $x2;
 }
 
-sub Conj {
-  my $x1 = to_c(shift);
+sub nrow {
+  my $x1 = shift;
   
-  my @a2_elements = map { Rstats::ElementFunc::Conj($_) } @{$x1->elements};
-  my $x2 = $x1->clone(elements => \@a2_elements);
-  
-  return $x2;
+  if ($x1->is_data_frame) {
+    return c($x1->{row_length});
+  }
+  elsif ($x1->is_list) {
+    return Rstats::Func::NULL();
+  }
+  else {
+    return c($x1->dim->values->[0]);
+  }
 }
+
 
 sub negation {
   my $x1 = shift;
@@ -2493,34 +2643,6 @@ sub sum {
   return c($sum);
 }
 
-sub col {
-  my $x1 = shift;
-  
-  my $nrow = nrow($x1)->value;
-  my $ncol = ncol($x1)->value;
-  
-  my @values;
-  for my $col (1 .. $ncol) {
-    push @values, ($col) x $nrow;
-  }
-  
-  return array(\@values, [$nrow, $ncol]);
-}
-
-sub nrow {
-  my $x1 = shift;
-  
-  if ($x1->is_data_frame) {
-    return c($x1->{row_length});
-  }
-  elsif ($x1->is_list) {
-    return Rstats::Func::NULL();
-  }
-  else {
-    return c($x1->dim->values->[0]);
-  }
-}
-
 sub ncol {
   my $x1 = shift;
   
@@ -2613,128 +2735,6 @@ sub seq {
     
     return c($elements);
   }
-}
-
-sub c {
-  my @elements_tmp1 = @_;
-  
-  # Fix elements
-  my $elements_tmp2;
-  if (@elements_tmp1 == 0) {
-    return NULL();
-  }
-  elsif (@elements_tmp1 > 1) {
-    $elements_tmp2 = \@elements_tmp1;
-  }
-  else {
-    $elements_tmp2 = $elements_tmp1[0];
-  }
-
-  my $elements = [];
-  if (defined $elements_tmp2) {
-    if (ref $elements_tmp2 eq 'ARRAY') {
-      for my $element (@$elements_tmp2) {
-        if (ref $element eq 'ARRAY') {
-          push @$elements, @$element;
-        }
-        elsif (ref $element eq 'Rstats::Container::Array') {
-          push @$elements, @{$element->elements};
-        }
-        else {
-          push @$elements, $element;
-        }
-      }
-    }
-    elsif (ref $elements_tmp2 eq 'Rstats::Container::Array') {
-      $elements = $elements_tmp2->elements;
-    }
-    else {
-      $elements = [$elements_tmp2];
-    }
-  }
-  else {
-    return NA();
-  }
-  
-  # Check elements
-  my $mode_h = {};
-  for my $element (@$elements) {
-    
-    if (!ref $element) {
-      if (Rstats::Util::is_perl_number($element)) {
-        $element = Rstats::ElementFunc::double($element);
-        $mode_h->{double}++;
-      }
-      else {
-        $element = Rstats::ElementFunc::character("$element");
-        $mode_h->{character}++;
-      }
-    }
-    elsif ($element->is_na) {
-      next;
-    }
-    elsif ($element->is_character) {
-      $mode_h->{character}++;
-    }
-    elsif ($element->is_complex) {
-      $mode_h->{complex}++;
-    }
-    elsif ($element->is_double) {
-      $mode_h->{double}++;
-    }
-    elsif ($element->is_integer) {
-      $element = Rstats::ElementFunc::double($element->value);
-      $mode_h->{double}++;
-    }
-    elsif ($element->is_logical) {
-      $mode_h->{logical}++;
-    }
-  }
-
-  # Array
-  my $x1 = NULL();
-  $x1->elements($elements);
-
-  # Upgrade elements and type
-  my @modes = keys %$mode_h;
-  if (@modes > 1) {
-    if ($mode_h->{character}) {
-      $x1 = $x1->as_character;
-    }
-    elsif ($mode_h->{complex}) {
-      $x1 = $x1->as_complex;
-    }
-    elsif ($mode_h->{double}) {
-      $x1 = $x1->as_double;
-    }
-  }
-  else {
-    $x1->mode($modes[0] || 'logical');
-  }
-  
-  return $x1;
-}
-
-sub C {
-  my $seq_str = shift;
-
-  my $by;
-  my $mode;
-  if ($seq_str =~ s/^(.+)\*//) {
-    $by = $1;
-  }
-  
-  my $from;
-  my $to;
-  if ($seq_str =~ /([^\:]+)(?:\:(.+))?/) {
-    $from = $1;
-    $to = $2;
-    $to = $from unless defined $to;
-  }
-  
-  my $vector = seq({from => $from, to => $to, by => $by});
-  
-  return $vector;
 }
 
 sub numeric {

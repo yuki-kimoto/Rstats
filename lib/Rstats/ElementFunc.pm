@@ -15,50 +15,27 @@ use POSIX ();
 my $perl_inf_result = 9 ** 9 ** 9;
 my $perl_negative_inf_result = -9 ** 9 ** 9;
 
-# Special values
-my $na = Rstats::Element->new(type => 'na');
-my $nan = Rstats::Element->new(type => 'double', flag => 'nan');
-my $inf = Rstats::Element->new(type => 'double', flag => 'inf');
-my $negative_inf = Rstats::Element->new(type => 'double', flag => '-inf');
-my $true = logical(1);
-my $false = logical(0);
-my $pi = double(Math::Trig::pi);
+sub TRUE () { new_logical(1) }
+sub FALSE () { new_logical(0) }
+sub NA () { new_NA() }
+sub NaN () { new_NaN() }
+sub Inf () { new_Inf() }
+sub negativeInf () { new_negative_Inf() }
+sub pi () { new_double(Math::Trig::pi) }
 
-# Address
-my $true_ad = Scalar::Util::refaddr $true;
-my $false_ad = Scalar::Util::refaddr $false;
-my $na_ad = Scalar::Util::refaddr $na;
-my $nan_ad = Scalar::Util::refaddr $nan;
-my $inf_ad = Scalar::Util::refaddr $inf;
-my $negative_inf_ad = Scalar::Util::refaddr $negative_inf;
+sub character { new_character(@_) }
 
-sub TRUE () { $true }
-sub FALSE () { $false }
-sub NA () { $na }
-sub NaN () { $nan }
-sub Inf () { $inf }
-sub negativeInf () { $negative_inf }
-sub pi () { $pi }
+sub complex { new_complex(@_) }
 
-sub character { Rstats::Element->new(cv => shift, type => 'character') }
-
-sub complex {
-  my ($re_value, $im_value) = @_;
-  
-  my $re = double($re_value);
-  my $im = double($im_value);
-  my $z = complex_double($re, $im);
-  
-  return $z;
-}
 sub complex_double {
   my ($re, $im) = @_;
   
-  my $z = Rstats::Element->new(type => 'complex', re => $re, im => $im);
+  my $z = complex($re->value, $im->value);
 }
-sub double { Rstats::Element->new(dv => shift, type => 'double', flag => shift || 'normal') }
-sub integer { Rstats::Element->new(type => 'integer', iv => int(shift)) }
-sub logical { Rstats::Element->new(type => 'logical', iv => shift) }
+
+sub double { new_double(shift) }
+sub integer { new_integer(shift) }
+sub logical { new_logical(shift) }
 
 sub atanh {
   my $e1 = shift;

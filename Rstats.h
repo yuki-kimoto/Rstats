@@ -91,6 +91,14 @@ namespace Rstats {
       return element;
     }
 
+    Rstats::Element* new_NA()
+    {
+      Rstats::Element* element = new Rstats::Element;
+      element->type = Rstats::ElementType::NA;
+      
+      return element;
+    }
+    
     int is_infinite(Rstats::Element* element)
     {
       int ret;

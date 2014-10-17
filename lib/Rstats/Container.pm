@@ -760,7 +760,9 @@ sub dimnames {
         }
       }
       $self->{dimnames} = $dimnames;
-
+      
+      $DB::single = 1;
+      
       if ($self->is_data_frame) {
         $self->{names} = [@{$self->{dimnames}->[1]}];
       }

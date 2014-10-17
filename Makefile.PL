@@ -19,7 +19,7 @@ WriteMakefile(
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },
     CC =>'g++',
-    OPTIMIZE => '-O3',
+#    OPTIMIZE => '-O3',
     LD => 'g++',
     LIBS              => [''],
     DEFINE            => '',

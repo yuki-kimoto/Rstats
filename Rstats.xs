@@ -245,7 +245,7 @@ void
 new_negativeInf(...)
   PPCODE:
 {
-  Rstats::Element* element = Rstats::ElementFunc::create_double(-(INFINITY));
+  Rstats::Element* element = Rstats::ElementFunc::new_double(-(INFINITY));
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
   return_sv(element_obj);
@@ -255,7 +255,7 @@ void
 new_Inf(...)
   PPCODE:
 {
-  Rstats::Element* element = Rstats::ElementFunc::create_double(INFINITY);
+  Rstats::Element* element = Rstats::ElementFunc::new_double(INFINITY);
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
   return_sv(element_obj);
@@ -265,7 +265,7 @@ void
 new_NaN(...)
   PPCODE:
 {
-  Rstats::Element* element = Rstats::ElementFunc::create_double(NAN);
+  Rstats::Element* element = Rstats::ElementFunc::new_double(NAN);
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   
   return_sv(element_obj);
@@ -358,7 +358,7 @@ new_double(...)
   SV* value_sv = ST(0);
   double dv = p->nv(value_sv);
   
-  Rstats::Element* element = Rstats::ElementFunc::create_double(dv);
+  Rstats::Element* element = Rstats::ElementFunc::new_double(dv);
   
   SV* element_obj = p->to_perl_obj(element, "Rstats::Element");
   

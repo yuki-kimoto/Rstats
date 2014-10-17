@@ -82,7 +82,7 @@ namespace Rstats {
       process(Rstats::ElementFunc::add, elements1, elements2, size);
     }
 
-    Rstats::Element* create_double(double dv)
+    Rstats::Element* new_double(double dv)
     {
       Rstats::Element* element = new Rstats::Element;
       element->dv = dv;

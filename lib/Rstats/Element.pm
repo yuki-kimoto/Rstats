@@ -119,7 +119,7 @@ sub as_double {
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunc::double($self->re);
+    return Rstats::ElementFunc::double($self->re->value);
   }
   elsif ($self->is_double) {
     return $self;
@@ -152,7 +152,7 @@ sub as_integer {
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunc::integer(int($self->re));
+    return Rstats::ElementFunc::integer(int($self->re->value));
   }
   elsif ($self->is_double) {
     if ($self->is_nan || $self->is_infinite) {
@@ -191,8 +191,8 @@ sub as_logical {
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    my $re = $self->re;
-    my $im = $self->im;
+    my $re = $self->re->value;
+    my $im = $self->im->value;
     if (defined $re && $re == 0 && defined $im && $im == 0) {
       return Rstats::ElementFunc::FALSE();
     }
@@ -353,8 +353,8 @@ sub value {
   }
   elsif ($self->is_complex) {
     return {
-      re => $self->re,
-      im => $self->im
+      re => $self->re->value,
+      im => $self->im->value
     };
   }
   elsif ($self->is_character) {

@@ -14,7 +14,7 @@ use Rstats::ElementFunc;
     is($e1->cv, "foo");
     1;
   }
-  
+
   # element - is_finite
   {
     # element - is_finite - double

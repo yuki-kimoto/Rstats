@@ -91,6 +91,22 @@ namespace Rstats {
       return element;
     }
 
+    Rstats::Element* new_NaN() {
+      Rstats::Element* element = new_double(NAN);
+      
+      return element;
+    }
+
+    Rstats::Element* new_negativeInf() {
+      Rstats::Element* element = new_double(-(INFINITY));
+      return element;
+    }
+    
+    Rstats::Element* new_Inf() {
+      Rstats::Element* element = new_double(INFINITY);
+      return element;
+    }
+    
     Rstats::Element* new_NA()
     {
       Rstats::Element* element = new Rstats::Element;

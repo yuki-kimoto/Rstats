@@ -85,7 +85,7 @@ namespace Rstats {
 
     Rstats::Element* new_character(SV* str_sv) {
       Rstats::Element* element = new Rstats::Element;
-      SV* new_str_sv = p->new_sv(str_sv);
+      SV* new_str_sv = Rstats::Perl::new_sv(str_sv);
       SvREFCNT_inc(new_str_sv);
       element->pv = new_str_sv;
       element->type = Rstats::ElementType::CHARACTER;

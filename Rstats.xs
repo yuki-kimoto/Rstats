@@ -149,23 +149,10 @@ re(...)
   
   double re = ((complex<double>*)self->pv)->real();
   
-  SV* re_sv;
-  if (isinf(re)) {
-    if (re > 0) {
-      re_sv = p->new_sv("Inf");
-    }
-    else {
-      re_sv = p->new_sv("-Inf");
-    }
-  }
-  else if(isnan(re)) {
-    re_sv = p->new_sv("NaN");
-  }
-  else {
-    re_sv = p->new_sv(re);
-  }
+  Rstats::Element* re_element = Rstats::ElementFunc::new_double(re);
+  SV* re_element_sv = p->to_perl_obj(re_element, "Rstats::Element");
 
-  return_sv(re_sv);
+  return_sv(re_element_sv);
 }
 
 void
@@ -176,23 +163,10 @@ im(...)
   
   double im = ((complex<double>*)self->pv)->imag();
   
-  SV* im_sv;
-  if (isinf(im)) {
-    if (im > 0) {
-      im_sv = p->new_sv("Inf");
-    }
-    else {
-      im_sv = p->new_sv("-Inf");
-    }
-  }
-  else if(isnan(im)) {
-    im_sv = p->new_sv("NaN");
-  }
-  else {
-    im_sv = p->new_sv(im);
-  }
+  Rstats::Element* im_element = Rstats::ElementFunc::new_double(im);
+  SV* im_element_sv = p->to_perl_obj(im_element, "Rstats::Element");
 
-  return_sv(im_sv);
+  return_sv(im_element_sv);
 }
 
 void

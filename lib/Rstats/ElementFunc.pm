@@ -20,7 +20,7 @@ sub FALSE () { new_logical(0) }
 sub NA () { new_NA() }
 sub NaN () { new_NaN() }
 sub Inf () { new_Inf() }
-sub negativeInf () { new_negative_Inf() }
+sub negativeInf () { new_negativeInf() }
 sub pi () { new_double(Math::Trig::pi) }
 
 sub character { new_character(@_) }

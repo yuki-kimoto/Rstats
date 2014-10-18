@@ -15,8 +15,8 @@ use POSIX ();
 my $perl_inf_result = 9 ** 9 ** 9;
 my $perl_negative_inf_result = -9 ** 9 ** 9;
 
-sub TRUE () { new_logical(1) }
-sub FALSE () { new_logical(0) }
+sub TRUE () { new_true() }
+sub FALSE () { new_false() }
 sub NA () { new_NA() }
 sub NaN () { new_NaN() }
 sub Inf () { new_Inf() }

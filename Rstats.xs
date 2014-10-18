@@ -100,7 +100,7 @@ iv(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   I32 iv;
-  if (self->type == Rstats::ElementsType::INTEGER) {
+  if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
     iv = (*(std::vector<int>*)self->values)[0];
   }
   else {
@@ -341,9 +341,6 @@ SV*
 new_true(...)
   PPCODE:
 {
-  SV* value_sv = ST(0);
-  I32 iv = my::iv(value_sv);
-  
   Rstats::Elements* element = Rstats::ElementsFunc::new_true();
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
@@ -355,9 +352,6 @@ SV*
 new_false(...)
   PPCODE:
 {
-  SV* value_sv = ST(0);
-  I32 iv = my::iv(value_sv);
-  
   Rstats::Elements* element = Rstats::ElementsFunc::new_false();
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");

@@ -343,6 +343,8 @@ namespace Rstats {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<int>* values = new std::vector<int>(1);
       (*values)[0] = 0;
+      elements->values = values;
+      elements->size = values->size();
       elements->na_positions = new std::map<int, int>();
       (*elements->na_positions)[0] = 1;
       

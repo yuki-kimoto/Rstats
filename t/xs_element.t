@@ -6,14 +6,6 @@ use Rstats::ElementsFunc;
 
 # element
 {
-  
-  # element - character_xs
-  {
-    my $e1 = Rstats::ElementsFunc::new_character("foo");
-    is($e1->type, 'character');
-    is($e1->cv, "foo");
-  }
-
   # element - is_finite
   {
     # element - is_finite - double
@@ -48,6 +40,13 @@ use Rstats::ElementsFunc;
     }
   }
   
+  # element - character_xs
+  {
+    my $e1 = Rstats::ElementsFunc::new_character("foo");
+    is($e1->type, 'character');
+    is($e1->cv, "foo");
+  }
+
   # element - Inf_xs
   {
     my $e1 = Rstats::ElementsFunc::new_Inf();

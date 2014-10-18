@@ -412,7 +412,8 @@ namespace Rstats {
       }
       else if (elements->type == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
-
+        
+        rets_values = new std::vector<int>(size);
         for (int i = 0; i < size; i++) {
           if (std::isfinite((*values)[i])) {
             (*rets_values)[i] = 1;

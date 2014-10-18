@@ -258,10 +258,11 @@ namespace Rstats {
     Rstats::Elements* new_character(SV* str_sv) {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<SV*>* values = new std::vector<SV*>(1);
-
+      
       SV* new_str_sv = Rstats::Perl::new_sv(str_sv);
       SvREFCNT_inc(new_str_sv);
       (*values)[0] = new_str_sv;
+      elements->values = values;
       elements->type = Rstats::ElementsType::CHARACTER;
       elements->size = values->size();
       elements->na_positions = new std::map<int, int>();

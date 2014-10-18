@@ -14,6 +14,13 @@ use Rstats::Func;
   # create element - character
   {
     my $x1 = c("a", "b", "c");
+    1;
+  }
+
+  # create element - double
+  {
+    my $x1 = c(1, 2, 3);
+    1;
   }
 }
 

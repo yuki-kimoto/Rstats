@@ -7,20 +7,23 @@ use Rstats::ElementsFunc;
 
 # as_character
 {
+  # as_character - NA
+  {
+    my $r = Rstats::ElementsFunc::logical(1);
+    my $q = Rstats::ElementsFunc::Inf();
+    my $p = Rstats::ElementsFunc::NA();
+    my $x1 = array(Rstats::ElementsFunc::NA);
+    my $x2 = r->as_character($x1);
+    ok(r->is_character($x2));
+    is_deeply($x2->values, ["NA"]);
+  }
+
   # as_character - Inf
   {
     my $x1 = array(Rstats::ElementsFunc::Inf);
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
     is_deeply($x2->values, ["Inf"]);
-  }
-
-  # as_character - NA
-  {
-    my $x1 = array(Rstats::ElementsFunc::NA);
-    my $x2 = r->as_character($x1);
-    ok(r->is_character($x2));
-    is_deeply($x2->values, ["NA"]);
   }
 
   # as_character - NaN

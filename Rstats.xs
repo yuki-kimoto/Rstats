@@ -75,7 +75,12 @@ type(...)
   SV* type_sv;
 
   if (type == Rstats::ElementsType::LOGICAL) {
-    type_sv = my::new_sv("logical");
+    if(self->na_positions->count(0)) {
+      type_sv = my::new_sv("na");
+    }
+    else {
+      type_sv = my::new_sv("logical");
+    }
   }
   else if (type == Rstats::ElementsType::INTEGER) {
     type_sv = my::new_sv("integer");

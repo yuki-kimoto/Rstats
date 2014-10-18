@@ -344,6 +344,7 @@ namespace Rstats {
       std::vector<int>* values = new std::vector<int>(1);
       (*values)[0] = 0;
       elements->values = values;
+      elements->type = Rstats::ElementsType::LOGICAL;
       elements->size = values->size();
       elements->na_positions = new std::map<int, int>();
       (*elements->na_positions)[0] = 1;

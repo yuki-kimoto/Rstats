@@ -219,8 +219,8 @@ namespace Rstats {
     }
   };
 
-  // Rstats::ElementType
-  namespace ElementType {
+  // Rstats::ElementsType
+  namespace ElementsType {
     enum Enum {
       NA = 0,
       LOGICAL = 1,
@@ -232,7 +232,7 @@ namespace Rstats {
     };
   }
 
-  // Rstats::Element
+  // Rstats::Elements
   typedef struct {
     union {
       int iv;
@@ -240,147 +240,144 @@ namespace Rstats {
       char* chv;
       void* pv;
     };
-    Rstats::ElementType::Enum type;
-  } Element;
+    Rstats::ElementsType::Enum type;
+  } Elements;
   
-  // Rstats::ElementFunc
-  namespace ElementFunc {
+  // Rstats::ElementsFunc
+  namespace ElementsFunc {
     
-    Rstats::Element* integer(int iv) {
+    Rstats::Elements* integer(int iv) {
       
-      Rstats::Element* e1 = new Rstats::Element;
+      Rstats::Elements* e1 = new Rstats::Elements;
       e1->iv = iv;
-      e1->type = Rstats::ElementType::INTEGER;
+      e1->type = Rstats::ElementsType::INTEGER;
       
       return e1;
     }
 
-    Rstats::ElementType::Enum check_type(const Element* e1, const Element* e2) {
+    Rstats::ElementsType::Enum check_type(const Rstats::Elements* e1, const Rstats::Elements* e2) {
       if (e1->type == e2->type) {
         return e1->type;
       }
       else {
-        return Rstats::ElementType::UNKNOWN;
+        return Rstats::ElementsType::UNKNOWN;
       }
     }
     
-    void add(Element* e1, const Element* e2) {
-      Rstats::ElementType::Enum type = check_type(e1, e2);
+    void add(Rstats::Elements* e1, const Rstats::Elements* e2) {
+      Rstats::ElementsType::Enum type = check_type(e1, e2);
       
-      if (type == Rstats::ElementType::NA) {
-        e1->type = Rstats::ElementType::NA;
+      if (type == Rstats::ElementsType::NA) {
+        e1->type = Rstats::ElementsType::NA;
       }
-      else if (e2->type == Rstats::ElementType::INTEGER) {
+      else if (e2->type == Rstats::ElementsType::INTEGER) {
         e1->iv += e2->iv;
       }
-      else if (e2->type == Rstats::ElementType::DOUBLE) {
+      else if (e2->type == Rstats::ElementsType::DOUBLE) {
         e1->dv += e2->dv;
       }
-      else if (e2->type == Rstats::ElementType::COMPLEX) {
+      else if (e2->type == Rstats::ElementsType::COMPLEX) {
         *((std::complex<double>*)e1->pv) += *((std::complex<double>*)e2->pv);
       }
     }
-  }
-  
-  // Rstats::ElementFunc
-  namespace ElementFunc {
-    void process(void (*func)(Element*, const Element*), Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
+
+    void process(void (*func)(Rstats::Elements*, const Rstats::Elements*), Rstats::Elements* elements1, const Rstats::Elements* elements2, size_t size) {
       for (int i = 0; i < size; i++) {
         (*func)(elements1 + i, elements2 + i);
       }
     }
     
-    void add(Rstats::Element* elements1, const Rstats::Element* elements2, size_t size) {
-      process(Rstats::ElementFunc::add, elements1, elements2, size);
+    void add(Rstats::Elements* elements1, const Rstats::Elements* elements2, size_t size) {
+      process(Rstats::ElementsFunc::add, elements1, elements2, size);
     }
 
-    Rstats::Element* new_double(double dv)
+    Rstats::Elements* new_double(double dv)
     {
-      Rstats::Element* element = new Rstats::Element;
+      Rstats::Elements* element = new Rstats::Elements;
       element->dv = dv;
-      element->type = Rstats::ElementType::DOUBLE;
+      element->type = Rstats::ElementsType::DOUBLE;
       
       return element;
     }
 
-    Rstats::Element* new_character(SV* str_sv) {
-      Rstats::Element* element = new Rstats::Element;
+    Rstats::Elements* new_character(SV* str_sv) {
+      Rstats::Elements* element = new Rstats::Elements;
       SV* new_str_sv = Rstats::Perl::new_sv(str_sv);
       SvREFCNT_inc(new_str_sv);
       element->pv = new_str_sv;
-      element->type = Rstats::ElementType::CHARACTER;
+      element->type = Rstats::ElementsType::CHARACTER;
       
       return element;
     }
 
-    Rstats::Element* new_complex(double re, double im) {
+    Rstats::Elements* new_complex(double re, double im) {
       
       std::complex<double>* z = new std::complex<double>(re, im);
-      Rstats::Element* element = new Rstats::Element;
+      Rstats::Elements* element = new Rstats::Elements;
       element->pv = (void*)z;
-      element->type = Rstats::ElementType::COMPLEX;
+      element->type = Rstats::ElementsType::COMPLEX;
       
       return element;
     }
 
-    Rstats::Element* new_true() {
-      Rstats::Element* element = new Rstats::Element;
+    Rstats::Elements* new_true() {
+      Rstats::Elements* element = new Rstats::Elements;
       element->iv = 1;
-      element->type = Rstats::ElementType::LOGICAL;
+      element->type = Rstats::ElementsType::LOGICAL;
       
       return element;
     }
 
-    Rstats::Element* new_logical(bool b) {
-      Rstats::Element* element = new Rstats::Element;
+    Rstats::Elements* new_logical(bool b) {
+      Rstats::Elements* element = new Rstats::Elements;
       element->iv = b ? 1 : 0;
-      element->type = Rstats::ElementType::LOGICAL;
+      element->type = Rstats::ElementsType::LOGICAL;
       
       return element;
     }
     
-    Rstats::Element* new_false() {
-      Rstats::Element* element = new Rstats::Element;
+    Rstats::Elements* new_false() {
+      Rstats::Elements* element = new Rstats::Elements;
       element->iv = 0;
-      element->type = Rstats::ElementType::LOGICAL;
+      element->type = Rstats::ElementsType::LOGICAL;
       
       return element;
     }
     
-    Rstats::Element* new_integer(int iv) {
-      Rstats::Element* element = new Rstats::Element;
+    Rstats::Elements* new_integer(int iv) {
+      Rstats::Elements* element = new Rstats::Elements;
       element->iv = iv;
-      element->type = Rstats::ElementType::INTEGER;
+      element->type = Rstats::ElementsType::INTEGER;
       
       return element;
     }
 
-    Rstats::Element* new_NaN() {
-      Rstats::Element* element = new_double(NAN);
+    Rstats::Elements* new_NaN() {
+      Rstats::Elements* element = new_double(NAN);
       
       return element;
     }
 
-    Rstats::Element* new_negativeInf() {
-      Rstats::Element* element = new_double(-(INFINITY));
+    Rstats::Elements* new_negativeInf() {
+      Rstats::Elements* element = new_double(-(INFINITY));
       return element;
     }
     
-    Rstats::Element* new_Inf() {
-      Rstats::Element* element = new_double(INFINITY);
+    Rstats::Elements* new_Inf() {
+      Rstats::Elements* element = new_double(INFINITY);
       return element;
     }
     
-    Rstats::Element* new_NA() {
-      Rstats::Element* element = new Rstats::Element;
-      element->type = Rstats::ElementType::NA;
+    Rstats::Elements* new_NA() {
+      Rstats::Elements* element = new Rstats::Elements;
+      element->type = Rstats::ElementsType::NA;
       
       return element;
     }
     
-    Rstats::Element* is_infinite(Rstats::Element* element) {
-      Rstats::Element* ret;
-      if (element->type == Rstats::ElementType::DOUBLE && std::isinf(element->dv)) {
+    Rstats::Elements* is_infinite(Rstats::Elements* element) {
+      Rstats::Elements* ret;
+      if (element->type == Rstats::ElementsType::DOUBLE && std::isinf(element->dv)) {
         ret = new_true();
       }
       else {
@@ -390,10 +387,10 @@ namespace Rstats {
       return ret;
     }
 
-    Rstats::Element* is_finite(Rstats::Element* element) {
+    Rstats::Elements* is_finite(Rstats::Elements* element) {
       
-      Rstats::Element* ret;
-      if (element->type == Rstats::ElementType::INTEGER || (element->type == Rstats::ElementType::DOUBLE && std::isfinite(element->dv))) {
+      Rstats::Elements* ret;
+      if (element->type == Rstats::ElementsType::INTEGER || (element->type == Rstats::ElementsType::DOUBLE && std::isfinite(element->dv))) {
         ret = new_true();
       }
       else {
@@ -403,10 +400,10 @@ namespace Rstats {
       return ret;
     }
 
-    Rstats::Element* is_nan(Rstats::Element* element) {
-      Rstats::Element* ret;
+    Rstats::Elements* is_nan(Rstats::Elements* element) {
+      Rstats::Elements* ret;
 
-      if (element->type == Rstats::ElementType::DOUBLE && isnan(element->dv)) {
+      if (element->type == Rstats::ElementsType::DOUBLE && isnan(element->dv)) {
         ret = new_true();
       }
       else {

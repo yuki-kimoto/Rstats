@@ -201,7 +201,7 @@ sub _name_to_index {
   my $index;
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
-    if (Rstats::ElementFunc::equal($e1_name, $name)) {
+    if (Rstats::ElementsFunc::equal($e1_name, $name)) {
       $index = $i + 1;
       $found = 1;
       last;
@@ -240,7 +240,7 @@ sub is_na {
   my $x1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE()
   } @{$x1->elements};
   my $x2 = Rstats::Func::array(\@a2_elements);
   $x2->mode('logical');
@@ -619,7 +619,7 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    my @elements = map { Rstats::ElementFunc::element($_) } @{$_[0]};
+    my @elements = map { Rstats::ElementsFunc::element($_) } @{$_[0]};
     $self->{elements} = \@elements;
   }
   else {
@@ -634,13 +634,13 @@ sub value {
   
   my $e1 = $self->element(@_);
   
-  return defined $e1 ? $e1->value : Rstats::ElementFunc::NA();
+  return defined $e1 ? $e1->value : Rstats::ElementsFunc::NA();
 }
 
 sub is_vector {
   my $self = shift;
   
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -648,7 +648,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -657,7 +657,7 @@ sub is_numeric {
   my $self = shift;
   
   my $is = ($self->{type} || '') eq 'double' || ($self->{type} || '') eq 'integer'
-    ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+    ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -665,7 +665,7 @@ sub is_numeric {
 sub is_double {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'double' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'double' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -673,7 +673,7 @@ sub is_double {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'integer' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'integer' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -681,7 +681,7 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'complex' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'complex' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -689,7 +689,7 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'character' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'character' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -697,7 +697,7 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'logical' ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'logical' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   
   return Rstats::Func::c($is);
 }

@@ -1,7 +1,7 @@
 package Rstats::Container::Array;
 use Rstats::Container -base;
 
-use Rstats::ElementFunc;
+use Rstats::ElementsFunc;
 use Rstats::Func;
 use Rstats::Util;
 use Carp 'croak', 'carp';
@@ -205,7 +205,7 @@ sub is_null {
   
   my $x1 = Rstats::Func::to_c($_a1);
   
-  my @a2_elements = [!$x1->length_value ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE()];
+  my @a2_elements = [!$x1->length_value ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE()];
   my $x2 = Rstats::Func::array(\@a2_elements);
   $x2->mode('logical');
   
@@ -244,7 +244,7 @@ sub get {
   
   my ($poss, $x2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
-  my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementFunc::NA() } @$poss;
+  my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementsFunc::NA() } @$poss;
   
   # array
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
@@ -266,7 +266,7 @@ sub _levels_h {
   my $levels_h = {};
   my $levels = $self->levels->values;
   for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::ElementFunc::integer($i);
+    $levels_h->{$levels->[$i - 1]} = Rstats::ElementsFunc::integer($i);
   }
   
   return $levels_h;
@@ -291,7 +291,7 @@ sub set {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if ($element->is_na) {
-        $self_elements->[$pos] = Rstats::ElementFunc::NA();
+        $self_elements->[$pos] = Rstats::ElementsFunc::NA();
       }
       else {
         my $value = $element->to_string;
@@ -300,7 +300,7 @@ sub set {
         }
         else {
           carp "invalid factor level, NA generated";
-          $self_elements->[$pos] = Rstats::ElementFunc::NA();
+          $self_elements->[$pos] = Rstats::ElementsFunc::NA();
         }
       }
     }

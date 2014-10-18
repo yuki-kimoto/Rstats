@@ -1,25 +1,25 @@
-package Rstats::ElementXS;
+package Rstats::Elements;
 use Object::Simple -base;
 
 use Carp 'croak', 'carp';
-use Rstats::ElementFunc;
+use Rstats::ElementsFunc;
 use Rstats::Util;
 
 use overload
   bool => \&bool,
-  '+' => sub { Rstats::ElementFunc::add(shift->_fix_position(@_)) },
-  '-' => sub { Rstats::ElementFunc::subtract(shift->_fix_position(@_)) },
-  '*' => sub { Rstats::ElementFunc::multiply(shift->_fix_position(@_)) },
-  '/' => sub { Rstats::ElementFunc::divide(shift->_fix_position(@_)) },
-  '%' => sub { Rstats::ElementFunc::remainder(shift->_fix_position(@_)) },
-  'neg' => sub { Rstats::ElementFunc::negation(@_) },
-  '**' => sub { Rstats::ElementFunc::raise(shift->_fix_position(@_)) },
-  '<' => sub { Rstats::ElementFunc::less_than(shift->_fix_position(@_)) },
-  '<=' => sub { Rstats::ElementFunc::less_than_or_equal(shift->_fix_position(@_)) },
-  '>' => sub { Rstats::ElementFunc::more_than(shift->_fix_position(@_)) },
-  '>=' => sub { Rstats::ElementFunc::more_than_or_equal(shift->_fix_position(@_)) },
-  '==' => sub { Rstats::ElementFunc::equal(shift->_fix_position(@_)) },
-  '!=' => sub { Rstats::ElementFunc::not_equal(shift->_fix_position(@_)) },
+  '+' => sub { Rstats::ElementsFunc::add(shift->_fix_position(@_)) },
+  '-' => sub { Rstats::ElementsFunc::subtract(shift->_fix_position(@_)) },
+  '*' => sub { Rstats::ElementsFunc::multiply(shift->_fix_position(@_)) },
+  '/' => sub { Rstats::ElementsFunc::divide(shift->_fix_position(@_)) },
+  '%' => sub { Rstats::ElementsFunc::remainder(shift->_fix_position(@_)) },
+  'neg' => sub { Rstats::ElementsFunc::negation(@_) },
+  '**' => sub { Rstats::ElementsFunc::raise(shift->_fix_position(@_)) },
+  '<' => sub { Rstats::ElementsFunc::less_than(shift->_fix_position(@_)) },
+  '<=' => sub { Rstats::ElementsFunc::less_than_or_equal(shift->_fix_position(@_)) },
+  '>' => sub { Rstats::ElementsFunc::more_than(shift->_fix_position(@_)) },
+  '>=' => sub { Rstats::ElementsFunc::more_than_or_equal(shift->_fix_position(@_)) },
+  '==' => sub { Rstats::ElementsFunc::equal(shift->_fix_position(@_)) },
+  '!=' => sub { Rstats::ElementsFunc::not_equal(shift->_fix_position(@_)) },
   '""' => \&to_string,
   fallback => 1;
 
@@ -28,18 +28,18 @@ sub _fix_position {
   
   my $e1;
   my $e2;
-  if (ref $data eq 'Rstats::Element') {
+  if (ref $data eq 'Rstats::Elements') {
     $e1 = $self;
     $e2 = $data;
   }
   else {
     if ($reverse) {
-      $e1 = Rstats::ElementFunc::element($data);
+      $e1 = Rstats::ElementsFunc::element($data);
       $e2 = $self;
     }
     else {
       $e1 = $self;
-      $e2 = Rstats::ElementFunc::element($data);
+      $e2 = Rstats::ElementsFunc::element($data);
     }
   }
   
@@ -57,7 +57,7 @@ sub _fix_position {
 sub as_character {
   my $self = shift;
   
-  my $e2 = Rstats::ElementFunc::character("$self");
+  my $e2 = Rstats::ElementsFunc::character("$self");
   
   return $e2;
 }
@@ -71,11 +71,11 @@ sub as_complex {
   elsif ($self->is_character) {
     my $z = Rstats::Util::looks_like_complex($self->cv);
     if (defined $z) {
-      return Rstats::ElementFunc::complex($z->{re}, $z->{im});
+      return Rstats::ElementsFunc::complex($z->{re}, $z->{im});
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
   }
   elsif ($self->is_complex) {
@@ -83,17 +83,17 @@ sub as_complex {
   }
   elsif ($self->is_double) {
     if ($self->is_nan) {
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
     else {
-      return Rstats::ElementFunc::complex_double($self, Rstats::ElementFunc::double(0));
+      return Rstats::ElementsFunc::complex_double($self, Rstats::ElementsFunc::double(0));
     }
   }
   elsif ($self->is_integer) {
-    return Rstats::ElementFunc::complex($self->iv, 0);
+    return Rstats::ElementsFunc::complex($self->iv, 0);
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunc::complex($self->iv ? 1 : 0, 0);
+    return Rstats::ElementsFunc::complex($self->iv ? 1 : 0, 0);
   }
   else {
     croak "unexpected type";
@@ -110,25 +110,25 @@ sub as_double {
   }
   elsif ($self->is_character) {
     if (my $num = Rstats::Util::looks_like_number($self->cv)) {
-      return Rstats::ElementFunc::double($num + 0);
+      return Rstats::ElementsFunc::double($num + 0);
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunc::double($self->re->value);
+    return Rstats::ElementsFunc::double($self->re->value);
   }
   elsif ($self->is_double) {
     return $self;
   }
   elsif ($self->is_integer) {
-    return Rstats::ElementFunc::double($self->iv);
+    return Rstats::ElementsFunc::double($self->iv);
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunc::double($self->iv ? 1 : 0);
+    return Rstats::ElementsFunc::double($self->iv ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -143,30 +143,30 @@ sub as_integer {
   }
   elsif ($self->is_character) {
     if (my $num = Rstats::Util::looks_like_number($self->cv)) {
-      return Rstats::ElementFunc::integer(int $num);
+      return Rstats::ElementsFunc::integer(int $num);
     }
     else {
       carp 'NAs introduced by coercion';
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
   }
   elsif ($self->is_complex) {
     carp "imaginary parts discarded in coercion";
-    return Rstats::ElementFunc::integer(int($self->re->value));
+    return Rstats::ElementsFunc::integer(int($self->re->value));
   }
   elsif ($self->is_double) {
     if ($self->is_nan || $self->is_infinite) {
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
     else {
-      return Rstats::ElementFunc::integer($self->dv);
+      return Rstats::ElementsFunc::integer($self->dv);
     }
   }
   elsif ($self->is_integer) {
     return $self; 
   }
   elsif ($self->is_logical) {
-    return Rstats::ElementFunc::integer($self->iv ? 1 : 0);
+    return Rstats::ElementsFunc::integer($self->iv ? 1 : 0);
   }
   else {
     croak "unexpected type";
@@ -186,7 +186,7 @@ sub as_logical {
       return $e1;
     }
     else {
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
   }
   elsif ($self->is_complex) {
@@ -194,28 +194,28 @@ sub as_logical {
     my $re = $self->re->value;
     my $im = $self->im->value;
     if (defined $re && $re == 0 && defined $im && $im == 0) {
-      return Rstats::ElementFunc::FALSE();
+      return Rstats::ElementsFunc::FALSE();
     }
     else {
-      return Rstats::ElementFunc::TRUE();
+      return Rstats::ElementsFunc::TRUE();
     }
   }
   elsif ($self->is_double) {
     if ($self->is_nan) {
-      return Rstats::ElementFunc::NA();
+      return Rstats::ElementsFunc::NA();
     }
     elsif ($self->is_infinite) {
-      return Rstats::ElementFunc::TRUE();
+      return Rstats::ElementsFunc::TRUE();
     }
     else {
-      return $self->dv == 0 ? Rstats::ElementFunc::FALSE() : Rstats::ElementFunc::TRUE();
+      return $self->dv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
     }
   }
   elsif ($self->is_integer) {
-    return $self->iv == 0 ? Rstats::ElementFunc::FALSE() : Rstats::ElementFunc::TRUE();
+    return $self->iv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
   }
   elsif ($self->is_logical) {
-    return $self->iv == 0 ? Rstats::ElementFunc::FALSE() : Rstats::ElementFunc::TRUE();
+    return $self->iv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
   }
   else {
     croak "unexpected type";
@@ -266,20 +266,18 @@ sub to_string {
     $str .= $im . 'i';
   }
   elsif ($self->is_double) {
-    
-    my $flag = $self->flag;
-    
-    if (defined $self->dv) {
-      return $self->dv . "";
-    }
-    elsif ($flag eq 'nan') {
-      return 'NaN';
-    }
-    elsif ($flag eq 'inf') {
+  
+    if ($self->is_positive_infinite) {
       return 'Inf';
     }
-    elsif ($flag eq '-inf') {
+    elsif ($self->is_negative_infinite) {
       return '-Inf';
+    }
+    elsif ($self->is_nan) {
+      return 'NaN';
+    }
+    else {
+      $self->dv . "";
     }
   }
   elsif ($self->is_integer) {
@@ -303,18 +301,14 @@ sub bool {
     croak 'Error in -a : invalid argument to unary operator ';
   }
   elsif ($self->is_double) {
-
-    if (defined $self->dv) {
-      return $self->dv;
+    if ($self->is_infinite) {
+      return 1;
+    }
+    elsif ($self->is_nan) {
+      croak 'argument is not interpretable as logical';
     }
     else {
-      if ($self->is_infinite) {
-        1;
-      }
-      # NaN
-      else {
-        croak 'argument is not interpretable as logical'
-      }
+      return $self->dv;
     }
   }
   elsif ($self->is_integer || $self->is_logical) {
@@ -404,4 +398,4 @@ sub is_negative_infinite {
 
 =head1 NAME
 
-Rstats::ElementXS - ElementXS
+Rstats::Elements - Elements

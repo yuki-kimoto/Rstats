@@ -7,7 +7,7 @@ use Scalar::Util ();
 use B ();
 use Carp 'croak';
 use Rstats::Func;
-use Rstats::ElementFunc;
+use Rstats::ElementsFunc;
 
 sub is_perl_number {
   my ($value) = @_;
@@ -45,7 +45,7 @@ sub looks_like_na {
   return if !defined $value || !CORE::length $value;
   
   if ($value eq 'NA') {
-    return Rstats::ElementFunc::NA();
+    return Rstats::ElementsFunc::NA();
   }
   else {
     return;
@@ -59,10 +59,10 @@ sub looks_like_logical {
   
   if ($value =~ /^(T|TRUE|F|FALSE)$/) {
     if ($value =~ /T/) {
-      return Rstats::ElementFunc::logical(1);
+      return Rstats::ElementsFunc::logical(1);
     }
     else {
-      return Rstats::ElementFunc::logical(0);
+      return Rstats::ElementsFunc::logical(0);
     }
   }
   else {

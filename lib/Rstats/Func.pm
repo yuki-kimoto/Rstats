@@ -7,7 +7,7 @@ use Carp qw/croak carp/;
 use Rstats::Container::Array;
 use Rstats::Container::List;
 use Rstats::Container::DataFrame;
-use Rstats::ElementFunc;
+use Rstats::ElementsFunc;
 
 use List::Util;
 use Math::Trig ();
@@ -17,21 +17,21 @@ use Encode ();
 
 sub NULL { Rstats::Container::Array->new(elements => [], type => 'logical') }
 
-sub NA { c(Rstats::ElementFunc::NA()) }
+sub NA { c(Rstats::ElementsFunc::NA()) }
 
-sub NaN { c(Rstats::ElementFunc::NaN()) }
+sub NaN { c(Rstats::ElementsFunc::NaN()) }
 
-sub Inf () { c(Rstats::ElementFunc::Inf()) }
+sub Inf () { c(Rstats::ElementsFunc::Inf()) }
 
-sub negativeInf () { c(Rstats::ElementFunc::negativeInf()) }
+sub negativeInf () { c(Rstats::ElementsFunc::negativeInf()) }
 
-sub FALSE () { c(Rstats::ElementFunc::FALSE()) }
+sub FALSE () { c(Rstats::ElementsFunc::FALSE()) }
 sub F () { FALSE }
 
-sub TRUE () { c(Rstats::ElementFunc::TRUE()) }
+sub TRUE () { c(Rstats::ElementsFunc::TRUE()) }
 sub T () { TRUE }
 
-sub pi () { c(Rstats::ElementFunc::pi()) }
+sub pi () { c(Rstats::ElementsFunc::pi()) }
 
 sub I {
   my $x1 = shift;
@@ -383,7 +383,7 @@ sub factor {
     for my $x_levels_element (@{$x_levels->elements}) {
       my $match;
       for my $x_exclude_element (@{$x_exclude->elements}) {
-        my $is_equal = Rstats::ElementFunc::equal($x_levels_element, $x_exclude_element);
+        my $is_equal = Rstats::ElementsFunc::equal($x_levels_element, $x_exclude_element);
         if (!$is_equal->is_na && $is_equal) {
           $match = 1;
           last;
@@ -426,13 +426,13 @@ sub factor {
   my $f1_elements = [];
   for my $x1_element (@$x1_elements) {
     if ($x1_element->is_na) {
-      push @$f1_elements, Rstats::ElementFunc::NA();
+      push @$f1_elements, Rstats::ElementsFunc::NA();
     }
     else {
       my $value = $x1_element->value;
       my $f1_element = exists $levels->{$value}
-        ? Rstats::ElementFunc::integer($levels->{$value})
-        : Rstats::ElementFunc::NA();
+        ? Rstats::ElementsFunc::integer($levels->{$value})
+        : Rstats::ElementsFunc::NA();
       push @$f1_elements, $f1_element;
     }
   }
@@ -576,10 +576,10 @@ sub upper_tri {
       for (my $row = 0; $row < $rows_count; $row++) {
         my $x2_element;
         if ($diag) {
-          $x2_element = $col >= $row ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+          $x2_element = $col >= $row ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
         }
         else {
-          $x2_element = $col > $row ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+          $x2_element = $col > $row ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
         }
         push @$x2_elements, $x2_element;
       }
@@ -609,10 +609,10 @@ sub lower_tri {
       for (my $row = 0; $row < $rows_count; $row++) {
         my $x2_element;
         if ($diag) {
-          $x2_element = $col <= $row ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+          $x2_element = $col <= $row ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
         }
         else {
-          $x2_element = $col < $row ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+          $x2_element = $col < $row ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
         }
         push @$x2_elements, $x2_element;
       }
@@ -635,7 +635,7 @@ sub diag {
   if ($x1->length_value == 1) {
     $size = $x1->value;
     $x2_elements = [];
-    push @$x2_elements, Rstats::ElementFunc::double(1) for (1 .. $size);
+    push @$x2_elements, Rstats::ElementsFunc::double(1) for (1 .. $size);
   }
   else {
     $size = $x1->length_value;
@@ -745,7 +745,7 @@ sub outer {
     my $x2_pos = $pos_tmp;
     my $x1_element = $x1->element(@$x1_pos);
     my $x2_element = $x2->element(@$x2_pos);
-    my $x3_element = Rstats::ElementFunc::multiply($x1_element, $x2_element);
+    my $x3_element = Rstats::ElementsFunc::multiply($x1_element, $x2_element);
     push @$x3_elements, $x3_element;
   }
   
@@ -757,7 +757,7 @@ sub outer {
 sub Arg {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::Arg($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Arg($_) } @{$x1->elements};
   my $x2 = $x1->clone(elements => \@a2_elements);
   
   return $x2;
@@ -784,7 +784,7 @@ sub sub {
       else {
         $x =~ s/$pattern/$replacement/;
       }
-      push @$x2_elements, Rstats::ElementFunc::character($x);
+      push @$x2_elements, Rstats::ElementsFunc::character($x);
     }
   }
   
@@ -814,7 +814,7 @@ sub gsub {
       else {
         $x =~ s/$pattern/$replacement/g;
       }
-      push @$x2_elements, Rstats::ElementFunc::character($x);
+      push @$x2_elements, Rstats::ElementsFunc::character($x);
     }
   }
   
@@ -838,12 +838,12 @@ sub grep {
       my $x = $x_e->cv;
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
-          push @$x2_elements, Rstats::ElementFunc::double($i + 1);
+          push @$x2_elements, Rstats::ElementsFunc::double($i + 1);
         }
       }
       else {
         if ($x =~ /$pattern/) {
-          push @$x2_elements, Rstats::ElementFunc::double($i + 1);
+          push @$x2_elements, Rstats::ElementsFunc::double($i + 1);
         }
       }
     }
@@ -899,11 +899,11 @@ sub c {
     
     if (!ref $element) {
       if (Rstats::Util::is_perl_number($element)) {
-        $element = Rstats::ElementFunc::double($element);
+        $element = Rstats::ElementsFunc::double($element);
         $mode_h->{double}++;
       }
       else {
-        $element = Rstats::ElementFunc::character("$element");
+        $element = Rstats::ElementsFunc::character("$element");
         $mode_h->{character}++;
       }
     }
@@ -920,7 +920,7 @@ sub c {
       $mode_h->{double}++;
     }
     elsif ($element->is_integer) {
-      $element = Rstats::ElementFunc::double($element->value);
+      $element = Rstats::ElementsFunc::double($element->value);
       $mode_h->{double}++;
     }
     elsif ($element->is_logical) {
@@ -1005,7 +1005,7 @@ sub chartr {
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";
       croak $@ if $@;
-      push @$x2_elements, Rstats::ElementFunc::character($x);
+      push @$x2_elements, Rstats::ElementsFunc::character($x);
     }
   }
   
@@ -1035,13 +1035,13 @@ sub charmatch {
       }
     }
     if ($match_count == 0) {
-      push @$x2_elements, Rstats::ElementFunc::NA();
+      push @$x2_elements, Rstats::ElementsFunc::NA();
     }
     elsif ($match_count == 1) {
-      push @$x2_elements, Rstats::ElementFunc::double($match_pos + 1);
+      push @$x2_elements, Rstats::ElementsFunc::double($match_pos + 1);
     }
     elsif ($match_count > 1) {
-      push @$x2_elements, Rstats::ElementFunc::double(0);
+      push @$x2_elements, Rstats::ElementsFunc::double(0);
     }
   }
   
@@ -1051,7 +1051,7 @@ sub charmatch {
 sub Conj {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::Conj($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Conj($_) } @{$x1->elements};
   my $x2 = $x1->clone(elements => \@a2_elements);
   
   return $x2;
@@ -1060,7 +1060,7 @@ sub Conj {
 sub Re {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::Re($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Re($_) } @{$x1->elements};
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->{type} = 'double';
   
@@ -1070,7 +1070,7 @@ sub Re {
 sub Im {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::Im($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Im($_) } @{$x1->elements};
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->{type} = 'double';
   
@@ -1095,7 +1095,7 @@ sub nrow {
 sub negation {
   my $x1 = shift;
   
-  my $x2_elements = [map { Rstats::ElementFunc::negation($_) } @{$x1->elements}];
+  my $x2_elements = [map { Rstats::ElementsFunc::negation($_) } @{$x1->elements}];
   my $x2 = $x1->clone(elements => $x2_elements);
   
   return $x2;
@@ -1110,12 +1110,12 @@ sub is_element {
   for my $x1_element (@{$x1->elements}) {
     my $match;
     for my $x2_element (@{$x2->elements}) {
-      if (Rstats::ElementFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;
       }
     }
-    push @$x3_elements, $match ? Rstats::ElementFunc::TRUE() : Rstats::ElementFunc::FALSE();
+    push @$x3_elements, $match ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
   }
   
   return c($x3_elements);
@@ -1133,7 +1133,7 @@ sub setequal {
   
   my $not_equal;
   for (my $i = 0; $i < $x3->length_value; $i++) {
-    unless (Rstats::ElementFunc::equal($x3->elements->[$i], $x4->elements->[$i])) {
+    unless (Rstats::ElementsFunc::equal($x3->elements->[$i], $x4->elements->[$i])) {
       $not_equal = 1;
       last;
     }
@@ -1151,7 +1151,7 @@ sub setdiff {
   for my $x1_element (@{$x1->elements}) {
     my $match;
     for my $x2_element (@{$x2->elements}) {
-      if (Rstats::ElementFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;
       }
@@ -1170,7 +1170,7 @@ sub intersect {
   my $x3_elements = [];
   for my $x1_element (@{$x1->elements}) {
     for my $x2_element (@{$x2->elements}) {
-      if (Rstats::ElementFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         push @$x3_elements, $x1_element;
       }
     }
@@ -1197,7 +1197,7 @@ sub diff {
   for (my $i = 0; $i < $x1->length_value - 1; $i++) {
     my $x1_element1 = $x1->elements->[$i];
     my $x1_element2 = $x1->elements->[$i + 1];
-    my $x2_element = Rstats::ElementFunc::subtract($x1_element2, $x1_element1);
+    my $x2_element = Rstats::ElementsFunc::subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
   my $x2 = $x1->clone(elements => $x2_elements);
@@ -1215,7 +1215,7 @@ sub nchar {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::ElementFunc::double(CORE::length $x1_element->value);
+        my $x2_element = Rstats::ElementsFunc::double(CORE::length $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1238,7 +1238,7 @@ sub tolower {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::ElementFunc::character(lc $x1_element->value);
+        my $x2_element = Rstats::ElementsFunc::character(lc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1261,7 +1261,7 @@ sub toupper {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::ElementFunc::character(uc $x1_element->value);
+        my $x2_element = Rstats::ElementsFunc::character(uc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1282,17 +1282,17 @@ sub match {
     my $i = 1;
     my $match;
     for my $x2_element (@{$x2->elements}) {
-      if (Rstats::ElementFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;
       }
       $i++;
     }
     if ($match) {
-      push @matches, Rstats::ElementFunc::double($i);
+      push @matches, Rstats::ElementsFunc::double($i);
     }
     else {
-      push @matches, Rstats::ElementFunc::NA();
+      push @matches, Rstats::ElementsFunc::NA();
     }
   }
   
@@ -1325,7 +1325,7 @@ sub operation {
   my $longer_length = $x1_length > $x2_length ? $x1_length : $x2_length;
   
   no strict 'refs';
-  my $operation = "Rstats::ElementFunc::$op";
+  my $operation = "Rstats::ElementsFunc::$op";
   my @a3_elements = map {
     &$operation($x1->elements->[$_ % $x1_length], $x2->elements->[$_ % $x2_length])
   } (0 .. $longer_length - 1);
@@ -1375,7 +1375,7 @@ sub not_equal { operation('not_equal', @_)}
 sub abs {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::abs($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::abs($_) } @{$x1->elements};
   
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -1383,9 +1383,9 @@ sub abs {
   return $x2;
 }
 
-sub acos { process(\&Rstats::ElementFunc::acos, @_) }
+sub acos { process(\&Rstats::ElementsFunc::acos, @_) }
 
-sub acosh { process(\&Rstats::ElementFunc::acosh, @_) }
+sub acosh { process(\&Rstats::ElementsFunc::acosh, @_) }
 
 sub append {
   my ($x1, $x2, $x_after) = args(['x1', 'x2', 'after'], @_);
@@ -1441,13 +1441,13 @@ sub array {
   return $x1;
 }
 
-sub asin { process(\&Rstats::ElementFunc::asin, @_) }
+sub asin { process(\&Rstats::ElementsFunc::asin, @_) }
 
-sub asinh { process(\&Rstats::ElementFunc::asinh, @_) }
+sub asinh { process(\&Rstats::ElementsFunc::asinh, @_) }
 
-sub atan { process(\&Rstats::ElementFunc::atan, @_) }
+sub atan { process(\&Rstats::ElementsFunc::atan, @_) }
 
-sub atanh { process(\&Rstats::ElementFunc::atanh, @_) }
+sub atanh { process(\&Rstats::ElementsFunc::atanh, @_) }
 
 sub cbind {
   my @xs = @_;
@@ -1517,7 +1517,7 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
-  my @a2_elements = map { Rstats::ElementFunc::double(POSIX::ceil $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::ceil $_->value) } @{$x1->elements};
   
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -1561,7 +1561,7 @@ sub colSums {
   }
 }
 
-sub cos { process(\&Rstats::ElementFunc::cos, @_) }
+sub cos { process(\&Rstats::ElementsFunc::cos, @_) }
 
 sub atan2 {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
@@ -1570,7 +1570,7 @@ sub atan2 {
   for (my $i = 0; $i < $x1->length_value; $i++) {
     my $element1 = $x1->elements->[$i];
     my $element2 = $x2->elements->[$i];
-    my $element3 = Rstats::ElementFunc::atan2($element1, $element2);
+    my $element3 = Rstats::ElementsFunc::atan2($element1, $element2);
     push @a3_elements, $element3;
   }
 
@@ -1589,7 +1589,7 @@ sub atan2 {
   return $x3;
 }
 
-sub cosh { process(\&Rstats::ElementFunc::cosh, @_) }
+sub cosh { process(\&Rstats::ElementsFunc::cosh, @_) }
 
 sub cummax {
   my $x1 = to_c(shift);
@@ -1611,7 +1611,7 @@ sub cummax {
     elsif ($element->is_nan) {
       $max = $element;
     }
-    if (Rstats::ElementFunc::more_than($element, $max) && !$max->is_nan) {
+    if (Rstats::ElementsFunc::more_than($element, $max) && !$max->is_nan) {
       $max = $element;
     }
     push @a2_elements, $max;
@@ -1639,7 +1639,7 @@ sub cummin {
     elsif ($element->is_nan) {
       $min = $element;
     }
-    if (Rstats::ElementFunc::less_than($element, $min) && !$min->is_nan) {
+    if (Rstats::ElementsFunc::less_than($element, $min) && !$min->is_nan) {
       $min = $element;
     }
     push @a2_elements, $min;
@@ -1651,9 +1651,9 @@ sub cummin {
 sub cumsum {
   my $x1 = to_c(shift);
   my $type = $x1->{type};
-  my $total = Rstats::ElementFunc::create($type);
+  my $total = Rstats::ElementsFunc::create($type);
   my @a2_elements;
-  push @a2_elements, $total = Rstats::ElementFunc::add($total, $_) for @{$x1->elements};
+  push @a2_elements, $total = Rstats::ElementsFunc::add($total, $_) for @{$x1->elements};
   
   return c(\@a2_elements);
 }
@@ -1661,9 +1661,9 @@ sub cumsum {
 sub cumprod {
   my $x1 = to_c(shift);
   my $type = $x1->{type};
-  my $total = Rstats::ElementFunc::create($type, 1);
+  my $total = Rstats::ElementsFunc::create($type, 1);
   my @a2_elements;
-  push @a2_elements, $total = Rstats::ElementFunc::multiply($total, $_) for @{$x1->elements};
+  push @a2_elements, $total = Rstats::ElementsFunc::multiply($total, $_) for @{$x1->elements};
   
   return c(\@a2_elements);
 }
@@ -1704,20 +1704,20 @@ sub complex {
     
     for (my $i = 0; $i < $longer_length; $i++) {
       my $mod = $x1_mod->elements->[$i];
-      $mod = Rstats::ElementFunc::double(1) unless $mod;
+      $mod = Rstats::ElementsFunc::double(1) unless $mod;
       my $arg = $x1_arg->elements->[$i];
-      $arg = Rstats::ElementFunc::double(0) unless $arg;
+      $arg = Rstats::ElementsFunc::double(0) unless $arg;
       
-      my $re = Rstats::ElementFunc::multiply(
+      my $re = Rstats::ElementsFunc::multiply(
         $mod,
-        Rstats::ElementFunc::cos($arg)
+        Rstats::ElementsFunc::cos($arg)
       );
-      my $im = Rstats::ElementFunc::multiply(
+      my $im = Rstats::ElementsFunc::multiply(
         $mod,
-        Rstats::ElementFunc::sin($arg)
+        Rstats::ElementsFunc::sin($arg)
       );
       
-      my $x2_element = Rstats::ElementFunc::complex_double($re, $im);
+      my $x2_element = Rstats::ElementsFunc::complex_double($re, $im);
       push @$x2_elements, $x2_element;
     }
   }
@@ -1726,9 +1726,9 @@ sub complex {
     croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
     
     for (my $i = 0; $i <  $x1_im->length_value; $i++) {
-      my $re = $x1_re->elements->[$i] || Rstats::ElementFunc::double(0);
+      my $re = $x1_re->elements->[$i] || Rstats::ElementsFunc::double(0);
       my $im = $x1_im->elements->[$i];
-      my $x2_element = Rstats::ElementFunc::complex_double($re, $im);
+      my $x2_element = Rstats::ElementsFunc::complex_double($re, $im);
       push @$x2_elements, $x2_element;
     }
   }
@@ -1736,9 +1736,9 @@ sub complex {
   return c($x2_elements);
 }
 
-sub exp { process(\&Rstats::ElementFunc::exp, @_) }
+sub exp { process(\&Rstats::ElementsFunc::exp, @_) }
 
-sub expm1 { process(\&Rstats::ElementFunc::expm1, @_) }
+sub expm1 { process(\&Rstats::ElementsFunc::expm1, @_) }
 
 sub max_type {
   my @xs = @_;
@@ -1777,7 +1777,7 @@ sub floor {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::ElementFunc::double(POSIX::floor $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::floor $_->value) } @{$x1->elements};
 
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -1813,7 +1813,7 @@ sub head {
 }
 
 sub i {
-  my $i = Rstats::ElementFunc::complex(0, 1);
+  my $i = Rstats::ElementsFunc::complex(0, 1);
   
   return c($i);
 }
@@ -1837,13 +1837,13 @@ sub ifelse {
   return array(\@x2_values);
 }
 
-sub log { process(\&Rstats::ElementFunc::log, @_) }
+sub log { process(\&Rstats::ElementsFunc::log, @_) }
 
 sub logb { Rstats::Func::log(@_) }
 
-sub log2 { process(\&Rstats::ElementFunc::log2, @_) }
+sub log2 { process(\&Rstats::ElementsFunc::log2, @_) }
 
-sub log10 { process(\&Rstats::ElementFunc::log10, @_) }
+sub log10 { process(\&Rstats::ElementsFunc::log10, @_) }
 
 sub max {
   my $x1 = c(@_);
@@ -1863,7 +1863,7 @@ sub max {
     elsif ($element->is_nan) {
       $max = $element;
     }
-    if (!$max->is_nan && Rstats::ElementFunc::more_than($element, $max)) {
+    if (!$max->is_nan && Rstats::ElementsFunc::more_than($element, $max)) {
       $max = $element;
     }
   }
@@ -1897,7 +1897,7 @@ sub min {
     elsif ($element->is_nan) {
       $min = $element;
     }
-    if (!$min->is_nan && Rstats::ElementFunc::less_than($element, $min)) {
+    if (!$min->is_nan && Rstats::ElementsFunc::less_than($element, $min)) {
       $min = $element;
     }
   }
@@ -2008,7 +2008,7 @@ sub pmax {
     my $elements = $v->elements;
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || Rstats::ElementFunc::more_than($elements->[$i], $maxs[$i])
+        if !defined $maxs[$i] || Rstats::ElementsFunc::more_than($elements->[$i], $maxs[$i])
     }
   }
   
@@ -2023,7 +2023,7 @@ sub pmin {
     my $elements = $v->elements;
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || Rstats::ElementFunc::less_than($elements->[$i], $mins[$i])
+        if !defined $mins[$i] || Rstats::ElementsFunc::less_than($elements->[$i], $mins[$i])
     }
   }
   
@@ -2034,9 +2034,9 @@ sub prod {
   my $x1 = c(@_);
   
   my $type = $x1->{type};
-  my $prod = Rstats::ElementFunc::create($type, 1);
+  my $prod = Rstats::ElementsFunc::create($type, 1);
   for my $element (@{$x1->elements}) {
-    $prod = Rstats::ElementFunc::multiply($prod, $element);
+    $prod = Rstats::ElementsFunc::multiply($prod, $element);
   }
 
   return c($prod);
@@ -2130,7 +2130,7 @@ sub replace {
   my $x2_elements = $x2->elements;
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
-    my $x2_element_hash = Rstats::ElementFunc::hash($x2_element->as_double);
+    my $x2_element_hash = Rstats::ElementsFunc::hash($x2_element->as_double);
     
     $x2_elements_h->{$x2_element_hash}++;
     croak "replace second argument can't have duplicate number"
@@ -2142,7 +2142,7 @@ sub replace {
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::ElementFunc::hash(Rstats::ElementFunc::double($i + 1));
+    my $hash = Rstats::ElementsFunc::hash(Rstats::ElementsFunc::double($i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
@@ -2207,7 +2207,7 @@ sub round {
   my $x1 = to_c($_x1);
 
   my $r = 10 ** $digits;
-  my @a2_elements = map { Rstats::ElementFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->elements};
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
   
@@ -2315,14 +2315,14 @@ sub sequence {
   return c(\@x2_values);
 }
 
-sub sin { process(\&Rstats::ElementFunc::sin, @_) }
+sub sin { process(\&Rstats::ElementsFunc::sin, @_) }
 
-sub sinh { process(\&Rstats::ElementFunc::sinh, @_) }
+sub sinh { process(\&Rstats::ElementsFunc::sinh, @_) }
 
 sub sqrt {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementFunc::sqrt($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::sqrt($_) } @{$x1->elements};
   
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -2339,8 +2339,8 @@ sub sort {
   my @a2_elements = grep { !$_->is_na && !$_->is_nan } @{$x1->elements};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::ElementFunc::more_than($a, $b) ? 1 : Rstats::ElementFunc::equal($a, $b) ? 0 : -1 } @a2_elements]
-    : [sort { Rstats::ElementFunc::more_than($a, $b) ? 1 : Rstats::ElementFunc::equal($a, $b) ? 0 : -1 } @a2_elements];
+    ? [reverse sort { Rstats::ElementsFunc::more_than($a, $b) ? 1 : Rstats::ElementsFunc::equal($a, $b) ? 0 : -1 } @a2_elements]
+    : [sort { Rstats::ElementsFunc::more_than($a, $b) ? 1 : Rstats::ElementsFunc::equal($a, $b) ? 0 : -1 } @a2_elements];
 
   return c($x3_elements);
 }
@@ -2363,7 +2363,7 @@ sub tail {
   return $x1->new(elements => \@e2);
 }
 
-sub tan { process(\&Rstats::ElementFunc::tan, @_) }
+sub tan { process(\&Rstats::ElementsFunc::tan, @_) }
 
 sub process {
   my $func = shift;
@@ -2376,14 +2376,14 @@ sub process {
   return $x2;
 }
 
-sub tanh { process(\&Rstats::ElementFunc::tanh, @_) }
+sub tanh { process(\&Rstats::ElementsFunc::tanh, @_) }
 
 sub trunc {
   my ($_x1) = @_;
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::ElementFunc::double(int $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(int $_->value) } @{$x1->elements};
 
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -2637,8 +2637,8 @@ sub sum {
   my $x1 = to_c(shift);
   
   my $type = $x1->{type};
-  my $sum = Rstats::ElementFunc::create($type);
-  $sum = Rstats::ElementFunc::add($sum, $_) for @{$x1->elements};
+  my $sum = Rstats::ElementsFunc::create($type);
+  $sum = Rstats::ElementsFunc::add($sum, $_) for @{$x1->elements};
   
   return c($sum);
 }

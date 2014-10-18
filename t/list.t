@@ -86,7 +86,7 @@ use Rstats;
     is_deeply($x1->elements->[1]->elements->[0]->values, ["Hello"]);
     is_deeply(
       $x1->elements->[1]->elements->[1]->elements,
-      [Rstats::ElementFunc::TRUE, Rstats::ElementFunc::FALSE, Rstats::ElementFunc::FALSE]
+      [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]
     );
   }
 

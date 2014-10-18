@@ -376,7 +376,7 @@ cross_product(...)
   I32 values_length = my::length(values_sv);
   SV* idxs_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::push(idxs_sv, my::new_sv((I32)0)); 
+    my::push(idxs_sv, my::new_sv(0)); 
   }
   
   SV* idx_idx_sv = my::new_av_ref();
@@ -387,11 +387,11 @@ cross_product(...)
   SV* x1_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
     SV* value_sv = my::av_get(values_sv, i);
-    my::push(x1_sv, my::av_get(value_sv, (I32)0));
+    my::push(x1_sv, my::av_get(value_sv, 0));
   }
 
   SV* result_sv = my::new_av_ref();
-  my::push(result_sv, my::copy_av(x1_sv));
+  my::push(result_sv, my::av_copy(x1_sv));
   I32 end_loop = 0;
   while (1) {
     for (I32 i = 0; i < values_length; i++) {
@@ -402,7 +402,7 @@ cross_product(...)
         sv_inc(idxs_tmp);
         my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), idxs_tmp));
         
-        my::push(result_sv, my::copy_av(x1_sv));
+        my::push(result_sv, my::av_copy(x1_sv));
         
         break;
       }
@@ -412,8 +412,8 @@ cross_product(...)
         break;
       }
       
-      my::av_set(idxs_sv, i, my::new_sv((I32)0));
-      my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), (I32)0));
+      my::av_set(idxs_sv, i, my::new_sv(0));
+      my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), 0));
     }
     if (end_loop) {
       break;

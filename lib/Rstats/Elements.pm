@@ -46,14 +46,6 @@ sub _fix_position {
   return ($e1, $e2);
 }
 
-# has 'type';
-# has 'iv';
-# has 'dv';
-# has 'cv';
-# has 're';
-# has 'im';
-# has 'flag';
-
 sub as_character {
   my $self = shift;
   
@@ -389,13 +381,34 @@ sub is_negative_infinite {
   return $self->is_infinite && $self->dv < 0;
 }
 
-# XS
-# is_nan
-# is_infinite
-# is_finite
 
 1;
 
 =head1 NAME
 
 Rstats::Elements - Elements
+
+=heaa1 METHODS
+
+=head2 type
+
+=head2 iv
+
+=head2 dv
+
+=head2 cv
+
+=head2 re
+
+=head2 im
+
+=head2 flag
+
+=head2  XS
+
+=head2  is_nan
+
+=head2  is_infinite
+
+=head2  is_finite
+

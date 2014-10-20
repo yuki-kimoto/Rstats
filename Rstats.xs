@@ -106,7 +106,7 @@ iv(...)
   
   I32 iv;
   if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
-    iv = (*(std::vector<int>*)self->values)[0];
+    iv = (*(std::vector<I32>*)self->values)[0];
   }
   else {
     iv = 0;
@@ -214,9 +214,9 @@ DESTROY(...)
   PPCODE:
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
-  int size = self->size;
+  I32 size = self->size;
   if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
-    std::vector<int>* values = (std::vector<int>*)self->values;
+    std::vector<I32>* values = (std::vector<I32>*)self->values;
     delete values;
   }
   else if (self->type == Rstats::ElementsType::DOUBLE) {
@@ -225,13 +225,13 @@ DESTROY(...)
   }
   else if (self->type == Rstats::ElementsType::COMPLEX) {
     std::vector<std::complex<double>*>* values = (std::vector<std::complex<double>*>*)self->values;
-    for (int i = 0; i < size; i++) {
+    for (I32 i = 0; i < size; i++) {
       delete (*values)[i];
     }
   }
   else if (self->type == Rstats::ElementsType::CHARACTER) {
     std::vector<SV*>* values = (std::vector<SV*>*)self->values;
-    for (int i = 0; i < size; i++) {
+    for (I32 i = 0; i < size; i++) {
       SvREFCNT_dec((*values)[i]);
     }
   }
@@ -383,7 +383,7 @@ new_integer(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  int iv = my::iv(value_sv);
+  I32 iv = my::iv(value_sv);
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_integer(iv);
   
@@ -403,7 +403,7 @@ cross_product(...)
   I32 values_length = my::length(values_sv);
   SV* idxs_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::push(idxs_sv, my::new_sv(0)); 
+    my::push(idxs_sv, my::new_sv((I32)0)); 
   }
   
   SV* idx_idx_sv = my::new_av_ref();
@@ -414,7 +414,7 @@ cross_product(...)
   SV* x1_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
     SV* value_sv = my::av_get(values_sv, i);
-    my::push(x1_sv, my::av_get(value_sv, 0));
+    my::push(x1_sv, my::av_get(value_sv, (I32)0));
   }
 
   SV* result_sv = my::new_av_ref();
@@ -439,8 +439,8 @@ cross_product(...)
         break;
       }
       
-      my::av_set(idxs_sv, i, my::new_sv(0));
-      my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), 0));
+      my::av_set(idxs_sv, i, my::new_sv((I32)0));
+      my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), (I32)0));
     }
     if (end_loop) {
       break;
@@ -471,7 +471,7 @@ pos_to_index(...)
     }
     
     I32 reminder = pos % before_dim_product;
-    I32 quotient = (int)(reminder / dim_product);
+    I32 quotient = (I32)(reminder / dim_product);
     
     my::unshift(index_sv, my::new_sv(quotient + 1));
     before_dim_product = dim_product;

@@ -33,7 +33,7 @@ is_finite(...)
   
   Rstats::Elements* rets = Rstats::ElementsFunc::is_finite(self);
 
-  SV* rets_sv = my::to_perl_obj(rets, "Rstats::Elements");
+  SV* rets_sv = my::to_perl_obj(rets, (char*)"Rstats::Elements");
   
   return_sv(rets_sv);
 }
@@ -46,7 +46,7 @@ is_infinite(...)
   
   Rstats::Elements* rets = Rstats::ElementsFunc::is_infinite(self);
   
-  SV* rets_sv = my::to_perl_obj(rets, "Rstats::Elements");
+  SV* rets_sv = my::to_perl_obj(rets, (char*)"Rstats::Elements");
   
   return_sv(rets_sv);
 }
@@ -59,7 +59,7 @@ is_nan(...)
 
   Rstats::Elements* rets = Rstats::ElementsFunc::is_nan(self);
 
-  SV* rets_sv = my::to_perl_obj(rets, "Rstats::Elements");
+  SV* rets_sv = my::to_perl_obj(rets, (char*)"Rstats::Elements");
   
   return_sv(rets_sv);
 }
@@ -76,23 +76,23 @@ type(...)
 
   if (type == Rstats::ElementsType::LOGICAL) {
     if(self->na_positions->count(0)) {
-      type_sv = my::new_sv("na");
+      type_sv = my::new_sv((char*)"na");
     }
     else {
-      type_sv = my::new_sv("logical");
+      type_sv = my::new_sv((char*)"logical");
     }
   }
   else if (type == Rstats::ElementsType::INTEGER) {
-    type_sv = my::new_sv("integer");
+    type_sv = my::new_sv((char*)"integer");
   }
   else if (type == Rstats::ElementsType::DOUBLE) {
-    type_sv = my::new_sv("double");
+    type_sv = my::new_sv((char*)"double");
   }
   else if (type == Rstats::ElementsType::COMPLEX) {
-    type_sv = my::new_sv("complex");
+    type_sv = my::new_sv((char*)"complex");
   }
   else if (type == Rstats::ElementsType::CHARACTER) {
-    type_sv = my::new_sv("character");
+    type_sv = my::new_sv((char*)"character");
   }
   
   return_sv(type_sv);
@@ -143,7 +143,7 @@ cv(...)
     str_sv = (*(std::vector<SV*>*)self->values)[0];
   }
   else {
-    str_sv = my::new_sv("");
+    str_sv = my::new_sv((char*)"");
   }
   
   return_sv(str_sv);
@@ -159,7 +159,7 @@ re(...)
   double re = ((*(std::vector<std::complex<double>*>*)self->values)[0])->real();
   
   Rstats::Elements* re_element = Rstats::ElementsFunc::new_double(re);
-  SV* re_element_sv = my::to_perl_obj(re_element, "Rstats::Elements");
+  SV* re_element_sv = my::to_perl_obj(re_element, (char*)"Rstats::Elements");
 
   return_sv(re_element_sv);
 }
@@ -173,7 +173,7 @@ im(...)
   double im = ((*(std::vector<std::complex<double>*>*)self->values)[0])->imag();
   
   Rstats::Elements* im_element = Rstats::ElementsFunc::new_double(im);
-  SV* im_element_sv = my::to_perl_obj(im_element, "Rstats::Elements");
+  SV* im_element_sv = my::to_perl_obj(im_element, (char*)"Rstats::Elements");
 
   return_sv(im_element_sv);
 }
@@ -189,21 +189,21 @@ flag(...)
     if (Rstats::ElementsFunc::is_infinite(self)) {
       double dv = (*(std::vector<double>*)self->values)[0];
       if (dv > 0) {
-        flag_sv = my::new_sv("inf");
+        flag_sv = my::new_sv((char*)"inf");
       }
       else {
-        flag_sv = my::new_sv("-inf");
+        flag_sv = my::new_sv((char*)"-inf");
       }
     }
     else if(Rstats::ElementsFunc::is_nan(self)) {
-      flag_sv = my::new_sv("nan");
+      flag_sv = my::new_sv((char*)"nan");
     }
     else {
-      flag_sv = my::new_sv("normal");
+      flag_sv = my::new_sv((char*)"normal");
     }
   }
   else {
-    flag_sv = my::new_sv("normal");
+    flag_sv = my::new_sv((char*)"normal");
   }
   
   return_sv(flag_sv);
@@ -253,7 +253,7 @@ complex_double (...)
   
   Rstats::Elements* z = Rstats::ElementsFunc::new_complex((*re_values)[0], (*im_values)[0]);
   
-  SV* z_sv = my::to_perl_obj(z, "Rstats::Elements");
+  SV* z_sv = my::to_perl_obj(z, (char*)"Rstats::Elements");
   
   return_sv(z_sv);
 }
@@ -263,7 +263,7 @@ new_negativeInf(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_negativeInf();
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -273,7 +273,7 @@ new_Inf(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_Inf();
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -283,7 +283,7 @@ new_NaN(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_NaN();
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -293,7 +293,7 @@ new_NA(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_NA();
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -306,7 +306,7 @@ new_character(...)
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_character(str_sv);
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -323,7 +323,7 @@ new_complex(...)
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_complex(re, im);
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -337,7 +337,7 @@ new_logical(...)
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_logical((bool)iv);
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -348,7 +348,7 @@ new_true(...)
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_true();
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -359,7 +359,7 @@ new_false(...)
 {
   Rstats::Elements* element = Rstats::ElementsFunc::new_false();
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -373,7 +373,7 @@ new_double(...)
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_double(dv);
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }
@@ -387,7 +387,7 @@ new_integer(...)
   
   Rstats::Elements* element = Rstats::ElementsFunc::new_integer(iv);
   
-  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* element_obj = my::to_perl_obj(element, (char*)"Rstats::Elements");
   
   return_sv(element_obj);
 }

@@ -2,6 +2,18 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
+# Check if exists clan++ or g++ compiler
+my $cc;
+my $ld;
+if (system("clang++ --version") == 0) {
+  $cc = 'clang++';
+  $ld = 'clang++';
+}
+else {
+  $cc = 'g++';
+  $ld = 'g++';
+}
+
 WriteMakefile(
     NAME                => 'Rstats',
     AUTHOR              => 'Yuki Kimoto <kimoto.yuki@gmail.com>',
@@ -18,9 +30,9 @@ WriteMakefile(
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },
-    CC =>'g++',
+    CC => $cc,
     OPTIMIZE => '-O3',
-    LD => 'g++',
+    LD => $ld,
     LIBS              => [''],
     DEFINE            => '',
     INC               => '-I.',

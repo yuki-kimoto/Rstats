@@ -63,7 +63,7 @@ use Rstats::ElementsFunc;
     my $x1 = array(c(1.1, 0));
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
-    is($x2->values->[0], "1.1");
+    is($x2->values->[0], 1.1);
     is($x2->values->[1], "0");
   }
   

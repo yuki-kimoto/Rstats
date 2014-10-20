@@ -376,7 +376,7 @@ namespace Rstats {
         std::vector<double>* values = (std::vector<double>*)elements->values;
         rets_values = new std::vector<int>(size);
         for (int i = 0; i < size; i++) {
-          if(isnan((*values)[i])) {
+          if(std::isnan((*values)[i])) {
             (*rets_values)[i] = 1;
           }
           else {

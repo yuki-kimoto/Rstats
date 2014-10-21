@@ -235,7 +235,7 @@ namespace Rstats {
     void* values;
     int size;
     Rstats::ElementsType::Enum type;
-    std::map<int, int> na_positions;
+    std::map<I32, I32> na_positions;
     
     public:
     

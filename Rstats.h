@@ -241,6 +241,22 @@ namespace Rstats {
     
     public:
     
+    Rstats::Values::Character* get_character_values() {
+      return (Rstats::Values::Character*)this->values;
+    }
+    
+    Rstats::Values::Complex* get_complex_values() {
+      return (Rstats::Values::Complex*)this->values;
+    }
+    
+    Rstats::Values::Double* get_double_values() {
+      return (Rstats::Values::Double*)this->values;
+    }
+    
+    Rstats::Values::Integer* get_integer_values() {
+      return (Rstats::Values::Integer*)this->values;
+    }
+    
     Rstats::ElementsType::Enum get_type() {
       return this->type;
     }
@@ -387,7 +403,7 @@ namespace Rstats {
       Rstats::Values::Integer* rets_values;
       int size = elements->get_size();
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        Rstats::Values::Double* values = elements->get_double_values();
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {
           if(std::isinf((*values)[i])) {
@@ -411,7 +427,7 @@ namespace Rstats {
       int size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        Rstats::Values::Double* values = elements->get_double_values();
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {
           if(std::isnan((*values)[i])) {
@@ -436,12 +452,12 @@ namespace Rstats {
       int size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::INTEGER) {
-        Rstats::Values::Integer* values = (Rstats::Values::Integer*)elements->values;
+        Rstats::Values::Integer* values = elements->get_integer_values();
         
         rets_values = new Rstats::Values::Integer(size, 1);
       }
       else if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        std::vector<double>* values = elements->get_double_values();
         
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {

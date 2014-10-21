@@ -143,7 +143,7 @@ dv(...)
   
   double dv;
   if (self->type == Rstats::ElementsType::DOUBLE) {
-    dv = (*(Rstats::Values::Double)self->values)[0];
+    dv = (*(Rstats::Values::Double*)self->values)[0];
   }
   else {
     dv = 0;
@@ -207,7 +207,7 @@ flag(...)
   SV* flag_sv;
   if (self->type == Rstats::ElementsType::DOUBLE) {
     if (Rstats::ElementsFunc::is_infinite(self)) {
-      double dv = (*(Rstats::Values::Double)self->values)[0];
+      double dv = (*(Rstats::Values::Double*)self->values)[0];
       if (dv > 0) {
         flag_sv = my::new_sv((char*)"inf");
       }
@@ -240,7 +240,7 @@ DESTROY(...)
     delete values;
   }
   else if (self->type == Rstats::ElementsType::DOUBLE) {
-    Rstats::Values::Double values = (Rstats::Values::Double)self->values;
+    Rstats::Values::Double* values = (Rstats::Values::Double*)self->values;
     delete values;
   }
   else if (self->type == Rstats::ElementsType::COMPLEX) {
@@ -265,8 +265,8 @@ complex_double (...)
   Rstats::Elements* re = my::to_c_obj<Rstats::Elements*>(ST(0));
   Rstats::Elements* im = my::to_c_obj<Rstats::Elements*>(ST(1));
   
-  Rstats::Values::Double re_values = (Rstats::Values::Double)re->values;
-  Rstats::Values::Double im_values = (Rstats::Values::Double)im->values;
+  Rstats::Values::Double* re_values = (Rstats::Values::Double*)re->values;
+  Rstats::Values::Double* im_values = (Rstats::Values::Double*)im->values;
   
   Rstats::Elements* z = Rstats::Elements::new_complex((*re_values)[0], (*im_values)[0]);
   

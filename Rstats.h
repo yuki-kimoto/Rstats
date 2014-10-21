@@ -231,13 +231,19 @@ namespace Rstats {
 
   // Rstats::Elements
   class Elements {
+    private:
+    Rstats::ElementsType::Enum type;
+    
     public:
     void* values;
     int size;
-    Rstats::ElementsType::Enum type;
     std::map<I32, I32> na_positions;
     
     public:
+    
+    Rstats::ElementsType::Enum get_type() {
+      return this->type;
+    }
     
     /* Constructor methods */
     static Rstats::Elements* new_double(double dv) {
@@ -362,7 +368,7 @@ namespace Rstats {
       
       Rstats::Values::Integer* rets_values;
       int size = elements->size;
-      if (elements->type == Rstats::ElementsType::DOUBLE) {
+      if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {
@@ -386,7 +392,7 @@ namespace Rstats {
     Rstats::Elements* is_nan(Rstats::Elements* elements) {
       int size = elements->size;
       Rstats::Values::Integer* rets_values;
-      if (elements->type == Rstats::ElementsType::DOUBLE) {
+      if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {
@@ -411,12 +417,12 @@ namespace Rstats {
       
       int size = elements->size;
       Rstats::Values::Integer* rets_values;
-      if (elements->type == Rstats::ElementsType::INTEGER) {
+      if (elements->get_type() == Rstats::ElementsType::INTEGER) {
         Rstats::Values::Integer* values = (Rstats::Values::Integer*)elements->values;
         
         rets_values = new Rstats::Values::Integer(size, 1);
       }
-      else if (elements->type == Rstats::ElementsType::DOUBLE) {
+      else if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
         
         rets_values = new Rstats::Values::Integer(size);

@@ -32,7 +32,7 @@ decompose(...)
   /*
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  Rstats::ElementsType::Enum type = self->type;
+  Rstats::ElementsType::Enum type = self->get_type();
   std::map<I32, I32>* na_positions = self->na_positions;
     Rstats::Elements* elements = self->values;
   
@@ -91,7 +91,7 @@ type(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   // Type
-  Rstats::ElementsType::Enum type = self->type;
+  Rstats::ElementsType::Enum type = self->get_type();
   SV* type_sv;
 
   if (type == Rstats::ElementsType::LOGICAL) {
@@ -125,7 +125,7 @@ iv(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   I32 iv;
-  if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
+  if (self->get_type() == Rstats::ElementsType::INTEGER || self->get_type() == Rstats::ElementsType::LOGICAL) {
     iv = (*(Rstats::Values::Integer*)self->values)[0];
   }
   else {
@@ -142,7 +142,7 @@ dv(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   double dv;
-  if (self->type == Rstats::ElementsType::DOUBLE) {
+  if (self->get_type() == Rstats::ElementsType::DOUBLE) {
     dv = (*(Rstats::Values::Double*)self->values)[0];
   }
   else {
@@ -159,7 +159,7 @@ cv(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   SV* str_sv;
-  if (self->type == Rstats::ElementsType::CHARACTER) {
+  if (self->get_type() == Rstats::ElementsType::CHARACTER) {
     str_sv = (*(Rstats::Values::Character*)self->values)[0];
   }
   else {
@@ -205,7 +205,7 @@ flag(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   SV* flag_sv;
-  if (self->type == Rstats::ElementsType::DOUBLE) {
+  if (self->get_type() == Rstats::ElementsType::DOUBLE) {
     if (Rstats::ElementsFunc::is_infinite(self)) {
       double dv = (*(Rstats::Values::Double*)self->values)[0];
       if (dv > 0) {
@@ -235,19 +235,19 @@ DESTROY(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   I32 size = self->size;
-  if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
+  if (self->get_type() == Rstats::ElementsType::INTEGER || self->get_type() == Rstats::ElementsType::LOGICAL) {
     Rstats::Values::Integer* values = (Rstats::Values::Integer*)self->values;
     delete values;
   }
-  else if (self->type == Rstats::ElementsType::DOUBLE) {
+  else if (self->get_type() == Rstats::ElementsType::DOUBLE) {
     Rstats::Values::Double* values = (Rstats::Values::Double*)self->values;
     delete values;
   }
-  else if (self->type == Rstats::ElementsType::COMPLEX) {
+  else if (self->get_type() == Rstats::ElementsType::COMPLEX) {
     Rstats::Values::Complex* values = (Rstats::Values::Complex*)self->values;
     delete values;
   }
-  else if (self->type == Rstats::ElementsType::CHARACTER) {
+  else if (self->get_type() == Rstats::ElementsType::CHARACTER) {
     Rstats::Values::Character* values = (Rstats::Values::Character*)self->values;
     for (I32 i = 0; i < size; i++) {
       SvREFCNT_dec((*values)[i]);

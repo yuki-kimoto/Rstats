@@ -29,35 +29,117 @@ SV*
 compose(...)
   PPCODE:
 {
-  /*
+
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   SV* mode_sv = ST(1);
   SV* elements_sv = ST(2);
   I32 len = my::array_length(elements_sv);
   
-  if (sv_cmp(mode_sv, my::new_sv((char*)"character")) == 0) {
+  Rstats::Elements* compose_elements;
+  if (sv_cmp(mode_sv, my::new_scalar((char*)"character")) == 0) {
+    Rstats::Values::Character* values = new Rstats::Values::Character(len);
+    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
-      Rstats::Elements element = my::to_c_obj<Rstats::Elements>(element_sv);
-      
+      Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
+      if (element->exists_na_position(0)) {
+        na_positions.push_back(i);
+        (*values)[i] = my::new_scalar((char*)"");
+      }
+      else
+      {
+        (*values)[i] = (*element->get_character_values())[0];
+      }
+    }
+    compose_elements = Rstats::Elements::new_character(values);
+    for (I32 i = 0; na_positions.size(); i++) {
+      compose_elements->add_na_position(i);
     }
   }
-  else if (sv_cmp(mode_sv, my::new_sv((char*)"complex")) == 0) {
-    
+  else if (sv_cmp(mode_sv, my::new_scalar((char*)"complex")) == 0) {
+    Rstats::Values::Complex* values = new Rstats::Values::Complex(len);
+    std::vector<I32> na_positions;
+    for (I32 i = 0; i < len; i++) {
+      SV* element_sv = my::array_fetch(elements_sv, i);
+      Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
+      if (element->exists_na_position(0)) {
+        na_positions.push_back(i);
+        (*values)[i] = std::complex<double>(0, 0);
+      }
+      else
+      {
+        (*values)[i] = (*element->get_complex_values())[0];
+      }
+    }
+    compose_elements = Rstats::Elements::new_complex(values);
+    for (I32 i = 0; na_positions.size(); i++) {
+      compose_elements->add_na_position(i);
+    }
   }
-  else if (sv_cmp(mode_sv, my::new_sv((char*)"double")) == 0) {
-    
+  else if (sv_cmp(mode_sv, my::new_scalar((char*)"double")) == 0) {
+    Rstats::Values::Double* values = new Rstats::Values::Double(len);
+    std::vector<I32> na_positions;
+    for (I32 i = 0; i < len; i++) {
+      SV* element_sv = my::array_fetch(elements_sv, i);
+      Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
+      if (element->exists_na_position(0)) {
+        na_positions.push_back(i);
+        (*values)[i] = 0;
+      }
+      else
+      {
+        (*values)[i] = (*element->get_double_values())[0];
+      }
+    }
+    compose_elements = Rstats::Elements::new_double(values);
+    for (I32 i = 0; na_positions.size(); i++) {
+      compose_elements->add_na_position(i);
+    }
   }
-  else if (sv_cmp(mode_sv, my::new_sv((char*)"integer")) == 0) {
-    
+  else if (sv_cmp(mode_sv, my::new_scalar((char*)"integer")) == 0) {
+    Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
+    std::vector<I32> na_positions;
+    for (I32 i = 0; i < len; i++) {
+      SV* element_sv = my::array_fetch(elements_sv, i);
+      Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
+      if (element->exists_na_position(0)) {
+        na_positions.push_back(i);
+        (*values)[i] = 0;
+      }
+      else
+      {
+        (*values)[i] = (*element->get_integer_values())[0];
+      }
+    }
+    compose_elements = Rstats::Elements::new_integer(values);
+    for (I32 i = 0; na_positions.size(); i++) {
+      compose_elements->add_na_position(i);
+    }
   }
-  else if (sv_cmp(mode_sv, my::new_sv((char*)"logical")) == 0) {
-    
+  else if (sv_cmp(mode_sv, my::new_scalar((char*)"logical")) == 0) {
+    Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
+    std::vector<I32> na_positions;
+    for (I32 i = 0; i < len; i++) {
+      SV* element_sv = my::array_fetch(elements_sv, i);
+      Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
+      if (element->exists_na_position(0)) {
+        na_positions.push_back(i);
+        (*values)[i] = 0;
+      }
+      else
+      {
+        (*values)[i] = (*element->get_integer_values())[0];
+      }
+    }
+    compose_elements = Rstats::Elements::new_logical(values);
+    for (I32 i = 0; na_positions.size(); i++) {
+      compose_elements->add_na_position(i);
+    }
   }
   
-  Rstats::Element compose_elemments = new Rstats::Elements::new_double
+  SV* compose_elements_sv = my::to_perl_obj(compose_elements, (char*)"Rstats::Elements");
   
-  */
+  return_sv(compose_elements_sv);
 }
 
 SV*

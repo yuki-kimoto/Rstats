@@ -930,24 +930,25 @@ sub c {
 
   # Array
   my $x1 = NULL();
-  $x1->elements($elements);
 
   # Upgrade elements and type
   my @modes = keys %$mode_h;
   if (@modes > 1) {
     if ($mode_h->{character}) {
-      $x1 = $x1->as_character;
+      $elements = [map { $_->as_character } @$elements];
     }
     elsif ($mode_h->{complex}) {
-      $x1 = $x1->as_complex;
+      $elements = [map { $_->as_complex } @$elements];
     }
     elsif ($mode_h->{double}) {
-      $x1 = $x1->as_double;
+      $elements = [map { $_->as_double } @$elements];
     }
   }
   else {
     $x1->mode($modes[0] || 'logical');
   }
+
+  $x1->elements($elements);
   
   return $x1;
 }

@@ -6,6 +6,7 @@ use Rstats::Container::List;
 use Carp 'croak';
 
 has 'elements' => sub { [] };
+has 'elements_obj';
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 

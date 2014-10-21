@@ -240,9 +240,8 @@ namespace Rstats {
   class Elements {
     private:
     Rstats::ElementsType::Enum type;
-    std::map<I32, I32> na_positions;
-    int size;
     void* values;
+    std::map<I32, I32> na_positions;
     
     public:
     
@@ -281,31 +280,36 @@ namespace Rstats {
     }
     
     I32 get_size () {
-      return this->size;
+      if (this->type == Rstats::ElementsType::CHARACTER) {
+        return this->get_character_values()->size();
+      }
+      else if (this->type == Rstats::ElementsType::COMPLEX) {
+        return this->get_complex_values()->size();
+      }
+      else if (this->type == Rstats::ElementsType::DOUBLE) {
+        return this->get_double_values()->size();
+      }
+      else if (this->type == Rstats::ElementsType::INTEGER || Rstats::ElementsType::LOGICAL) {
+        return this->get_integer_values()->size();
+      }
     }
     
-    /* Constructor methods */
     static Rstats::Elements* new_double(double dv) {
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Double* values = new Rstats::Values::Double(1);
-      (*values)[0] = dv;
-      elements->values = values;
+      elements->values = new Rstats::Values::Double(1, dv);
       elements->type = Rstats::ElementsType::DOUBLE;
-      elements->size = values->size();
       
       return elements;
     }
 
     static Rstats::Elements* new_character(SV* str_sv) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Character* values = new Rstats::Values::Character(1);
-      
+
       SV* new_str_sv = Rstats::Perl::new_sv(str_sv);
       SvREFCNT_inc(new_str_sv);
-      (*values)[0] = new_str_sv;
-      elements->values = values;
+
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Character(1, new_str_sv);
       elements->type = Rstats::ElementsType::CHARACTER;
-      elements->size = values->size();
       
       return elements;
     }
@@ -314,11 +318,8 @@ namespace Rstats {
       
       std::complex<double> z(re, im);
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Complex* values = new Rstats::Values::Complex(1);
-      (*values)[0] = z;
-      elements->values = values;
+      elements->values = new Rstats::Values::Complex(1, z);
       elements->type = Rstats::ElementsType::COMPLEX;
-      elements->size = values->size();
       
       return elements;
     }
@@ -326,22 +327,16 @@ namespace Rstats {
     static Rstats::Elements* new_complex(std::complex<double> z) {
       
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Complex* values = new Rstats::Values::Complex(1);
-      (*values)[0] = z;
-      elements->values = values;
+      elements->values = new Rstats::Values::Complex(1, z);
       elements->type = Rstats::ElementsType::COMPLEX;
-      elements->size = values->size();
       
       return elements;
     }
     
     static Rstats::Elements* new_logical(int iv) {
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Integer* values = new Rstats::Values::Integer(1);
-      (*values)[0] = iv;
-      elements->values = values;
+      elements->values = new Rstats::Values::Integer(1, iv);
       elements->type = Rstats::ElementsType::LOGICAL;
-      elements->size = values->size();
       
       return elements;
     }
@@ -350,7 +345,6 @@ namespace Rstats {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
-      elements->size = values->size();
       
       return elements;
     }
@@ -366,11 +360,8 @@ namespace Rstats {
     static Rstats::Elements* new_integer(int iv) {
       
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Integer* values = new Rstats::Values::Integer(1);
-      (*values)[0] = iv;
-      elements->values = values;
+      elements->values = new Rstats::Values::Integer(1, iv);
       elements->type = Rstats::ElementsType::INTEGER;
-      elements->size = values->size();
       
       return elements;
     }
@@ -389,11 +380,8 @@ namespace Rstats {
     
     static Rstats::Elements* new_NA() {
       Rstats::Elements* elements = new Rstats::Elements;
-      Rstats::Values::Integer* values = new Rstats::Values::Integer(1);
-      (*values)[0] = 0;
-      elements->values = values;
+      elements->values = new Rstats::Values::Integer(1, 0);
       elements->type = Rstats::ElementsType::LOGICAL;
-      elements->size = values->size();
       elements->add_na_position((I32)0);
       
       return elements;

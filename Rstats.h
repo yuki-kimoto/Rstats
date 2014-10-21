@@ -83,7 +83,16 @@ namespace Rstats {
         croak("Can't derefernce");
       }
     }
+    
+    void array_extend(AV* av, I32 key) {
+      return av_extend(av, key);
+    }
 
+    void array_extend(SV* av_ref, I32 key) {
+      AV* av = array_deref(av_ref);
+      return av_extend(av, key);
+    }
+    
     I32 array_length (AV* av) {
       return av_len(av) + 1;
     }

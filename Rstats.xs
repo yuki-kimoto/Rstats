@@ -32,37 +32,52 @@ decompose(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   SV* decompose_elements_sv = my::new_array_ref();
-  /*
-  Rstats::Elements::Type type = self->get_type();
-  I32 size = self->get_size();
   
-  switch (type) {
-    case Rstats::ElementsType::CHARACTER:
-      Rstats::Values::Character values = self->get_character_values;
-      for (I32 i = 0; i < size; i++) {
-        Rstats::Elements* elements = new Rstats::Elements::new_character((*values)[i]);
-        SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        
-        
-      }
-      break;
-    case Rstats::ElementsType::COMPLEX:
-    
-      break;
-    
-    case Rstats::ElementsType::DOUBLE:
-    
-      break;
-    
-    case Rstats::ElementsType::INTEGER:
-    
-      break;
-    
-    case Rstats::ElementsType::LOGICAL
-    
-      break;
+  I32 size = self->get_size();
+  my::array_extend(decompose_elements_sv, size);
+
+  Rstats::ElementsType::Enum type = self->get_type();
+  
+  if (type == Rstats::ElementsType::CHARACTER) {
+    Rstats::Values::Character* values = self->get_character_values();
+    for (I32 i = 0; i < size; i++) {
+      Rstats::Elements* elements = Rstats::Elements::new_character((*values)[i]);
+      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      my::array_push(decompose_elements_sv, elements_sv);
+    }
   }
-  */
+  else if (type == Rstats::ElementsType::COMPLEX) {
+    Rstats::Values::Complex* values = self->get_complex_values();
+    for (I32 i = 0; i < size; i++) {
+      Rstats::Elements* elements = Rstats::Elements::new_complex((*values)[i]);
+      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      my::array_push(decompose_elements_sv, elements_sv);
+    }
+  }
+  else if (type == Rstats::ElementsType::DOUBLE) {
+    Rstats::Values::Double* values = self->get_double_values();
+    for (I32 i = 0; i < size; i++) {
+      Rstats::Elements* elements = Rstats::Elements::new_double((*values)[i]);
+      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      my::array_push(decompose_elements_sv, elements_sv);
+    }
+  }
+  else if (type == Rstats::ElementsType::INTEGER) {
+    Rstats::Values::Integer* values = self->get_integer_values();
+    for (I32 i = 0; i < size; i++) {
+      Rstats::Elements* elements = Rstats::Elements::new_integer((*values)[i]);
+      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      my::array_push(decompose_elements_sv, elements_sv);
+    }
+  }
+  else if (type == Rstats::ElementsType::LOGICAL) {
+    Rstats::Values::Integer* values = self->get_integer_values();
+    for (I32 i = 0; i < size; i++) {
+      Rstats::Elements* elements = Rstats::Elements::new_logical((*values)[i]);
+      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      my::array_push(decompose_elements_sv, elements_sv);
+    }
+  }
   
   return_sv(decompose_elements_sv);
 }

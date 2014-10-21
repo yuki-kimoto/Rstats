@@ -366,7 +366,6 @@ use Rstats::ElementsFunc;
 {
   # as_complex - Inf
   {
-    $DB::single = 1;
     my $x1 = array(Rstats::ElementsFunc::Inf);
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));

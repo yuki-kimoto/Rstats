@@ -29,20 +29,42 @@ SV*
 decompose(...)
   PPCODE:
 {
-  /*
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  Rstats::ElementsType::Enum type = self->get_type();
-  std::map<I32, I32>* na_positions = self->na_positions;
-    Rstats::Elements* elements = self->values;
+  SV* decompose_elements_sv = my::new_array_ref();
+  /*
+  Rstats::Elements::Type type = self->get_type();
+  I32 size = self->get_size();
   
-  SV* de_elements = my::new_av_ref();
-  for (I32 i = 0; i < self->get_size(); i++) {
+  switch (type) {
+    case Rstats::ElementsType::CHARACTER:
+      Rstats::Values::Character values = self->get_character_values;
+      for (I32 i = 0; i < size; i++) {
+        Rstats::Elements* elements = new Rstats::Elements::new_character((*values)[i]);
+        SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
+        
+        
+      }
+      break;
+    case Rstats::ElementsType::COMPLEX:
     
+      break;
+    
+    case Rstats::ElementsType::DOUBLE:
+    
+      break;
+    
+    case Rstats::ElementsType::INTEGER:
+    
+      break;
+    
+    case Rstats::ElementsType::LOGICAL
+    
+      break;
   }
   */
   
-  XSRETURN(0);
+  return_sv(decompose_elements_sv);
 }
 
 SV*
@@ -96,23 +118,23 @@ type(...)
 
   if (type == Rstats::ElementsType::LOGICAL) {
     if(self->exists_na_position((I32)0)) {
-      type_sv = my::new_sv((char*)"na");
+      type_sv = my::new_scalar((char*)"na");
     }
     else {
-      type_sv = my::new_sv((char*)"logical");
+      type_sv = my::new_scalar((char*)"logical");
     }
   }
   else if (type == Rstats::ElementsType::INTEGER) {
-    type_sv = my::new_sv((char*)"integer");
+    type_sv = my::new_scalar((char*)"integer");
   }
   else if (type == Rstats::ElementsType::DOUBLE) {
-    type_sv = my::new_sv((char*)"double");
+    type_sv = my::new_scalar((char*)"double");
   }
   else if (type == Rstats::ElementsType::COMPLEX) {
-    type_sv = my::new_sv((char*)"complex");
+    type_sv = my::new_scalar((char*)"complex");
   }
   else if (type == Rstats::ElementsType::CHARACTER) {
-    type_sv = my::new_sv((char*)"character");
+    type_sv = my::new_scalar((char*)"character");
   }
   
   return_sv(type_sv);
@@ -132,7 +154,7 @@ iv(...)
     iv = 0;
   }
   
-  return_sv(my::new_sv(iv));
+  return_sv(my::new_scalar(iv));
 }
 
 SV*
@@ -149,7 +171,7 @@ dv(...)
     dv = 0;
   }
   
-  return_sv(my::new_sv(dv));
+  return_sv(my::new_scalar(dv));
 }
 
 SV*
@@ -163,7 +185,7 @@ cv(...)
     str_sv = (*self->get_character_values())[0];
   }
   else {
-    str_sv = my::new_sv((char*)"");
+    str_sv = my::new_scalar((char*)"");
   }
   
   return_sv(str_sv);
@@ -209,21 +231,21 @@ flag(...)
     if (Rstats::ElementsFunc::is_infinite(self)) {
       double dv = (*self->get_double_values())[0];
       if (dv > 0) {
-        flag_sv = my::new_sv((char*)"inf");
+        flag_sv = my::new_scalar((char*)"inf");
       }
       else {
-        flag_sv = my::new_sv((char*)"-inf");
+        flag_sv = my::new_scalar((char*)"-inf");
       }
     }
     else if(Rstats::ElementsFunc::is_nan(self)) {
-      flag_sv = my::new_sv((char*)"nan");
+      flag_sv = my::new_scalar((char*)"nan");
     }
     else {
-      flag_sv = my::new_sv((char*)"normal");
+      flag_sv = my::new_scalar((char*)"normal");
     }
   }
   else {
-    flag_sv = my::new_sv((char*)"normal");
+    flag_sv = my::new_scalar((char*)"normal");
   }
   
   return_sv(flag_sv);
@@ -335,8 +357,8 @@ new_complex(...)
   SV* re_sv = ST(0);
   SV* im_sv = ST(1);
 
-  double re = my::nv(re_sv);
-  double im = my::nv(im_sv);
+  double re = my::get_nv(re_sv);
+  double im = my::get_nv(im_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_complex(re, im);
   
@@ -350,7 +372,7 @@ new_logical(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 iv = my::iv(value_sv);
+  I32 iv = my::get_iv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_logical((bool)iv);
   
@@ -386,7 +408,7 @@ new_double(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  double dv = my::nv(value_sv);
+  double dv = my::get_nv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_double(dv);
   
@@ -400,7 +422,7 @@ new_integer(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 iv = my::iv(value_sv);
+  I32 iv = my::get_iv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_integer(iv);
   
@@ -417,47 +439,47 @@ cross_product(...)
 {
   SV* values_sv = ST(0);
   
-  I32 values_length = my::length(values_sv);
-  SV* idxs_sv = my::new_av_ref();
+  I32 values_length = my::array_length(values_sv);
+  SV* idxs_sv = my::new_array_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::push(idxs_sv, my::new_sv((I32)0)); 
+    my::array_push(idxs_sv, my::new_scalar((I32)0)); 
   }
   
-  SV* idx_idx_sv = my::new_av_ref();
+  SV* idx_idx_sv = my::new_array_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::push(idx_idx_sv, my::new_sv(i));
+    my::array_push(idx_idx_sv, my::new_scalar(i));
   }
   
-  SV* x1_sv = my::new_av_ref();
+  SV* x1_sv = my::new_array_ref();
   for (I32 i = 0; i < values_length; i++) {
-    SV* value_sv = my::av_get(values_sv, i);
-    my::push(x1_sv, my::av_get(value_sv, (I32)0));
+    SV* value_sv = my::array_fetch(values_sv, i);
+    my::array_push(x1_sv, my::array_fetch(value_sv, (I32)0));
   }
 
-  SV* result_sv = my::new_av_ref();
-  my::push(result_sv, my::av_copy(x1_sv));
+  SV* result_sv = my::new_array_ref();
+  my::array_push(result_sv, my::array_copy(x1_sv));
   I32 end_loop = 0;
   while (1) {
     for (I32 i = 0; i < values_length; i++) {
       
-      if (my::iv(my::av_get(idxs_sv, i)) < my::length(my::av_get(values_sv, i)) - 1) {
+      if (my::get_iv(my::array_fetch(idxs_sv, i)) < my::array_length(my::array_fetch(values_sv, i)) - 1) {
         
-        SV* idxs_tmp = my::av_get(idxs_sv, i);
+        SV* idxs_tmp = my::array_fetch(idxs_sv, i);
         sv_inc(idxs_tmp);
-        my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), idxs_tmp));
+        my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), idxs_tmp));
         
-        my::push(result_sv, my::av_copy(x1_sv));
+        my::array_push(result_sv, my::array_copy(x1_sv));
         
         break;
       }
       
-      if (i == my::iv(my::av_get(idx_idx_sv, values_length - 1))) {
+      if (i == my::get_iv(my::array_fetch(idx_idx_sv, values_length - 1))) {
         end_loop = 1;
         break;
       }
       
-      my::av_set(idxs_sv, i, my::new_sv((I32)0));
-      my::av_set(x1_sv, i, my::av_get(my::av_get(values_sv, i), (I32)0));
+      my::array_store(idxs_sv, i, my::new_scalar((I32)0));
+      my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), (I32)0));
     }
     if (end_loop) {
       break;
@@ -474,23 +496,23 @@ pos_to_index(...)
   SV* pos_sv = ST(0);
   SV* dim_sv = ST(1);
   
-  SV* index_sv = my::new_av_ref();
-  I32 pos = my::iv(pos_sv);
+  SV* index_sv = my::new_array_ref();
+  I32 pos = my::get_iv(pos_sv);
   I32 before_dim_product = 1;
-  for (I32 i = 0; i < my::length(my::av_deref(dim_sv)); i++) {
-    before_dim_product *= my::iv(my::av_get(dim_sv, i));
+  for (I32 i = 0; i < my::array_length(my::array_deref(dim_sv)); i++) {
+    before_dim_product *= my::get_iv(my::array_fetch(dim_sv, i));
   }
   
-  for (I32 i = my::length(my::av_deref(dim_sv)) - 1; i >= 0; i--) {
+  for (I32 i = my::array_length(my::array_deref(dim_sv)) - 1; i >= 0; i--) {
     I32 dim_product = 1;
     for (I32 k = 0; k < i; k++) {
-      dim_product *= my::iv(my::av_get(dim_sv, k));
+      dim_product *= my::get_iv(my::array_fetch(dim_sv, k));
     }
     
     I32 reminder = pos % before_dim_product;
     I32 quotient = (I32)(reminder / dim_product);
     
-    my::unshift(index_sv, my::new_sv(quotient + 1));
+    my::array_unshift(index_sv, my::new_scalar(quotient + 1));
     before_dim_product = dim_product;
   }
   
@@ -505,20 +527,20 @@ index_to_pos(...)
   SV* dim_values_sv = ST(1);
   
   U32 pos = 0;
-  for (U32 i = 0; i < my::length(my::av_deref(dim_values_sv)); i++) {
+  for (U32 i = 0; i < my::array_length(my::array_deref(dim_values_sv)); i++) {
     if (i > 0) {
       U32 tmp = 1;
-      for (U32 k = 0; k < i; k++) {
-        tmp *= my::uv(my::av_get(dim_values_sv, k));
+      for (I32 k = 0; k < i; k++) {
+        tmp *= my::get_iv(my::array_fetch(dim_values_sv, k));
       }
-      pos += tmp * (my::uv(my::av_get(index_sv, i)) - 1);
+      pos += tmp * (my::get_iv(my::array_fetch(index_sv, i)) - 1);
     }
     else {
-      pos += my::uv(my::av_get(index_sv, i));
+      pos += my::get_iv(my::array_fetch(index_sv, i));
     }
   }
   
-  SV* pos_sv = my::new_sv(pos - 1);
+  SV* pos_sv = my::new_scalar(pos - 1);
   
   return_sv(pos_sv);
 }

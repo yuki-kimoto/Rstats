@@ -235,8 +235,6 @@ namespace Rstats {
     Rstats::ElementsType::Enum type;
     std::map<I32, I32> na_positions;
     int size;
-    
-    public:
     void* values;
     
     public:
@@ -457,7 +455,7 @@ namespace Rstats {
         rets_values = new Rstats::Values::Integer(size, 1);
       }
       else if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = elements->get_double_values();
+        Rstats::Values::Double* values = elements->get_double_values();
         
         rets_values = new Rstats::Values::Integer(size);
         for (int i = 0; i < size; i++) {

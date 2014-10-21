@@ -33,7 +33,7 @@ decompose(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   Rstats::ElementsType::Enum type = self->type;
-  std::map<int, int>* na_positions = self->na_positions;
+  std::map<I32, I32>* na_positions = self->na_positions;
     Rstats::Elements* elements = self->values;
   
   SV* de_elements = my::new_av_ref();
@@ -126,7 +126,7 @@ iv(...)
   
   I32 iv;
   if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
-    iv = (*(std::vector<I32>*)self->values)[0];
+    iv = (*(Rstats::Values::Integer*)self->values)[0];
   }
   else {
     iv = 0;
@@ -160,7 +160,7 @@ cv(...)
   
   SV* str_sv;
   if (self->type == Rstats::ElementsType::CHARACTER) {
-    str_sv = (*(std::vector<SV*>*)self->values)[0];
+    str_sv = (*(Rstats::Values::Character*)self->values)[0];
   }
   else {
     str_sv = my::new_sv((char*)"");
@@ -176,7 +176,7 @@ re(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   
-  double re = ((*(std::vector<std::complex<double> >*)self->values)[0]).real();
+  double re = ((*(Rstats::Values::Complex*)self->values)[0]).real();
   
   Rstats::Elements* re_element = Rstats::Elements::new_double(re);
   SV* re_element_sv = my::to_perl_obj(re_element, (char*)"Rstats::Elements");
@@ -190,7 +190,7 @@ im(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  double im = ((*(std::vector<std::complex<double> >*)self->values)[0]).imag();
+  double im = ((*(Rstats::Values::Complex*)self->values)[0]).imag();
   
   Rstats::Elements* im_element = Rstats::Elements::new_double(im);
   SV* im_element_sv = my::to_perl_obj(im_element, (char*)"Rstats::Elements");
@@ -236,7 +236,7 @@ DESTROY(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   I32 size = self->size;
   if (self->type == Rstats::ElementsType::INTEGER || self->type == Rstats::ElementsType::LOGICAL) {
-    std::vector<I32>* values = (std::vector<I32>*)self->values;
+    Rstats::Values::Integer* values = (Rstats::Values::Integer*)self->values;
     delete values;
   }
   else if (self->type == Rstats::ElementsType::DOUBLE) {
@@ -244,11 +244,11 @@ DESTROY(...)
     delete values;
   }
   else if (self->type == Rstats::ElementsType::COMPLEX) {
-    std::vector<std::complex<double> >* values = (std::vector<std::complex<double> >*)self->values;
+    Rstats::Values::Complex* values = (Rstats::Values::Complex*)self->values;
     delete values;
   }
   else if (self->type == Rstats::ElementsType::CHARACTER) {
-    std::vector<SV*>* values = (std::vector<SV*>*)self->values;
+    Rstats::Values::Character* values = (Rstats::Values::Character*)self->values;
     for (I32 i = 0; i < size; i++) {
       SvREFCNT_dec((*values)[i]);
     }

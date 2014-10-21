@@ -26,6 +26,41 @@ namespace my = Rstats::Perl;
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
 SV*
+compose(...)
+  PPCODE:
+{
+  /*
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  SV* mode_sv = ST(1);
+  SV* elements_sv = ST(2);
+  I32 len = my::array_length(elements_sv);
+  
+  if (sv_cmp(mode_sv, my::new_sv((char*)"character")) == 0) {
+    for (I32 i = 0; i < len; i++) {
+      SV* element_sv = my::array_fetch(elements_sv, i);
+      Rstats::Elements element = my::to_c_obj<Rstats::Elements>(element_sv);
+      
+    }
+  }
+  else if (sv_cmp(mode_sv, my::new_sv((char*)"complex")) == 0) {
+    
+  }
+  else if (sv_cmp(mode_sv, my::new_sv((char*)"double")) == 0) {
+    
+  }
+  else if (sv_cmp(mode_sv, my::new_sv((char*)"integer")) == 0) {
+    
+  }
+  else if (sv_cmp(mode_sv, my::new_sv((char*)"logical")) == 0) {
+    
+  }
+  
+  Rstats::Element compose_elemments = new Rstats::Elements::new_double
+  
+  */
+}
+
+SV*
 decompose(...)
   PPCODE:
 {

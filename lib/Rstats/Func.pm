@@ -950,6 +950,8 @@ sub c {
 
   $x1->elements($elements);
   
+  # $x1->elements_obj(Rstats::Elements->compose_elements($self->mode, $elements));
+  
   return $x1;
 }
 

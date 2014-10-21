@@ -95,7 +95,7 @@ type(...)
   SV* type_sv;
 
   if (type == Rstats::ElementsType::LOGICAL) {
-    if(self->na_positions->count(0)) {
+    if(self->na_positions.count(0)) {
       type_sv = my::new_sv((char*)"na");
     }
     else {
@@ -255,7 +255,6 @@ DESTROY(...)
       SvREFCNT_dec((*values)[i]);
     }
   }
-  delete self->na_positions;
   delete self;
 }
 

@@ -228,18 +228,16 @@ namespace Rstats {
     void* values;
     int size;
     Rstats::ElementsType::Enum type;
-    std::map<int, int>* na_positions;
+    std::map<int, int> na_positions;
     
     /* Constructor methods */
-    static Rstats::Elements* new_double(double dv)
-    {
+    static Rstats::Elements* new_double(double dv) {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<double>* values = new std::vector<double>(1);
       (*values)[0] = dv;
       elements->values = values;
       elements->type = Rstats::ElementsType::DOUBLE;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -254,7 +252,6 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::CHARACTER;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -268,7 +265,6 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::COMPLEX;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -280,7 +276,6 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -290,7 +285,6 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -311,7 +305,6 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::INTEGER;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
       
       return elements;
     }
@@ -335,8 +328,7 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->size = values->size();
-      elements->na_positions = new std::map<int, int>();
-      (*elements->na_positions)[0] = 1;
+      elements->na_positions[0] = 1;
       
       return elements;
     }
@@ -424,6 +416,5 @@ namespace Rstats {
       
       return rets;
     }
-
   }
 }

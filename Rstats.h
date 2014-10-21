@@ -303,14 +303,6 @@ namespace Rstats {
       }
     }
     
-    static Rstats::Elements* new_double(double dv) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Double(1, dv);
-      elements->type = Rstats::ElementsType::DOUBLE;
-      
-      return elements;
-    }
-
     static Rstats::Elements* new_character(SV* str_sv) {
 
       SV* new_str_sv = Rstats::Perl::new_scalar(str_sv);
@@ -323,6 +315,14 @@ namespace Rstats {
       return elements;
     }
 
+    static Rstats::Elements* new_character(Rstats::Values::Character* values) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = values;
+      elements->type = Rstats::ElementsType::CHARACTER;
+      
+      return elements;
+    }
+    
     static Rstats::Elements* new_complex(double re, double im) {
       
       std::complex<double> z(re, im);
@@ -338,6 +338,47 @@ namespace Rstats {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Complex(1, z);
       elements->type = Rstats::ElementsType::COMPLEX;
+      
+      return elements;
+    }
+
+    static Rstats::Elements* new_complex(Rstats::Values::Complex* values) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = values;
+      elements->type = Rstats::ElementsType::COMPLEX;
+      
+      return elements;
+    }
+    
+    static Rstats::Elements* new_double(double dv) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Double(1, dv);
+      elements->type = Rstats::ElementsType::DOUBLE;
+      
+      return elements;
+    }
+
+    static Rstats::Elements* new_double(Rstats::Values::Double* values) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = values;
+      elements->type = Rstats::ElementsType::DOUBLE;
+      
+      return elements;
+    }
+    
+    static Rstats::Elements* new_integer(int iv) {
+      
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Integer(1, iv);
+      elements->type = Rstats::ElementsType::INTEGER;
+      
+      return elements;
+    }
+    
+    static Rstats::Elements* new_integer(Rstats::Values::Integer* values) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = values;
+      elements->type = Rstats::ElementsType::DOUBLE;
       
       return elements;
     }
@@ -366,15 +407,6 @@ namespace Rstats {
       return new_logical(0);
     }
     
-    static Rstats::Elements* new_integer(int iv) {
-      
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Integer(1, iv);
-      elements->type = Rstats::ElementsType::INTEGER;
-      
-      return elements;
-    }
-
     static Rstats::Elements* new_NaN() {
       return new_double(NAN);
     }

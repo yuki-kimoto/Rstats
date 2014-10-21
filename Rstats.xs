@@ -37,7 +37,7 @@ decompose(...)
     Rstats::Elements* elements = self->values;
   
   SV* de_elements = my::new_av_ref();
-  for (I32 i = 0; i < self->size; i++) {
+  for (I32 i = 0; i < self->get_size(); i++) {
     
   }
   */
@@ -234,7 +234,7 @@ DESTROY(...)
   PPCODE:
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
-  I32 size = self->size;
+  I32 size = self->get_size();
   if (self->get_type() == Rstats::ElementsType::INTEGER || self->get_type() == Rstats::ElementsType::LOGICAL) {
     Rstats::Values::Integer* values = (Rstats::Values::Integer*)self->values;
     delete values;

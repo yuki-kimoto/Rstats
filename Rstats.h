@@ -234,10 +234,10 @@ namespace Rstats {
     private:
     Rstats::ElementsType::Enum type;
     std::map<I32, I32> na_positions;
+    int size;
     
     public:
     void* values;
-    int size;
     
     public:
     
@@ -257,6 +257,10 @@ namespace Rstats {
       for(std::map<I32, I32>::iterator it = elements->na_positions.begin(); it != elements->na_positions.end(); ++it) {
         this->add_na_position(it->first);
       }
+    }
+    
+    I32 get_size () {
+      return this->size;
     }
     
     /* Constructor methods */
@@ -381,7 +385,7 @@ namespace Rstats {
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       Rstats::Values::Integer* rets_values;
-      int size = elements->size;
+      int size = elements->get_size();
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
         rets_values = new Rstats::Values::Integer(size);
@@ -404,7 +408,7 @@ namespace Rstats {
     }
 
     Rstats::Elements* is_nan(Rstats::Elements* elements) {
-      int size = elements->size;
+      int size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         std::vector<double>* values = (std::vector<double>*)elements->values;
@@ -429,7 +433,7 @@ namespace Rstats {
 
     Rstats::Elements* is_finite(Rstats::Elements* elements) {
       
-      int size = elements->size;
+      int size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::INTEGER) {
         Rstats::Values::Integer* values = (Rstats::Values::Integer*)elements->values;

@@ -176,7 +176,7 @@ re(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   
-  double re = ((*(std::vector<std::complex<double>*>*)self->values)[0])->real();
+  double re = ((*(std::vector<std::complex<double> >*)self->values)[0]).real();
   
   Rstats::Elements* re_element = Rstats::Elements::new_double(re);
   SV* re_element_sv = my::to_perl_obj(re_element, (char*)"Rstats::Elements");
@@ -190,7 +190,7 @@ im(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  double im = ((*(std::vector<std::complex<double>*>*)self->values)[0])->imag();
+  double im = ((*(std::vector<std::complex<double> >*)self->values)[0]).imag();
   
   Rstats::Elements* im_element = Rstats::Elements::new_double(im);
   SV* im_element_sv = my::to_perl_obj(im_element, (char*)"Rstats::Elements");
@@ -244,10 +244,8 @@ DESTROY(...)
     delete values;
   }
   else if (self->type == Rstats::ElementsType::COMPLEX) {
-    std::vector<std::complex<double>*>* values = (std::vector<std::complex<double>*>*)self->values;
-    for (I32 i = 0; i < size; i++) {
-      delete (*values)[i];
-    }
+    std::vector<std::complex<double> >* values = (std::vector<std::complex<double> >*)self->values;
+    delete values;
   }
   else if (self->type == Rstats::ElementsType::CHARACTER) {
     std::vector<SV*>* values = (std::vector<SV*>*)self->values;
@@ -267,8 +265,8 @@ complex_double (...)
   Rstats::Elements* re = my::to_c_obj<Rstats::Elements*>(ST(0));
   Rstats::Elements* im = my::to_c_obj<Rstats::Elements*>(ST(1));
   
-  std::vector<double>* re_values = (std::vector<double>*)re->values;
-  std::vector<double>* im_values = (std::vector<double>*)im->values;
+  Rstats::Values::Double re_values = (Rstats::Values::Double)re->values;
+  Rstats::Values::Double im_values = (Rstats::Values::Double)im->values;
   
   Rstats::Elements* z = Rstats::Elements::new_complex((*re_values)[0], (*im_values)[0]);
   

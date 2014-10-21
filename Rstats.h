@@ -233,16 +233,30 @@ namespace Rstats {
   class Elements {
     private:
     Rstats::ElementsType::Enum type;
+    std::map<I32, I32> na_positions;
     
     public:
     void* values;
     int size;
-    std::map<I32, I32> na_positions;
     
     public:
     
     Rstats::ElementsType::Enum get_type() {
       return this->type;
+    }
+    
+    void add_na_position (I32 position) {
+      this->na_positions[position] = 1;
+    }
+
+    bool exists_na_position (I32 position) {
+      return this->na_positions.count(position);
+    }
+    
+    void merge_na_positions (Rstats::Elements* elements) {
+      for(std::map<I32, I32>::iterator it = elements->na_positions.begin(); it != elements->na_positions.end(); ++it) {
+        this->add_na_position(it->first);
+      }
     }
     
     /* Constructor methods */
@@ -355,7 +369,7 @@ namespace Rstats {
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->size = values->size();
-      elements->na_positions[0] = 1;
+      elements->add_na_position((I32)0);
       
       return elements;
     }

@@ -223,18 +223,15 @@ namespace Rstats {
   }
 
   // Rstats::Elements
-  typedef struct  {
+  class Elements {
     public:
     void* values;
     int size;
     Rstats::ElementsType::Enum type;
     std::map<int, int>* na_positions;
-  } Elements;
-  
-  // Rstats::ElementsFunc
-  namespace ElementsFunc {
     
-    Rstats::Elements* new_double(double dv)
+    /* Constructor methods */
+    static Rstats::Elements* new_double(double dv)
     {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<double>* values = new std::vector<double>(1);
@@ -247,7 +244,7 @@ namespace Rstats {
       return elements;
     }
 
-    Rstats::Elements* new_character(SV* str_sv) {
+    static Rstats::Elements* new_character(SV* str_sv) {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<SV*>* values = new std::vector<SV*>(1);
       
@@ -262,7 +259,7 @@ namespace Rstats {
       return elements;
     }
 
-    Rstats::Elements* new_complex(double re, double im) {
+    static Rstats::Elements* new_complex(double re, double im) {
       
       std::complex<double>* z = new std::complex<double>(re, im);
       Rstats::Elements* elements = new Rstats::Elements;
@@ -276,7 +273,7 @@ namespace Rstats {
       return elements;
     }
 
-    Rstats::Elements* new_logical(int iv) {
+    static Rstats::Elements* new_logical(int iv) {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<int>* values = new std::vector<int>(1);
       (*values)[0] = iv;
@@ -288,7 +285,7 @@ namespace Rstats {
       return elements;
     }
     
-    Rstats::Elements* new_logical(std::vector<int>* values) {
+    static Rstats::Elements* new_logical(std::vector<int>* values) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = values;
       elements->type = Rstats::ElementsType::LOGICAL;
@@ -298,15 +295,15 @@ namespace Rstats {
       return elements;
     }
     
-    Rstats::Elements* new_true() {
+    static Rstats::Elements* new_true() {
       return new_logical(1);
     }
 
-    Rstats::Elements* new_false() {
+    static Rstats::Elements* new_false() {
       return new_logical(0);
     }
     
-    Rstats::Elements* new_integer(int iv) {
+    static Rstats::Elements* new_integer(int iv) {
       
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<int>* values = new std::vector<int>(1);
@@ -319,19 +316,19 @@ namespace Rstats {
       return elements;
     }
 
-    Rstats::Elements* new_NaN() {
+    static Rstats::Elements* new_NaN() {
       return new_double(NAN);
     }
 
-    Rstats::Elements* new_negativeInf() {
+    static Rstats::Elements* new_negativeInf() {
       return new_double(-(INFINITY));
     }
     
-    Rstats::Elements* new_Inf() {
+    static Rstats::Elements* new_Inf() {
       return new_double(INFINITY);
     }
     
-    Rstats::Elements* new_NA() {
+    static Rstats::Elements* new_NA() {
       Rstats::Elements* elements = new Rstats::Elements;
       std::vector<int>* values = new std::vector<int>(1);
       (*values)[0] = 0;
@@ -343,6 +340,10 @@ namespace Rstats {
       
       return elements;
     }
+  };
+  
+  // Rstats::ElementsFunc
+  namespace ElementsFunc {
     
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
@@ -364,7 +365,7 @@ namespace Rstats {
         rets_values = new std::vector<int>(size, 0);
       }
       
-      Rstats::Elements* rets = new_logical(rets_values);
+      Rstats::Elements* rets = Rstats::Elements::new_logical(rets_values);
       
       return rets;
     }
@@ -388,7 +389,7 @@ namespace Rstats {
         rets_values = new std::vector<int>(size, 0);
       }
       
-      Rstats::Elements* rets = new_logical(rets_values);
+      Rstats::Elements* rets = Rstats::Elements::new_logical(rets_values);
       
       return rets;
     }
@@ -419,7 +420,7 @@ namespace Rstats {
         rets_values = new std::vector<int>(size, 0);
       }
 
-      Rstats::Elements* rets = new_logical(rets_values);
+      Rstats::Elements* rets = Rstats::Elements::new_logical(rets_values);
       
       return rets;
     }

@@ -243,7 +243,7 @@ namespace Rstats {
     /* Constructor methods */
     static Rstats::Elements* new_double(double dv) {
       Rstats::Elements* elements = new Rstats::Elements;
-      std::vector<double>* values = new std::vector<double>(1);
+      Rstats::Values::Double values = new std::vector<double>(1);
       (*values)[0] = dv;
       elements->values = values;
       elements->type = Rstats::ElementsType::DOUBLE;
@@ -364,7 +364,7 @@ namespace Rstats {
       std::vector<I32>* rets_values;
       int size = elements->size;
       if (elements->type == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        Rstats::Values::Double values = (Rstats::Values::Double)elements->values;
         rets_values = new std::vector<I32>(size);
         for (int i = 0; i < size; i++) {
           if(std::isinf((*values)[i])) {
@@ -388,7 +388,7 @@ namespace Rstats {
       int size = elements->size;
       std::vector<I32>* rets_values;
       if (elements->type == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        Rstats::Values::Double values = (Rstats::Values::Double)elements->values;
         rets_values = new std::vector<I32>(size);
         for (int i = 0; i < size; i++) {
           if(std::isnan((*values)[i])) {
@@ -418,7 +418,7 @@ namespace Rstats {
         rets_values = new std::vector<I32>(size, 1);
       }
       else if (elements->type == Rstats::ElementsType::DOUBLE) {
-        std::vector<double>* values = (std::vector<double>*)elements->values;
+        Rstats::Values::Double values = (Rstats::Values::Double)elements->values;
         
         rets_values = new std::vector<I32>(size);
         for (int i = 0; i < size; i++) {

@@ -143,7 +143,7 @@ dv(...)
   
   double dv;
   if (self->type == Rstats::ElementsType::DOUBLE) {
-    dv = (*(std::vector<double>*)self->values)[0];
+    dv = (*(Rstats::Values::Double)self->values)[0];
   }
   else {
     dv = 0;
@@ -207,7 +207,7 @@ flag(...)
   SV* flag_sv;
   if (self->type == Rstats::ElementsType::DOUBLE) {
     if (Rstats::ElementsFunc::is_infinite(self)) {
-      double dv = (*(std::vector<double>*)self->values)[0];
+      double dv = (*(Rstats::Values::Double)self->values)[0];
       if (dv > 0) {
         flag_sv = my::new_sv((char*)"inf");
       }
@@ -240,7 +240,7 @@ DESTROY(...)
     delete values;
   }
   else if (self->type == Rstats::ElementsType::DOUBLE) {
-    std::vector<double>* values = (std::vector<double>*)self->values;
+    Rstats::Values::Double values = (Rstats::Values::Double)self->values;
     delete values;
   }
   else if (self->type == Rstats::ElementsType::COMPLEX) {

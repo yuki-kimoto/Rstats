@@ -223,9 +223,16 @@ namespace Rstats {
   }
   
   namespace Values {
+    // Rstats::Values::Character
     typedef std::vector<SV*> Character;
+    
+    // Rstats::Values::Complex
     typedef std::vector<std::complex<double> > Complex;
+    
+    // Rstats::Values::Double
     typedef std::vector<double> Double;
+    
+    // Rstats::Values::Integer
     typedef std::vector<I32> Integer;
   }
 

@@ -897,6 +897,7 @@ sub c {
   my $mode_h = {};
   for my $element (@$elements) {
     
+    $DB::single = 1 if $ENV{a};
     if (!ref $element) {
       if (Rstats::Util::is_perl_number($element)) {
         $element = Rstats::ElementsFunc::double($element);

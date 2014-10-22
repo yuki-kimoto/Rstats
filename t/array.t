@@ -9,21 +9,6 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
-# create element
-{
-  # create element - double
-  {
-    my $x1 = c(1, 2, 3);
-    1;
-  }
-  
-  # create element - character
-  {
-    my $x1 = c("a", "b", "c");
-    1;
-  }
-}
-
 # get
 {
   # get - logical
@@ -129,6 +114,21 @@ use Rstats::Func;
   {
     my $x1 = array(C('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+  }
+}
+
+# create element
+{
+  # create element - double
+  {
+    my $x1 = c(1, 2, 3);
+    1;
+  }
+  
+  # create element - character
+  {
+    my $x1 = c("a", "b", "c");
+    1;
   }
 }
 

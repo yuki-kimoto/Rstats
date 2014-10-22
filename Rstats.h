@@ -383,9 +383,17 @@ namespace Rstats {
       return elements;
     }
     
-    static Rstats::Elements* new_logical(int iv) {
+    static Rstats::Elements* new_logical(I32 iv) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(1, iv);
+      elements->type = Rstats::ElementsType::LOGICAL;
+      
+      return elements;
+    }
+
+    static Rstats::Elements* new_logical_size(I32 iv) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Integer(iv);
       elements->type = Rstats::ElementsType::LOGICAL;
       
       return elements;

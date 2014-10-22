@@ -243,11 +243,9 @@ sub as {
 sub to_string {
   my $self = shift;
   
-  if ($self->is_na) {
-    return 'NA';
-  }
-  elsif ($self->is_character) {
-    return $self->cv . "";
+  my $str;
+  if ($self->is_character) {
+    $str = $self->cv . "";
   }
   elsif ($self->is_complex) {
     my $re = $self->re;
@@ -260,100 +258,117 @@ sub to_string {
   elsif ($self->is_double) {
   
     if ($self->is_positive_infinite) {
-      return 'Inf';
+      $str = 'Inf';
     }
     elsif ($self->is_negative_infinite) {
-      return '-Inf';
+      $str = '-Inf';
     }
     elsif ($self->is_nan) {
-      return 'NaN';
+      $str = 'NaN';
     }
     else {
-      $self->dv . "";
+      $str = $self->dv . "";
     }
   }
   elsif ($self->is_integer) {
-    return $self->iv . "";
+    $str = $self->iv . "";
   }
   elsif ($self->is_logical) {
-    return $self->iv ? 'TRUE' : 'FALSE'
+    $str = $self->iv ? 'TRUE' : 'FALSE'
   }
   else {
     croak "Invalid type";
   }
+  
+  my $is_na = $self->is_na->iv;
+  if ($is_na) {
+    $str = 'NA';
+  }
+  
+  return $str;
 }
 
 sub bool {
   my $self = shift;
   
-  if ($self->is_na) {
-    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
-  }
-  elsif ($self->is_character || $self->is_complex) {
+  my $is;
+  if ($self->is_character || $self->is_complex) {
     croak 'Error in -a : invalid argument to unary operator ';
   }
   elsif ($self->is_double) {
     if ($self->is_infinite) {
-      return 1;
+      $is = 1;
     }
     elsif ($self->is_nan) {
       croak 'argument is not interpretable as logical';
     }
     else {
-      return $self->dv;
+      $is = $self->dv;
     }
   }
   elsif ($self->is_integer || $self->is_logical) {
-    return $self->iv;
+    $is = $self->iv;
   }
   else {
     croak "Invalid type";
-  }  
+  }
+  
+  my $is_na = $self->is_na->iv;
+  if ($is_na) {
+    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
+  }
+  
+  return $is;
 }
 
 sub value {
   my $self = shift;
   
-  if ($self->is_na) {
-    return undef;
-  }
-  elsif ($self->is_double) {
+  my $value;
+  if ($self->is_double) {
     if ($self->is_positive_infinite) {
-      return 'Inf';
+      $value = 'Inf';
     }
     elsif ($self->is_negative_infinite) {
-      return '-Inf';
+      $value = '-Inf';
     }
     elsif ($self->is_nan) {
-      return 'NaN';
+      $value = 'NaN';
     }
     else {
-      return $self->dv;
+      $value = $self->dv;
     }
   }
   elsif ($self->is_logical) {
     if ($self->iv) {
-      return 1;
+      $value = 1;
     }
     else {
-      return 0;
+      $value = 0;
     }
   }
   elsif ($self->is_complex) {
-    return {
+    $value = {
       re => $self->re->value,
       im => $self->im->value
     };
   }
   elsif ($self->is_character) {
-    return $self->cv;
+    $value = $self->cv;
   }
   elsif ($self->is_integer) {
-    return $self->iv;
+    $value = $self->iv;
   }
   else {
-    croak "Invalid type";
+    croak "Invalid type(Rstats::Elements::value())";
   }
+  
+  my $is_na = $self->is_na->iv;
+  if ($is_na) {
+    $value = undef;
+  }
+  
+  return $value;
 }
 
 sub typeof { shift->type }
@@ -367,7 +382,6 @@ sub is_numeric {
 sub is_double { shift->type eq 'double' }
 sub is_integer { shift->type eq 'integer' }
 sub is_logical { shift->type eq 'logical' }
-sub is_na { shift->type eq 'na' }
 
 sub is_positive_infinite {
   my $self = shift;

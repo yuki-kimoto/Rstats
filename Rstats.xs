@@ -26,6 +26,30 @@ namespace my = Rstats::Perl;
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
 SV*
+is_na(...)
+  PPCODE:
+{
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  I32 size = self->get_size();
+  Rstats::Elements* rets = Rstats::Elements::new_logical_size(size);
+  
+  Rstats::Values::Integer* values = rets->get_integer_values();
+  for (I32 i = 0; i < size; i++) {
+    if (self->exists_na_position(i)) {
+      (*values)[i] = 1;
+    }
+    else {
+      (*values)[i] = 0;
+    }
+  }
+  
+  SV* rets_sv = my::to_perl_obj(rets, (char*)"Rstats::Elements");
+  
+  return_sv(rets_sv);
+}
+
+SV*
 compose(...)
   PPCODE:
 {
@@ -253,12 +277,7 @@ type(...)
   SV* type_sv;
 
   if (type == Rstats::ElementsType::LOGICAL) {
-    if(self->exists_na_position((I32)0)) {
-      type_sv = my::new_scalar((char*)"na");
-    }
-    else {
-      type_sv = my::new_scalar((char*)"logical");
-    }
+    type_sv = my::new_scalar((char*)"logical");
   }
   else if (type == Rstats::ElementsType::INTEGER) {
     type_sv = my::new_scalar((char*)"integer");

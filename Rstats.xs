@@ -29,8 +29,6 @@ SV*
 compose(...)
   PPCODE:
 {
-
-  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   SV* mode_sv = ST(1);
   SV* elements_sv = ST(2);
   I32 len = my::array_length(elements_sv);
@@ -44,15 +42,17 @@ compose(...)
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
-        (*values)[i] = my::new_scalar((char*)"");
+        SV* value_sv = my::new_scalar((char*)"");
+        (*values)[i] = SvREFCNT_inc(value_sv);
       }
       else
       {
-        (*values)[i] = (*element->get_character_values())[0];
+        SV* value_sv = my::new_scalar((*element->get_character_values())[0]);
+        (*values)[i] = SvREFCNT_inc(value_sv);
       }
     }
     compose_elements = Rstats::Elements::new_character(values);
-    for (I32 i = 0; na_positions.size(); i++) {
+    for (I32 i = 0; i < na_positions.size(); i++) {
       compose_elements->add_na_position(i);
     }
   }
@@ -72,11 +72,12 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_complex(values);
-    for (I32 i = 0; na_positions.size(); i++) {
+    for (I32 i = 0; i < na_positions.size(); i++) {
       compose_elements->add_na_position(i);
     }
   }
   else if (sv_cmp(mode_sv, my::new_scalar((char*)"double")) == 0) {
+
     Rstats::Values::Double* values = new Rstats::Values::Double(len);
     std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
@@ -92,7 +93,7 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_double(values);
-    for (I32 i = 0; na_positions.size(); i++) {
+    for (I32 i = 0; i < na_positions.size(); i++) {
       compose_elements->add_na_position(i);
     }
   }
@@ -112,7 +113,7 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_integer(values);
-    for (I32 i = 0; na_positions.size(); i++) {
+    for (I32 i = 0; i < na_positions.size(); i++) {
       compose_elements->add_na_position(i);
     }
   }
@@ -132,9 +133,12 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_logical(values);
-    for (I32 i = 0; na_positions.size(); i++) {
+    for (I32 i = 0; i < na_positions.size(); i++) {
       compose_elements->add_na_position(i);
     }
+  }
+  else {
+    croak("Unknown type(Rstats::Elements::compose)");
   }
   
   SV* compose_elements_sv = my::to_perl_obj(compose_elements, (char*)"Rstats::Elements");

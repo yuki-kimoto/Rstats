@@ -947,11 +947,10 @@ sub c {
   else {
     $x1->mode($modes[0] || 'logical');
   }
-
-  $x1->elements($elements);
   
   my $compose_elements = Rstats::Elements->compose($x1->{type}, $elements);
-  $x1->elements_obj($compose_elements);
+  my $decompose_elements = $compose_elements->decompose;
+  $x1->elements($decompose_elements);
   
   return $x1;
 }
@@ -1439,6 +1438,7 @@ sub array {
     @$elements = (@$elements) x $repeat_count;
     @$elements = splice @$elements, 0, $dim_product;
   }
+  
   $x1->elements($elements);
   $x1->dim($dim);
   

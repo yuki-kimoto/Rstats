@@ -3,10 +3,11 @@ use strict;
 use warnings;
 
 use Rstats::ElementsFunc;
+use Rstats;
+
 
 # element
 {
-
   # element - new_NA
   {
     my $e1 = Rstats::ElementsFunc::new_NA();

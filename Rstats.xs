@@ -58,9 +58,9 @@ compose(...)
   I32 len = my::array_length(elements_sv);
   
   Rstats::Elements* compose_elements;
+  std::vector<I32> na_positions;
   if (sv_cmp(mode_sv, my::new_scalar((char*)"character")) == 0) {
     Rstats::Values::Character* values = new Rstats::Values::Character(len);
-    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -76,13 +76,9 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_character(values);
-    for (I32 i = 0; i < na_positions.size(); i++) {
-      compose_elements->add_na_position(i);
-    }
   }
   else if (sv_cmp(mode_sv, my::new_scalar((char*)"complex")) == 0) {
     Rstats::Values::Complex* values = new Rstats::Values::Complex(len);
-    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -96,14 +92,9 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_complex(values);
-    for (I32 i = 0; i < na_positions.size(); i++) {
-      compose_elements->add_na_position(i);
-    }
   }
   else if (sv_cmp(mode_sv, my::new_scalar((char*)"double")) == 0) {
-
     Rstats::Values::Double* values = new Rstats::Values::Double(len);
-    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -117,13 +108,9 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_double(values);
-    for (I32 i = 0; i < na_positions.size(); i++) {
-      compose_elements->add_na_position(i);
-    }
   }
   else if (sv_cmp(mode_sv, my::new_scalar((char*)"integer")) == 0) {
     Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
-    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -137,13 +124,9 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_integer(values);
-    for (I32 i = 0; i < na_positions.size(); i++) {
-      compose_elements->add_na_position(i);
-    }
   }
   else if (sv_cmp(mode_sv, my::new_scalar((char*)"logical")) == 0) {
     Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
-    std::vector<I32> na_positions;
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -157,12 +140,13 @@ compose(...)
       }
     }
     compose_elements = Rstats::Elements::new_logical(values);
-    for (I32 i = 0; i < na_positions.size(); i++) {
-      compose_elements->add_na_position(i);
-    }
   }
   else {
     croak("Unknown type(Rstats::Elements::compose)");
+  }
+  
+  for (I32 i = 0; i < na_positions.size(); i++) {
+    compose_elements->add_na_position(na_positions[i]);
   }
   
   SV* compose_elements_sv = my::to_perl_obj(compose_elements, (char*)"Rstats::Elements");
@@ -187,6 +171,9 @@ decompose(...)
     Rstats::Values::Character* values = self->get_character_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_character((*values)[i]);
+      if (self->exists_na_position(i)) {
+        elements->add_na_position(0);
+      }
       SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
       my::array_push(decompose_elements_sv, elements_sv);
     }
@@ -195,6 +182,9 @@ decompose(...)
     Rstats::Values::Complex* values = self->get_complex_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_complex((*values)[i]);
+      if (self->exists_na_position(i)) {
+        elements->add_na_position(0);
+      }
       SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
       my::array_push(decompose_elements_sv, elements_sv);
     }
@@ -203,7 +193,10 @@ decompose(...)
     Rstats::Values::Double* values = self->get_double_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_double((*values)[i]);
-      SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
+      if (self->exists_na_position(i)) {
+        elements->add_na_position(0);
+      }
+     SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
       my::array_push(decompose_elements_sv, elements_sv);
     }
   }
@@ -211,6 +204,9 @@ decompose(...)
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_integer((*values)[i]);
+      if (self->exists_na_position(i)) {
+        elements->add_na_position(0);
+      }
       SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
       my::array_push(decompose_elements_sv, elements_sv);
     }
@@ -219,6 +215,9 @@ decompose(...)
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_logical((*values)[i]);
+      if (self->exists_na_position(i)) {
+        elements->add_na_position(0);
+      }
       SV* elements_sv = my::to_perl_obj(elements, (char*)"Rstats::Elements");
       my::array_push(decompose_elements_sv, elements_sv);
     }

@@ -247,6 +247,7 @@ sub get {
   my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementsFunc::NA() } @$poss;
   
   # array
+  $ENV{a} = 1;
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
   
   # Copy attributes

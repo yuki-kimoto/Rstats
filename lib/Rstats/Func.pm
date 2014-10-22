@@ -936,12 +936,15 @@ sub c {
   if (@modes > 1) {
     if ($mode_h->{character}) {
       $elements = [map { $_->as_character } @$elements];
+      $x1->mode('character');
     }
     elsif ($mode_h->{complex}) {
       $elements = [map { $_->as_complex } @$elements];
+      $x1->mode('complex');
     }
     elsif ($mode_h->{double}) {
       $elements = [map { $_->as_double } @$elements];
+      $x1->mode('double');
     }
   }
   else {

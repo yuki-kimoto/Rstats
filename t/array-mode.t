@@ -7,6 +7,17 @@ use Rstats::ElementsFunc;
 
 # as_character
 {
+  # as_character - complex
+  {
+    my $x0 = r->complex(1, 2);
+    "$x0";
+    
+    my $x1 = array(r->complex(1, 2));
+    my $x2 = r->as_character($x1);
+    ok(r->is_character($x2));
+    is($x2->values->[0], "1+2i");
+  }
+
   # as_character - NA
   {
     my $r = Rstats::ElementsFunc::logical(1);
@@ -42,14 +53,6 @@ use Rstats::ElementsFunc;
     is($x2->values->[0], "a");
   }
   
-  # as_character - complex
-  {
-    my $x1 = array(r->complex(1, 2));
-    my $x2 = r->as_character($x1);
-    ok(r->is_character($x2));
-    is($x2->values->[0], "1+2i");
-  }
-
   # as_character - complex, 0 + 0i
   {
     my $x1 = array(r->complex(0, 0));

@@ -81,7 +81,10 @@ compose(...)
     compose_elements = Rstats::Elements::new_character(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("complex")) == 0) {
-    Rstats::Values::Complex* values = new Rstats::Values::Complex(len);
+
+    compose_elements = Rstats::Elements::new_complex(len);
+
+    Rstats::Values::Complex* values = compose_elements->get_complex_values();
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -89,12 +92,10 @@ compose(...)
         na_positions.push_back(i);
         (*values)[i] = std::complex<double>(0, 0);
       }
-      else
-      {
-        (*values)[i] = (*element->get_complex_values())[0];
+      else {
+       (*values)[i] = (*element->get_complex_values())[0];
       }
     }
-    compose_elements = Rstats::Elements::new_complex(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("double")) == 0) {
     compose_elements = Rstats::Elements::new_double(len);
@@ -185,7 +186,7 @@ decompose(...)
   else if (type == Rstats::ElementsType::COMPLEX) {
     Rstats::Values::Complex* values = self->get_complex_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_complex((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_complex(1, (*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -449,7 +450,7 @@ complex_double (...)
   Rstats::Values::Double* re_values = re->get_double_values();
   Rstats::Values::Double* im_values = im->get_double_values();
   
-  Rstats::Elements* z = Rstats::Elements::new_complex((*re_values)[0], (*im_values)[0]);
+  Rstats::Elements* z = Rstats::Elements::new_complex(1, std::complex<double>((*re_values)[0], (*im_values)[0]));
   
   SV* z_sv = my::to_perl_obj(z, "Rstats::Elements");
   
@@ -519,7 +520,7 @@ new_complex(...)
   double re = my::get_nv(re_sv);
   double im = my::get_nv(im_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_complex(re, im);
+  Rstats::Elements* element = Rstats::Elements::new_complex(1, std::complex<double>(re, im));
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   

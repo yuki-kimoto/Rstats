@@ -314,29 +314,20 @@ namespace Rstats {
       
       return elements;
     }
-    
-    static Rstats::Elements* new_complex(double re, double im) {
+
+    static Rstats::Elements* new_complex(I32 size) {
       
-      std::complex<double> z(re, im);
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Complex(1, z);
+      elements->values = new Rstats::Values::Complex(size, std::complex<double>(0, 0));
       elements->type = Rstats::ElementsType::COMPLEX;
       
       return elements;
     }
-
-    static Rstats::Elements* new_complex(std::complex<double> z) {
+        
+    static Rstats::Elements* new_complex(I32 size, std::complex<double> z) {
       
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Complex(1, z);
-      elements->type = Rstats::ElementsType::COMPLEX;
-      
-      return elements;
-    }
-
-    static Rstats::Elements* new_complex(Rstats::Values::Complex* values) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = values;
+      elements->values = new Rstats::Values::Complex(size, z);
       elements->type = Rstats::ElementsType::COMPLEX;
       
       return elements;

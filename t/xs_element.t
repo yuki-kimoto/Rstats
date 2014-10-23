@@ -5,6 +5,25 @@ use warnings;
 use Rstats::ElementsFunc;
 use Rstats;
 
+{
+my $x1 = r->complex(1,2);
+my $x2 = r->complex(3,4);
+$ENV{a} = 1;
+c($x1, $x2);
+1;
+}
+
+{
+c(r->complex(1,2))
+}
+
+{
+r->complex(1,2);
+}
+
+{
+my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
+}
 
 # element
 {

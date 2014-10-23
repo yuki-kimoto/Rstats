@@ -342,7 +342,7 @@ namespace Rstats {
       return elements;
     }
 
-    static Rstats::Elements* new_double_size(I32 size) {
+    static Rstats::Elements* new_double(I32 size) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Double(size);
       elements->type = Rstats::ElementsType::DOUBLE;
@@ -350,25 +350,9 @@ namespace Rstats {
       return elements;
     }
 
-    static Rstats::Elements* new_double_size(I32 size, double value) {
+    static Rstats::Elements* new_double(I32 size, double value) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Double(size, value);
-      elements->type = Rstats::ElementsType::DOUBLE;
-      
-      return elements;
-    }
-        
-    static Rstats::Elements* new_double(double dv) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Double(1, dv);
-      elements->type = Rstats::ElementsType::DOUBLE;
-      
-      return elements;
-    }
-
-    static Rstats::Elements* new_double(Rstats::Values::Double* values) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = values;
       elements->type = Rstats::ElementsType::DOUBLE;
       
       return elements;
@@ -424,15 +408,15 @@ namespace Rstats {
     }
     
     static Rstats::Elements* new_NaN() {
-      return  Rstats::Elements::new_double_size(1, NAN);
+      return  Rstats::Elements::new_double(1, NAN);
     }
 
     static Rstats::Elements* new_negativeInf() {
-      return Rstats::Elements::new_double_size(1, -(INFINITY));
+      return Rstats::Elements::new_double(1, -(INFINITY));
     }
     
     static Rstats::Elements* new_Inf() {
-      return Rstats::Elements::new_double_size(1, INFINITY);
+      return Rstats::Elements::new_double(1, INFINITY);
     }
     
     static Rstats::Elements* new_NA() {

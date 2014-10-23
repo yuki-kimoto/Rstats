@@ -97,7 +97,7 @@ compose(...)
     compose_elements = Rstats::Elements::new_complex(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("double")) == 0) {
-    compose_elements = Rstats::Elements::new_double_size(len);
+    compose_elements = Rstats::Elements::new_double(len);
 
     Rstats::Values::Double* values = compose_elements->get_double_values();
     for (I32 i = 0; i < len; i++) {
@@ -197,7 +197,7 @@ decompose(...)
 
     Rstats::Values::Double* values = self->get_double_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_double((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_double(1, (*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -359,7 +359,7 @@ re(...)
   
   double re = ((*self->get_complex_values())[0]).real();
   
-  Rstats::Elements* re_element = Rstats::Elements::new_double(re);
+  Rstats::Elements* re_element = Rstats::Elements::new_double(1, re);
   SV* re_element_sv = my::to_perl_obj(re_element, "Rstats::Elements");
 
   return_sv(re_element_sv);
@@ -373,7 +373,7 @@ im(...)
   
   double im = ((*self->get_complex_values())[0]).imag();
   
-  Rstats::Elements* im_element = Rstats::Elements::new_double(im);
+  Rstats::Elements* im_element = Rstats::Elements::new_double(1, im);
   SV* im_element_sv = my::to_perl_obj(im_element, "Rstats::Elements");
 
   return_sv(im_element_sv);
@@ -569,7 +569,7 @@ new_double(...)
   SV* value_sv = ST(0);
   double dv = my::get_nv(value_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_double(dv);
+  Rstats::Elements* element = Rstats::Elements::new_double(1, dv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   

@@ -5,13 +5,14 @@ use ExtUtils::MakeMaker;
 # Check if exists clan++ or g++ compiler
 my $cc;
 my $ld;
-if (system("clang++ --version") == 0) {
-  $cc = 'clang++';
-  $ld = 'clang++';
-}
-else {
+if (system("g++ --version") == 0) {
   $cc = 'g++';
   $ld = 'g++';
+}
+else {
+  print "g++ is not exists. fallback to clang++";
+  $cc = 'clang++';
+  $ld = 'clang++';
 }
 
 WriteMakefile(

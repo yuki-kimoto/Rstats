@@ -5,31 +5,15 @@ use warnings;
 use Rstats::ElementsFunc;
 use Rstats;
 
-{
-my $x1 = r->complex(1,2);
-my $x2 = r->complex(3,4);
-$ENV{a} = 1;
-c($x1, $x2);
+my $x1 = c(1, 2, 3);
 1;
-}
 
-{
-c(r->complex(1,2))
-}
-
-{
-r->complex(1,2);
-}
-
-{
-my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
-}
 
 # element
 {
-  # element - new_NA
+  # element - new_na
   {
-    my $e1 = Rstats::ElementsFunc::new_NA();
+    my $e1 = Rstats::ElementsFunc::new_na();
     ok($e1->is_na);
     ok(!defined $e1->value);
   }
@@ -50,7 +34,7 @@ my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
 
     # element - is_finite - NaN
     {
-      my $e1 = Rstats::ElementsFunc::new_NaN();
+      my $e1 = Rstats::ElementsFunc::new_nan();
       is($e1->type, 'double');
       ok(!$e1->is_finite);
     }
@@ -77,7 +61,7 @@ my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
 
   # element - Inf_xs
   {
-    my $e1 = Rstats::ElementsFunc::new_Inf();
+    my $e1 = Rstats::ElementsFunc::new_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite);
     ok($e1->dv > 0);
@@ -85,7 +69,7 @@ my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
   
   # element - negativeInf_xs
   {
-    my $e1 = Rstats::ElementsFunc::new_negativeInf();
+    my $e1 = Rstats::ElementsFunc::new_negative_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite);
     ok($e1->dv < 0);
@@ -93,7 +77,7 @@ my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
 
   # element - NaN_xs
   {
-    my $e1 = Rstats::ElementsFunc::new_NaN();
+    my $e1 = Rstats::ElementsFunc::new_nan();
     is($e1->type, 'double');
     ok($e1->is_nan);
   }

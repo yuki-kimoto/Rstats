@@ -17,10 +17,10 @@ my $perl_negative_inf_result = -9 ** 9 ** 9;
 
 sub TRUE () { new_true() }
 sub FALSE () { new_false() }
-sub NA () { new_NA() }
-sub NaN () { new_NaN() }
-sub Inf () { new_Inf() }
-sub negativeInf () { new_negativeInf() }
+sub NA () { new_na() }
+sub NaN () { new_nan() }
+sub Inf () { new_inf() }
+sub negativeInf () { new_negative_inf() }
 sub pi () { new_double(Math::Trig::pi) }
 
 sub character { new_character(@_) }

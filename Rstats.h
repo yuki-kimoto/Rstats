@@ -249,6 +249,7 @@ namespace Rstats {
     
     ~Elements () {
       I32 length = this->get_length();
+    
       if (this->is_integer_type() || this->is_logical_type()) {
         Rstats::Values::Integer* values = this->get_integer_values();
         delete values;
@@ -471,24 +472,29 @@ namespace Rstats {
       return new_logical(1, 0);
     }
     
-    static Rstats::Elements* new_NaN() {
+    static Rstats::Elements* new_nan() {
       return  Rstats::Elements::new_double(1, NAN);
     }
 
-    static Rstats::Elements* new_negativeInf() {
+    static Rstats::Elements* new_negative_inf() {
       return Rstats::Elements::new_double(1, -(INFINITY));
     }
     
-    static Rstats::Elements* new_Inf() {
+    static Rstats::Elements* new_inf() {
       return Rstats::Elements::new_double(1, INFINITY);
     }
     
-    static Rstats::Elements* new_NA() {
+    static Rstats::Elements* new_na() {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(1, 0);
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->add_na_position(0);
       
+      return elements;
+    }
+    
+    static Rstats::Elements* new_null() {
+      Rstats::Elements* elements = new Rstats::Elements;
       return elements;
     }
   };

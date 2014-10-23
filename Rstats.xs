@@ -25,6 +25,16 @@ namespace my = Rstats::Perl;
 
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
+SV* new_null(...)
+  PPCODE:
+{
+  Rstats::Elements* elements = Rstats::Elements::new_null();
+  
+  SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
+  
+  return_sv(elements_sv);
+}
+
 SV* length_value(...)
   PPCODE:
 {
@@ -440,40 +450,50 @@ complex_double (...)
 }
 
 SV*
-new_negativeInf(...)
+new_negative_inf(...)
   PPCODE:
 {
-  Rstats::Elements* element = Rstats::Elements::new_negativeInf();
+  Rstats::Elements* element = Rstats::Elements::new_negative_inf();
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
   return_sv(element_obj);
 }
 
 SV*
-new_Inf(...)
+new_inf(...)
   PPCODE:
 {
-  Rstats::Elements* element = Rstats::Elements::new_Inf();
+  Rstats::Elements* element = Rstats::Elements::new_inf();
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
   return_sv(element_obj);
 }
 
 SV*
-new_NaN(...)
+new_nan(...)
   PPCODE:
 {
-  Rstats::Elements* element = Rstats::Elements::new_NaN();
+  Rstats::Elements* element = Rstats::Elements::new_nan();
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
   return_sv(element_obj);
 }
 
 SV*
-new_NA(...)
+new_na(...)
   PPCODE:
 {
-  Rstats::Elements* element = Rstats::Elements::new_NA();
+  Rstats::Elements* element = Rstats::Elements::new_na();
+  SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  
+  return_sv(element_obj);
+}
+
+SV*
+new_null(...)
+  PPCODE:
+{
+  Rstats::Elements* element = Rstats::Elements::new_null();
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
   return_sv(element_obj);

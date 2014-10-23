@@ -25,6 +25,28 @@ namespace my = Rstats::Perl;
 
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
+SV* length_value(...)
+  PPCODE:
+{
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  I32 length = self->get_length();
+  
+  return_sv(my::new_scalar_iv(length));
+}
+
+SV* length(...)
+  PPCODE:
+{
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  I32 length = self->get_length();
+  Rstats::Elements* length_elements = Rstats::Elements::new_double(1, length);
+  SV* length_elements_sv = my::to_perl_obj(length_elements, "Rstats::Elements");
+  
+  return_sv(length_elements_sv);
+}
+
 SV*
 is_na(...)
   PPCODE:

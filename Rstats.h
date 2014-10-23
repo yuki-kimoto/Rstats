@@ -358,6 +358,14 @@ namespace Rstats {
       return elements;
     }
     
+    double get_double_value(I32 pos) {
+      return (*this->get_double_values())[pos];
+    }
+    
+    void set_double_value(I32 pos, double value) {
+      (*this->get_double_values())[pos] = value;
+    }
+    
     static Rstats::Elements* new_integer_iv(I32 iv) {
       
       Rstats::Elements* elements = new Rstats::Elements;

@@ -46,6 +46,9 @@ is_na(...)
   
   SV* rets_sv = my::to_perl_obj(rets, "Rstats::Elements");
   
+  SV* av_ref = my::new_array_ref();
+  my::array_extend(av_ref, 3);
+  
   return_sv(rets_sv);
 }
 
@@ -59,25 +62,25 @@ compose(...)
   
   Rstats::Elements* compose_elements;
   std::vector<I32> na_positions;
-  if (sv_cmp(mode_sv, my::new_scalar_pv("character")) == 0) {
+  if (sv_cmp(mode_sv, my::new_scalar("character")) == 0) {
     Rstats::Values::Character* values = new Rstats::Values::Character(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
-        SV* value_sv = my::new_scalar_pv("");
+        SV* value_sv = my::new_scalar("");
         (*values)[i] = SvREFCNT_inc(value_sv);
       }
       else
       {
-        SV* value_sv = my::new_scalar_sv((*element->get_character_values())[0]);
+        SV* value_sv = my::new_scalar((*element->get_character_values())[0]);
         (*values)[i] = SvREFCNT_inc(value_sv);
       }
     }
     compose_elements = Rstats::Elements::new_character(values);
   }
-  else if (sv_cmp(mode_sv, my::new_scalar_pv("complex")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_scalar("complex")) == 0) {
     Rstats::Values::Complex* values = new Rstats::Values::Complex(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
@@ -93,7 +96,7 @@ compose(...)
     }
     compose_elements = Rstats::Elements::new_complex(values);
   }
-  else if (sv_cmp(mode_sv, my::new_scalar_pv("double")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_scalar("double")) == 0) {
     Rstats::Values::Double* values = new Rstats::Values::Double(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
@@ -109,7 +112,7 @@ compose(...)
     }
     compose_elements = Rstats::Elements::new_double(values);
   }
-  else if (sv_cmp(mode_sv, my::new_scalar_pv("integer")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_scalar("integer")) == 0) {
     Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
@@ -125,7 +128,7 @@ compose(...)
     }
     compose_elements = Rstats::Elements::new_integer(values);
   }
-  else if (sv_cmp(mode_sv, my::new_scalar_pv("logical")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_scalar("logical")) == 0) {
     Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
@@ -276,19 +279,19 @@ type(...)
   SV* type_sv;
 
   if (type == Rstats::ElementsType::LOGICAL) {
-    type_sv = my::new_scalar_pv("logical");
+    type_sv = my::new_scalar("logical");
   }
   else if (type == Rstats::ElementsType::INTEGER) {
-    type_sv = my::new_scalar_pv("integer");
+    type_sv = my::new_scalar("integer");
   }
   else if (type == Rstats::ElementsType::DOUBLE) {
-    type_sv = my::new_scalar_pv("double");
+    type_sv = my::new_scalar("double");
   }
   else if (type == Rstats::ElementsType::COMPLEX) {
-    type_sv = my::new_scalar_pv("complex");
+    type_sv = my::new_scalar("complex");
   }
   else if (type == Rstats::ElementsType::CHARACTER) {
-    type_sv = my::new_scalar_pv("character");
+    type_sv = my::new_scalar("character");
   }
   
   return_sv(type_sv);
@@ -339,7 +342,7 @@ cv(...)
     str_sv = (*self->get_character_values())[0];
   }
   else {
-    str_sv = my::new_scalar_pv("");
+    str_sv = my::new_scalar("");
   }
   
   return_sv(str_sv);
@@ -385,21 +388,21 @@ flag(...)
     if (Rstats::ElementsFunc::is_infinite(self)) {
       double dv = (*self->get_double_values())[0];
       if (dv > 0) {
-        flag_sv = my::new_scalar_pv("inf");
+        flag_sv = my::new_scalar("inf");
       }
       else {
-        flag_sv = my::new_scalar_pv("-inf");
+        flag_sv = my::new_scalar("-inf");
       }
     }
     else if(Rstats::ElementsFunc::is_nan(self)) {
-      flag_sv = my::new_scalar_pv("nan");
+      flag_sv = my::new_scalar("nan");
     }
     else {
-      flag_sv = my::new_scalar_pv("normal");
+      flag_sv = my::new_scalar("normal");
     }
   }
   else {
-    flag_sv = my::new_scalar_pv("normal");
+    flag_sv = my::new_scalar("normal");
   }
   
   return_sv(flag_sv);

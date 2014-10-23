@@ -30,6 +30,14 @@ namespace Rstats {
       return SvPV_nolen(sv);
     }
 
+    SV* new_scalar(SV* sv) {
+      return sv_2mortal(newSVsv(sv));
+    }
+
+    SV* new_scalar(const char* pv) {
+      return sv_2mortal(newSVpvn(pv, strlen(pv)));
+    }
+    
     SV* new_scalar_iv(I32 iv) {
       return sv_2mortal(newSViv(iv));
     }
@@ -38,16 +46,8 @@ namespace Rstats {
       return sv_2mortal(newSVuv(uv));
     }
     
-    SV* new_scalar_sv(SV* sv) {
-      return sv_2mortal(newSVsv(sv));
-    }
-    
     SV* new_scalar_nv(double nv) {
       return sv_2mortal(newSVnv(nv));
-    }
-
-    SV* new_scalar_pv(const char* pv) {
-      return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
     
     AV* new_array() {
@@ -169,7 +169,7 @@ namespace Rstats {
       SV* new_array_ref_sv = new_array_ref();
       
       for (I32 i = 0; i < array_length(av_ref_sv); i++) {
-        array_store(new_array_ref_sv, i, new_scalar_sv(array_fetch(av_ref_sv, i)));
+        array_store(new_array_ref_sv, i, new_scalar(array_fetch(av_ref_sv, i)));
       }
       
       return new_array_ref_sv;
@@ -305,7 +305,7 @@ namespace Rstats {
     
     static Rstats::Elements* new_character(SV* str_sv) {
 
-      SV* new_str_sv = Rstats::Perl::new_scalar_sv(str_sv);
+      SV* new_str_sv = Rstats::Perl::new_scalar(str_sv);
       SvREFCNT_inc(new_str_sv);
 
       Rstats::Elements* elements = new Rstats::Elements;

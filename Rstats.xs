@@ -114,7 +114,8 @@ compose(...)
     }
   }
   else if (sv_cmp(mode_sv, my::new_scalar("integer")) == 0) {
-    Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
+    compose_elements = Rstats::Elements::new_integer(len);
+    Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -127,7 +128,6 @@ compose(...)
         (*values)[i] = (*element->get_integer_values())[0];
       }
     }
-    compose_elements = Rstats::Elements::new_integer(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("logical")) == 0) {
     compose_elements = Rstats::Elements::new_logical(len);
@@ -208,7 +208,7 @@ decompose(...)
   else if (type == Rstats::ElementsType::INTEGER) {
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_integer_iv((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_integer(1, (*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -583,7 +583,7 @@ new_integer(...)
   SV* value_sv = ST(0);
   I32 iv = my::get_iv(value_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_integer_iv(iv);
+  Rstats::Elements* element = Rstats::Elements::new_integer(1, iv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   

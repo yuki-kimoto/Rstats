@@ -366,7 +366,7 @@ namespace Rstats {
       (*this->get_double_values())[pos] = value;
     }
 
-    static Rstats::Elements* new_integer_size(I32 size) {
+    static Rstats::Elements* new_integer(I32 size) {
       
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(size);
@@ -375,28 +375,11 @@ namespace Rstats {
       return elements;
     }
 
-    static Rstats::Elements* new_integer_size(I32 size, I32 value) {
+    static Rstats::Elements* new_integer(I32 size, I32 value) {
       
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(size, value);
       elements->type = Rstats::ElementsType::INTEGER;
-      
-      return elements;
-    }
-        
-    static Rstats::Elements* new_integer_iv(I32 iv) {
-      
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Integer(1, iv);
-      elements->type = Rstats::ElementsType::INTEGER;
-      
-      return elements;
-    }
-    
-    static Rstats::Elements* new_integer(Rstats::Values::Integer* values) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = values;
-      elements->type = Rstats::ElementsType::DOUBLE;
       
       return elements;
     }

@@ -191,7 +191,7 @@ namespace Rstats {
     
     void array_unshift(SV* av_ref, SV* sv) {
       av_unshift(array_deref(av_ref), 1);
-      array_store(array_deref(av_ref), (I32)0, sv);
+      array_store(array_deref(av_ref), 0, sv);
     }
 
     template <class X> X to_c_obj(SV* perl_obj_ref) {
@@ -358,7 +358,7 @@ namespace Rstats {
       return elements;
     }
     
-    static Rstats::Elements* new_integer(int iv) {
+    static Rstats::Elements* new_integer_iv(I32 iv) {
       
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(1, iv);
@@ -375,7 +375,7 @@ namespace Rstats {
       return elements;
     }
     
-    static Rstats::Elements* new_logical(I32 iv) {
+    static Rstats::Elements* new_logical_iv(I32 iv) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Integer(1, iv);
       elements->type = Rstats::ElementsType::LOGICAL;
@@ -400,11 +400,11 @@ namespace Rstats {
     }
     
     static Rstats::Elements* new_true() {
-      return new_logical(1);
+      return new_logical_iv(1);
     }
 
     static Rstats::Elements* new_false() {
-      return new_logical((I32)0);
+      return new_logical_iv(0);
     }
     
     static Rstats::Elements* new_NaN() {
@@ -421,9 +421,9 @@ namespace Rstats {
     
     static Rstats::Elements* new_NA() {
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Integer(1, (I32)0);
+      elements->values = new Rstats::Values::Integer(1, 0);
       elements->type = Rstats::ElementsType::LOGICAL;
-      elements->add_na_position((I32)0);
+      elements->add_na_position(0);
       
       return elements;
     }

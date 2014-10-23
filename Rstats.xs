@@ -206,7 +206,7 @@ decompose(...)
   else if (type == Rstats::ElementsType::INTEGER) {
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_integer((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_integer_iv((*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -217,7 +217,7 @@ decompose(...)
   else if (type == Rstats::ElementsType::LOGICAL) {
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_logical((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_logical_iv((*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -531,7 +531,7 @@ new_logical(...)
   SV* value_sv = ST(0);
   I32 iv = my::get_iv(value_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_logical((bool)iv);
+  Rstats::Elements* element = Rstats::Elements::new_logical_iv((bool)iv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
@@ -581,7 +581,7 @@ new_integer(...)
   SV* value_sv = ST(0);
   I32 iv = my::get_iv(value_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_integer(iv);
+  Rstats::Elements* element = Rstats::Elements::new_integer_iv(iv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
@@ -610,7 +610,7 @@ cross_product(...)
   SV* x1_sv = my::new_array_ref();
   for (I32 i = 0; i < values_length; i++) {
     SV* value_sv = my::array_fetch(values_sv, i);
-    my::array_push(x1_sv, my::array_fetch(value_sv, (I32)0));
+    my::array_push(x1_sv, my::array_fetch(value_sv, 0));
   }
 
   SV* result_sv = my::new_array_ref();
@@ -636,7 +636,7 @@ cross_product(...)
       }
       
       my::array_store(idxs_sv, i, my::new_scalar_iv(0));
-      my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), (I32)0));
+      my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), 0));
     }
     if (end_loop) {
       break;

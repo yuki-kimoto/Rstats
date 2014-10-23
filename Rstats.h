@@ -383,6 +383,14 @@ namespace Rstats {
       
       return elements;
     }
+
+    I32 get_integer_value(I32 pos) {
+      return (*this->get_integer_values())[pos];
+    }
+    
+    void set_integer_value(I32 pos, I32 value) {
+      (*this->get_integer_values())[pos] = value;
+    }
     
     static Rstats::Elements* new_logical(I32 size) {
       Rstats::Elements* elements = new Rstats::Elements;

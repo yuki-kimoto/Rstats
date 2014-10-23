@@ -951,10 +951,10 @@ sub c {
     $x1->mode($modes[0] || 'logical');
   }
   
-  $DB::single = 1 if $ENV{a};
   my $compose_elements = Rstats::Elements->compose($x1->{type}, $elements);
   my $decompose_elements = $compose_elements->decompose;
   $x1->elements($decompose_elements);
+  $x1->compose_elements($compose_elements);
   
   return $x1;
 }

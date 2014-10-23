@@ -31,10 +31,10 @@ is_na(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  I32 size = self->get_size();
-  Rstats::Elements* rets = Rstats::Elements::new_logical(size);
+  I32 length = self->get_length();
+  Rstats::Elements* rets = Rstats::Elements::new_logical(length);
   
-  for (I32 i = 0; i < size; i++) {
+  for (I32 i = 0; i < length; i++) {
     if (self->exists_na_position(i)) {
       rets->set_integer_value(i, 1);
     }
@@ -149,11 +149,11 @@ decompose(...)
   
   SV* decompose_elements_sv = my::new_array_ref();
   
-  I32 size = self->get_size();
-  my::array_extend(decompose_elements_sv, size);
+  I32 length = self->get_length();
+  my::array_extend(decompose_elements_sv, length);
 
   if (self->is_character_type()) {
-    for (I32 i = 0; i < size; i++) {
+    for (I32 i = 0; i < length; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_character(1, self->get_character_value(i));
       if (self->exists_na_position(i)) {
@@ -164,7 +164,7 @@ decompose(...)
     }
   }
   else if (self->is_complex_type()) {
-    for (I32 i = 0; i < size; i++) {
+    for (I32 i = 0; i < length; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_complex(1, self->get_complex_value(i));
       if (self->exists_na_position(i)) {
@@ -176,7 +176,7 @@ decompose(...)
   }
   else if (self->is_double_type()) {
 
-    for (I32 i = 0; i < size; i++) {
+    for (I32 i = 0; i < length; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_double(1, self->get_double_value(i));
       if (self->exists_na_position(i)) {
@@ -187,7 +187,7 @@ decompose(...)
     }
   }
   else if (self->is_integer_type()) {
-    for (I32 i = 0; i < size; i++) {
+    for (I32 i = 0; i < length; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_integer(1, self->get_integer_value(i));
       if (self->exists_na_position(i)) {
@@ -198,7 +198,7 @@ decompose(...)
     }
   }
   else if (self->is_logical_type()) {
-    for (I32 i = 0; i < size; i++) {
+    for (I32 i = 0; i < length; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_logical(1, self->get_integer_value(i));
       if (self->exists_na_position(i)) {

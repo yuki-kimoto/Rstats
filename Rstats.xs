@@ -621,9 +621,9 @@ cross_product(...)
       
       if (my::get_iv(my::array_fetch(idxs_sv, i)) < my::array_length(my::array_fetch(values_sv, i)) - 1) {
         
-        SV* idxs_tmp = my::array_fetch(idxs_sv, i);
-        sv_inc(idxs_tmp);
-        my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), idxs_tmp));
+        SV* idxs_tmp_sv = my::array_fetch(idxs_sv, i);
+        sv_inc(idxs_tmp_sv);
+        my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), my::get_iv(idxs_tmp_sv)));
         
         my::array_push(result_sv, my::array_copy(x1_sv));
         

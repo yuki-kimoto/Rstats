@@ -107,10 +107,6 @@ namespace Rstats {
       
       return element;
     }
-
-    SV* array_fetch(AV* av, SV* pos_sv) {
-      return array_fetch(av, get_iv(pos_sv));
-    }
     
     SV* array_fetch(SV* av_ref, I32 pos) {
       AV* av = array_deref(av_ref);
@@ -118,10 +114,6 @@ namespace Rstats {
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
-    }
-
-    SV* array_fetch(SV* av_ref, SV* pos_sv) {
-      return array_fetch(av_ref, get_iv(pos_sv));
     }
 
     HV* hash_deref(SV* ref) {

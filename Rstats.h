@@ -30,23 +30,23 @@ namespace Rstats {
       return SvPV_nolen(sv);
     }
 
-    SV* new_scalar(I32 iv) {
+    SV* new_scalar_iv(I32 iv) {
       return sv_2mortal(newSViv(iv));
     }
 
-    SV* new_scalar(U32 uv) {
+    SV* new_scalar_uv(U32 uv) {
       return sv_2mortal(newSVuv(uv));
     }
     
-    SV* new_scalar(SV* sv) {
+    SV* new_scalar_sv(SV* sv) {
       return sv_2mortal(newSVsv(sv));
     }
     
-    SV* new_scalar(double nv) {
+    SV* new_scalar_nv(double nv) {
       return sv_2mortal(newSVnv(nv));
     }
 
-    SV* new_scalar(const char* pv) {
+    SV* new_scalar_pv(const char* pv) {
       return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
     
@@ -169,7 +169,7 @@ namespace Rstats {
       SV* new_array_ref_sv = new_array_ref();
       
       for (I32 i = 0; i < array_length(av_ref_sv); i++) {
-        array_store(new_array_ref_sv, i, new_scalar(array_fetch(av_ref_sv, i)));
+        array_store(new_array_ref_sv, i, new_scalar_sv(array_fetch(av_ref_sv, i)));
       }
       
       return new_array_ref_sv;
@@ -212,7 +212,7 @@ namespace Rstats {
 
     template <class X> SV* to_perl_obj(X c_obj, const char* class_name) {
       I32 obj_addr = PTR2IV(c_obj);
-      SV* obj_addr_sv = new_scalar(obj_addr);
+      SV* obj_addr_sv = new_scalar_iv(obj_addr);
       SV* obj_addr_sv_ref = new_ref(obj_addr_sv);
       SV* perl_obj = sv_bless(obj_addr_sv_ref, gv_stashpv(class_name, 1));
       
@@ -305,7 +305,7 @@ namespace Rstats {
     
     static Rstats::Elements* new_character(SV* str_sv) {
 
-      SV* new_str_sv = Rstats::Perl::new_scalar(str_sv);
+      SV* new_str_sv = Rstats::Perl::new_scalar_sv(str_sv);
       SvREFCNT_inc(new_str_sv);
 
       Rstats::Elements* elements = new Rstats::Elements;

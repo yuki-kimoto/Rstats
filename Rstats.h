@@ -46,7 +46,7 @@ namespace Rstats {
       return sv_2mortal(newSVnv(nv));
     }
 
-    SV* new_scalar(char* pv) {
+    SV* new_scalar(const char* pv) {
       return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
     
@@ -133,7 +133,7 @@ namespace Rstats {
       }
     }
     
-    SV* hash_fetch(HV* hv, char* key) {
+    SV* hash_fetch(HV* hv, const char* key) {
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
@@ -144,7 +144,7 @@ namespace Rstats {
       return hash_fetch(hv, get_pv(key_sv));
     }
     
-    SV* hash_fetch(SV* hv_ref, char* key) {
+    SV* hash_fetch(SV* hv_ref, const char* key) {
       HV* hv = hash_deref(hv_ref);
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
@@ -175,11 +175,11 @@ namespace Rstats {
       return new_array_ref_sv;
     }
     
-    void hash_store(HV* hv, char* key, SV* element) {
+    void hash_store(HV* hv, const char* key, SV* element) {
       hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
     }
 
-    void hash_store(SV* hv_ref, char* key, SV* element) {
+    void hash_store(SV* hv_ref, const char* key, SV* element) {
       HV* hv = hash_deref(hv_ref);
       hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
     }
@@ -194,12 +194,12 @@ namespace Rstats {
 
     void array_unshift(AV* av, SV* sv) {
       av_unshift(av, 1);
-      array_store(av, 0, sv);
+      array_store(av, (I32)0, sv);
     }
     
     void array_unshift(SV* av_ref, SV* sv) {
       av_unshift(array_deref(av_ref), 1);
-      array_store(array_deref(av_ref), 0, sv);
+      array_store(array_deref(av_ref), (I32)0, sv);
     }
 
     template <class X> X to_c_obj(SV* perl_obj_ref) {
@@ -210,7 +210,7 @@ namespace Rstats {
       return c_obj;
     }
 
-    template <class X> SV* to_perl_obj(X c_obj, char* class_name) {
+    template <class X> SV* to_perl_obj(X c_obj, const char* class_name) {
       I32 obj_addr = PTR2IV(c_obj);
       SV* obj_addr_sv = new_scalar(obj_addr);
       SV* obj_addr_sv_ref = new_ref(obj_addr_sv);
@@ -412,7 +412,7 @@ namespace Rstats {
     }
 
     static Rstats::Elements* new_false() {
-      return new_logical(0);
+      return new_logical((I32)0);
     }
     
     static Rstats::Elements* new_NaN() {
@@ -429,7 +429,7 @@ namespace Rstats {
     
     static Rstats::Elements* new_NA() {
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Integer(1, 0);
+      elements->values = new Rstats::Values::Integer(1, (I32)0);
       elements->type = Rstats::ElementsType::LOGICAL;
       elements->add_na_position((I32)0);
       
@@ -443,11 +443,11 @@ namespace Rstats {
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       Rstats::Values::Integer* rets_values;
-      int size = elements->get_size();
+      I32 size = elements->get_size();
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         Rstats::Values::Double* values = elements->get_double_values();
         rets_values = new Rstats::Values::Integer(size);
-        for (int i = 0; i < size; i++) {
+        for (I32 i = 0; i < size; i++) {
           if(std::isinf((*values)[i])) {
             (*rets_values)[i] = 1;
           }
@@ -466,12 +466,12 @@ namespace Rstats {
     }
 
     Rstats::Elements* is_nan(Rstats::Elements* elements) {
-      int size = elements->get_size();
+      I32 size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::DOUBLE) {
         Rstats::Values::Double* values = elements->get_double_values();
         rets_values = new Rstats::Values::Integer(size);
-        for (int i = 0; i < size; i++) {
+        for (I32 i = 0; i < size; i++) {
           if(std::isnan((*values)[i])) {
             (*rets_values)[i] = 1;
           }
@@ -491,7 +491,7 @@ namespace Rstats {
 
     Rstats::Elements* is_finite(Rstats::Elements* elements) {
       
-      int size = elements->get_size();
+      I32 size = elements->get_size();
       Rstats::Values::Integer* rets_values;
       if (elements->get_type() == Rstats::ElementsType::INTEGER) {
         Rstats::Values::Integer* values = elements->get_integer_values();
@@ -502,7 +502,7 @@ namespace Rstats {
         Rstats::Values::Double* values = elements->get_double_values();
         
         rets_values = new Rstats::Values::Integer(size);
-        for (int i = 0; i < size; i++) {
+        for (I32 i = 0; i < size; i++) {
           if (std::isfinite((*values)[i])) {
             (*rets_values)[i] = 1;
           }

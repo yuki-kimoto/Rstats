@@ -246,6 +246,30 @@ namespace Rstats {
     
     public:
     
+    ~Elements () {
+      I32 size = this->get_size();
+      if (this->get_type() == Rstats::ElementsType::INTEGER || this->get_type() == Rstats::ElementsType::LOGICAL) {
+        Rstats::Values::Integer* values = this->get_integer_values();
+        delete values;
+      }
+      else if (this->get_type() == Rstats::ElementsType::DOUBLE) {
+        Rstats::Values::Double* values = this->get_double_values();
+        delete values;
+      }
+      else if (this->get_type() == Rstats::ElementsType::COMPLEX) {
+        Rstats::Values::Complex* values = this->get_complex_values();
+        delete values;
+      }
+      else if (this->get_type() == Rstats::ElementsType::CHARACTER) {
+        Rstats::Values::Character* values = this->get_character_values();
+        for (I32 i = 0; i < size; i++) {
+          if ((*values)[i] != NULL) {
+            SvREFCNT_dec((*values)[i]);
+          }
+        }
+      }
+    }
+    
     Rstats::Values::Character* get_character_values() {
       return (Rstats::Values::Character*)this->values;
     }

@@ -398,25 +398,7 @@ DESTROY(...)
   PPCODE:
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
-  I32 size = self->get_size();
-  if (self->get_type() == Rstats::ElementsType::INTEGER || self->get_type() == Rstats::ElementsType::LOGICAL) {
-    Rstats::Values::Integer* values = self->get_integer_values();
-    delete values;
-  }
-  else if (self->get_type() == Rstats::ElementsType::DOUBLE) {
-    Rstats::Values::Double* values = self->get_double_values();
-    delete values;
-  }
-  else if (self->get_type() == Rstats::ElementsType::COMPLEX) {
-    Rstats::Values::Complex* values = self->get_complex_values();
-    delete values;
-  }
-  else if (self->get_type() == Rstats::ElementsType::CHARACTER) {
-    Rstats::Values::Character* values = self->get_character_values();
-    for (I32 i = 0; i < size; i++) {
-      SvREFCNT_dec((*values)[i]);
-    }
-  }
+
   delete self;
 }
 

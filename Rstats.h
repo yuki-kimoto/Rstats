@@ -248,19 +248,19 @@ namespace Rstats {
     
     ~Elements () {
       I32 size = this->get_size();
-      if (this->get_type() == Rstats::ElementsType::INTEGER || this->get_type() == Rstats::ElementsType::LOGICAL) {
+      if (this->is_integer_type() || this->is_logical_type()) {
         Rstats::Values::Integer* values = this->get_integer_values();
         delete values;
       }
-      else if (this->get_type() == Rstats::ElementsType::DOUBLE) {
+      else if (this->is_double_type()) {
         Rstats::Values::Double* values = this->get_double_values();
         delete values;
       }
-      else if (this->get_type() == Rstats::ElementsType::COMPLEX) {
+      else if (this->is_complex_type()) {
         Rstats::Values::Complex* values = this->get_complex_values();
         delete values;
       }
-      else if (this->get_type() == Rstats::ElementsType::CHARACTER) {
+      else if (this->is_character_type()) {
         Rstats::Values::Character* values = this->get_character_values();
         for (I32 i = 0; i < size; i++) {
           if ((*values)[i] != NULL) {
@@ -270,6 +270,12 @@ namespace Rstats {
         delete values;
       }
     }
+
+    bool is_integer_type () { return this->get_type() == Rstats::ElementsType::INTEGER; }
+    bool is_logical_type () { return this->get_type() == Rstats::ElementsType::LOGICAL; }
+    bool is_double_type () { return this->get_type() == Rstats::ElementsType::DOUBLE; }
+    bool is_complex_type () { return this->get_type() == Rstats::ElementsType::COMPLEX; }
+    bool is_character_type () { return this->get_type() == Rstats::ElementsType::CHARACTER; }
     
     Rstats::Values::Character* get_character_values() {
       return (Rstats::Values::Character*)this->values;
@@ -306,16 +312,16 @@ namespace Rstats {
     }
     
     I32 get_size () {
-      if (this->type == Rstats::ElementsType::CHARACTER) {
+      if (this->is_character_type()) {
         return this->get_character_values()->size();
       }
-      else if (this->type == Rstats::ElementsType::COMPLEX) {
+      else if (this->is_complex_type()) {
         return this->get_complex_values()->size();
       }
-      else if (this->type == Rstats::ElementsType::DOUBLE) {
+      else if (this->is_double_type()) {
         return this->get_double_values()->size();
       }
-      else if (this->type == Rstats::ElementsType::INTEGER || Rstats::ElementsType::LOGICAL) {
+      else if (this->is_integer_type() || this->is_logical_type()) {
         return this->get_integer_values()->size();
       }
     }
@@ -534,12 +540,11 @@ namespace Rstats {
     Rstats::Elements* is_finite(Rstats::Elements* elements) {
       
       I32 size = elements->get_size();
-      Rstats::ElementsType::Enum type = elements->get_type();
       Rstats::Elements* rets;
-      if (type == Rstats::ElementsType::INTEGER) {
+      if (elements->is_integer_type()) {
         rets = Rstats::Elements::new_logical(size, 1);
       }
-      else if (type == Rstats::ElementsType::DOUBLE) {
+      else if (elements->is_double_type()) {
         Rstats::Values::Double* values = elements->get_double_values();
         rets = Rstats::Elements::new_logical(size);
         Rstats::Values::Integer* rets_values = rets->get_integer_values();

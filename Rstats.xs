@@ -152,9 +152,7 @@ decompose(...)
   I32 size = self->get_size();
   my::array_extend(decompose_elements_sv, size);
 
-  Rstats::ElementsType::Enum type = self->get_type();
-  
-  if (type == Rstats::ElementsType::CHARACTER) {
+  if (self->is_character_type()) {
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_character(1, self->get_character_value(i));
@@ -165,7 +163,7 @@ decompose(...)
       my::array_push(decompose_elements_sv, elements_sv);
     }
   }
-  else if (type == Rstats::ElementsType::COMPLEX) {
+  else if (self->is_complex_type()) {
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_complex(1, self->get_complex_value(i));
@@ -176,7 +174,7 @@ decompose(...)
       my::array_push(decompose_elements_sv, elements_sv);
     }
   }
-  else if (type == Rstats::ElementsType::DOUBLE) {
+  else if (self->is_double_type()) {
 
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements
@@ -188,7 +186,7 @@ decompose(...)
       my::array_push(decompose_elements_sv, elements_sv);
     }
   }
-  else if (type == Rstats::ElementsType::INTEGER) {
+  else if (self->is_integer_type()) {
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_integer(1, self->get_integer_value(i));
@@ -199,7 +197,7 @@ decompose(...)
       my::array_push(decompose_elements_sv, elements_sv);
     }
   }
-  else if (type == Rstats::ElementsType::LOGICAL) {
+  else if (self->is_logical_type()) {
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements
         = Rstats::Elements::new_logical(1, self->get_integer_value(i));
@@ -259,23 +257,21 @@ type(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  // Type
-  Rstats::ElementsType::Enum type = self->get_type();
   SV* type_sv;
 
-  if (type == Rstats::ElementsType::LOGICAL) {
+  if (self->is_logical_type()) {
     type_sv = my::new_scalar("logical");
   }
-  else if (type == Rstats::ElementsType::INTEGER) {
+  else if (self->is_integer_type()) {
     type_sv = my::new_scalar("integer");
   }
-  else if (type == Rstats::ElementsType::DOUBLE) {
+  else if (self->is_double_type()) {
     type_sv = my::new_scalar("double");
   }
-  else if (type == Rstats::ElementsType::COMPLEX) {
+  else if (self->is_complex_type()) {
     type_sv = my::new_scalar("complex");
   }
-  else if (type == Rstats::ElementsType::CHARACTER) {
+  else if (self->is_character_type()) {
     type_sv = my::new_scalar("character");
   }
   
@@ -323,7 +319,7 @@ cv(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   SV* str_sv;
-  if (self->get_type() == Rstats::ElementsType::CHARACTER) {
+  if (self->is_character_type()) {
     str_sv = self->get_character_value(0);
   }
   else {

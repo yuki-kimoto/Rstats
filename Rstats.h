@@ -294,25 +294,45 @@ namespace Rstats {
         return this->get_integer_values()->size();
       }
     }
-    
-    static Rstats::Elements* new_character(SV* str_sv) {
 
-      SV* new_str_sv = Rstats::Perl::new_scalar(str_sv);
-      SvREFCNT_inc(new_str_sv);
+    static Rstats::Elements* new_character(I32 size) {
 
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Character(1, new_str_sv);
+      elements->values = new Rstats::Values::Character(size, NULL);
       elements->type = Rstats::ElementsType::CHARACTER;
       
       return elements;
     }
 
-    static Rstats::Elements* new_character(Rstats::Values::Character* values) {
-      Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = values;
+    static Rstats::Elements* new_character(I32 size, SV* str_sv) {
+
+      Rstats::Elements* elements = Rstats::Elements::new_character(size);
+      for (I32 i = 0; i < size; i++) {
+        elements->set_character_value(i, str_sv);
+      }
       elements->type = Rstats::ElementsType::CHARACTER;
       
       return elements;
+    }
+
+    SV* get_character_value(I32 pos) {
+      SV* value = (*this->get_character_values())[pos];
+      if (value == NULL) {
+        return NULL;
+      }
+      else {
+        return Rstats::Perl::new_scalar(value);
+      }
+    }
+    
+    void set_character_value(I32 pos, SV* value) {
+      if (value != NULL) {
+        SvREFCNT_dec((*this->get_character_values())[pos]);
+      }
+      
+      SV* new_value = Rstats::Perl::new_scalar(value);
+      SvREFCNT_inc(new_value);
+      (*this->get_character_values())[pos] = new_value;
     }
 
     static Rstats::Elements* new_complex(I32 size) {
@@ -333,6 +353,14 @@ namespace Rstats {
       return elements;
     }
 
+    std::complex<double> get_complex_value(I32 pos) {
+      return (*this->get_complex_values())[pos];
+    }
+    
+    void set_complex_value(I32 pos, std::complex<double> value) {
+      (*this->get_complex_values())[pos] = value;
+    }
+    
     static Rstats::Elements* new_double(I32 size) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Double(size);

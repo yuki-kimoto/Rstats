@@ -63,22 +63,17 @@ compose(...)
   Rstats::Elements* compose_elements;
   std::vector<I32> na_positions;
   if (sv_cmp(mode_sv, my::new_scalar("character")) == 0) {
-    Rstats::Values::Character* values = new Rstats::Values::Character(len);
+    compose_elements = Rstats::Elements::new_character(len);
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
-        SV* value_sv = my::new_scalar("");
-        (*values)[i] = SvREFCNT_inc(value_sv);
       }
-      else
-      {
-        SV* value_sv = my::new_scalar((*element->get_character_values())[0]);
-        (*values)[i] = SvREFCNT_inc(value_sv);
+      else {
+        compose_elements->set_character_value(i, (*element->get_character_values())[0]);
       }
     }
-    compose_elements = Rstats::Elements::new_character(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("complex")) == 0) {
 
@@ -175,7 +170,7 @@ decompose(...)
   if (type == Rstats::ElementsType::CHARACTER) {
     Rstats::Values::Character* values = self->get_character_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_character((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_character(1, (*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -503,7 +498,7 @@ new_character(...)
 {
   SV* str_sv = ST(0);
   
-  Rstats::Elements* element = Rstats::Elements::new_character(str_sv);
+  Rstats::Elements* element = Rstats::Elements::new_character(1, str_sv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   

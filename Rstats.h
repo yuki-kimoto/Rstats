@@ -267,6 +267,7 @@ namespace Rstats {
             SvREFCNT_dec((*values)[i]);
           }
         }
+        delete values;
       }
     }
     

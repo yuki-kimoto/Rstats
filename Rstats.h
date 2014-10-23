@@ -215,6 +215,7 @@ namespace Rstats {
   // Rstats::ElementsType
   namespace ElementsType {
     enum Enum {
+      NULL_TYPE = 0,
       LOGICAL = 1,
       INTEGER = 2,
       DOUBLE = 4,
@@ -271,6 +272,7 @@ namespace Rstats {
       }
     }
 
+    bool is_null_type () { return this->get_type() == Rstats::ElementsType::NULL_TYPE; }
     bool is_integer_type () { return this->get_type() == Rstats::ElementsType::INTEGER; }
     bool is_logical_type () { return this->get_type() == Rstats::ElementsType::LOGICAL; }
     bool is_double_type () { return this->get_type() == Rstats::ElementsType::DOUBLE; }
@@ -312,7 +314,10 @@ namespace Rstats {
     }
     
     I32 get_length () {
-      if (this->is_character_type()) {
+      if (this->values == NULL) {
+        return 0;
+      }
+      else if (this->is_character_type()) {
         return this->get_character_values()->size();
       }
       else if (this->is_complex_type()) {

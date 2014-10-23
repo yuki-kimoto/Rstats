@@ -341,7 +341,23 @@ namespace Rstats {
       
       return elements;
     }
-    
+
+    static Rstats::Elements* new_double_size(I32 size) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Double(size);
+      elements->type = Rstats::ElementsType::DOUBLE;
+      
+      return elements;
+    }
+
+    static Rstats::Elements* new_double_size(I32 size, double value) {
+      Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = new Rstats::Values::Double(size, value);
+      elements->type = Rstats::ElementsType::DOUBLE;
+      
+      return elements;
+    }
+        
     static Rstats::Elements* new_double(double dv) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Double(1, dv);
@@ -408,15 +424,15 @@ namespace Rstats {
     }
     
     static Rstats::Elements* new_NaN() {
-      return new_double(NAN);
+      return  Rstats::Elements::new_double_size(1, NAN);
     }
 
     static Rstats::Elements* new_negativeInf() {
-      return new_double(-(INFINITY));
+      return Rstats::Elements::new_double_size(1, -(INFINITY));
     }
     
     static Rstats::Elements* new_Inf() {
-      return new_double(INFINITY);
+      return Rstats::Elements::new_double_size(1, INFINITY);
     }
     
     static Rstats::Elements* new_NA() {

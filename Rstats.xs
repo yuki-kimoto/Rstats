@@ -97,7 +97,9 @@ compose(...)
     compose_elements = Rstats::Elements::new_complex(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("double")) == 0) {
-    Rstats::Values::Double* values = new Rstats::Values::Double(len);
+    compose_elements = Rstats::Elements::new_double_size(len);
+
+    Rstats::Values::Double* values = compose_elements->get_double_values();
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -110,7 +112,6 @@ compose(...)
         (*values)[i] = (*element->get_double_values())[0];
       }
     }
-    compose_elements = Rstats::Elements::new_double(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("integer")) == 0) {
     Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
@@ -193,6 +194,7 @@ decompose(...)
     }
   }
   else if (type == Rstats::ElementsType::DOUBLE) {
+
     Rstats::Values::Double* values = self->get_double_values();
     for (I32 i = 0; i < size; i++) {
       Rstats::Elements* elements = Rstats::Elements::new_double((*values)[i]);

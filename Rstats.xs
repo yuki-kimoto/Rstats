@@ -32,7 +32,7 @@ is_na(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   I32 size = self->get_size();
-  Rstats::Elements* rets = Rstats::Elements::new_logical_size(size);
+  Rstats::Elements* rets = Rstats::Elements::new_logical(size);
   
   Rstats::Values::Integer* values = rets->get_integer_values();
   for (I32 i = 0; i < size; i++) {
@@ -130,7 +130,8 @@ compose(...)
     compose_elements = Rstats::Elements::new_integer(values);
   }
   else if (sv_cmp(mode_sv, my::new_scalar("logical")) == 0) {
-    Rstats::Values::Integer* values = new Rstats::Values::Integer(len);
+    compose_elements = Rstats::Elements::new_logical(len);
+    Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
       SV* element_sv = my::array_fetch(elements_sv, i);
       Rstats::Elements* element = my::to_c_obj<Rstats::Elements*>(element_sv);
@@ -143,7 +144,6 @@ compose(...)
         (*values)[i] = (*element->get_integer_values())[0];
       }
     }
-    compose_elements = Rstats::Elements::new_logical(values);
   }
   else {
     croak("Unknown type(Rstats::Elements::compose)");
@@ -219,7 +219,7 @@ decompose(...)
   else if (type == Rstats::ElementsType::LOGICAL) {
     Rstats::Values::Integer* values = self->get_integer_values();
     for (I32 i = 0; i < size; i++) {
-      Rstats::Elements* elements = Rstats::Elements::new_logical_iv((*values)[i]);
+      Rstats::Elements* elements = Rstats::Elements::new_logical(1, (*values)[i]);
       if (self->exists_na_position(i)) {
         elements->add_na_position(0);
       }
@@ -533,7 +533,7 @@ new_logical(...)
   SV* value_sv = ST(0);
   I32 iv = my::get_iv(value_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_logical_iv((bool)iv);
+  Rstats::Elements* element = Rstats::Elements::new_logical(1, iv);
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   

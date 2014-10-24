@@ -801,7 +801,7 @@ sub gsub {
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
   
   my $x2_elements = [];
-  for my $x_e (@{$x1_x->elements}) {
+  for my $x_e (@{$x1_x->elements_obj->decompose}) {
     if ($x_e->is_na) {
       push @$x2_elements, $x_e;
     }
@@ -829,7 +829,7 @@ sub grep {
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
   
   my $x2_elements = [];
-  my $x1_x_elements = $x1_x->elements;
+  my $x1_x_elements = $x1_x->elements_obj->decompose;
   for (my $i = 0; $i < @$x1_x_elements; $i++) {
     my $x_e = $x1_x_elements->[$i];
     
@@ -1001,7 +1001,7 @@ sub chartr {
   my $new = $x1_new->value;
   
   my $x2_elements = [];
-  for my $x_e (@{$x1_x->elements}) {
+  for my $x_e (@{$x1_x->elements_obj->decompose}) {
     if ($x_e->is_na) {
       push @$x2_elements, $x_e;
     }
@@ -1027,13 +1027,14 @@ sub charmatch {
     unless $x1_x->{type} eq 'character' && $x1_table->{type} eq 'character';
   
   my $x2_elements = [];
-  for my $x1_x_element (@{$x1_x->elements}) {
+  for my $x1_x_element (@{$x1_x->elements_obj->decompose}) {
     my $x1_x_char = $x1_x_element->value;
     my $x1_x_char_q = quotemeta($x1_x_char);
     my $match_count;
     my $match_pos;
+    my $x1_table_elements = $x1_table->elements_obj->decompose;
     for (my $k = 0; $k < $x1_table->length_value; $k++) {
-      my $x1_table = $x1_table->elements->[$k];
+      my $x1_table = $x1_table_elements->[$k];
       my $x1_table_char = $x1_table->value;
       if ($x1_table_char =~ /$x1_x_char_q/) {
         $match_count++;
@@ -1057,7 +1058,7 @@ sub charmatch {
 sub Conj {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::Conj($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Conj($_) } @{$x1->elements_obj->decompose};
   my $x2 = $x1->clone(elements => \@a2_elements);
   
   return $x2;
@@ -1066,7 +1067,7 @@ sub Conj {
 sub Re {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::Re($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Re($_) } @{$x1->elements_obj->decompose};
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->{type} = 'double';
   
@@ -1076,7 +1077,7 @@ sub Re {
 sub Im {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::Im($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Im($_) } @{$x1->elements_obj->decompose};
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->{type} = 'double';
   
@@ -1101,7 +1102,7 @@ sub nrow {
 sub negation {
   my $x1 = shift;
   
-  my $x2_elements = [map { Rstats::ElementsFunc::negation($_) } @{$x1->elements}];
+  my $x2_elements = [map { Rstats::ElementsFunc::negation($_) } @{$x1->elements_obj->decompose}];
   my $x2 = $x1->clone(elements => $x2_elements);
   
   return $x2;
@@ -1112,10 +1113,12 @@ sub is_element {
   
   croak "mode is diffrence" if $x1->{type} ne $x2->{type};
   
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my $x3_elements = [];
-  for my $x1_element (@{$x1->elements}) {
+  for my $x1_element (@$x1_elements) {
     my $match;
-    for my $x2_element (@{$x2->elements}) {
+    for my $x2_element (@$x2_elements) {
       if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;
@@ -1138,8 +1141,10 @@ sub setequal {
   return FALSE if $x3->length_value ne $x4->length_value;
   
   my $not_equal;
+  my $x3_elements = $x3->elements_obj->decompose;
+  my $x4_elements = $x4->elements_obj->decompose;
   for (my $i = 0; $i < $x3->length_value; $i++) {
-    unless (Rstats::ElementsFunc::equal($x3->elements->[$i], $x4->elements->[$i])) {
+    unless (Rstats::ElementsFunc::equal($x3_elements->[$i], $x4_elements->[$i])) {
       $not_equal = 1;
       last;
     }
@@ -1153,10 +1158,12 @@ sub setdiff {
   
   croak "mode is diffrence" if $x1->{type} ne $x2->{type};
   
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my $x3_elements = [];
-  for my $x1_element (@{$x1->elements}) {
+  for my $x1_element (@$x1_elements) {
     my $match;
-    for my $x2_element (@{$x2->elements}) {
+    for my $x2_element (@$x2_elements) {
       if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;
@@ -1173,9 +1180,11 @@ sub intersect {
   
   croak "mode is diffrence" if $x1->{type} ne $x2->{type};
   
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my $x3_elements = [];
-  for my $x1_element (@{$x1->elements}) {
-    for my $x2_element (@{$x2->elements}) {
+  for my $x1_element (@$x1_elements) {
+    for my $x2_element (@$x2_elements) {
       if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         push @$x3_elements, $x1_element;
       }
@@ -1200,9 +1209,10 @@ sub diff {
   my $x1 = to_c(shift);
   
   my $x2_elements = [];
+  my $x1_elements = $x1->elements_obj->decompose;
   for (my $i = 0; $i < $x1->length_value - 1; $i++) {
-    my $x1_element1 = $x1->elements->[$i];
-    my $x1_element2 = $x1->elements->[$i + 1];
+    my $x1_element1 = $x1_elements->[$i];
+    my $x1_element2 = $x1_elements->[$i + 1];
     my $x2_element = Rstats::ElementsFunc::subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
@@ -1216,7 +1226,7 @@ sub nchar {
   
   if ($x1->{type} eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->elements}) {
+    for my $x1_element (@{$x1->elements_obj->decompose}) {
       if ($x1_element->is_na) {
         push @$x2_elements, $x1_element;
       }
@@ -1239,7 +1249,7 @@ sub tolower {
   
   if ($x1->{type} eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->elements}) {
+    for my $x1_element (@{$x1->elements_obj->decompose}) {
       if ($x1_element->is_na) {
         push @$x2_elements, $x1_element;
       }
@@ -1262,7 +1272,7 @@ sub toupper {
   
   if ($x1->{type} eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->elements}) {
+    for my $x1_element (@{$x1->elements_obj->decompose}) {
       if ($x1_element->is_na) {
         push @$x2_elements, $x1_element;
       }
@@ -1284,7 +1294,7 @@ sub match {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   my @matches;
-  for my $x1_element (@{$x1->elements}) {
+  for my $x1_element (@{$x1->elements_obj->decompose}) {
     my $i = 1;
     my $match;
     for my $x2_element (@{$x2->elements}) {

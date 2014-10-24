@@ -437,8 +437,7 @@ sub factor {
     }
   }
   
-  my $f1 = Rstats::Container::Array->new;
-  $f1->elements($f1_elements);
+  my $f1 = c($f1_elements);
   $f1->{type} = 'integer';
   if ($x_ordered) {
     $f1->{class} = ['factor', 'ordered'];
@@ -1421,7 +1420,7 @@ sub array {
   my ($x1, $_dim) = @_;
   $_dim = $opt->{dim} unless defined $_dim;
   
-  $x1 = c($x1);
+  $x1 = to_c($x1);
 
   # Dimention
   my $elements = $x1->elements;
@@ -1443,10 +1442,10 @@ sub array {
     @$elements = splice @$elements, 0, $dim_product;
   }
   
-  $x1->elements($elements);
-  $x1->dim($dim);
+  my $x2 = c($elements);
+  $x2->dim($dim);
   
-  return $x1;
+  return $x2;
 }
 
 sub asin { process(\&Rstats::ElementsFunc::asin, @_) }

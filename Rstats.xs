@@ -333,7 +333,7 @@ dv(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  double dv;
+  NV dv;
   if (self->get_type() == Rstats::ElementsType::DOUBLE) {
     dv = self->get_double_value(0);
   }
@@ -368,7 +368,7 @@ re(...)
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
   
-  double re = self->get_complex_value(0).real();
+  NV re = self->get_complex_value(0).real();
   
   Rstats::Elements* re_element = Rstats::Elements::new_double(1, re);
   SV* re_element_sv = my::to_perl_obj(re_element, "Rstats::Elements");
@@ -382,7 +382,7 @@ im(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  double im = self->get_complex_value(0).imag();
+  NV im = self->get_complex_value(0).imag();
   
   Rstats::Elements* im_element = Rstats::Elements::new_double(1, im);
   SV* im_element_sv = my::to_perl_obj(im_element, "Rstats::Elements");
@@ -399,7 +399,7 @@ flag(...)
   SV* flag_sv;
   if (self->get_type() == Rstats::ElementsType::DOUBLE) {
     if (Rstats::ElementsFunc::is_infinite(self)) {
-      double dv = self->get_double_value(0);
+      NV dv = self->get_double_value(0);
       if (dv > 0) {
         flag_sv = my::new_scalar("inf");
       }
@@ -441,7 +441,7 @@ complex_double (...)
   
   Rstats::Elements* z = Rstats::Elements::new_complex(
     1,
-    std::complex<double>(re->get_double_value(0), im->get_double_value(0))
+    std::complex<NV>(re->get_double_value(0), im->get_double_value(0))
   );
   
   SV* z_sv = my::to_perl_obj(z, "Rstats::Elements");
@@ -519,10 +519,10 @@ new_complex(...)
   SV* re_sv = ST(0);
   SV* im_sv = ST(1);
 
-  double re = my::get_nv(re_sv);
-  double im = my::get_nv(im_sv);
+  NV re = my::get_nv(re_sv);
+  NV im = my::get_nv(im_sv);
   
-  Rstats::Elements* element = Rstats::Elements::new_complex(1, std::complex<double>(re, im));
+  Rstats::Elements* element = Rstats::Elements::new_complex(1, std::complex<NV>(re, im));
   
   SV* element_obj = my::to_perl_obj(element, "Rstats::Elements");
   
@@ -570,7 +570,7 @@ new_double(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  double dv = my::get_nv(value_sv);
+  NV dv = my::get_nv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_double(1, dv);
   

@@ -22,7 +22,7 @@ namespace Rstats {
       return SvUV(sv);
     }
 
-    double get_nv(SV* sv) {
+    NV get_nv(SV* sv) {
       return SvNV(sv);
     }
       
@@ -46,7 +46,7 @@ namespace Rstats {
       return sv_2mortal(newSVuv(uv));
     }
     
-    SV* new_scalar_nv(double nv) {
+    SV* new_scalar_nv(NV nv) {
       return sv_2mortal(newSVnv(nv));
     }
     
@@ -229,10 +229,10 @@ namespace Rstats {
     typedef std::vector<SV*> Character;
     
     // Rstats::Values::Complex
-    typedef std::vector<std::complex<double> > Complex;
+    typedef std::vector<std::complex<NV> > Complex;
     
     // Rstats::Values::Double
-    typedef std::vector<double> Double;
+    typedef std::vector<NV> Double;
     
     // Rstats::Values::Integer
     typedef std::vector<I32> Integer;
@@ -375,13 +375,13 @@ namespace Rstats {
     static Rstats::Elements* new_complex(I32 length) {
       
       Rstats::Elements* elements = new Rstats::Elements;
-      elements->values = new Rstats::Values::Complex(length, std::complex<double>(0, 0));
+      elements->values = new Rstats::Values::Complex(length, std::complex<NV>(0, 0));
       elements->type = Rstats::ElementsType::COMPLEX;
       
       return elements;
     }
         
-    static Rstats::Elements* new_complex(I32 length, std::complex<double> z) {
+    static Rstats::Elements* new_complex(I32 length, std::complex<NV> z) {
       
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Complex(length, z);
@@ -390,11 +390,11 @@ namespace Rstats {
       return elements;
     }
 
-    std::complex<double> get_complex_value(I32 pos) {
+    std::complex<NV> get_complex_value(I32 pos) {
       return (*this->get_complex_values())[pos];
     }
     
-    void set_complex_value(I32 pos, std::complex<double> value) {
+    void set_complex_value(I32 pos, std::complex<NV> value) {
       (*this->get_complex_values())[pos] = value;
     }
     
@@ -406,7 +406,7 @@ namespace Rstats {
       return elements;
     }
 
-    static Rstats::Elements* new_double(I32 length, double value) {
+    static Rstats::Elements* new_double(I32 length, NV value) {
       Rstats::Elements* elements = new Rstats::Elements;
       elements->values = new Rstats::Values::Double(length, value);
       elements->type = Rstats::ElementsType::DOUBLE;
@@ -414,11 +414,11 @@ namespace Rstats {
       return elements;
     }
     
-    double get_double_value(I32 pos) {
+    NV get_double_value(I32 pos) {
       return (*this->get_double_values())[pos];
     }
     
-    void set_double_value(I32 pos, double value) {
+    void set_double_value(I32 pos, NV value) {
       (*this->get_double_values())[pos] = value;
     }
 

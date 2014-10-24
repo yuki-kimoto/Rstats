@@ -13,20 +13,20 @@ use Rstats::ElementsFunc;
 
 # C
 {
-  my $v1 = C('1:3');
+  my $v1 = ve('1:3');
   is_deeply($v1->values, [1, 2, 3]);
 }
 
 # array
 {
-  my $x1 = array(C('1:12'), c(4, 3));
+  my $x1 = array(ve('1:12'), c(4, 3));
   is_deeply($x1->values, [1 .. 12]);
   is_deeply(r->dim($x1)->values, [4, 3]);
 }
 
 # matrix
 {
-  my $m1 = matrix(C('1:12'), 4, 3);
+  my $m1 = matrix(ve('1:12'), 4, 3);
   is_deeply($m1->values, [1 .. 12]);
   is_deeply(r->dim($m1)->values, [4, 3]);
 }

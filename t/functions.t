@@ -6,6 +6,12 @@ use Rstats;
 use Rstats::ElementsFunc;
 use Math::Trig ();
 
+# ve - minus
+{
+  my $x1 = -ve('1:4');
+  is_deeply($x1->values, [-1, -2, -3, -4]);
+}
+
 # str
 {
 
@@ -17,25 +23,25 @@ use Math::Trig ();
   
   # str - array, one dimention
   {
-    my $x1 = array(C('1:4'), c(4));
+    my $x1 = array(ve('1:4'), c(4));
     is(r->str($x1), 'num [1:4(1d)] 1 2 3 4');
   }
   
   # str - array
   {
-    my $x1 = array(C('1:12'), c(4, 3));
+    my $x1 = array(ve('1:12'), c(4, 3));
     is(r->str($x1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
   }
   
   # str - vector, more than 10 element
   {
-    my $x1 = C('1:11');
+    my $x1 = ve('1:11');
     is(r->str($x1), 'num [1:11] 1 2 3 4 5 6 7 8 9 10 ...');
   }
 
   # str - vector, 10 element
   {
-    my $x1 = C('1:10');
+    my $x1 = ve('1:10');
     is(r->str($x1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
   }
 
@@ -551,7 +557,7 @@ use Math::Trig ();
 # replace
 {
   {
-    my $v1 = C('1:10');
+    my $v1 = ve('1:10');
     my $v2 = c(2, 5, 10);
     my $v3 = c(12, 15, 20);
     my $v4 = r->replace($v1, $v2, $v3);
@@ -560,7 +566,7 @@ use Math::Trig ();
   
   # replace - single value
   {
-    my $v1 = C('1:10');
+    my $v1 = ve('1:10');
     my $v2 = c(2, 5, 10);
     my $v4 = r->replace($v1, $v2, 11);
     is_deeply($v4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
@@ -568,7 +574,7 @@ use Math::Trig ();
   
   # replace - few values
   {
-    my $v1 = C('1:10');
+    my $v1 = ve('1:10');
     my $v2 = c(2, 5, 10);
     my $v4 = r->replace($v1, $v2, c(12, 15));
     is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
@@ -761,12 +767,12 @@ use Math::Trig ();
 {
   # paste($str, $vector);
   {
-    my $v1 = r->paste('x', C('1:3'));
+    my $v1 = r->paste('x', ve('1:3'));
     is_deeply($v1->values, ['x 1', 'x 2', 'x 3']);
   }
   # paste($str, $vector, {sep => ''});
   {
-    my $v1 = r->paste('x', C('1:3'), {sep => ''});
+    my $v1 = r->paste('x', ve('1:3'), {sep => ''});
     is_deeply($v1->values, ['x1', 'x2', 'x3']);
   }
 }
@@ -944,7 +950,7 @@ use Math::Trig ();
 {
   # quantile - odd number
   {
-    my $v1 = C('0:100');
+    my $v1 = ve('0:100');
     my $v2 = r->quantile($v1);
     is_deeply($v2->values, [0, 25, 50, 75, 100]);
     is_deeply($v2->names->values, [qw/0%  25%  50%  75% 100% /]);
@@ -952,7 +958,7 @@ use Math::Trig ();
   
   # quantile - even number
   {
-    my $v1 = C('1:100');
+    my $v1 = ve('1:100');
     my $v2 = r->quantile($v1);
     is_deeply($v2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
   }

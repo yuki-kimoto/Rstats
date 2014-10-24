@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c C array matrix list data_frame factor ordered/;
+  my @methods = qw/c ve array matrix list data_frame factor ordered/;
   for my $method (@methods) {
     *{"${class}::$method"} = sub { $r->$method(@_) }
   }
@@ -53,13 +53,13 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   print $v3;
   
   # Sequence m:n
-  my $v1 = C('1:3');
+  my $v1 = ve("1:3");
 
   # Matrix
-  my $m1 = matrix(C('1:12'), 4, 3);
+  my $m1 = matrix(ve("1:12"), 4, 3);
   
   # Array
-  my $a1 = array(C(1:24), c(4, 3, 2));
+  my $a1 = array(ve("1:24"), c(4, 3, 2));
 
   # Complex
   my $z1 = 1 + 2 * i;
@@ -97,17 +97,17 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   # c(1, 2, 3)
   c(1, 2, 3)
 
-=head2 C
+=head2 vec
 
   # 1:24
-  C('1:24')
+  ve("1:24")
 
-C function is equal to C<m:n> of R.
+vec function is equal to C<m:n> of R.
 
 =head2 array
 
   # array(1:24, c(4, 3, 2))
-  array(C('1:24'), c(4, 3, 2))
+  array(ve("1:24"), c(4, 3, 2))
 
 =head2 TRUE
 
@@ -152,13 +152,13 @@ C function is equal to C<m:n> of R.
 =head2 matrix
 
   # matrix(1:12, 4, 3)
-  matrix(C('1:12'), 4, 3)
+  matrix(ve("1:12"), 4, 3)
   
   # matrix(1:12, nrow=4, ncol=3)
-  matrix(C('1:12'), {nrow => 4, ncol => 3});
+  matrix(ve("1:12"), {nrow => 4, ncol => 3});
   
   # matrix(1:12, 4, 3, byrow=TRUE)
-  matrix(C('1:12'), 4, 3, {byrow => TRUE});
+  matrix(ve("1:12"), 4, 3, {byrow => TRUE});
 
 =head1 VECTOR ACCESS
 
@@ -283,7 +283,7 @@ C function is equal to C<m:n> of R.
 
 =head2 c
 
-=head2 C
+=head2 vec
 
 =head2 charmatch
 

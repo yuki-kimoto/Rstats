@@ -1293,11 +1293,13 @@ sub toupper {
 sub match {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my @matches;
-  for my $x1_element (@{$x1->elements_obj->decompose}) {
+  for my $x1_element (@$x1_elements) {
     my $i = 1;
     my $match;
-    for my $x2_element (@{$x2->elements}) {
+    for my $x2_element (@$x2_elements) {
       if (Rstats::ElementsFunc::equal($x1_element, $x2_element)) {
         $match = 1;
         last;

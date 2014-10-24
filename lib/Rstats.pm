@@ -2,7 +2,22 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.0116';
+our $VERSION = '0.0117';
+
+# Source filter to work -c and -i as minus of c and minus of i
+#   -c and -i is interpret as file test operater by default Perl
+#   But -c and -i want to be meaned as minus of c and minus of i.
+#   so "use Rstats" replace -c to - c, -i to - i by source filter.
+#   and export file_test_c() function as alternate.
+use Filter::Simple;
+FILTER_ONLY
+  code  => sub {
+    s/-c\b/- c/g;
+    s/-i\b/- i/g;
+  }
+;
+
+sub file_test_c { -c @_ }
 
 use Rstats::Class;
 
@@ -26,6 +41,8 @@ sub import {
   for my $method (@methods_no_args) {
     *{"${class}::$method"} = sub () { $r->$method };
   }
+  
+  *{"${class}::file_test_c"} = \&file_test_c;
   
   warnings->unimport('ambiguous');
 }
@@ -791,3 +808,26 @@ vec function is equal to C<m:n> of R.
 
   # typeof(x1)
   r->typeof($x1);
+
+=head1 SOURCE FILTER
+
+Rstats use source filter to work -c and -i as minus of c and minus of i.
+
+-c and -i is interpreted as file test operater by default Perl
+But we want to mean -c and -i as minus of c and minus of i.
+
+So when you use Rstats,
+-c and -i is replaced to - c, and - i by Perl source filter,
+  
+  use Rstats;
+  
+  # This is replaced to "- c(1, 2, 3)"
+  -c(1, 2, 3)
+  
+  # This is replaced to "- i"
+  -i
+
+and file_test_c() is exported as altanative of -c
+
+  # This is same as -c
+  file_test_c($file);

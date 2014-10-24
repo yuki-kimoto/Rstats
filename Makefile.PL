@@ -27,7 +27,8 @@ WriteMakefile(
     PREREQ_PM => {
         'Object::Simple' => '3.10',
         'Math::Round' => '0.06',
-        'Text::UnicodeTable::Simple' => '0.09'
+        'Text::UnicodeTable::Simple' => '0.09',
+        'Filter::Simple' => '0.91'
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },

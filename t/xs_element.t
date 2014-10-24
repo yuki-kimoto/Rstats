@@ -41,13 +41,13 @@ my $x1 = c(1, 2, 3);
 
     # element - is_finite - Inf
     {
-      my $e1 = Rstats::ElementsFunc::new_Inf();
+      my $e1 = Rstats::ElementsFunc::new_inf();
       ok(!$e1->is_finite);
     }
 
     # element - is_finite - -Inf
     {
-      my $e1 = Rstats::ElementsFunc::new_negativeInf();
+      my $e1 = Rstats::ElementsFunc::new_negative_inf();
       ok(!$e1->is_finite);
     }
   }

@@ -380,9 +380,9 @@ sub factor {
   # fix levels
   if (!$x_exclude->is_na && $x_exclude->length->value) {
     my $new_a_levels_elements = [];
-    for my $x_levels_element (@{$x_levels->elements}) {
+    for my $x_levels_element (@{$x_levels->elements_obj->decompose}) {
       my $match;
-      for my $x_exclude_element (@{$x_exclude->elements}) {
+      for my $x_exclude_element (@{$x_exclude->elements_obj->decompose}) {
         my $is_equal = Rstats::ElementsFunc::equal($x_levels_element, $x_exclude_element);
         if (!$is_equal->is_na && $is_equal) {
           $match = 1;
@@ -402,7 +402,7 @@ sub factor {
   # default - ordered
   $x_ordered = $x1->is_ordered unless defined $x_ordered;
   
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   
   my $labels_length = $x_labels->length->value;
   my $levels_length = $x_levels->length->value;
@@ -416,7 +416,7 @@ sub factor {
   
   # Levels hash
   my $levels;
-  my $x_levels_elements = $x_levels->elements;
+  my $x_levels_elements = $x_levels->elements_obj->decompose;
   for (my $i = 1; $i <= $levels_length; $i++) {
     my $x_levels_element = $x_levels_elements->[$i - 1];
     my $value = $x_levels_element->value;
@@ -503,7 +503,7 @@ sub data_frame {
           $fix_name = $name;
         }
         push @$column_names, $fix_name;
-        push @$elements, splice(@{$v->elements}, 0, $count);
+        push @$elements, splice(@{$v->elements_obj->decompose}, 0, $count);
       }
     }
     else {
@@ -638,7 +638,7 @@ sub diag {
   }
   else {
     $size = $x1->length_value;
-    $x2_elements = $x1->elements;
+    $x2_elements = $x1->elements_obj->decompose;
   }
   
   my $x2 = matrix(0, $size, $size);
@@ -659,7 +659,7 @@ sub set_diag {
   my $size = $x1_dim_values->[0] < $x1_dim_values->[1] ? $x1_dim_values->[0] : $x1_dim_values->[1];
   
   $x2 = array($x2, $size);
-  $x2_elements = $x2->elements;
+  $x2_elements = $x2->elements_obj->decompose;
   
   for (my $i = 0; $i < $size; $i++) {
     $x1->at($i + 1, $i + 1);
@@ -756,7 +756,7 @@ sub outer {
 sub Arg {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::Arg($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::Arg($_) } @{$x1->elements_obj->decompose};
   my $x2 = $x1->clone(elements => \@a2_elements);
   
   return $x2;
@@ -771,7 +771,7 @@ sub sub {
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
   
   my $x2_elements = [];
-  for my $x_e (@{$x1_x->elements}) {
+  for my $x_e (@{$x1_x->elements_obj->decompose}) {
     if ($x_e->is_na) {
       push @$x2_elements, $x_e;
     }
@@ -953,7 +953,7 @@ sub c {
   my $compose_elements = Rstats::Elements->compose($x1->{type}, $elements);
   my $decompose_elements = $compose_elements->decompose;
   $x1->elements($decompose_elements);
-  $x1->compose_elements($compose_elements);
+  $x1->elements_obj($compose_elements);
   
   return $x1;
 }

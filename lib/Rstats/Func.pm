@@ -1435,14 +1435,14 @@ sub append {
   $x_after = c($x1_length) if $x_after->is_null;
   my $after = $x_after->value;
   
-  if (ref $x2 eq 'Rstats::Container::Array') {
-    splice @{$x1->elements}, $after, 0, @{$x2->elements};
-  }
-  else {
-    splice @{$x1->elements}, $after, 0, $x2;
-  }
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
+  my $x3_elements = [@$x1_elements];
+  splice @$x3_elements, $after, 0, $x2_elements;
   
-  return $x1
+  my $x3 = c($x3_elements);
+  
+  return $x3;
 }
 
 sub array {
@@ -1455,10 +1455,10 @@ sub array {
   $x1 = to_c($x1);
 
   # Dimention
-  my $elements = $x1->elements;
+  my $elements = $x1->elements_obj->decompose;
   my $dim = defined $_dim ? to_c($_dim) : NULL;
   my $x1_length = $x1->length_value;
-  unless (@{$dim->elements}) {
+  unless ($dim->elements_obj->length_value) {
     $dim = c($x1_length);
   }
   my $dim_product = 1;
@@ -1526,15 +1526,16 @@ sub cbind {
     my $x2_elements = [];
     for my $_x (@xs) {
       
-      my $a = to_c($_x);
+      my $a1 = to_c($_x);
+      my $a1_dim_elements = $a1->dim->elements_obj->decompose;
       
       my $row_count;
-      if ($a->is_matrix) {
-        $row_count = $a->dim->elements->[0];
-        $col_count_total += $a->dim->elements->[1];
+      if ($a1->is_matrix) {
+        $row_count = $a1_dim_elements->[0];
+        $col_count_total += $a1_dim_elements->[1];
       }
-      elsif ($a->is_vector) {
-        $row_count = $a->dim_as_array->values->[0];
+      elsif ($a1->is_vector) {
+        $row_count = $a1->dim_as_array->values->[0];
         $col_count_total += 1;
       }
       else {
@@ -1544,7 +1545,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, $a->elements;
+      push @$x2_elements, $a1->elements_obj->decompose;
     }
     my $matrix = matrix($x2_elements, $row_count_needed, $col_count_total);
     
@@ -1556,7 +1557,7 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
-  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::ceil $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::ceil $_->value) } @{$x1->elements_obj->decompose};
   
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -1605,10 +1606,12 @@ sub cos { process(\&Rstats::ElementsFunc::cos, @_) }
 sub atan2 {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my @a3_elements;
   for (my $i = 0; $i < $x1->length_value; $i++) {
-    my $element1 = $x1->elements->[$i];
-    my $element2 = $x2->elements->[$i];
+    my $element1 = $x1_elements->[$i];
+    my $element2 = $x2_elements->[$i];
     my $element3 = Rstats::ElementsFunc::atan2($element1, $element2);
     push @a3_elements, $element3;
   }
@@ -1639,7 +1642,7 @@ sub cummax {
   }
   
   my @a2_elements;
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   my $max = shift @$x1_elements;
   push @a2_elements, $max;
   for my $element (@$x1_elements) {
@@ -1668,7 +1671,7 @@ sub cummin {
   }
   
   my @a2_elements;
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   my $min = shift @$x1_elements;
   push @a2_elements, $min;
   for my $element (@$x1_elements) {
@@ -1692,7 +1695,7 @@ sub cumsum {
   my $type = $x1->{type};
   my $total = Rstats::ElementsFunc::create($type);
   my @a2_elements;
-  push @a2_elements, $total = Rstats::ElementsFunc::add($total, $_) for @{$x1->elements};
+  push @a2_elements, $total = Rstats::ElementsFunc::add($total, $_) for @{$x1->elements_obj->decompose};
   
   return c(\@a2_elements);
 }
@@ -1702,7 +1705,7 @@ sub cumprod {
   my $type = $x1->{type};
   my $total = Rstats::ElementsFunc::create($type, 1);
   my @a2_elements;
-  push @a2_elements, $total = Rstats::ElementsFunc::multiply($total, $_) for @{$x1->elements};
+  push @a2_elements, $total = Rstats::ElementsFunc::multiply($total, $_) for @{$x1->elements_obj->decompose};
   
   return c(\@a2_elements);
 }

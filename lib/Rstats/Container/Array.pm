@@ -275,9 +275,16 @@ sub set {
   my $self = shift;
   my $x2 = Rstats::Func::to_c(shift);
   
+  $DB::single = 1;
+
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-
+  
+  # Upgrade mode if type is different
+  ($self, $x2) = Rstats::Func::upgrade_type($self, $x2) if $self->{type} ne $x2->{type};
+  
+  $self->at($at);
+  
   my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
   my $self_elements = $self->elements_obj->decompose;
@@ -312,7 +319,7 @@ sub set {
     }
   }
   
-  $self->elements($self_elements);
+  $DB::single = 1;
   $self->elements_obj(Rstats::Elements->compose($self->{type}, $self_elements));
   
   return $self;

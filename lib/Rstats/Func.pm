@@ -1366,7 +1366,6 @@ sub operation {
   # Upgrade mode if type is different
   ($x1, $x2) = upgrade_type($x1, $x2) if $x1->{type} ne $x2->{type};
   
-  $DB::single = 1;
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
   my $x2_length = $x2->length_value;
@@ -1385,11 +1384,19 @@ sub operation {
   
   no strict 'refs';
   my $operation = "Rstats::ElementsFunc::$op";
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
-  my @a3_elements = map { &$operation($x1_elements->[$_], $x2_elements->[$_]) } (0 .. $length - 1);
+  my $x3;
+  if ($op eq 'add') {
+    my $x3_elements = Rstats::ElementsFunc::add($x1->elements, $x2->elements);
+    $x3 = Rstats::Func::NULL();
+    $x3->elements($x3_elements);
+  }
+  else {
+    my $x1_elements = $x1->decompose_elements;
+    my $x2_elements = $x2->decompose_elements;
+    my @a3_elements = map { &$operation($x1_elements->[$_], $x2_elements->[$_]) } (0 .. $length - 1);
+    $x3 = c(\@a3_elements);
+  }
   
-  my $x3 = c(\@a3_elements);
   $x1->_copy_attrs_to($x3);
   if ($op eq 'divide') {
     $x3->{type} = 'double';

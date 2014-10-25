@@ -4,81 +4,16 @@ use warnings;
 
 use Rstats;
 
-# ncol
-{
-  my $x1 = list(1, 2, 3);
-  my $x2 = r->ncol($x1);
-  ok($x2->is_null);
-}
-
-# nrow
-{
-  my $x1 = list(1, 2, 3);
-  my $x2 = r->nrow($x1);
-  ok($x2->is_null);
-}
-
-# set
-{
-  # set - NULL, dimnames
-  {
-    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
-    $x1->dimnames(list(c("r1", "r2", "r3"), c("c1", "c2", "c3")));
-    $x1->at(2)->set(NULL);
-    is_deeply($x1->getin(1)->values, [1, 2, 3]);
-    is_deeply($x1->getin(2)->values, [7, 8, 9]);
-    is_deeply($x1->dimnames->getin(1)->values, ["r1", "r2", "r3"]);
-    is_deeply($x1->dimnames->getin(2)->values, ["c1", "c3"]);
-  }
-  
-  # set - NULL, names
-  {
-    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
-    $x1->names(c("c1", "c2", "c3"));
-    $x1->at(2)->set(NULL);
-    is_deeply($x1->getin(1)->values, [1, 2, 3]);
-    is_deeply($x1->getin(2)->values, [7, 8, 9]);
-    is_deeply($x1->names->values, ["c1", "c3"]);
-  }
-  
-  # set - basic
-  {
-    my $x1 = list(1, 2, 3);
-    $x1->at(2)->set(5);
-    is_deeply($x1->getin(1)->values, [1]);
-    is_deeply($x1->getin(2)->values, [5]);
-    is_deeply($x1->getin(3)->values, [3]);
-  }
-
-  # set - name
-  {
-    my $x1 = list(1, 2, 3);
-    r->names($x1, c("n1", "n2", "n3"));
-    $x1->at("n2")->set(5);
-    is_deeply($x1->getin(1)->values, [1]);
-    is_deeply($x1->getin(2)->values, [5]);
-    is_deeply($x1->getin(3)->values, [3]);
-  }
-  
-  # set - two index
-  {
-    my $x1 = list(1, list(2, 3));
-    $x1->getin(2)->at(2)->set(5);
-    is_deeply($x1->getin(1)->values, [1]);
-    is_deeply($x1->getin(2)->getin(1)->values, [2]);
-    is_deeply($x1->getin(2)->getin(2)->values, [5]);
-  }
-
-  # set - tree index
-  {
-    my $x1 = list(1, list(2, 3, list(4)));
-    $x1->getin(2)->getin(3)->at(1)->set(5);
-    is_deeply($x1->getin(2)->getin(3)->getin(1)->values, [5]);
-  }
-}
-
 # list
 {
+  # list - get
+  {
+    my $x1 = list(1, 2, 3);
+    my $l2 = $x1->get(1);
+    ok(r->is_list($l2));
+    is_deeply($l2->getin(1)->values, [1]);
+  }
+
   # list - basic
   {
     my $x1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
@@ -162,14 +97,6 @@ EOS
     is_deeply($x3->values, ["e"]);
   }
   
-  # list - get
-  {
-    my $x1 = list(1, 2, 3);
-    my $l2 = $x1->get(1);
-    ok(r->is_list($l2));
-    is_deeply($l2->getin(1)->values, [1]);
-  }
-
   # list - get, multiple
   {
     my $x1 = list(1, 2, 3);
@@ -189,3 +116,77 @@ EOS
     is_deeply($l2->getin(2)->values, [3]);
   }
 }
+
+# ncol
+{
+  my $x1 = list(1, 2, 3);
+  my $x2 = r->ncol($x1);
+  ok($x2->is_null);
+}
+
+# nrow
+{
+  my $x1 = list(1, 2, 3);
+  my $x2 = r->nrow($x1);
+  ok($x2->is_null);
+}
+
+# set
+{
+  # set - NULL, dimnames
+  {
+    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $x1->dimnames(list(c("r1", "r2", "r3"), c("c1", "c2", "c3")));
+    $x1->at(2)->set(NULL);
+    is_deeply($x1->getin(1)->values, [1, 2, 3]);
+    is_deeply($x1->getin(2)->values, [7, 8, 9]);
+    is_deeply($x1->dimnames->getin(1)->values, ["r1", "r2", "r3"]);
+    is_deeply($x1->dimnames->getin(2)->values, ["c1", "c3"]);
+  }
+  
+  # set - NULL, names
+  {
+    my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
+    $x1->names(c("c1", "c2", "c3"));
+    $x1->at(2)->set(NULL);
+    is_deeply($x1->getin(1)->values, [1, 2, 3]);
+    is_deeply($x1->getin(2)->values, [7, 8, 9]);
+    is_deeply($x1->names->values, ["c1", "c3"]);
+  }
+  
+  # set - basic
+  {
+    my $x1 = list(1, 2, 3);
+    $x1->at(2)->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->values, [5]);
+    is_deeply($x1->getin(3)->values, [3]);
+  }
+
+  # set - name
+  {
+    my $x1 = list(1, 2, 3);
+    r->names($x1, c("n1", "n2", "n3"));
+    $x1->at("n2")->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->values, [5]);
+    is_deeply($x1->getin(3)->values, [3]);
+  }
+  
+  # set - two index
+  {
+    my $x1 = list(1, list(2, 3));
+    $x1->getin(2)->at(2)->set(5);
+    is_deeply($x1->getin(1)->values, [1]);
+    is_deeply($x1->getin(2)->getin(1)->values, [2]);
+    is_deeply($x1->getin(2)->getin(2)->values, [5]);
+  }
+
+  # set - tree index
+  {
+    my $x1 = list(1, list(2, 3, list(4)));
+    $x1->getin(2)->getin(3)->at(1)->set(5);
+    is_deeply($x1->getin(2)->getin(3)->getin(1)->values, [5]);
+  }
+}
+

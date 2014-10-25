@@ -9,6 +9,18 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# get logical array
+{
+  # get logical array - basic
+  {
+    my $x1 = matrix(ve('1:9'), 3, 3);
+    my $x2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
+    my $x3 = $x1->get($x2);
+    is_deeply($x3->values, [1, 5, 9]);
+    is_deeply(r->dim($x3)->values, [3]);
+  }
+}
+
 # get
 {
   # get - logical
@@ -655,18 +667,6 @@ EOS
     r->names($x1 => c('r1', 'r2', 'r3'));
     my $x2 = $x1->clone;
     is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
-  }
-}
-
-# get logical array
-{
-  # get logical array - basic
-  {
-    my $x1 = matrix(ve('1:9'), 3, 3);
-    my $x2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
-    my $x3 = $x1->get($x2);
-    is_deeply($x3->values, [1, 5, 9]);
-    is_deeply(r->dim($x3)->values, [3]);
   }
 }
 

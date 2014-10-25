@@ -419,7 +419,7 @@ sub sweep {
     my $e1 = $x2->element(@{$new_index});
     push @$x_result_elements, $e1;
   }
-  my $x3 = $x1->clone(elements => $x_result_elements);
+  my $x3 = Rstats::Func::c($x_result_elements);
   
   my $x4;
   if ($func eq '+') {
@@ -440,6 +440,8 @@ sub sweep {
   elsif ($func eq '%') {
     $x4 = $x1 % $x3;
   }
+  
+  $x1->_copy_attrs_to($x4);
   
   return $x4;
 }

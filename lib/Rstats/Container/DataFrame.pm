@@ -73,7 +73,7 @@ sub get {
   # Create new data frame
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->elements($new_elements);
-  $self->_copy_attrs_to($data_frame, [$row_index, Rstats::Func::c($col_index_values)]);
+  $self->_copy_attrs_to($data_frame, {new_indexes => [$row_index, Rstats::Func::c($col_index_values)]});
   $data_frame->{dimnames}[0] = [1 .. $data_frame->getin(1)->length_value];
   
   return $data_frame;

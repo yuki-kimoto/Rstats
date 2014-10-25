@@ -10,6 +10,15 @@ use Rstats::ElementsFunc;
 
 # matrix
 {
+  
+  # matrix - byrow
+  {
+    my $m1 = matrix(ve('1:12'), 3, 4, {byrow => 1});
+    is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
+    is_deeply(r->dim($m1)->values, [3, 4]);
+    ok(r->is_matrix($m1));
+  }
+
   # matrix - omit col
   {
     my $m1 = matrix(ve('1:12'), undef, 4);
@@ -70,14 +79,6 @@ use Rstats::ElementsFunc;
   {
     my $m1 = matrix(0, 3, 4);
     is_deeply($m1->values, [(0) x 12]);
-    is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
-  }
-  
-  # matrix - byrow
-  {
-    my $m1 = matrix(ve('1:12'), 3, 4, {byrow => 1});
-    is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
     is_deeply(r->dim($m1)->values, [3, 4]);
     ok(r->is_matrix($m1));
   }

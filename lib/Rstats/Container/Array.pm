@@ -242,16 +242,15 @@ sub get {
   }
   $self->at($_indexs);
   
-  my ($poss, $x2_dim, $new_indexs) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
+  my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
   my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementsFunc::NA() } @$poss;
   
   # array
-  $ENV{a} = 1;
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
   
   # Copy attributes
-  $self->_copy_attrs_to($x2, $new_indexs);
+  $self->_copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
   # level drop
   if ($level_drop) {
@@ -282,11 +281,11 @@ sub set {
 
   my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
-  my $self_elements = $self->elements;
+  my $self_elements = $self->elements_obj->decompose;
 
   if ($self->is_factor) {
     $x2 = $x2->as_character unless $x2->is_character;
-    my $x2_elements = $x2->elements;
+    my $x2_elements = $x2->elements_obj->decompose;
     my $levels_h = $self->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
@@ -307,12 +306,15 @@ sub set {
     }
   }
   else {
-    my $x2_elements = $x2->elements;
+    my $x2_elements = $x2->elements_obj->decompose;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       $self_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
+  
+  $self->elements($self_elements);
+  $self->elements_obj(Rstats::Elements->compose($self->{type}, $self_elements));
   
   return $self;
 }

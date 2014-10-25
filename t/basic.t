@@ -5,6 +5,18 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
+=pod
+# TODO
+# NULL
+{
+  my $v1 = r->NULL;
+  is_deeply($v1->values, []);
+  is("$v1", 'NULL');
+  $v1->at(3)->set(5);
+  is_deeply($v1->values, [undef, undef, 5]);
+}
+=cut
+
 # class
 {
   # class - vector, numeric
@@ -235,15 +247,6 @@ use Math::Trig ();
   }
 }
 
-# NULL
-{
-  my $v1 = r->NULL;
-  is_deeply($v1->values, []);
-  is("$v1", 'NULL');
-  $v1->at(3)->set(5);
-  is_deeply($v1->values, [undef, undef, 5]);
-}
-
 # runif
 {
   {
@@ -456,91 +459,4 @@ use Math::Trig ();
   my $v1 = c(3, 4, 5);
   my $v2 = r->seq({along => $v1});
   is_deeply($v2->values, [1, 2, 3]);
-}
-
-# Method
-{
-  # add (vector)
-  {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c($v1, 4, 5);
-    is_deeply($v2->values, [1, 2, 3, 4, 5]);
-  }
-  # add (array)
-  {
-    my $v1 = c(c(1, 2), 3, 4);
-    is_deeply($v1->values, [1, 2, 3, 4]);
-  }
-  
-  # add to original vector
-  {
-    my $v1 = c(1, 2, 3);
-    $v1->at(r->length($v1)->value + 1)->set(6);
-    is_deeply($v1->values, [1, 2, 3, 6]);
-  }
-  
-  # numeric
-  {
-    my $v1 = r->numeric(3);
-    is_deeply($v1->values, [0, 0, 0]);
-  }
-
-  # length
-  {
-    my $v1 = c(1, 2, 4);
-    my $length = r->length($v1);
-    is($length->value, 3);
-  }
-
-  # sum
-  {
-    my $v1 = c(1, 2, 3);
-    my $sum = r->sum($v1);
-    is($sum->value, 6);
-  }
-
-  # prod
-  {
-    my $v1 = c(2, 3, 4);
-    my $prod = r->prod($v1);
-    is($prod->value, 24);
-  }
-  
-  # mean
-  {
-    my $v1 = c(1, 2, 3);
-    my $mean = r->mean($v1);
-    is($mean->value, 2);
-  }
-
-  # var
-  {
-    my $v1 = c(2, 3, 4, 7, 9);
-    my $var = r->var($v1);
-    is($var->value, 8.5);
-  }
-  
-  # sort
-  {
-    # sort - acending
-    {
-      my $v1 = c(2, 1, 5);
-      my $v1_sorted = r->sort($v1);
-      is_deeply($v1_sorted->values, [1, 2, 5]);
-    }
-    
-    # sort - decreasing
-    {
-      my $v1 = c(2, 1, 5);
-      my $v1_sorted = r->sort($v1, {decreasing => 1});
-      is_deeply($v1_sorted->values, [5, 2, 1]);
-    }
-    
-    # sort - contain NA or NaN
-    {
-      my $v1 = c(2, 1, 5, NA, NaN);
-      my $v1_sorted = r->sort($v1);
-      is_deeply($v1_sorted->values, [1, 2, 5]);
-    }
-  }
 }

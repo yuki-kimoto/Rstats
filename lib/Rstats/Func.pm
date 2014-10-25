@@ -15,7 +15,7 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub NULL { Rstats::Container::Array->new(elements => [], type => 'logical') }
+sub NULL { Rstats::Container::Array->new(elements => [], elements_obj => Rstats::Elements->new_null, type => 'logical') }
 
 sub NA { c(Rstats::ElementsFunc::NA()) }
 
@@ -49,6 +49,25 @@ sub subset {
   $x_names = Rstats::Func::NULL() unless defined $x_names;
   
   my $x2 = $x1->get($x_condition, $x_names);
+  
+  return $x2;
+}
+
+sub t {
+  my $x1 = shift;
+  
+  my $x1_row = $x1->dim->values->[0];
+  my $x1_col = $x1->dim->values->[1];
+  
+  my $x2 = matrix(0, $x1_col, $x1_row);
+  
+  for my $row (1 .. $x1_row) {
+    for my $col (1 .. $x1_col) {
+      my $element = $x1->element($row, $col);
+      $x2->at($col, $row);
+      $x2->set($element);
+    }
+  }
   
   return $x2;
 }
@@ -646,7 +665,7 @@ sub diag {
     $x2->at($i + 1, $i + 1);
     $x2->set($x2_elements->[$i]);
   }
-  
+
   return $x2;
 }
 
@@ -1348,7 +1367,8 @@ sub operation {
     &$operation($x1->elements->[$_ % $x1_length], $x2->elements->[$_ % $x2_length])
   } (0 .. $longer_length - 1);
   
-  my $x3 = $x1->clone(elements => \@a3_elements);
+  my $x3 = c(\@a3_elements);
+  $x1->_copy_attrs_to($x2);
   if ($op eq 'divide') {
     $x3->{type} = 'double';
   }
@@ -2530,7 +2550,7 @@ sub sd {
 
 sub var {
   my $x1 = to_c(shift);
-
+  
   my $var = sum(($x1 - mean($x1)) ** 2) / ($x1->length_value - 1);
   
   return $var;
@@ -2571,7 +2591,7 @@ sub matrix {
   my $byrow;
   $byrow = $x_byrow->value if defined $x_byrow;
   
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   my $x1_length = @$x1_elements;
   if (!defined $nrow && !defined $ncol) {
     $nrow = $x1_length;
@@ -2657,7 +2677,9 @@ sub sum {
   
   my $type = $x1->{type};
   my $sum = Rstats::ElementsFunc::create($type);
-  $sum = Rstats::ElementsFunc::add($sum, $_) for @{$x1->elements};
+  
+  my $x1_elements = $x1->elements_obj->decompose;
+  $sum = Rstats::ElementsFunc::add($sum, $_) for @$x1_elements;
   
   return c($sum);
 }
@@ -2772,25 +2794,6 @@ sub to_c {
   my $x1 = $is_container ? $_x : c($_x);
   
   return $x1;
-}
-
-sub t {
-  my $x1 = shift;
-  
-  my $x1_row = $x1->dim->values->[0];
-  my $x1_col = $x1->dim->values->[1];
-  
-  my $x2 = matrix(0, $x1_col, $x1_row);
-  
-  for my $row (1 .. $x1_row) {
-    for my $col (1 .. $x1_col) {
-      my $element = $x1->element($row, $col);
-      $x2->at($col, $row);
-      $x2->set($element);
-    }
-  }
-  
-  return $x2;
 }
 
 sub upgrade_type {

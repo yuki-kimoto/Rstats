@@ -4,65 +4,6 @@ use warnings;
 
 use Rstats;
 
-# mapply
-{
-  # mapply - same length
-  {
-    my $x1 = c(1, 2, 3);
-    my $x2 = c(3, 2, 1);
-    my $x3 = r->mapply('rep', $x1, $x2);
-    ok($x3->is_list);
-    is_deeply($x3->getin(1)->values, [1, 1, 1]);
-    is_deeply($x3->getin(2)->values, [2, 2]);
-    is_deeply($x3->getin(3)->values, [3]);
-  }
-  
-  # mapply - different length
-  {
-    my $x1 = c(1, 2, 3);
-    my $x2 = c(6, 5, 4, 3, 2, 1);
-    my $x3 = r->mapply('rep', $x1, $x2);
-    ok($x3->is_list);
-    is_deeply($x3->getin(1)->values, [1, 1, 1, 1, 1, 1]);
-    is_deeply($x3->getin(6)->values, [3]);
-  }
-
-  # mapply - only first element
-  {
-    my $x1 = c(1);
-    my $x2 = c(3);
-    my $x3 = r->mapply('rep', $x1, $x2);
-    is_deeply($x3->values, [1, 1, 1]);
-  }
-}
-
-# tapply
-{
-  my $x1 = c(1, 2, 4, 5, 4);
-  my $x2 = factor(c("M", "L", "M", "L", "M"));
-  my $x3 = r->tapply($x1, $x2, 'mean');
-  is_deeply($x3->values, [3.5, 3]);
-  is_deeply($x3->names->values, ["L", "M"]);
-  is_deeply($x3->dim->values, [2]);
-}
-
-# sapply
-{
-  my $x1 = list(c(1, 2), c(3.2, 4.2));
-  my $x2 = r->sapply($x1, 'sum');
-  ok($x2->is_vector);
-  is_deeply($x2->values, [3, 7.4]);
-}
-
-# lapply
-{
-  my $x1 = list(c(1, 2), c(3, 4));
-  my $x2 = r->lapply($x1, 'sum');
-  ok($x2->is_list);
-  is_deeply($x2->getin(1)->values, [3]);
-  is_deeply($x2->getin(2)->values, [7]);
-}
-
 # sweep
 {
   # sweep - margin 1, %
@@ -135,6 +76,65 @@ use Rstats;
     my $x3 = r->sweep($x1, c(1, 2), $x2);
     is_deeply($x3->values, [qw/-1 -1 -1 -1 -1 -1/]);
   }
+}
+
+# mapply
+{
+  # mapply - same length
+  {
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(3, 2, 1);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    ok($x3->is_list);
+    is_deeply($x3->getin(1)->values, [1, 1, 1]);
+    is_deeply($x3->getin(2)->values, [2, 2]);
+    is_deeply($x3->getin(3)->values, [3]);
+  }
+  
+  # mapply - different length
+  {
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(6, 5, 4, 3, 2, 1);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    ok($x3->is_list);
+    is_deeply($x3->getin(1)->values, [1, 1, 1, 1, 1, 1]);
+    is_deeply($x3->getin(6)->values, [3]);
+  }
+
+  # mapply - only first element
+  {
+    my $x1 = c(1);
+    my $x2 = c(3);
+    my $x3 = r->mapply('rep', $x1, $x2);
+    is_deeply($x3->values, [1, 1, 1]);
+  }
+}
+
+# tapply
+{
+  my $x1 = c(1, 2, 4, 5, 4);
+  my $x2 = factor(c("M", "L", "M", "L", "M"));
+  my $x3 = r->tapply($x1, $x2, 'mean');
+  is_deeply($x3->values, [3.5, 3]);
+  is_deeply($x3->names->values, ["L", "M"]);
+  is_deeply($x3->dim->values, [2]);
+}
+
+# sapply
+{
+  my $x1 = list(c(1, 2), c(3.2, 4.2));
+  my $x2 = r->sapply($x1, 'sum');
+  ok($x2->is_vector);
+  is_deeply($x2->values, [3, 7.4]);
+}
+
+# lapply
+{
+  my $x1 = list(c(1, 2), c(3, 4));
+  my $x2 = r->lapply($x1, 'sum');
+  ok($x2->is_list);
+  is_deeply($x2->getin(1)->values, [3]);
+  is_deeply($x2->getin(2)->values, [7]);
 }
 
 # apply

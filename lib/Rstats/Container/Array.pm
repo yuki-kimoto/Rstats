@@ -240,7 +240,10 @@ sub get {
   
   my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
-  my @a2_elements = map { defined $self->elements->[$_] ? $self->elements->[$_] : Rstats::ElementsFunc::NA() } @$poss;
+  my $self_elements = $self->elements_obj->decompose;
+  my @a2_elements
+    = map { defined $self_elements->[$_] ? $self_elements->[$_] : Rstats::ElementsFunc::NA() }
+      @$poss;
   
   # array
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
@@ -310,7 +313,6 @@ sub set {
   }
   
   $self->elements($self_elements);
-  
   $self->elements_obj(Rstats::Elements->compose($self->{type}, $self_elements));
   
   return $self;
@@ -337,19 +339,20 @@ sub element {
 
   my $dim_values = $self->dim_as_array->values;
   
+  my $self_elements = $self->elements_obj->decompose;
   if (@_) {
     if (@$dim_values == 1) {
-      return $self->elements->[$_[0] - 1];
+      return $self_elements->[$_[0] - 1];
     }
     elsif (@$dim_values == 2) {
-      return $self->elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+      return $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      return $self->get(@_)->elements->[0];
+      return $self->get(@_)->elements_obj->decompose->[0];
     }
   }
   else {
-    return $self->elements->[0];
+    return $self_elements->[0];
   }
 }
 

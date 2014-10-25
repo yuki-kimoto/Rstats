@@ -9,6 +9,38 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# clone
+{
+  # clone - matrix with value
+  {
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    my $x2 = $x1->clone;
+    $x2->values([2 .. 25]);
+    is_deeply($x2->values, [2 .. 25]);
+  }
+  
+  # clone - matrix
+  {
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    r->rownames($x1 => c('r1', 'r2', 'r3'));
+    r->colnames($x1 => c('c1', 'c2'));
+    my $x2 = $x1->clone(elements => []);
+    ok(r->is_matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
+    is_deeply($x2->values, []);
+  }
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = $x1->clone;
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
+}
+
 # numeric operator auto upgrade
 {
   # numeric operator auto upgrade - integer
@@ -635,38 +667,6 @@ EOS
     $expected =~ s/[ \t]+/ /;
     
     is($x1_str, $expected);
-  }
-}
-
-# clone
-{
-  # clone - matrix
-  {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = $x1->clone(elements => []);
-    ok(r->is_matrix($x2));
-    is_deeply(r->dim($x2)->values, [3, 2]);
-    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-    is_deeply($x2->values, []);
-  }
-  
-  # clone - matrix with value
-  {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    my $x2 = $x1->clone;
-    $x2->values([2 .. 25]);
-    is_deeply($x2->values, [2 .. 25]);
-  }
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = $x1->clone;
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
 }
 

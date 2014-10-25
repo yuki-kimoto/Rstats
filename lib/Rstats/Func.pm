@@ -974,8 +974,6 @@ sub c {
   }
   
   my $compose_elements = Rstats::Elements->compose($x1->{type}, $elements);
-  my $decompose_elements = $compose_elements->decompose;
-  $x1->elements($decompose_elements);
   $x1->elements_obj($compose_elements);
   
   return $x1;

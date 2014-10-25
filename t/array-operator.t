@@ -8,7 +8,6 @@ use Rstats;
 {
   # numeric operator - -Inf + 2i
   {
-    2*i;
     my $x1 = c(-Inf);
     my $x2 = c(2*i);
     my $x3 = $x1 + $x2;

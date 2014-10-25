@@ -4,9 +4,20 @@ use Object::Simple -base;
 use Rstats::Func;
 use Rstats::Container::List;
 use Carp 'croak';
+use Rstats::Elements;
 
-has 'elements' => sub { [] };
 has 'elements_obj';
+
+sub elements {
+  my $self = shift;
+  
+  if (defined $self->elements_obj) {
+    return $self->elements_obj->decompose;
+  }
+  else {
+    return $self->{elements};
+  }
+}
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
@@ -36,6 +47,9 @@ sub _copy_attrs_to {
         push @$names, $self->{names}[$i - 1];
       }
     }
+    else {
+      $names = [@{$self->{names}}];
+    }
     $x2->{names} = $names;
   }
   
@@ -49,8 +63,13 @@ sub _copy_attrs_to {
       if (defined $dimname && @$dimname) {
         my $index = $new_indexes->[$i];
         my $new_dimname = [];
-        for my $k (@{$index->values}) {
-          push @$new_dimname, $dimname->[$k - 1];
+        if (defined $index) {
+          for my $k (@{$index->values}) {
+            push @$new_dimname, $dimname->[$k - 1];
+          }
+        }
+        else {
+          $new_dimname = [@$dimname];
         }
         push @$new_dimnames, $new_dimname;
       }
@@ -181,9 +200,8 @@ sub levels {
 sub clone {
   my ($self, %opt) = @_;
   
-  my $clone = {%$self};
-  $clone = bless $clone, ref $self;
-  $clone->{elements} = $opt{elements} if $opt{elements};
+  my $clone = Rstats::Func::c($opt{elements} || $self->elements);
+  $self->_copy_attrs_to($clone);
   
   return $clone;
 }
@@ -636,7 +654,8 @@ sub values {
   
   if (@_) {
     my @elements = map { Rstats::ElementsFunc::element($_) } @{$_[0]};
-    $self->{elements} = \@elements;
+    
+    $self->elements_obj(Rstats::Func::c(\@elements)->elements_obj);
   }
   else {
     my @values = map { defined $_ ? $_->value : undef } @{$self->elements};

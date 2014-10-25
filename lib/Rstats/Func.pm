@@ -1764,9 +1764,11 @@ sub complex {
   else {
     croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
     
+    my $x1_re_elements = $x1_re->elements_obj->decompose;
+    my $x1_im_elements = $x1_im->elements_obj->decompose;
     for (my $i = 0; $i <  $x1_im->length_value; $i++) {
-      my $re = $x1_re->elements->[$i] || Rstats::ElementsFunc::double(0);
-      my $im = $x1_im->elements->[$i];
+      my $re = $x1_re_elements->[$i] || Rstats::ElementsFunc::double(0);
+      my $im = $x1_im_elements->[$i];
       my $x2_element = Rstats::ElementsFunc::complex_double($re, $im);
       push @$x2_elements, $x2_element;
     }
@@ -1816,7 +1818,7 @@ sub floor {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::floor $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(POSIX::floor $_->value) } @{$x1->elements_obj->decompose};
 
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -1838,7 +1840,7 @@ sub head {
     return $x2;
   }
   else {
-    my $x1_elements = $x1->elements;
+    my $x1_elements = $x1->elements_obj->decompose;
     my $max = $x1->length_value < $n ? $x1->length_value : $n;
     my @x2_elements;
     for (my $i = 0; $i < $max; $i++) {
@@ -1892,7 +1894,7 @@ sub max {
     return negativeInf;
   }
   
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -1926,7 +1928,7 @@ sub min {
     return Inf;
   }
   
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -2044,7 +2046,7 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $elements = $v->elements;
+    my $elements = $v->elements_obj->decompose;
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
         if !defined $maxs[$i] || Rstats::ElementsFunc::more_than($elements->[$i], $maxs[$i])
@@ -2059,7 +2061,7 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $elements = $v->elements;
+    my $elements = $v->elements_obj->decompose;
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
         if !defined $mins[$i] || Rstats::ElementsFunc::less_than($elements->[$i], $mins[$i])
@@ -2074,7 +2076,7 @@ sub prod {
   
   my $type = $x1->{type};
   my $prod = Rstats::ElementsFunc::create($type, 1);
-  for my $element (@{$x1->elements}) {
+  for my $element (@{$x1->elements_obj->decompose}) {
     $prod = Rstats::ElementsFunc::multiply($prod, $element);
   }
 
@@ -2154,7 +2156,7 @@ sub rep {
   my $times = defined $x_times ? $x_times->value : 1;
   
   my $elements = [];
-  push @$elements, @{$x1->elements} for 1 .. $times;
+  push @$elements, @{$x1->elements_obj->decompose} for 1 .. $times;
   my $x2 = c($elements);
   
   return $x2;
@@ -2165,8 +2167,8 @@ sub replace {
   my $x2 = to_c(shift);
   my $v3 = to_c(shift);
   
-  my $x1_elements = $x1->elements;
-  my $x2_elements = $x2->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
     my $x2_element_hash = Rstats::ElementsFunc::hash($x2_element->as_double);
@@ -2175,7 +2177,7 @@ sub replace {
     croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
-  my $v3_elements = $v3->elements;
+  my $v3_elements = $v3->elements_obj->decompose;
   my $v3_length = @{$v3_elements};
   
   my $v4_elements = [];
@@ -2198,8 +2200,9 @@ sub rev {
   my $x1 = shift;
   
   # Reverse elements
-  my @a2_elements = reverse @{$x1->elements};
-  my $x2 = $x1->clone(elements => \@a2_elements);
+  my @a2_elements = reverse @{$x1->elements_obj->decompose};
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   
   return $x2;
 }
@@ -2246,8 +2249,9 @@ sub round {
   my $x1 = to_c($_x1);
 
   my $r = 10 ** $digits;
-  my @a2_elements = map { Rstats::ElementsFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->elements};
-  my $x2 = $x1->clone(elements => \@a2_elements);
+  my @a2_elements = map { Rstats::ElementsFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->elements_obj->decompose};
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;
@@ -2329,7 +2333,7 @@ sub sample {
     if $length > $x1_length && !$replace;
   
   my @x2_elements;
-  my $x1_elements = $x1->elements;
+  my $x1_elements = $x1->elements_obj->decompose;
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand @$x1_elements);
     my $rand_element = splice @$x1_elements, $rand_num, 1;
@@ -2361,9 +2365,10 @@ sub sinh { process(\&Rstats::ElementsFunc::sinh, @_) }
 sub sqrt {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::sqrt($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::sqrt($_) } @{$x1->elements_obj->decompose};
   
-  my $x2 = $x1->clone(elements => \@a2_elements);
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;
@@ -2375,7 +2380,7 @@ sub sort {
   my $x1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
   
-  my @a2_elements = grep { !$_->is_na && !$_->is_nan } @{$x1->elements};
+  my @a2_elements = grep { !$_->is_na && !$_->is_nan } @{$x1->elements_obj->decompose};
   
   my $x3_elements = $decreasing
     ? [reverse sort { Rstats::ElementsFunc::more_than($a, $b) ? 1 : Rstats::ElementsFunc::equal($a, $b) ? 0 : -1 } @a2_elements]
@@ -2408,8 +2413,9 @@ sub process {
   my $func = shift;
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { $func->($_) } @{$x1->elements};
-  my $x2 = $x1->clone(elements => \@a2_elements);
+  my @a2_elements = map { $func->($_) } @{$x1->elements_obj->decompose};
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode(max_type($x1, $x2));
   
   return $x2;
@@ -2422,7 +2428,7 @@ sub trunc {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::ElementsFunc::double(int $_->value) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::double(int $_->value) } @{$x1->elements_obj->decompose};
 
   my $x2 = $x1->clone(elements => \@a2_elements);
   $x2->mode('double');
@@ -2437,7 +2443,7 @@ sub unique {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
-    for my $x1_element (@{$x1->elements}) {
+    for my $x1_element (@{$x1->elements_obj->decompose}) {
       if ($x1_element->is_na) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;

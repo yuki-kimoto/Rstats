@@ -10,10 +10,16 @@ use Rstats;
   {
     my $x1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
     $x1->at(c(3, 6))->set(c("a2", "a1"));
+=pod
     is_deeply($x1->values, [1, 2, 2, 1, 2, 1]);
     is_deeply($x1->levels->values, ["a1", "a2", "a3"]);
+=cut
   }
 }
+
+ok(1);
+
+__END__
 
 # get
 {
@@ -362,4 +368,3 @@ EOS
     is_deeply($x1->levels->values, ["a", "b", "c"]);
   }
 }
-

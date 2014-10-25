@@ -157,10 +157,10 @@ compose(...)
       Rstats::Elements* element;
       SV* element_sv = my::array_fetch(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
-        element = element = Rstats::Elements::new_na();
+        element = Rstats::Elements::new_na();
       }
       else {
-        my::to_c_obj<Rstats::Elements*>(element_sv);
+        element = my::to_c_obj<Rstats::Elements*>(element_sv);
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);

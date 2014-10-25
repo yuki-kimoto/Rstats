@@ -1741,10 +1741,12 @@ sub complex {
     my $x1_arg_length = $x1_arg->length_value;
     my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
     
+    my $x1_mod_elements = $x1_mod->elements_obj->decompose;
+    my $x1_arg_elements = $x1_arg->elements_obj->decompose;
     for (my $i = 0; $i < $longer_length; $i++) {
-      my $mod = $x1_mod->elements->[$i];
+      my $mod = $x1_mod_elements->[$i];
       $mod = Rstats::ElementsFunc::double(1) unless $mod;
-      my $arg = $x1_arg->elements->[$i];
+      my $arg = $x1_arg_elements->[$i];
       $arg = Rstats::ElementsFunc::double(0) unless $arg;
       
       my $re = Rstats::ElementsFunc::multiply(

@@ -314,6 +314,7 @@ sub set {
   }
   
   $self->elements($self_elements);
+  
   $self->elements_obj(Rstats::Elements->compose($self->{type}, $self_elements));
   
   return $self;

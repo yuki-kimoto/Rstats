@@ -34,7 +34,7 @@ WriteMakefile(
     CC => $cc,
     OPTIMIZE => '-O3',
     LD => $ld,
-    LIBS              => [''],
+    LIBS              => ["-lpthread"], # Fix BSD segfault bug
     DEFINE            => '',
     INC               => '-I.',
     OBJECT            => '$(O_FILES)',

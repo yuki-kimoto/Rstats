@@ -1385,7 +1385,9 @@ sub operation {
   no strict 'refs';
   my $operation = "Rstats::ElementsFunc::$op";
   my $x3;
-  if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide') {
+  if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
+   || $op eq 'raise')
+  {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
     $x3 = Rstats::Func::NULL();
     $x3->elements($x3_elements);
@@ -2402,11 +2404,13 @@ sub sinh { process(\&Rstats::ElementsFunc::sinh, @_) }
 sub sqrt {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::sqrt($_) } @{$x1->decompose_elements};
+  my $x2_elements = Rstats::ElementsFunc::sqrt($x1->elements);
   
-  my $x2 = c(\@a2_elements);
+  my $x2 = Rstats::Func::NULL();
+  $x2->elements($x2_elements);
+  
   $x1->_copy_attrs_to($x2);
-  $x2->mode('double');
+  $x2->mode($x2_elements->type);
   
   return $x2;
 }

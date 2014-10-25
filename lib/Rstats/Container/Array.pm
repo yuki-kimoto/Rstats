@@ -43,7 +43,7 @@ sub to_string {
   
   my $is_character = $self->is_character;
 
-  my $elements = $self->elements;
+  my $elements = $self->elements_obj->decompose;
   
   my $dim_values = $self->dim_as_array->values;
   
@@ -165,48 +165,44 @@ sub to_string {
 }
 
 sub is_finite {
-  my $_a1 = shift;
-
-  my $x1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_finite } @{$x1->elements};
-  my $x2 = Rstats::Func::array(\@a2_elements);
+  my @a2_elements = map { $_->is_finite } @{$x1->elements_obj->decompose};
+  my $x2 = Rstats::Func::c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
   
   return $x2;
 }
 
 sub is_infinite {
-  my $_a1 = shift;
+  my $x1 = Rstats::Func::to_c(shift);
   
-  my $x1 = Rstats::Func::to_c($_a1);
-  
-  my @a2_elements = map { $_->is_infinite } @{$x1->elements};
+  my @a2_elements = map { $_->is_infinite } @{$x1->elements_obj->decompose};
   my $x2 = Rstats::Func::c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
   
   return $x2;
 }
 
 sub is_nan {
-  my $_a1 = shift;
+  my $x1 = Rstats::Func::to_c(shift);
   
-  my $x1 = Rstats::Func::to_c($_a1);
-  
-  my @a2_elements = map { $_->is_nan } @{$x1->elements};
-  my $x2 = Rstats::Func::array(\@a2_elements);
+  my @a2_elements = map { $_->is_nan } @{$x1->elements_obj->decompose};
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
   
   return $x2;
 }
 
 sub is_null {
-  my $_a1 = shift;
-  
-  my $x1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c(shift);
   
   my @a2_elements = [!$x1->length_value ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE()];
-  my $x2 = Rstats::Func::array(\@a2_elements);
+  my $x2 = Rstats::Func::c(\@a2_elements);
+  $x1->_copy_attrs_to($x1);
   $x2->mode('logical');
   
   return $x2;

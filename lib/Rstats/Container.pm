@@ -521,7 +521,8 @@ sub as_complex {
   my $x2;
   my $x_tmp_elements = $x_tmp->elements;
   my @a2_elements = map { $_->as('complex') } @$x_tmp_elements;
-  $x2 = $x_tmp->clone(elements => \@a2_elements);
+  $x2 = Rstats::Func::c(\@a2_elements);
+  $x_tmp->_copy_attrs_to($x2);
   $x2->{type} = 'complex';
 
   return $x2;
@@ -541,7 +542,8 @@ sub as_double {
   else {
     my $self_elements = $self->elements;
     my @a2_elements = map { $_->as('double') } @$self_elements;
-    $x2 = $self->clone(elements => \@a2_elements);
+    $x2 = Rstats::Func::c(\@a2_elements);
+    $self->_copy_attrs_to($x2);
     $x2->{type} = 'double';
   }
 
@@ -559,7 +561,8 @@ sub as_integer {
   else {
    my $self_elements = $self->elements;
     my @a2_elements = map { $_->as_integer  } @$self_elements;
-    $x2 = $self->clone(elements => \@a2_elements);
+    $x2 = Rstats::Func::c(\@a2_elements);
+    $self->_copy_attrs_to($x2);
     $x2->{type} = 'integer';
   }
 
@@ -577,7 +580,8 @@ sub as_logical {
   else {
     my $self_elements = $self->elements;
     my @a2_elements = map { $_->as_logical } @$self_elements;
-    $x2 = $self->clone(elements => \@a2_elements);
+    $x2 = Rstats::Func::c(\@a2_elements);
+    $self->_copy_attrs_to($x2);
     $x2->{type} = 'logical';
   }
 
@@ -613,11 +617,14 @@ sub as_character {
       }
     }
     $x2 = Rstats::Func::c($x2_elements);
+    $self->_copy_attrs_to($x2)
   }
   else {
     my $self_elements = $self->elements;
     my @a2_elements = map { $_->as_character } @$self_elements;
-    $x2 = $self->clone(elements => \@a2_elements);
+    $x2 = Rstats::Func::c(\@a2_elements);
+    $self->_copy_attrs_to($x2);
+    
     $x2->{type} = 'character';
   }
 

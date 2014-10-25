@@ -1363,8 +1363,10 @@ sub operation {
   
   no strict 'refs';
   my $operation = "Rstats::ElementsFunc::$op";
+  my $x1_elements = $x1->elements_obj->decompose;
+  my $x2_elements = $x2->elements_obj->decompose;
   my @a3_elements = map {
-    &$operation($x1->elements->[$_ % $x1_length], $x2->elements->[$_ % $x2_length])
+    &$operation($x1_elements->[$_ % $x1_length], $x2_elements->[$_ % $x2_length])
   } (0 .. $longer_length - 1);
   
   my $x3 = c(\@a3_elements);
@@ -1413,9 +1415,10 @@ sub not_equal { operation('not_equal', @_)}
 sub abs {
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { Rstats::ElementsFunc::abs($_) } @{$x1->elements};
+  my @a2_elements = map { Rstats::ElementsFunc::abs($_) } @{$x1->elements_obj->decompose};
   
-  my $x2 = $x1->clone(elements => \@a2_elements);
+  my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;
@@ -2859,8 +2862,9 @@ sub upgrade_type {
   return @xs;
 }
 
+1;
+
 =head1 NAME
 
 Rstats::Func - Functions
 
-1;

@@ -1366,18 +1366,28 @@ sub operation {
   # Upgrade mode if type is different
   ($x1, $x2) = upgrade_type($x1, $x2) if $x1->{type} ne $x2->{type};
   
-  # Calculate
+  $DB::single = 1;
+  # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
   my $x2_length = $x2->length_value;
-  my $longer_length = $x1_length > $x2_length ? $x1_length : $x2_length;
+  my $length;
+  if ($x1_length > $x2_length) {
+    $x2 = array($x2, $x1_length);
+    $length = $x1_length;
+  }
+  elsif ($x1_length < $x2_length) {
+    $x1 = array($x1, $x2_length);
+    $length = $x2_length;
+  }
+  else {
+    $length = $x1_length;
+  }
   
   no strict 'refs';
   my $operation = "Rstats::ElementsFunc::$op";
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
-  my @a3_elements = map {
-    &$operation($x1_elements->[$_ % $x1_length], $x2_elements->[$_ % $x2_length])
-  } (0 .. $longer_length - 1);
+  my @a3_elements = map { &$operation($x1_elements->[$_], $x2_elements->[$_]) } (0 .. $length - 1);
   
   my $x3 = c(\@a3_elements);
   $x1->_copy_attrs_to($x3);

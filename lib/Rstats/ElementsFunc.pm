@@ -7,13 +7,8 @@ use Carp 'croak', 'carp';
 require Rstats;
 use Rstats::Elements;
 use Scalar::Util ();
-use Math::Complex ();
 use Math::Trig ();
 use POSIX ();
-
-# Perl infinite values(this is value is only valid as return value)
-my $perl_inf_result = 9 ** 9 ** 9;
-my $perl_negative_inf_result = -9 ** 9 ** 9;
 
 sub TRUE () { new_true() }
 sub FALSE () { new_false() }

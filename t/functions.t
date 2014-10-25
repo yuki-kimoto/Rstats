@@ -766,7 +766,12 @@ use Math::Trig ();
   {
     my $v1 = c(2*i, 3*i, 4*i);
     my $v2 = r->cumprod($v1);
-    is_deeply($v2->values, [{re => 0, im => 2}, {re => -6, im => 0}, {re => 0, im => -24}])
+    cmp_ok($v2->values->[0]->{re}, '==', 0);
+    cmp_ok($v2->values->[0]->{im}, '==', 2);
+    cmp_ok($v2->values->[1]->{re}, '==', -6);
+    cmp_ok($v2->values->[1]->{im}, '==', 0);
+    cmp_ok($v2->values->[2]->{re}, '==', 0);
+    cmp_ok($v2->values->[2]->{im}, '==', -24);
   }
 }
 

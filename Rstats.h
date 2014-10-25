@@ -600,7 +600,56 @@ namespace Rstats {
       
       return e3;
     }
-        
+
+    Rstats::Elements* multiply(Rstats::Elements* e1, Rstats::Elements* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        croak("Can't multiply different type(Rstats::ElementFunc::multiply())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't multiply different length(Rstats::ElementFunc::multiply())");
+      }
+      
+      I32 length = e1->get_length();
+      Rstats::Elements* e3;
+      if (e1->is_character_type()) {
+        croak("Error in a - b : non-numeric argument to binary operator");
+      }
+      else if (e1->is_complex_type()) {
+        e3 = Rstats::Elements::new_complex(length);
+        for (I32 i = 0; i < length; i++) {
+          e3->set_complex_value(i, e1->get_complex_value(i) * e2->get_complex_value(i));
+        }
+      }
+      else if (e1->is_double_type()) {
+        e3 = Rstats::Elements::new_double(length);
+        for (I32 i = 0; i < length; i++) {
+          e3->set_double_value(i, e1->get_double_value(i) * e2->get_double_value(i));
+        }
+      }
+      else if (e1->is_integer_type()) {
+        e3 = Rstats::Elements::new_integer(length);
+        for (I32 i = 0; i < length; i++) {
+          e3->set_integer_value(i, e1->get_integer_value(i) * e2->get_integer_value(i));
+        }
+      }
+      else if (e1->is_logical_type()) {
+        e3 = Rstats::Elements::new_logical(length);
+        for (I32 i = 0; i < length; i++) {
+          e3->set_integer_value(i, e1->get_integer_value(i) * e2->get_integer_value(i));
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      return e3;
+    }
+            
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       I32 length = elements->get_length();

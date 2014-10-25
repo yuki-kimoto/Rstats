@@ -1385,7 +1385,7 @@ sub operation {
   no strict 'refs';
   my $operation = "Rstats::ElementsFunc::$op";
   my $x3;
-  if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply') {
+  if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide') {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
     $x3 = Rstats::Func::NULL();
     $x3->elements($x3_elements);

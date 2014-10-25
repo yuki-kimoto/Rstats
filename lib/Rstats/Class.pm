@@ -259,7 +259,7 @@ sub _set_seed {
 sub sapply {
   my $x1 = shift->lapply(@_);
   
-  my $x2 = Rstats::Func::c($x1->elements);
+  my $x2 = Rstats::Func::c($x1->list);
   
   return $x2;
 }
@@ -273,7 +273,7 @@ sub lapply {
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
   
   my $new_elements = [];
-  for my $element (@{$x1->elements}) {
+  for my $element (@{$x1->list}) {
     push @$new_elements, $func->($element);
   }
   

@@ -6,6 +6,15 @@ use Rstats;
 
 # list
 {
+  
+  # list - as_list, input is array
+  {
+    my $x1 = c("a", "b");
+    my $x2 = r->as_list($x1);
+    ok(r->is_list($x2));
+    is_deeply($x2->getin(1)->values, ["a", "b"]);
+  }
+
   # list - get
   {
     my $x1 = list(1, 2, 3);
@@ -17,10 +26,10 @@ use Rstats;
   # list - basic
   {
     my $x1 = list(c(1, 2, 3), list("Hello", c(T, F, F)));
-    is_deeply($x1->elements->[0]->values, [1, 2, 3]);
-    is_deeply($x1->elements->[1]->elements->[0]->values, ["Hello"]);
+    is_deeply($x1->list->[0]->values, [1, 2, 3]);
+    is_deeply($x1->list->[1]->list->[0]->values, ["Hello"]);
     is_deeply(
-      $x1->elements->[1]->elements->[1]->elements,
+      $x1->list->[1]->list->[1]->elements,
       [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]
     );
   }
@@ -28,9 +37,9 @@ use Rstats;
   # list - argument is not array
   {
     my $x1 = list(1, 2, 3);
-    is_deeply($x1->elements->[0]->values, [1]);
-    is_deeply($x1->elements->[1]->values, [2]);
-    is_deeply($x1->elements->[2]->values, [3]);
+    is_deeply($x1->list->[0]->values, [1]);
+    is_deeply($x1->list->[1]->values, [2]);
+    is_deeply($x1->list->[2]->values, [3]);
   }
     
   # list - to_string
@@ -63,14 +72,6 @@ EOS
     my $x1 = list("a", "b");
     my $l2 = r->as_list($x1);
     is($x1, $l2);
-  }
-  
-  # list - as_list, input is array
-  {
-    my $x1 = c("a", "b");
-    my $x2 = r->as_list($x1);
-    ok(r->is_list($x2));
-    is_deeply($x2->values, ["a", "b"]);
   }
 
   # list - getin

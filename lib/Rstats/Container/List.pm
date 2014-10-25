@@ -2,22 +2,13 @@ package Rstats::Container::List;
 use Rstats::Container -base;
 
 use Rstats::Func;
-
-use overload '""' => \&to_string,
-  fallback => 1;
-
-use Rstats::Func;
 use Carp 'croak';
 
-has 'elements' => sub { [] };
-has 'mode' => sub { Rstats::Func::c('list') };
-
 use overload '""' => \&to_string,
   fallback => 1;
 
-use Rstats::Func;
-
-has 'elements' => sub { [] };
+has list => sub { [] };
+has mode => sub { Rstats::Func::c('list') };
 
 sub getin {
   my ($self, $_index) = @_;
@@ -35,7 +26,7 @@ sub getin {
   else {
     $index = $x1_index->values->[0];
   }
-  my $elements = $self->elements;
+  my $elements = $self->list;
   my $element = $elements->[$index - 1];
   
   return $element;
@@ -45,11 +36,11 @@ sub get {
   my $self = shift;
   my $index = Rstats::Func::to_c(shift);
   
-  my $elements = $self->elements;
+  my $elements = $self->list;
   
   my $class = ref $self;
   my $list = $class->new;
-  my $list_elements = $list->elements;
+  my $list_elements = $list->list;
   
   my $index_values;
   if ($index->is_character) {
@@ -85,7 +76,7 @@ sub set {
   $v1 = Rstats::Func::to_c($v1);
   
   if ($v1->is_null) {
-    splice @{$self->elements}, $index - 1, 1;
+    splice @{$self->list}, $index - 1, 1;
     if (exists $self->{names}) {
       splice @{$self->{names}}, $index - 1, 1;
     }
@@ -103,7 +94,7 @@ sub set {
       }
     }
     
-    $self->elements->[$index - 1] = $v1;
+    $self->list->[$index - 1] = $v1;
   }
   
   return $self;
@@ -122,7 +113,7 @@ sub to_string {
 sub _to_string {
   my ($self, $list, $poses, $str_ref) = @_;
   
-  my $elements = $list->elements;
+  my $elements = $list->list;
   for (my $i = 0; $i < @$elements; $i++) {
     push @$poses, $i + 1;
     $$str_ref .= join('', map { "[[$_]]" } @$poses) . "\n";

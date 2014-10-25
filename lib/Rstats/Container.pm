@@ -6,16 +6,32 @@ use Rstats::Container::List;
 use Carp 'croak';
 use Rstats::Elements;
 
-has 'elements_obj';
+sub is_perl_array_class {
+  my $self  = shift;
+  
+  my $is;
+  eval { $is = $self->isa('Rstats::Container::Array') };
+  
+  return $is;
+}
+
+sub is_perl_list_class {
+  my $self  = shift;
+  
+  my $is;
+  eval { $is = $self->isa('Rstats::Container::List') };
+  
+  return $is;
+}
 
 sub elements {
   my $self = shift;
   
-  if (defined $self->elements_obj) {
+  if ($self->is_perl_array_class) {
     return $self->elements_obj->decompose;
   }
   else {
-    return $self->{elements};
+    croak "Can't call elements methods from list";
   }
 }
 
@@ -259,7 +275,13 @@ sub length {
 sub length_value {
   my $self = shift;
   
-  my $length = @{$self->elements};
+  my $length;
+  if ($self->is_perl_array_class) {
+    $length = $self->elements_obj->length_value;
+  }
+  else {
+    $length = @{$self->list}
+  }
   
   return $length;
 }
@@ -279,25 +301,23 @@ sub is_na {
 }
 
 sub as_list {
-  my $container = shift;
+  my $self = shift;
   
-  return $container if $container->is_list;
-
-  my $list = Rstats::Container::List->new;
-  $list->elements($container->elements);
-  
-  return $list;
+  if ($self->is_perl_list_class) {
+    return $self;
+  }
+  else {
+    my $list = Rstats::Container::List->new;
+    $list->list([Rstats::Func::c($self->elements)]);
+    
+    return $list;
+  }
 }
 
 sub is_list {
-  my $container = shift;
-  
-  my $is_list;
-  eval {
-    $is_list = $container->isa('Rstats::Container::List');
-  };
+  my $self = shift;
 
-  return $is_list ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+  return $self->is_perl_list_class ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
 }
 
 sub class {

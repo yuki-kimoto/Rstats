@@ -78,7 +78,7 @@ sub transform {
   my @args = @_;
 
   my $new_names = $x1->names->values;
-  my $new_elements = $x1->elements;
+  my $new_elements = $x1->list;
   
   my $names = $x1->names->values;
   
@@ -120,7 +120,7 @@ sub na_omit {
   my $x1 = shift;
   
   my @poss;
-  for my $v (@{$x1->elements}) {
+  for my $v (@{$x1->list}) {
     for (my $index = 1; $index <= $x1->{row_length}; $index++) {
       push @poss, $index if $v->element($index)->is_na;
     }
@@ -482,7 +482,7 @@ sub list {
   @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_c($_) : $_ } @elements;
   
   my $list = Rstats::Container::List->new;
-  $list->elements(\@elements);
+  $list->list(\@elements);
   
   return $list;
 }
@@ -569,7 +569,7 @@ sub data_frame {
   # Create data frame
   my $data_frame = Rstats::Container::DataFrame->new;
   $data_frame->{row_length} = $max_count;
-  $data_frame->elements($elements);
+  $data_frame->list($elements);
   $data_frame->dimnames(
     Rstats::Func::list(
       Rstats::Func::c($row_names),

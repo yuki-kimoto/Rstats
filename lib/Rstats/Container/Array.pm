@@ -29,6 +29,8 @@ use overload
   '|' => sub { shift->operation('or', @_) },
   fallback => 1;
 
+has 'elements_obj';
+
 sub to_string {
   my $self = shift;
   
@@ -406,8 +408,8 @@ sub _fix_position {
   return ($x1, $x2);
 }
 
+1;
+
 =head1 NAME
 
 Rstats::Container::Array - Array
-
-1;

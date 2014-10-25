@@ -481,6 +481,20 @@ add(...)
 }
 
 SV*
+subtract(...)
+  PPCODE:
+{
+  Rstats::Elements* e1 = my::to_c_obj<Rstats::Elements*>(ST(0));
+  Rstats::Elements* e2 = my::to_c_obj<Rstats::Elements*>(ST(1));
+  
+  Rstats::Elements* e3 = Rstats::ElementsFunc::subtract(e1, e2);
+  
+  SV* e3_sv = my::to_perl_obj(e3, "Rstats::Elements");
+  
+  return_sv(e3_sv);
+}
+
+SV*
 complex_double (...)
   PPCODE:
 {

@@ -8,6 +8,13 @@ use Math::Trig ();
 
 # Method
 {
+  # add (vector)
+  {
+    my $v1 = c(1, 2, 3);
+    my $v2 = c($v1, 4, 5);
+    is_deeply($v2->values, [1, 2, 3, 4, 5]);
+  }
+
   # var
   {
     my $v1 = c(2, 3, 4, 7, 9);
@@ -15,12 +22,6 @@ use Math::Trig ();
     is($var->value, 8.5);
   }
   
-  # add (vector)
-  {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c($v1, 4, 5);
-    is_deeply($v2->values, [1, 2, 3, 4, 5]);
-  }
   # add (array)
   {
     my $v1 = c(c(1, 2), 3, 4);
@@ -358,8 +359,8 @@ use Math::Trig ();
     my $x2 = r->logb($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.5f", $x2->values->[1]), '2.30259');
-    ok($x2->elements->[2]->is_nan);
-    ok($x2->elements->[3]->is_negative_infinite);
+    ok($x2->decompose_elements->[2]->is_nan);
+    ok($x2->decompose_elements->[3]->is_negative_infinite);
     is_deeply(r->dim($x2)->values, [4]);
     ok(r->is_double($x2));
   }
@@ -386,8 +387,8 @@ use Math::Trig ();
     my $x2 = r->log($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.5f", $x2->values->[1]), '2.30259');
-    ok($x2->elements->[2]->is_nan);
-    ok($x2->elements->[3]->is_negative_infinite);
+    ok($x2->decompose_elements->[2]->is_nan);
+    ok($x2->decompose_elements->[3]->is_negative_infinite);
     is_deeply(r->dim($x2)->values, [4]);
     ok(r->is_double($x2));
   }

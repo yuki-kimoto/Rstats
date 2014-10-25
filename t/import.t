@@ -70,7 +70,7 @@ use Rstats::ElementsFunc;
 # NULL
 {
   my $null = NULL;
-  is_deeply($null->elements, []);
+  is_deeply($null->decompose_elements, []);
   is_deeply($null->dim->values, []);
   is_deeply($null->{type}, 'logical');
 }

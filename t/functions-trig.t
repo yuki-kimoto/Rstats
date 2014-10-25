@@ -42,11 +42,11 @@ use Math::Complex ();
     my $x2 = r->atanh($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.6f", $x2->values->[1]), '0.549306');
-    ok($x2->elements->[2]->is_positive_infinite);
-    ok($x2->elements->[3]->is_nan);
-    ok($x2->elements->[4]->is_negative_infinite);
+    ok($x2->decompose_elements->[2]->is_positive_infinite);
+    ok($x2->decompose_elements->[3]->is_nan);
+    ok($x2->decompose_elements->[4]->is_negative_infinite);
     is(sprintf("%.6f", $x2->values->[5]), '-0.549306');
-    ok($x2->elements->[6]->is_nan);
+    ok($x2->decompose_elements->[6]->is_nan);
     is_deeply(r->dim($x2)->values, [7]);
     ok(r->is_double($x2));
   }
@@ -132,7 +132,7 @@ use Math::Complex ();
   {
     my $x1 = array(c(0, 1, 2));
     my $x2 = r->acosh($x1);
-    ok($x2->elements->[0]->is_nan);
+    ok($x2->decompose_elements->[0]->is_nan);
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
     is_deeply(r->dim($x2)->values, [3]);
@@ -317,9 +317,9 @@ use Math::Complex ();
     my $x1 = array(c(0, Inf, 2, -Inf));
     my $x2 = r->cosh($x1);
     is($x2->values->[0], '1');
-    ok($x2->elements->[1]->is_positive_infinite);
+    ok($x2->decompose_elements->[1]->is_positive_infinite);
     is(sprintf("%.6f", $x2->values->[2]), '3.762196');
-    ok($x2->elements->[3]->is_positive_infinite);
+    ok($x2->decompose_elements->[3]->is_positive_infinite);
     is_deeply(r->dim($x2)->values, [4]);
     ok(r->is_double($x2));
   }
@@ -385,9 +385,9 @@ use Math::Complex ();
     my $x1 = array(c(0, Inf, 2, -Inf));
     my $x2 = r->sinh($x1);
     is($x2->values->[0], '0');
-    ok($x2->elements->[1]->is_positive_infinite);
+    ok($x2->decompose_elements->[1]->is_positive_infinite);
     is(sprintf("%.6f", $x2->values->[2]), '3.626860');
-    ok($x2->elements->[3]->is_negative_infinite);
+    ok($x2->decompose_elements->[3]->is_negative_infinite);
     is_deeply(r->dim($x2)->values, [4]);
     ok(r->is_double($x2));
   }
@@ -437,7 +437,7 @@ use Math::Complex ();
     my $x1 = c(1*i);
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
-    ok($x2->elements->[0]->im->is_positive_infinite);
+    ok($x2->decompose_elements->[0]->im->is_positive_infinite);
     ok(r->is_complex($x2));
   }
   
@@ -446,7 +446,7 @@ use Math::Complex ();
     my $x1 = c(-1*i);
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
-    ok($x2->elements->[0]->im->is_negative_infinite);
+    ok($x2->decompose_elements->[0]->im->is_negative_infinite);
     ok(r->is_complex($x2));
   }
 
@@ -580,8 +580,8 @@ use Math::Complex ();
     my $x1 = array(c(1, 1.1, -1.1));
     my $x2 = r->acos($x1);
     is($x2->values->[0], 0);
-    ok($x2->elements->[1]->is_nan);
-    ok($x2->elements->[2]->is_nan);
+    ok($x2->decompose_elements->[1]->is_nan);
+    ok($x2->decompose_elements->[2]->is_nan);
     is_deeply(r->dim($x2)->values, [3]);
     ok(r->is_double($x2));
   }
@@ -688,8 +688,8 @@ use Math::Complex ();
     my $x1 = array(c(1, 1.1, -1.1));
     my $x2 = r->asin($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.570796');
-    ok($x2->elements->[1]->is_nan);
-    ok($x2->elements->[2]->is_nan);
+    ok($x2->decompose_elements->[1]->is_nan);
+    ok($x2->decompose_elements->[2]->is_nan);
     is_deeply(r->dim($x2)->values, [3]);
     ok(r->is_double($x2));
   }

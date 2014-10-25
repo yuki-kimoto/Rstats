@@ -29,7 +29,7 @@ use overload
   '|' => sub { shift->operation('or', @_) },
   fallback => 1;
 
-has 'elements_obj';
+has 'elements';
 
 sub to_string {
   my $self = shift;
@@ -45,7 +45,7 @@ sub to_string {
   
   my $is_character = $self->is_character;
 
-  my $elements = $self->elements_obj->decompose;
+  my $elements = $self->decompose_elements;
   
   my $dim_values = $self->dim_as_array->values;
   
@@ -169,7 +169,7 @@ sub to_string {
 sub is_finite {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_finite } @{$x1->elements_obj->decompose};
+  my @a2_elements = map { $_->is_finite } @{$x1->decompose_elements};
   my $x2 = Rstats::Func::c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
@@ -180,7 +180,7 @@ sub is_finite {
 sub is_infinite {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_infinite } @{$x1->elements_obj->decompose};
+  my @a2_elements = map { $_->is_infinite } @{$x1->decompose_elements};
   my $x2 = Rstats::Func::c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
@@ -191,7 +191,7 @@ sub is_infinite {
 sub is_nan {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_nan } @{$x1->elements_obj->decompose};
+  my @a2_elements = map { $_->is_nan } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
   $x2->mode('logical');
@@ -242,7 +242,7 @@ sub get {
   
   my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
-  my $self_elements = $self->elements_obj->decompose;
+  my $self_elements = $self->decompose_elements;
   my @a2_elements
     = map { defined $self_elements->[$_] ? $self_elements->[$_] : Rstats::ElementsFunc::NA() }
       @$poss;
@@ -285,16 +285,16 @@ sub set {
     my $self_tmp;
     ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
     $self_tmp->_copy_attrs_to($self);
-    $self->elements_obj($self_tmp->elements_obj);
+    $self->elements($self_tmp->elements);
   }
   
   my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
-  my $self_elements = $self->elements_obj->decompose;
+  my $self_elements = $self->decompose_elements;
 
   if ($self->is_factor) {
     $x2 = $x2->as_character unless $x2->is_character;
-    my $x2_elements = $x2->elements_obj->decompose;
+    my $x2_elements = $x2->decompose_elements;
     my $levels_h = $self->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
@@ -315,14 +315,14 @@ sub set {
     }
   }
   else {
-    my $x2_elements = $x2->elements_obj->decompose;
+    my $x2_elements = $x2->decompose_elements;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       $self_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
   
-  $self->elements_obj(Rstats::Elements->compose($self->{type}, $self_elements));
+  $self->elements(Rstats::Elements->compose($self->{type}, $self_elements));
   
   return $self;
 }
@@ -348,7 +348,7 @@ sub element {
 
   my $dim_values = $self->dim_as_array->values;
   
-  my $self_elements = $self->elements_obj->decompose;
+  my $self_elements = $self->decompose_elements;
   if (@_) {
     if (@$dim_values == 1) {
       return $self_elements->[$_[0] - 1];
@@ -357,7 +357,7 @@ sub element {
       return $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      return $self->get(@_)->elements_obj->decompose->[0];
+      return $self->get(@_)->decompose_elements->[0];
     }
   }
   else {

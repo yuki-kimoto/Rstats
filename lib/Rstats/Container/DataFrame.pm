@@ -29,13 +29,13 @@ sub get {
   }
   elsif ($col_index->is_character) {
     $col_index_values = [];
-    for my $element (@{$col_index->elements}) {
+    for my $element (@{$col_index->decompose_elements}) {
       push @$col_index_values, $self->_name_to_index($element);
     }
   }
   elsif ($col_index->is_logical) {
     for (my $i = 0; $i < @{$col_index->values}; $i++) {
-      push @$col_index_values, $i + 1 if $col_index->elements->[$i];
+      push @$col_index_values, $i + 1 if $col_index->decompose_elements->[$i];
     }
   }
   else {
@@ -93,7 +93,7 @@ sub to_string {
   for (my $i = 1; $i <= @$column_names; $i++) {
     my $x = $self->getin($i);
     $x = $x->as_character if $x->is_factor;
-    push @$columns, $x->elements;
+    push @$columns, $x->decompose_elements;
   }
   my $col_count = @{$columns};
   my $row_count = @{$columns->[0]};

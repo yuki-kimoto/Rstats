@@ -292,8 +292,8 @@ sub tapply {
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
   
   my $new_elements = [];
-  my $x1_elements = $x1->elements;
-  my $x2_elements = $x2->elements;
+  my $x1_elements = $x1->decompose_elements;
+  my $x2_elements = $x2->decompose_elements;
   
   # Group elements
   for (my $i = 0; $i < $x1->length_value; $i++) {

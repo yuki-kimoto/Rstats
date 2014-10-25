@@ -136,10 +136,10 @@ sub parse_index {
   my @indexs;
   my @x2_dim;
 
-  if (ref $_indexs[0] && $_indexs[0]->is_array && $_indexs[0]->is_logical && @{$_indexs[0]->dim->elements} > 1) {
+  if (ref $_indexs[0] && $_indexs[0]->is_array && $_indexs[0]->is_logical && @{$_indexs[0]->dim->decompose_elements} > 1) {
     my $x2 = $_indexs[0];
     my $x2_dim_values = $x2->dim->values;
-    my $x2_elements = $x2->elements;
+    my $x2_elements = $x2->decompose_elements;
     my $poss = [];
     for (my $i = 0; $i < @$x2_elements; $i++) {
       next unless $x2_elements->[$i];
@@ -200,8 +200,9 @@ sub parse_index {
       }
       elsif ($index->is_logical) {
         my $index_values_new = [];
+        my $index_elements = $index->decompose_elements;
         for (my $i = 0; $i < @{$index->values}; $i++) {
-          push @$index_values_new, $i + 1 if $index->elements->[$i];
+          push @$index_values_new, $i + 1 if $index_elements->[$i];
         }
         $index = Rstats::Func::array($index_values_new);
       }
@@ -216,7 +217,7 @@ sub parse_index {
 
       push @indexs, $index;
 
-      my $count = @{$index->elements};
+      my $count = $index->elements->length_value;
       push @x2_dim, $count unless $count == 1 && $drop;
     }
     @x2_dim = (1) unless @x2_dim;

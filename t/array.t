@@ -9,49 +9,20 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
-# clone
+# get logical array
 {
-  # clone - matrix with value
+  # get logical array - basic
   {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    my $x2 = $x1->clone;
-    $x2->values([2 .. 25]);
-    is_deeply($x2->values, [2 .. 25]);
-  }
-  
-  # clone - matrix
-  {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = $x1->clone(elements => []);
-    ok(r->is_matrix($x2));
-    is_deeply(r->dim($x2)->values, [3, 2]);
-    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-    is_deeply($x2->values, []);
-  }
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(ve('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = $x1->clone;
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+    my $x1 = matrix(ve('1:9'), 3, 3);
+    my $x2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
+    my $x3 = $x1->get($x2);
+    is_deeply($x3->values, [1, 5, 9]);
+    is_deeply(r->dim($x3)->values, [3]);
   }
 }
 
 # numeric operator auto upgrade
 {
-  # numeric operator auto upgrade - integer
-  {
-    my $x1 = r->as_integer(array(c(3, 5)));
-    my $x2 = array(c(r->TRUE, r->FALSE));
-    my $x3 = $x1 + $x2;
-    ok(r->is_integer($x3));
-    is_deeply($x3->values, [4, 5])
-  }
-    
   # numeric operator auto upgrade - complex
   {
     my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
@@ -64,6 +35,15 @@ use Rstats::Func;
     is($x3->values->[1]->{im}, 4);
   }
 
+  # numeric operator auto upgrade - integer
+  {
+    my $x1 = r->as_integer(array(c(3, 5)));
+    my $x2 = array(c(r->TRUE, r->FALSE));
+    my $x3 = $x1 + $x2;
+    ok(r->is_integer($x3));
+    is_deeply($x3->values, [4, 5])
+  }
+    
   # numeric operator auto upgrade - numeric
   {
     my $x1 = array(c(1.1, 1.2));
@@ -122,15 +102,35 @@ use Rstats::Func;
   }
 }
 
-# get logical array
+# clone
 {
-  # get logical array - basic
+  # clone - matrix with value
   {
-    my $x1 = matrix(ve('1:9'), 3, 3);
-    my $x2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
-    my $x3 = $x1->get($x2);
-    is_deeply($x3->values, [1, 5, 9]);
-    is_deeply(r->dim($x3)->values, [3]);
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    my $x2 = $x1->clone;
+    $x2->values([2 .. 25]);
+    is_deeply($x2->values, [2 .. 25]);
+  }
+  
+  # clone - matrix
+  {
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    r->rownames($x1 => c('r1', 'r2', 'r3'));
+    r->colnames($x1 => c('c1', 'c2'));
+    my $x2 = $x1->clone(elements => []);
+    ok(r->is_matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
+    is_deeply($x2->values, []);
+  }
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(ve('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = $x1->clone;
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
 }
 
@@ -792,7 +792,7 @@ EOS
     my $x1 = array($v1);
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
   }
 
   # comparison operator numeric - <, arguments count is different
@@ -800,7 +800,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -808,7 +808,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -816,7 +816,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -824,7 +824,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -832,7 +832,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -840,7 +840,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -848,7 +848,7 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -856,7 +856,7 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -864,7 +864,7 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -872,7 +872,7 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -880,7 +880,7 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
   }
 }
 

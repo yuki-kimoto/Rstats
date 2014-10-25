@@ -277,7 +277,8 @@ sub lapply {
     push @$new_elements, $func->($element);
   }
   
-  my $x2 = $x1->clone(elements => $new_elements);
+  my $x2 = Rstats::Func::list(@$new_elements);
+  $x1->_copy_attrs_to($x2);
   
   return $x2;
 }

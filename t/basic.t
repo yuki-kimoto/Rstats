@@ -5,7 +5,6 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
-# TODO
 # NULL
 {
   my $v1 = r->NULL;
@@ -13,6 +12,30 @@ use Math::Trig ();
   is("$v1", 'NULL');
   $v1->at(3)->set(5);
   is_deeply($v1->values, [undef, undef, 5]);
+}
+
+
+# tail
+{
+  {
+    my $v1 = c(1, 2, 3, 4, 5, 6, 7);
+    my $tail = r->tail($v1);
+    is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
+  }
+  
+  # tail - values is low than 6
+  {
+    my $v1 = c(1, 2, 3);
+    my $tail = r->tail($v1);
+    is_deeply($tail->values, [1, 2, 3]);
+  }
+  
+  # tail - n option
+  {
+    my $v1 = c(1, 2, 3, 4);
+    my $tail = r->tail($v1, {n => 3});
+    is_deeply($tail->values, [2, 3, 4]);
+  }
 }
 
 # class
@@ -319,29 +342,6 @@ use Math::Trig ();
     my $v1 = c(1, 2, 3, 4);
     my $head = r->head($v1, {n => 3});
     is_deeply($head->values, [1, 2, 3]);
-  }
-}
-
-# tail
-{
-  {
-    my $v1 = c(1, 2, 3, 4, 5, 6, 7);
-    my $tail = r->tail($v1);
-    is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
-  }
-  
-  # tail - values is low than 6
-  {
-    my $v1 = c(1, 2, 3);
-    my $tail = r->tail($v1);
-    is_deeply($tail->values, [1, 2, 3]);
-  }
-  
-  # tail - n option
-  {
-    my $v1 = c(1, 2, 3, 4);
-    my $tail = r->tail($v1, {n => 3});
-    is_deeply($tail->values, [2, 3, 4]);
   }
 }
 

@@ -4,6 +4,15 @@ use warnings;
 
 use Rstats;
 
+# lapply
+{
+  my $x1 = list(c(1, 2), c(3, 4));
+  my $x2 = r->lapply($x1, 'sum');
+  ok($x2->is_list);
+  is_deeply($x2->getin(1)->values, [3]);
+  is_deeply($x2->getin(2)->values, [7]);
+}
+
 # sweep
 {
   # sweep - margin 1, %
@@ -126,15 +135,6 @@ use Rstats;
   my $x2 = r->sapply($x1, 'sum');
   ok($x2->is_vector);
   is_deeply($x2->values, [3, 7.4]);
-}
-
-# lapply
-{
-  my $x1 = list(c(1, 2), c(3, 4));
-  my $x2 = r->lapply($x1, 'sum');
-  ok($x2->is_list);
-  is_deeply($x2->getin(1)->values, [3]);
-  is_deeply($x2->getin(2)->values, [7]);
 }
 
 # apply

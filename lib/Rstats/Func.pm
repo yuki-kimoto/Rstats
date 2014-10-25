@@ -2420,14 +2420,17 @@ sub tail {
   my $n = $opt->{n};
   $n = 6 unless defined $n;
   
-  my $e1 = $x1->{elements};
+  my $e1 = $x1->elements_obj->decompose;
   my $max = $x1->length_value < $n ? $x1->length_value : $n;
   my @e2;
   for (my $i = 0; $i < $max; $i++) {
     unshift @e2, $e1->[$x1->length_value - ($i  + 1)];
   }
   
-  return $x1->new(elements => \@e2);
+  my $x2 = c(\@e2);
+  $x1->_copy_attrs_to($x1);
+  
+  return $x2;
 }
 
 sub tan { process(\&Rstats::ElementsFunc::tan, @_) }

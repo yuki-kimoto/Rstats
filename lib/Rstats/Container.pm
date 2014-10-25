@@ -38,6 +38,9 @@ sub _copy_attrs_to {
   # levels
   $x2->{levels} = $self->{levels} if !$exclude_h{levels} && exists $self->{levels};
   
+  # type
+  $x2->{type} = $self->{type} if !$exclude_h{type} && exists $self->{type};
+  
   # names
   if (!$exclude_h{names} && exists $self->{names}) {
     my $names = [];
@@ -658,7 +661,7 @@ sub values {
     $self->elements_obj(Rstats::Func::c(\@elements)->elements_obj);
   }
   else {
-    my @values = map { defined $_ ? $_->value : undef } @{$self->elements};
+    my @values = map { $_->value } @{$self->elements};
   
     return \@values;
   }
@@ -669,7 +672,7 @@ sub value {
   
   my $e1 = $self->element(@_);
   
-  return defined $e1 ? $e1->value : Rstats::ElementsFunc::NA();
+  return defined $e1 ? $e1->value : undef;
 }
 
 sub is_vector {

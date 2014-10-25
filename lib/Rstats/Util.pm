@@ -229,38 +229,6 @@ sub parse_index {
   }
 }
 
-sub cross_product {
-  my $values = shift;
-
-  my @idxs = (0) x @$values;
-  my @idx_idx = 0..(@idxs - 1);
-  my @x1 = map { $_->[0] } @$values;
-  my $result = [];
-  
-  push @$result, [@x1];
-  my $end_loop;
-  while (1) {
-    foreach my $i (@idx_idx) {
-      if( $idxs[$i] < @{$values->[$i]} - 1 ) {
-        $x1[$i] = $values->[$i][++$idxs[$i]];
-        push @$result, [@x1];
-        last;
-      }
-      
-      if ($i == $idx_idx[-1]) {
-        $end_loop = 1;
-        last;
-      }
-      
-      $idxs[$i] = 0;
-      $x1[$i] = $values->[$i][0];
-    }
-    last if $end_loop;
-  }
-  
-  return $result;
-}
-
 # XS functions
 # index_to_pos()
 # pos_to_index()

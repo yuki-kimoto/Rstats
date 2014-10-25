@@ -10,12 +10,19 @@
 /* Rstats headers */
 #include "Rstats.h"
 
-/* aSV* symbol collisions*/
+/* suppress error - Cent OS(symbol collisions) */
 #undef init_tm
 #undef do_open
 #undef do_close
 #ifdef ENTER
 #undef ENTER
+#endif
+
+/* suppress error - Mac OS X(error: declaration of 'Perl___notused' has a different language linkage) */
+#ifdef __cplusplus
+#  define dNOOP (void)0
+#else
+#  define dNOOP extern int Perl___notused(void)
 #endif
 
 /* Shortcut of return sv */

@@ -1380,17 +1380,14 @@ sub operation {
   } (0 .. $longer_length - 1);
   
   my $x3 = c(\@a3_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->_copy_attrs_to($x3);
   if ($op eq 'divide') {
     $x3->{type} = 'double';
   }
   elsif ($comparison_op{$op} || $logical_op{$op}) {
     $x3->{type} = 'logical';
   }
-  else {
-    $x3->{type} = $x1->{type};
-  }
-  
+
   return $x3;
 }
 

@@ -275,7 +275,7 @@ sub _levels_h {
 sub set {
   my $self = shift;
   my $x2 = Rstats::Func::to_c(shift);
-
+  
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
 

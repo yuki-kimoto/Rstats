@@ -5,7 +5,6 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
-=pod
 # TODO
 # NULL
 {
@@ -15,7 +14,6 @@ use Math::Trig ();
   $v1->at(3)->set(5);
   is_deeply($v1->values, [undef, undef, 5]);
 }
-=cut
 
 # class
 {

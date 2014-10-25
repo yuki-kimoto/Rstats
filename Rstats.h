@@ -495,6 +495,7 @@ namespace Rstats {
     
     static Rstats::Elements* new_null() {
       Rstats::Elements* elements = new Rstats::Elements;
+      elements->values = NULL;
       return elements;
     }
   };

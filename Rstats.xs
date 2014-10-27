@@ -49,7 +49,7 @@ SV* length_value(...)
   
   I32 length = self->get_length();
   
-  return_sv(my::new_scalar_iv(length));
+  return_sv(my::new_sv_iv(length));
 }
 
 SV* length(...)
@@ -84,8 +84,8 @@ is_na(...)
   
   SV* rets_sv = my::to_perl_obj(rets, "Rstats::Elements");
   
-  SV* av_ref = my::new_array_ref();
-  my::array_extend(av_ref, 3);
+  SV* av_ref = my::new_av_ref();
+  my::extend_av(av_ref, 3);
   
   return_sv(rets_sv);
 }
@@ -96,11 +96,11 @@ compose(...)
 {
   SV* mode_sv = ST(1);
   SV* elements_sv = ST(2);
-  I32 len = my::array_length(elements_sv);
+  I32 len = my::length_av(elements_sv);
   
   Rstats::Elements* compose_elements;
   std::vector<I32> na_positions;
-  if (sv_cmp(mode_sv, my::new_scalar("character")) == 0) {
+  if (sv_cmp(mode_sv, my::new_sv("character")) == 0) {
     compose_elements = Rstats::Elements::new_character(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
@@ -119,7 +119,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(mode_sv, my::new_scalar("complex")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_sv("complex")) == 0) {
     compose_elements = Rstats::Elements::new_complex(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
@@ -138,7 +138,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(mode_sv, my::new_scalar("double")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_sv("double")) == 0) {
     compose_elements = Rstats::Elements::new_double(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
@@ -157,7 +157,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(mode_sv, my::new_scalar("integer")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_sv("integer")) == 0) {
     compose_elements = Rstats::Elements::new_integer(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
@@ -177,7 +177,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(mode_sv, my::new_scalar("logical")) == 0) {
+  else if (sv_cmp(mode_sv, my::new_sv("logical")) == 0) {
     compose_elements = Rstats::Elements::new_logical(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
@@ -216,12 +216,12 @@ decompose(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  SV* decompose_elements_sv = my::new_array_ref();
+  SV* decompose_elements_sv = my::new_av_ref();
   
   I32 length = self->get_length();
   
   if (length > 0) {
-    my::array_extend(decompose_elements_sv, length);
+    my::extend_av(decompose_elements_sv, length);
 
     if (self->is_character_type()) {
       for (I32 i = 0; i < length; i++) {
@@ -231,7 +231,7 @@ decompose(...)
           elements->add_na_position(0);
         }
         SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        my::array_push(decompose_elements_sv, elements_sv);
+        my::push_av(decompose_elements_sv, elements_sv);
       }
     }
     else if (self->is_complex_type()) {
@@ -242,7 +242,7 @@ decompose(...)
           elements->add_na_position(0);
         }
         SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        my::array_push(decompose_elements_sv, elements_sv);
+        my::push_av(decompose_elements_sv, elements_sv);
       }
     }
     else if (self->is_double_type()) {
@@ -254,7 +254,7 @@ decompose(...)
           elements->add_na_position(0);
         }
        SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        my::array_push(decompose_elements_sv, elements_sv);
+        my::push_av(decompose_elements_sv, elements_sv);
       }
     }
     else if (self->is_integer_type()) {
@@ -265,7 +265,7 @@ decompose(...)
           elements->add_na_position(0);
         }
         SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        my::array_push(decompose_elements_sv, elements_sv);
+        my::push_av(decompose_elements_sv, elements_sv);
       }
     }
     else if (self->is_logical_type()) {
@@ -276,7 +276,7 @@ decompose(...)
           elements->add_na_position(0);
         }
         SV* elements_sv = my::to_perl_obj(elements, "Rstats::Elements");
-        my::array_push(decompose_elements_sv, elements_sv);
+        my::push_av(decompose_elements_sv, elements_sv);
       }
     }
   }
@@ -332,19 +332,19 @@ type(...)
   SV* type_sv;
 
   if (self->is_logical_type()) {
-    type_sv = my::new_scalar("logical");
+    type_sv = my::new_sv("logical");
   }
   else if (self->is_integer_type()) {
-    type_sv = my::new_scalar("integer");
+    type_sv = my::new_sv("integer");
   }
   else if (self->is_double_type()) {
-    type_sv = my::new_scalar("double");
+    type_sv = my::new_sv("double");
   }
   else if (self->is_complex_type()) {
-    type_sv = my::new_scalar("complex");
+    type_sv = my::new_sv("complex");
   }
   else if (self->is_character_type()) {
-    type_sv = my::new_scalar("character");
+    type_sv = my::new_sv("character");
   }
   
   return_sv(type_sv);
@@ -364,7 +364,7 @@ iv(...)
     iv = 0;
   }
   
-  return_sv(my::new_scalar_iv(iv));
+  return_sv(my::new_sv_iv(iv));
 }
 
 SV*
@@ -381,7 +381,7 @@ dv(...)
     dv = 0;
   }
   
-  return_sv(my::new_scalar_nv(dv));
+  return_sv(my::new_sv_nv(dv));
 }
 
 SV*
@@ -395,7 +395,7 @@ cv(...)
     str_sv = self->get_character_value(0);
   }
   else {
-    str_sv = my::new_scalar("");
+    str_sv = my::new_sv("");
   }
   
   return_sv(str_sv);
@@ -441,21 +441,21 @@ flag(...)
     if (Rstats::ElementsFunc::is_infinite(self)) {
       NV dv = self->get_double_value(0);
       if (dv > 0) {
-        flag_sv = my::new_scalar("inf");
+        flag_sv = my::new_sv("inf");
       }
       else {
-        flag_sv = my::new_scalar("-inf");
+        flag_sv = my::new_sv("-inf");
       }
     }
     else if(Rstats::ElementsFunc::is_nan(self)) {
-      flag_sv = my::new_scalar("nan");
+      flag_sv = my::new_sv("nan");
     }
     else {
-      flag_sv = my::new_scalar("normal");
+      flag_sv = my::new_sv("normal");
     }
   }
   else {
-    flag_sv = my::new_scalar("normal");
+    flag_sv = my::new_sv("normal");
   }
   
   return_sv(flag_sv);
@@ -881,36 +881,36 @@ cross_product(...)
 {
   SV* values_sv = ST(0);
   
-  I32 values_length = my::array_length(values_sv);
-  SV* idxs_sv = my::new_array_ref();
+  I32 values_length = my::length_av(values_sv);
+  SV* idxs_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::array_push(idxs_sv, my::new_scalar_iv(0)); 
+    my::push_av(idxs_sv, my::new_sv_iv(0)); 
   }
   
-  SV* idx_idx_sv = my::new_array_ref();
+  SV* idx_idx_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    my::array_push(idx_idx_sv, my::new_scalar_iv(i));
+    my::push_av(idx_idx_sv, my::new_sv_iv(i));
   }
   
-  SV* x1_sv = my::new_array_ref();
+  SV* x1_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
     SV* value_sv = my::array_fetch(values_sv, i);
-    my::array_push(x1_sv, my::array_fetch(value_sv, 0));
+    my::push_av(x1_sv, my::array_fetch(value_sv, 0));
   }
 
-  SV* result_sv = my::new_array_ref();
-  my::array_push(result_sv, my::array_copy(x1_sv));
+  SV* result_sv = my::new_av_ref();
+  my::push_av(result_sv, my::copy_av(x1_sv));
   I32 end_loop = 0;
   while (1) {
     for (I32 i = 0; i < values_length; i++) {
       
-      if (my::get_iv(my::array_fetch(idxs_sv, i)) < my::array_length(my::array_fetch(values_sv, i)) - 1) {
+      if (my::get_iv(my::array_fetch(idxs_sv, i)) < my::length_av(my::array_fetch(values_sv, i)) - 1) {
         
         SV* idxs_tmp_sv = my::array_fetch(idxs_sv, i);
         sv_inc(idxs_tmp_sv);
         my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), my::get_iv(idxs_tmp_sv)));
         
-        my::array_push(result_sv, my::array_copy(x1_sv));
+        my::push_av(result_sv, my::copy_av(x1_sv));
         
         break;
       }
@@ -920,7 +920,7 @@ cross_product(...)
         break;
       }
       
-      my::array_store(idxs_sv, i, my::new_scalar_iv(0));
+      my::array_store(idxs_sv, i, my::new_sv_iv(0));
       my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), 0));
     }
     if (end_loop) {
@@ -938,14 +938,14 @@ pos_to_index(...)
   SV* pos_sv = ST(0);
   SV* dim_sv = ST(1);
   
-  SV* index_sv = my::new_array_ref();
+  SV* index_sv = my::new_av_ref();
   I32 pos = my::get_iv(pos_sv);
   I32 before_dim_product = 1;
-  for (I32 i = 0; i < my::array_length(my::array_deref(dim_sv)); i++) {
+  for (I32 i = 0; i < my::length_av(my::deref_av(dim_sv)); i++) {
     before_dim_product *= my::get_iv(my::array_fetch(dim_sv, i));
   }
   
-  for (I32 i = my::array_length(my::array_deref(dim_sv)) - 1; i >= 0; i--) {
+  for (I32 i = my::length_av(my::deref_av(dim_sv)) - 1; i >= 0; i--) {
     I32 dim_product = 1;
     for (I32 k = 0; k < i; k++) {
       dim_product *= my::get_iv(my::array_fetch(dim_sv, k));
@@ -954,7 +954,7 @@ pos_to_index(...)
     I32 reminder = pos % before_dim_product;
     I32 quotient = (I32)(reminder / dim_product);
     
-    my::array_unshift(index_sv, my::new_scalar_iv(quotient + 1));
+    my::unshit_av(index_sv, my::new_sv_iv(quotient + 1));
     before_dim_product = dim_product;
   }
   
@@ -969,7 +969,7 @@ index_to_pos(...)
   SV* dim_values_sv = ST(1);
   
   U32 pos = 0;
-  for (U32 i = 0; i < my::array_length(my::array_deref(dim_values_sv)); i++) {
+  for (U32 i = 0; i < my::length_av(my::deref_av(dim_values_sv)); i++) {
     if (i > 0) {
       U32 tmp = 1;
       for (I32 k = 0; k < i; k++) {
@@ -982,7 +982,7 @@ index_to_pos(...)
     }
   }
   
-  SV* pos_sv = my::new_scalar_iv(pos - 1);
+  SV* pos_sv = my::new_sv_iv(pos - 1);
   
   return_sv(pos_sv);
 }

@@ -1660,7 +1660,7 @@ sub atan2 {
   return $x3;
 }
 
-sub cosh { process(\&Rstats::ElementsFunc::cosh, @_) }
+sub cosh { process_unary(\&Rstats::ElementsFunc::cosh, @_) }
 
 sub cummax {
   my $x1 = to_c(shift);

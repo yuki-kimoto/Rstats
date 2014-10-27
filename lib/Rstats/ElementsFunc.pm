@@ -631,14 +631,6 @@ sub hash {
   return $hash;
 }
 
-sub tan {
-  my $e1 = shift;
-  
-  my $e2 = divide(Rstats::ElementsFunc::sin($e1), Rstats::ElementsFunc::cos($e1));
-  
-  return $e2;
-}
-
 sub exp {
   my $e1 = shift;
   

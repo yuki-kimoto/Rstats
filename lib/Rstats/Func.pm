@@ -2449,7 +2449,7 @@ sub tail {
   return $x2;
 }
 
-sub tan { process(\&Rstats::ElementsFunc::tan, @_) }
+sub tan { process_unary(\&Rstats::ElementsFunc::tan, @_) }
 
 sub process {
   my $func = shift;

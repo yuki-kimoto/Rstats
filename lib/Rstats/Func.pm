@@ -1632,7 +1632,7 @@ sub colSums {
   }
 }
 
-sub cos { process(\&Rstats::ElementsFunc::cos, @_) }
+sub cos { process_unary(\&Rstats::ElementsFunc::cos, @_) }
 
 sub atan2 {
   my ($x1, $x2) = (to_c(shift), to_c(shift));

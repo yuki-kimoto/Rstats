@@ -1799,7 +1799,7 @@ sub complex {
   return c($x2_elements);
 }
 
-sub exp { process(\&Rstats::ElementsFunc::exp, @_) }
+sub exp { process_unary(\&Rstats::ElementsFunc::exp, @_) }
 
 sub expm1 { process(\&Rstats::ElementsFunc::expm1, @_) }
 
@@ -1903,11 +1903,8 @@ sub ifelse {
 }
 
 sub log { process_unary(\&Rstats::ElementsFunc::log, @_) }
-
 sub logb { process_unary(\&Rstats::ElementsFunc::logb, @_) }
-
 sub log2 { process_unary(\&Rstats::ElementsFunc::log2, @_) }
-
 sub log10 { process_unary(\&Rstats::ElementsFunc::log10, @_) }
 
 sub max {

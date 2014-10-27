@@ -1173,6 +1173,46 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Elements* exp(Rstats::Elements* e1) {
+      
+      I32 length = e1->get_length();
+      Rstats::Elements* e2;
+      if (e1->is_character_type()) {
+        croak("Error in a - b : non-numeric argument to binary operator");
+      }
+      else if (e1->is_complex_type()) {
+        e2 = Rstats::Elements::new_complex(length);
+        for (I32 i = 0; i < length; i++) {
+          e2->set_complex_value(i, std::exp(e1->get_complex_value(i)));
+        }
+      }
+      else if (e1->is_double_type()) {
+        e2 = Rstats::Elements::new_double(length);
+        for (I32 i = 0; i < length; i++) {
+          e2->set_double_value(i, std::exp(e1->get_double_value(i)));
+        }
+      }
+      else if (e1->is_integer_type()) {
+        e2 = Rstats::Elements::new_double(length);
+        for (I32 i = 0; i < length; i++) {
+          e2->set_double_value(i, std::exp(e1->get_integer_value(i)));
+        }
+      }
+      else if (e1->is_logical_type()) {
+        e2 = Rstats::Elements::new_double(length);
+        for (I32 i = 0; i < length; i++) {
+          e2->set_double_value(i, std::exp(e1->get_integer_value(i)));
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
     
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       

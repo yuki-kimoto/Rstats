@@ -370,55 +370,6 @@ sub hash {
   return $hash;
 }
 
-sub exp {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na;
-  
-  my $e2;
-  if ($e1->is_complex) {
-    
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
-    
-    my $e2_mod = Rstats::ElementsFunc::exp($e1_re);
-    my $e2_arg = $e1_im;
-
-    my $e2_re = Rstats::ElementsFunc::multiply(
-      $e2_mod,
-      Rstats::ElementsFunc::cos($e2_arg)
-    );
-    my $e2_im = Rstats::ElementsFunc::multiply(
-      $e2_mod,
-      Rstats::ElementsFunc::sin($e2_arg)
-    );
-    
-    $e2 = complex_double($e2_re, $e2_im);
-  }
-  elsif ($e1->is_double || $e1->is_integer || $e1->is_logical) {
-    $e1 = $e1->as_double unless $e1->is_double;
-    
-    if ($e1->is_positive_infinite) {
-      $e2 = Inf;
-    }
-    elsif ($e1->is_negative_infinite) {
-      $e2 = double(0);
-    }
-    elsif ($e1->is_nan) {
-      $e2 = $e1;
-    }
-    else {
-      my $value = $e1->dv;
-      $e2 = double(exp($value));
-    }
-  }
-  else {
-    croak "Not implemented";
-  }
-  
-  return $e2;
-}
-
 sub expm1 {
   my $e1 = shift;
   

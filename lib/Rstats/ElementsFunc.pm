@@ -336,17 +336,6 @@ sub atan2 {
   return $e3;
 }
 
-sub log2 {
-  my $e1 = shift;
-  
-  my $e2 = divide(
-    Rstats::ElementsFunc::log($e1),
-    $e1->is_complex ? Rstats::ElementsFunc::log(complex(2, 0)) : Rstats::ElementsFunc::log(double(2))
-  );
-  
-  return $e2;
-}
-
 sub Mod { Rstats::ElementsFunc::abs(@_) }
 
 sub Arg {

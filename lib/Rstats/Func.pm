@@ -1906,7 +1906,7 @@ sub log { process_unary(\&Rstats::ElementsFunc::log, @_) }
 
 sub logb { process_unary(\&Rstats::ElementsFunc::logb, @_) }
 
-sub log2 { process(\&Rstats::ElementsFunc::log2, @_) }
+sub log2 { process_unary(\&Rstats::ElementsFunc::log2, @_) }
 
 sub log10 { process_unary(\&Rstats::ElementsFunc::log10, @_) }
 

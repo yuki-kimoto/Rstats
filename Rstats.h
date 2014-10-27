@@ -1152,6 +1152,28 @@ namespace Rstats {
       return e2;
     }
 
+    Rstats::Elements* log2(Rstats::Elements* e1) {
+      
+      I32 length = e1->get_length();
+      Rstats::Elements* e2;
+      if (e1->is_character_type()) {
+        croak("Error in a - b : non-numeric argument to binary operator");
+      }
+      else if (e1->is_complex_type()) {
+        e2 = divide(log(e1), log(Rstats::Elements::new_complex(length, std::complex<double>(2, 0))));
+      }
+      else if (e1->is_double_type() || e1->is_integer_type() || e1->is_logical_type()) {
+        e2 = divide(log(e1), log(Rstats::Elements::new_double(length, 2)));
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+    
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       I32 length = elements->get_length();

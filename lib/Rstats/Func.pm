@@ -1904,7 +1904,7 @@ sub ifelse {
 
 sub log { process_unary(\&Rstats::ElementsFunc::log, @_) }
 
-sub logb { Rstats::Func::log(@_) }
+sub logb { process_unary(\&Rstats::ElementsFunc::logb, @_) }
 
 sub log2 { process(\&Rstats::ElementsFunc::log2, @_) }
 

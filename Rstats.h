@@ -1107,6 +1107,10 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Elements* logb(Rstats::Elements* e1) {
+      return log(e1);
+    }
     
     Rstats::Elements* log10(Rstats::Elements* e1) {
       
@@ -1147,7 +1151,7 @@ namespace Rstats {
       
       return e2;
     }
-    
+
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       I32 length = elements->get_length();

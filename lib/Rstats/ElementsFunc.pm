@@ -212,48 +212,6 @@ sub asinh {
   return $e2;
 }
 
-sub tanh {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na;
-  
-  my $e2;
-  if ($e1->is_complex) {
-    if ($e1->im->is_infinite) {
-      $e2 = complex_double(NaN, NaN);
-    }
-    elsif ($e1->re->is_positive_infinite) {
-      $e2 = complex(1, 0);
-    }
-    elsif ($e1->re->is_negative_infinite) {
-      $e2 = complex(-1, 0);
-    }
-    else {
-      $e2 = divide(sinh($e1), cosh($e1));
-    }
-  }
-  elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = $e1->as_double;
-    
-    return $e1 if $e1->is_nan;
-    
-    if ($e1->is_positive_infinite) {
-      $e2 = double(1);
-    }
-    elsif ($e1->is_negative_infinite) {
-      $e2 = double(-1);
-    }
-    else {
-      $e2 = divide(sinh($e1), cosh($e1));
-    }
-  }
-  else {
-    croak "Not implemented";
-  }
-  
-  return $e2;
-}
-
 sub atan {
   my $e1 = shift;
   

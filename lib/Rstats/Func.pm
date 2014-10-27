@@ -2475,7 +2475,7 @@ sub process_unary {
   return $x2;
 }
 
-sub tanh { process(\&Rstats::ElementsFunc::tanh, @_) }
+sub tanh { process_unary(\&Rstats::ElementsFunc::tanh, @_) }
 
 sub trunc {
   my ($_x1) = @_;

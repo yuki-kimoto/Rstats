@@ -235,7 +235,7 @@ use Math::Complex ();
     $ENV{a}++;
     my $x2 = r->tanh($x1);
     is($x2->value->{re}, '-1');
-    is($x2->value->{im}, '0');
+    cmp_ok($x2->value->{im}, '==', 0);
   }
   
   # tanh - complex, -Inf + 2i

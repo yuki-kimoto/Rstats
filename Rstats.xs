@@ -104,7 +104,7 @@ compose(...)
     compose_elements = Rstats::Elements::new_character(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
-      SV* element_sv = my::array_fetch(elements_sv, i);
+      SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
         element = Rstats::Elements::new_na();
       }
@@ -123,7 +123,7 @@ compose(...)
     compose_elements = Rstats::Elements::new_complex(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
-      SV* element_sv = my::array_fetch(elements_sv, i);
+      SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
         element = Rstats::Elements::new_na();
       }
@@ -142,7 +142,7 @@ compose(...)
     compose_elements = Rstats::Elements::new_double(len);
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
-      SV* element_sv = my::array_fetch(elements_sv, i);
+      SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
         element = Rstats::Elements::new_na();
       }
@@ -162,7 +162,7 @@ compose(...)
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
-      SV* element_sv = my::array_fetch(elements_sv, i);
+      SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
         element = Rstats::Elements::new_na();
       }
@@ -182,7 +182,7 @@ compose(...)
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (I32 i = 0; i < len; i++) {
       Rstats::Elements* element;
-      SV* element_sv = my::array_fetch(elements_sv, i);
+      SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
         element = Rstats::Elements::new_na();
       }
@@ -894,8 +894,8 @@ cross_product(...)
   
   SV* x1_sv = my::new_av_ref();
   for (I32 i = 0; i < values_length; i++) {
-    SV* value_sv = my::array_fetch(values_sv, i);
-    my::push_av(x1_sv, my::array_fetch(value_sv, 0));
+    SV* value_sv = my::fetch_av(values_sv, i);
+    my::push_av(x1_sv, my::fetch_av(value_sv, 0));
   }
 
   SV* result_sv = my::new_av_ref();
@@ -904,24 +904,24 @@ cross_product(...)
   while (1) {
     for (I32 i = 0; i < values_length; i++) {
       
-      if (my::get_iv(my::array_fetch(idxs_sv, i)) < my::length_av(my::array_fetch(values_sv, i)) - 1) {
+      if (my::get_iv(my::fetch_av(idxs_sv, i)) < my::length_av(my::fetch_av(values_sv, i)) - 1) {
         
-        SV* idxs_tmp_sv = my::array_fetch(idxs_sv, i);
+        SV* idxs_tmp_sv = my::fetch_av(idxs_sv, i);
         sv_inc(idxs_tmp_sv);
-        my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), my::get_iv(idxs_tmp_sv)));
+        my::store_av(x1_sv, i, my::fetch_av(my::fetch_av(values_sv, i), my::get_iv(idxs_tmp_sv)));
         
         my::push_av(result_sv, my::copy_av(x1_sv));
         
         break;
       }
       
-      if (i == my::get_iv(my::array_fetch(idx_idx_sv, values_length - 1))) {
+      if (i == my::get_iv(my::fetch_av(idx_idx_sv, values_length - 1))) {
         end_loop = 1;
         break;
       }
       
-      my::array_store(idxs_sv, i, my::new_sv_iv(0));
-      my::array_store(x1_sv, i, my::array_fetch(my::array_fetch(values_sv, i), 0));
+      my::store_av(idxs_sv, i, my::new_sv_iv(0));
+      my::store_av(x1_sv, i, my::fetch_av(my::fetch_av(values_sv, i), 0));
     }
     if (end_loop) {
       break;
@@ -942,13 +942,13 @@ pos_to_index(...)
   I32 pos = my::get_iv(pos_sv);
   I32 before_dim_product = 1;
   for (I32 i = 0; i < my::length_av(my::deref_av(dim_sv)); i++) {
-    before_dim_product *= my::get_iv(my::array_fetch(dim_sv, i));
+    before_dim_product *= my::get_iv(my::fetch_av(dim_sv, i));
   }
   
   for (I32 i = my::length_av(my::deref_av(dim_sv)) - 1; i >= 0; i--) {
     I32 dim_product = 1;
     for (I32 k = 0; k < i; k++) {
-      dim_product *= my::get_iv(my::array_fetch(dim_sv, k));
+      dim_product *= my::get_iv(my::fetch_av(dim_sv, k));
     }
     
     I32 reminder = pos % before_dim_product;
@@ -973,12 +973,12 @@ index_to_pos(...)
     if (i > 0) {
       U32 tmp = 1;
       for (I32 k = 0; k < i; k++) {
-        tmp *= my::get_iv(my::array_fetch(dim_values_sv, k));
+        tmp *= my::get_iv(my::fetch_av(dim_values_sv, k));
       }
-      pos += tmp * (my::get_iv(my::array_fetch(index_sv, i)) - 1);
+      pos += tmp * (my::get_iv(my::fetch_av(index_sv, i)) - 1);
     }
     else {
-      pos += my::get_iv(my::array_fetch(index_sv, i));
+      pos += my::get_iv(my::fetch_av(index_sv, i));
     }
   }
   

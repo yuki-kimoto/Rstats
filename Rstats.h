@@ -101,14 +101,14 @@ namespace Rstats {
       return av_len(deref_av(av_ref)) + 1;
     }
     
-    SV* array_fetch(AV* av, I32 pos) {
+    SV* fetch_av(AV* av, I32 pos) {
       SV** const element_ptr = av_fetch(av, pos, FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
     }
     
-    SV* array_fetch(SV* av_ref, I32 pos) {
+    SV* fetch_av(SV* av_ref, I32 pos) {
       AV* av = deref_av(av_ref);
       SV** const element_ptr = av_fetch(av, pos, FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
@@ -116,7 +116,7 @@ namespace Rstats {
       return element;
     }
 
-    HV* hash_deref(SV* ref) {
+    HV* deref_hv(SV* ref) {
       if (SvROK(ref)) {
         return (HV*)SvRV(ref);
       }
@@ -125,73 +125,81 @@ namespace Rstats {
       }
     }
     
-    SV* hash_fetch(HV* hv, const char* key) {
+    SV* fetch_hv(HV* hv, const char* key) {
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
     }
 
-    SV* hash_fetch(HV* hv, SV* key_sv) {
-      return hash_fetch(hv, get_pv(key_sv));
+    SV* fetch_hv(HV* hv, SV* key_sv) {
+      return fetch_hv(hv, get_pv(key_sv));
     }
     
-    SV* hash_fetch(SV* hv_ref, const char* key) {
-      HV* hv = hash_deref(hv_ref);
+    SV* fetch_hv(SV* hv_ref, const char* key) {
+      HV* hv = deref_hv(hv_ref);
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
     }
 
-    SV* hash_fetch(SV* hv_ref, SV* key_sv) {
-      return hash_fetch(hv_ref, get_pv(key_sv));
+    SV* fetch_hv(SV* hv_ref, SV* key_sv) {
+      return fetch_hv(hv_ref, get_pv(key_sv));
     }
     
-    void array_store(AV* av, I32 pos, SV* element) {
-      av_store(av, pos, SvREFCNT_inc(element));
+    SV* refcnt_inc_sv(SV* sv) {
+      return SvREFCNT_inc(sv);
+    }
+
+    void refcnt_dec_sv(SV* sv) {
+      return SvREFCNT_dec(sv);
     }
     
-    void array_store(SV* av_ref, I32 pos, SV* element) {
+    void store_av(AV* av, I32 pos, SV* element) {
+      av_store(av, pos, refcnt_inc_sv(element));
+    }
+    
+    void store_av(SV* av_ref, I32 pos, SV* element) {
       AV* av = deref_av(av_ref);
-      av_store(av, pos, SvREFCNT_inc(element));
+      av_store(av, pos, refcnt_inc_sv(element));
     }
 
     SV* copy_av(SV* av_ref_sv) {
       SV* new_av_ref_sv = new_av_ref();
       
       for (I32 i = 0; i < length_av(av_ref_sv); i++) {
-        array_store(new_av_ref_sv, i, new_sv(array_fetch(av_ref_sv, i)));
+        store_av(new_av_ref_sv, i, new_sv(fetch_av(av_ref_sv, i)));
       }
       
       return new_av_ref_sv;
     }
     
     void store_hv(HV* hv, const char* key, SV* element) {
-      hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
+      hv_store(hv, key, strlen(key), refcnt_inc_sv(element), FALSE);
     }
 
     void store_hv(SV* hv_ref, const char* key, SV* element) {
-      HV* hv = hash_deref(hv_ref);
-      hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
+      HV* hv = deref_hv(hv_ref);
+      hv_store(hv, key, strlen(key), refcnt_inc_sv(element), FALSE);
     }
     
     void push_av(AV* av, SV* sv) {
-      av_push(av, SvREFCNT_inc(sv));
+      av_push(av, refcnt_inc_sv(sv));
     }
     
     void push_av(SV* av_ref, SV* sv) {
-      av_push(deref_av(av_ref), SvREFCNT_inc(sv));
+      av_push(deref_av(av_ref), refcnt_inc_sv(sv));
     }
 
     void unshit_av(AV* av, SV* sv) {
       av_unshift(av, 1);
-      array_store(av, (I32)0, sv);
+      store_av(av, (I32)0, sv);
     }
     
     void unshit_av(SV* av_ref, SV* sv) {
       av_unshift(deref_av(av_ref), 1);
-      array_store(deref_av(av_ref), 0, sv);
+      store_av(deref_av(av_ref), 0, sv);
     }
 
     template <class X> X to_c_obj(SV* perl_obj_ref) {
@@ -266,7 +274,7 @@ namespace Rstats {
         Rstats::Values::Character* values = this->get_character_values();
         for (I32 i = 0; i < length; i++) {
           if ((*values)[i] != NULL) {
-            SvREFCNT_dec((*values)[i]);
+            Rstats::Perl::refcnt_dec_sv((*values)[i]);
           }
         }
         delete values;
@@ -364,12 +372,12 @@ namespace Rstats {
     
     void set_character_value(I32 pos, SV* value) {
       if (value != NULL) {
-        SvREFCNT_dec((*this->get_character_values())[pos]);
+        Rstats::Perl::refcnt_dec_sv((*this->get_character_values())[pos]);
       }
       
       SV* new_value = Rstats::Perl::new_sv(value);
-      SvREFCNT_inc(new_value);
-      (*this->get_character_values())[pos] = new_value;
+      (*this->get_character_values())[pos]
+        = Rstats::Perl::refcnt_inc_sv(new_value);
     }
 
     static Rstats::Elements* new_complex(I32 length) {

@@ -960,36 +960,6 @@ sub Im {
   }
 }
 
-sub abs {
-  my $e1 = shift;
-  
-  if ($e1->is_complex) {
-    return raise(add(raise($e1->re, double(2)), raise($e1->im, double(2))), double(1/2));
-  }
-  elsif ($e1->is_double || $e1->is_integer) {
-    my $type = $e1->type;
-    my $zero = Rstats::ElementsFunc::create($type);
-    if (more_than($e1, $zero)) {
-      return $e1;
-    }
-    else {
-      return negation($e1);
-    }
-  }
-  elsif ($e1->is_logical) {
-    my $zero = Rstats::ElementsFunc::create('logical');
-    if (more_than($e1, $zero)) {
-      return logical_to_integer($e1);
-    }
-    else {
-      return negation(logical_to_integer($e1));
-    }
-  }
-  else {
-    croak 'non-numeric argument to mathematical function';
-  }
-}
-
 sub logical_to_integer {
   my $e1 = shift;
   

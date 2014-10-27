@@ -1510,11 +1510,8 @@ sub array {
 }
 
 sub asin { process(\&Rstats::ElementsFunc::asin, @_) }
-
 sub asinh { process(\&Rstats::ElementsFunc::asinh, @_) }
-
 sub atan { process(\&Rstats::ElementsFunc::atan, @_) }
-
 sub atanh { process(\&Rstats::ElementsFunc::atanh, @_) }
 
 sub cbind {
@@ -2397,7 +2394,7 @@ sub sequence {
   return c(\@x2_values);
 }
 
-sub sinh { process(\&Rstats::ElementsFunc::sinh, @_) }
+sub sinh { process_unary(\&Rstats::ElementsFunc::sinh, @_) }
 
 sub sqrt {
   my $x1 = to_c(shift);

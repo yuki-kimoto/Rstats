@@ -1024,69 +1024,6 @@ sub asin {
   return $e2;
 }
 
-sub sin {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na;
-  
-  my $e2;
-  if ($e1->is_complex) {
-    
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
-    
-    my $e2_eim = Rstats::ElementsFunc::exp($e1_im);
-    my $e2_sre = Rstats::ElementsFunc::sin($e1_re);
-    my $e2_cre = Rstats::ElementsFunc::cos($e1_re);
-    
-    my $e2_eim_1 = divide(double(1), $e2_eim);
-    
-    my $e2_re = divide(
-      multiply(
-        $e2_sre,
-        add(
-          $e2_eim,
-          $e2_eim_1
-        )
-      ),
-      double(2)
-    );
-    
-    my $e2_im = divide(
-      multiply(
-        $e2_cre,
-        subtract(
-          $e2_eim,
-          $e2_eim_1
-        )
-      ),
-      double(2)
-    );
-    
-    $e2 = complex_double($e2_re, $e2_im);
-  }
-  elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = $e1->as_double unless $e1->is_double;
-    my $value = $e1->dv;
-    
-    if ($e1->is_infinite) {
-      carp "In sin : NaNs produced";
-      $e2 = NaN;
-    }
-    elsif ($e1->is_nan) {
-      $e2 = $e1;
-    }
-    else {
-      $e2 = double(sin($value));
-    }
-  }
-  else {
-    croak "Not implemented";
-  }
-  
-  return $e2;
-}
-
 sub create {
   my ($type, $value) = @_;
   

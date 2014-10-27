@@ -2397,8 +2397,6 @@ sub sequence {
   return c(\@x2_values);
 }
 
-sub sin { process(\&Rstats::ElementsFunc::sin, @_) }
-
 sub sinh { process(\&Rstats::ElementsFunc::sinh, @_) }
 
 sub sqrt {
@@ -2459,6 +2457,21 @@ sub process {
   
   my @a2_elements = map { $func->($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
+  $x1->_copy_attrs_to($x2);
+  $x2->mode(max_type($x1, $x2));
+  
+  return $x2;
+}
+
+sub sin { process_unary(\&Rstats::ElementsFunc::sin, @_) }
+
+sub process_unary {
+  my $func = shift;
+  my $x1 = to_c(shift);
+  
+  my $x2_elements = $func->($x1->elements);
+  my $x2 = NULL;
+  $x2->elements($x2_elements);
   $x1->_copy_attrs_to($x2);
   $x2->mode(max_type($x1, $x2));
   

@@ -1438,17 +1438,7 @@ sub equal { operation('equal', @_)}
 
 sub not_equal { operation('not_equal', @_)}
 
-sub abs {
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { Rstats::ElementsFunc::abs($_) } @{$x1->decompose_elements};
-  
-  my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
-  $x2->mode('double');
-  
-  return $x2;
-}
+sub abs { process(\&Rstats::ElementsFunc::abs, @_) }
 
 sub acos { process(\&Rstats::ElementsFunc::acos, @_) }
 

@@ -960,17 +960,6 @@ sub Im {
   }
 }
 
-sub logical_to_integer {
-  my $e1 = shift;
-  
-  if ($e1->is_logical) {
-    return integer($e1->iv);
-  }
-  else {
-    return $e1;
-  }
-}
-
 sub more_than {
   my ($e1, $e2) = @_;
   

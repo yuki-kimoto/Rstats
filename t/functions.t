@@ -397,7 +397,7 @@ use Math::Trig ();
   {
     my $x1 = c(Inf);
     my $x2 = r->log($x1);
-    ok($x2->element->is_nan);
+    ok($x2->is_infinite->values, [1]);
   }
   
   # log - Inf()

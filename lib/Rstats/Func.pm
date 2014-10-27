@@ -1439,9 +1439,7 @@ sub equal { operation('equal', @_)}
 sub not_equal { operation('not_equal', @_)}
 
 sub abs { process(\&Rstats::ElementsFunc::abs, @_) }
-
 sub acos { process(\&Rstats::ElementsFunc::acos, @_) }
-
 sub acosh { process(\&Rstats::ElementsFunc::acosh, @_) }
 
 sub append {

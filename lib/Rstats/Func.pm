@@ -1902,13 +1902,13 @@ sub ifelse {
   return array(\@x2_values);
 }
 
-sub log { process(\&Rstats::ElementsFunc::log, @_) }
+sub log { process_unary(\&Rstats::ElementsFunc::log, @_) }
 
 sub logb { Rstats::Func::log(@_) }
 
 sub log2 { process(\&Rstats::ElementsFunc::log2, @_) }
 
-sub log10 { process(\&Rstats::ElementsFunc::log10, @_) }
+sub log10 { process_unary(\&Rstats::ElementsFunc::log10, @_) }
 
 sub max {
   my $x1 = c(@_);

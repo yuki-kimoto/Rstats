@@ -347,17 +347,6 @@ sub log2 {
   return $e2;
 }
 
-sub log10 {
-  my $e1 = shift;
-  
-  my $e2 = divide(
-    Rstats::ElementsFunc::log($e1),
-    $e1->is_complex ? Rstats::ElementsFunc::log(complex(10, 0)) : Rstats::ElementsFunc::log(double(10))
-  );
-  
-  return $e2;
-}
-
 sub Mod { Rstats::ElementsFunc::abs(@_) }
 
 sub Arg {

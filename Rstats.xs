@@ -661,6 +661,19 @@ log(...)
 }
 
 SV*
+log10(...)
+  PPCODE:
+{
+  Rstats::Elements* e1 = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  Rstats::Elements* e2 = Rstats::ElementsFunc::log10(e1);
+  
+  SV* e2_sv = my::to_perl_obj(e2, "Rstats::Elements");
+  
+  return_sv(e2_sv);
+}
+
+SV*
 complex_double (...)
   PPCODE:
 {

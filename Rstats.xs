@@ -47,7 +47,7 @@ SV* length_value(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  I32 length = self->get_length();
+  IV length = self->get_length();
   
   return_sv(my::new_sv_iv(length));
 }
@@ -57,7 +57,7 @@ SV* length(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  I32 length = self->get_length();
+  IV length = self->get_length();
   Rstats::Elements* length_elements = Rstats::Elements::new_double(1, length);
   SV* length_elements_sv = my::to_perl_obj(length_elements, "Rstats::Elements");
   
@@ -70,10 +70,10 @@ is_na(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  I32 length = self->get_length();
+  IV length = self->get_length();
   Rstats::Elements* rets = Rstats::Elements::new_logical(length);
   
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     if (self->exists_na_position(i)) {
       rets->set_integer_value(i, 1);
     }
@@ -96,13 +96,13 @@ compose(...)
 {
   SV* mode_sv = ST(1);
   SV* elements_sv = ST(2);
-  I32 len = my::length_av(elements_sv);
+  IV len = my::length_av(elements_sv);
   
   Rstats::Elements* compose_elements;
-  std::vector<I32> na_positions;
+  std::vector<IV> na_positions;
   if (sv_cmp(mode_sv, my::new_sv("character")) == 0) {
     compose_elements = Rstats::Elements::new_character(len);
-    for (I32 i = 0; i < len; i++) {
+    for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
@@ -121,7 +121,7 @@ compose(...)
   }
   else if (sv_cmp(mode_sv, my::new_sv("complex")) == 0) {
     compose_elements = Rstats::Elements::new_complex(len);
-    for (I32 i = 0; i < len; i++) {
+    for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
@@ -140,7 +140,7 @@ compose(...)
   }
   else if (sv_cmp(mode_sv, my::new_sv("double")) == 0) {
     compose_elements = Rstats::Elements::new_double(len);
-    for (I32 i = 0; i < len; i++) {
+    for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
@@ -160,7 +160,7 @@ compose(...)
   else if (sv_cmp(mode_sv, my::new_sv("integer")) == 0) {
     compose_elements = Rstats::Elements::new_integer(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
-    for (I32 i = 0; i < len; i++) {
+    for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
@@ -180,7 +180,7 @@ compose(...)
   else if (sv_cmp(mode_sv, my::new_sv("logical")) == 0) {
     compose_elements = Rstats::Elements::new_logical(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
-    for (I32 i = 0; i < len; i++) {
+    for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* element_sv = my::fetch_av(elements_sv, i);
       if (element_sv == &PL_sv_undef) {
@@ -201,7 +201,7 @@ compose(...)
     croak("Unknown type(Rstats::Elements::compose)");
   }
   
-  for (I32 i = 0; i < na_positions.size(); i++) {
+  for (IV i = 0; i < na_positions.size(); i++) {
     compose_elements->add_na_position(na_positions[i]);
   }
   
@@ -218,13 +218,13 @@ decompose(...)
   
   SV* decompose_elements_sv = my::new_av_ref();
   
-  I32 length = self->get_length();
+  IV length = self->get_length();
   
   if (length > 0) {
     my::extend_av(decompose_elements_sv, length);
 
     if (self->is_character_type()) {
-      for (I32 i = 0; i < length; i++) {
+      for (IV i = 0; i < length; i++) {
         Rstats::Elements* elements
           = Rstats::Elements::new_character(1, self->get_character_value(i));
         if (self->exists_na_position(i)) {
@@ -235,7 +235,7 @@ decompose(...)
       }
     }
     else if (self->is_complex_type()) {
-      for (I32 i = 0; i < length; i++) {
+      for (IV i = 0; i < length; i++) {
         Rstats::Elements* elements
           = Rstats::Elements::new_complex(1, self->get_complex_value(i));
         if (self->exists_na_position(i)) {
@@ -247,7 +247,7 @@ decompose(...)
     }
     else if (self->is_double_type()) {
 
-      for (I32 i = 0; i < length; i++) {
+      for (IV i = 0; i < length; i++) {
         Rstats::Elements* elements
           = Rstats::Elements::new_double(1, self->get_double_value(i));
         if (self->exists_na_position(i)) {
@@ -258,7 +258,7 @@ decompose(...)
       }
     }
     else if (self->is_integer_type()) {
-      for (I32 i = 0; i < length; i++) {
+      for (IV i = 0; i < length; i++) {
         Rstats::Elements* elements
           = Rstats::Elements::new_integer(1, self->get_integer_value(i));
         if (self->exists_na_position(i)) {
@@ -269,7 +269,7 @@ decompose(...)
       }
     }
     else if (self->is_logical_type()) {
-      for (I32 i = 0; i < length; i++) {
+      for (IV i = 0; i < length; i++) {
         Rstats::Elements* elements
           = Rstats::Elements::new_logical(1, self->get_integer_value(i));
         if (self->exists_na_position(i)) {
@@ -356,7 +356,7 @@ iv(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  I32 iv;
+  IV iv;
   if (self->get_type() == Rstats::ElementsType::INTEGER || self->get_type() == Rstats::ElementsType::LOGICAL) {
     iv = self->get_integer_value(0);
   }
@@ -814,7 +814,7 @@ new_logical(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 iv = my::get_iv(value_sv);
+  IV iv = my::get_iv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_logical(1, iv);
   
@@ -864,7 +864,7 @@ new_integer(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  I32 iv = my::get_iv(value_sv);
+  IV iv = my::get_iv(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_integer(1, iv);
   
@@ -881,28 +881,28 @@ cross_product(...)
 {
   SV* values_sv = ST(0);
   
-  I32 values_length = my::length_av(values_sv);
+  IV values_length = my::length_av(values_sv);
   SV* idxs_sv = my::new_av_ref();
-  for (I32 i = 0; i < values_length; i++) {
+  for (IV i = 0; i < values_length; i++) {
     my::push_av(idxs_sv, my::new_sv_iv(0)); 
   }
   
   SV* idx_idx_sv = my::new_av_ref();
-  for (I32 i = 0; i < values_length; i++) {
+  for (IV i = 0; i < values_length; i++) {
     my::push_av(idx_idx_sv, my::new_sv_iv(i));
   }
   
   SV* x1_sv = my::new_av_ref();
-  for (I32 i = 0; i < values_length; i++) {
+  for (IV i = 0; i < values_length; i++) {
     SV* value_sv = my::fetch_av(values_sv, i);
     my::push_av(x1_sv, my::fetch_av(value_sv, 0));
   }
 
   SV* result_sv = my::new_av_ref();
   my::push_av(result_sv, my::copy_av(x1_sv));
-  I32 end_loop = 0;
+  IV end_loop = 0;
   while (1) {
-    for (I32 i = 0; i < values_length; i++) {
+    for (IV i = 0; i < values_length; i++) {
       
       if (my::get_iv(my::fetch_av(idxs_sv, i)) < my::length_av(my::fetch_av(values_sv, i)) - 1) {
         
@@ -939,20 +939,20 @@ pos_to_index(...)
   SV* dim_sv = ST(1);
   
   SV* index_sv = my::new_av_ref();
-  I32 pos = my::get_iv(pos_sv);
-  I32 before_dim_product = 1;
-  for (I32 i = 0; i < my::length_av(my::deref_av(dim_sv)); i++) {
+  IV pos = my::get_iv(pos_sv);
+  IV before_dim_product = 1;
+  for (IV i = 0; i < my::length_av(my::deref_av(dim_sv)); i++) {
     before_dim_product *= my::get_iv(my::fetch_av(dim_sv, i));
   }
   
-  for (I32 i = my::length_av(my::deref_av(dim_sv)) - 1; i >= 0; i--) {
-    I32 dim_product = 1;
-    for (I32 k = 0; k < i; k++) {
+  for (IV i = my::length_av(my::deref_av(dim_sv)) - 1; i >= 0; i--) {
+    IV dim_product = 1;
+    for (IV k = 0; k < i; k++) {
       dim_product *= my::get_iv(my::fetch_av(dim_sv, k));
     }
     
-    I32 reminder = pos % before_dim_product;
-    I32 quotient = (I32)(reminder / dim_product);
+    IV reminder = pos % before_dim_product;
+    IV quotient = (IV)(reminder / dim_product);
     
     my::unshit_av(index_sv, my::new_sv_iv(quotient + 1));
     before_dim_product = dim_product;
@@ -968,11 +968,11 @@ index_to_pos(...)
   SV* index_sv = ST(0);
   SV* dim_values_sv = ST(1);
   
-  U32 pos = 0;
-  for (U32 i = 0; i < my::length_av(my::deref_av(dim_values_sv)); i++) {
+  IV pos = 0;
+  for (IV i = 0; i < my::length_av(my::deref_av(dim_values_sv)); i++) {
     if (i > 0) {
-      U32 tmp = 1;
-      for (I32 k = 0; k < i; k++) {
+      IV tmp = 1;
+      for (IV k = 0; k < i; k++) {
         tmp *= my::get_iv(my::fetch_av(dim_values_sv, k));
       }
       pos += tmp * (my::get_iv(my::fetch_av(index_sv, i)) - 1);

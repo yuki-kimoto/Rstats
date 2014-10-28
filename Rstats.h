@@ -548,6 +548,55 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Elements* as_integer() {
+
+      IV length = this->get_length();
+      Rstats::Elements* e2 = new_integer(length);
+      if (this->is_character_type()) {
+        for (IV i = 0; i < length; i++) {
+          SV* value_sv = this->get_character_value(i);
+          if (looks_like_number(value_sv)) {
+            IV value = Rstats::Perl::get_iv(value_sv);
+            e2->set_integer_value(i, value);
+          }
+          else {
+            warn("NAs introduced by coercion");
+            e2->add_na_position(i);
+          }
+        }
+      }
+      else if (this->is_complex_type()) {
+        warn("imaginary parts discarded in coercion");
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, (IV)this->get_complex_value(i).real());
+        }
+      }
+      else if (this->is_double_type()) {
+        NV value;
+        for (IV i = 0; i < length; i++) {
+          value = this->get_double_value(i);
+          if (std::isnan(value) || std::isinf(value)) {
+            e2->add_na_position(i);
+          }
+          else {
+            e2->set_integer_value(i, (IV)value);
+          }
+        }
+      }
+      else if (this->is_integer_type() || this->is_logical_type()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, this->get_integer_value(i));
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(this);
+      
+      return e2;
+    }
   };
   
   // Rstats::ElementsFunc

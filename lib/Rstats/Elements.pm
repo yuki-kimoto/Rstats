@@ -94,44 +94,6 @@ sub as_complex {
 
 sub as_numeric { as_double(@_) }
 
-sub as_integer {
-  my $self = shift;
-
-  if ($self->is_na) {
-    return $self;
-  }
-  elsif ($self->is_character) {
-    if (my $num = Rstats::Util::looks_like_number($self->cv)) {
-      return Rstats::ElementsFunc::integer(int $num);
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return Rstats::ElementsFunc::NA();
-    }
-  }
-  elsif ($self->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    return Rstats::ElementsFunc::integer(int($self->re->value));
-  }
-  elsif ($self->is_double) {
-    if ($self->is_nan || $self->is_infinite) {
-      return Rstats::ElementsFunc::NA();
-    }
-    else {
-      return Rstats::ElementsFunc::integer($self->dv);
-    }
-  }
-  elsif ($self->is_integer) {
-    return $self; 
-  }
-  elsif ($self->is_logical) {
-    return Rstats::ElementsFunc::integer($self->iv ? 1 : 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
 sub as_logical {
   my $self = shift;
   

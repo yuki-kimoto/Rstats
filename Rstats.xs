@@ -44,6 +44,18 @@ SV* as_double(...)
   return_sv(e2_sv);
 }
 
+SV* as_integer(...)
+  PPCODE:
+{
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  Rstats::Elements* e2 = self->as_integer();
+  
+  SV* e2_sv = my::to_perl_obj(e2, "Rstats::Elements");
+  
+  return_sv(e2_sv);
+}
+
 SV* new_null(...)
   PPCODE:
 {

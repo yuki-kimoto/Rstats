@@ -28,7 +28,7 @@
 /* Shortcut of return sv */
 #define return_sv(x) XPUSHs(x); XSRETURN(1)
 
-namespace my = Rstats::Perl;
+namespace my = Rstats::PerlAPI;
 
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
@@ -823,8 +823,8 @@ new_complex(...)
   SV* re_sv = ST(0);
   SV* im_sv = ST(1);
 
-  NV re = my::get_nv(re_sv);
-  NV im = my::get_nv(im_sv);
+  NV re = SvNV(re_sv);
+  NV im = SvNV(im_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_complex(1, std::complex<NV>(re, im));
   
@@ -838,7 +838,7 @@ new_logical(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  IV iv = my::get_iv(value_sv);
+  IV iv = SvIV(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_logical(1, iv);
   
@@ -874,7 +874,7 @@ new_double(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  NV dv = my::get_nv(value_sv);
+  NV dv = SvNV(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_double(1, dv);
   
@@ -888,7 +888,7 @@ new_integer(...)
   PPCODE:
 {
   SV* value_sv = ST(0);
-  IV iv = my::get_iv(value_sv);
+  IV iv = SvIV(value_sv);
   
   Rstats::Elements* element = Rstats::Elements::new_integer(1, iv);
   
@@ -928,18 +928,18 @@ cross_product(...)
   while (1) {
     for (IV i = 0; i < values_length; i++) {
       
-      if (my::get_iv(my::fetch_av(idxs_sv, i)) < my::length_av(my::fetch_av(values_sv, i)) - 1) {
+      if (SvIV(my::fetch_av(idxs_sv, i)) < my::length_av(my::fetch_av(values_sv, i)) - 1) {
         
         SV* idxs_tmp_sv = my::fetch_av(idxs_sv, i);
         sv_inc(idxs_tmp_sv);
-        my::store_av(x1_sv, i, my::fetch_av(my::fetch_av(values_sv, i), my::get_iv(idxs_tmp_sv)));
+        my::store_av(x1_sv, i, my::fetch_av(my::fetch_av(values_sv, i), SvIV(idxs_tmp_sv)));
         
         my::push_av(result_sv, my::copy_av(x1_sv));
         
         break;
       }
       
-      if (i == my::get_iv(my::fetch_av(idx_idx_sv, values_length - 1))) {
+      if (i == SvIV(my::fetch_av(idx_idx_sv, values_length - 1))) {
         end_loop = 1;
         break;
       }
@@ -963,16 +963,16 @@ pos_to_index(...)
   SV* dim_sv = ST(1);
   
   SV* index_sv = my::new_av_ref();
-  IV pos = my::get_iv(pos_sv);
+  IV pos = SvIV(pos_sv);
   IV before_dim_product = 1;
   for (IV i = 0; i < my::length_av(my::deref_av(dim_sv)); i++) {
-    before_dim_product *= my::get_iv(my::fetch_av(dim_sv, i));
+    before_dim_product *= SvIV(my::fetch_av(dim_sv, i));
   }
   
   for (IV i = my::length_av(my::deref_av(dim_sv)) - 1; i >= 0; i--) {
     IV dim_product = 1;
     for (IV k = 0; k < i; k++) {
-      dim_product *= my::get_iv(my::fetch_av(dim_sv, k));
+      dim_product *= SvIV(my::fetch_av(dim_sv, k));
     }
     
     IV reminder = pos % before_dim_product;
@@ -997,12 +997,12 @@ index_to_pos(...)
     if (i > 0) {
       IV tmp = 1;
       for (IV k = 0; k < i; k++) {
-        tmp *= my::get_iv(my::fetch_av(dim_values_sv, k));
+        tmp *= SvIV(my::fetch_av(dim_values_sv, k));
       }
-      pos += tmp * (my::get_iv(my::fetch_av(index_sv, i)) - 1);
+      pos += tmp * (SvIV(my::fetch_av(index_sv, i)) - 1);
     }
     else {
-      pos += my::get_iv(my::fetch_av(index_sv, i));
+      pos += SvIV(my::fetch_av(index_sv, i));
     }
   }
   

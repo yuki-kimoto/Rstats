@@ -1,6 +1,6 @@
 namespace Rstats {
-  // Rstats::Perl
-  namespace Perl {
+  // Rstats::PerlAPI
+  namespace PerlAPI {
     
     SV* new_ref(SV* sv) {
       return sv_2mortal(newRV_inc(sv));
@@ -12,22 +12,6 @@ namespace Rstats {
 
     SV* new_ref(HV* hv) {
       return sv_2mortal(newRV_inc((SV*)hv));
-    }
-    
-    IV get_iv (SV* sv) {
-      return SvIV(sv);
-    }
-    
-    UV get_uv(SV* sv) {
-      return SvUV(sv);
-    }
-
-    NV get_nv(SV* sv) {
-      return SvNV(sv);
-    }
-      
-    char* get_pv(SV* sv) {
-      return SvPV_nolen(sv);
     }
 
     SV* new_sv(SV* sv) {
@@ -133,7 +117,7 @@ namespace Rstats {
     }
 
     SV* fetch_hv(HV* hv, SV* key_sv) {
-      return fetch_hv(hv, get_pv(key_sv));
+      return fetch_hv(hv, SvPV_nolen(key_sv));
     }
     
     SV* fetch_hv(SV* hv_ref, const char* key) {
@@ -145,24 +129,16 @@ namespace Rstats {
     }
 
     SV* fetch_hv(SV* hv_ref, SV* key_sv) {
-      return fetch_hv(hv_ref, get_pv(key_sv));
-    }
-    
-    SV* refcnt_inc_sv(SV* sv) {
-      return SvREFCNT_inc(sv);
-    }
-
-    void refcnt_dec_sv(SV* sv) {
-      return SvREFCNT_dec(sv);
+      return fetch_hv(hv_ref, SvPV_nolen(key_sv));
     }
     
     void store_av(AV* av, IV pos, SV* element) {
-      av_store(av, pos, refcnt_inc_sv(element));
+      av_store(av, pos, SvREFCNT_inc(element));
     }
     
     void store_av(SV* av_ref, IV pos, SV* element) {
       AV* av = deref_av(av_ref);
-      av_store(av, pos, refcnt_inc_sv(element));
+      av_store(av, pos, SvREFCNT_inc(element));
     }
 
     SV* copy_av(SV* av_ref_sv) {
@@ -176,30 +152,30 @@ namespace Rstats {
     }
     
     void store_hv(HV* hv, const char* key, SV* element) {
-      hv_store(hv, key, strlen(key), refcnt_inc_sv(element), FALSE);
+      hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
     }
 
     void store_hv(SV* hv_ref, const char* key, SV* element) {
       HV* hv = deref_hv(hv_ref);
-      hv_store(hv, key, strlen(key), refcnt_inc_sv(element), FALSE);
+      hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
     }
     
     void push_av(AV* av, SV* sv) {
-      av_push(av, refcnt_inc_sv(sv));
+      av_push(av, SvREFCNT_inc(sv));
     }
     
     void push_av(SV* av_ref, SV* sv) {
-      av_push(deref_av(av_ref), refcnt_inc_sv(sv));
+      av_push(deref_av(av_ref), SvREFCNT_inc(sv));
     }
 
     void unshit_av(AV* av, SV* sv) {
       av_unshift(av, 1);
-      store_av(av, (IV)0, sv);
+      store_av(av, (IV)0, SvREFCNT_inc(sv));
     }
     
     void unshit_av(SV* av_ref, SV* sv) {
       av_unshift(deref_av(av_ref), 1);
-      store_av(deref_av(av_ref), 0, sv);
+      store_av(deref_av(av_ref), 0, SvREFCNT_inc(sv));
     }
 
     template <class X> X to_c_obj(SV* perl_obj_ref) {
@@ -274,7 +250,7 @@ namespace Rstats {
         Rstats::Values::Character* values = this->get_character_values();
         for (IV i = 0; i < length; i++) {
           if ((*values)[i] != NULL) {
-            Rstats::Perl::refcnt_dec_sv((*values)[i]);
+            SvREFCNT_dec((*values)[i]);
           }
         }
         delete values;
@@ -366,18 +342,17 @@ namespace Rstats {
         return NULL;
       }
       else {
-        return Rstats::Perl::new_sv(value);
+        return Rstats::PerlAPI::new_sv(value);
       }
     }
     
     void set_character_value(IV pos, SV* value) {
       if (value != NULL) {
-        Rstats::Perl::refcnt_dec_sv((*this->get_character_values())[pos]);
+        SvREFCNT_dec((*this->get_character_values())[pos]);
       }
       
-      SV* new_value = Rstats::Perl::new_sv(value);
-      (*this->get_character_values())[pos]
-        = Rstats::Perl::refcnt_inc_sv(new_value);
+      SV* new_value = Rstats::PerlAPI::new_sv(value);
+      (*this->get_character_values())[pos] = SvREFCNT_inc(new_value);
     }
 
     static Rstats::Elements* new_complex(IV length) {
@@ -515,7 +490,7 @@ namespace Rstats {
         for (IV i = 0; i < length; i++) {
           SV* value_sv = this->get_character_value(i);
           if (looks_like_number(value_sv)) {
-            NV value = Rstats::Perl::get_nv(value_sv);
+            NV value = SvNV(value_sv);
             e2->set_double_value(i, value);
           }
           else {
@@ -557,7 +532,7 @@ namespace Rstats {
         for (IV i = 0; i < length; i++) {
           SV* value_sv = this->get_character_value(i);
           if (looks_like_number(value_sv)) {
-            IV value = Rstats::Perl::get_iv(value_sv);
+            IV value = SvIV(value_sv);
             e2->set_integer_value(i, value);
           }
           else {
@@ -606,7 +581,7 @@ namespace Rstats {
         for (IV i = 0; i < length; i++) {
           SV* value_sv = this->get_character_value(i);
           if (looks_like_number(value_sv)) {
-            IV value = Rstats::Perl::get_iv(value_sv);
+            IV value = SvIV(value_sv);
             e2->set_integer_value(i, value);
           }
           else {

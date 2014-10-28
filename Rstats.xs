@@ -32,6 +32,18 @@ namespace my = Rstats::Perl;
 
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
+SV* as_double(...)
+  PPCODE:
+{
+  Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
+  
+  Rstats::Elements* e2 = self->as_double();
+  
+  SV* e2_sv = my::to_perl_obj(e2, "Rstats::Elements");
+  
+  return_sv(e2_sv);
+}
+
 SV* new_null(...)
   PPCODE:
 {

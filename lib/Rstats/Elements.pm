@@ -94,39 +94,6 @@ sub as_complex {
 
 sub as_numeric { as_double(@_) }
 
-sub as_double {
-  my $self = shift;
-
-  if ($self->is_na) {
-    return $self;
-  }
-  elsif ($self->is_character) {
-    if (my $num = Rstats::Util::looks_like_number($self->cv)) {
-      return Rstats::ElementsFunc::double($num + 0);
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return Rstats::ElementsFunc::NA();
-    }
-  }
-  elsif ($self->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    return Rstats::ElementsFunc::double($self->re->value);
-  }
-  elsif ($self->is_double) {
-    return $self;
-  }
-  elsif ($self->is_integer) {
-    return Rstats::ElementsFunc::double($self->iv);
-  }
-  elsif ($self->is_logical) {
-    return Rstats::ElementsFunc::double($self->iv ? 1 : 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
 sub as_integer {
   my $self = shift;
 
@@ -403,6 +370,8 @@ sub is_negative_infinite {
 Rstats::Elements - Elements
 
 =heaa1 METHODS
+
+=head2 as_double
 
 =head2 type
 

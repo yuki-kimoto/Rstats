@@ -1221,7 +1221,89 @@ namespace Rstats {
       
       return e2;
     }
-    
+
+    Rstats::Elements* equal(Rstats::Elements* e1, Rstats::Elements* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        std::cerr << e1->get_type() << " " << e2->get_type();
+        croak("Can't compare equal different type(Rstats::ElementFunc::equal())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't compare equal different length(Rstats::ElementFunc::equal())");
+      }
+      
+      IV length = e1->get_length();
+      Rstats::Elements* e3 = Rstats::Elements::new_logical(length);
+      if (e1->is_character_type()) {
+        IV is;
+        for (IV i = 0; i < length; i++) {
+          if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) == 0) {
+            is = 1;
+          }
+          else {
+            is = 0;
+          }
+          e3->set_integer_value(i, is);
+        }
+      }
+      else if (e1->is_complex_type()) {
+        IV is;
+        for (IV i = 0; i < length; i++) {
+          if (e1->get_complex_value(i) == e2->get_complex_value(i)) {
+            is = 1;
+          }
+          else {
+            is = 0;
+          }
+          e3->set_integer_value(i, is);
+        }
+      }
+      else if (e1->is_double_type()) {
+        IV is;
+        NV e1_value;
+        NV e2_value;
+        for (IV i = 0; i < length; i++) {
+          e1_value = e1->get_double_value(i);
+          e2_value = e2->get_double_value(i);
+          
+          if (std::isnan(e1_value) || std::isnan(e2_value)) {
+            e3->add_na_position(i);
+            is = 0;
+          }
+          else {
+            if(e1_value == e2_value) {
+              is = 1;
+            }
+            else {
+              is = 0;
+            }
+          }
+          e3->set_integer_value(i, is);
+        }
+      }
+      else if (e1->is_integer_type() || e1->is_logical_type()) {
+        IV is;
+        for (IV i = 0; i < length; i++) {
+          if (e1->get_integer_value(i) == e2->get_integer_value(i)) {
+            is = 1;
+          }
+          else {
+            is = 0;
+          }
+          e3->set_integer_value(i, is);
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      return e3;
+    }
+            
     Rstats::Elements* is_infinite(Rstats::Elements* elements) {
       
       IV length = elements->get_length();

@@ -1120,8 +1120,18 @@ namespace Rstats {
       }
       else if (e1->is_complex_type()) {
         e2 = Rstats::Elements::new_complex(length);
+        NV e1_value_re;
         for (IV i = 0; i < length; i++) {
-          e2->set_complex_value(i, std::tanh(e1->get_complex_value(i)));
+          e1_value_re = e1->get_complex_value(i).real();
+          
+          // For fix FreeBSD bug
+          // FreeBAD return (NaN + NaNi) when real value is negative infinite
+          if (std::isinf(e1_value_re) && e1_value_re < 0) {
+            e2->set_complex_value(i, std::complex<double>(-1, 0));
+          }
+          else {
+            e2->set_complex_value(i, std::tanh(e1->get_complex_value(i)));
+          }
         }
       }
       else if (e1->is_double_type()) {

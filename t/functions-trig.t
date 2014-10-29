@@ -228,11 +228,18 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->value->{im}), '-0.243458');
     ok(r->is_complex($x2));
   }
+  
+  # tanh - complex, 1 + Inf
+  {
+    my $x1 = r->complex({re => 1, im => Inf});
+    my $x2 = r->tanh($x1);
+    ok($x2->element->re->is_nan);
+    ok($x2->element->im->is_nan);
+  }
 
   # tanh - complex, -Inf - 2i
   {
     my $x1 = c(-Inf - 2*i);
-    $ENV{a}++;
     my $x2 = r->tanh($x1);
     is($x2->value->{re}, '-1');
     cmp_ok($x2->value->{im}, '==', 0);

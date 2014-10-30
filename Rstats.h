@@ -226,8 +226,8 @@ namespace Rstats {
   class Elements {
     private:
     Rstats::ElementsType::Enum type;
-    void* values;
     std::map<IV, IV> na_positions;
+    void* values;
     
     public:
     
@@ -1183,13 +1183,13 @@ namespace Rstats {
       else if (e1->is_integer_type()) {
         e2 = Rstats::Elements::new_integer(length);
         for (IV i = 0; i < length; i++) {
-          e2->set_integer_value(i, std::abs(e1->get_integer_value(i)));
+          e2->set_integer_value(i, (IV)std::abs((NV)e1->get_integer_value(i)));
         }
       }
       else if (e1->is_logical_type()) {
-        e2 = Rstats::Elements::new_integer(length);
+        e2 = Rstats::Elements::new_logical(length);
         for (IV i = 0; i < length; i++) {
-          e2->set_integer_value(i, std::abs(e1->get_integer_value(i)));
+          e2->set_integer_value(i, (IV)std::abs((NV)e1->get_integer_value(i)));
         }
       }
       else {

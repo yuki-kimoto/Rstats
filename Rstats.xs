@@ -431,7 +431,6 @@ re(...)
 {
   Rstats::Elements* self = my::to_c_obj<Rstats::Elements*>(ST(0));
   
-  
   NV re = self->get_complex_value(0).real();
   
   Rstats::Elements* re_element = Rstats::Elements::new_double(1, re);
@@ -496,6 +495,22 @@ DESTROY(...)
 
 MODULE = Rstats::ElementsFunc PACKAGE = Rstats::ElementsFunc
 
+SV* _test_sqrt(...)
+  PPCODE:
+{
+  std::complex<double> z1(-1, 0);
+  std::complex<double> z2 = sqrt(z1);
+  
+  SV* ok_sv;
+  if (z2.real() == 0) {
+    ok_sv = my::new_sv_iv(1);
+  }
+  else {
+    ok_sv = my::new_sv_iv(0);
+  }
+  
+  return_sv(ok_sv);
+}
 
 SV*
 add(...)

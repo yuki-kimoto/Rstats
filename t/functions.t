@@ -943,7 +943,7 @@ use Math::Trig ();
     my $e2 = r->sqrt($e1);
     is_deeply($e2->values, [2, 3]);
   }
-
+  
   # sqrt - complex
   {
     my $e1 = c(-1 + 0*i);

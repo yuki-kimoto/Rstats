@@ -2380,20 +2380,7 @@ sub sequence {
 }
 
 sub sinh { process_unary(\&Rstats::ElementsFunc::sinh, @_) }
-
-sub sqrt {
-  my $x1 = to_c(shift);
-  
-  my $x2_elements = Rstats::ElementsFunc::sqrt($x1->elements);
-  
-  my $x2 = Rstats::Func::NULL();
-  $x2->elements($x2_elements);
-  
-  $x1->_copy_attrs_to($x2);
-  $x2->mode($x2_elements->type);
-  
-  return $x2;
-}
+sub sqrt { process_unary(\&Rstats::ElementsFunc::sqrt, @_) }
 
 sub sort {
 

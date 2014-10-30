@@ -2,17 +2,18 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-# Check if exists clan++ or g++ compiler
+use Config;
+
+# Compiler(gcc or clang)
 my $cc;
 my $ld;
-if (system("g++ --version") == 0) {
-  $cc = 'g++';
-  $ld = 'g++';
-}
-else {
-  print "g++ is not exists. fallback to clang++";
+if ($Config{gccversion} =~ /clang/i) {
   $cc = 'clang++';
   $ld = 'clang++';
+}
+else {
+  $cc = 'g++';
+  $ld = 'g++';
 }
 
 WriteMakefile(

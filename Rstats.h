@@ -880,8 +880,23 @@ namespace Rstats {
       }
       else if (e1->is_complex_type()) {
         e2 = Rstats::Elements::new_complex(length);
+        std::complex<NV> value;
         for (IV i = 0; i < length; i++) {
-          e2->set_complex_value(i, std::sqrt(e1->get_complex_value(i)));
+          value = e1->get_complex_value(i);
+          
+          // Fix bug that clang sqrt can't right value of perfect squeres
+          if (value.imag() == 0 && value.real() < 0) {
+            e2->set_complex_value(
+              i,
+              std::complex<NV>(
+                0,
+                std::sqrt(-(value.real()))
+              )
+            );
+          }
+          else {
+            e2->set_complex_value(i, std::sqrt(value));
+          }
         }
       }
       else if (e1->is_double_type()) {
@@ -1127,7 +1142,7 @@ namespace Rstats {
           // For fix FreeBSD bug
           // FreeBAD return (NaN + NaNi) when real value is negative infinite
           if (std::isinf(e1_value_re) && e1_value_re < 0) {
-            e2->set_complex_value(i, std::complex<double>(-1, 0));
+            e2->set_complex_value(i, std::complex<NV>(-1, 0));
           }
           else {
             e2->set_complex_value(i, std::tanh(e1->get_complex_value(i)));
@@ -1293,7 +1308,7 @@ namespace Rstats {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
       else if (e1->is_complex_type()) {
-        e2 = divide(log(e1), log(Rstats::Elements::new_complex(length, std::complex<double>(2, 0))));
+        e2 = divide(log(e1), log(Rstats::Elements::new_complex(length, std::complex<NV>(2, 0))));
       }
       else if (e1->is_double_type() || e1->is_integer_type() || e1->is_logical_type()) {
         e2 = divide(log(e1), log(Rstats::Elements::new_double(length, 2)));

@@ -7,11 +7,6 @@ use Rstats::ElementsFunc;
 
 my $r = Rstats::Class->new;
 
-# complex sqrt test
-{
-  ok(Rstats::ElementsFunc::_test_sqrt());
-}
-
 # comparison operator
 {
   # comparison operator - ==, true

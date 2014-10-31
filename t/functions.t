@@ -943,14 +943,36 @@ use Math::Trig ();
     my $e2 = r->sqrt($e1);
     is_deeply($e2->values, [2, 3]);
   }
+
+  # sqrt - complex, 1 + 0i
+  {
+    my $e1 = c(1 + 0*i);
+    my $e2 = r->sqrt($e1);
+    is_deeply($e2->value, {re => 1, im => 0});
+  }
+
+  # sqrt - complex, 4 + 0i
+  {
+    my $e1 = c(4 + 0*i);
+    my $e2 = r->sqrt($e1);
+    is_deeply($e2->value, {re => 2, im => 0});
+  }
   
-  # sqrt - complex
+  # sqrt - complex, -1 + 0i
   {
     my $e1 = c(-1 + 0*i);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 0, im => 1});
   }
+
+  # sqrt - complex, -4 + 0i
+  {
+    my $e1 = c(-4 + 0*i);
+    my $e2 = r->sqrt($e1);
+    is_deeply($e2->value, {re => 0, im => 2});
+  }
 }
+
 # min
 {
   # min

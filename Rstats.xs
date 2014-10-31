@@ -495,23 +495,6 @@ DESTROY(...)
 
 MODULE = Rstats::ElementsFunc PACKAGE = Rstats::ElementsFunc
 
-SV* _test_sqrt(...)
-  PPCODE:
-{
-  std::complex<double> z1(-1, 0);
-  std::complex<double> z2 = sqrt(z1);
-  
-  SV* ok_sv;
-  if (z2.real() == 0) {
-    ok_sv = my::new_sv_iv(1);
-  }
-  else {
-    ok_sv = my::new_sv_iv(0);
-  }
-  
-  return_sv(ok_sv);
-}
-
 SV*
 add(...)
   PPCODE:

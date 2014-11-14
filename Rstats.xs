@@ -756,9 +756,9 @@ new_negative_inf(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::Elements::new_negative_inf();
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -766,9 +766,9 @@ new_inf(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::Elements::new_inf();
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -776,9 +776,9 @@ new_nan(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::Elements::new_nan();
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -786,9 +786,9 @@ new_na(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::Elements::new_na();
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -796,9 +796,9 @@ new_null(...)
   PPCODE:
 {
   Rstats::Elements* element = Rstats::Elements::new_null();
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -809,9 +809,9 @@ new_character(...)
   
   Rstats::Elements* element = Rstats::Elements::new_character(1, sv_str);
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -826,9 +826,9 @@ new_complex(...)
   
   Rstats::Elements* element = Rstats::Elements::new_complex(1, std::complex<NV>(re, im));
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -840,9 +840,9 @@ new_logical(...)
   
   Rstats::Elements* element = Rstats::Elements::new_logical(1, iv);
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -851,9 +851,9 @@ new_true(...)
 {
   Rstats::Elements* element = Rstats::Elements::new_true();
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -862,9 +862,9 @@ new_false(...)
 {
   Rstats::Elements* element = Rstats::Elements::new_false();
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -876,9 +876,9 @@ new_double(...)
   
   Rstats::Elements* element = Rstats::Elements::new_double(1, dv);
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 SV*
@@ -890,9 +890,9 @@ new_integer(...)
   
   Rstats::Elements* element = Rstats::Elements::new_integer(1, iv);
   
-  SV* sv_element_obj = my::to_perl_obj(element, "Rstats::Elements");
+  SV* sv_element = my::to_perl_obj(element, "Rstats::Elements");
   
-  return_sv(sv_element_obj);
+  return_sv(sv_element);
 }
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util

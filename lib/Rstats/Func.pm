@@ -233,7 +233,7 @@ sub read_table {
       elsif (defined Rstats::Util::looks_like_integer($row[$i])) {
         $type = 'integer';
       }
-      elsif (defined Rstats::Util::looks_like_number($row[$i])) {
+      elsif (defined Rstats::Util::looks_like_double($row[$i])) {
         $type = 'double';
       }
       elsif (defined Rstats::Util::looks_like_complex($row[$i])) {

@@ -83,14 +83,14 @@ sub looks_like_integer {
   }
 }
 
-sub looks_like_number {
+sub looks_like_double {
   my $value = shift;
   
   return if !defined $value || !CORE::length $value;
   $value =~ s/^ +//;
   $value =~ s/ +$//;
   
-  if (Scalar::Util::looks_like_number $value) {
+  if (Scalar::Util::looks_like_number($value)) {
     return $value + 0;
   }
   else {
@@ -121,7 +121,7 @@ sub looks_like_complex {
     return;
   }
   
-  if (defined Rstats::Util::looks_like_number($re) && defined Rstats::Util::looks_like_number($im)) {
+  if (defined Rstats::Util::looks_like_double($re) && defined Rstats::Util::looks_like_double($im)) {
     return {re => $re + 0, im => $im + 0};
   }
   else {

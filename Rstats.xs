@@ -898,10 +898,11 @@ new_integer(...)
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
 SV*
-looks_like_integer_(...)
+looks_like_integer(...)
   PPCODE:
 {
   SV* sv_value = ST(0);
+  char* value = SvPV_nolen(sv_value);
   
   SV* sv_ret;
   
@@ -909,11 +910,31 @@ looks_like_integer_(...)
     sv_ret = &PL_sv_undef;
   }
   else {
+    SV* sv_re = my::new_sv("^[-+]?[0-9]+$");
+    REGEXP* rp_re = (REGEXP*)sv_2mortal((SV*)re_compile(sv_re, 0));
     
-    //if ($value =~ /^[-+]?[0-9]+$/) {
-    if (1) {
-      sv_ret = &PL_sv_undef;
-      // return $value + 0;
+    // pregexec(
+    //  REGEXP * const prog,
+    //  char* stringarg,
+    //  char *strend,
+    //  char *strbeg,
+    //  SSize_t minend,
+    //  SV *screamer,
+    //  U32 nosave
+    //);
+    
+    IV ret = pregexec(
+      rp_re,
+      value,
+      value + strlen(value),
+      value,
+      strlen(value),
+      sv_value,
+      0
+    );
+    
+    if (ret) {
+      sv_ret = my::new_sv_iv(SvIV(sv_value));
     }
     else {
       sv_ret = &PL_sv_undef;

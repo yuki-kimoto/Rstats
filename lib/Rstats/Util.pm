@@ -70,19 +70,6 @@ sub looks_like_logical {
   }
 }
 
-sub looks_like_integer {
-  my $value = shift;
-  
-  return if !defined $value || !CORE::length $value;
-  
-  if ($value =~ /^[-+]?[0-9]+$/) {
-    return $value + 0;
-  }
-  else {
-    return;
-  }
-}
-
 sub looks_like_double {
   my $value = shift;
   

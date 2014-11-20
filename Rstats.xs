@@ -901,27 +901,17 @@ SV*
 looks_like_integer(...)
   PPCODE:
 {
-  SV* sv_value = ST(0);
-  char* value = SvPV_nolen(sv_value);
+  SV* sv_str = ST(0);
   
   SV* sv_ret;
-  
-  if (sv_value == &PL_sv_undef || sv_len(sv_value) == 0) {
+  if (sv_str == &PL_sv_undef || sv_len(sv_str) == 0) {
     sv_ret = &PL_sv_undef;
   }
   else {
-    SV* sv_re = my::new_sv("^ *([-+]?[0-9]+) *$");
-    REGEXP* rp_re = (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, 0));
+    SV* sv_re_str = my::new_sv("^ *([-+]?[0-9]+) *$");
+    REGEXP* sv_re = my::new_pregcomp(sv_re_str, 0);
     
-    IV ret = pregexec(
-      rp_re,
-      value,
-      value + strlen(value),
-      value,
-      0,
-      sv_value,
-      0
-    );
+    IV ret = my::pregexec_simple(sv_str, sv_re);
     
     if (ret) {
       SV* match_sv = get_sv("1", 0);

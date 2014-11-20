@@ -2,6 +2,24 @@ namespace Rstats {
   // Rstats::PerlAPI
   namespace PerlAPI {
     
+    REGEXP* new_pregcomp (SV* sv_re, IV flag) {
+      return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
+    }
+    
+    IV pregexec_simple (SV* sv_str, REGEXP* sv_re) {
+      char* str = SvPV_nolen(sv_str);
+      
+      return pregexec(
+        sv_re,
+        str,
+        str + strlen(str),
+        str,
+        0,
+        sv_str,
+        0
+      );
+    }
+    
     SV* new_ref(SV* sv) {
       return sv_2mortal(newRV_inc(sv));
     }

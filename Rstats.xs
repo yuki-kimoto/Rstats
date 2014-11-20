@@ -918,7 +918,7 @@ looks_like_integer(...)
       value,
       value + strlen(value),
       value,
-      strlen(value),
+      0,
       sv_value,
       0
     );

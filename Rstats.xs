@@ -910,18 +910,8 @@ looks_like_integer(...)
     sv_ret = &PL_sv_undef;
   }
   else {
-    SV* sv_re = my::new_sv("^[-+]?[0-9]+$");
-    REGEXP* rp_re = (REGEXP*)sv_2mortal((SV*)re_compile(sv_re, 0));
-    
-    // pregexec(
-    //  REGEXP * const prog,
-    //  char* stringarg,
-    //  char *strend,
-    //  char *strbeg,
-    //  SSize_t minend,
-    //  SV *screamer,
-    //  U32 nosave
-    //);
+    SV* sv_re = my::new_sv("^ *([-+]?[0-9]+) *$");
+    REGEXP* rp_re = (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, 0));
     
     IV ret = pregexec(
       rp_re,
@@ -934,7 +924,8 @@ looks_like_integer(...)
     );
     
     if (ret) {
-      sv_ret = my::new_sv_iv(SvIV(sv_value));
+      SV* match_sv = get_sv("1", 0);
+      sv_ret = my::new_sv_iv(SvIV(match_sv));
     }
     else {
       sv_ret = &PL_sv_undef;

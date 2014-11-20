@@ -30,6 +30,12 @@
 
 namespace my = Rstats::PerlAPI;
 
+namespace Rstats {
+  namespace Util {
+    REGEXP* INTEGER_RE = pregcomp(newSVpvs("^ *([-+]?[0-9]+) *$"), 0);
+  }
+}
+
 MODULE = Rstats::Elements PACKAGE = Rstats::Elements
 
 SV* as_double(...)
@@ -908,10 +914,7 @@ looks_like_integer(...)
     sv_ret = &PL_sv_undef;
   }
   else {
-    SV* sv_re_str = my::new_sv("^ *([-+]?[0-9]+) *$");
-    REGEXP* sv_re = my::new_pregcomp(sv_re_str, 0);
-    
-    IV ret = my::pregexec_simple(sv_str, sv_re);
+    IV ret = my::pregexec_simple(sv_str, Rstats::Util::INTEGER_RE);
     
     if (ret) {
       SV* match_sv = get_sv("1", 0);

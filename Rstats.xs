@@ -135,11 +135,11 @@ compose(...)
     for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* sv_element = my::fetch_av(sv_elements, i);
-      if (sv_element == &PL_sv_undef) {
-        element = Rstats::Elements::new_na();
+      if (SvOK(sv_element)) {
+        element = my::to_c_obj<Rstats::Elements*>(sv_element);
       }
       else {
-        element = my::to_c_obj<Rstats::Elements*>(sv_element);
+        element = Rstats::Elements::new_na();
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
@@ -154,11 +154,11 @@ compose(...)
     for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* sv_element = my::fetch_av(sv_elements, i);
-      if (sv_element == &PL_sv_undef) {
-        element = Rstats::Elements::new_na();
+      if (SvOK(sv_element)) {
+        element = my::to_c_obj<Rstats::Elements*>(sv_element);
       }
       else {
-        element = my::to_c_obj<Rstats::Elements*>(sv_element);
+        element = Rstats::Elements::new_na();
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
@@ -173,11 +173,11 @@ compose(...)
     for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* sv_element = my::fetch_av(sv_elements, i);
-      if (sv_element == &PL_sv_undef) {
-        element = Rstats::Elements::new_na();
+      if (SvOK(sv_element)) {
+        element = my::to_c_obj<Rstats::Elements*>(sv_element);
       }
       else {
-        element = my::to_c_obj<Rstats::Elements*>(sv_element);
+        element = Rstats::Elements::new_na();
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
@@ -193,11 +193,11 @@ compose(...)
     for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* sv_element = my::fetch_av(sv_elements, i);
-      if (sv_element == &PL_sv_undef) {
-        element = Rstats::Elements::new_na();
+      if (SvOK(sv_element)) {
+        element = my::to_c_obj<Rstats::Elements*>(sv_element);
       }
       else {
-        element = my::to_c_obj<Rstats::Elements*>(sv_element);
+        element = Rstats::Elements::new_na();
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
@@ -213,11 +213,11 @@ compose(...)
     for (IV i = 0; i < len; i++) {
       Rstats::Elements* element;
       SV* sv_element = my::fetch_av(sv_elements, i);
-      if (sv_element == &PL_sv_undef) {
-        element = Rstats::Elements::new_na();
+      if (SvOK(sv_element)) {
+        element = my::to_c_obj<Rstats::Elements*>(sv_element);
       }
       else {
-        element = my::to_c_obj<Rstats::Elements*>(sv_element);
+        element = Rstats::Elements::new_na();
       }
       if (element->exists_na_position(0)) {
         na_positions.push_back(i);
@@ -910,7 +910,7 @@ looks_like_integer(...)
   SV* sv_str = ST(0);
   
   SV* sv_ret;
-  if (sv_str == &PL_sv_undef || sv_len(sv_str) == 0) {
+  if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
     sv_ret = &PL_sv_undef;
   }
   else {

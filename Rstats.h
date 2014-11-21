@@ -37,7 +37,7 @@ namespace Rstats {
     }
 
     SV* new_sv(const char* pv) {
-      return sv_2mortal(newSVpvn(pv, strlen(pv)));
+      return sv_2mortal(newSVpv(pv, 0));
     }
     
     SV* new_sv_iv(IV iv) {

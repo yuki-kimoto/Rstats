@@ -917,6 +917,18 @@ looks_like_double(...)
 }
 
 SV*
+looks_like_na(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  
+  SV* sv_ret = Rstats::Util::looks_like_na(sv_str);
+  
+  return_sv(sv_ret);
+}
+
+
+SV*
 cross_product(...)
   PPCODE:
 {

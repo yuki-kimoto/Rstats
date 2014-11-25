@@ -188,55 +188,14 @@ namespace Rstats {
     // Rstats::Values::Integer
     typedef std::vector<IV> Integer;
   }
-
+  
+  // Rstats::Util header
   namespace Util {
-    
-    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+) *$", 0), 0);
-    REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
-    
-    SV* looks_like_integer(SV* sv_str) {
-      
-      SV* sv_ret;
-      if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
-        sv_ret = &PL_sv_undef;
-      }
-      else {
-        IV ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
-        if (ret) {
-          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
-          Perl_reg_numbered_buff_fetch(aTHX_ INTEGER_RE, 1, match1);
-          sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(match1));
-        }
-        else {
-          sv_ret = &PL_sv_undef;
-        }
-      }
-      
-      return sv_ret;
-    }
-
-    SV* looks_like_double (SV* sv_value) {
-      
-      SV* sv_ret;
-      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
-        sv_ret =  &PL_sv_undef;
-      }
-      else {
-        IV ret = Rstats::PerlAPI::pregexec_simple(sv_value, DOUBLE_RE);
-        if (ret) {
-          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
-          Perl_reg_numbered_buff_fetch(aTHX_ DOUBLE_RE, 1, match1);
-          sv_ret = Rstats::PerlAPI::new_mSVnv(SvNV(match1));
-        }
-        else {
-          sv_ret = &PL_sv_undef;
-        }
-      }
-      
-      return sv_ret;
-    }
+    SV* looks_like_na (SV* sv_value);
+    SV* looks_like_integer (SV* sv_str);
+    SV* looks_like_double (SV* sv_value);
   }
-
+  
   // Rstats::Elements
   class Elements {
     private:
@@ -639,7 +598,7 @@ namespace Rstats {
       return e2;
     }
   };
-  
+
   // Rstats::ElementsFunc
   namespace ElementsFunc {
     
@@ -1532,6 +1491,73 @@ namespace Rstats {
       }
       
       return rets;
+    }
+  }
+  
+  // Rstats::Util body
+  namespace Util {
+    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+) *$", 0), 0);
+    REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
+
+    SV* looks_like_na (SV* sv_value) {
+      
+      SV* sv_ret;
+      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
+        sv_ret = &PL_sv_undef;
+      }
+      else {
+        SV* sv_na = Rstats::PerlAPI::new_mSVpv("NA");
+        if (sv_cmp(sv_value, sv_na) == 0) {
+          sv_ret = Rstats::PerlAPI::to_perl_obj(Rstats::Elements::new_na(), "Rstats::Elements");
+        }
+        else {
+          sv_ret = &PL_sv_undef;
+        }
+      }
+      
+      return sv_ret;
+    }
+    
+    SV* looks_like_integer(SV* sv_str) {
+      
+      SV* sv_ret;
+      if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
+        sv_ret = &PL_sv_undef;
+      }
+      else {
+        IV ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
+        if (ret) {
+          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          Perl_reg_numbered_buff_fetch(aTHX_ INTEGER_RE, 1, match1);
+          sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(match1));
+        }
+        else {
+          sv_ret = &PL_sv_undef;
+        }
+      }
+      
+      return sv_ret;
+    }
+
+    SV* looks_like_double (SV* sv_value) {
+      
+      SV* sv_ret;
+      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
+        sv_ret =  &PL_sv_undef;
+      }
+      else {
+        IV ret = Rstats::PerlAPI::pregexec_simple(sv_value, DOUBLE_RE);
+        if (ret) {
+          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          Perl_reg_numbered_buff_fetch(aTHX_ DOUBLE_RE, 1, match1);
+          sv_ret = Rstats::PerlAPI::new_mSVnv(SvNV(match1));
+        }
+        else {
+          sv_ret = &PL_sv_undef;
+        }
+      }
+      
+      return sv_ret;
     }
   }
 }

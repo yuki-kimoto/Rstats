@@ -39,19 +39,6 @@ sub higher_type {
   }
 }
 
-sub looks_like_na {
-  my $value = shift;
-  
-  return if !defined $value || !CORE::length $value;
-  
-  if ($value eq 'NA') {
-    return Rstats::ElementsFunc::NA();
-  }
-  else {
-    return;
-  }
-}
-
 sub looks_like_logical {
   my $value = shift;
   

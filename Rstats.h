@@ -2,7 +2,7 @@ namespace Rstats {
   // Rstats::PerlAPI
   namespace PerlAPI {
     
-    REGEXP* new_pregcomp (SV* sv_re, IV flag) {
+    REGEXP* mpregcomp (SV* sv_re, IV flag) {
       return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
     }
     
@@ -20,55 +20,43 @@ namespace Rstats {
       );
     }
     
-    SV* new_ref(SV* sv) {
+    SV* new_mRV_inc(SV* sv) {
       return sv_2mortal(newRV_inc(sv));
     }
 
-    SV* new_ref(AV* av) {
-      return sv_2mortal(newRV_inc((SV*)av));
-    }
-
-    SV* new_ref(HV* hv) {
-      return sv_2mortal(newRV_inc((SV*)hv));
-    }
-
-    SV* new_sv(SV* sv) {
+    SV* new_mSVsv(SV* sv) {
       return sv_2mortal(newSVsv(sv));
     }
 
-    SV* new_sv(const char* pv) {
+    SV* new_mSVpv(const char* pv) {
       return sv_2mortal(newSVpv(pv, 0));
     }
     
-    SV* new_sv_iv(IV iv) {
+    SV* new_mSViv(IV iv) {
       return sv_2mortal(newSViv(iv));
     }
-
-    SV* new_sv_uv(UV uv) {
-      return sv_2mortal(newSVuv(uv));
-    }
     
-    SV* new_sv_nv(NV nv) {
+    SV* new_mSVnv(NV nv) {
       return sv_2mortal(newSVnv(nv));
     }
     
-    AV* new_av() {
+    AV* new_mAV() {
       return (AV*)sv_2mortal((SV*)newAV());
     }
     
-    SV* new_av_ref() {
-      return sv_2mortal(newRV_inc((SV*)new_av()));
+    SV* new_mAVRV() {
+      return sv_2mortal(newRV_inc((SV*)new_mAV()));
     }
     
-    HV* new_hv() {
+    HV* new_mHV() {
       return (HV*)sv_2mortal((SV*)newHV());
     }
 
-    SV* new_hv_ref() {
-      return sv_2mortal(newRV_inc((SV*)new_hv()));
+    SV* new_mHVRV() {
+      return sv_2mortal(newRV_inc((SV*)new_mHV()));
     }
 
-    SV* deref_sv(SV* ref) {
+    SV* SvRV_safe(SV* ref) {
       if (SvROK(ref)) {
         return SvRV(ref);
       }
@@ -77,123 +65,82 @@ namespace Rstats {
       }
     }
     
-    AV* deref_av(SV* ref) {
-      if (SvROK(ref)) {
-        return (AV*)SvRV(ref);
-      }
-      else {
-        croak("Can't derefernce");
-      }
-    }
-    
-    void extend_av(AV* av, IV key) {
-      return av_extend(av, key);
-    }
-
-    void extend_av(SV* av_ref, IV key) {
-      AV* av = deref_av(av_ref);
-      return av_extend(av, key);
-    }
-    
-    IV length_av (AV* av) {
+    IV av_len_fix (AV* av) {
       return av_len(av) + 1;
     }
 
-    IV length_av (SV* av_ref) {
-      return av_len(deref_av(av_ref)) + 1;
+    IV avrv_len_fix (SV* av_ref) {
+      return av_len((AV*)SvRV_safe(av_ref)) + 1;
     }
     
-    SV* fetch_av(AV* av, IV pos) {
+    SV* av_fetch_simple(AV* av, IV pos) {
       SV** const element_ptr = av_fetch(av, pos, FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
     }
     
-    SV* fetch_av(SV* av_ref, IV pos) {
-      AV* av = deref_av(av_ref);
-      SV** const element_ptr = av_fetch(av, pos, FALSE);
-      SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
-      
-      return element;
+    SV* avrv_fetch_simple(SV* av_ref, IV pos) {
+      AV* av = (AV*)SvRV_safe(av_ref);
+      return av_fetch_simple(av, pos);
     }
 
-    HV* deref_hv(SV* ref) {
-      if (SvROK(ref)) {
-        return (HV*)SvRV(ref);
-      }
-      else {
-        croak("Can't derefernce");
-      }
-    }
-    
-    SV* fetch_hv(HV* hv, const char* key) {
+    SV* hv_fetch_simple(HV* hv, const char* key) {
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
       
       return element;
     }
 
-    SV* fetch_hv(HV* hv, SV* sv_key) {
-      return fetch_hv(hv, SvPV_nolen(sv_key));
+    SV* hvrv_fetch_simple(SV* hv_ref, const char* key) {
+      HV* hv = (HV*)SvRV_safe(hv_ref);
+      return hv_fetch_simple(hv, key);
     }
     
-    SV* fetch_hv(SV* hv_ref, const char* key) {
-      HV* hv = deref_hv(hv_ref);
-      SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
-      SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
-      
-      return element;
-    }
-
-    SV* fetch_hv(SV* hv_ref, SV* sv_key) {
-      return fetch_hv(hv_ref, SvPV_nolen(sv_key));
-    }
-    
-    void store_av(AV* av, IV pos, SV* element) {
+    void av_store_inc(AV* av, IV pos, SV* element) {
       av_store(av, pos, SvREFCNT_inc(element));
     }
     
-    void store_av(SV* av_ref, IV pos, SV* element) {
-      AV* av = deref_av(av_ref);
-      av_store(av, pos, SvREFCNT_inc(element));
+    void avrv_store_inc(SV* av_ref, IV pos, SV* element) {
+      AV* av = (AV*)SvRV_safe(av_ref);
+      av_store_inc(av, pos, element);
     }
 
     SV* copy_av(SV* sv_av_ref) {
-      SV* sv_new_av_ref = new_av_ref();
+      SV* sv_new_av_ref = new_mAVRV();
       
-      for (IV i = 0; i < length_av(sv_av_ref); i++) {
-        store_av(sv_new_av_ref, i, new_sv(fetch_av(sv_av_ref, i)));
+      for (IV i = 0; i < avrv_len_fix(sv_av_ref); i++) {
+        avrv_store_inc(sv_new_av_ref, i, new_mSVsv(avrv_fetch_simple(sv_av_ref, i)));
       }
       
       return sv_new_av_ref;
     }
     
-    void store_hv(HV* hv, const char* key, SV* element) {
+    void hv_store_nolen_inc(HV* hv, const char* key, SV* element) {
       hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
     }
 
-    void store_hv(SV* hv_ref, const char* key, SV* element) {
-      HV* hv = deref_hv(hv_ref);
-      hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
+    void hvrv_store_nolen_inc(SV* hv_ref, const char* key, SV* element) {
+      HV* hv = (HV*)SvRV_safe(hv_ref);
+      return hv_store_nolen_inc(hv, key, element);
     }
     
-    void push_av(AV* av, SV* sv) {
+    void av_push_inc(AV* av, SV* sv) {
       av_push(av, SvREFCNT_inc(sv));
     }
     
-    void push_av(SV* av_ref, SV* sv) {
-      av_push(deref_av(av_ref), SvREFCNT_inc(sv));
+    void avrv_push_inc(SV* av_ref, SV* sv) {
+      return av_push_inc((AV*)SvRV_safe(av_ref), sv);
     }
 
-    void unshit_av(AV* av, SV* sv) {
+    void av_unshift_real_inc(AV* av, SV* sv) {
       av_unshift(av, 1);
-      store_av(av, (IV)0, SvREFCNT_inc(sv));
+      av_store_inc(av, (IV)0, SvREFCNT_inc(sv));
     }
     
-    void unshit_av(SV* av_ref, SV* sv) {
-      av_unshift(deref_av(av_ref), 1);
-      store_av(deref_av(av_ref), 0, SvREFCNT_inc(sv));
+    void avrv_unshift_real_inc(SV* av_ref, SV* sv) {
+      av_unshift((AV*)SvRV_safe(av_ref), 1);
+      av_store_inc((AV*)SvRV_safe(av_ref), 0, SvREFCNT_inc(sv));
     }
 
     template <class X> X to_c_obj(SV* perl_obj_ref) {
@@ -206,8 +153,8 @@ namespace Rstats {
 
     template <class X> SV* to_perl_obj(X c_obj, const char* class_name) {
       IV obj_addr = PTR2IV(c_obj);
-      SV* sv_obj_addr = new_sv_iv(obj_addr);
-      SV* sv_obj_addr_ref = new_ref(sv_obj_addr);
+      SV* sv_obj_addr = new_mSViv(obj_addr);
+      SV* sv_obj_addr_ref = new_mRV_inc(sv_obj_addr);
       SV* perl_obj = sv_bless(sv_obj_addr_ref, gv_stashpv(class_name, 1));
       
       return perl_obj;
@@ -360,7 +307,7 @@ namespace Rstats {
         return NULL;
       }
       else {
-        return Rstats::PerlAPI::new_sv(value);
+        return Rstats::PerlAPI::new_mSVsv(value);
       }
     }
     
@@ -369,7 +316,7 @@ namespace Rstats {
         SvREFCNT_dec((*this->get_character_values())[pos]);
       }
       
-      SV* new_value = Rstats::PerlAPI::new_sv(value);
+      SV* new_value = Rstats::PerlAPI::new_mSVsv(value);
       (*this->get_character_values())[pos] = SvREFCNT_inc(new_value);
     }
 

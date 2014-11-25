@@ -70,21 +70,6 @@ sub looks_like_logical {
   }
 }
 
-sub looks_like_double {
-  my $value = shift;
-  
-  return if !defined $value || !CORE::length $value;
-  $value =~ s/^ +//;
-  $value =~ s/ +$//;
-  
-  if (Scalar::Util::looks_like_number($value)) {
-    return $value + 0;
-  }
-  else {
-    return;
-  }
-}
-
 sub looks_like_complex {
   my $value = shift;
   
@@ -222,6 +207,8 @@ sub parse_index {
 Rstats::Util - Utility class
 
 =head1 FUNCTION
+
+=head2 looks_like_double (xs)
 
 =head2 looks_like_integer (xs)
 

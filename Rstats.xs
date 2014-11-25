@@ -906,6 +906,17 @@ looks_like_integer(...)
 }
 
 SV*
+looks_like_double(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  
+  SV* sv_ret = Rstats::Util::looks_like_double(sv_str);
+  
+  return_sv(sv_ret);
+}
+
+SV*
 cross_product(...)
   PPCODE:
 {

@@ -9,6 +9,26 @@ use Rstats::Util;
 #   which
 #   get - logical, undef
 
+# looks_like_double
+{
+  # looks_like_double - 5.23
+  {
+    my $num_str = "5.23";
+    my $ret = Rstats::Util::looks_like_double($num_str);
+    cmp_ok($ret, "==", 5.23);
+  }
+}
+
+# looks_like_integer
+{
+  # looks_like_double - 5
+  {
+    my $num_str = "5";
+    my $ret = Rstats::Util::looks_like_integer($num_str);
+    cmp_ok($ret, "==", 5);
+  }
+}
+
 # cross_product
 {
   my $values = [

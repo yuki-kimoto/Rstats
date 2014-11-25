@@ -6,20 +6,6 @@ namespace Rstats {
       return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
     }
     
-    IV pregexec_simple (SV* sv_str, REGEXP* sv_re) {
-      char* str = SvPV_nolen(sv_str);
-      
-      return pregexec(
-        sv_re,
-        str,
-        str + strlen(str),
-        str,
-        0,
-        sv_str,
-        0
-      );
-    }
-    
     SV* new_mRV_inc(SV* sv) {
       return sv_2mortal(newRV_inc(sv));
     }
@@ -159,6 +145,22 @@ namespace Rstats {
       
       return perl_obj;
     }
+
+    IV pregexec_simple (SV* sv_str, REGEXP* sv_re) {
+      char* str = SvPV_nolen(sv_str);
+      
+      IV ret = pregexec(
+        sv_re,
+        str,
+        str + strlen(str),
+        str,
+        0,
+        sv_str,
+        1
+      );
+      
+      return ret;
+    }
   };
   
   // Rstats::ElementsType
@@ -189,7 +191,8 @@ namespace Rstats {
 
   namespace Util {
     
-    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([-+]?[0-9]+) *$", 0), 0);
+    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+) *$", 0), 0);
+    REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
     
     SV* looks_like_integer(SV* sv_str) {
       
@@ -200,7 +203,30 @@ namespace Rstats {
       else {
         IV ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
         if (ret) {
-          sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(get_sv("1", 0)));
+          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          Perl_reg_numbered_buff_fetch(aTHX_ INTEGER_RE, 1, match1);
+          sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(match1));
+        }
+        else {
+          sv_ret = &PL_sv_undef;
+        }
+      }
+      
+      return sv_ret;
+    }
+
+    SV* looks_like_double (SV* sv_value) {
+      
+      SV* sv_ret;
+      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
+        sv_ret =  &PL_sv_undef;
+      }
+      else {
+        IV ret = Rstats::PerlAPI::pregexec_simple(sv_value, DOUBLE_RE);
+        if (ret) {
+          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          Perl_reg_numbered_buff_fetch(aTHX_ DOUBLE_RE, 1, match1);
+          sv_ret = Rstats::PerlAPI::new_mSVnv(SvNV(match1));
         }
         else {
           sv_ret = &PL_sv_undef;
@@ -478,8 +504,9 @@ namespace Rstats {
       if (this->is_character_type()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
-          if (looks_like_number(sv_value)) {
-            NV value = SvNV(sv_value);
+          SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
+          if (SvOK(sv_value_fix)) {
+            NV value = SvNV(sv_value_fix);
             e2->set_double_value(i, value);
           }
           else {
@@ -520,8 +547,9 @@ namespace Rstats {
       if (this->is_character_type()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
-          if (looks_like_number(sv_value)) {
-            IV value = SvIV(sv_value);
+          SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
+          if (SvOK(sv_value_fix)) {
+            IV value = SvIV(sv_value_fix);
             e2->set_integer_value(i, value);
           }
           else {

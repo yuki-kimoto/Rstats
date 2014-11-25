@@ -900,13 +900,7 @@ looks_like_integer(...)
 {
   SV* sv_str = ST(0);
   
-  SV* sv_ret;
-  if (Rstats::Util::looks_like_integer(sv_str)) {
-    sv_ret = my::new_mSViv(1);
-  }
-  else {
-    sv_ret = &PL_sv_undef;
-  }
+  SV* sv_ret = Rstats::Util::looks_like_integer(sv_str);
   
   return_sv(sv_ret);
 }

@@ -191,17 +191,23 @@ namespace Rstats {
     
     REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([-+]?[0-9]+) *$", 0), 0);
     
-    IV looks_like_integer(SV* sv_str) {
+    SV* looks_like_integer(SV* sv_str) {
       
-      IV ret;
+      SV* sv_ret;
       if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
-        ret = 0;
+        sv_ret = &PL_sv_undef;
       }
       else {
-        ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
+        IV ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
+        if (ret) {
+          sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(get_sv("1", 0)));
+        }
+        else {
+          sv_ret = &PL_sv_undef;
+        }
       }
       
-      return ret;
+      return sv_ret;
     }
   }
 

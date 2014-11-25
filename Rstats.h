@@ -187,6 +187,24 @@ namespace Rstats {
     typedef std::vector<IV> Integer;
   }
 
+  namespace Util {
+    
+    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([-+]?[0-9]+) *$", 0), 0);
+    
+    IV looks_like_integer(SV* sv_str) {
+      
+      IV ret;
+      if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
+        ret = 0;
+      }
+      else {
+        ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
+      }
+      
+      return ret;
+    }
+  }
+
   // Rstats::Elements
   class Elements {
     private:
@@ -1480,24 +1498,6 @@ namespace Rstats {
       }
       
       return rets;
-    }
-  }
-  
-  namespace Util {
-    
-    REGEXP* INTEGER_RE = pregcomp(newSVpv("^ *([-+]?[0-9]+) *$", 0), 0);
-    
-    IV looks_like_integer(SV* sv_str) {
-      
-      IV ret;
-      if (!SvOK(sv_str) || sv_len(sv_str) == 0) {
-        ret = 0;
-      }
-      else {
-        ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
-      }
-      
-      return ret;
     }
   }
 }

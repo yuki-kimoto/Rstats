@@ -209,6 +209,7 @@ use Rstats::ElementsFunc;
   
   # as_integer - character, only real number, no sign
   {
+    $DB::single = 1;
     my $x1 = array(c("1.23"));
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));

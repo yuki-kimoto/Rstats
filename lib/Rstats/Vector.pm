@@ -46,14 +46,6 @@ sub _fix_position {
   return ($e1, $e2);
 }
 
-sub as_character {
-  my $self = shift;
-  
-  my $e2 = Rstats::VectorFunc::character("$self");
-  
-  return $e2;
-}
-
 sub as {
   my ($self, $type) = @_;
   

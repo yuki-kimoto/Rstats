@@ -458,6 +458,83 @@ namespace Rstats {
       return elements;
     }
 
+    Rstats::Vector* as_character () {
+      IV length = this->get_length();
+      Rstats::Vector* e2 = new_character(length);
+      if (this->is_character_type()) {
+        for (IV i = 0; i < length; i++) {
+          SV* sv_value = this->get_character_value(i);
+          e2->set_character_value(i, sv_value);
+        }
+      }
+      else if (this->is_complex_type()) {
+        for (IV i = 0; i < length; i++) {
+          std::complex<NV> z = this->get_complex_value(i);
+          NV re = z.real();
+          NV im = z.imag();
+          
+          SV* sv_re = Rstats::PerlAPI::new_mSVnv(re);
+          SV* sv_im = Rstats::PerlAPI::new_mSVnv(im);
+          SV* sv_str = Rstats::PerlAPI::new_mSVpv("");
+          
+          sv_catpv(sv_str, SvPV_nolen(sv_re));
+          if (im >= 0) {
+            sv_catpv(sv_str, "+");
+          }
+          sv_catpv(sv_str, SvPV_nolen(sv_im));
+          sv_catpv(sv_str, "i");
+          
+          for (IV i = 0; i < length; i++) {
+            e2->set_character_value(i, sv_str);
+          }
+        }
+      }
+      else if (this->is_double_type()) {
+        for (IV i = 0; i < length; i++) {
+          NV value = this->get_double_value(i);
+          SV* sv_str = Rstats::PerlAPI::new_mSVpv("");
+          if (std::isinf(value) && value > 0) {
+            sv_catpv(sv_str, "Inf");
+          }
+          else if (std::isinf(value) && value < 0) {
+            sv_catpv(sv_str, "-Inf");
+          }
+          else if (std::isnan(value)) {
+            sv_catpv(sv_str, "NaN");
+          }
+          else {
+            sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(value)));
+          }
+          e2->set_character_value(i, sv_str);
+        }
+      }
+      else if (this->is_integer_type()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_character_value(
+            i,
+            Rstats::PerlAPI::new_mSViv(this->get_integer_value(i))
+          );
+        }
+      }
+      else if (this->is_logical_type()) {
+        for (IV i = 0; i < length; i++) {
+          if (this->get_integer_value(i)) {
+            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv("TRUE"));
+          }
+          else {
+            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv("FALSE"));
+          }
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(this);
+      
+      return e2;
+    }
+    
     Rstats::Vector* as_double() {
 
       IV length = this->get_length();

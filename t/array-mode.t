@@ -42,7 +42,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NA);
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
-    is_deeply($x2->values, ["NA"]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_character - Inf

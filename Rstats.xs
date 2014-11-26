@@ -32,6 +32,15 @@ namespace my = Rstats::PerlAPI;
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
+SV* as_character(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = self->as_character();
+  SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
+  return_sv(sv_e2);
+}
+
 SV* as_complex(...)
   PPCODE:
 {

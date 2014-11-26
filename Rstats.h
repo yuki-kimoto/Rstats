@@ -191,11 +191,11 @@ namespace Rstats {
   
   // Rstats::Util header
   namespace Util {
-    SV* looks_like_na (SV* sv_value);
-    SV* looks_like_integer (SV* sv_str);
-    SV* looks_like_double (SV* sv_value);
-    SV* looks_like_logical (SV* sv_value);
-    SV* looks_like_complex (SV* sv_value);
+    SV* looks_like_na (SV*);
+    SV* looks_like_integer (SV*);
+    SV* looks_like_double (SV*);
+    SV* looks_like_logical (SV*);
+    SV* looks_like_complex (SV*);
   }
   
   // Rstats::Elements

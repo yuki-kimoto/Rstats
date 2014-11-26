@@ -103,8 +103,13 @@ sub as_logical {
   elsif ($self->is_character) {
     my $value = $self->value;
     
-    if (defined (my $e1 = Rstats::Util::looks_like_logical($value))) {
-      return $e1;
+    if (defined (my $logical = Rstats::Util::looks_like_logical($value))) {
+      if ($logical) {
+        return Rstats::ElementsFunc::TRUE();
+      }
+      else {
+        return Rstats::ElementsFunc::FALSE();
+      }
     }
     else {
       return Rstats::ElementsFunc::NA();

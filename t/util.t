@@ -15,10 +15,50 @@ use Rstats::Util;
   {
     my $str = "TRUE";
     my $ret = Rstats::Util::looks_like_logical($str);
-    ok($ret->is_logical);
-    is_deeply($ret->value, 1);
+    ok(defined $ret);
+    ok($ret);
+  }
+
+  # looks_like_logical - "  TRUE  "
+  {
+    my $str = "  TRUE  ";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok(defined $ret);
+    ok($ret);
+  }
+
+  # looks_like_logical - "T"
+  {
+    my $str = "T";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok(defined $ret);
+    ok($ret);
+  }
+
+  # looks_like_logical - "FALSE"
+  {
+    my $str = "FALSE";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok(defined $ret);
+    ok(!$ret);
+  }
+
+  # looks_like_logical - "F"
+  {
+    my $str = "F";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok(defined $ret);
+    ok(!$ret);
+  }
+  
+  # looks_like_logical - "abc"
+  {
+    my $str = "abc";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok(!defined $ret);
   }
 }
+
 =pod
 # looks_like_complex
 {

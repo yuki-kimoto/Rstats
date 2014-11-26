@@ -1559,10 +1559,10 @@ namespace Rstats {
       else {
         if (Rstats::PerlAPI::pregexec_simple(sv_value, LOGICAL_RE)) {
           if (Rstats::PerlAPI::pregexec_simple(sv_value, LOGICAL_TRUE_RE)) {
-            sv_ret = Rstats::PerlAPI::to_perl_obj(Rstats::Elements::new_true(), "Rstats::Elements");
+            sv_ret = Rstats::PerlAPI::new_mSViv(1);
           }
           else {
-            sv_ret = Rstats::PerlAPI::to_perl_obj(Rstats::Elements::new_false(), "Rstats::Elements");
+            sv_ret = Rstats::PerlAPI::new_mSViv(0);
           }
         }
         else {

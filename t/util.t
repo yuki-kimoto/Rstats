@@ -9,6 +9,84 @@ use Rstats::Util;
 #   which
 #   get - logical, undef
 
+# looks_like_logical
+{
+  # looks_like_logical - "TRUE"
+  {
+    my $str = "TRUE";
+    my $ret = Rstats::Util::looks_like_logical($str);
+    ok($ret->is_logical);
+    is_deeply($ret->value, 1);
+  }
+}
+=pod
+# looks_like_complex
+{
+  # looks_like_complex - "abc"
+  {
+    my $num_str = "abc";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    ok(!defined $ret);
+  }
+  
+  # looks_like_complex - "2i"
+  {
+    my $num_str = "2i";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 0);
+    cmp_ok($ret->{im}, "==", 2);
+  }
+
+  # looks_like_complex - "2.3i"
+  {
+    my $num_str = "2.3i";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 0);
+    cmp_ok($ret->{im}, "==", 2.3);
+  }
+
+  # looks_like_complex - "-2.3i"
+  {
+    my $num_str = "-2.3i";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 0);
+    cmp_ok($ret->{im}, "==", -2.3);
+  }
+
+  # looks_like_complex - "  2.3i  "
+  {
+    my $num_str = "  2.3i  ";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 0);
+    cmp_ok($ret->{im}, "==", 2.3);
+  }
+
+  # looks_like_complex - "1.2+2.3i"
+  {
+    my $num_str = "1.2+2.3i";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 1.2);
+    cmp_ok($ret->{im}, "==", 2.3);
+  }
+
+  # looks_like_complex - "  1.2  +  2.3i  "
+  {
+    my $num_str = "  1.2+2.3i  ";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", 1.2);
+    cmp_ok($ret->{im}, "==", 2.3);
+  }
+
+  # looks_like_complex - "-1.2-2.3i"
+  {
+    my $num_str = "-1.2-2.3i";
+    my $ret = Rstats::Util::looks_like_complex($num_str);
+    cmp_ok($ret->{re}, "==", -1.2);
+    cmp_ok($ret->{im}, "==", -2.3);
+  }
+}
+=cut
+
 # looks_like_double
 {
   # looks_like_double - 5.23

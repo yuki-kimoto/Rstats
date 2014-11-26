@@ -54,44 +54,6 @@ sub as_character {
   return $e2;
 }
 
-sub as_complex {
-  my $self = shift;
-
-  if ($self->is_na) {
-    return $self;
-  }
-  elsif ($self->is_character) {
-    my $z = Rstats::Util::looks_like_complex($self->cv);
-    if (defined $z) {
-      return Rstats::ElementsFunc::complex($z->{re}, $z->{im});
-    }
-    else {
-      carp 'NAs introduced by coercion';
-      return Rstats::ElementsFunc::NA();
-    }
-  }
-  elsif ($self->is_complex) {
-    return $self;
-  }
-  elsif ($self->is_double) {
-    if ($self->is_nan) {
-      return Rstats::ElementsFunc::NA();
-    }
-    else {
-      return Rstats::ElementsFunc::complex_double($self, Rstats::ElementsFunc::double(0));
-    }
-  }
-  elsif ($self->is_integer) {
-    return Rstats::ElementsFunc::complex($self->iv, 0);
-  }
-  elsif ($self->is_logical) {
-    return Rstats::ElementsFunc::complex($self->iv ? 1 : 0, 0);
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
 sub as_numeric { as_double(@_) }
 
 sub as {

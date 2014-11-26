@@ -551,6 +551,58 @@ namespace Rstats {
       return e2;
     }
 
+    Rstats::Elements* as_complex() {
+
+      IV length = this->get_length();
+      Rstats::Elements* e2 = new_complex(length);
+      if (this->is_character_type()) {
+        for (IV i = 0; i < length; i++) {
+          SV* sv_value = this->get_character_value(i);
+          SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
+          
+          if (SvOK(sv_z)) {
+            SV* sv_re = Rstats::PerlAPI::hvrv_fetch_simple(sv_z, "re");
+            SV* sv_im = Rstats::PerlAPI::hvrv_fetch_simple(sv_z, "im");
+            NV re = SvNV(sv_re);
+            NV im = SvNV(sv_im);
+            e2->set_complex_value(i, std::complex<NV>(re, im));
+          }
+          else {
+            warn("NAs introduced by coercion");
+            e2->add_na_position(i);
+          }
+        }
+      }
+      else if (this->is_complex_type()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_complex_value(i, this->get_complex_value(i));
+        }
+      }
+      else if (this->is_double_type()) {
+        for (IV i = 0; i < length; i++) {
+          NV value = this->get_double_value(i);
+          if (std::isnan(value)) {
+            e2->add_na_position(i);
+          }
+          else {
+            e2->set_complex_value(i, std::complex<NV>(this->get_double_value(i), 0));
+          }
+        }
+      }
+      else if (this->is_integer_type() || this->is_logical_type()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_complex_value(i, std::complex<NV>(this->get_integer_value(i), 0));
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(this);
+      
+      return e2;
+    }
+    
     Rstats::Elements* as_logical() {
       IV length = this->get_length();
       Rstats::Elements* e2 = new_logical(length);

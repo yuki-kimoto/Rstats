@@ -154,6 +154,8 @@ Rstats::Util - Utility class
 
 =head2 looks_like_integer (xs)
 
+=head2 looks_like_complex (xs)
+
 =head2 index_to_pos (xs)
 
 =head2 pos_to_index (xs)

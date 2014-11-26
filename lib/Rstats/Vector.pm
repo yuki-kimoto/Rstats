@@ -54,8 +54,6 @@ sub as_character {
   return $e2;
 }
 
-sub as_numeric { as_double(@_) }
-
 sub as {
   my ($self, $type) = @_;
   
@@ -246,7 +244,15 @@ Rstats::Vector - Vector
 
 =heaa1 METHODS
 
-=head2 as_double
+=head2 as_double (xs)
+
+=head2 as_integer (xs)
+
+=head2 as_numeric (xs)
+
+=head2 as_complex (xs)
+
+=head2 as_logical (xs)
 
 =head2 type
 

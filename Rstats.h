@@ -501,6 +501,10 @@ namespace Rstats {
       return e2;
     }
 
+    Rstats::Vector* as_numeric() {
+      return this->as_double();
+    }
+
     Rstats::Vector* as_integer() {
 
       IV length = this->get_length();

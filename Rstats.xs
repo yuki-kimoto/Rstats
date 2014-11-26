@@ -36,11 +36,8 @@ SV* as_complex(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = self->as_complex();
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -48,11 +45,17 @@ SV* as_logical(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = self->as_logical();
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
+  return_sv(sv_e2);
+}
+
+SV* as_numeric(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = self->as_numeric();
+  SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
   return_sv(sv_e2);
 }
 
@@ -60,11 +63,8 @@ SV* as_double(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = self->as_double();
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -72,11 +72,8 @@ SV* as_integer(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = self->as_integer();
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -84,9 +81,7 @@ SV* new_null(...)
   PPCODE:
 {
   Rstats::Vector* elements = Rstats::Vector::new_null();
-  
   SV* sv_elements = my::to_perl_obj(elements, "Rstats::Vector");
-  
   return_sv(sv_elements);
 }
 
@@ -94,9 +89,7 @@ SV* length_value(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   IV length = self->get_length();
-  
   return_sv(my::new_mSViv(length));
 }
 
@@ -104,11 +97,9 @@ SV* length(...)
   PPCODE:
 {
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   IV length = self->get_length();
   Rstats::Vector* length_elements = Rstats::Vector::new_double(1, length);
   SV* sv_length_elements = my::to_perl_obj(length_elements, "Rstats::Vector");
-  
   return_sv(sv_length_elements);
 }
 

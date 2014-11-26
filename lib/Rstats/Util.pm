@@ -39,24 +39,6 @@ sub higher_type {
   }
 }
 
-sub looks_like_logical {
-  my $value = shift;
-  
-  return if !defined $value || !CORE::length $value;
-  
-  if ($value =~ /^(T|TRUE|F|FALSE)$/) {
-    if ($value =~ /T/) {
-      return Rstats::ElementsFunc::logical(1);
-    }
-    else {
-      return Rstats::ElementsFunc::logical(0);
-    }
-  }
-  else {
-    return;
-  }
-}
-
 sub looks_like_complex {
   my $value = shift;
   
@@ -194,6 +176,10 @@ sub parse_index {
 Rstats::Util - Utility class
 
 =head1 FUNCTION
+
+=head2 looks_like_na (xs)
+
+=head2 looks_like_logical (xs)
 
 =head2 looks_like_double (xs)
 

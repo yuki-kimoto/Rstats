@@ -11,7 +11,7 @@ use Rstats;
     my $x1 = c(-0.2);
     my $x2 = c(-Inf);
     my $x3 = $x1 * $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::Inf]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::Inf]);
   }
 
   # numeric operator - -Inf + 2i
@@ -32,7 +32,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE]);
   }
   
   # comparison operator numeric - <, arguments count is different
@@ -40,7 +40,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE]);
   }
 
   # comparison operator numeric - <=
@@ -48,7 +48,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -56,7 +56,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
   }
 
   # comparison operator numeric - >
@@ -64,7 +64,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -72,7 +72,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - >=
@@ -80,7 +80,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -88,7 +88,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - ==
@@ -96,7 +96,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -104,7 +104,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::FALSE, Rstats::ElementsFunc::TRUE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
   }
 
   # comparison operator numeric - !=
@@ -112,7 +112,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -120,6 +120,6 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->decompose_elements, [Rstats::ElementsFunc::TRUE, Rstats::ElementsFunc::FALSE]);
+    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
   }
 }

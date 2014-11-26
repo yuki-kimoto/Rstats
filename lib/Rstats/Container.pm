@@ -4,7 +4,7 @@ use Object::Simple -base;
 use Rstats::Func;
 use Rstats::Container::List;
 use Carp 'croak';
-use Rstats::Elements;
+use Rstats::Vector;
 
 sub is_perl_array_class {
   my $self  = shift;
@@ -180,7 +180,7 @@ sub str {
       push @str, "[$dim_str]";
     }
     
-    # Elements
+    # Vector
     my @element_str;
     my $max_count = $length > 10 ? 10 : $length;
     my $is_character = $self->is_character;
@@ -247,7 +247,7 @@ sub _name_to_index {
   my $index;
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
-    if (Rstats::ElementsFunc::equal($e1_name, $name)) {
+    if (Rstats::VectorFunc::equal($e1_name, $name)) {
       $index = $i + 1;
       $found = 1;
       last;
@@ -292,7 +292,7 @@ sub is_na {
   my $x1 = Rstats::Func::to_c($_a1);
   
   my @a2_elements = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE()
+    ref $_ eq  'Rstats::Type::NA' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE()
   } @{$x1->decompose_elements};
   my $x2 = Rstats::Func::array(\@a2_elements);
   $x2->mode('logical');
@@ -676,7 +676,7 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    my @elements = map { Rstats::ElementsFunc::element($_) } @{$_[0]};
+    my @elements = map { Rstats::VectorFunc::element($_) } @{$_[0]};
     
     $self->elements(Rstats::Func::c(\@elements)->elements);
   }
@@ -698,7 +698,7 @@ sub value {
 sub is_vector {
   my $self = shift;
   
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -706,7 +706,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -715,7 +715,7 @@ sub is_numeric {
   my $self = shift;
   
   my $is = ($self->{type} || '') eq 'double' || ($self->{type} || '') eq 'integer'
-    ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -723,7 +723,7 @@ sub is_numeric {
 sub is_double {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'double' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'double' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -731,7 +731,7 @@ sub is_double {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'integer' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'integer' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -739,7 +739,7 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'complex' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'complex' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -747,7 +747,7 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'character' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'character' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -755,7 +755,7 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'logical' ? Rstats::ElementsFunc::TRUE() : Rstats::ElementsFunc::FALSE();
+  my $is = ($self->{type} || '') eq 'logical' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }

@@ -1,25 +1,25 @@
-package Rstats::Elements;
+package Rstats::Vector;
 use Object::Simple -base;
 
 use Carp 'croak', 'carp';
-use Rstats::ElementsFunc;
+use Rstats::VectorFunc;
 use Rstats::Util;
 
 use overload
   bool => \&bool,
-  '+' => sub { Rstats::ElementsFunc::add(shift->_fix_position(@_)) },
-  '-' => sub { Rstats::ElementsFunc::subtract(shift->_fix_position(@_)) },
-  '*' => sub { Rstats::ElementsFunc::multiply(shift->_fix_position(@_)) },
-  '/' => sub { Rstats::ElementsFunc::divide(shift->_fix_position(@_)) },
-  '%' => sub { Rstats::ElementsFunc::remainder(shift->_fix_position(@_)) },
-  'neg' => sub { Rstats::ElementsFunc::negation(@_) },
-  '**' => sub { Rstats::ElementsFunc::raise(shift->_fix_position(@_)) },
-  '<' => sub { Rstats::ElementsFunc::less_than(shift->_fix_position(@_)) },
-  '<=' => sub { Rstats::ElementsFunc::less_than_or_equal(shift->_fix_position(@_)) },
-  '>' => sub { Rstats::ElementsFunc::more_than(shift->_fix_position(@_)) },
-  '>=' => sub { Rstats::ElementsFunc::more_than_or_equal(shift->_fix_position(@_)) },
-  '==' => sub { Rstats::ElementsFunc::equal(shift->_fix_position(@_)) },
-  '!=' => sub { Rstats::ElementsFunc::not_equal(shift->_fix_position(@_)) },
+  '+' => sub { Rstats::VectorFunc::add(shift->_fix_position(@_)) },
+  '-' => sub { Rstats::VectorFunc::subtract(shift->_fix_position(@_)) },
+  '*' => sub { Rstats::VectorFunc::multiply(shift->_fix_position(@_)) },
+  '/' => sub { Rstats::VectorFunc::divide(shift->_fix_position(@_)) },
+  '%' => sub { Rstats::VectorFunc::remainder(shift->_fix_position(@_)) },
+  'neg' => sub { Rstats::VectorFunc::negation(@_) },
+  '**' => sub { Rstats::VectorFunc::raise(shift->_fix_position(@_)) },
+  '<' => sub { Rstats::VectorFunc::less_than(shift->_fix_position(@_)) },
+  '<=' => sub { Rstats::VectorFunc::less_than_or_equal(shift->_fix_position(@_)) },
+  '>' => sub { Rstats::VectorFunc::more_than(shift->_fix_position(@_)) },
+  '>=' => sub { Rstats::VectorFunc::more_than_or_equal(shift->_fix_position(@_)) },
+  '==' => sub { Rstats::VectorFunc::equal(shift->_fix_position(@_)) },
+  '!=' => sub { Rstats::VectorFunc::not_equal(shift->_fix_position(@_)) },
   '""' => \&to_string,
   fallback => 1;
 
@@ -28,18 +28,18 @@ sub _fix_position {
   
   my $e1;
   my $e2;
-  if (ref $data eq 'Rstats::Elements') {
+  if (ref $data eq 'Rstats::Vector') {
     $e1 = $self;
     $e2 = $data;
   }
   else {
     if ($reverse) {
-      $e1 = Rstats::ElementsFunc::element($data);
+      $e1 = Rstats::VectorFunc::element($data);
       $e2 = $self;
     }
     else {
       $e1 = $self;
-      $e2 = Rstats::ElementsFunc::element($data);
+      $e2 = Rstats::VectorFunc::element($data);
     }
   }
   
@@ -49,7 +49,7 @@ sub _fix_position {
 sub as_character {
   my $self = shift;
   
-  my $e2 = Rstats::ElementsFunc::character("$self");
+  my $e2 = Rstats::VectorFunc::character("$self");
   
   return $e2;
 }
@@ -202,7 +202,7 @@ sub value {
     $value = $self->iv;
   }
   else {
-    croak "Invalid type(Rstats::Elements::value())";
+    croak "Invalid type(Rstats::Vector::value())";
   }
   
   my $is_na = $self->is_na->iv;
@@ -242,7 +242,7 @@ sub is_negative_infinite {
 
 =head1 NAME
 
-Rstats::Elements - Elements
+Rstats::Vector - Vector
 
 =heaa1 METHODS
 

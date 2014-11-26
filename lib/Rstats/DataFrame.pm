@@ -1,5 +1,5 @@
-package Rstats::Container::DataFrame;
-use Rstats::Container::List -base;
+package Rstats::DataFrame;
+use Rstats::List -base;
 
 use overload '""' => \&to_string,
   fallback => 1;
@@ -71,7 +71,7 @@ sub get {
   }
   
   # Create new data frame
-  my $data_frame = Rstats::Container::DataFrame->new;
+  my $data_frame = Rstats::DataFrame->new;
   $data_frame->list($new_elements);
   $self->_copy_attrs_to($data_frame, {new_indexes => [$row_index, Rstats::Func::c($col_index_values)]});
   $data_frame->{dimnames}[0] = [1 .. $data_frame->getin(1)->length_value];
@@ -114,5 +114,5 @@ sub to_string {
 
 =head1 NAME
 
-Rstats::Container::DataFrame - Data frame
+Rstats::DataFrame - Data frame
 

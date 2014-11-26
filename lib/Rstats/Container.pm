@@ -2,7 +2,7 @@ package Rstats::Container;
 use Object::Simple -base;
 
 use Rstats::Func;
-use Rstats::Container::List;
+use Rstats::List;
 use Carp 'croak';
 use Rstats::Vector;
 
@@ -10,7 +10,7 @@ sub is_perl_array_class {
   my $self  = shift;
   
   my $is;
-  eval { $is = $self->isa('Rstats::Container::Array') };
+  eval { $is = $self->isa('Rstats::Array') };
   
   return $is;
 }
@@ -19,7 +19,7 @@ sub is_perl_list_class {
   my $self  = shift;
   
   my $is;
-  eval { $is = $self->isa('Rstats::Container::List') };
+  eval { $is = $self->isa('Rstats::List') };
   
   return $is;
 }
@@ -307,7 +307,7 @@ sub as_list {
     return $self;
   }
   else {
-    my $list = Rstats::Container::List->new;
+    my $list = Rstats::List->new;
     $list->list([Rstats::Func::c($self->decompose_elements)]);
     
     return $list;
@@ -698,7 +698,7 @@ sub value {
 sub is_vector {
   my $self = shift;
   
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 0 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 0 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -706,7 +706,7 @@ sub is_vector {
 sub is_matrix {
   my $self = shift;
 
-  my $is = ref $self eq 'Rstats::Container::Array' && $self->dim->length_value == 2 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 2 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -763,13 +763,13 @@ sub is_logical {
 sub is_data_frame {
   my $self = shift;
   
-  return ref $self eq 'Rstats::Container::DataFrame' ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+  return ref $self eq 'Rstats::DataFrame' ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
 }
 
 sub is_array {
   my $self = shift;
   
-  my $is = ref $self eq 'Rstats::Container::Array' && exists $self->{dim};
+  my $is = ref $self eq 'Rstats::Array' && exists $self->{dim};
   
   return $is;
 }
@@ -804,7 +804,7 @@ sub dimnames {
   
   if (@_) {
     my $dimnames_list = shift;
-    if (ref $dimnames_list eq 'Rstats::Container::List') {
+    if (ref $dimnames_list eq 'Rstats::List') {
       my $length = $dimnames_list->length_value;
       my $dimnames = [];
       for (my $i = 0; $i < $length; $i++) {

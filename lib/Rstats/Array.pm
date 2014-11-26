@@ -1,4 +1,4 @@
-package Rstats::Container::Array;
+package Rstats::Array;
 use Rstats::Container -base;
 
 use Rstats::VectorFunc;
@@ -390,7 +390,7 @@ sub _fix_position {
   
   my $x1;
   my $x2;
-  if (ref $data eq 'Rstats::Container::Array') {
+  if (ref $data eq 'Rstats::Array') {
     $x1 = $self;
     $x2 = $data;
   }
@@ -412,4 +412,4 @@ sub _fix_position {
 
 =head1 NAME
 
-Rstats::Container::Array - Array
+Rstats::Array - Array

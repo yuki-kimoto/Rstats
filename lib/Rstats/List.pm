@@ -1,4 +1,4 @@
-package Rstats::Container::List;
+package Rstats::List;
 use Rstats::Container -base;
 
 use Rstats::Func;
@@ -119,7 +119,7 @@ sub _to_string {
     $$str_ref .= join('', map { "[[$_]]" } @$poses) . "\n";
     
     my $element = $elements->[$i];
-    if (ref $element eq 'Rstats::Container::List') {
+    if (ref $element eq 'Rstats::List') {
       $self->_to_string($element, $poses, $str_ref);
     }
     else {
@@ -133,4 +133,4 @@ sub _to_string {
 
 =head1 NAME
 
-Rstats::Container::List - List
+Rstats::List - List

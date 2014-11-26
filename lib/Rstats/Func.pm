@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use Carp qw/croak carp/;
 
-use Rstats::Container::Array;
-use Rstats::Container::List;
-use Rstats::Container::DataFrame;
+use Rstats::Array;
+use Rstats::List;
+use Rstats::DataFrame;
 use Rstats::VectorFunc;
 
 use List::Util;
@@ -15,7 +15,7 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub NULL { Rstats::Container::Array->new(elements => Rstats::Vector->new_null, type => 'logical') }
+sub NULL { Rstats::Array->new(elements => Rstats::Vector->new_null, type => 'logical') }
 
 sub NA { c(Rstats::VectorFunc::NA()) }
 
@@ -478,9 +478,9 @@ sub length {
 sub list {
   my @elements = @_;
   
-  @elements = map { ref $_ ne 'Rstats::Container::List' ? Rstats::Func::to_c($_) : $_ } @elements;
+  @elements = map { ref $_ ne 'Rstats::List' ? Rstats::Func::to_c($_) : $_ } @elements;
   
-  my $list = Rstats::Container::List->new;
+  my $list = Rstats::List->new;
   $list->list(\@elements);
   
   return $list;
@@ -566,7 +566,7 @@ sub data_frame {
   }
   
   # Create data frame
-  my $data_frame = Rstats::Container::DataFrame->new;
+  my $data_frame = Rstats::DataFrame->new;
   $data_frame->{row_length} = $max_count;
   $data_frame->list($elements);
   $data_frame->dimnames(
@@ -895,7 +895,7 @@ sub c {
         if (ref $element eq 'ARRAY') {
           push @$elements, @$element;
         }
-        elsif (ref $element eq 'Rstats::Container::Array') {
+        elsif (ref $element eq 'Rstats::Array') {
           push @$elements, @{$element->decompose_elements};
         }
         else {
@@ -903,7 +903,7 @@ sub c {
         }
       }
     }
-    elsif (ref $elements_tmp2 eq 'Rstats::Container::Array') {
+    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
       $elements = $elements_tmp2->decompose_elements;
     }
     else {

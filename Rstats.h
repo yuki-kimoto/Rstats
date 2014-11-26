@@ -552,15 +552,19 @@ namespace Rstats {
     }
 
     Rstats::Elements* as_logical() {
-
       IV length = this->get_length();
       Rstats::Elements* e2 = new_logical(length);
       if (this->is_character_type()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
-          if (looks_like_number(sv_value)) {
-            IV value = SvIV(sv_value);
-            e2->set_integer_value(i, value);
+          SV* sv_logical = Rstats::Util::looks_like_logical(sv_value);
+          if (SvOK(sv_logical)) {
+            if (SvTRUE(sv_logical)) {
+              e2->set_integer_value(i, 1);
+            }
+            else {
+              e2->set_integer_value(i, 0);
+            }
           }
           else {
             warn("NAs introduced by coercion");
@@ -575,11 +579,13 @@ namespace Rstats {
         }
       }
       else if (this->is_double_type()) {
-        NV value;
         for (IV i = 0; i < length; i++) {
-          value = this->get_double_value(i);
-          if (std::isnan(value) || std::isinf(value)) {
+          NV value = this->get_double_value(i);
+          if (std::isnan(value)) {
             e2->add_na_position(i);
+          }
+          else if (std::isinf(value)) {
+            e2->set_integer_value(i, 1);
           }
           else {
             e2->set_integer_value(i, (IV)value);

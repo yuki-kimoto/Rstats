@@ -94,60 +94,6 @@ sub as_complex {
 
 sub as_numeric { as_double(@_) }
 
-sub as_logical {
-  my $self = shift;
-  
-  if ($self->is_na) {
-    return $self;
-  }
-  elsif ($self->is_character) {
-    my $value = $self->value;
-    
-    if (defined (my $logical = Rstats::Util::looks_like_logical($value))) {
-      if ($logical) {
-        return Rstats::ElementsFunc::TRUE();
-      }
-      else {
-        return Rstats::ElementsFunc::FALSE();
-      }
-    }
-    else {
-      return Rstats::ElementsFunc::NA();
-    }
-  }
-  elsif ($self->is_complex) {
-    carp "imaginary parts discarded in coercion";
-    my $re = $self->re->value;
-    my $im = $self->im->value;
-    if (defined $re && $re == 0 && defined $im && $im == 0) {
-      return Rstats::ElementsFunc::FALSE();
-    }
-    else {
-      return Rstats::ElementsFunc::TRUE();
-    }
-  }
-  elsif ($self->is_double) {
-    if ($self->is_nan) {
-      return Rstats::ElementsFunc::NA();
-    }
-    elsif ($self->is_infinite) {
-      return Rstats::ElementsFunc::TRUE();
-    }
-    else {
-      return $self->dv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
-    }
-  }
-  elsif ($self->is_integer) {
-    return $self->iv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
-  }
-  elsif ($self->is_logical) {
-    return $self->iv == 0 ? Rstats::ElementsFunc::FALSE() : Rstats::ElementsFunc::TRUE();
-  }
-  else {
-    croak "unexpected type";
-  }
-}
-
 sub as {
   my ($self, $type) = @_;
   

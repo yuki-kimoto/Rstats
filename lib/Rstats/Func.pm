@@ -246,7 +246,6 @@ sub read_table {
     }
   }
   
-  
   my $data_frame_args = [];
   for (my $i = 0; $i < $row_size; $i++) {
     if (defined $header->[$i]) {

@@ -951,6 +951,17 @@ looks_like_logical(...)
 }
 
 SV*
+looks_like_complex(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  
+  SV* sv_ret = Rstats::Util::looks_like_complex(sv_str);
+  
+  return_sv(sv_ret);
+}
+
+SV*
 cross_product(...)
   PPCODE:
 {

@@ -59,7 +59,6 @@ use Rstats::Util;
   }
 }
 
-=pod
 # looks_like_complex
 {
   # looks_like_complex - "abc"
@@ -125,7 +124,6 @@ use Rstats::Util;
     cmp_ok($ret->{im}, "==", -2.3);
   }
 }
-=cut
 
 # looks_like_double
 {

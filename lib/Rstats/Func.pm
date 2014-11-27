@@ -1390,7 +1390,7 @@ sub operation {
   my $x3;
   if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
    || $op eq 'raise' || $op eq 'equal' || $op eq 'not_equal' || $op eq 'more_than'
-   || $op eq 'less_than')
+   || $op eq 'less_than' || $op eq 'more_than_or_equal')
   {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
     $x3 = Rstats::Func::NULL();

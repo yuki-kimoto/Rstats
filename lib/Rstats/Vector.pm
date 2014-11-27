@@ -46,32 +46,6 @@ sub _fix_position {
   return ($e1, $e2);
 }
 
-sub as {
-  my ($self, $type) = @_;
-  
-  if ($type eq 'character') {
-    return $self->as_character;
-  }
-  elsif ($type eq 'complex') {
-    return $self->as_complex;
-  }
-  elsif ($type eq 'double') {
-    return $self->as_double;
-  }
-  elsif ($type eq 'numeric') {
-    return $self->as_numeric;
-  }
-  elsif ($type eq 'integer') {
-    return $self->as_integer;
-  }
-  elsif ($type eq 'logical') {
-    return $self->as_logical;
-  }
-  else {
-    croak "Invalid mode is passed";
-  }
-}
-
 sub to_string {
   my $self = shift;
   

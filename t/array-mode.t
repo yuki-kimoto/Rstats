@@ -18,7 +18,6 @@ use Rstats::VectorFunc;
     is($x1->values->[1]->{im}, 4);
     ok(r->is_complex($x1));
   }
-
 }
 
 # as_character

@@ -191,6 +191,13 @@ namespace Rstats {
   
   // Rstats::Util header
   namespace Util {
+    SV* SV_CHARACTER_TYPE_NAME = newSVpv("character", 0);
+    SV* SV_COMPLEX_TYPE_NAME = newSVpv("complex", 0);
+    SV* SV_DOUBLE_TYPE_NAME = newSVpv("double", 0);
+    SV* SV_NUMERIC_TYPE_NAME = newSVpv("numeric", 0);
+    SV* SV_INTEGER_TYPE_NAME = newSVpv("integer", 0);
+    SV* SV_LOGICAL_TYPE_NAME = newSVpv("logical", 0);
+
     SV* looks_like_na (SV*);
     SV* looks_like_integer (SV*);
     SV* looks_like_double (SV*);
@@ -204,6 +211,7 @@ namespace Rstats {
     Rstats::VectorType::Enum type;
     std::map<IV, IV> na_positions;
     void* values;
+    
     
     public:
     
@@ -458,6 +466,38 @@ namespace Rstats {
       return elements;
     }
 
+    Rstats::Vector* as (SV* sv_type) {
+      Rstats::Vector* e2;
+      if (SvOK(sv_type)) {
+        if (sv_cmp(sv_type, Rstats::Util::SV_CHARACTER_TYPE_NAME) == 0) {
+          e2 = this->as_character();
+        }
+        else if (sv_cmp(sv_type, Rstats::Util::SV_COMPLEX_TYPE_NAME) == 0) {
+          e2 = this->as_complex();
+        }
+        else if (sv_cmp(sv_type, Rstats::Util::SV_DOUBLE_TYPE_NAME) == 0) {
+          e2 = this->as_double();
+        }
+        else if (sv_cmp(sv_type, Rstats::Util::SV_NUMERIC_TYPE_NAME) == 0) {
+          e2 = this->as_numeric();
+        }
+        else if (sv_cmp(sv_type, Rstats::Util::SV_INTEGER_TYPE_NAME) == 0) {
+          e2 = this->as_integer();
+        }
+        else if (sv_cmp(sv_type, Rstats::Util::SV_LOGICAL_TYPE_NAME) == 0) {
+          e2 = this->as_logical();
+        }
+        else {
+          croak("Invalid mode is passed(Rstats::Vector::as())");
+        }
+      }
+      else {
+        croak("Invalid mode is passed(Rstats::Vector::as())");
+      }
+      
+      return e2;
+    }
+    
     Rstats::Vector* as_character () {
       IV length = this->get_length();
       Rstats::Vector* e2 = new_character(length);

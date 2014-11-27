@@ -32,6 +32,60 @@ namespace my = Rstats::PerlAPI;
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
+SV* is_character(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_character();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
+SV* is_complex(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_complex();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
+SV* is_numeric(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_numeric();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
+SV* is_double(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_double();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
+SV* is_integer(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_integer();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
+SV* is_logical(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  bool is = self->is_logical();
+  SV* sv_is = is ? my::new_mSViv(1) : my::new_mSViv(0);
+  return_sv(sv_is);
+}
+
 SV* as(...)
   PPCODE:
 {
@@ -278,7 +332,7 @@ decompose(...)
   if (length > 0) {
     av_extend((AV*)my::SvRV_safe(sv_decompose_elements), length);
 
-    if (self->is_character_type()) {
+    if (self->is_character()) {
       for (IV i = 0; i < length; i++) {
         Rstats::Vector* elements
           = Rstats::Vector::new_character(1, self->get_character_value(i));
@@ -289,7 +343,7 @@ decompose(...)
         my::avrv_push_inc(sv_decompose_elements, sv_elements);
       }
     }
-    else if (self->is_complex_type()) {
+    else if (self->is_complex()) {
       for (IV i = 0; i < length; i++) {
         Rstats::Vector* elements
           = Rstats::Vector::new_complex(1, self->get_complex_value(i));
@@ -300,7 +354,7 @@ decompose(...)
         my::avrv_push_inc(sv_decompose_elements, sv_elements);
       }
     }
-    else if (self->is_double_type()) {
+    else if (self->is_double()) {
 
       for (IV i = 0; i < length; i++) {
         Rstats::Vector* elements
@@ -312,7 +366,7 @@ decompose(...)
         my::avrv_push_inc(sv_decompose_elements, sv_elements);
       }
     }
-    else if (self->is_integer_type()) {
+    else if (self->is_integer()) {
       for (IV i = 0; i < length; i++) {
         Rstats::Vector* elements
           = Rstats::Vector::new_integer(1, self->get_integer_value(i));
@@ -323,7 +377,7 @@ decompose(...)
         my::avrv_push_inc(sv_decompose_elements, sv_elements);
       }
     }
-    else if (self->is_logical_type()) {
+    else if (self->is_logical()) {
       for (IV i = 0; i < length; i++) {
         Rstats::Vector* elements
           = Rstats::Vector::new_logical(1, self->get_integer_value(i));
@@ -386,19 +440,19 @@ type(...)
   
   SV* sv_type;
 
-  if (self->is_logical_type()) {
+  if (self->is_logical()) {
     sv_type = my::new_mSVpv_nolen("logical");
   }
-  else if (self->is_integer_type()) {
+  else if (self->is_integer()) {
     sv_type = my::new_mSVpv_nolen("integer");
   }
-  else if (self->is_double_type()) {
+  else if (self->is_double()) {
     sv_type = my::new_mSVpv_nolen("double");
   }
-  else if (self->is_complex_type()) {
+  else if (self->is_complex()) {
     sv_type = my::new_mSVpv_nolen("complex");
   }
-  else if (self->is_character_type()) {
+  else if (self->is_character()) {
     sv_type = my::new_mSVpv_nolen("character");
   }
   
@@ -446,7 +500,7 @@ cv(...)
   Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
   
   SV* sv_str;
-  if (self->is_character_type()) {
+  if (self->is_character()) {
     sv_str = self->get_character_value(0);
   }
   else {

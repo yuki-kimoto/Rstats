@@ -179,15 +179,6 @@ sub value {
 
 sub typeof { shift->type }
 
-sub is_character { shift->type eq 'character' }
-sub is_complex { shift->type eq 'complex' }
-sub is_numeric {
-  my $self = shift;
-  return $self->is_double || $self->is_integer;
-}
-sub is_double { shift->type eq 'double' }
-sub is_integer { shift->type eq 'integer' }
-sub is_logical { shift->type eq 'logical' }
 
 sub is_positive_infinite {
   my $self = shift;

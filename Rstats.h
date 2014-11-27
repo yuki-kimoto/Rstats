@@ -464,6 +464,7 @@ namespace Rstats {
     static Rstats::Vector* new_null() {
       Rstats::Vector* elements = new Rstats::Vector;
       elements->values = NULL;
+      elements->type = Rstats::VectorType::LOGICAL;
       return elements;
     }
 

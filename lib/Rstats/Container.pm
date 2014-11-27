@@ -681,9 +681,9 @@ sub values {
     $self->elements(Rstats::Func::c(\@elements)->elements);
   }
   else {
-    my @values = map { $_->value } @{$self->decompose_elements};
-  
-    return \@values;
+    my $values = $self->elements->values;
+    
+    return $values;
   }
 }
 

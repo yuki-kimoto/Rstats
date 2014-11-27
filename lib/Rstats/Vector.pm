@@ -127,58 +127,9 @@ sub bool {
   return $is;
 }
 
-sub value {
-  my $self = shift;
-  
-  my $value;
-  if ($self->is_double) {
-    if ($self->is_positive_infinite) {
-      $value = 'Inf';
-    }
-    elsif ($self->is_negative_infinite) {
-      $value = '-Inf';
-    }
-    elsif ($self->is_nan) {
-      $value = 'NaN';
-    }
-    else {
-      $value = $self->dv;
-    }
-  }
-  elsif ($self->is_logical) {
-    if ($self->iv) {
-      $value = 1;
-    }
-    else {
-      $value = 0;
-    }
-  }
-  elsif ($self->is_complex) {
-    $value = {
-      re => $self->re->value,
-      im => $self->im->value
-    };
-  }
-  elsif ($self->is_character) {
-    $value = $self->cv;
-  }
-  elsif ($self->is_integer) {
-    $value = $self->iv;
-  }
-  else {
-    croak "Invalid type(Rstats::Vector::value())";
-  }
-  
-  my $is_na = $self->is_na->iv;
-  if ($is_na) {
-    $value = undef;
-  }
-  
-  return $value;
-}
+sub value { shift->values->[0] }
 
 sub typeof { shift->type }
-
 
 sub is_positive_infinite {
   my $self = shift;
@@ -192,7 +143,6 @@ sub is_negative_infinite {
   return $self->is_infinite && $self->dv < 0;
 }
 
-
 1;
 
 =head1 NAME
@@ -200,6 +150,20 @@ sub is_negative_infinite {
 Rstats::Vector - Vector
 
 =heaa1 METHODS
+
+=head2 values (xs)
+
+=head2 is_character (xs)
+
+=head2 is_complex (xs)
+
+=head2 is_double (xs)
+
+=head2 is_integer (xs)
+
+=head2 is_numeric (xs)
+
+=head2 is_logical (xs)
 
 =head2 as_double (xs)
 
@@ -224,8 +188,6 @@ Rstats::Vector - Vector
 =head2 im
 
 =head2 flag
-
-=head2  XS
 
 =head2  is_nan
 

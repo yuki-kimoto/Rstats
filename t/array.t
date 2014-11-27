@@ -340,6 +340,7 @@ use Rstats::Func;
   # to_string - character, 1 dimention
   {
     my $x1 = array(c("a", "b"));
+    $ENV{a} = 1;
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
     my $expected = qq/[1] "a" "b"\n/;

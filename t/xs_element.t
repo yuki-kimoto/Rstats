@@ -93,14 +93,14 @@ my $x1 = c(1, 2, 3);
   {
     my $e1 = Rstats::VectorFunc::new_integer(2);
     is($e1->type, 'integer');
-    is($e1->iv, 2);
+    is($e1->value, 2);
   }
 
   # element - logical_xs
   {
     my $e1 = Rstats::VectorFunc::new_logical(1);
     is($e1->type, 'logical');
-    is($e1->iv, 1);
+    is($e1->value, 1);
   }
   
   # element - complex_xs

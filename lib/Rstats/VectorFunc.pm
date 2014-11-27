@@ -706,7 +706,7 @@ sub negation {
     }
   }
   elsif ($e1->is_integer || $e1->is_logical) {
-    return integer(-$e1->iv);
+    return integer(-$e1->value);
   }
   else {
     croak "Invalid type";
@@ -721,7 +721,7 @@ sub and {
   $e1 = $e1->as_logical unless $e1->is_logical;
   $e2 = $e2->as_logical unless $e2->is_logical;
   
-  if ($e1->iv && $e2->iv) {
+  if ($e1->value && $e2->value) {
     return TRUE;
   }
   else {
@@ -737,7 +737,7 @@ sub or {
   $e1 = $e1->as_logical unless $e1->is_logical;
   $e2 = $e2->as_logical unless $e2->is_logical;
   
-  if ($e1->iv || $e2->iv) {
+  if ($e1->value || $e2->value) {
     return TRUE;
   }
   else {
@@ -768,7 +768,7 @@ sub remainder {
     }
   }
   elsif ($e1->is_integer) {
-    if ($e2->iv == 0) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
@@ -776,11 +776,11 @@ sub remainder {
     }
   }
   elsif ($e1->is_logical) {
-    if ($e2->iv == 0) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
-      return double($e1->iv % $e2->iv);
+      return double($e1->value % $e2->value);
     }
   }
   else {
@@ -869,10 +869,10 @@ sub more_than {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv > $e2->iv ? TRUE : FALSE;
+    return $e1->value > $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv > $e2->iv ? TRUE : FALSE;
+    return $e1->value > $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -927,10 +927,10 @@ sub more_than_or_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv >= $e2->iv ? TRUE : FALSE;
+    return $e1->value >= $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv >= $e2->iv ? TRUE : FALSE;
+    return $e1->value >= $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -985,10 +985,10 @@ sub less_than {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv < $e2->iv ? TRUE : FALSE;
+    return $e1->value < $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv < $e2->iv ? TRUE : FALSE;
+    return $e1->value < $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1043,10 +1043,10 @@ sub less_than_or_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv <= $e2->iv ? TRUE : FALSE;
+    return $e1->value <= $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv <= $e2->iv ? TRUE : FALSE;
+    return $e1->value <= $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1101,10 +1101,10 @@ sub equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv == $e2->iv ? TRUE : FALSE;
+    return $e1->value == $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv == $e2->iv ? TRUE : FALSE;
+    return $e1->value == $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";
@@ -1159,10 +1159,10 @@ sub not_equal {
     }
   }
   elsif ($e1->is_integer) {
-    return $e1->iv != $e2->iv ? TRUE : FALSE;
+    return $e1->value != $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_logical) {
-    return $e1->iv != $e2->iv ? TRUE : FALSE;
+    return $e1->value != $e2->value ? TRUE : FALSE;
   }
   else {
     croak "Invalid type";

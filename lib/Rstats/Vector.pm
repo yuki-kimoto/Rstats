@@ -64,16 +64,16 @@ sub to_string {
     }
   }
   elsif ($self->is_integer) {
-    $str = $self->iv . "";
+    $str = $self->value . "";
   }
   elsif ($self->is_logical) {
-    $str = $self->iv ? 'TRUE' : 'FALSE'
+    $str = $self->value ? 'TRUE' : 'FALSE'
   }
   else {
     croak "Invalid type";
   }
   
-  my $is_na = $self->is_na->iv;
+  my $is_na = $self->is_na->value;
   if ($is_na) {
     $str = 'NA';
   }
@@ -100,13 +100,13 @@ sub bool {
     }
   }
   elsif ($self->is_integer || $self->is_logical) {
-    $is = $self->iv;
+    $is = $self->value;
   }
   else {
     croak "Invalid type";
   }
   
-  my $is_na = $self->is_na->iv;
+  my $is_na = $self->is_na->value;
   if ($is_na) {
     croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
   }
@@ -163,8 +163,6 @@ Rstats::Vector - Vector
 =head2 as_logical (xs)
 
 =head2 type
-
-=head2 iv
 
 =head2 cv
 

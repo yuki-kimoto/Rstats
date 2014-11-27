@@ -883,25 +883,25 @@ use Math::Complex ();
   # atan2 - y is NA
   {
     my $x1 = r->atan2(NA, 0);
-    ok($x1->element->is_na);
+    ok(!defined $x1->value);
   }  
 
   # atan2 - x is NA
   {
     my $x1 = r->atan2(0, NA);
-    ok($x1->element->is_na);
+    ok(!defined $x1->value);
   }
 
   # atan2 - y is NaN
   {
     my $x1 = r->atan2(NaN, 0);
-    ok($x1->element->is_nan);
+    is($x1->value, 'NaN');
   }
   
   # atan2 - x is NaN
   {
     my $x1 = r->atan2(0, NaN);
-    ok($x1->element->is_nan);
+    is($x1->value, 'NaN');
   }
 }
 

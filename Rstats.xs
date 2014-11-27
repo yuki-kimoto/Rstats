@@ -566,40 +566,6 @@ type(...)
 }
 
 SV*
-iv(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  IV iv;
-  if (self->get_type() == Rstats::VectorType::INTEGER || self->get_type() == Rstats::VectorType::LOGICAL) {
-    iv = self->get_integer_value(0);
-  }
-  else {
-    iv = 0;
-  }
-  
-  return_sv(my::new_mSViv(iv));
-}
-
-SV*
-cv(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  SV* sv_str;
-  if (self->is_character()) {
-    sv_str = self->get_character_value(0);
-  }
-  else {
-    sv_str = my::new_mSVpv_nolen("");
-  }
-  
-  return_sv(sv_str);
-}
-
-SV*
 re(...)
   PPCODE:
 {

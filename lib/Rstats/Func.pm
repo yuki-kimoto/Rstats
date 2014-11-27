@@ -827,7 +827,7 @@ sub gsub {
       push @$x2_elements, $x_e;
     }
     else {
-      my $x = $x_e->cv;
+      my $x = $x_e->value;
       if ($ignore_case) {
         $x =~ s/$pattern/$replacement/gi;
       }
@@ -856,7 +856,7 @@ sub grep {
     my $x_e = $x1_x_elements->[$i];
     
     unless ($x_e->is_na) {
-      my $x = $x_e->cv;
+      my $x = $x_e->value;
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
           push @$x2_elements, Rstats::VectorFunc::double($i + 1);
@@ -1026,7 +1026,7 @@ sub chartr {
       push @$x2_elements, $x_e;
     }
     else {
-      my $x = $x_e->cv;
+      my $x = $x_e->value;
       $old =~ s#/#\/#;
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";

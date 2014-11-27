@@ -827,7 +827,7 @@ sub more_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv gt $e2->cv ? TRUE : FALSE;
+    return $e1->value gt $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -885,7 +885,7 @@ sub more_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv ge $e2->cv ? TRUE : FALSE;
+    return $e1->value ge $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -943,7 +943,7 @@ sub less_than {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv lt $e2->cv ? TRUE : FALSE;
+    return $e1->value lt $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -1001,7 +1001,7 @@ sub less_than_or_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv le $e2->cv ? TRUE : FALSE;
+    return $e1->value le $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     croak "invalid comparison with complex values";
@@ -1059,7 +1059,7 @@ sub equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv eq $e2->cv ? TRUE : FALSE;
+    return $e1->value eq $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return $e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value ? TRUE : FALSE;
@@ -1117,7 +1117,7 @@ sub not_equal {
   return NA if $e1->is_na || $e2->is_na;
   
   if ($e1->is_character) {
-    return $e1->cv ne $e2->cv ? TRUE : FALSE;
+    return $e1->value ne $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
     return !($e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value) ? TRUE : FALSE;

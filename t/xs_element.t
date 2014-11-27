@@ -56,7 +56,7 @@ my $x1 = c(1, 2, 3);
   {
     my $e1 = Rstats::VectorFunc::new_character("foo");
     is($e1->type, 'character');
-    is($e1->cv, "foo");
+    is($e1->value, "foo");
   }
 
   # element - Inf_xs

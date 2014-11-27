@@ -38,7 +38,7 @@ sub to_string {
   
   my $str;
   if ($self->is_character) {
-    $str = $self->cv . "";
+    $str = $self->value . "";
   }
   elsif ($self->is_complex) {
     my $re = $self->re;
@@ -163,8 +163,6 @@ Rstats::Vector - Vector
 =head2 as_logical (xs)
 
 =head2 type
-
-=head2 cv
 
 =head2 re
 

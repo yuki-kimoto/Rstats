@@ -402,8 +402,12 @@ sub factor {
     for my $x_levels_element (@{$x_levels->decompose_elements}) {
       my $match;
       for my $x_exclude_element (@{$x_exclude->decompose_elements}) {
-        my $is_equal = Rstats::VectorFunc::equal($x_levels_element, $x_exclude_element);
-        if (!$is_equal->is_na && $is_equal) {
+        my $x_levels_value = $x_levels_element->value;
+        my $x_exclude_value = $x_exclude_element->value;
+        if (defined $x_levels_value
+          && defined $x_exclude_value
+          && $x_levels_value eq $x_exclude_value)
+        {
           $match = 1;
           last;
         }
@@ -1385,7 +1389,7 @@ sub operation {
   my $operation = "Rstats::VectorFunc::$op";
   my $x3;
   if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
-   || $op eq 'raise')
+   || $op eq 'raise' || $op eq 'equal')
   {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
     $x3 = Rstats::Func::NULL();

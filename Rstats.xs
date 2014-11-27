@@ -608,16 +608,24 @@ DESTROY(...)
 MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
 
 SV*
+equal(...)
+  PPCODE:
+{
+  Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
+  Rstats::Vector* e3 = Rstats::VectorFunc::equal(e1, e2);
+  SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
+  return_sv(sv_e3);
+}
+
+SV*
 add(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* e3 = Rstats::VectorFunc::add(e1, e2);
-  
   SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
-  
   return_sv(sv_e3);
 }
 
@@ -627,11 +635,8 @@ subtract(...)
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* e3 = Rstats::VectorFunc::subtract(e1, e2);
-  
   SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
-  
   return_sv(sv_e3);
 }
 
@@ -641,11 +646,8 @@ multiply(...)
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* e3 = Rstats::VectorFunc::multiply(e1, e2);
-  
   SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
-  
   return_sv(sv_e3);
 }
 
@@ -655,11 +657,8 @@ divide(...)
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* e3 = Rstats::VectorFunc::divide(e1, e2);
-  
   SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
-  
   return_sv(sv_e3);
 }
 
@@ -669,11 +668,8 @@ raise(...)
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* e3 = Rstats::VectorFunc::raise(e1, e2);
-  
   SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
-  
   return_sv(sv_e3);
 }
 
@@ -682,11 +678,8 @@ sqrt(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::sqrt(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -695,11 +688,8 @@ sin(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::sin(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -708,11 +698,8 @@ cos(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::cos(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -721,11 +708,8 @@ tan(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::tan(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -734,11 +718,8 @@ sinh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::sinh(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -747,11 +728,8 @@ cosh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::cosh(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -760,11 +738,8 @@ tanh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::tanh(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -773,11 +748,8 @@ abs(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::abs(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -786,11 +758,8 @@ log(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::log(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -799,11 +768,8 @@ logb(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::logb(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -812,11 +778,8 @@ log10(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::log10(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -825,11 +788,8 @@ log2(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::log2(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -838,11 +798,8 @@ exp(...)
   PPCODE:
 {
   Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
   Rstats::Vector* e2 = Rstats::VectorFunc::exp(e1);
-  
   SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
-  
   return_sv(sv_e2);
 }
 
@@ -852,14 +809,11 @@ complex_double (...)
 {
   Rstats::Vector* re = my::to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* im = my::to_c_obj<Rstats::Vector*>(ST(1));
-  
   Rstats::Vector* z = Rstats::Vector::new_complex(
     1,
     std::complex<NV>(re->get_double_value(0), im->get_double_value(0))
   );
-  
   SV* sv_z = my::to_perl_obj(z, "Rstats::Vector");
-  
   return_sv(sv_z);
 }
 
@@ -869,7 +823,6 @@ new_negative_inf(...)
 {
   Rstats::Vector* element = Rstats::Vector::new_negative_inf();
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -879,7 +832,6 @@ new_inf(...)
 {
   Rstats::Vector* element = Rstats::Vector::new_inf();
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -889,7 +841,6 @@ new_nan(...)
 {
   Rstats::Vector* element = Rstats::Vector::new_nan();
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -899,7 +850,6 @@ new_na(...)
 {
   Rstats::Vector* element = Rstats::Vector::new_na();
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -909,7 +859,6 @@ new_null(...)
 {
   Rstats::Vector* element = Rstats::Vector::new_null();
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -918,11 +867,8 @@ new_character(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   Rstats::Vector* element = Rstats::Vector::new_character(1, sv_str);
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -932,14 +878,10 @@ new_complex(...)
 {
   SV* sv_re = ST(0);
   SV* sv_im = ST(1);
-
   NV re = SvNV(sv_re);
   NV im = SvNV(sv_im);
-  
   Rstats::Vector* element = Rstats::Vector::new_complex(1, std::complex<NV>(re, im));
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -949,11 +891,8 @@ new_logical(...)
 {
   SV* sv_value = ST(0);
   IV iv = SvIV(sv_value);
-  
   Rstats::Vector* element = Rstats::Vector::new_logical(1, iv);
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -962,9 +901,7 @@ new_true(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::Vector::new_true();
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -973,9 +910,7 @@ new_false(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::Vector::new_false();
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -985,11 +920,8 @@ new_double(...)
 {
   SV* sv_value = ST(0);
   NV value = SvNV(sv_value);
-  
   Rstats::Vector* element = Rstats::Vector::new_double(1, value);
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -999,11 +931,8 @@ new_integer(...)
 {
   SV* sv_value = ST(0);
   IV iv = SvIV(sv_value);
-  
   Rstats::Vector* element = Rstats::Vector::new_integer(1, iv);
-  
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
-  
   return_sv(sv_element);
 }
 
@@ -1014,9 +943,7 @@ looks_like_integer(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   SV* sv_ret = Rstats::Util::looks_like_integer(sv_str);
-  
   return_sv(sv_ret);
 }
 
@@ -1025,9 +952,7 @@ looks_like_double(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   SV* sv_ret = Rstats::Util::looks_like_double(sv_str);
-  
   return_sv(sv_ret);
 }
 
@@ -1036,9 +961,7 @@ looks_like_na(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   SV* sv_ret = Rstats::Util::looks_like_na(sv_str);
-  
   return_sv(sv_ret);
 }
 
@@ -1047,9 +970,7 @@ looks_like_logical(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   SV* sv_ret = Rstats::Util::looks_like_logical(sv_str);
-  
   return_sv(sv_ret);
 }
 
@@ -1058,9 +979,7 @@ looks_like_complex(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  
   SV* sv_ret = Rstats::Util::looks_like_complex(sv_str);
-  
   return_sv(sv_ret);
 }
 

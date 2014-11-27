@@ -784,15 +784,85 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
-    
-    Rstats::Vector* add(Rstats::Vector* e1, Rstats::Vector* e2) {
+
+    Rstats::Vector* equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't add different type(Rstats::ElementFunc::add())");
+        warn("aaaaaaaaaaaaaaaaaaa%d, %d", e1->get_type(), e2->get_type());
+        croak("Can't compare different type(Rstats::VectorFunc::equal())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't add different length(Rstats::ElementFunc::add())");
+        croak("Can't compare different length(Rstats::VectorFunc::equal())");
+      }
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      if (e1->is_character()) {
+        for (IV i = 0; i < length; i++) {
+          if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) == 0) {
+            e3->set_integer_value(i, 1);
+          }
+          else {
+            e3->set_integer_value(i, 0);
+          }
+        }
+      }
+      else if (e1->is_complex()) {
+        for (IV i = 0; i < length; i++) {
+          if (e1->get_complex_value(i) == e2->get_complex_value(i)) {
+            e3->set_integer_value(i, 1);
+          }
+          else {
+            e3->set_integer_value(i, 0);
+          }
+        }
+      }
+      else if (e1->is_double()) {
+        for (IV i = 0; i < length; i++) {
+          NV value1 = e1->get_double_value(i);
+          NV value2 = e2->get_double_value(i);
+          if (std::isnan(value1) || std::isnan(value2)) {
+            e3->add_na_position(i);
+          }
+          else {
+            if (e1->get_double_value(i) == e2->get_double_value(i)) {
+              e3->set_integer_value(i, 1);
+            }
+            else {
+              e3->set_integer_value(i, 0);
+            }
+          }
+        }
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        for (IV i = 0; i < length; i++) {
+          if (e1->get_integer_value(i) == e2->get_integer_value(i)) {
+            e3->set_integer_value(i, 1);
+          }
+          else {
+            e3->set_integer_value(i, 0);
+          }
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      return e3;
+    }
+
+    Rstats::Vector* add(Rstats::Vector* e1, Rstats::Vector* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        croak("Can't add different type(Rstats::VectorFunc::add())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't add different length(Rstats::VectorFunc::add())");
       }
       
       IV length = e1->get_length();
@@ -837,11 +907,11 @@ namespace Rstats {
     Rstats::Vector* subtract(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't subtract different type(Rstats::ElementFunc::subtract())");
+        croak("Can't subtract different type(Rstats::VectorFunc::subtract())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't subtract different length(Rstats::ElementFunc::subtract())");
+        croak("Can't subtract different length(Rstats::VectorFunc::subtract())");
       }
       
       IV length = e1->get_length();
@@ -886,11 +956,11 @@ namespace Rstats {
     Rstats::Vector* multiply(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't multiply different type(Rstats::ElementFunc::multiply())");
+        croak("Can't multiply different type(Rstats::VectorFunc::multiply())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't multiply different length(Rstats::ElementFunc::multiply())");
+        croak("Can't multiply different length(Rstats::VectorFunc::multiply())");
       }
       
       IV length = e1->get_length();
@@ -935,11 +1005,11 @@ namespace Rstats {
     Rstats::Vector* divide(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't divide different type(Rstats::ElementFunc::multiply())");
+        croak("Can't divide different type(Rstats::VectorFunc::multiply())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't divide different length(Rstats::ElementFunc::multiply())");
+        croak("Can't divide different length(Rstats::VectorFunc::multiply())");
       }
       
       IV length = e1->get_length();
@@ -984,11 +1054,11 @@ namespace Rstats {
     Rstats::Vector* raise(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't raise different type(Rstats::ElementFunc::multiply())");
+        croak("Can't raise different type(Rstats::VectorFunc::multiply())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't raise different length(Rstats::ElementFunc::multiply())");
+        croak("Can't raise different length(Rstats::VectorFunc::multiply())");
       }
       
       IV length = e1->get_length();
@@ -1519,88 +1589,6 @@ namespace Rstats {
       e2->merge_na_positions(e1);
       
       return e2;
-    }
-
-    Rstats::Vector* equal(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        std::cerr << e1->get_type() << " " << e2->get_type();
-        croak("Can't compare equal different type(Rstats::ElementFunc::equal())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare equal different length(Rstats::ElementFunc::equal())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      if (e1->is_character()) {
-        IV is;
-        for (IV i = 0; i < length; i++) {
-          if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) == 0) {
-            is = 1;
-          }
-          else {
-            is = 0;
-          }
-          e3->set_integer_value(i, is);
-        }
-      }
-      else if (e1->is_complex()) {
-        IV is;
-        for (IV i = 0; i < length; i++) {
-          if (e1->get_complex_value(i) == e2->get_complex_value(i)) {
-            is = 1;
-          }
-          else {
-            is = 0;
-          }
-          e3->set_integer_value(i, is);
-        }
-      }
-      else if (e1->is_double()) {
-        IV is;
-        NV e1_value;
-        NV e2_value;
-        for (IV i = 0; i < length; i++) {
-          e1_value = e1->get_double_value(i);
-          e2_value = e2->get_double_value(i);
-          
-          if (std::isnan(e1_value) || std::isnan(e2_value)) {
-            e3->add_na_position(i);
-            is = 0;
-          }
-          else {
-            if(e1_value == e2_value) {
-              is = 1;
-            }
-            else {
-              is = 0;
-            }
-          }
-          e3->set_integer_value(i, is);
-        }
-      }
-      else if (e1->is_integer() || e1->is_logical()) {
-        IV is;
-        for (IV i = 0; i < length; i++) {
-          if (e1->get_integer_value(i) == e2->get_integer_value(i)) {
-            is = 1;
-          }
-          else {
-            is = 0;
-          }
-          e3->set_integer_value(i, is);
-        }
-      }
-      else {
-        croak("Invalid type");
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
     }
 
     Rstats::Vector* is_infinite(Rstats::Vector* elements) {

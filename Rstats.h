@@ -17,10 +17,6 @@ namespace Rstats {
     SV* new_mSVpv_nolen(const char* pv) {
       return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
-
-    SV* new_mSVpvs(const char* pv) {
-      return sv_2mortal(newSVpvs("aaaa"));
-    }
         
     SV* new_mSViv(IV iv) {
       return sv_2mortal(newSViv(iv));

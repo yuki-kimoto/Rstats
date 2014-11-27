@@ -1389,7 +1389,7 @@ sub operation {
   my $operation = "Rstats::VectorFunc::$op";
   my $x3;
   if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
-   || $op eq 'raise' || $op eq 'equal')
+   || $op eq 'raise' || $op eq 'equal' || $op eq 'not_equal')
   {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
     $x3 = Rstats::Func::NULL();

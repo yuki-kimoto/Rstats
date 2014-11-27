@@ -7,19 +7,6 @@ use Rstats::Util;
 
 use overload
   bool => \&bool,
-  '+' => sub { Rstats::VectorFunc::add(shift->_fix_position(@_)) },
-  '-' => sub { Rstats::VectorFunc::subtract(shift->_fix_position(@_)) },
-  '*' => sub { Rstats::VectorFunc::multiply(shift->_fix_position(@_)) },
-  '/' => sub { Rstats::VectorFunc::divide(shift->_fix_position(@_)) },
-  '%' => sub { Rstats::VectorFunc::remainder(shift->_fix_position(@_)) },
-  'neg' => sub { Rstats::VectorFunc::negation(@_) },
-  '**' => sub { Rstats::VectorFunc::raise(shift->_fix_position(@_)) },
-  '<' => sub { Rstats::VectorFunc::less_than(shift->_fix_position(@_)) },
-  '<=' => sub { Rstats::VectorFunc::less_than_or_equal(shift->_fix_position(@_)) },
-  '>' => sub { Rstats::VectorFunc::more_than(shift->_fix_position(@_)) },
-  '>=' => sub { Rstats::VectorFunc::more_than_or_equal(shift->_fix_position(@_)) },
-  '==' => sub { Rstats::VectorFunc::equal(shift->_fix_position(@_)) },
-  '!=' => sub { Rstats::VectorFunc::not_equal(shift->_fix_position(@_)) },
   '""' => \&to_string,
   fallback => 1;
 
@@ -73,7 +60,7 @@ sub to_string {
       $str = 'NaN';
     }
     else {
-      $str = $self->dv . "";
+      $str = $self->value . "";
     }
   }
   elsif ($self->is_integer) {
@@ -109,7 +96,7 @@ sub bool {
       croak 'argument is not interpretable as logical';
     }
     else {
-      $is = $self->dv;
+      $is = $self->value;
     }
   }
   elsif ($self->is_integer || $self->is_logical) {
@@ -134,13 +121,13 @@ sub typeof { shift->type }
 sub is_positive_infinite {
   my $self = shift;
   
-  return $self->is_infinite && $self->dv > 0;
+  return $self->is_infinite && $self->value > 0;
 }
 
 sub is_negative_infinite {
   my $self = shift;
   
-  return $self->is_infinite && $self->dv < 0;
+  return $self->is_infinite && $self->value < 0;
 }
 
 1;
@@ -178,8 +165,6 @@ Rstats::Vector - Vector
 =head2 type
 
 =head2 iv
-
-=head2 dv
 
 =head2 cv
 

@@ -56,7 +56,6 @@ sub to_string {
   my $str;
   if (@$elements) {
     if ($dim_length == 1) {
-      $DB::single = 1;
       my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";

@@ -315,7 +315,7 @@ sub atan2 {
       $e3 = double(-1.5707963267949);
     }
     elsif ($e2->is_negative_infinite) {
-      my $value1 = $e1->dv;
+      my $value1 = $e1->value;
       if ($value1 >= 0) {
         $e3 = double(3.14159265358979);
       }
@@ -324,8 +324,8 @@ sub atan2 {
       }
     }
     else {
-      my $value1 = $e1->dv;
-      my $value2 = $e2->dv;
+      my $value1 = $e1->value;
+      my $value2 = $e2->value;
       $e3 = double(CORE::atan2($value1, $value2));
     }
   }
@@ -692,8 +692,8 @@ sub negation {
   elsif ($e1->is_double) {
     
     my $flag = $e1->flag;
-    if (defined $e1->dv) {
-      return double(-$e1->dv);
+    if (defined $e1->value) {
+      return double(-$e1->value);
     }
     elsif ($flag eq 'nan') {
       return NaN;
@@ -759,11 +759,11 @@ sub remainder {
   elsif ($e1->is_double) {
     return NaN if $e1->is_nan || $e2->is_nan || $e1->is_infinite || $e2->is_infinite;
     
-    if ($e2->dv == 0) {
+    if ($e2->value == 0) {
       return NaN;
     }
     else {
-      my $v3_value = $e1->dv - POSIX::floor($e1->dv / $e2->dv) * $e2->dv;
+      my $v3_value = $e1->value - POSIX::floor($e1->value / $e2->value) * $e2->value;
       return double($v3_value);
     }
   }
@@ -834,9 +834,9 @@ sub more_than {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv > $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value > $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -846,7 +846,7 @@ sub more_than {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -857,7 +857,7 @@ sub more_than {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -892,9 +892,9 @@ sub more_than_or_equal {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv >= $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value >= $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -904,7 +904,7 @@ sub more_than_or_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -915,7 +915,7 @@ sub more_than_or_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -950,9 +950,9 @@ sub less_than {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv < $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value < $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -962,7 +962,7 @@ sub less_than {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -973,7 +973,7 @@ sub less_than {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1008,9 +1008,9 @@ sub less_than_or_equal {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv <= $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value <= $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -1020,7 +1020,7 @@ sub less_than_or_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1031,7 +1031,7 @@ sub less_than_or_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1066,9 +1066,9 @@ sub equal {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv == $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value == $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return FALSE;
@@ -1078,7 +1078,7 @@ sub equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1089,7 +1089,7 @@ sub equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return FALSE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1124,9 +1124,9 @@ sub not_equal {
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->dv) {
-      if (defined $e2->dv) {
-        return $e1->dv != $e2->dv ? TRUE : FALSE;
+    if (defined $e1->value) {
+      if (defined $e2->value) {
+        return $e1->value != $e2->value ? TRUE : FALSE;
       }
       elsif ($e2->is_positive_infinite) {
         return TRUE;
@@ -1136,7 +1136,7 @@ sub not_equal {
       }
     }
     elsif ($e1->is_positive_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {
@@ -1147,7 +1147,7 @@ sub not_equal {
       }
     }
     elsif ($e1->is_negative_infinite) {
-      if (defined $e2->dv) {
+      if (defined $e2->value) {
         return TRUE;
       }
       elsif ($e2->is_positive_infinite) {

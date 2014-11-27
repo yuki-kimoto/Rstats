@@ -64,7 +64,7 @@ my $x1 = c(1, 2, 3);
     my $e1 = Rstats::VectorFunc::new_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite);
-    ok($e1->dv > 0);
+    ok($e1->value > 0);
   }
   
   # element - negativeInf_xs
@@ -72,7 +72,7 @@ my $x1 = c(1, 2, 3);
     my $e1 = Rstats::VectorFunc::new_negative_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite);
-    ok($e1->dv < 0);
+    ok($e1->value < 0);
   }
 
   # element - NaN_xs
@@ -86,7 +86,7 @@ my $x1 = c(1, 2, 3);
   {
     my $e1 = Rstats::VectorFunc::new_double(2.5);
     is($e1->type, 'double');
-    is($e1->dv, 2.5);
+    is($e1->value, 2.5);
   }
 
   # element - integer_xs

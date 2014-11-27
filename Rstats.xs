@@ -583,23 +583,6 @@ iv(...)
 }
 
 SV*
-dv(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  NV dv;
-  if (self->get_type() == Rstats::VectorType::DOUBLE) {
-    dv = self->get_double_value(0);
-  }
-  else {
-    dv = 0;
-  }
-  
-  return_sv(my::new_mSVnv(dv));
-}
-
-SV*
 cv(...)
   PPCODE:
 {

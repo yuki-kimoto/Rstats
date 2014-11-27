@@ -107,7 +107,7 @@ my $x1 = c(1, 2, 3);
   {
     my $e1 = Rstats::VectorFunc::new_complex(1.5, 2.5);
     is($e1->type, 'complex');
-    is($e1->re, 1.5);
-    is($e1->im, 2.5);
+    is($e1->value->{re}, 1.5);
+    is($e1->value->{im}, 2.5);
   }
 }

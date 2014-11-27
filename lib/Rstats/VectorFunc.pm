@@ -99,8 +99,8 @@ sub acosh {
   
   my $e2;
   if ($e1->is_complex) {
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
+    my $e1_re = Rstats::VectorFunc::new_double($e1->value->{re});
+    my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
 
     my $e2_t = add(
       Rstats::VectorFunc::sqrt(
@@ -342,8 +342,8 @@ sub Arg {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
+    my $e1_re = Rstats::VectorFunc::new_double($e1->value->{re});
+    my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
     my $re = $e1_re->value;
     my $im = $e1_im->value;
     
@@ -413,8 +413,8 @@ sub acos {
   my $e2;
   if ($e1->is_complex) {
 
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
+    my $e1_re = Rstats::VectorFunc::new_double($e1->value->{re});
+    my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
     
     if (equal($e1_re, double(1)) && equal($e1_im, double(0))) {
       $e2 = complex(0, 0);
@@ -531,8 +531,8 @@ sub asin {
   my $e2;
   if ($e1->is_complex) {
 
-    my $e1_re = $e1->re;
-    my $e1_im = $e1->im;
+    my $e1_re = Rstats::VectorFunc::new_double($e1->value->{re});
+    my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
     
     if (equal($e1_re, double(0)) && equal($e1_im, double(0))) {
       $e2 = complex(0, 0);
@@ -687,7 +687,7 @@ sub negation {
     croak 'argument is not interpretable as logical'
   }
   elsif ($e1->is_complex) {
-    return complex_double(negation($e1->re), negation($e1->im));
+    return complex(-$e1->value->{re}, -$e1->value->{im});
   }
   elsif ($e1->is_double) {
     
@@ -792,7 +792,7 @@ sub Conj {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return complex_double($e1->re, Rstats::VectorFunc::negation($e1->im));
+    return complex($e1->value->{re}, -$e1->value->{im});
   }
   else {
     croak 'Invalid type';
@@ -803,7 +803,7 @@ sub Re {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->re;
+    return Rstats::VectorFunc::new_double($e1->value->{re});
   }
   else {
     'Not implemented';
@@ -814,7 +814,7 @@ sub Im {
   my $e1 = shift;
   
   if ($e1->is_complex) {
-    return $e1->im;
+    return  Rstats::VectorFunc::new_double($e1->value->{im});
   }
   else {
     'Not implemented';
@@ -1062,7 +1062,7 @@ sub equal {
     return $e1->value eq $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
-    return $e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value ? TRUE : FALSE;
+    return $e1->value->{re} == $e2->value->{re} && $e1->value->{im} == $e2->value->{im} ? TRUE : FALSE;
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;
@@ -1120,7 +1120,7 @@ sub not_equal {
     return $e1->value ne $e2->value ? TRUE : FALSE;
   }
   elsif ($e1->is_complex) {
-    return !($e1->re->value == $e2->re->value && $e1->im->value == $e2->im->value) ? TRUE : FALSE;
+    return !($e1->value->{re} == $e2->value->{re} && $e1->value->{im} == $e2->value->{im}) ? TRUE : FALSE;
   }
   elsif ($e1->is_double) {
     return NA if $e1->is_nan || $e2->is_nan;

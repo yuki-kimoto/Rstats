@@ -19,7 +19,7 @@ use Rstats;
     my $x1 = c(-Inf);
     my $x2 = c(2*i);
     my $x3 = $x1 + $x2;
-    ok($x3->element->re->is_negative_infinite);
+    is($x3->element->value->{re}, '-Inf');
     is($x3->value->{im}, 2);
   }
 }

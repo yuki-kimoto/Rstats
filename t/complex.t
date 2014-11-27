@@ -97,8 +97,8 @@ my $r = Rstats::Class->new;
   # new
   {
     my $z1 = Rstats::VectorFunc::complex(1,2);
-    is($z1->re->value, 1);
-    is($z1->im->value, 2);
+    is($z1->value->{re}, 1);
+    is($z1->value->{im}, 2);
   }
 }
 
@@ -108,8 +108,8 @@ my $r = Rstats::Class->new;
   {
     my $z1 = Rstats::VectorFunc::complex(1,2);
     my $z2 = Rstats::VectorFunc::negation($z1);
-    is($z2->re->value, -1);
-    is($z2->im->value, -2);
+    is($z2->value->{re}, -1);
+    is($z2->value->{im}, -2);
   }
   
   # operation - add
@@ -117,8 +117,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::complex(1,2);
     my $z2 = Rstats::VectorFunc::complex(3,4);
     my $z3 = Rstats::VectorFunc::add($z1, $z2);
-    is($z3->re->value, 4);
-    is($z3->im->value, 6);
+    is($z3->value->{re}, 4);
+    is($z3->value->{im}, 6);
   }
   
   # operation - subtract
@@ -126,8 +126,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::complex(1,2);
     my $z2 = Rstats::VectorFunc::complex(3,4);
     my $z3 = Rstats::VectorFunc::subtract($z1, $z2);
-    is($z3->re->value, -2);
-    is($z3->im->value, -2);
+    is($z3->value->{re}, -2);
+    is($z3->value->{im}, -2);
   }
   
   # operation - multiply
@@ -135,8 +135,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::complex(1, 2);
     my $z2 = Rstats::VectorFunc::complex(3, 4);
     my $z3 = Rstats::VectorFunc::multiply($z1, $z2);
-    is($z3->re->value, -5);
-    is($z3->im->value, 10);
+    is($z3->value->{re}, -5);
+    is($z3->value->{im}, 10);
   }
 
   # operation - abs
@@ -150,8 +150,8 @@ my $r = Rstats::Class->new;
   {
     my $z1 = Rstats::VectorFunc::complex(1, 2);
     my $conj = Rstats::VectorFunc::Conj($z1);
-    is($conj->re->value, 1);
-    is($conj->im->value, -2);
+    is($conj->value->{re}, 1);
+    is($conj->value->{im}, -2);
   }
   
   # operation - divide
@@ -159,8 +159,8 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::complex(5, -6);
     my $z2 = Rstats::VectorFunc::complex(3, 2);
     my $z3 = Rstats::VectorFunc::divide($z1, $z2);
-    is($z3->re->value, 3/13);
-    is($z3->im->value, -28/13);
+    is($z3->value->{re}, 3/13);
+    is($z3->value->{im}, -28/13);
   }
 
   # operation - raise
@@ -168,7 +168,7 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::complex(1, 2);
     my $z2 = Rstats::VectorFunc::complex(3, 0);
     my $z3 = Rstats::VectorFunc::raise($z1, $z2);
-    is($z3->re->value, -11);
-    is($z3->im->value, -2);
+    is($z3->value->{re}, -11);
+    is($z3->value->{im}, -2);
   }
 }

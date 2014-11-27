@@ -566,34 +566,6 @@ type(...)
 }
 
 SV*
-re(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  NV re = self->get_complex_value(0).real();
-  
-  Rstats::Vector* re_element = Rstats::Vector::new_double(1, re);
-  SV* sv_re_element = my::to_perl_obj(re_element, "Rstats::Vector");
-
-  return_sv(sv_re_element);
-}
-
-SV*
-im(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  NV im = self->get_complex_value(0).imag();
-  
-  Rstats::Vector* im_element = Rstats::Vector::new_double(1, im);
-  SV* sv_im_element = my::to_perl_obj(im_element, "Rstats::Vector");
-
-  return_sv(sv_im_element);
-}
-
-SV*
 flag(...)
   PPCODE:
 {
@@ -602,8 +574,8 @@ flag(...)
   SV* sv_flag;
   if (self->get_type() == Rstats::VectorType::DOUBLE) {
     if (Rstats::VectorFunc::is_infinite(self)) {
-      NV dv = self->get_double_value(0);
-      if (dv > 0) {
+      NV value = self->get_double_value(0);
+      if (value > 0) {
         sv_flag = my::new_mSVpv_nolen("inf");
       }
       else {
@@ -1012,9 +984,9 @@ new_double(...)
   PPCODE:
 {
   SV* sv_value = ST(0);
-  NV dv = SvNV(sv_value);
+  NV value = SvNV(sv_value);
   
-  Rstats::Vector* element = Rstats::Vector::new_double(1, dv);
+  Rstats::Vector* element = Rstats::Vector::new_double(1, value);
   
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   

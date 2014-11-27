@@ -41,8 +41,8 @@ sub to_string {
     $str = $self->value . "";
   }
   elsif ($self->is_complex) {
-    my $re = $self->re;
-    my $im = $self->im;
+    my $re = $self->value->{re};
+    my $im = $self->value->{im};
     
     $str = "$re";
     $str .= '+' if $im >= 0;

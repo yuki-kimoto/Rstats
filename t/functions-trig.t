@@ -22,8 +22,8 @@ use Math::Complex ();
   {
     my $x1 = c(1 + 0*i);
     my $x2 = r->atanh($x1);
-    ok($x2->element->re->is_positive_infinite);
-    ok($x2->element->im->is_nan);
+    is($x2->element->value->{re}, 'Inf');
+    is($x2->element->value->{im}, 'NaN');
     ok(r->is_complex($x2));
   }
 
@@ -31,8 +31,8 @@ use Math::Complex ();
   {
     my $x1 = c(-1 + 0*i);
     my $x2 = r->atanh($x1);
-    ok($x2->element->re->is_negative_infinite);
-    ok($x2->element->im->is_nan);
+    is($x2->element->value->{re}, '-Inf');
+    is($x2->element->value->{im}, 'NaN');
     ok(r->is_complex($x2));
   }
         
@@ -233,8 +233,8 @@ use Math::Complex ();
   {
     my $x1 = r->complex({re => 1, im => Inf});
     my $x2 = r->tanh($x1);
-    ok($x2->element->re->is_nan);
-    ok($x2->element->im->is_nan);
+    is($x2->element->value->{re}, 'NaN');
+    is($x2->element->value->{im}, 'NaN');
   }
 
   # tanh - complex, -Inf - 2i
@@ -307,16 +307,16 @@ use Math::Complex ();
   {
     my $x1 = c(-Inf - 2*i);
     my $x2 = r->cosh($x1);
-    ok($x2->element->re->is_negative_infinite);
-    ok($x2->element->im->is_positive_infinite);
+    is($x2->element->value->{re}, '-Inf');
+    is($x2->element->value->{im}, 'Inf');
   }
   
   # cosh - complex, -Inf + 2i
   {
     my $x1 = c(-Inf + 2*i);
     my $x2 = r->cosh($x1);
-    ok($x2->element->re->is_negative_infinite);
-    ok($x2->element->im->is_negative_infinite);
+    is($x2->element->value->{re}, '-Inf');
+    ok($x2->element->value->{im}, '-Inf');
   }
   
   # cosh - double,array
@@ -375,16 +375,16 @@ use Math::Complex ();
   {
     my $x1 = c(-Inf - 2*i);
     my $x2 = r->sinh($x1);
-    ok($x2->element->re->is_positive_infinite);
-    ok($x2->element->im->is_negative_infinite);
+    is($x2->element->value->{re}, 'Inf');
+    is($x2->element->value->{im}, '-Inf');
   }
   
   # sinh - complex, -Inf + 2i
   {
     my $x1 = c(-Inf + 2*i);
     my $x2 = r->sinh($x1);
-    ok($x2->element->re->is_positive_infinite);
-    ok($x2->element->im->is_positive_infinite);
+    is($x2->element->value->{re}, 'Inf');
+    is($x2->element->value->{im}, 'Inf');
   }
   
   # sinh - double,array
@@ -444,7 +444,7 @@ use Math::Complex ();
     my $x1 = c(1*i);
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
-    ok($x2->decompose_elements->[0]->im->is_positive_infinite);
+    is($x2->decompose_elements->[0]->value->{im}, 'Inf');
     ok(r->is_complex($x2));
   }
   
@@ -453,7 +453,7 @@ use Math::Complex ();
     my $x1 = c(-1*i);
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
-    ok($x2->decompose_elements->[0]->im->is_negative_infinite);
+    is($x2->decompose_elements->[0]->value->{im}, '-Inf');
     ok(r->is_complex($x2));
   }
 

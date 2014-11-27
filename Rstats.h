@@ -14,10 +14,14 @@ namespace Rstats {
       return sv_2mortal(newSVsv(sv));
     }
 
-    SV* new_mSVpv(const char* pv) {
-      return sv_2mortal(newSVpv(pv, 0));
+    SV* new_mSVpv_nolen(const char* pv) {
+      return sv_2mortal(newSVpvn(pv, strlen(pv)));
     }
-    
+
+    SV* new_mSVpvs(const char* pv) {
+      return sv_2mortal(newSVpvs("aaaa"));
+    }
+        
     SV* new_mSViv(IV iv) {
       return sv_2mortal(newSViv(iv));
     }
@@ -515,7 +519,7 @@ namespace Rstats {
           
           SV* sv_re = Rstats::PerlAPI::new_mSVnv(re);
           SV* sv_im = Rstats::PerlAPI::new_mSVnv(im);
-          SV* sv_str = Rstats::PerlAPI::new_mSVpv("");
+          SV* sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
           
           sv_catpv(sv_str, SvPV_nolen(sv_re));
           if (im >= 0) {
@@ -532,7 +536,7 @@ namespace Rstats {
       else if (this->is_double_type()) {
         for (IV i = 0; i < length; i++) {
           NV value = this->get_double_value(i);
-          SV* sv_str = Rstats::PerlAPI::new_mSVpv("");
+          SV* sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
           if (std::isinf(value) && value > 0) {
             sv_catpv(sv_str, "Inf");
           }
@@ -559,10 +563,10 @@ namespace Rstats {
       else if (this->is_logical_type()) {
         for (IV i = 0; i < length; i++) {
           if (this->get_integer_value(i)) {
-            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv("TRUE"));
+            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv_nolen("TRUE"));
           }
           else {
-            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv("FALSE"));
+            e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv_nolen("FALSE"));
           }
         }
       }
@@ -1695,7 +1699,7 @@ namespace Rstats {
         SV* sv_im;
         if (Rstats::PerlAPI::pregexec_simple(sv_value, COMPLEX_IMAGE_ONLY_RE)) {
           sv_re = Rstats::PerlAPI::new_mSVnv(0);
-          SV* sv_im_str = Rstats::PerlAPI::new_mSVpv("");
+          SV* sv_im_str = Rstats::PerlAPI::new_mSVpv_nolen("");
           Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_IMAGE_ONLY_RE, 1, sv_im_str);
           sv_im = Rstats::PerlAPI::new_mSVnv(SvNV(sv_im_str));
           
@@ -1704,11 +1708,11 @@ namespace Rstats {
           Rstats::PerlAPI::hvrv_store_nolen_inc(sv_ret, "im", sv_im);
         }
         else if(Rstats::PerlAPI::pregexec_simple(sv_value, COMPLEX_RE)) {
-          SV* sv_re_str = Rstats::PerlAPI::new_mSVpv("");
+          SV* sv_re_str = Rstats::PerlAPI::new_mSVpv_nolen("");
           Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_RE, 1, sv_re_str);
           sv_re = Rstats::PerlAPI::new_mSVnv(SvNV(sv_re_str));
 
-          SV* sv_im_str = Rstats::PerlAPI::new_mSVpv("");
+          SV* sv_im_str = Rstats::PerlAPI::new_mSVpv_nolen("");
           Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_RE, 2, sv_im_str);
           if (SvOK(sv_im_str)) {
             sv_im = Rstats::PerlAPI::new_mSVnv(SvNV(sv_im_str));
@@ -1758,7 +1762,7 @@ namespace Rstats {
         sv_ret = &PL_sv_undef;
       }
       else {
-        SV* sv_na = Rstats::PerlAPI::new_mSVpv("NA");
+        SV* sv_na = Rstats::PerlAPI::new_mSVpv_nolen("NA");
         if (sv_cmp(sv_value, sv_na) == 0) {
           sv_ret = Rstats::PerlAPI::to_perl_obj(Rstats::Vector::new_na(), "Rstats::Vector");
         }
@@ -1779,7 +1783,7 @@ namespace Rstats {
       else {
         IV ret = Rstats::PerlAPI::pregexec_simple(sv_str, INTEGER_RE);
         if (ret) {
-          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          SV* match1 = Rstats::PerlAPI::new_mSVpv_nolen("");
           Perl_reg_numbered_buff_fetch(aTHX_ INTEGER_RE, 1, match1);
           sv_ret = Rstats::PerlAPI::new_mSViv(SvIV(match1));
         }
@@ -1800,7 +1804,7 @@ namespace Rstats {
       else {
         IV ret = Rstats::PerlAPI::pregexec_simple(sv_value, DOUBLE_RE);
         if (ret) {
-          SV* match1 = Rstats::PerlAPI::new_mSVpv("");
+          SV* match1 = Rstats::PerlAPI::new_mSVpv_nolen("");
           Perl_reg_numbered_buff_fetch(aTHX_ DOUBLE_RE, 1, match1);
           sv_ret = Rstats::PerlAPI::new_mSVnv(SvNV(match1));
         }

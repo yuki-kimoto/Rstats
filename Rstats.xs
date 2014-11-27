@@ -155,7 +155,7 @@ compose(...)
   
   Rstats::Vector* compose_elements;
   std::vector<IV> na_positions;
-  if (sv_cmp(sv_mode, my::new_mSVpv("character")) == 0) {
+  if (sv_cmp(sv_mode, my::new_mSVpv_nolen("character")) == 0) {
     compose_elements = Rstats::Vector::new_character(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -174,7 +174,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv("complex")) == 0) {
+  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("complex")) == 0) {
     compose_elements = Rstats::Vector::new_complex(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -193,7 +193,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv("double")) == 0) {
+  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("double")) == 0) {
     compose_elements = Rstats::Vector::new_double(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -212,7 +212,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv("integer")) == 0) {
+  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("integer")) == 0) {
     compose_elements = Rstats::Vector::new_integer(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {
@@ -232,7 +232,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv("logical")) == 0) {
+  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("logical")) == 0) {
     compose_elements = Rstats::Vector::new_logical(len);
     Rstats::Values::Integer* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {
@@ -387,19 +387,19 @@ type(...)
   SV* sv_type;
 
   if (self->is_logical_type()) {
-    sv_type = my::new_mSVpv("logical");
+    sv_type = my::new_mSVpv_nolen("logical");
   }
   else if (self->is_integer_type()) {
-    sv_type = my::new_mSVpv("integer");
+    sv_type = my::new_mSVpv_nolen("integer");
   }
   else if (self->is_double_type()) {
-    sv_type = my::new_mSVpv("double");
+    sv_type = my::new_mSVpv_nolen("double");
   }
   else if (self->is_complex_type()) {
-    sv_type = my::new_mSVpv("complex");
+    sv_type = my::new_mSVpv_nolen("complex");
   }
   else if (self->is_character_type()) {
-    sv_type = my::new_mSVpv("character");
+    sv_type = my::new_mSVpv_nolen("character");
   }
   
   return_sv(sv_type);
@@ -450,7 +450,7 @@ cv(...)
     sv_str = self->get_character_value(0);
   }
   else {
-    sv_str = my::new_mSVpv("");
+    sv_str = my::new_mSVpv_nolen("");
   }
   
   return_sv(sv_str);
@@ -495,21 +495,21 @@ flag(...)
     if (Rstats::VectorFunc::is_infinite(self)) {
       NV dv = self->get_double_value(0);
       if (dv > 0) {
-        sv_flag = my::new_mSVpv("inf");
+        sv_flag = my::new_mSVpv_nolen("inf");
       }
       else {
-        sv_flag = my::new_mSVpv("-inf");
+        sv_flag = my::new_mSVpv_nolen("-inf");
       }
     }
     else if(Rstats::VectorFunc::is_nan(self)) {
-      sv_flag = my::new_mSVpv("nan");
+      sv_flag = my::new_mSVpv_nolen("nan");
     }
     else {
-      sv_flag = my::new_mSVpv("normal");
+      sv_flag = my::new_mSVpv_nolen("normal");
     }
   }
   else {
-    sv_flag = my::new_mSVpv("normal");
+    sv_flag = my::new_mSVpv_nolen("normal");
   }
   
   return_sv(sv_flag);

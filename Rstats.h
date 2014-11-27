@@ -785,6 +785,68 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
+    Rstats::Vector* less_than(Rstats::Vector* e1, Rstats::Vector* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        croak("Can't compare different type(Rstats::VectorFunc::more_than())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't compare different length(Rstats::VectorFunc::more_than())");
+      }
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      if (e1->is_character()) {
+        for (IV i = 0; i < length; i++) {
+          if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) < 0) {
+            e3->set_integer_value(i, 1);
+          }
+          else {
+            e3->set_integer_value(i, 0);
+          }
+        }
+      }
+      else if (e1->is_complex()) {
+        croak("invalid comparison with complex values(Rstats::VectorFunc::more_than())");
+      }
+      else if (e1->is_double()) {
+        for (IV i = 0; i < length; i++) {
+          NV value1 = e1->get_double_value(i);
+          NV value2 = e2->get_double_value(i);
+          if (std::isnan(value1) || std::isnan(value2)) {
+            e3->add_na_position(i);
+          }
+          else {
+            if (e1->get_double_value(i) < e2->get_double_value(i)) {
+              e3->set_integer_value(i, 1);
+            }
+            else {
+              e3->set_integer_value(i, 0);
+            }
+          }
+        }
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        for (IV i = 0; i < length; i++) {
+          if (e1->get_integer_value(i) < e2->get_integer_value(i)) {
+            e3->set_integer_value(i, 1);
+          }
+          else {
+            e3->set_integer_value(i, 0);
+          }
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      return e3;
+    }
+    
     Rstats::Vector* more_than(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {

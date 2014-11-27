@@ -879,64 +879,6 @@ sub more_than_or_equal {
   }
 }
 
-sub less_than {
-  my ($e1, $e2) = @_;
-  
-  return NA if $e1->is_na || $e2->is_na;
-  
-  if ($e1->is_character) {
-    return $e1->value lt $e2->value ? TRUE : FALSE;
-  }
-  elsif ($e1->is_complex) {
-    croak "invalid comparison with complex values";
-  }
-  elsif ($e1->is_double) {
-    return NA if $e1->is_nan || $e2->is_nan;
-    if (defined $e1->value) {
-      if (defined $e2->value) {
-        return $e1->value < $e2->value ? TRUE : FALSE;
-      }
-      elsif ($e2->is_positive_infinite) {
-        return TRUE;
-      }
-      elsif ($e2->is_negative_infinite) {
-        return FALSE;
-      }
-    }
-    elsif ($e1->is_positive_infinite) {
-      if (defined $e2->value) {
-        return FALSE;
-      }
-      elsif ($e2->is_positive_infinite) {
-        return TRUE;
-      }
-      elsif ($e2->is_negative_infinite) {
-        return FALSE;
-      }
-    }
-    elsif ($e1->is_negative_infinite) {
-      if (defined $e2->value) {
-        return TRUE;
-      }
-      elsif ($e2->is_positive_infinite) {
-        return TRUE;
-      }
-      elsif ($e2->is_negative_infinite) {
-        return FALSE;
-      }
-    }
-  }
-  elsif ($e1->is_integer) {
-    return $e1->value < $e2->value ? TRUE : FALSE;
-  }
-  elsif ($e1->is_logical) {
-    return $e1->value < $e2->value ? TRUE : FALSE;
-  }
-  else {
-    croak "Invalid type";
-  }
-}
-
 sub less_than_or_equal {
   my ($e1, $e2) = @_;
   

@@ -676,9 +676,7 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    my @elements = map { Rstats::VectorFunc::element($_) } @{$_[0]};
-    
-    $self->elements(Rstats::Func::c(\@elements)->elements);
+    $self->elements(Rstats::Func::c($_[0])->elements);
   }
   else {
     my $values = $self->elements->values;

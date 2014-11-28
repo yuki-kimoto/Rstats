@@ -668,15 +668,6 @@ sub create {
   }
 }
 
-sub element {
-  my $value = shift;
-  
-  return ref $value ? $value
-    : Rstats::Util::is_perl_number($value) ? double($value)
-    : character($value);
-
-}
-
 sub negation {
   my $e1 = shift;
   

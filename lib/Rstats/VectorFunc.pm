@@ -668,42 +668,6 @@ sub create {
   }
 }
 
-sub negation {
-  my $e1 = shift;
-  
-  if ($e1->is_na) {
-    return NA;
-  }
-  elsif ($e1->is_character) {
-    croak 'argument is not interpretable as logical'
-  }
-  elsif ($e1->is_complex) {
-    return complex(-$e1->value->{re}, -$e1->value->{im});
-  }
-  elsif ($e1->is_double) {
-    
-    my $flag = $e1->flag;
-    if (defined $e1->value) {
-      return double(-$e1->value);
-    }
-    elsif ($flag eq 'nan') {
-      return NaN;
-    }
-    elsif ($flag eq 'inf') {
-      return negativeInf;
-    }
-    elsif ($flag eq '-inf') {
-      return Inf;
-    }
-  }
-  elsif ($e1->is_integer || $e1->is_logical) {
-    return integer(-$e1->value);
-  }
-  else {
-    croak "Invalid type";
-  }  
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

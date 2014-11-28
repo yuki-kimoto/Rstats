@@ -704,49 +704,6 @@ sub negation {
   }  
 }
 
-sub remainder {
-  my ($e1, $e2) = @_;
-  
-  return NA if $e1->is_na || $e2->is_na;
-  
-  if ($e1->is_character) {
-    croak "Error in a + b : non-numeric argument to binary operator";
-  }
-  elsif ($e1->is_complex) {
-    croak "unimplemented complex operation";
-  }
-  elsif ($e1->is_double) {
-    return NaN if $e1->is_nan || $e2->is_nan || $e1->is_infinite || $e2->is_infinite;
-    
-    if ($e2->value == 0) {
-      return NaN;
-    }
-    else {
-      my $v3_value = $e1->value - POSIX::floor($e1->value / $e2->value) * $e2->value;
-      return double($v3_value);
-    }
-  }
-  elsif ($e1->is_integer) {
-    if ($e2->value == 0) {
-      return NaN;
-    }
-    else {
-      return double($e1 % $e2);
-    }
-  }
-  elsif ($e1->is_logical) {
-    if ($e2->value == 0) {
-      return NaN;
-    }
-    else {
-      return double($e1->value % $e2->value);
-    }
-  }
-  else {
-    croak "Invalid type";
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

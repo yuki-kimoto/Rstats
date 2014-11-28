@@ -783,6 +783,58 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
+    Rstats::Vector* reminder(Rstats::Vector* e1, Rstats::Vector* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        croak("Can't reminder different type(Rstats::VectorFunc::remainder())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't reminder different length(Rstats::VectorFunc::remainder())");
+      }
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e3 = Rstats::Vector::new_double(length);
+      if (e1->is_character()) {
+        croak("Error : non-numeric argument to binary operator(Rstats::Vector::Func::reminder())");
+      }
+      else if (e1->is_complex()) {
+        croak("unimplemented complex operation(Rstats::Vector::Func::reminder())");
+      }
+      else if (e1->is_double()) {
+        for (IV i = 0; i < length; i++) {
+          NV e1_value = e1->get_double_value(i);
+          NV e2_value = e2->get_double_value(i);
+          
+          if (std::isnan(e1_value) || std::isnan(e2_value) || e2_value == 0) {
+            e3->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
+          }
+          else {
+            NV e3_value = e1_value - std::floor(e1_value / e2_value) * e2_value;
+            e3->set_double_value(i, e3_value);
+          }
+        }
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        for (IV i = 0; i < length; i++) {
+          if (e2->get_integer_value(i) == 0) {
+            e3->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
+          }
+          else {
+            e3->set_double_value(i, e1->get_integer_value(i) % e2->get_integer_value(i));
+          }
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      return e3;
+    }
+    
     Rstats::Vector* And(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {

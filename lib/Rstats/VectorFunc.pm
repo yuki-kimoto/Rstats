@@ -810,17 +810,6 @@ sub Re {
   }
 }
 
-sub Im {
-  my $e1 = shift;
-  
-  if ($e1->is_complex) {
-    return  Rstats::VectorFunc::new_double($e1->value->{im});
-  }
-  else {
-    'Not implemented';
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

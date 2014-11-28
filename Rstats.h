@@ -525,10 +525,8 @@ namespace Rstats {
           }
           sv_catpv(sv_str, SvPV_nolen(sv_im));
           sv_catpv(sv_str, "i");
-          
-          for (IV i = 0; i < length; i++) {
-            e2->set_character_value(i, sv_str);
-          }
+
+          e2->set_character_value(i, sv_str);
         }
       }
       else if (this->is_double()) {
@@ -785,6 +783,36 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
+    Rstats::Vector* Im (Rstats::Vector* e1) {
+      IV length = e1->get_length();
+      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      if (e1->is_character()) {
+        croak("Error : non-numeric argument to function(Rstats::VectorFunc::Im())");
+      }
+      else if (e1->is_complex()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, e1->get_complex_value(i).imag());
+        }
+      }
+      else if (e1->is_double()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, 0);
+        }
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, 0);
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+    
     Rstats::Vector* less_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {

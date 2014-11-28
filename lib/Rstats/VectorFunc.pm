@@ -799,17 +799,6 @@ sub Conj {
   }
 }
 
-sub Re {
-  my $e1 = shift;
-  
-  if ($e1->is_complex) {
-    return Rstats::VectorFunc::new_double($e1->value->{re});
-  }
-  else {
-    'Not implemented';
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

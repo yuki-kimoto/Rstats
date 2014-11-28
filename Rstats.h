@@ -783,6 +783,36 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
+    Rstats::Vector* Re (Rstats::Vector* e1) {
+      IV length = e1->get_length();
+      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      if (e1->is_character()) {
+        croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
+      }
+      else if (e1->is_complex()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, e1->get_complex_value(i).real());
+        }
+      }
+      else if (e1->is_double()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, e1->get_double_value(i));
+        }
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, e1->get_integer_value(i));
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+    
     Rstats::Vector* Im (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2 = Rstats::Vector::new_double(length);

@@ -1,3 +1,5 @@
+use 5.010001;
+
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -25,6 +27,14 @@ WriteMakefile(
       ? ('LICENSE'=> 'perl')
       : ()),
     PL_FILES            => {},
+    META_MERGE   => {
+      requires  => {perl => '5.010001'},
+      resources => {
+        license    => 'http://www.opensource.org/licenses/artistic-license-2.0',
+        bugtracker => 'https://github.com/yuki-kimoto/Rstats/issues',
+        repository => 'https://github.com/yuki-kimoto/Rstats.git'
+      }
+    },
     PREREQ_PM => {
         'Object::Simple' => '3.10',
         'Math::Round' => '0.06',

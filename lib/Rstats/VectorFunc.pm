@@ -18,8 +18,6 @@ sub pi () { new_double(Math::Trig::pi) }
 
 sub character { new_character(@_) }
 
-sub complex { new_complex(@_) }
-
 sub atanh {
   my $e1 = shift;
   
@@ -27,21 +25,21 @@ sub atanh {
   
   my $e2;
   if ($e1->is_complex) {
-    if (equal($e1, complex(1, 0))) {
+    if (equal($e1, new_complex(1, 0))) {
       $e2 = complex_double(Inf, NaN);
       carp("In atanh() : NaNs produced");
     }
-    elsif (equal($e1, complex(-1, 0))) {
+    elsif (equal($e1, new_complex(-1, 0))) {
       $e2 = complex_double(negativeInf, NaN);
       carp("In atanh() : NaNs produced");
     }
     else {
       $e2 = multiply(
-        complex(0.5, 0),
+        new_complex(0.5, 0),
         Rstats::VectorFunc::log(
           divide(
-            add(complex(1, 0), $e1),
-            subtract(complex(1, 0), $e1)
+            add(new_complex(1, 0), $e1),
+            subtract(new_complex(1, 0), $e1)
           )
         )
       );
@@ -100,7 +98,7 @@ sub acosh {
       Rstats::VectorFunc::sqrt(
         subtract(
           multiply($e1, $e1),
-          complex(1, 0)
+          new_complex(1, 0)
         ),
       ),
       $e1
@@ -167,7 +165,7 @@ sub asinh {
       Rstats::VectorFunc::sqrt(
         add(
           multiply($e1, $e1),
-          complex(1, 0)
+          new_complex(1, 0)
         )
       ),
       $e1
@@ -214,17 +212,17 @@ sub atan {
   my $e2;
   if ($e1->is_complex) {
     
-    if (equal($e1, complex(0, 0))) {
-      $e2 = complex(0, 0);
+    if (equal($e1, new_complex(0, 0))) {
+      $e2 = new_complex(0, 0);
     }
-    elsif (equal($e1, complex(0, 1))) {
+    elsif (equal($e1, new_complex(0, 1))) {
       $e2 = complex_double(new_double(0), Inf);
     }
-    elsif (equal($e1, complex(0, -1))) {
+    elsif (equal($e1, new_complex(0, -1))) {
       $e2 = complex_double(new_double(0), negativeInf);
     }
     else {
-      my $e2_i = complex(0, 1);
+      my $e2_i = new_complex(0, 1);
       my $e2_log = Rstats::VectorFunc::log(
         divide(
           add($e2_i, $e1),
@@ -233,7 +231,7 @@ sub atan {
       );
       
       $e2 = multiply(
-        divide($e2_i, complex(2, 0)),
+        divide($e2_i, new_complex(2, 0)),
         $e2_log
       );
     }
@@ -260,11 +258,11 @@ sub atan2 {
   if ($e1->is_complex) {
     
     my $e3_s = add(multiply($e1, $e1), multiply($e2, $e2));
-    if (equal($e3_s, complex(0, 0))) {
-      $e3 = complex(0, 0);
+    if (equal($e3_s, new_complex(0, 0))) {
+      $e3 = new_complex(0, 0);
     }
     else {
-      my $e3_i = complex(0, 1);
+      my $e3_i = new_complex(0, 1);
       my $e3_r = add($e2, multiply($e1, $e3_i));
       $e3 = multiply(
         negation($e3_i),
@@ -411,7 +409,7 @@ sub acos {
     my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
     
     if (equal($e1_re, new_double(1)) && equal($e1_im, new_double(0))) {
-      $e2 = complex(0, 0);
+      $e2 = new_complex(0, 0);
     }
     else {
       my $e2_t1 = Rstats::VectorFunc::sqrt(
@@ -529,7 +527,7 @@ sub asin {
     my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
     
     if (equal($e1_re, new_double(0)) && equal($e1_im, new_double(0))) {
-      $e2 = complex(0, 0);
+      $e2 = new_complex(0, 0);
     }
     else {
       my $e2_t1 = Rstats::VectorFunc::sqrt(
@@ -646,7 +644,7 @@ sub create {
     return character("$value");
   }
   elsif ($type eq 'complex') {
-    return complex($value, 0);
+    return new_complex($value, 0);
   }
   elsif ($type eq 'double') {
     return new_double($value);

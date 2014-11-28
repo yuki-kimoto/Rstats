@@ -1871,7 +1871,7 @@ sub head {
 }
 
 sub i {
-  my $i = Rstats::VectorFunc::complex(0, 1);
+  my $i = Rstats::VectorFunc::new_complex(0, 1);
   
   return c($i);
 }

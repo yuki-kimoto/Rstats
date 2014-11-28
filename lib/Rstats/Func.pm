@@ -1388,21 +1388,9 @@ sub operation {
   no strict 'refs';
   my $operation = "Rstats::VectorFunc::$op";
   my $x3;
-  if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
-   || $op eq 'pow' || $op eq 'equal' || $op eq 'not_equal' || $op eq 'more_than'
-   || $op eq 'less_than' || $op eq 'more_than_or_equal' || $op eq 'less_than_or_equal'
-   || $op eq 'or' || $op eq 'reminder')
-  {
-    my $x3_elements = &$operation($x1->elements, $x2->elements);
-    $x3 = Rstats::Func::NULL();
-    $x3->elements($x3_elements);
-  }
-  else {
-    my $x1_elements = $x1->decompose_elements;
-    my $x2_elements = $x2->decompose_elements;
-    my @a3_elements = map { &$operation($x1_elements->[$_], $x2_elements->[$_]) } (0 .. $length - 1);
-    $x3 = c(\@a3_elements);
-  }
+  my $x3_elements = &$operation($x1->elements, $x2->elements);
+  $x3 = Rstats::Func::NULL();
+  $x3->elements($x3_elements);
   
   $x1->_copy_attrs_to($x3);
   if ($op eq 'divide') {

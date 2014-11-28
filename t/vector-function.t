@@ -8,7 +8,7 @@ use Rstats::VectorFunc;
 {
   # sqrt - numeric
   {
-    my $e1 = Rstats::VectorFunc::double(4);
+    my $e1 = Rstats::VectorFunc::new_double(4);
     my $e2 = Rstats::VectorFunc::sqrt($e1);
     is($e2->value, 2);
   }

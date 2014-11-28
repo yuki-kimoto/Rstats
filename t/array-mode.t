@@ -35,7 +35,7 @@ use Rstats::VectorFunc;
 
   # as_character - NA
   {
-    my $r = Rstats::VectorFunc::logical(1);
+    my $r = Rstats::VectorFunc::new_logical(1);
     my $q = Rstats::VectorFunc::Inf();
     my $p = Rstats::VectorFunc::NA();
     my $x1 = array(Rstats::VectorFunc::NA);

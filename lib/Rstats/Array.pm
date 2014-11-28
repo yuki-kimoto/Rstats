@@ -267,7 +267,7 @@ sub _levels_h {
   my $levels_h = {};
   my $levels = $self->levels->values;
   for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::integer($i);
+    $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
   }
   
   return $levels_h;

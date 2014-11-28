@@ -454,7 +454,7 @@ sub factor {
     else {
       my $value = $x1_element->value;
       my $f1_element = exists $levels->{$value}
-        ? Rstats::VectorFunc::integer($levels->{$value})
+        ? Rstats::VectorFunc::new_integer($levels->{$value})
         : Rstats::VectorFunc::NA();
       push @$f1_elements, $f1_element;
     }
@@ -657,7 +657,7 @@ sub diag {
   if ($x1->length_value == 1) {
     $size = $x1->value;
     $x2_elements = [];
-    push @$x2_elements, Rstats::VectorFunc::double(1) for (1 .. $size);
+    push @$x2_elements, Rstats::VectorFunc::new_double(1) for (1 .. $size);
   }
   else {
     $size = $x1->length_value;
@@ -863,12 +863,12 @@ sub grep {
       my $x = $x_e->value;
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
-          push @$x2_elements, Rstats::VectorFunc::double($i + 1);
+          push @$x2_elements, Rstats::VectorFunc::new_double($i + 1);
         }
       }
       else {
         if ($x =~ /$pattern/) {
-          push @$x2_elements, Rstats::VectorFunc::double($i + 1);
+          push @$x2_elements, Rstats::VectorFunc::new_double($i + 1);
         }
       }
     }
@@ -924,7 +924,7 @@ sub c {
     
     if (!ref $element) {
       if (Rstats::Util::is_perl_number($element)) {
-        $element = Rstats::VectorFunc::double($element);
+        $element = Rstats::VectorFunc::new_double($element);
         $mode_h->{double}++;
       }
       else {
@@ -945,7 +945,7 @@ sub c {
       $mode_h->{double}++;
     }
     elsif ($element->is_integer) {
-      $element = Rstats::VectorFunc::double($element->value);
+      $element = Rstats::VectorFunc::new_double($element->value);
       $mode_h->{double}++;
     }
     elsif ($element->is_logical) {
@@ -1070,10 +1070,10 @@ sub charmatch {
       push @$x2_elements, Rstats::VectorFunc::NA();
     }
     elsif ($match_count == 1) {
-      push @$x2_elements, Rstats::VectorFunc::double($match_pos + 1);
+      push @$x2_elements, Rstats::VectorFunc::new_double($match_pos + 1);
     }
     elsif ($match_count > 1) {
-      push @$x2_elements, Rstats::VectorFunc::double(0);
+      push @$x2_elements, Rstats::VectorFunc::new_double(0);
     }
   }
   
@@ -1260,7 +1260,7 @@ sub nchar {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::double(CORE::length $x1_element->value);
+        my $x2_element = Rstats::VectorFunc::new_double(CORE::length $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1339,7 +1339,7 @@ sub match {
       $i++;
     }
     if ($match) {
-      push @matches, Rstats::VectorFunc::double($i);
+      push @matches, Rstats::VectorFunc::new_double($i);
     }
     else {
       push @matches, Rstats::VectorFunc::NA();
@@ -1564,7 +1564,7 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
-  my @a2_elements = map { Rstats::VectorFunc::double(POSIX::ceil $_->value) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{$x1->decompose_elements};
   
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
@@ -1758,9 +1758,9 @@ sub complex {
     my $x1_arg_elements = $x1_arg->decompose_elements;
     for (my $i = 0; $i < $longer_length; $i++) {
       my $mod = $x1_mod_elements->[$i];
-      $mod = Rstats::VectorFunc::double(1) unless $mod;
+      $mod = Rstats::VectorFunc::new_double(1) unless $mod;
       my $arg = $x1_arg_elements->[$i];
-      $arg = Rstats::VectorFunc::double(0) unless $arg;
+      $arg = Rstats::VectorFunc::new_double(0) unless $arg;
       
       my $re = Rstats::VectorFunc::multiply(
         $mod,
@@ -1782,7 +1782,7 @@ sub complex {
     my $x1_re_elements = $x1_re->decompose_elements;
     my $x1_im_elements = $x1_im->decompose_elements;
     for (my $i = 0; $i <  $x1_im->length_value; $i++) {
-      my $re = $x1_re_elements->[$i] || Rstats::VectorFunc::double(0);
+      my $re = $x1_re_elements->[$i] || Rstats::VectorFunc::new_double(0);
       my $im = $x1_im_elements->[$i];
       my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
       push @$x2_elements, $x2_element;
@@ -1833,7 +1833,7 @@ sub floor {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::VectorFunc::double(POSIX::floor $_->value) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{$x1->decompose_elements};
 
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
@@ -2197,7 +2197,7 @@ sub replace {
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::VectorFunc::hash(Rstats::VectorFunc::double($i + 1));
+    my $hash = Rstats::VectorFunc::hash(Rstats::VectorFunc::new_double($i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
@@ -2263,7 +2263,7 @@ sub round {
   my $x1 = to_c($_x1);
 
   my $r = 10 ** $digits;
-  my @a2_elements = map { Rstats::VectorFunc::double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
   $x2->mode('double');
@@ -2447,7 +2447,8 @@ sub trunc {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::VectorFunc::double(int $_->value) } @{$x1->decompose_elements};
+  my @a2_elements
+    = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose_elements};
 
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);

@@ -1554,14 +1554,14 @@ namespace Rstats {
       return e3;
     }
 
-    Rstats::Vector* raise(Rstats::Vector* e1, Rstats::Vector* e2) {
+    Rstats::Vector* pow(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't raise different type(Rstats::VectorFunc::multiply())");
+        croak("Can't pow different type(Rstats::VectorFunc::multiply())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't raise different length(Rstats::VectorFunc::multiply())");
+        croak("Can't pow different length(Rstats::VectorFunc::multiply())");
       }
       
       IV length = e1->get_length();
@@ -1572,25 +1572,25 @@ namespace Rstats {
       else if (e1->is_complex()) {
         e3 = Rstats::Vector::new_complex(length);
         for (IV i = 0; i < length; i++) {
-          e3->set_complex_value(i, pow(e1->get_complex_value(i), e2->get_complex_value(i)));
+          e3->set_complex_value(i, std::pow(e1->get_complex_value(i), e2->get_complex_value(i)));
         }
       }
       else if (e1->is_double()) {
         e3 = Rstats::Vector::new_double(length);
         for (IV i = 0; i < length; i++) {
-          e3->set_double_value(i, pow(e1->get_double_value(i), e2->get_double_value(i)));
+          e3->set_double_value(i, ::pow(e1->get_double_value(i), e2->get_double_value(i)));
         }
       }
       else if (e1->is_integer()) {
         e3 = Rstats::Vector::new_double(length);
         for (IV i = 0; i < length; i++) {
-          e3->set_double_value(i, pow(e1->get_integer_value(i), e2->get_integer_value(i)));
+          e3->set_double_value(i, ::pow(e1->get_integer_value(i), e2->get_integer_value(i)));
         }
       }
       else if (e1->is_logical()) {
         e3 = Rstats::Vector::new_double(length);
         for (IV i = 0; i < length; i++) {
-          e3->set_double_value(i, pow(e1->get_integer_value(i), e2->get_integer_value(i)));
+          e3->set_double_value(i, ::pow(e1->get_integer_value(i), e2->get_integer_value(i)));
         }
       }
       else {

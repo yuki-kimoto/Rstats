@@ -1389,7 +1389,7 @@ sub operation {
   my $operation = "Rstats::VectorFunc::$op";
   my $x3;
   if ($op eq 'add' || $op eq 'subtract' || $op eq 'multiply' || $op eq 'divide'
-   || $op eq 'raise' || $op eq 'equal' || $op eq 'not_equal' || $op eq 'more_than'
+   || $op eq 'pow' || $op eq 'equal' || $op eq 'not_equal' || $op eq 'more_than'
    || $op eq 'less_than' || $op eq 'more_than_or_equal' || $op eq 'less_than_or_equal' || $op eq 'or')
   {
     my $x3_elements = &$operation($x1->elements, $x2->elements);
@@ -1426,7 +1426,7 @@ sub multiply { operation('multiply', @_)}
 
 sub divide { operation('divide', @_)}
 
-sub raise { operation('raise', @_)}
+sub pow { operation('pow', @_)}
 
 sub remainder { operation('remainder', @_)}
 

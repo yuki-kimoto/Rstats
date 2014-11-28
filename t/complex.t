@@ -163,11 +163,11 @@ my $r = Rstats::Class->new;
     is($z3->value->{im}, -28/13);
   }
 
-  # operation - raise
+  # operation - pow
   {
     my $z1 = Rstats::VectorFunc::complex(1, 2);
     my $z2 = Rstats::VectorFunc::complex(3, 0);
-    my $z3 = Rstats::VectorFunc::raise($z1, $z2);
+    my $z3 = Rstats::VectorFunc::pow($z1, $z2);
     is($z3->value->{re}, -11);
     is($z3->value->{im}, -2);
   }

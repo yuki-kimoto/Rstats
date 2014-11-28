@@ -16,7 +16,7 @@ use overload
   '/' => sub { shift->operation('divide', @_) },
   '%' => sub { shift->operation('remainder', @_) },
   'neg' => sub { shift->negation(@_) },
-  '**' => sub { shift->operation('raise', @_) },
+  '**' => sub { shift->operation('pow', @_) },
   'x' => sub { shift->inner_product(@_) },
   '<' => sub { shift->operation('less_than', @_) },
   '<=' => sub { shift->operation('less_than_or_equal', @_) },

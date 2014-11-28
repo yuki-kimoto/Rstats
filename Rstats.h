@@ -783,14 +783,58 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
-    Rstats::Vector* Or(Rstats::Vector* e1, Rstats::Vector* e2) {
+    Rstats::Vector* And(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::or())");
+        croak("Can't compare different type(Rstats::VectorFunc::And())");
       }
       
       if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::or())");
+        croak("Can't compare different length(Rstats::VectorFunc::And())");
+      }
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      
+      Rstats::Vector* e1_fix = NULL;
+      Rstats::Vector* e2_fix = NULL;
+      
+      if (!e1->is_logical()) {
+        e1_fix = e1->as_logical();
+        e1 = e1_fix;
+      }
+      
+      if (!e2->is_logical()) {
+        e2_fix = e2->as_logical();
+        e2 = e2_fix;
+      }
+      
+      for (IV i = 0; i < length; i++) {
+        e3->set_integer_value(i, e1->get_integer_value(i) && e2->get_integer_value(i));
+      }
+      
+      e3->merge_na_positions(e1);
+      e3->merge_na_positions(e2);
+      
+      if (e1_fix != NULL) {
+        delete e1_fix;
+      }
+      
+      if (e2_fix != NULL) {
+        delete e2_fix;
+      }
+      
+      return e3;
+    }
+    
+    Rstats::Vector* Or(Rstats::Vector* e1, Rstats::Vector* e2) {
+      
+      if (e1->get_type() != e2->get_type()) {
+        croak("Can't compare different type(Rstats::VectorFunc::Or())");
+      }
+      
+      if (e1->get_length() != e2->get_length()) {
+        croak("Can't compare different length(Rstats::VectorFunc::Or())");
       }
       
       IV length = e1->get_length();

@@ -788,17 +788,6 @@ sub remainder {
   }
 }
 
-sub Conj {
-  my $e1 = shift;
-  
-  if ($e1->is_complex) {
-    return complex($e1->value->{re}, -$e1->value->{im});
-  }
-  else {
-    croak 'Invalid type';
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

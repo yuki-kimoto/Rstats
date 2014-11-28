@@ -783,6 +783,47 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
 
+    Rstats::Vector* Conj (Rstats::Vector* e1) {
+      IV length = e1->get_length();
+      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      if (e1->is_character()) {
+        croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
+      }
+      else if (e1->is_complex()) {
+        e2 = Rstats::Vector::new_complex(length);
+        for (IV i = 0; i < length; i++) {
+          std::complex<NV> e1_value = e1->get_complex_value(i);
+          std::complex<NV> e2_value(e1_value.real(), -e1_value.imag());
+          e2->set_complex_value(i, e2_value);
+        }
+      }
+      else if (e1->is_double()) {
+        e2 = Rstats::Vector::new_double(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, e1->get_double_value(i));
+        }
+      }
+      else if (e1->is_integer()) {
+        e2 = Rstats::Vector::new_integer(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, e1->get_integer_value(i));
+        }
+      }
+      else if (e1->is_logical()) {
+        e2 = Rstats::Vector::new_logical(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, e1->get_integer_value(i));
+        }
+      }
+      else {
+        croak("unexpected type");
+      }
+
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+    
     Rstats::Vector* Re (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2 = Rstats::Vector::new_double(length);

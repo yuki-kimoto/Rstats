@@ -1049,7 +1049,7 @@ sub charmatch {
   my ($x1_x, $x1_table) = args(['x', 'table'], @_);
   
   die "Not implemented"
-    unless $x1_x->{type} eq 'character' && $x1_table->{type} eq 'character';
+    unless $x1_x->elements->type eq 'character' && $x1_table->elements->type eq 'character';
   
   my $x2_elements = [];
   for my $x1_x_element (@{$x1_x->decompose_elements}) {
@@ -1139,7 +1139,7 @@ sub negation {
 sub is_element {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->{type} ne $x2->{type};
+  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1161,7 +1161,7 @@ sub is_element {
 sub setequal {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->{type} ne $x2->{type};
+  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
   
   my $x3 = Rstats::Func::sort($x1);
   my $x4 = Rstats::Func::sort($x2);
@@ -1184,7 +1184,7 @@ sub setequal {
 sub setdiff {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->{type} ne $x2->{type};
+  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1206,7 +1206,7 @@ sub setdiff {
 sub intersect {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->{type} ne $x2->{type};
+  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1225,7 +1225,7 @@ sub intersect {
 sub union {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
 
-  croak "mode is diffrence" if $x1->{type} ne $x2->{type};
+  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
   
   my $x3 = c($x1, $x2);
   my $x4 = unique($x3);
@@ -1253,7 +1253,7 @@ sub diff {
 sub nchar {
   my $x1 = to_c(shift);
   
-  if ($x1->{type} eq 'character') {
+  if ($x1->elements->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1277,7 +1277,7 @@ sub nchar {
 sub tolower {
   my $x1 = to_c(shift);
   
-  if ($x1->{type} eq 'character') {
+  if ($x1->elements->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1301,7 +1301,7 @@ sub tolower {
 sub toupper {
   my $x1 = to_c(shift);
   
-  if ($x1->{type} eq 'character') {
+  if ($x1->elements->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1367,7 +1367,7 @@ sub operation {
   $x2 = to_c($x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->{type} ne $x2->{type};
+  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->elements->type ne $x2->elements->type;
   
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
@@ -1702,7 +1702,7 @@ sub cummin {
 
 sub cumsum {
   my $x1 = to_c(shift);
-  my $type = $x1->{type};
+  my $type = $x1->elements->type;
   my $total = Rstats::VectorFunc::create($type);
   my @a2_elements;
   push @a2_elements, $total = Rstats::VectorFunc::add($total, $_) for @{$x1->decompose_elements};
@@ -1712,7 +1712,7 @@ sub cumsum {
 
 sub cumprod {
   my $x1 = to_c(shift);
-  my $type = $x1->{type};
+  my $type = $x1->elements->type;
   my $total = Rstats::VectorFunc::create($type, 1);
   my @a2_elements;
   push @a2_elements, $total = Rstats::VectorFunc::multiply($total, $_) for @{$x1->decompose_elements};
@@ -2088,7 +2088,7 @@ sub pmin {
 sub prod {
   my $x1 = c(@_);
   
-  my $type = $x1->{type};
+  my $type = $x1->elements->type;
   my $prod = Rstats::VectorFunc::create($type, 1);
   for my $element (@{$x1->decompose_elements}) {
     $prod = Rstats::VectorFunc::multiply($prod, $element);
@@ -2826,7 +2826,7 @@ sub upgrade_type {
   # Check elements
   my $type_h = {};
   for my $x1 (@xs) {
-    my $type = $x1->{type} || '';
+    my $type = $x1->elements->type || '';
     if ($type eq 'character') {
       $type_h->{character}++;
     }

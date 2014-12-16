@@ -420,7 +420,7 @@ sub mode {
     return $self;
   }
   else {
-    my $type = $self->{type};
+    my $type = $self->elements->type;
     my $mode;
     if (defined $type) {
       if ($type eq 'integer' || $type eq 'double') {
@@ -457,7 +457,7 @@ sub type {
     return $self;
   }
   else {
-    return $self->{type};
+    return $self->elements->type;
   }
 }
 
@@ -714,7 +714,7 @@ sub is_matrix {
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && (($self->elements->type || '') eq 'double' || ($self->{type} || '') eq 'integer')
+  my $is = ($self->is_array || $self->is_vector) && (($self->elements->type || '') eq 'double' || ($self->elements->type || '') eq 'integer')
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);

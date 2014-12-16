@@ -407,12 +407,7 @@ sub mode {
     croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
       unless $types_h{$type};
     
-    if ($type eq 'numeric') {
-      $self->{type} = 'double';
-    }
-    else {
-      $self->{type} = $type;
-    }
+    $self->elements($self->elements->as($type));
     
     return $self;
   }

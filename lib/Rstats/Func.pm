@@ -1423,7 +1423,7 @@ sub equal { operation('equal', @_)}
 
 sub not_equal { operation('not_equal', @_)}
 
-sub abs { process(\&Rstats::VectorFunc::abs, @_) }
+sub abs { process_unary(\&Rstats::VectorFunc::abs, @_) }
 sub acos { process(\&Rstats::VectorFunc::acos, @_) }
 sub acosh { process(\&Rstats::VectorFunc::acosh, @_) }
 
@@ -2427,7 +2427,6 @@ sub process_unary {
   my $x2 = NULL;
   $x2->elements($x2_elements);
   $x1->_copy_attrs_to($x2);
-  $x2->mode(max_type($x1, $x2));
   
   return $x2;
 }

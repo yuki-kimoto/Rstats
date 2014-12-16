@@ -168,23 +168,31 @@ sub to_string {
 sub is_finite {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_finite } @{$x1->decompose_elements};
-  my $x2 = Rstats::Func::c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
-  $x2->mode('logical');
-  
-  return $x2;
+  if (my $vector = $x1->vector) {
+    my $x2 = Rstats::Func::NULL();
+    $x2->vector($x1->vector->is_finite);
+    $x1->_copy_attrs_to($x2);
+    
+    return $x2;
+  }
+  else {
+    croak "Error : is_finite is not implemented except array";
+  }
 }
 
 sub is_infinite {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_infinite } @{$x1->decompose_elements};
-  my $x2 = Rstats::Func::c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
-  $x2->mode('logical');
-  
-  return $x2;
+  if (my $vector = $x1->vector) {
+    my $x2 = Rstats::Func::NULL();
+    $x2->vector($x1->vector->is_infinite);
+    $x1->_copy_attrs_to($x2);
+    
+    return $x2;
+  }
+  else {
+    croak "Error : is_finite is not implemented except array";
+  }
 }
 
 sub is_nan {

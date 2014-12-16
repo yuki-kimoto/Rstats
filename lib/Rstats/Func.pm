@@ -460,8 +460,7 @@ sub factor {
     }
   }
   
-  my $f1 = c($f1_elements);
-  $f1->{type} = 'integer';
+  my $f1 = c($f1_elements)->as_integer;
   if ($x_ordered) {
     $f1->{class} = ['factor', 'ordered'];
   }
@@ -1095,7 +1094,6 @@ sub Re {
   my @a2_elements = map { Rstats::VectorFunc::Re($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
-  $x2->{type} = 'double';
   
   return $x2;
 }
@@ -1106,7 +1104,6 @@ sub Im {
   my @a2_elements = map { Rstats::VectorFunc::Im($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
   $x1->_copy_attrs_to($x2);
-  $x2->{type} = 'double';
   
   return $x2;
 }
@@ -1393,12 +1390,6 @@ sub operation {
   $x3->elements($x3_elements);
   
   $x1->_copy_attrs_to($x3);
-  if ($op eq 'divide') {
-    $x3->{type} = 'double';
-  }
-  elsif ($comparison_op{$op} || $logical_op{$op}) {
-    $x3->{type} = 'logical';
-  }
 
   return $x3;
 }
@@ -2703,7 +2694,6 @@ sub sum {
   my $x1 = to_c(shift);
   
   my $x2 = Rstats::Array->new(elements => Rstats::VectorFunc::sum($x1->elements));
-  $x2->{type} = $x1->{type};
   
   return $x2;
 }

@@ -501,26 +501,33 @@ sub as_matrix {
     $col = 1;
   }
   
-  my $x2_elements = [@{$self->decompose_elements}];
+  my $x2 = Rstats::Func::NULL();
+  my $x2_vector = $self->vector->clone;
+  $x2->vector($x2_vector);
   
-  return Rstats::Func::matrix($x2_elements, $row, $col);
+  return Rstats::Func::matrix($x2, $row, $col);
 }
 
 sub as_array {
   my $self = shift;
-  
-  my $self_elements = [@{$self->decompose_elements}];
+
+  my $x2 = Rstats::Func::NULL();
+  my $x2_vector = $self->vector->clone;
+  $x2->vector($x2_vector);
+
   my $self_dim_elements = [@{$self->dim_as_array->values}];
   
-  return $self->array($self_elements, $self_dim_elements);
+  return $self->array($x2, $self_dim_elements);
 }
 
 sub as_vector {
   my $self = shift;
   
-  my $self_elements = [@{$self->decompose_elements}];
+  my $x2 = Rstats::Func::NULL();
+  my $x2_vector = $self->vector->clone;
+  $x2->vector($x2_vector);
   
-  return Rstats::Func::c($self_elements);
+  return $x2;
 }
 
 sub as {

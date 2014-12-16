@@ -2078,7 +2078,50 @@ namespace Rstats {
       
       return e2;
     }
-    
+
+    Rstats::Vector* clone(Rstats::Vector* e1) {
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      if (e1->is_character()) {
+        e2 = Rstats::Vector::new_character(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_character_value(i, e1->get_character_value(i));
+        }
+      }
+      else if (e1->is_complex()) {
+        e2 = Rstats::Vector::new_complex(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_complex_value(i, e1->get_complex_value(i));
+        }
+      }
+      else if (e1->is_double()) {
+        e2 = Rstats::Vector::new_double(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_double_value(i, e1->get_double_value(i));
+        }
+      }
+      else if (e1->is_integer()) {
+        e2 = Rstats::Vector::new_integer(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, e1->get_integer_value(i));
+        }
+      }
+      else if (e1->is_logical()) {
+        e2 = Rstats::Vector::new_logical(length);
+        for (IV i = 0; i < length; i++) {
+          e2->set_integer_value(i, e1->get_integer_value(i));
+        }
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+        
     Rstats::Vector* log(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

@@ -435,7 +435,7 @@ sub typeof {
   
   if ($self->is_array || $self->is_vector) {
     my $type = $self->elements->type;
-    return Rstats::Array->new(elements => Rstats::VectorFunc::new_character($type));
+    return Rstats::Array->new->elements(Rstats::VectorFunc::new_character($type));
   }
   else {
     return Rstats::Func::c(undef);
@@ -558,7 +558,7 @@ sub as_complex {
   }
 
   my $x2;
-  $x2 = Rstats::Array->new(elements => $x_tmp->elements->as_complex);
+  $x2 = Rstats::Array->new->elements($x_tmp->elements->as_complex);
   $x_tmp->_copy_attrs_to($x2);
 
   return $x2;
@@ -571,10 +571,10 @@ sub as_double {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_double);
+    $x2 = Rstats::Array->new->elements($self->elements->as_double);
   }
   else {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_double);
+    $x2 = Rstats::Array->new->elements($self->elements->as_double);
     $self->_copy_attrs_to($x2);
   }
 
@@ -586,10 +586,10 @@ sub as_integer {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
+    $x2 = Rstats::Array->new->elements($self->elements->as_integer);
   }
   else {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
+    $x2 = Rstats::Array->new->elements($self->elements->as_integer);
     $self->_copy_attrs_to($x2);
   }
 
@@ -601,10 +601,10 @@ sub as_logical {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
+    $x2 = Rstats::Array->new->elements($self->elements->as_logical);
   }
   else {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
+    $x2 = Rstats::Array->new->elements($self->elements->as_logical);
     $self->_copy_attrs_to($x2);
   }
 
@@ -643,7 +643,7 @@ sub as_character {
     $self->_copy_attrs_to($x2)
   }
   else {
-    $x2 = Rstats::Array->new(elements => $self->elements->as_character);
+    $x2 = Rstats::Array->new->elements($self->elements->as_character);
     $self->_copy_attrs_to($x2);
   }
 

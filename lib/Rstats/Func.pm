@@ -15,7 +15,13 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub NULL { Rstats::Array->new(elements => Rstats::Vector->new_null, type => 'logical') }
+sub NULL {
+  
+  my $x1 = Rstats::Array->new;
+  $x1->elements(Rstats::Vector->new_null);
+  
+  return $x1;
+}
 
 sub NA { c(Rstats::VectorFunc::NA()) }
 
@@ -2693,7 +2699,8 @@ sub row {
 sub sum {
   my $x1 = to_c(shift);
   
-  my $x2 = Rstats::Array->new(elements => Rstats::VectorFunc::sum($x1->elements));
+  my $x2 = Rstats::Array->new;
+  $x2->elements(Rstats::VectorFunc::sum($x1->elements));
   
   return $x2;
 }

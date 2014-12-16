@@ -1443,7 +1443,52 @@ namespace Rstats {
       
       return e3;
     }
-
+    
+    Rstats::Vector* sum(Rstats::Vector* e1) {
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      if (e1->is_character()) {
+        croak("Error in a - b : non-numeric argument to binary operator");
+      }
+      else if (e1->is_complex()) {
+        e2 = Rstats::Vector::new_complex(1);
+        std::complex<NV> e2_total(0, 0);
+        for (IV i = 0; i < length; i++) {
+          e2_total += e1->get_complex_value(i);
+        }
+        e2->set_complex_value(0, e2_total);
+      }
+      else if (e1->is_double()) {
+        e2 = Rstats::Vector::new_double(1);
+        NV e2_total(0);
+        for (IV i = 0; i < length; i++) {
+          e2_total += e1->get_double_value(i);
+        }
+        e2->set_double_value(0, e2_total);
+      }
+      else if (e1->is_integer() || e1->is_logical()) {
+        e2 = Rstats::Vector::new_integer(1);
+        IV e2_total(0);
+        for (IV i = 0; i < length; i++) {
+          e2_total += e1->get_integer_value(i);
+        }
+        e2->set_integer_value(0, e2_total);
+      }
+      else {
+        croak("Invalid type");
+      }
+      
+      for (IV i = 0; i < length; i++) {
+        if (e1->exists_na_position(i)) {
+          e2->add_na_position(0);
+          break;
+        }
+      }
+      
+      return e2;
+    }
+    
     Rstats::Vector* add(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {

@@ -744,6 +744,16 @@ equal(...)
 }
 
 SV*
+sum(...)
+  PPCODE:
+{
+  Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = Rstats::VectorFunc::sum(e1);
+  SV* sv_e2 = my::to_perl_obj(e2, "Rstats::Vector");
+  return_sv(sv_e2);
+}
+
+SV*
 add(...)
   PPCODE:
 {

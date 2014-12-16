@@ -2702,13 +2702,10 @@ sub row {
 sub sum {
   my $x1 = to_c(shift);
   
-  my $type = $x1->{type};
-  my $sum = Rstats::VectorFunc::create($type);
+  my $x2 = Rstats::Array->new(elements => Rstats::VectorFunc::sum($x1->elements));
+  $x2->{type} = $x1->{type};
   
-  my $x1_elements = $x1->decompose_elements;
-  $sum = Rstats::VectorFunc::add($sum, $_) for @$x1_elements;
-  
-  return c($sum);
+  return $x2;
 }
 
 sub ncol {

@@ -141,7 +141,7 @@ sub str {
   
   if ($self->is_vector || $self->is_array) {
     # Short type
-    my $type = $self->{type};
+    my $type = $self->elements->type;
     my $short_type;
     if ($type eq 'character') {
       $short_type = 'chr';
@@ -573,9 +573,7 @@ sub as_complex {
   }
 
   my $x2;
-  my $x_tmp_elements = $x_tmp->decompose_elements;
-  my @a2_elements = map { $_->as('complex') } @$x_tmp_elements;
-  $x2 = Rstats::Func::c(\@a2_elements);
+  $x2 = Rstats::Array->new(elements => $x_tmp->elements->as_complex);
   $x_tmp->_copy_attrs_to($x2);
   $x2->{type} = 'complex';
 
@@ -589,14 +587,11 @@ sub as_double {
   
   my $x2;
   if ($self->is_factor) {
-    my $x2_elements = [map { $_->as_double } @{$self->decompose_elements}];
-    $x2 = Rstats::Func::c($x2_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_double);
     $x2->{type} = 'double';
   }
   else {
-    my $self_elements = $self->decompose_elements;
-    my @a2_elements = map { $_->as('double') } @$self_elements;
-    $x2 = Rstats::Func::c(\@a2_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_double);
     $self->_copy_attrs_to($x2);
     $x2->{type} = 'double';
   }
@@ -609,13 +604,11 @@ sub as_integer {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Func::c($self->decompose_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
     $x2->{type} = 'integer';
   }
   else {
-   my $self_elements = $self->decompose_elements;
-    my @a2_elements = map { $_->as_integer  } @$self_elements;
-    $x2 = Rstats::Func::c(\@a2_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
     $self->_copy_attrs_to($x2);
     $x2->{type} = 'integer';
   }
@@ -628,13 +621,11 @@ sub as_logical {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Func::c($self->decompose_elements);
-    $x2 = $x2->as_logical;
+    $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
+    $x2->{type} = 'logical';
   }
   else {
-    my $self_elements = $self->decompose_elements;
-    my @a2_elements = map { $_->as_logical } @$self_elements;
-    $x2 = Rstats::Func::c(\@a2_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
     $self->_copy_attrs_to($x2);
     $x2->{type} = 'logical';
   }
@@ -674,9 +665,7 @@ sub as_character {
     $self->_copy_attrs_to($x2)
   }
   else {
-    my $self_elements = $self->decompose_elements;
-    my @a2_elements = map { $_->as_character } @$self_elements;
-    $x2 = Rstats::Func::c(\@a2_elements);
+    $x2 = Rstats::Array->new(elements => $self->elements->as_character);
     $self->_copy_attrs_to($x2);
     
     $x2->{type} = 'character';

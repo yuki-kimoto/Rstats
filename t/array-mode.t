@@ -110,7 +110,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NA);
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_logical - NaN
@@ -118,7 +118,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NaN);
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
   
   # as_logical - character, number
@@ -126,7 +126,7 @@ use Rstats::VectorFunc;
     my $x1 = array(c("1.23"));
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
 
   # as_logical - character, pre and trailing space
@@ -134,7 +134,7 @@ use Rstats::VectorFunc;
     my $x1 = array(c("  1  "));
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
 
   # as_logical - character
@@ -142,7 +142,7 @@ use Rstats::VectorFunc;
     my $x1 = array(c("a"));
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
   
   # as_logical - complex
@@ -187,7 +187,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::Inf);
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_integer - NA
@@ -195,7 +195,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NA);
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_integer - NaN
@@ -203,12 +203,11 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NaN);
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
   
   # as_integer - character, only real number, no sign
   {
-    $DB::single = 1;
     my $x1 = array(c("1.23"));
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
@@ -225,7 +224,6 @@ use Rstats::VectorFunc;
   
   # as_integer - character, only real number, minus
   {
-    $DB::single = 1;
     my $x1 = array(c("-1.23"));
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
@@ -245,7 +243,7 @@ use Rstats::VectorFunc;
     my $x1 = array(c("a"));
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
   
   # as_integer - complex
@@ -297,7 +295,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NA);
     my $x2 = r->as_numeric($x1);
     ok(r->is_numeric($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_numeric - NaN
@@ -345,7 +343,7 @@ use Rstats::VectorFunc;
     my $x1 = array("a");
     my $x2 = r->as_numeric($x1);
     ok(r->is_numeric($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
   
   # as_numeric - complex
@@ -398,7 +396,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NA);
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_complex - NaN
@@ -406,7 +404,7 @@ use Rstats::VectorFunc;
     my $x1 = array(Rstats::VectorFunc::NaN);
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
-    is_deeply($x2->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x2->values, [undef]);
   }
 
   # as_complex - character, only real number, no sign
@@ -513,7 +511,7 @@ use Rstats::VectorFunc;
     my $x1 = array("a");
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
 
   # as_complex - error
@@ -521,7 +519,7 @@ use Rstats::VectorFunc;
     my $x1 = array("i");
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
-    ok($x2->decompose_elements->[0]->is_na);
+    is($x2->values->[0], undef);
   }
         
   # as_complex - complex
@@ -620,7 +618,7 @@ use Rstats::VectorFunc;
   # array decide type - NA
   {
     my $x1 = array(Rstats::VectorFunc::NA);
-    is_deeply($x1->decompose_elements, [Rstats::VectorFunc::NA]);
+    is_deeply($x1->values, [undef]);
     ok(r->is_logical($x1));
   }
 }

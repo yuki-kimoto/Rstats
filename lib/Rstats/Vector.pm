@@ -37,44 +37,33 @@ sub to_string {
   my $self = shift;
   
   my $str;
-  if ($self->is_character) {
-    $str = $self->value . "";
-  }
-  elsif ($self->is_complex) {
-    my $re = $self->value->{re};
-    my $im = $self->value->{im};
-    
-    $str = "$re";
-    $str .= '+' if $im >= 0;
-    $str .= $im . 'i';
-  }
-  elsif ($self->is_double) {
-  
-    if ($self->is_positive_infinite) {
-      $str = 'Inf';
-    }
-    elsif ($self->is_negative_infinite) {
-      $str = '-Inf';
-    }
-    elsif ($self->is_nan) {
-      $str = 'NaN';
-    }
-    else {
+  my $value = $self->value;
+  if (defined $value) {
+    if ($self->is_character) {
       $str = $self->value . "";
     }
-  }
-  elsif ($self->is_integer) {
-    $str = $self->value . "";
-  }
-  elsif ($self->is_logical) {
-    $str = $self->value ? 'TRUE' : 'FALSE'
+    elsif ($self->is_complex) {
+      my $re = $self->value->{re};
+      my $im = $self->value->{im};
+      
+      $str = "$re";
+      $str .= '+' if $im >= 0;
+      $str .= $im . 'i';
+    }
+    elsif ($self->is_double) {
+      $str = $self->value . "";
+    }
+    elsif ($self->is_integer) {
+      $str = $self->value . "";
+    }
+    elsif ($self->is_logical) {
+      $str = $self->value ? 'TRUE' : 'FALSE'
+    }
+    else {
+      croak "Invalid type";
+    }
   }
   else {
-    croak "Invalid type";
-  }
-  
-  my $is_na = $self->is_na->value;
-  if ($is_na) {
     $str = 'NA';
   }
   

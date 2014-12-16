@@ -957,6 +957,7 @@ sub c {
 
   # Upgrade elements and type
   my @modes = keys %$mode_h;
+  my $mode;
   if (@modes > 1) {
     if ($mode_h->{character}) {
       $elements = [map { $_->as_character } @$elements];

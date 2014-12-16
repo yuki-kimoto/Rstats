@@ -324,7 +324,7 @@ sub set {
     }
   }
   
-  $self->elements(Rstats::Vector->compose($self->{type}, $self_elements));
+  $self->elements(Rstats::Vector->compose($self->elements->type, $self_elements));
   
   return $self;
 }

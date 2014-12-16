@@ -961,22 +961,22 @@ sub c {
   if (@modes > 1) {
     if ($mode_h->{character}) {
       $elements = [map { $_->as_character } @$elements];
-      $x1->mode('character');
+      $mode = 'character';
     }
     elsif ($mode_h->{complex}) {
       $elements = [map { $_->as_complex } @$elements];
-      $x1->mode('complex');
+      $mode = 'complex';
     }
     elsif ($mode_h->{double}) {
       $elements = [map { $_->as_double } @$elements];
-      $x1->mode('double');
+      $mode = 'double';
     }
   }
   else {
-    $x1->mode($modes[0] || 'logical');
+    $mode = $modes[0] || 'logical';
   }
   
-  my $compose_elements = Rstats::Vector->compose($x1->{type}, $elements);
+  my $compose_elements = Rstats::Vector->compose($mode, $elements);
   $x1->elements($compose_elements);
   
   return $x1;

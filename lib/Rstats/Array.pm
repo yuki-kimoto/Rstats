@@ -45,7 +45,8 @@ sub to_string {
   
   my $is_character = $self->is_character;
 
-  my $elements = $self->decompose_elements;
+  my $values = $self->values;
+  my $type = $self->elements->type;
   
   my $dim_values = $self->dim_as_array->values;
   
@@ -54,13 +55,13 @@ sub to_string {
   my $poss = [];
   
   my $str;
-  if (@$elements) {
+  if (@$values) {
     if ($dim_length == 1) {
       my $names = $self->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { $self->_element_to_string($_, $is_character, $is_factor) } @$elements;
+      my @parts = map { $self->_value_to_string($_, $type, $is_factor) } @$values;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
@@ -89,8 +90,8 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          my $part = $self->element($d1, $d2);
-          push @parts, $self->_element_to_string($part, $is_character, $is_factor);
+          my $part = $self->value($d1, $d2);
+          push @parts, $self->_value_to_string($part, $type, $is_factor);
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -137,8 +138,8 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                my $part = $self->element($d1, $d2, @$poss);
-                push @parts, $self->_element_to_string($part, $is_character, $is_factor);
+                my $part = $self->value($d1, $d2, @$poss);
+                push @parts, $self->_value_to_string($part, $type, $is_factor);
               }
               
               $str .= join(' ', @parts) . "\n";

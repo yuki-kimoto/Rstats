@@ -97,6 +97,36 @@ sub _copy_attrs_to {
   }
 }
 
+sub _value_to_string {
+  my ($self, $value, $type, $is_factor) = @_;
+  
+  my $string;
+  if ($is_factor) {
+    if (!defined $value) {
+      $string = '<NA>';
+    }
+    else {
+      $string = "$value";
+    }
+  }
+  else {
+    if (!defined $value) {
+      $string = 'NA';
+    }
+    elsif ($type eq 'character') {
+      $string = '"' . $value . '"';
+    }
+    elsif ($type eq 'logical') {
+      $string = $value ? 'TRUE' : 'FALSE';
+    }
+    else {
+      $string = "$value";
+    }
+  }
+  
+  return $string;
+}
+
 sub _element_to_string {
   my ($self, $element, $is_character, $is_factor) = @_;
   

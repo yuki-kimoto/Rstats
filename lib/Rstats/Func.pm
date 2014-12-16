@@ -43,7 +43,7 @@ sub I {
   my $x1 = shift;
   
   my $x2 = c($x1);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   $x2->class('AsIs');
   
   return $x2;
@@ -786,7 +786,7 @@ sub Arg {
   
   my @a2_elements = map { Rstats::VectorFunc::Arg($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -817,7 +817,7 @@ sub sub {
   }
   
   my $x2 = c($x2_elements);
-  $x1_x->_copy_attrs_to($x2);
+  $x1_x->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -848,7 +848,7 @@ sub gsub {
   }
   
   my $x2 = c($x2_elements);
-  $x1_x->_copy_attrs_to($x2);
+  $x1_x->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1046,7 +1046,7 @@ sub chartr {
   }
   
   my $x2 = c($x2_elements);
-  $x1_x->_copy_attrs_to($x2);
+  $x1_x->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1091,7 +1091,7 @@ sub Conj {
   
   my @a2_elements = map { Rstats::VectorFunc::Conj($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   return $x2;
 }
 
@@ -1100,7 +1100,7 @@ sub Re {
   
   my @a2_elements = map { Rstats::VectorFunc::Re($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1110,7 +1110,7 @@ sub Im {
   
   my @a2_elements = map { Rstats::VectorFunc::Im($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1135,7 +1135,7 @@ sub negation {
   
   my $x2_elements = [map { Rstats::VectorFunc::negation($_) } @{$x1->decompose_elements}];
   my $x2 = c($x2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1249,7 +1249,7 @@ sub diff {
     push @$x2_elements, $x2_element;
   }
   my $x2 = c($x2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -1269,7 +1269,7 @@ sub nchar {
       }
     }
     my $x2 = c($x2_elements);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -1293,7 +1293,7 @@ sub tolower {
       }
     }
     my $x2 = c($x2_elements);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -1317,7 +1317,7 @@ sub toupper {
       }
     }
     my $x2 = c($x2_elements);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -1396,7 +1396,7 @@ sub operation {
   $x3 = Rstats::Func::NULL();
   $x3->vector($x3_elements);
   
-  $x1->_copy_attrs_to($x3);
+  $x1->copy_attrs_to($x3);
 
   return $x3;
 }
@@ -1565,7 +1565,7 @@ sub ceiling {
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{$x1->decompose_elements};
   
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   $x2->mode('double');
   
@@ -1624,7 +1624,7 @@ sub atan2 {
   }
 
   my $x3 = c(\@a3_elements);
-  $x1->_copy_attrs_to($x3);
+  $x1->copy_attrs_to($x3);
   
   # mode
   my $x3_mode;
@@ -1834,7 +1834,7 @@ sub floor {
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{$x1->decompose_elements};
 
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;
@@ -1862,7 +1862,7 @@ sub head {
     }
     
     my $x2 = c(\@x2_elements);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
   
     return $x2;
   }
@@ -2214,7 +2214,7 @@ sub rev {
   # Reverse elements
   my @a2_elements = reverse @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -2263,7 +2263,7 @@ sub round {
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;
@@ -2404,7 +2404,7 @@ sub tail {
   }
   
   my $x2 = c(\@e2);
-  $x1->_copy_attrs_to($x1);
+  $x1->copy_attrs_to($x1);
   
   return $x2;
 }
@@ -2417,7 +2417,7 @@ sub process {
   
   my @a2_elements = map { $func->($_) } @{$x1->decompose_elements};
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   $x2->mode(max_type($x1, $x2));
   
   return $x2;
@@ -2432,7 +2432,7 @@ sub process_unary {
   my $x2_elements = $func->($x1->vector);
   my $x2 = NULL;
   $x2->vector($x2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -2448,7 +2448,7 @@ sub trunc {
     = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose_elements};
 
   my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
   return $x2;

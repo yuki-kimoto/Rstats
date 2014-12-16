@@ -171,7 +171,7 @@ sub is_finite {
   if (my $vector = $x1->vector) {
     my $x2 = Rstats::Func::NULL();
     $x2->vector($x1->vector->is_finite);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -186,7 +186,7 @@ sub is_infinite {
   if (my $vector = $x1->vector) {
     my $x2 = Rstats::Func::NULL();
     $x2->vector($x1->vector->is_infinite);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -201,7 +201,7 @@ sub is_nan {
   if (my $vector = $x1->vector) {
     my $x2 = Rstats::Func::NULL();
     $x2->vector($x1->vector->is_nan);
-    $x1->_copy_attrs_to($x2);
+    $x1->copy_attrs_to($x2);
     
     return $x2;
   }
@@ -215,7 +215,7 @@ sub is_null {
   
   my @a2_elements = [!$x1->length_value ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE()];
   my $x2 = Rstats::Func::c(\@a2_elements);
-  $x1->_copy_attrs_to($x1);
+  $x1->copy_attrs_to($x1);
   $x2->mode('logical');
   
   return $x2;
@@ -262,7 +262,7 @@ sub get {
   my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
   
   # Copy attributes
-  $self->_copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
+  $self->copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
   # level drop
   if ($level_drop) {
@@ -321,7 +321,7 @@ sub set {
     if ($self->vector->type ne $x2->vector->type) {
       my $self_tmp;
       ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
-      $self_tmp->_copy_attrs_to($self);
+      $self_tmp->copy_attrs_to($self);
       $self->vector($self_tmp->vector);
     }
 

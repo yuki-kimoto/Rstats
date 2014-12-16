@@ -40,7 +40,7 @@ sub decompose_elements {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
-sub _copy_attrs_to {
+sub copy_attrs_to {
   my ($self, $x2, $opt) = @_;
   
   $opt ||= {};
@@ -234,7 +234,7 @@ sub clone {
   
   my $clone = Rstats::Func::NULL();
   $clone->vector($self->vector->clone);
-  $self->_copy_attrs_to($clone);
+  $self->copy_attrs_to($clone);
   
   return $clone;
 }
@@ -570,7 +570,7 @@ sub as_complex {
 
   my $x2;
   $x2 = Rstats::Array->new->vector($x_tmp->vector->as_complex);
-  $x_tmp->_copy_attrs_to($x2);
+  $x_tmp->copy_attrs_to($x2);
 
   return $x2;
 }
@@ -586,7 +586,7 @@ sub as_double {
   }
   else {
     $x2 = Rstats::Array->new->vector($self->vector->as_double);
-    $self->_copy_attrs_to($x2);
+    $self->copy_attrs_to($x2);
   }
 
   return $x2;
@@ -601,7 +601,7 @@ sub as_integer {
   }
   else {
     $x2 = Rstats::Array->new->vector($self->vector->as_integer);
-    $self->_copy_attrs_to($x2);
+    $self->copy_attrs_to($x2);
   }
 
   return $x2;
@@ -616,7 +616,7 @@ sub as_logical {
   }
   else {
     $x2 = Rstats::Array->new->vector($self->vector->as_logical);
-    $self->_copy_attrs_to($x2);
+    $self->copy_attrs_to($x2);
   }
 
   return $x2;
@@ -651,11 +651,11 @@ sub as_character {
       }
     }
     $x2 = Rstats::Func::c($x2_elements);
-    $self->_copy_attrs_to($x2)
+    $self->copy_attrs_to($x2)
   }
   else {
     $x2 = Rstats::Array->new->vector($self->vector->as_character);
-    $self->_copy_attrs_to($x2);
+    $self->copy_attrs_to($x2);
   }
 
   return $x2;

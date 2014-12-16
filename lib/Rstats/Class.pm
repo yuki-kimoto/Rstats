@@ -278,7 +278,7 @@ sub lapply {
   }
   
   my $x2 = Rstats::Func::list(@$new_elements);
-  $x1->_copy_attrs_to($x2);
+  $x1->copy_attrs_to($x2);
   
   return $x2;
 }
@@ -386,7 +386,7 @@ sub apply {
 
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::Func::c($new_elements)->vector);
-  $x1->_copy_attrs_to($x1);
+  $x1->copy_attrs_to($x1);
   $x2->{dim} = $new_dim_values;
   
   if (@{$x2->{dim}} == 1) {
@@ -444,7 +444,7 @@ sub sweep {
     $x4 = $x1 % $x3;
   }
   
-  $x1->_copy_attrs_to($x4);
+  $x1->copy_attrs_to($x4);
   
   return $x4;
 }

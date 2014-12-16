@@ -1005,11 +1005,16 @@ SV*
 new_complex(...)
   PPCODE:
 {
-  SV* sv_re = ST(0);
-  SV* sv_im = ST(1);
-  NV re = SvNV(sv_re);
-  NV im = SvNV(sv_im);
-  Rstats::Vector* element = Rstats::Vector::new_complex(1, std::complex<NV>(re, im));
+  Rstats::Vector* element = Rstats::Vector::new_complex(items);
+  for (int i = 0; i < items; i++) {
+    SV* sv_value = ST(i);
+    SV* sv_value_re = my::hvrv_fetch_simple(sv_value, "re");
+    SV* sv_value_im = my::hvrv_fetch_simple(sv_value, "im");
+    NV value_re = SvOK(sv_value_re) ? SvNV(sv_value_re) : 0;
+    NV value_im = SvOK(sv_value_im) ? SvNV(sv_value_im) : 0;
+    
+    element->set_complex_value(i, std::complex<NV>(value_re, value_im));
+  }
 
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);

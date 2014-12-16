@@ -994,7 +994,12 @@ new_character(...)
   Rstats::Vector* element = Rstats::Vector::new_character(items);
   for (int i = 0; i < items; i++) {
     SV* sv_value = ST(i);
-    element->set_character_value(i, sv_value);
+    if (SvOK(sv_value)) {
+      element->set_character_value(i, sv_value);
+    }
+    else {
+      element->add_na_position(i);
+    }
   }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
 
@@ -1027,8 +1032,13 @@ new_logical(...)
   Rstats::Vector* element = Rstats::Vector::new_logical(items);
   for (int i = 0; i < items; i++) {
     SV* sv_value = ST(i);
-    IV value = SvIV(sv_value);
-    element->set_integer_value(i, value ? 1 : 0);
+    if (SvOK(sv_value)) {
+      IV value = SvIV(sv_value);
+      element->set_integer_value(i, value ? 1 : 0);
+    }
+    else {
+      element->add_na_position(i);
+    }
   }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
@@ -1059,8 +1069,25 @@ new_double(...)
   Rstats::Vector* element = Rstats::Vector::new_double(items);
   for (int i = 0; i < items; i++) {
     SV* sv_value = ST(i);
-    NV value = SvNV(sv_value);
-    element->set_double_value(i, value);
+    if (SvOK(sv_value)) {
+      char* sv_value_str = SvPV_nolen(sv_value);
+      if (strEQ(sv_value_str, "NaN")) {
+        element->set_double_value(i, NAN);
+      }
+      else if (strEQ(sv_value_str, "Inf")) {
+        element->set_double_value(i, INFINITY);
+      }
+      else if (strEQ(sv_value_str, "-Inf")) {
+        element->set_double_value(i, -(INFINITY));
+      }
+      else {
+        NV value = SvNV(sv_value);
+        element->set_double_value(i, value);
+      }
+    }
+    else {
+      element->add_na_position(i);
+    }
   }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
@@ -1073,8 +1100,13 @@ new_integer(...)
   Rstats::Vector* element = Rstats::Vector::new_integer(items);
   for (int i = 0; i < items; i++) {
     SV* sv_value = ST(i);
-    IV value = SvIV(sv_value);
-    element->set_integer_value(i, value);
+    if (SvOK(sv_value)) {
+      IV value = SvIV(sv_value);
+      element->set_integer_value(i, value);
+    }
+    else {
+      element->add_na_position(i);
+    }
   }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);

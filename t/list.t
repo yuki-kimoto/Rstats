@@ -29,8 +29,8 @@ use Rstats;
     is_deeply($x1->list->[0]->values, [1, 2, 3]);
     is_deeply($x1->list->[1]->list->[0]->values, ["Hello"]);
     is_deeply(
-      $x1->list->[1]->list->[1]->decompose_elements,
-      [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE]
+      $x1->list->[1]->list->[1]->values,
+      [1, 0, 0]
     );
   }
 

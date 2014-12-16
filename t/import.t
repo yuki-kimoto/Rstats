@@ -70,7 +70,7 @@ use Rstats::VectorFunc;
 # NULL
 {
   my $null = NULL;
-  is_deeply($null->decompose_elements, []);
+  is_deeply($null->values, []);
   is_deeply($null->dim->values, []);
   is_deeply($null->{type}, 'logical');
 }

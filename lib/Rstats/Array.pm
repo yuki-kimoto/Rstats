@@ -280,20 +280,11 @@ sub set {
   
   my $at = $self->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  
-  # Upgrade mode if type is different
-  if ($self->elements->type ne $x2->elements->type) {
-    my $self_tmp;
-    ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
-    $self_tmp->_copy_attrs_to($self);
-    $self->elements($self_tmp->elements);
-  }
-  
   my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
   
-  my $self_elements = $self->decompose_elements;
-
+  my $self_elements;
   if ($self->is_factor) {
+    $self_elements = $self->decompose_elements;
     $x2 = $x2->as_character unless $x2->is_character;
     my $x2_elements = $x2->decompose_elements;
     my $levels_h = $self->_levels_h;
@@ -316,6 +307,16 @@ sub set {
     }
   }
   else {
+    # Upgrade mode if type is different
+    if ($self->elements->type ne $x2->elements->type) {
+      my $self_tmp;
+      ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
+      $self_tmp->_copy_attrs_to($self);
+      $self->elements($self_tmp->elements);
+    }
+
+    $self_elements = $self->decompose_elements;
+
     my $x2_elements = $x2->decompose_elements;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];

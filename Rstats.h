@@ -748,7 +748,7 @@ namespace Rstats {
       else if (this->is_complex()) {
         warn("imaginary parts discarded in coercion");
         for (IV i = 0; i < length; i++) {
-          e2->set_integer_value(i, (IV)this->get_complex_value(i).real());
+          e2->set_integer_value(i, this->get_complex_value(i).real() ? 1 : 0);
         }
       }
       else if (this->is_double()) {
@@ -761,13 +761,13 @@ namespace Rstats {
             e2->set_integer_value(i, 1);
           }
           else {
-            e2->set_integer_value(i, (IV)value);
+            e2->set_integer_value(i, value ? 1 : 0);
           }
         }
       }
       else if (this->is_integer() || this->is_logical()) {
         for (IV i = 0; i < length; i++) {
-          e2->set_integer_value(i, this->get_integer_value(i));
+          e2->set_integer_value(i, this->get_integer_value(i) ? 1 : 0);
         }
       }
       else {

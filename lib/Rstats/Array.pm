@@ -191,19 +191,23 @@ sub is_infinite {
     return $x2;
   }
   else {
-    croak "Error : is_finite is not implemented except array";
+    croak "Error : is_infinite is not implemented except array";
   }
 }
 
 sub is_nan {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = map { $_->is_nan } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
-  $x1->_copy_attrs_to($x2);
-  $x2->mode('logical');
-  
-  return $x2;
+  if (my $vector = $x1->vector) {
+    my $x2 = Rstats::Func::NULL();
+    $x2->vector($x1->vector->is_nan);
+    $x1->_copy_attrs_to($x2);
+    
+    return $x2;
+  }
+  else {
+    croak "Error : is_nan is not implemented except array";
+  }
 }
 
 sub is_null {

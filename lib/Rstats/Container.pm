@@ -443,16 +443,7 @@ sub typeof {
 }
 
 sub type {
-  my $self = shift;
-  
-  if (@_) {
-    $self->{type} = $_[0];
-    
-    return $self;
-  }
-  else {
-    return $self->elements->type;
-  }
+  return shift->elements->type;
 }
 
 sub is_factor {

@@ -230,9 +230,10 @@ sub levels {
 }
 
 sub clone {
-  my ($self, %opt) = @_;
+  my $self = shift;;
   
-  my $clone = Rstats::Func::c($opt{vector} || $self->decompose_elements);
+  my $clone = Rstats::Func::NULL();
+  $clone->vector($self->vector->clone);
   $self->_copy_attrs_to($clone);
   
   return $clone;

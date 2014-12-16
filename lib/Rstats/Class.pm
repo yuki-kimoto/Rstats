@@ -384,7 +384,9 @@ sub apply {
     push @$new_elements, $func->($element_array);
   }
 
-  my $x2 = $x1->clone(vector => $new_elements);
+  my $x2 = Rstats::Func::NULL();
+  $x2->vector(Rstats::Func::c($new_elements)->vector);
+  $x1->_copy_attrs_to($x1);
   $x2->{dim} = $new_dim_values;
   
   if (@{$x2->{dim}} == 1) {

@@ -441,11 +441,13 @@ sub mode {
 sub typeof {
   my $self = shift;
   
-  my $type = $self->{type};
-  my $x2_elements = defined $type ? $type : "NULL";
-  my $x2 = Rstats::Func::c($x2_elements);
-  
-  return $x2;
+  if ($self->is_array || $self->is_vector) {
+    my $type = $self->elements->type;
+    return Rstats::Array->new(elements => Rstats::VectorFunc::new_character($type));
+  }
+  else {
+    return Rstats::Func::c(undef);
+  }
 }
 
 sub type {
@@ -667,8 +669,6 @@ sub as_character {
   else {
     $x2 = Rstats::Array->new(elements => $self->elements->as_character);
     $self->_copy_attrs_to($x2);
-    
-    $x2->{type} = 'character';
   }
 
   return $x2;

@@ -213,7 +213,7 @@ use Math::Trig ();
   {
     my $x1 = c(Inf);
     my $x2 = r->expm1($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
   
   # expm1 - -Inf
@@ -227,7 +227,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->expm1($x1);
-    ok($x2->element->is_na);
+    ok($x2->vector_part->is_na);
   }
 
   # expm1 - NaN
@@ -263,7 +263,7 @@ use Math::Trig ();
   {
     my $x1 = c(Inf);
     my $x2 = r->exp($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
   
   # exp - -Inf
@@ -277,7 +277,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->exp($x1);
-    ok($x2->element->is_na);
+    ok($x2->vector_part->is_na);
   }  
 
   # exp - NaN
@@ -411,7 +411,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->log($x1);
-    ok($x2->element->is_na);
+    ok($x2->vector_part->is_na);
   }  
 
   # log - NaN
@@ -1097,7 +1097,7 @@ use Math::Trig ();
 # NA
 {
   my $na = NA;
-  my $na_element = $na->element;
+  my $na_element = $na->vector_part;
   is($na_element, Rstats::VectorFunc::NA);
 }
 

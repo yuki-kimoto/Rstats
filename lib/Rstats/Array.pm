@@ -338,12 +338,12 @@ sub bool {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
-  my $element = $self->element;
+  my $element = $self->vector_part;
   
   return !!$element;
 }
 
-sub element {
+sub vector_part {
   my $self = shift;
 
   my $dim_values = $self->dim_as_array->values;

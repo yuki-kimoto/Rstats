@@ -669,7 +669,7 @@ sub values {
 sub value {
   my $self = shift;
   
-  my $e1 = $self->element(@_);
+  my $e1 = $self->vector_part(@_);
   
   return defined $e1 ? $e1->value : undef;
 }

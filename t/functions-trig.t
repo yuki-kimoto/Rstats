@@ -193,14 +193,14 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->asinh($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
   
   # asinh - -Inf
   {
     my $x1 = c(-Inf);
     my $x2 = r->asinh($x1);
-    ok($x2->element->is_negative_infinite);
+    ok($x2->vector_part->is_negative_infinite);
   }
 
   # asinh - NA
@@ -335,14 +335,14 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->cosh($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
   
   # cosh - -Inf
   {
     my $x1 = c(-Inf);
     my $x2 = r->cosh($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
 
   # cosh - NA
@@ -403,14 +403,14 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->sinh($x1);
-    ok($x2->element->is_positive_infinite);
+    ok($x2->vector_part->is_positive_infinite);
   }
   
   # sinh - -Inf
   {
     my $x1 = c(-Inf);
     my $x2 = r->sinh($x1);
-    ok($x2->element->is_negative_infinite);
+    ok($x2->vector_part->is_negative_infinite);
   }
 
   # sinh - NA

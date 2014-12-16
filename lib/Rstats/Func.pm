@@ -70,7 +70,7 @@ sub t {
   
   for my $row (1 .. $x1_row) {
     for my $col (1 .. $x1_col) {
-      my $element = $x1->element($row, $col);
+      my $element = $x1->vector_part($row, $col);
       $x2->at($col, $row);
       $x2->set($element);
     }
@@ -128,7 +128,7 @@ sub na_omit {
   my @poss;
   for my $v (@{$x1->list}) {
     for (my $index = 1; $index <= $x1->{row_length}; $index++) {
-      push @poss, $index if $v->element($index)->is_na;
+      push @poss, $index if $v->vector_part($index)->is_na;
     }
   }
   
@@ -591,7 +591,7 @@ sub data_frame {
 sub upper_tri {
   my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = defined $x1_diag ? $x1_diag->element : FALSE;
+  my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
   
   my $x2_elements = [];
   if ($x1_m->is_matrix) {
@@ -624,7 +624,7 @@ sub upper_tri {
 sub lower_tri {
   my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = defined $x1_diag ? $x1_diag->element : FALSE;
+  my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
   
   my $x2_elements = [];
   if ($x1_m->is_matrix) {
@@ -737,8 +737,8 @@ sub kronecker {
       my $x2_ind = $x3_i - $x2_dim_value * ($x1_ind - 1);
       push @$x2_index, $x2_ind;
     }
-    my $x1_element = $x1->element(@$x1_index);
-    my $x2_element = $x2->element(@$x2_index);
+    my $x1_element = $x1->vector_part(@$x1_index);
+    my $x2_element = $x2->vector_part(@$x2_index);
     my $x3_element = multiply($x1_element, $x2_element);
     push @$x3_elements, $x3_element;
   }
@@ -770,8 +770,8 @@ sub outer {
     my $pos_tmp = [@$pos];
     my $x1_pos = [splice @$pos_tmp, 0, $x1_dim_length];
     my $x2_pos = $pos_tmp;
-    my $x1_element = $x1->element(@$x1_pos);
-    my $x2_element = $x2->element(@$x2_pos);
+    my $x1_element = $x1->vector_part(@$x1_pos);
+    my $x2_element = $x2->vector_part(@$x2_pos);
     my $x3_element = Rstats::VectorFunc::multiply($x1_element, $x2_element);
     push @$x3_elements, $x3_element;
   }
@@ -797,7 +797,7 @@ sub sub {
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
@@ -828,7 +828,7 @@ sub gsub {
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
@@ -857,7 +857,7 @@ sub grep {
   my ($x1_pattern, $x1_x, $x1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->element : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
   
   my $x2_elements = [];
   my $x1_x_elements = $x1_x->decompose_elements;
@@ -1803,7 +1803,7 @@ sub max_type {
     my $x_type = $x->typeof->value;
     $type_h->{$x_type}++;
     unless ($x->is_null) {
-      my $element = $x->element;
+      my $element = $x->vector_part;
       my $element_type = $element->typeof;
       $type_h->{$element_type}++;
     }

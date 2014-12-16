@@ -72,7 +72,7 @@ use Rstats::VectorFunc;
   my $null = NULL;
   is_deeply($null->values, []);
   is_deeply($null->dim->values, []);
-  is_deeply($null->{type}, 'logical');
+  is_deeply($null->type, 'logical');
 }
 
 # r

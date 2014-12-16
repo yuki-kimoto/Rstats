@@ -93,7 +93,7 @@ sub to_string {
   for (my $i = 1; $i <= @$column_names; $i++) {
     my $x = $self->getin($i);
     $x = $x->as_character if $x->is_factor;
-    push @$columns, $x->decompose_elements;
+    push @$columns, $x->values;
   }
   my $col_count = @{$columns};
   my $row_count = @{$columns->[0]};

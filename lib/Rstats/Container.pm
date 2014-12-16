@@ -254,13 +254,13 @@ sub _name_to_index {
   my $self = shift;
   my $x1_index = Rstats::Func::to_c(shift);
   
-  my $e1_name = $x1_index->element;
+  my $e1_name = $x1_index->value;
   my $found;
-  my $names = $self->names->decompose_elements;
+  my $names = $self->names->values;
   my $index;
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
-    if (Rstats::VectorFunc::equal($e1_name, $name)) {
+    if ($e1_name eq $name) {
       $index = $i + 1;
       $found = 1;
       last;

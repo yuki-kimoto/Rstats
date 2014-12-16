@@ -54,9 +54,6 @@ sub _copy_attrs_to {
   # levels
   $x2->{levels} = $self->{levels} if !$exclude_h{levels} && exists $self->{levels};
   
-  # type
-  $x2->{type} = $self->{type} if !$exclude_h{type} && exists $self->{type};
-  
   # names
   if (!$exclude_h{names} && exists $self->{names}) {
     my $names = [];
@@ -577,7 +574,6 @@ sub as_complex {
   my $x2;
   $x2 = Rstats::Array->new(elements => $x_tmp->elements->as_complex);
   $x_tmp->_copy_attrs_to($x2);
-  $x2->{type} = 'complex';
 
   return $x2;
 }
@@ -590,12 +586,10 @@ sub as_double {
   my $x2;
   if ($self->is_factor) {
     $x2 = Rstats::Array->new(elements => $self->elements->as_double);
-    $x2->{type} = 'double';
   }
   else {
     $x2 = Rstats::Array->new(elements => $self->elements->as_double);
     $self->_copy_attrs_to($x2);
-    $x2->{type} = 'double';
   }
 
   return $x2;
@@ -607,12 +601,10 @@ sub as_integer {
   my $x2;
   if ($self->is_factor) {
     $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
-    $x2->{type} = 'integer';
   }
   else {
     $x2 = Rstats::Array->new(elements => $self->elements->as_integer);
     $self->_copy_attrs_to($x2);
-    $x2->{type} = 'integer';
   }
 
   return $x2;
@@ -624,12 +616,10 @@ sub as_logical {
   my $x2;
   if ($self->is_factor) {
     $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
-    $x2->{type} = 'logical';
   }
   else {
     $x2 = Rstats::Array->new(elements => $self->elements->as_logical);
     $self->_copy_attrs_to($x2);
-    $x2->{type} = 'logical';
   }
 
   return $x2;

@@ -1013,12 +1013,56 @@ new_complex(...)
   Rstats::Vector* element = Rstats::Vector::new_complex(items);
   for (int i = 0; i < items; i++) {
     SV* sv_value = ST(i);
-    SV* sv_value_re = my::hvrv_fetch_simple(sv_value, "re");
-    SV* sv_value_im = my::hvrv_fetch_simple(sv_value, "im");
-    NV value_re = SvOK(sv_value_re) ? SvNV(sv_value_re) : 0;
-    NV value_im = SvOK(sv_value_im) ? SvNV(sv_value_im) : 0;
     
-    element->set_complex_value(i, std::complex<NV>(value_re, value_im));
+    if (SvOK(sv_value)) {
+      SV* sv_value_re = my::hvrv_fetch_simple(sv_value, "re");
+      SV* sv_value_im = my::hvrv_fetch_simple(sv_value, "im");
+      
+      NV value_re;
+      if (SvOK(sv_value_re)) {
+        char* sv_value_re_str = SvPV_nolen(sv_value_re);
+        if (strEQ(sv_value_re_str, "NaN")) {
+          value_re =NAN;
+        }
+        else if (strEQ(sv_value_re_str, "Inf")) {
+          value_re = INFINITY;
+        }
+        else if (strEQ(sv_value_re_str, "-Inf")) {
+          value_re = -(INFINITY);
+        }
+        else {
+          value_re = SvNV(sv_value_re);
+        }
+      }
+      else {
+        value_re = 0;
+      }
+
+      NV value_im;
+      if (SvOK(sv_value_im)) {
+        char* sv_value_im_str = SvPV_nolen(sv_value_im);
+        if (strEQ(sv_value_im_str, "NaN")) {
+          value_im =NAN;
+        }
+        else if (strEQ(sv_value_im_str, "Inf")) {
+          value_im = INFINITY;
+        }
+        else if (strEQ(sv_value_im_str, "-Inf")) {
+          value_im = -(INFINITY);
+        }
+        else {
+          value_im = SvNV(sv_value_im);
+        }
+      }
+      else {
+        value_im = 0;
+      }
+      
+      element->set_complex_value(i, std::complex<NV>(value_re, value_im));
+    }
+    else {
+      element->add_na_position(i);
+    }
   }
 
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");

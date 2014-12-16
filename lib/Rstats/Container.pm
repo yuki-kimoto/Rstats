@@ -113,6 +113,13 @@ sub _value_to_string {
     if (!defined $value) {
       $string = 'NA';
     }
+    elsif ($type eq 'complex') {
+      my $re = $value->{re} || 0;
+      my $im = $value->{im} || 0;
+      $string = "$re";
+      $string .= $im > 0 ? "+$im" : $im;
+      $string .= 'i';
+    }
     elsif ($type eq 'character') {
       $string = '"' . $value . '"';
     }
@@ -121,30 +128,6 @@ sub _value_to_string {
     }
     else {
       $string = "$value";
-    }
-  }
-  
-  return $string;
-}
-
-sub _element_to_string {
-  my ($self, $element, $is_character, $is_factor) = @_;
-  
-  my $string;
-  if ($is_factor) {
-    if ($element->is_na) {
-      $string = '<NA>';
-    }
-    else {
-      $string = "$element";
-    }
-  }
-  else {
-    if ($is_character) {
-      $string = '"' . $element . '"';
-    }
-    else {
-      $string = "$element";
     }
   }
   
@@ -214,9 +197,9 @@ sub str {
     my @element_str;
     my $max_count = $length > 10 ? 10 : $length;
     my $is_character = $self->is_character;
-    my $elements = $self->decompose_elements;
+    my $values = $self->values;
     for (my $i = 0; $i < $max_count; $i++) {
-      push @element_str, $self->_element_to_string($elements->[$i], $is_character);
+      push @element_str, $self->_value_to_string($values->[$i], $type);
     }
     if ($length > 10) {
       push @element_str, '...';

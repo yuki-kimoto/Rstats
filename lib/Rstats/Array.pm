@@ -282,7 +282,7 @@ sub set {
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   
   # Upgrade mode if type is different
-  if ($self->{type} ne $x2->{type}) {
+  if ($self->elements->type ne $x2->elements->type) {
     my $self_tmp;
     ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
     $self_tmp->_copy_attrs_to($self);

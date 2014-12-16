@@ -714,7 +714,7 @@ sub is_matrix {
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'double' || ($self->{type} || '') eq 'integer'
+  my $is = ($self->is_array || $self->is_vector) && (($self->elements->type || '') eq 'double' || ($self->{type} || '') eq 'integer')
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -723,7 +723,8 @@ sub is_numeric {
 sub is_double {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'double' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'double'
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -731,7 +732,8 @@ sub is_double {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'integer' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'integer'
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -739,7 +741,8 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'complex' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'complex'
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -747,7 +750,8 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'character' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'character'
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }
@@ -755,7 +759,8 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->{type} || '') eq 'logical' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'logical'
+    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
 }

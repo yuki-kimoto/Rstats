@@ -6,6 +6,9 @@ use Rstats::List;
 use Carp 'croak';
 use Rstats::Vector;
 
+has list => sub { [] };
+has 'elements';
+
 sub is_perl_array_class {
   my $self  = shift;
   

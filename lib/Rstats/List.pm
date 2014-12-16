@@ -7,9 +7,6 @@ use Carp 'croak';
 use overload '""' => \&to_string,
   fallback => 1;
 
-has list => sub { [] };
-has mode => sub { Rstats::Func::c('list') };
-
 sub getin {
   my ($self, $_index) = @_;
   

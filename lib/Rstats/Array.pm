@@ -29,8 +29,6 @@ use overload
   '|' => sub { shift->operation('or', @_) },
   fallback => 1;
 
-has 'elements';
-
 sub to_string {
   my $self = shift;
   

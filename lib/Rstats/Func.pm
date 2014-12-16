@@ -807,7 +807,7 @@ sub sub {
       else {
         $x =~ s/$pattern/$replacement/;
       }
-      push @$x2_elements, Rstats::VectorFunc::character($x);
+      push @$x2_elements, Rstats::VectorFunc::new_character($x);
     }
   }
   
@@ -838,7 +838,7 @@ sub gsub {
       else {
         $x =~ s/$pattern/$replacement/g;
       }
-      push @$x2_elements, Rstats::VectorFunc::character($x);
+      push @$x2_elements, Rstats::VectorFunc::new_character($x);
     }
   }
   
@@ -928,7 +928,7 @@ sub c {
         $mode_h->{double}++;
       }
       else {
-        $element = Rstats::VectorFunc::character("$element");
+        $element = Rstats::VectorFunc::new_character("$element");
         $mode_h->{character}++;
       }
     }
@@ -1035,7 +1035,7 @@ sub chartr {
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";
       croak $@ if $@;
-      push @$x2_elements, Rstats::VectorFunc::character($x);
+      push @$x2_elements, Rstats::VectorFunc::new_character($x);
     }
   }
   
@@ -1284,7 +1284,7 @@ sub tolower {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::character(lc $x1_element->value);
+        my $x2_element = Rstats::VectorFunc::new_character(lc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1308,7 +1308,7 @@ sub toupper {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::character(uc $x1_element->value);
+        my $x2_element = Rstats::VectorFunc::new_character(uc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }

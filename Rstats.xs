@@ -991,9 +991,13 @@ SV*
 new_character(...)
   PPCODE:
 {
-  SV* sv_str = ST(0);
-  Rstats::Vector* element = Rstats::Vector::new_character(1, sv_str);
+  Rstats::Vector* element = Rstats::Vector::new_character(items);
+  for (int i = 0; i < items; i++) {
+    SV* sv_value = ST(i);
+    element->set_character_value(i, sv_value);
+  }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
+
   return_sv(sv_element);
 }
 
@@ -1006,6 +1010,7 @@ new_complex(...)
   NV re = SvNV(sv_re);
   NV im = SvNV(sv_im);
   Rstats::Vector* element = Rstats::Vector::new_complex(1, std::complex<NV>(re, im));
+
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
 }
@@ -1014,9 +1019,12 @@ SV*
 new_logical(...)
   PPCODE:
 {
-  SV* sv_value = ST(0);
-  IV iv = SvIV(sv_value);
-  Rstats::Vector* element = Rstats::Vector::new_logical(1, iv);
+  Rstats::Vector* element = Rstats::Vector::new_logical(items);
+  for (int i = 0; i < items; i++) {
+    SV* sv_value = ST(i);
+    IV value = SvIV(sv_value);
+    element->set_integer_value(i, value ? 1 : 0);
+  }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
 }
@@ -1043,9 +1051,12 @@ SV*
 new_double(...)
   PPCODE:
 {
-  SV* sv_value = ST(0);
-  NV value = SvNV(sv_value);
-  Rstats::Vector* element = Rstats::Vector::new_double(1, value);
+  Rstats::Vector* element = Rstats::Vector::new_double(items);
+  for (int i = 0; i < items; i++) {
+    SV* sv_value = ST(i);
+    NV value = SvNV(sv_value);
+    element->set_double_value(i, value);
+  }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
 }
@@ -1054,9 +1065,12 @@ SV*
 new_integer(...)
   PPCODE:
 {
-  SV* sv_value = ST(0);
-  IV iv = SvIV(sv_value);
-  Rstats::Vector* element = Rstats::Vector::new_integer(1, iv);
+  Rstats::Vector* element = Rstats::Vector::new_integer(items);
+  for (int i = 0; i < items; i++) {
+    SV* sv_value = ST(i);
+    IV value = SvIV(sv_value);
+    element->set_integer_value(i, value);
+  }
   SV* sv_element = my::to_perl_obj(element, "Rstats::Vector");
   return_sv(sv_element);
 }

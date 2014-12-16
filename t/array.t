@@ -793,7 +793,8 @@ EOS
     my $x1 = array($v1);
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 0, 0]);
   }
 
   # comparison operator numeric - <, arguments count is different
@@ -801,7 +802,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 < $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 0, 0]);
   }
 
   # comparison operator numeric - <=
@@ -809,7 +811,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 0, 1]);
   }
 
   # comparison operator numeric - <=, arguments count is different
@@ -817,7 +820,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 <= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 1, 0]);
   }
 
   # comparison operator numeric - >
@@ -825,7 +829,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 1, 0]);
   }
 
   # comparison operator numeric - >, arguments count is different
@@ -833,7 +838,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 > $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 0, 1]);
   }
 
   # comparison operator numeric - >=
@@ -841,7 +847,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 1, 1]);
   }
 
   # comparison operator numeric - >=, arguments count is different
@@ -849,7 +856,8 @@ EOS
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 >= $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 1, 1]);
   }
 
   # comparison operator numeric - ==
@@ -857,7 +865,8 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 1]);
   }
 
   # comparison operator numeric - ==, arguments count is different
@@ -865,7 +874,8 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 == $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::FALSE, Rstats::VectorFunc::TRUE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [0, 1]);
   }
 
   # comparison operator numeric - !=
@@ -873,7 +883,8 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 0]);
   }
 
   # comparison operator numeric - !=, arguments count is different
@@ -881,7 +892,8 @@ EOS
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 != $x2;
-    is_deeply($x3->decompose_elements, [Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE]);
+    ok($x3->is_logical);
+    is_deeply($x3->values, [1, 0]);
   }
 }
 

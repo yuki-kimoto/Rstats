@@ -44,7 +44,7 @@ sub to_string {
   my $is_character = $self->is_character;
 
   my $values = $self->values;
-  my $type = $self->elements->type;
+  my $type = $self->vector->type;
   
   my $dim_values = $self->dim_as_array->values;
   
@@ -306,11 +306,11 @@ sub set {
   }
   else {
     # Upgrade mode if type is different
-    if ($self->elements->type ne $x2->elements->type) {
+    if ($self->vector->type ne $x2->vector->type) {
       my $self_tmp;
       ($self_tmp, $x2) = Rstats::Func::upgrade_type($self, $x2);
       $self_tmp->_copy_attrs_to($self);
-      $self->elements($self_tmp->elements);
+      $self->vector($self_tmp->vector);
     }
 
     $self_elements = $self->decompose_elements;
@@ -322,7 +322,7 @@ sub set {
     }
   }
   
-  $self->elements(Rstats::Vector->compose($self->elements->type, $self_elements));
+  $self->vector(Rstats::Vector->compose($self->vector->type, $self_elements));
   
   return $self;
 }

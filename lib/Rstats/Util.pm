@@ -127,7 +127,7 @@ sub parse_index {
 
       push @indexs, $index;
 
-      my $count = $index->elements->length_value;
+      my $count = $index->vector->length_value;
       push @x2_dim, $count unless $count == 1 && $drop;
     }
     @x2_dim = (1) unless @x2_dim;

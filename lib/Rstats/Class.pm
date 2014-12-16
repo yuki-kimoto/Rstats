@@ -384,7 +384,7 @@ sub apply {
     push @$new_elements, $func->($element_array);
   }
 
-  my $x2 = $x1->clone(elements => $new_elements);
+  my $x2 = $x1->clone(vector => $new_elements);
   $x2->{dim} = $new_dim_values;
   
   if (@{$x2->{dim}} == 1) {

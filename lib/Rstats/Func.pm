@@ -18,7 +18,7 @@ use Encode ();
 sub NULL {
   
   my $x1 = Rstats::Array->new;
-  $x1->elements(Rstats::Vector->new_null);
+  $x1->vector(Rstats::Vector->new_null);
   
   return $x1;
 }
@@ -983,7 +983,7 @@ sub c {
   }
   
   my $compose_elements = Rstats::Vector->compose($mode, $elements);
-  $x1->elements($compose_elements);
+  $x1->vector($compose_elements);
   
   return $x1;
 }
@@ -1055,7 +1055,7 @@ sub charmatch {
   my ($x1_x, $x1_table) = args(['x', 'table'], @_);
   
   die "Not implemented"
-    unless $x1_x->elements->type eq 'character' && $x1_table->elements->type eq 'character';
+    unless $x1_x->vector->type eq 'character' && $x1_table->vector->type eq 'character';
   
   my $x2_elements = [];
   for my $x1_x_element (@{$x1_x->decompose_elements}) {
@@ -1143,7 +1143,7 @@ sub negation {
 sub is_element {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
+  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1165,7 +1165,7 @@ sub is_element {
 sub setequal {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
+  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x3 = Rstats::Func::sort($x1);
   my $x4 = Rstats::Func::sort($x2);
@@ -1188,7 +1188,7 @@ sub setequal {
 sub setdiff {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
+  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1210,7 +1210,7 @@ sub setdiff {
 sub intersect {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
+  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
@@ -1229,7 +1229,7 @@ sub intersect {
 sub union {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
 
-  croak "mode is diffrence" if $x1->elements->type ne $x2->elements->type;
+  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x3 = c($x1, $x2);
   my $x4 = unique($x3);
@@ -1257,7 +1257,7 @@ sub diff {
 sub nchar {
   my $x1 = to_c(shift);
   
-  if ($x1->elements->type eq 'character') {
+  if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1281,7 +1281,7 @@ sub nchar {
 sub tolower {
   my $x1 = to_c(shift);
   
-  if ($x1->elements->type eq 'character') {
+  if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1305,7 +1305,7 @@ sub tolower {
 sub toupper {
   my $x1 = to_c(shift);
   
-  if ($x1->elements->type eq 'character') {
+  if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
       if ($x1_element->is_na) {
@@ -1371,7 +1371,7 @@ sub operation {
   $x2 = to_c($x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->elements->type ne $x2->elements->type;
+  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
   
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
@@ -1392,9 +1392,9 @@ sub operation {
   no strict 'refs';
   my $operation = "Rstats::VectorFunc::$op";
   my $x3;
-  my $x3_elements = &$operation($x1->elements, $x2->elements);
+  my $x3_elements = &$operation($x1->vector, $x2->vector);
   $x3 = Rstats::Func::NULL();
-  $x3->elements($x3_elements);
+  $x3->vector($x3_elements);
   
   $x1->_copy_attrs_to($x3);
 
@@ -1466,7 +1466,7 @@ sub array {
   my $elements = $x1->decompose_elements;
   my $dim = defined $_dim ? to_c($_dim) : NULL;
   my $x1_length = $x1->length_value;
-  unless ($dim->elements->length_value) {
+  unless ($dim->vector->length_value) {
     $dim = c($x1_length);
   }
   my $dim_product = 1;
@@ -1700,7 +1700,7 @@ sub cummin {
 
 sub cumsum {
   my $x1 = to_c(shift);
-  my $type = $x1->elements->type;
+  my $type = $x1->vector->type;
   my $total = Rstats::VectorFunc::create($type);
   my @a2_elements;
   push @a2_elements, $total = Rstats::VectorFunc::add($total, $_) for @{$x1->decompose_elements};
@@ -1710,7 +1710,7 @@ sub cumsum {
 
 sub cumprod {
   my $x1 = to_c(shift);
-  my $type = $x1->elements->type;
+  my $type = $x1->vector->type;
   my $total = Rstats::VectorFunc::create($type, 1);
   my @a2_elements;
   push @a2_elements, $total = Rstats::VectorFunc::multiply($total, $_) for @{$x1->decompose_elements};
@@ -2086,7 +2086,7 @@ sub pmin {
 sub prod {
   my $x1 = c(@_);
   
-  my $type = $x1->elements->type;
+  my $type = $x1->vector->type;
   my $prod = Rstats::VectorFunc::create($type, 1);
   for my $element (@{$x1->decompose_elements}) {
     $prod = Rstats::VectorFunc::multiply($prod, $element);
@@ -2429,9 +2429,9 @@ sub process_unary {
   my $func = shift;
   my $x1 = to_c(shift);
   
-  my $x2_elements = $func->($x1->elements);
+  my $x2_elements = $func->($x1->vector);
   my $x2 = NULL;
-  $x2->elements($x2_elements);
+  $x2->vector($x2_elements);
   $x1->_copy_attrs_to($x2);
   
   return $x2;
@@ -2700,7 +2700,7 @@ sub sum {
   my $x1 = to_c(shift);
   
   my $x2 = Rstats::Array->new;
-  $x2->elements(Rstats::VectorFunc::sum($x1->elements));
+  $x2->vector(Rstats::VectorFunc::sum($x1->vector));
   
   return $x2;
 }
@@ -2823,7 +2823,7 @@ sub upgrade_type {
   # Check elements
   my $type_h = {};
   for my $x1 (@xs) {
-    my $type = $x1->elements->type || '';
+    my $type = $x1->vector->type || '';
     if ($type eq 'character') {
       $type_h->{character}++;
     }

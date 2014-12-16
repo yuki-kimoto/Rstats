@@ -7,7 +7,7 @@ use Carp 'croak';
 use Rstats::Vector;
 
 has list => sub { [] };
-has 'elements';
+has 'vector';
 
 sub is_perl_array_class {
   my $self  = shift;
@@ -31,7 +31,7 @@ sub decompose_elements {
   my $self = shift;
   
   if ($self->is_perl_array_class) {
-    return $self->elements->decompose;
+    return $self->vector->decompose;
   }
   else {
     croak "Can't call decompose_elements methods from list";
@@ -141,7 +141,7 @@ sub str {
   
   if ($self->is_vector || $self->is_array) {
     # Short type
-    my $type = $self->elements->type;
+    my $type = $self->vector->type;
     my $short_type;
     if ($type eq 'character') {
       $short_type = 'chr';
@@ -232,7 +232,7 @@ sub levels {
 sub clone {
   my ($self, %opt) = @_;
   
-  my $clone = Rstats::Func::c($opt{elements} || $self->decompose_elements);
+  my $clone = Rstats::Func::c($opt{vector} || $self->decompose_elements);
   $self->_copy_attrs_to($clone);
   
   return $clone;
@@ -290,7 +290,7 @@ sub length_value {
   
   my $length;
   if ($self->is_perl_array_class) {
-    $length = $self->elements->length_value;
+    $length = $self->vector->length_value;
   }
   else {
     $length = @{$self->list}
@@ -410,12 +410,12 @@ sub mode {
     croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
       unless $types_h{$type};
     
-    $self->elements($self->elements->as($type));
+    $self->vector($self->vector->as($type));
     
     return $self;
   }
   else {
-    my $type = $self->elements->type;
+    my $type = $self->vector->type;
     my $mode;
     if (defined $type) {
       if ($type eq 'integer' || $type eq 'double') {
@@ -437,8 +437,8 @@ sub typeof {
   my $self = shift;
   
   if ($self->is_array || $self->is_vector) {
-    my $type = $self->elements->type;
-    return Rstats::Array->new->elements(Rstats::VectorFunc::new_character($type));
+    my $type = $self->vector->type;
+    return Rstats::Array->new->vector(Rstats::VectorFunc::new_character($type));
   }
   else {
     return Rstats::Func::c(undef);
@@ -446,7 +446,7 @@ sub typeof {
 }
 
 sub type {
-  return shift->elements->type;
+  return shift->vector->type;
 }
 
 sub is_factor {
@@ -561,7 +561,7 @@ sub as_complex {
   }
 
   my $x2;
-  $x2 = Rstats::Array->new->elements($x_tmp->elements->as_complex);
+  $x2 = Rstats::Array->new->vector($x_tmp->vector->as_complex);
   $x_tmp->_copy_attrs_to($x2);
 
   return $x2;
@@ -574,10 +574,10 @@ sub as_double {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new->elements($self->elements->as_double);
+    $x2 = Rstats::Array->new->vector($self->vector->as_double);
   }
   else {
-    $x2 = Rstats::Array->new->elements($self->elements->as_double);
+    $x2 = Rstats::Array->new->vector($self->vector->as_double);
     $self->_copy_attrs_to($x2);
   }
 
@@ -589,10 +589,10 @@ sub as_integer {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new->elements($self->elements->as_integer);
+    $x2 = Rstats::Array->new->vector($self->vector->as_integer);
   }
   else {
-    $x2 = Rstats::Array->new->elements($self->elements->as_integer);
+    $x2 = Rstats::Array->new->vector($self->vector->as_integer);
     $self->_copy_attrs_to($x2);
   }
 
@@ -604,10 +604,10 @@ sub as_logical {
   
   my $x2;
   if ($self->is_factor) {
-    $x2 = Rstats::Array->new->elements($self->elements->as_logical);
+    $x2 = Rstats::Array->new->vector($self->vector->as_logical);
   }
   else {
-    $x2 = Rstats::Array->new->elements($self->elements->as_logical);
+    $x2 = Rstats::Array->new->vector($self->vector->as_logical);
     $self->_copy_attrs_to($x2);
   }
 
@@ -646,7 +646,7 @@ sub as_character {
     $self->_copy_attrs_to($x2)
   }
   else {
-    $x2 = Rstats::Array->new->elements($self->elements->as_character);
+    $x2 = Rstats::Array->new->vector($self->vector->as_character);
     $self->_copy_attrs_to($x2);
   }
 
@@ -657,10 +657,10 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    $self->elements(Rstats::Func::c($_[0])->elements);
+    $self->vector(Rstats::Func::c($_[0])->vector);
   }
   else {
-    my $values = $self->elements->values;
+    my $values = $self->vector->values;
     
     return $values;
   }
@@ -693,7 +693,7 @@ sub is_matrix {
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && (($self->elements->type || '') eq 'double' || ($self->elements->type || '') eq 'integer')
+  my $is = ($self->is_array || $self->is_vector) && (($self->vector->type || '') eq 'double' || ($self->vector->type || '') eq 'integer')
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -702,7 +702,7 @@ sub is_numeric {
 sub is_double {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'double'
+  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'double'
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -711,7 +711,7 @@ sub is_double {
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'integer'
+  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'integer'
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -720,7 +720,7 @@ sub is_integer {
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'complex'
+  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'complex'
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -729,7 +729,7 @@ sub is_complex {
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'character'
+  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'character'
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);
@@ -738,7 +738,7 @@ sub is_character {
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->elements->type || '') eq 'logical'
+  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'logical'
     ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
   
   return Rstats::Func::c($is);

@@ -304,12 +304,9 @@ sub is_na {
   my $_a1 = shift;
   
   my $x1 = Rstats::Func::to_c($_a1);
-  
-  my @a2_elements = map {
-    ref $_ eq  'Rstats::Type::NA' ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE()
-  } @{$x1->decompose_elements};
-  my $x2 = Rstats::Func::array(\@a2_elements);
-  $x2->mode('logical');
+  my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
+  my $x2 = Rstats::Func::NULL();
+  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
   
   return $x2;
 }

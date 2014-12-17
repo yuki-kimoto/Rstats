@@ -2596,6 +2596,31 @@ sub which {
   return c(\@x2_values);
 }
 
+sub new_character {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_character(@_));
+}
+
+sub new_complex {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_complex(@_));
+}
+
+sub new_double {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_double(@_));
+}
+
+sub new_integer {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_integer(@_));
+}
+
+sub new_logical {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_logical(@_));
+}
+
 sub matrix {
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = args(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);

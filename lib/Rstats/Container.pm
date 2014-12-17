@@ -322,7 +322,9 @@ sub as_list {
   }
   else {
     my $list = Rstats::List->new;
-    $list->list([Rstats::Func::c($self->decompose_elements)]);
+    my $x2 = Rstats::Func::NULL();
+    $x2->vector($self->vector->clone);
+    $list->list([$x2]);
     
     return $list;
   }

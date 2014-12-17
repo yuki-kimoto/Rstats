@@ -631,26 +631,26 @@ sub as_character {
   if ($self->is_factor) {
     my $levels = {};
     my $x_levels = $self->levels;
-    my $x_levels_elements = $x_levels->decompose_elements;
-    my $levels_length = $x_levels->length->value;
+    my $x_levels_values = $x_levels->values;
+    my $levels_length = $x_levels->length_value;
     for (my $i = 1; $i <= $levels_length; $i++) {
-      my $x_levels_element = $x_levels_elements->[$i - 1];
-      $levels->{$i} = $x_levels_element->value;
+      $levels->{$i} = $x_levels_values->[$i - 1];
     }
 
-    my $self_elements =  $self->decompose_elements;
-    my $x2_elements = [];
-    for my $self_element (@$self_elements) {
-      if ($self_element->is_na) {
-        push @$x2_elements, Rstats::Func::NA();
+    my $self_values = $self->values;
+    my $x2_values = [];
+    for my $self_value (@$self_values) {
+      if (defined $self_value) {
+        my $character = $levels->{$self_value};
+        push @$x2_values, "$character";
       }
       else {
-        my $value = $self_element->value;
-        my $character = $levels->{$value};
-        push @$x2_elements, "$character";
+        push @$x2_values, undef;
       }
     }
-    $x2 = Rstats::Func::c($x2_elements);
+    $x2 = Rstats::Func::NULL();
+    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
+    
     $self->copy_attrs_to($x2)
   }
   else {

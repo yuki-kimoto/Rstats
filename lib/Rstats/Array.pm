@@ -253,13 +253,14 @@ sub get {
   
   my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
   
-  my $self_elements = $self->decompose_elements;
-  my @a2_elements
-    = map { defined $self_elements->[$_] ? $self_elements->[$_] : Rstats::VectorFunc::NA() }
-      @$poss;
+  my $self_values = $self->values;
+  my @a2_values = map { $self_values->[$_] } @$poss;
   
   # array
-  my $x2 = Rstats::Func::array(\@a2_elements, $x2_dim);
+  my $x2 = Rstats::Func::array(
+    Rstats::Func::new_vector($self->vector->type, @a2_values),
+    $x2_dim
+  );
   
   # Copy attributes
   $self->copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});

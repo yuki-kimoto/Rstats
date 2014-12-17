@@ -2596,6 +2596,29 @@ sub which {
   return c(\@x2_values);
 }
 
+sub new_vector {
+  my $type = shift;
+  
+  if ($type eq 'character') {
+    return new_character(@_);
+  }
+  elsif ($type eq 'complex') {
+    return new_complex(@_);
+  }
+  elsif ($type eq 'double') {
+    return new_double(@_);
+  }
+  elsif ($type eq 'integer') {
+    return new_integer(@_);
+  }
+  elsif ($type eq 'logical') {
+    return new_logical(@_);
+  }
+  else {
+    croak("Invalid type $type is passed(new_vector)");
+  }
+}
+
 sub new_character {
   my $x1 = Rstats::Func::NULL();
   $x1->vector(Rstats::VectorFunc::new_character(@_));

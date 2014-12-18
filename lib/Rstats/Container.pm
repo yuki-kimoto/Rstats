@@ -786,7 +786,7 @@ sub names {
     $self->{names} = $names->values;
     
     if ($self->is_data_frame) {
-      $self->{dimnames}->[1] =[@$self->{names}];
+      $self->{dimnames}->[1] =[@{$self->{names}}];
     }
     
     return $self;

@@ -36,38 +36,44 @@ sub _fix_position {
 sub to_string {
   my $self = shift;
   
-  my $str;
-  my $value = $self->value;
-  if (defined $value) {
-    if ($self->is_character) {
-      $str = $self->value . "";
-    }
-    elsif ($self->is_complex) {
-      my $re = $self->value->{re};
-      my $im = $self->value->{im};
-      
-      $str = "$re";
-      $str .= '+' if $im >= 0;
-      $str .= $im . 'i';
-    }
-    elsif ($self->is_double) {
-      $str = $self->value . "";
-    }
-    elsif ($self->is_integer) {
-      $str = $self->value . "";
-    }
-    elsif ($self->is_logical) {
-      $str = $self->value ? 'TRUE' : 'FALSE'
+  my @strs;
+  my $values = $self->values;
+  for my $value (@$values) {
+    my $str;
+    if (defined $value) {
+      if ($self->is_character) {
+        $str = $value . "";
+      }
+      elsif ($self->is_complex) {
+        my $re = $value->{re};
+        my $im = $value->{im};
+        
+        $str = "$re";
+        $str .= '+' if $im >= 0;
+        $str .= $im . 'i';
+      }
+      elsif ($self->is_double) {
+        $str = $value . "";
+      }
+      elsif ($self->is_integer) {
+        $str = $value . "";
+      }
+      elsif ($self->is_logical) {
+        $str = $value ? 'TRUE' : 'FALSE'
+      }
+      else {
+        croak "Invalid type";
+      }
     }
     else {
-      croak "Invalid type";
+      $str = 'NA';
     }
-  }
-  else {
-    $str = 'NA';
+    push @strs, $str;
   }
   
-  return $str;
+  my $str_all = join ' ', @strs;
+  
+  return $str_all;
 }
 
 sub bool {

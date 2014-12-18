@@ -4,6 +4,184 @@ use warnings;
 
 use Rstats;
 
+# get
+{
+  
+  # get - multiple elements
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(1,3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    my $tmp = $x2->dimnames;
+    is_deeply($tmp->getin(2)->values, ['sex', 'weight']);
+  }
+
+  # get - minus row index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(-1, -3), NULL);
+    ok($x2->is_data_frame);
+    is_deeply($x2->getin(1)->values, [qw/2/]);
+    is_deeply($x2->getin(2)->values, [qw/168/]);
+    is_deeply($x2->getin(3)->values, [qw/6/]);
+  }
+  
+  # get - minus collum index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(NULL, c(-1, -3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->names->values, ['height']);
+    is_deeply($x2->getin(1)->values, [qw/172 168 155/]);
+  }
+  
+  # get - row index and column index is null
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(3, 2), NULL);
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/155 168/]);
+    is_deeply($x2->getin(3)->values, [qw/7 6/]);
+  }
+  
+  # get - row index and column index is null
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(3, 2), NULL);
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/155 168/]);
+    is_deeply($x2->getin(3)->values, [qw/7 6/]);
+  }
+  
+  # get - row index and column index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(3, 2), c(1, 3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
+    is_deeply($x2->getin(2)->values, [qw/7 6/]);
+  }
+  
+  # get - logical, logical
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(T, F, T), c(T, F, T));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F F/]);
+    is_deeply($x2->getin(2)->values, [qw/5 7/]);
+  }
+  
+  # get - logical
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(T, F, T));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2 3/]);
+    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
+  }
+  
+  # get - row index and name
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(c(2, 3), c(1, 3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/M F/]);
+    is_deeply($x2->getin(2)->values, [qw/6 7/]);
+  }
+  
+  # get - row index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get(NULL, c(1, 3));
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['sex', 'weight']);
+    is_deeply($x2->rownames->values, [qw/1 2 3/]);
+    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply($x2->getin(1)->as_character->values, [qw/F M F/]);
+    is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
+  }
+  
+  # get - name
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = $x1->get("weight");
+    ok($x2->is_data_frame);
+    is_deeply($x2->class->values, ['data.frame']);
+    is_deeply($x2->names->values, ['weight']);
+  }
+}
+
 # transform
 {
   # transform - less elements
@@ -179,182 +357,6 @@ use Rstats;
     ok($x2->is_data_frame);
     is_deeply($x2->getin(1)->values, [1, 2, 3]);
     is_deeply($x2->getin(2)->values, [1, 2, 5]);
-  }
-}
-
-# get
-{
-  # get - minus row index
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(-1, -3), NULL);
-    ok($x2->is_data_frame);
-    is_deeply($x2->getin(1)->values, [qw/2/]);
-    is_deeply($x2->getin(2)->values, [qw/168/]);
-    is_deeply($x2->getin(3)->values, [qw/6/]);
-  }
-  
-  # get - minus collum index
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(NULL, c(-1, -3));
-    ok($x2->is_data_frame);
-    is_deeply($x2->names->values, ['height']);
-    is_deeply($x2->getin(1)->values, [qw/172 168 155/]);
-  }
-  
-  # get - row index and column index is null
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), NULL);
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
-    is_deeply($x2->getin(2)->values, [qw/155 168/]);
-    is_deeply($x2->getin(3)->values, [qw/7 6/]);
-  }
-  
-  # get - row index and column index is null
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), NULL);
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'height', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
-    is_deeply($x2->getin(2)->values, [qw/155 168/]);
-    is_deeply($x2->getin(3)->values, [qw/7 6/]);
-  }
-  
-  # get - row index and column index
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), c(1, 3));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F M/]);
-    is_deeply($x2->getin(2)->values, [qw/7 6/]);
-  }
-  
-  # get - logical, logical
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(T, F, T), c(T, F, T));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F F/]);
-    is_deeply($x2->getin(2)->values, [qw/5 7/]);
-  }
-  
-  # get - logical
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(T, F, T));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2 3/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F M F/]);
-    is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
-  }
-  
-  # get - row index and name
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(2, 3), c(1, 3));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
-    is_deeply($x2->getin(1)->as_character->values, [qw/M F/]);
-    is_deeply($x2->getin(2)->values, [qw/6 7/]);
-  }
-  
-  # get - row index
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(NULL, c(1, 3));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2 3/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
-    is_deeply($x2->getin(1)->as_character->values, [qw/F M F/]);
-    is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
-  }
-  
-  # get - name
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get("weight");
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['weight']);
-  }
-  
-  # get - multiple elements
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(1,3));
-    ok($x2->is_data_frame);
-    is_deeply($x2->class->values, ['data.frame']);
-    is_deeply($x2->names->values, ['sex', 'weight']);
-    is_deeply($x2->dimnames->getin(2)->values, ['sex', 'weight']);
   }
 }
 

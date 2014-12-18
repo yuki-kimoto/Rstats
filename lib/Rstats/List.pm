@@ -73,7 +73,6 @@ sub set {
   $v1 = Rstats::Func::to_c($v1);
   
   if ($v1->is_null) {
-    $DB::single = 1;
     splice @{$self->list}, $index - 1, 1;
     if (exists $self->{names}) {
       my $new_names_values = $self->{names}->values;
@@ -82,7 +81,9 @@ sub set {
     }
     
     if (exists $self->{dimnames}) {
-      splice @{$self->{dimnames}[1]}, $index - 1, 1;
+      my $new_dimname_values = $self->{dimnames}[1]->values;
+      splice @$new_dimname_values, $index - 1, 1;
+      $self->{dimnames}[1] = Rstats::VectorFunc::new_character(@$new_dimname_values);
     }
   }
   else {

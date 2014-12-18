@@ -128,7 +128,7 @@ sub na_omit {
   my @poss;
   for my $v (@{$x1->list}) {
     for (my $index = 1; $index <= $x1->{row_length}; $index++) {
-      push @poss, $index if $v->vector_part($index)->is_na;
+      push @poss, $index if $v->vector_part($index)->is_na->value;
     }
   }
   
@@ -403,7 +403,7 @@ sub factor {
   $x_exclude = NA unless defined $x_exclude;
   
   # fix levels
-  if (!$x_exclude->is_na && $x_exclude->length->value) {
+  if (!$x_exclude->is_na->value && $x_exclude->length->value) {
     my $new_a_levels_elements = [];
     for my $x_levels_element (@{$x_levels->decompose_elements}) {
       my $match;
@@ -454,7 +454,7 @@ sub factor {
   
   my $f1_elements = [];
   for my $x1_element (@$x1_elements) {
-    if ($x1_element->is_na) {
+    if ($x1_element->is_na->value) {
       push @$f1_elements, Rstats::VectorFunc::NA();
     }
     else {
@@ -801,7 +801,7 @@ sub sub {
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na) {
+    if ($x_e->is_na->value) {
       push @$x2_elements, $x_e;
     }
     else {
@@ -832,7 +832,7 @@ sub gsub {
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na) {
+    if ($x_e->is_na->value) {
       push @$x2_elements, $x_e;
     }
     else {
@@ -864,7 +864,7 @@ sub grep {
   for (my $i = 0; $i < @$x1_x_elements; $i++) {
     my $x_e = $x1_x_elements->[$i];
     
-    unless ($x_e->is_na) {
+    unless ($x_e->is_na->value) {
       my $x = $x_e->value;
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
@@ -937,7 +937,7 @@ sub c {
         $mode_h->{character}++;
       }
     }
-    elsif ($element->is_na) {
+    elsif ($element->is_na->value) {
       next;
     }
     elsif ($element->is_character) {
@@ -1032,7 +1032,7 @@ sub chartr {
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na) {
+    if ($x_e->is_na->value) {
       push @$x2_elements, $x_e;
     }
     else {
@@ -1151,7 +1151,7 @@ sub is_element {
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
         $match = 1;
         last;
       }
@@ -1176,7 +1176,7 @@ sub setequal {
   my $x3_elements = $x3->decompose_elements;
   my $x4_elements = $x4->decompose_elements;
   for (my $i = 0; $i < $x3->length_value; $i++) {
-    unless (Rstats::VectorFunc::equal($x3_elements->[$i], $x4_elements->[$i])) {
+    unless (Rstats::VectorFunc::equal($x3_elements->[$i], $x4_elements->[$i])->value) {
       $not_equal = 1;
       last;
     }
@@ -1196,7 +1196,7 @@ sub setdiff {
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
         $match = 1;
         last;
       }
@@ -1217,7 +1217,7 @@ sub intersect {
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
         push @$x3_elements, $x1_element;
       }
     }
@@ -1260,7 +1260,7 @@ sub nchar {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
-      if ($x1_element->is_na) {
+      if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1284,7 +1284,7 @@ sub tolower {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
-      if ($x1_element->is_na) {
+      if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1308,7 +1308,7 @@ sub toupper {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose_elements}) {
-      if ($x1_element->is_na) {
+      if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1336,7 +1336,7 @@ sub match {
     my $i = 1;
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)) {
+      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
         $match = 1;
         last;
       }
@@ -1655,13 +1655,13 @@ sub cummax {
   push @a2_elements, $max;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na) {
+    if ($element->is_na->value) {
       return NA;
     }
-    elsif ($element->is_nan) {
+    elsif ($element->is_nan->value) {
       $max = $element;
     }
-    if (Rstats::VectorFunc::more_than($element, $max) && !$max->is_nan) {
+    if (Rstats::VectorFunc::more_than($element, $max)->value && !$max->is_nan->value) {
       $max = $element;
     }
     push @a2_elements, $max;
@@ -1683,13 +1683,13 @@ sub cummin {
   my $min = shift @$x1_elements;
   push @a2_elements, $min;
   for my $element (@$x1_elements) {
-    if ($element->is_na) {
+    if ($element->is_na->value) {
       return NA;
     }
-    elsif ($element->is_nan) {
+    elsif ($element->is_nan->value) {
       $min = $element;
     }
-    if (Rstats::VectorFunc::less_than($element, $min) && !$min->is_nan) {
+    if (Rstats::VectorFunc::less_than($element, $min)->value && !$min->is_nan->value) {
       $min = $element;
     }
     push @a2_elements, $min;
@@ -1741,7 +1741,7 @@ sub args {
 
 sub complex {
   my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args(['re', 'im', 'mod', 'arg'], @_);
-
+  
   $x1_mod = NULL unless defined $x1_mod;
   $x1_arg = NULL unless defined $x1_arg;
 
@@ -1910,13 +1910,13 @@ sub max {
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na) {
+    if ($element->is_na->value) {
       return NA;
     }
-    elsif ($element->is_nan) {
+    elsif ($element->is_nan->value) {
       $max = $element;
     }
-    if (!$max->is_nan && Rstats::VectorFunc::more_than($element, $max)) {
+    if (!$max->is_nan->value && Rstats::VectorFunc::more_than($element, $max)->value) {
       $max = $element;
     }
   }
@@ -1944,13 +1944,13 @@ sub min {
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na) {
+    if ($element->is_na->value) {
       return NA;
     }
-    elsif ($element->is_nan) {
+    elsif ($element->is_nan->value) {
       $min = $element;
     }
-    if (!$min->is_nan && Rstats::VectorFunc::less_than($element, $min)) {
+    if (!$min->is_nan->value && Rstats::VectorFunc::less_than($element, $min)->value) {
       $min = $element;
     }
   }
@@ -2061,7 +2061,7 @@ sub pmax {
     my $elements = $v->decompose_elements;
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || Rstats::VectorFunc::more_than($elements->[$i], $maxs[$i])
+        if !defined $maxs[$i] || Rstats::VectorFunc::more_than($elements->[$i], $maxs[$i])->value
     }
   }
   
@@ -2076,7 +2076,7 @@ sub pmin {
     my $elements = $v->decompose_elements;
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || Rstats::VectorFunc::less_than($elements->[$i], $mins[$i])
+        if !defined $mins[$i] || Rstats::VectorFunc::less_than($elements->[$i], $mins[$i])->value
     }
   }
   
@@ -2379,11 +2379,11 @@ sub sort {
   my $x1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
   
-  my @a2_elements = grep { !$_->is_na && !$_->is_nan } @{$x1->decompose_elements};
+  my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose_elements};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::VectorFunc::more_than($a, $b) ? 1 : Rstats::VectorFunc::equal($a, $b) ? 0 : -1 } @a2_elements]
-    : [sort { Rstats::VectorFunc::more_than($a, $b) ? 1 : Rstats::VectorFunc::equal($a, $b) ? 0 : -1 } @a2_elements];
+    ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
+    : [sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements];
 
   return c($x3_elements);
 }
@@ -2462,7 +2462,7 @@ sub unique {
     my $elements_count = {};
     my $na_count;
     for my $x1_element (@{$x1->decompose_elements}) {
-      if ($x1_element->is_na) {
+      if ($x1_element->is_na->value) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;
         }
@@ -2776,7 +2776,7 @@ sub seq {
   
   # Along
   my $_along = $opt->{along};
-  if ($_along) {
+  if (defined $_along) {
     my $along = to_c($_along);
     my $length = $along->length_value;
     return seq(1, $length);

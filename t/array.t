@@ -9,6 +9,53 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# bool context
+{
+  # bool context - one argument, true
+  {
+    my $x1 = array(1);
+    if ($x1) {
+      pass;
+    }
+    else {
+      fail;
+    }
+  }
+  
+  # bool context - one argument, false
+  {
+    my $x1 = array(0);
+    if ($x1) {
+      fail;
+    }
+    else {
+      pass;
+    }
+  }
+
+  # bool context - two argument, true
+  {
+    my $x1 = array(3, 3);
+    if ($x1) {
+      pass;
+    }
+    else {
+      fail;
+    }
+  }
+
+  # bool context - two argument, true
+  {
+    my $x1 = r->NULL;
+    eval {
+      if ($x1) {
+      
+      }
+    };
+    like($@, qr/zero/);
+  }
+}
+
 # get logical array
 {
   # get logical array - basic
@@ -893,53 +940,6 @@ EOS
     my $x3 = $x1 != $x2;
     ok($x3->is_logical);
     is_deeply($x3->values, [1, 0]);
-  }
-}
-
-# bool context
-{
-  # bool context - one argument, true
-  {
-    my $x1 = array(1);
-    if ($x1) {
-      pass;
-    }
-    else {
-      fail;
-    }
-  }
-  
-  # bool context - one argument, false
-  {
-    my $x1 = array(0);
-    if ($x1) {
-      fail;
-    }
-    else {
-      pass;
-    }
-  }
-
-  # bool context - two argument, true
-  {
-    my $x1 = array(3, 3);
-    if ($x1) {
-      pass;
-    }
-    else {
-      fail;
-    }
-  }
-
-  # bool context - two argument, true
-  {
-    my $x1 = r->NULL;
-    eval {
-      if ($x1) {
-      
-      }
-    };
-    like($@, qr/zero/);
   }
 }
 

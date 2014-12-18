@@ -15,7 +15,7 @@ use Rstats::VectorFunc;
   # logical - bool, FALSE
   {
     my $false = Rstats::VectorFunc::FALSE;
-    ok(!$false);
+    ok(!$false->value);
   }
   
   # negation, true

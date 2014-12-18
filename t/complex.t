@@ -14,28 +14,28 @@ my $r = Rstats::Class->new;
     my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     my $z2 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     my $ret = Rstats::VectorFunc::equal($z1, $z2);
-    is($ret, Rstats::VectorFunc::TRUE);
+    is($ret->value, 1);
   }
   # comparison operator - ==, false
   {
     my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     my $z2 = Rstats::VectorFunc::new_complex({re => 1, im => 1});
     my $ret = Rstats::VectorFunc::equal($z1, $z2);
-    is($ret, Rstats::VectorFunc::FALSE);
+    is($ret->value, 0);
   }
 
   # comparison operator - !=, true
   {
     my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     my $z2 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
-    is(Rstats::VectorFunc::not_equal($z1, $z2), Rstats::VectorFunc::FALSE);
+    is(Rstats::VectorFunc::not_equal($z1, $z2)->value, 0);
   }
   
   # comparison operator - !=, false
   {
     my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     my $z2 = Rstats::VectorFunc::new_complex({re => 1, im => 1});
-    is(Rstats::VectorFunc::not_equal($z1, $z2), Rstats::VectorFunc::TRUE);
+    is(Rstats::VectorFunc::not_equal($z1, $z2)->value, 1);
   }
 
   # comparison operator - <, error

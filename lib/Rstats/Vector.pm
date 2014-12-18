@@ -6,9 +6,7 @@ use Rstats::VectorFunc;
 use Rstats::Util;
 
 use overload
-  bool => \&bool,
-  '""' => \&to_string,
-  fallback => 1;
+  '""' => \&to_string;
 
 sub to_string {
   my $self = shift;
@@ -61,10 +59,10 @@ sub bool {
     croak 'Error in -a : invalid argument to unary operator ';
   }
   elsif ($self->is_double) {
-    if ($self->is_infinite) {
+    if ($self->is_infinite->value) {
       $is = 1;
     }
-    elsif ($self->is_nan) {
+    elsif ($self->is_nan->value) {
       croak 'argument is not interpretable as logical';
     }
     else {
@@ -93,13 +91,13 @@ sub typeof { shift->type }
 sub is_positive_infinite {
   my $self = shift;
   
-  return $self->is_infinite && $self->value > 0;
+  return Rstats::VectorFunc::new_logical($self->is_infinite->value && $self->value > 0);
 }
 
 sub is_negative_infinite {
   my $self = shift;
   
-  return $self->is_infinite && $self->value < 0;
+  return Rstats::VectorFunc::new_logical($self->is_infinite->value && $self->value < 0);
 }
 
 1;

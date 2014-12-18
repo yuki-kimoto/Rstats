@@ -302,7 +302,7 @@ sub set {
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
-      if ($element->is_na) {
+      if ($element->is_na->value) {
         $self_elements->[$pos] = Rstats::VectorFunc::NA();
       }
       else {

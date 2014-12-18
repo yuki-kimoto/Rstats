@@ -1098,7 +1098,7 @@ use Math::Trig ();
 {
   my $na = NA;
   my $na_element = $na->vector_part;
-  is($na_element, Rstats::VectorFunc::NA);
+  is($na_element->value, undef);
 }
 
 # round

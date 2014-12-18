@@ -14,14 +14,7 @@ use Rstats::VectorFunc;
 {
   my $nan1 = Rstats::VectorFunc::NaN;
   my $nan2 = Rstats::VectorFunc::negation($nan1);
-  ok($nan2->is_nan);
-}
-
-# non - boolean
-{
-  my $nan = Rstats::VectorFunc::NaN;
-  eval { !!$nan };
-  like($@, qr/logical/);
+  ok($nan2->is_nan->value);
 }
 
 # non - to_string

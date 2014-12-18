@@ -17,14 +17,6 @@ use Rstats::VectorFunc;
   ok($na2->is_na);
 }
 
-# bool
-{
-  my $na = Rstats::VectorFunc::NA;
-  
-  eval { !!$na };
-  like($@, qr/bool/);
-}
-
 # to_string
 {
   my $na = Rstats::VectorFunc::NA;

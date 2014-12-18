@@ -506,6 +506,15 @@ use Math::Complex ();
 
 # acos
 {
+  # acos - complex, -1 - 1*i
+  {
+    my $x1 = c(-1 - 1*i);
+    my $x2 = r->acos($x1);
+    is(sprintf("%.6f", $x2->value->{re}), '2.237036');
+    is(sprintf("%.6f", $x2->value->{im}), '1.061275');
+  }
+
+
   # acos - complex, 1 + 2*i
   {
   
@@ -545,14 +554,6 @@ use Math::Complex ();
     my $x2 = r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '2.023075');
     is(sprintf("%.6f", $x2->value->{im}), '0.530638');
-  }
-
-  # acos - complex, -1 - 1*i
-  {
-    my $x1 = c(-1 - 1*i);
-    my $x2 = r->acos($x1);
-    is(sprintf("%.6f", $x2->value->{re}), '2.237036');
-    is(sprintf("%.6f", $x2->value->{im}), '1.061275');
   }
 
   # acos - complex, 0

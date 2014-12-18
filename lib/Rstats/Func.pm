@@ -2663,8 +2663,8 @@ sub matrix {
   my $byrow;
   $byrow = $x_byrow->value if defined $x_byrow;
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x1_length = @$x1_elements;
+  my $x1_values = $x1->values;
+  my $x1_length = $x1->length_value;
   if (!defined $nrow && !defined $ncol) {
     $nrow = $x1_length;
     $ncol = 1;
@@ -2679,16 +2679,18 @@ sub matrix {
   
   my $dim = [$nrow, $ncol];
   my $matrix;
+  my $x_matrix = Rstats::Func::NULL();
+  $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->vector->type, @$x1_values));
   if ($byrow) {
     $matrix = array(
-      $x1_elements,
+      $x_matrix,
       [$dim->[1], $dim->[0]],
     );
     
     $matrix = t($matrix);
   }
   else {
-    $matrix = array($x1_elements, $dim);
+    $matrix = array($x_matrix, $dim);
   }
   
   return $matrix;

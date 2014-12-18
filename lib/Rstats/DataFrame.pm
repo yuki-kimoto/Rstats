@@ -29,13 +29,14 @@ sub get {
   }
   elsif ($col_index->is_character) {
     $col_index_values = [];
-    for my $element (@{$col_index->decompose_elements}) {
-      push @$col_index_values, $self->_name_to_index($element);
+    for my $col_index_value (@{$col_index->values}) {
+      push @$col_index_values, $self->_name_to_index($col_index_value);
     }
   }
   elsif ($col_index->is_logical) {
-    for (my $i = 0; $i < @{$col_index->values}; $i++) {
-      push @$col_index_values, $i + 1 if $col_index->decompose_elements->[$i];
+    my $tmp_col_index_values = $col_index->values;
+    for (my $i = 0; $i < @$tmp_col_index_values; $i++) {
+      push @$col_index_values, $i + 1 if $tmp_col_index_values->[$i];
     }
   }
   else {

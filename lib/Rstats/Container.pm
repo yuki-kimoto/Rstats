@@ -55,7 +55,7 @@ sub copy_attrs_to {
   $x2->{class} =  $self->{class}->clone if !$exclude_h{class} && exists $self->{class};
   
   # levels
-  $x2->{levels} = $self->{levels} if !$exclude_h{levels} && exists $self->{levels};
+  $x2->{levels} = $self->{levels}->clone if !$exclude_h{levels} && exists $self->{levels};
   
   # names
   if (!$exclude_h{names} && exists $self->{names}) {
@@ -218,15 +218,20 @@ sub levels {
   my $self = shift;
   
   if (@_) {
-    my $x1_levels = Rstats::Func::to_c(shift);
-    $x1_levels = $x1_levels->as_character unless $x1_levels->is_character;
+    my $x_levels = Rstats::Func::to_c(shift);
+    $x_levels = $x_levels->as_character unless $x_levels->is_character;
     
-    $self->{levels} = $x1_levels->values;
+    $self->{levels} = $x_levels->vector->clone;
     
     return $self;
   }
   else {
-    return exists $self->{levels} ? Rstats::Func::c($self->{levels}) : Rstats::Func::NULL();
+    my $x_levels = Rstats::Func::NULL();
+    if (exists $self->{levels}) {
+      $x_levels->vector($self->{levels}->clone);
+    }
+    
+    return $x_levels;
   }
 }
 

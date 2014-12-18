@@ -473,7 +473,7 @@ sub factor {
   else {
     $f1->{class} = Rstats::VectorFunc::new_character('factor');
   }
-  $f1->{levels} = $x_labels;
+  $f1->{levels} = $x_labels->vector->clone;
   
   return $f1;
 }

@@ -52,8 +52,8 @@ sub copy_attrs_to {
   $x2->{dim} = $self->{dim}->clone if !$exclude_h{dim} && exists $self->{dim};
   
   # class
-  $x2->{class} =  [@{$self->{class}}] if !$exclude_h{class} && exists $self->{class};
-
+  $x2->{class} =  $self->{class}->clone if !$exclude_h{class} && exists $self->{class};
+  
   # levels
   $x2->{levels} = $self->{levels} if !$exclude_h{levels} && exists $self->{levels};
   
@@ -340,32 +340,32 @@ sub class {
   if (@_) {
     my $x_class = Rstats::Func::to_c($_[0]);
     
-    $self->{class} = $x_class->values;
+    $self->{class} = $x_class->vector;
     
     return $self;
   }
   else {
+    my $x_class = Rstats::Func::NULL();
     if (exists $self->{class}) {
-      return Rstats::Func::c($self->{class});
+      $x_class->vector($self->{class}->clone);
     }
     elsif ($self->is_vector) {
-      return Rstats::Func::c($self->mode);
+      $x_class->vector($self->mode->vector->clone);
     }
     elsif ($self->is_matrix) {
-      return Rstats::Func::c('matrix');
+      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
     }
     elsif ($self->is_array) {
-      return Rstats::Func::c('array');
+      $x_class->vector(Rstats::VectorFunc::new_character('array'));
     }
     elsif ($self->is_data_frame) {
-      return Rstats::Func::c('data.frame');
+      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
     }
     elsif ($self->is_list) {
-      return Rstats::Func::c('list');
+      $x_class->vector(Rstats::VectorFunc::new_character('list'));
     }
-    else {
-      Rstats::Func::NULL()
-    }
+    
+    return $x_class;
   }
 }
 

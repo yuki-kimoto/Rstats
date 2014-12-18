@@ -468,10 +468,10 @@ sub factor {
   
   my $f1 = c($f1_elements)->as_integer;
   if ($x_ordered) {
-    $f1->{class} = ['factor', 'ordered'];
+    $f1->{class} = Rstats::VectorFunc::new_character('factor', 'ordered');
   }
   else {
-    $f1->{class} = ['factor'];
+    $f1->{class} = Rstats::VectorFunc::new_character('factor');
   }
   $f1->{levels} = $x_labels;
   

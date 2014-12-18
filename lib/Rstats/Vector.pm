@@ -10,29 +10,6 @@ use overload
   '""' => \&to_string,
   fallback => 1;
 
-sub _fix_position {
-  my ($self, $data, $reverse) = @_;
-  
-  my $e1;
-  my $e2;
-  if (ref $data eq 'Rstats::Vector') {
-    $e1 = $self;
-    $e2 = $data;
-  }
-  else {
-    if ($reverse) {
-      $e1 = Rstats::VectorFunc::element($data);
-      $e2 = $self;
-    }
-    else {
-      $e1 = $self;
-      $e2 = Rstats::VectorFunc::element($data);
-    }
-  }
-  
-  return ($e1, $e2);
-}
-
 sub to_string {
   my $self = shift;
   

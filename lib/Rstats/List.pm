@@ -42,8 +42,8 @@ sub get {
   my $index_values;
   if ($index->is_character) {
     $index_values = [];
-    for my $element (@{$index->decompose_elements}) {
-      push @$index_values, $self->_name_to_index($element);
+    for my $value (@{$index->values}) {
+      push @$index_values, $self->_name_to_index($value);
     }
   }
   else {

@@ -387,9 +387,9 @@ sub apply {
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::Func::c($new_elements)->vector);
   $x1->copy_attrs_to($x1);
-  $x2->{dim} = $new_dim_values;
+  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
   
-  if (@{$x2->{dim}} == 1) {
+  if ($x2->{dim}->length_value == 1) {
     delete $x2->{dim};
   }
   

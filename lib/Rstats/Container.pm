@@ -49,7 +49,7 @@ sub copy_attrs_to {
   my %exclude_h = map { $_ => 1 } @$exclude;
   
   # dim
-  $x2->{dim} = [@{$self->{dim}}] if !$exclude_h{dim} && exists $self->{dim};
+  $x2->{dim} = $self->{dim}->clone if !$exclude_h{dim} && exists $self->{dim};
   
   # class
   $x2->{class} =  [@{$self->{class}}] if !$exclude_h{class} && exists $self->{class};
@@ -167,17 +167,18 @@ sub str {
     my @dim_str;
     my $length = $self->length_value;
     if (exists $self->{dim}) {
-      for (my $i = 0; $i < @{$self->{dim}}; $i++) {
-        my $d = $self->{dim}[$i];
+      my $dim_values = $self->{dim}->values;
+      for (my $i = 0; $i < $self->{dim}->length_value; $i++) {
+        my $d = $dim_values->[$i];
         my $d_str;
         if ($d == 1) {
           $d_str = "1";
         }
         else {
-          $d_str = "1:$d"
+          $d_str = "1:$d";
         }
         
-        if (@{$self->{dim}} == 1) {
+        if ($self->{dim}->length_value == 1) {
           $d_str .= "(" . ($i + 1) . "d)";
         }
         push @dim_str, $d_str;
@@ -393,12 +394,17 @@ sub dim {
       croak "dims [product $self_lenght_by_dim] do not match the length of object [$self_length]";
     }
   
-    $self->{dim} = $x_dim->values;
+    $self->{dim} = $x_dim->vector->clone;
     
     return $self;
   }
   else {
-    return defined $self->{dim} ? Rstats::Func::c($self->{dim}) : Rstats::Func::NULL();
+    my $x_dim = Rstats::Func::NULL();
+    if (defined $self->{dim}) {
+      $x_dim->vector($self->{dim}->clone);
+    }
+    
+    return $x_dim;
   }
 }
 

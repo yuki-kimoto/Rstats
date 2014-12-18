@@ -51,39 +51,6 @@ sub to_string {
   return $str_all;
 }
 
-sub bool {
-  my $self = shift;
-  
-  my $is;
-  if ($self->is_character || $self->is_complex) {
-    croak 'Error in -a : invalid argument to unary operator ';
-  }
-  elsif ($self->is_double) {
-    if ($self->is_infinite->value) {
-      $is = 1;
-    }
-    elsif ($self->is_nan->value) {
-      croak 'argument is not interpretable as logical';
-    }
-    else {
-      $is = $self->value;
-    }
-  }
-  elsif ($self->is_integer || $self->is_logical) {
-    $is = $self->value;
-  }
-  else {
-    croak "Invalid type";
-  }
-  
-  my $is_na = $self->is_na->value;
-  if ($is_na) {
-    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
-  }
-  
-  return $is;
-}
-
 sub value { shift->values->[0] }
 
 sub typeof { shift->type }

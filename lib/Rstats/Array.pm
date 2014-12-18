@@ -352,8 +352,35 @@ sub bool {
   }
   
   my $element = $self->vector_part;
+
+  my $is;
+  if ($element->is_character || $element->is_complex) {
+    croak 'Error in -a : invalid argument to unary operator ';
+  }
+  elsif ($element->is_double) {
+    if ($element->is_infinite->value) {
+      $is = 1;
+    }
+    elsif ($element->is_nan->value) {
+      croak 'argument is not interpretable as logical';
+    }
+    else {
+      $is = $element->value;
+    }
+  }
+  elsif ($element->is_integer || $element->is_logical) {
+    $is = $element->value;
+  }
+  else {
+    croak "Invalid type";
+  }
   
-  return $element->bool;
+  my $is_na = $element->is_na->value;
+  if ($is_na) {
+    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
+  }
+
+  return $is;
 }
 
 sub vector_part {

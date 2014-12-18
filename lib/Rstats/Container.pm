@@ -59,17 +59,18 @@ sub copy_attrs_to {
   
   # names
   if (!$exclude_h{names} && exists $self->{names}) {
-    my $names = [];
+    my $x2_names_values = [];
     my $index = $self->is_data_frame ? $new_indexes->[1] : $new_indexes->[0];
     if (defined $index) {
+      my $self_names_values = $self->{names}->values;
       for my $i (@{$index->values}) {
-        push @$names, $self->{names}[$i - 1];
+        push @$x2_names_values, $self_names_values->[$i - 1];
       }
     }
     else {
-      $names = [@{$self->{names}}];
+      $x2_names_values = $self->{names}->values;
     }
-    $x2->{names} = $names;
+    $x2->{names} = Rstats::VectorFunc::new_character(@$x2_names_values);
   }
   
   # dimnames
@@ -783,21 +784,20 @@ sub names {
     my $names = Rstats::Func::to_c(shift);
     
     $names = $names->as_character unless $names->is_character;
-    $self->{names} = $names->values;
+    $self->{names} = $names->vector->clone;
     
     if ($self->is_data_frame) {
-      $self->{dimnames}->[1] =[@{$self->{names}}];
+      $self->{dimnames}->[1] =[@{$self->{names}->values}];
     }
     
     return $self;
   }
   else {
+    my $x_names = Rstats::Func::NULL();
     if (exists $self->{names}) {
-      return Rstats::Func::c($self->{names});
+      $x_names->vector($self->{names}->clone);
     }
-    else {
-      return Rstats::Func::NULL();
-    }
+    return $x_names;
   }
 }
 
@@ -822,7 +822,7 @@ sub dimnames {
       $self->{dimnames} = $dimnames;
       
       if ($self->is_data_frame) {
-        $self->{names} = [@{$self->{dimnames}->[1]}];
+        $self->{names} = Rstats::VectorFunc::new_character(@{$self->{dimnames}->[1]});
       }
     }
     else {

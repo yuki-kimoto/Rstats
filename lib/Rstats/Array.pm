@@ -353,7 +353,7 @@ sub bool {
   
   my $element = $self->vector_part;
   
-  return !!$element;
+  return $element->bool;
 }
 
 sub vector_part {

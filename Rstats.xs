@@ -241,7 +241,8 @@ compose(...)
   
   Rstats::Vector* compose_elements;
   std::vector<IV> na_positions;
-  if (sv_cmp(sv_mode, my::new_mSVpv_nolen("character")) == 0) {
+  char* mode = SvPV_nolen(sv_mode);
+  if (strEQ(mode, "character")) {
     compose_elements = Rstats::Vector::new_character(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -260,7 +261,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("complex")) == 0) {
+  else if (strEQ(mode, "complex")) {
     compose_elements = Rstats::Vector::new_complex(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -279,7 +280,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("double")) == 0) {
+  else if (strEQ(mode, "double")) {
     compose_elements = Rstats::Vector::new_double(len);
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
@@ -298,7 +299,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("integer")) == 0) {
+  else if (strEQ(mode, "integer")) {
     compose_elements = Rstats::Vector::new_integer(len);
     std::vector<IV>* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {
@@ -318,7 +319,7 @@ compose(...)
       }
     }
   }
-  else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("logical")) == 0) {
+  else if (strEQ(mode, "logical")) {
     compose_elements = Rstats::Vector::new_logical(len);
     std::vector<IV>* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {

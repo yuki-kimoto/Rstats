@@ -196,26 +196,32 @@ namespace Rstats {
       IV length = this->get_length();
       
       Rstats::VectorType::Enum type = this->get_type();
-      if (this->is_character()) {
-        std::vector<SV*>* values = this->get_character_values();
-        for (IV i = 0; i < length; i++) {
-          if ((*values)[i] != NULL) {
-            SvREFCNT_dec((*values)[i]);
+      switch (type) {
+        case Rstats::VectorType::CHARACTER : {
+          std::vector<SV*>* values = this->get_character_values();
+          for (IV i = 0; i < length; i++) {
+            if ((*values)[i] != NULL) {
+              SvREFCNT_dec((*values)[i]);
+            }
           }
+          delete values;
+          break;
         }
-        delete values;
-      }
-      else if (this->is_integer() || this->is_logical()) {
-        std::vector<IV>* values = this->get_integer_values();
-        delete values;
-      }
-      else if (this->is_double()) {
-        std::vector<NV>* values = this->get_double_values();
-        delete values;
-      }
-      else if (this->is_complex()) {
-        std::vector<std::complex<NV> >* values = this->get_complex_values();
-        delete values;
+        case Rstats::VectorType::COMPLEX : {
+          std::vector<std::complex<NV> >* values = this->get_complex_values();
+          delete values;
+          break;
+        }
+        case Rstats::VectorType::DOUBLE : {
+          std::vector<NV>* values = this->get_double_values();
+          delete values;
+          break;
+        }
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL : {
+          std::vector<IV>* values = this->get_integer_values();
+          delete values;
+        }
       }
     }
 

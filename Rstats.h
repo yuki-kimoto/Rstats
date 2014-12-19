@@ -239,6 +239,96 @@ namespace Rstats {
       }
     }
 
+    SV* get_value(IV pos) {
+
+      SV* sv_value;
+      if (this->is_character()) {
+        if (this->exists_na_position(pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          sv_value = this->get_character_value(pos);
+        }
+      }
+      else if (this->is_complex()) {
+        if (this->exists_na_position(pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          std::complex<NV> z = this->get_complex_value(pos);
+          
+          NV re = z.real();
+          SV* sv_re;
+          if (std::isnan(re)) {
+            sv_re = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
+          }
+          else if (std::isinf(re) && re > 0) {
+            sv_re = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
+          }
+          else if (std::isinf(re) && re < 0) {
+            sv_re = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
+          }
+          else {
+            sv_re = Rstats::PerlAPI::new_mSVnv(re);
+          }
+          
+          NV im = z.imag();
+          SV* sv_im;
+          if (std::isnan(im)) {
+            sv_im = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
+          }
+          else if (std::isinf(im) && im > 0) {
+            sv_im = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
+          }
+          else if (std::isinf(im) && im < 0) {
+            sv_im = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
+          }
+          else {
+            sv_im = Rstats::PerlAPI::new_mSVnv(im);
+          }
+
+          sv_value = Rstats::PerlAPI::new_mHVRV();
+          Rstats::PerlAPI::hvrv_store_nolen_inc(sv_value, "re", sv_re);
+          Rstats::PerlAPI::hvrv_store_nolen_inc(sv_value, "im", sv_im);
+        }
+      }
+      else if (this->is_double()) {
+      
+        if (this->exists_na_position(pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          NV value = this->get_double_value(pos);
+          if (std::isnan(value)) {
+            sv_value = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
+          }
+          else if (std::isinf(value) && value > 0) {
+            sv_value = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
+          }
+          else if (std::isinf(value) && value < 0) {
+            sv_value = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
+          }
+          else {
+            sv_value = Rstats::PerlAPI::new_mSVnv(value);
+          }
+        }
+      }
+      else if (this->is_integer() || this->is_logical()) {
+        if (this->exists_na_position(pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          IV value = this->get_integer_value(pos);
+          sv_value = Rstats::PerlAPI::new_mSViv(value);
+        }
+      }
+      else {
+        sv_value = &PL_sv_undef;
+      }
+      
+      return sv_value;
+    }
+    
     SV* get_values() {
       
       IV length = this->get_length();

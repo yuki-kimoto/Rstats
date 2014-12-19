@@ -51,8 +51,6 @@ sub to_string {
   return $str_all;
 }
 
-sub value { shift->values->[0] }
-
 1;
 
 =head1 NAME

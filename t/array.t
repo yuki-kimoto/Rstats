@@ -11,7 +11,6 @@ use Rstats::Func;
 
 # bool context
 {
-  # bool context - one argument, true
   {
     my $x1 = array(1);
     if ($x1) {

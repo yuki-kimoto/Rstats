@@ -40,6 +40,30 @@ SV* values(...)
   return_sv(sv_values);
 }
 
+SV* value(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  
+  IV pos;
+  if (items < 2) {
+    pos = 0;
+  }
+  else {
+    pos = SvIV(ST(1));
+  }
+  
+  SV* sv_value;
+  if (pos >= 0 && pos < self->get_length()) {
+    sv_value = self->get_value(pos);
+  }
+  else {
+    sv_value = &PL_sv_undef;
+  }
+  
+  return_sv(sv_value);
+}
+
 SV* is_character(...)
   PPCODE:
 {

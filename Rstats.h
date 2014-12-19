@@ -378,19 +378,19 @@ namespace Rstats {
       }
       
       switch (type) {
-        default:
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           return this->get_character_values()->size();
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           return this->get_complex_values()->size();
-        }
-        else if (this->is_double()) {
+          break;
+        case Rstats::VectorType::DOUBLE :
           return this->get_double_values()->size();
-        }
-        else if (this->is_integer() || this->is_logical()) {
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
           return this->get_integer_values()->size();
-        }
+          break;
       }
     }
 

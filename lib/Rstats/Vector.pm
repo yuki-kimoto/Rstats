@@ -55,18 +55,6 @@ sub value { shift->values->[0] }
 
 sub typeof { shift->type }
 
-sub is_positive_infinite {
-  my $self = shift;
-  
-  return Rstats::VectorFunc::new_logical($self->is_infinite->value && $self->value > 0);
-}
-
-sub is_negative_infinite {
-  my $self = shift;
-  
-  return Rstats::VectorFunc::new_logical($self->is_infinite->value && $self->value < 0);
-}
-
 1;
 
 =head1 NAME

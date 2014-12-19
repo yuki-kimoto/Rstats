@@ -3,10 +3,10 @@ use Object::Simple -base;
 
 use Carp 'croak', 'carp';
 use Rstats::VectorFunc;
-use Rstats::Util;
 
 use overload
-  '""' => \&to_string;
+  '""' => \&to_string,
+  fallback => 1;
 
 sub to_string {
   my $self = shift;
@@ -75,6 +75,16 @@ Rstats::Vector - Vector
 
 =heaa1 METHODS
 
+=head2 is_negative_infinite
+
+=head2 is_positive_infinite
+
+=head2 typeof
+
+=head2 value
+
+=head2 to_string
+
 =head2 values (xs)
 
 =head2 is_character (xs)
@@ -99,17 +109,17 @@ Rstats::Vector - Vector
 
 =head2 as_logical (xs)
 
-=head2 type
+=head2 type (xs)
 
-=head2 re
+=head2 re (xs)
 
-=head2 im
+=head2 im (xs)
 
-=head2 flag
+=head2 flag (xs)
 
-=head2  is_nan
+=head2  is_nan (xs)
 
-=head2  is_infinite
+=head2  is_infinite (xs)
 
-=head2  is_finite
+=head2  is_finite (xs)
 

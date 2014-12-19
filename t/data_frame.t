@@ -4,6 +4,14 @@ use warnings;
 
 use Rstats;
 
+# typeof
+{
+  my $x1 = data_frame(sex => c(1, 2, 1));
+  my $x2 = r->typeof($x1);
+  ok($x2->is_character);
+  is_deeply($x2->values, ['list']);
+}
+
 # get
 {
   

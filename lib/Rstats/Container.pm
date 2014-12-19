@@ -449,12 +449,15 @@ sub mode {
 sub typeof {
   my $self = shift;
   
-  if ($self->is_array || $self->is_vector) {
+  if ($self->is_vector || $self->is_array) {
     my $type = $self->vector->type;
-    return Rstats::Array->new->vector(Rstats::VectorFunc::new_character($type));
+    return Rstats::Func::new_character($type);
+  }
+  elsif ($self->is_list) {
+    return Rstats::Func::new_character('list');
   }
   else {
-    return Rstats::Func::c(undef);
+    return Rstats::Func::NA();
   }
 }
 

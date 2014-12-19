@@ -228,18 +228,18 @@ namespace Rstats {
     SV* get_value(IV pos) {
 
       SV* sv_value;
+      
       Rstats::VectorType::Enum type = this->get_type();
       switch (type) {
-        default:
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           if (this->exists_na_position(pos)) {
             sv_value = &PL_sv_undef;
           }
           else {
             sv_value = this->get_character_value(pos);
           }
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           if (this->exists_na_position(pos)) {
             sv_value = &PL_sv_undef;
           }
@@ -280,9 +280,8 @@ namespace Rstats {
             Rstats::PerlAPI::hvrv_store_nolen_inc(sv_value, "re", sv_re);
             Rstats::PerlAPI::hvrv_store_nolen_inc(sv_value, "im", sv_im);
           }
-        }
-        else if (this->is_double()) {
-        
+          break;
+        case Rstats::VectorType::DOUBLE :
           if (this->exists_na_position(pos)) {
             sv_value = &PL_sv_undef;
           }
@@ -301,8 +300,9 @@ namespace Rstats {
               sv_value = Rstats::PerlAPI::new_mSVnv(value);
             }
           }
-        }
-        else if (this->is_integer() || this->is_logical()) {
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
           if (this->exists_na_position(pos)) {
             sv_value = &PL_sv_undef;
           }
@@ -310,10 +310,9 @@ namespace Rstats {
             IV value = this->get_integer_value(pos);
             sv_value = Rstats::PerlAPI::new_mSViv(value);
           }
-        }
-        else {
+          break;
+        default:
           sv_value = &PL_sv_undef;
-        }
       }
       
       return sv_value;

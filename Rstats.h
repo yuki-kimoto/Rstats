@@ -1827,11 +1827,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, e1->get_integer_value(i) / e2->get_integer_value(i));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e3 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -1879,11 +1874,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, ::pow(e1->get_integer_value(i), e2->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e3 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -1939,13 +1929,7 @@ namespace Rstats {
           }
           break;
         }
-        case Rstats::VectorType::INTEGER : {
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sqrt(e1->get_integer_value(i)));
-          }
-          break;
-        }
+        case Rstats::VectorType::INTEGER :
         case Rstats::VectorType::LOGICAL : {
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2023,11 +2007,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cos(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2066,11 +2045,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tan(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2109,11 +2083,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sinh(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2152,11 +2121,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cosh(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2205,11 +2169,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tanh(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2337,11 +2296,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::log(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2384,11 +2338,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::log10(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
@@ -2454,11 +2403,6 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::exp(e1->get_integer_value(i)));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {

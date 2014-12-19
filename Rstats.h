@@ -599,15 +599,13 @@ namespace Rstats {
       Rstats::Vector* e2 = new_character(length);
       Rstats::VectorType::Enum type = this->get_type();
       switch (type) {
-        default:
-
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           for (IV i = 0; i < length; i++) {
             SV* sv_value = this->get_character_value(i);
             e2->set_character_value(i, sv_value);
           }
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           for (IV i = 0; i < length; i++) {
             std::complex<NV> z = this->get_complex_value(i);
             NV re = z.real();
@@ -626,8 +624,8 @@ namespace Rstats {
 
             e2->set_character_value(i, sv_str);
           }
-        }
-        else if (this->is_double()) {
+          break;
+        case Rstats::VectorType::DOUBLE :
           for (IV i = 0; i < length; i++) {
             NV value = this->get_double_value(i);
             SV* sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
@@ -645,16 +643,16 @@ namespace Rstats {
             }
             e2->set_character_value(i, sv_str);
           }
-        }
-        else if (this->is_integer()) {
+          break;
+        case Rstats::VectorType::INTEGER :
           for (IV i = 0; i < length; i++) {
             e2->set_character_value(
               i,
               Rstats::PerlAPI::new_mSViv(this->get_integer_value(i))
             );
           }
-        }
-        else if (this->is_logical()) {
+          break;
+        case Rstats::VectorType::LOGICAL :
           for (IV i = 0; i < length; i++) {
             if (this->get_integer_value(i)) {
               e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv_nolen("TRUE"));
@@ -663,10 +661,9 @@ namespace Rstats {
               e2->set_character_value(i, Rstats::PerlAPI::new_mSVpv_nolen("FALSE"));
             }
           }
-        }
-        else {
+          break;
+        default:
           croak("unexpected type");
-        }
       }
 
       e2->merge_na_positions(this);
@@ -680,8 +677,7 @@ namespace Rstats {
       Rstats::Vector* e2 = new_double(length);
       Rstats::VectorType::Enum type = this->get_type();
       switch (type) {
-        default:
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           for (IV i = 0; i < length; i++) {
             SV* sv_value = this->get_character_value(i);
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
@@ -694,26 +690,26 @@ namespace Rstats {
               e2->add_na_position(i);
             }
           }
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
             e2->set_double_value(i, this->get_complex_value(i).real());
           }
-        }
-        else if (this->is_double()) {
+          break;
+        case Rstats::VectorType::DOUBLE :
           for (IV i = 0; i < length; i++) {
             e2->set_double_value(i, this->get_double_value(i));
           }
-        }
-        else if (this->is_integer() || this->is_logical()) {
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
           for (IV i = 0; i < length; i++) {
             e2->set_double_value(i, this->get_integer_value(i));
           }
-        }
-        else {
+          break;
+        default:
           croak("unexpected type");
-        }
       }
 
       e2->merge_na_positions(this);
@@ -731,8 +727,7 @@ namespace Rstats {
       Rstats::Vector* e2 = new_integer(length);
       Rstats::VectorType::Enum type = this->get_type();
       switch (type) {
-        default:
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           for (IV i = 0; i < length; i++) {
             SV* sv_value = this->get_character_value(i);
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
@@ -745,14 +740,14 @@ namespace Rstats {
               e2->add_na_position(i);
             }
           }
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
             e2->set_integer_value(i, (IV)this->get_complex_value(i).real());
           }
-        }
-        else if (this->is_double()) {
+          break;
+        case Rstats::VectorType::DOUBLE :
           NV value;
           for (IV i = 0; i < length; i++) {
             value = this->get_double_value(i);
@@ -763,15 +758,15 @@ namespace Rstats {
               e2->set_integer_value(i, (IV)value);
             }
           }
-        }
-        else if (this->is_integer() || this->is_logical()) {
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
           for (IV i = 0; i < length; i++) {
             e2->set_integer_value(i, this->get_integer_value(i));
           }
-        }
-        else {
+          break;
+        default:
           croak("unexpected type");
-        }
       }
 
       e2->merge_na_positions(this);
@@ -785,8 +780,7 @@ namespace Rstats {
       Rstats::Vector* e2 = new_complex(length);
       Rstats::VectorType::Enum type = this->get_type();
       switch (type) {
-        default:
-        if (this->is_character()) {
+        case Rstats::VectorType::CHARACTER :
           for (IV i = 0; i < length; i++) {
             SV* sv_value = this->get_character_value(i);
             SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
@@ -803,13 +797,13 @@ namespace Rstats {
               e2->add_na_position(i);
             }
           }
-        }
-        else if (this->is_complex()) {
+          break;
+        case Rstats::VectorType::COMPLEX :
           for (IV i = 0; i < length; i++) {
             e2->set_complex_value(i, this->get_complex_value(i));
           }
-        }
-        else if (this->is_double()) {
+          break;
+        case Rstats::VectorType::DOUBLE :
           for (IV i = 0; i < length; i++) {
             NV value = this->get_double_value(i);
             if (std::isnan(value)) {
@@ -819,15 +813,15 @@ namespace Rstats {
               e2->set_complex_value(i, std::complex<NV>(this->get_double_value(i), 0));
             }
           }
-        }
-        else if (this->is_integer() || this->is_logical()) {
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
           for (IV i = 0; i < length; i++) {
             e2->set_complex_value(i, std::complex<NV>(this->get_integer_value(i), 0));
           }
-        }
-        else {
+          break;
+        default:
           croak("unexpected type");
-        }
       }
 
       e2->merge_na_positions(this);

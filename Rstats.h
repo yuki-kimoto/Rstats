@@ -194,8 +194,18 @@ namespace Rstats {
     
     ~Vector () {
       IV length = this->get_length();
-    
-      if (this->is_integer() || this->is_logical()) {
+      
+      Rstats::VectorType::Enum type = this->get_type();
+      if (this->is_character()) {
+        std::vector<SV*>* values = this->get_character_values();
+        for (IV i = 0; i < length; i++) {
+          if ((*values)[i] != NULL) {
+            SvREFCNT_dec((*values)[i]);
+          }
+        }
+        delete values;
+      }
+      else if (this->is_integer() || this->is_logical()) {
         std::vector<IV>* values = this->get_integer_values();
         delete values;
       }
@@ -207,20 +217,12 @@ namespace Rstats {
         std::vector<std::complex<NV> >* values = this->get_complex_values();
         delete values;
       }
-      else if (this->is_character()) {
-        std::vector<SV*>* values = this->get_character_values();
-        for (IV i = 0; i < length; i++) {
-          if ((*values)[i] != NULL) {
-            SvREFCNT_dec((*values)[i]);
-          }
-        }
-        delete values;
-      }
     }
 
     SV* get_value(IV pos) {
 
       SV* sv_value;
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         if (this->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
@@ -366,7 +368,8 @@ namespace Rstats {
       if (this->values == NULL) {
         return 0;
       }
-      else if (this->is_character()) {
+      
+      if (this->is_character()) {
         return this->get_character_values()->size();
       }
       else if (this->is_complex()) {

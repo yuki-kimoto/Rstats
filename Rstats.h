@@ -583,6 +583,7 @@ namespace Rstats {
     Rstats::Vector* as_character () {
       IV length = this->get_length();
       Rstats::Vector* e2 = new_character(length);
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
@@ -659,6 +660,7 @@ namespace Rstats {
 
       IV length = this->get_length();
       Rstats::Vector* e2 = new_double(length);
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
@@ -706,6 +708,7 @@ namespace Rstats {
 
       IV length = this->get_length();
       Rstats::Vector* e2 = new_integer(length);
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
@@ -756,6 +759,7 @@ namespace Rstats {
 
       IV length = this->get_length();
       Rstats::Vector* e2 = new_complex(length);
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
@@ -807,6 +811,7 @@ namespace Rstats {
     Rstats::Vector* as_logical() {
       IV length = this->get_length();
       Rstats::Vector* e2 = new_logical(length);
+      Rstats::VectorType::Enum type = this->get_type();
       if (this->is_character()) {
         for (IV i = 0; i < length; i++) {
           SV* sv_value = this->get_character_value(i);
@@ -866,6 +871,7 @@ namespace Rstats {
     Rstats::Vector* negation (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("argument is not interpretable as logical(Rstats::VectorFunc::negation())");
       }
@@ -909,6 +915,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_double(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error : non-numeric argument to binary operator(Rstats::Vector::Func::reminder())");
       }
@@ -1040,6 +1047,7 @@ namespace Rstats {
     Rstats::Vector* Conj (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
       }
@@ -1081,6 +1089,7 @@ namespace Rstats {
     Rstats::Vector* Re (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
       }
@@ -1111,6 +1120,7 @@ namespace Rstats {
     Rstats::Vector* Im (Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2 = Rstats::Vector::new_double(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error : non-numeric argument to function(Rstats::VectorFunc::Im())");
       }
@@ -1150,6 +1160,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) <= 0) {
@@ -1212,6 +1223,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) >= 0) {
@@ -1274,6 +1286,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) < 0) {
@@ -1336,6 +1349,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) > 0) {
@@ -1398,6 +1412,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) != 0) {
@@ -1467,6 +1482,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         for (IV i = 0; i < length; i++) {
           if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) == 0) {
@@ -1528,6 +1544,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1633,6 +1650,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1682,6 +1700,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1731,6 +1750,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1780,6 +1800,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e3;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1821,6 +1842,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1876,6 +1898,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1910,6 +1933,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1950,6 +1974,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -1990,6 +2015,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2030,6 +2056,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2070,6 +2097,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2120,6 +2148,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2160,6 +2189,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         e2 = Rstats::Vector::new_character(length);
         for (IV i = 0; i < length; i++) {
@@ -2203,6 +2233,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2247,6 +2278,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2287,6 +2319,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }
@@ -2309,6 +2342,7 @@ namespace Rstats {
       
       IV length = e1->get_length();
       Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
       if (e1->is_character()) {
         croak("Error in a - b : non-numeric argument to binary operator");
       }

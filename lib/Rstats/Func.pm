@@ -1804,7 +1804,7 @@ sub max_type {
     $type_h->{$x_type}++;
     unless ($x->is_null) {
       my $element = $x->vector_part;
-      my $element_type = $element->typeof;
+      my $element_type = $element->type;
       $type_h->{$element_type}++;
     }
   }

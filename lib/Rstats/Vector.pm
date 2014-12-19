@@ -53,8 +53,6 @@ sub to_string {
 
 sub value { shift->values->[0] }
 
-sub typeof { shift->type }
-
 1;
 
 =head1 NAME

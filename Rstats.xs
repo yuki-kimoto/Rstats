@@ -300,7 +300,7 @@ compose(...)
   }
   else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("integer")) == 0) {
     compose_elements = Rstats::Vector::new_integer(len);
-    Rstats::Values::Integer* values = compose_elements->get_integer_values();
+    std::vector<IV>* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
       SV* sv_element = my::avrv_fetch_simple(sv_elements, i);
@@ -320,7 +320,7 @@ compose(...)
   }
   else if (sv_cmp(sv_mode, my::new_mSVpv_nolen("logical")) == 0) {
     compose_elements = Rstats::Vector::new_logical(len);
-    Rstats::Values::Integer* values = compose_elements->get_integer_values();
+    std::vector<IV>* values = compose_elements->get_integer_values();
     for (IV i = 0; i < len; i++) {
       Rstats::Vector* element;
       SV* sv_element = my::avrv_fetch_simple(sv_elements, i);

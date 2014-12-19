@@ -174,20 +174,6 @@ namespace Rstats {
     };
   }
   
-  namespace Values {
-    // Rstats::Values::Character
-    typedef std::vector<SV*> Character;
-    
-    // Rstats::Values::Complex
-    typedef std::vector<std::complex<NV> > Complex;
-    
-    // Rstats::Values::Double
-    typedef std::vector<NV> Double;
-    
-    // Rstats::Values::Integer
-    typedef std::vector<IV> Integer;
-  }
-  
   // Rstats::Util header
   namespace Util {
     SV* SV_CHARACTER_TYPE_NAME = newSVpv("character", 0);
@@ -217,19 +203,19 @@ namespace Rstats {
       IV length = this->get_length();
     
       if (this->is_integer() || this->is_logical()) {
-        Rstats::Values::Integer* values = this->get_integer_values();
+        std::vector<IV>* values = this->get_integer_values();
         delete values;
       }
       else if (this->is_double()) {
-        Rstats::Values::Double* values = this->get_double_values();
+        std::vector<NV>* values = this->get_double_values();
         delete values;
       }
       else if (this->is_complex()) {
-        Rstats::Values::Complex* values = this->get_complex_values();
+        std::vector<std::complex<NV> >* values = this->get_complex_values();
         delete values;
       }
       else if (this->is_character()) {
-        Rstats::Values::Character* values = this->get_character_values();
+        std::vector<SV*>* values = this->get_character_values();
         for (IV i = 0; i < length; i++) {
           if ((*values)[i] != NULL) {
             SvREFCNT_dec((*values)[i]);
@@ -349,20 +335,20 @@ namespace Rstats {
     }
     bool is_logical () { return this->get_type() == Rstats::VectorType::LOGICAL; }
     
-    Rstats::Values::Character* get_character_values() {
-      return (Rstats::Values::Character*)this->values;
+    std::vector<SV*>* get_character_values() {
+      return (std::vector<SV*>*)this->values;
     }
     
-    Rstats::Values::Complex* get_complex_values() {
-      return (Rstats::Values::Complex*)this->values;
+    std::vector<std::complex<NV> >* get_complex_values() {
+      return (std::vector<std::complex<NV> >*)this->values;
     }
     
-    Rstats::Values::Double* get_double_values() {
-      return (Rstats::Values::Double*)this->values;
+    std::vector<NV>* get_double_values() {
+      return (std::vector<NV>*)this->values;
     }
     
-    Rstats::Values::Integer* get_integer_values() {
-      return (Rstats::Values::Integer*)this->values;
+    std::vector<IV>* get_integer_values() {
+      return (std::vector<IV>*)this->values;
     }
     
     Rstats::VectorType::Enum get_type() {
@@ -415,7 +401,7 @@ namespace Rstats {
     static Rstats::Vector* new_character(IV length) {
 
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Character(length);
+      elements->values = new std::vector<SV*>(length);
       elements->type = Rstats::VectorType::CHARACTER;
       
       return elements;
@@ -443,7 +429,7 @@ namespace Rstats {
     static Rstats::Vector* new_complex(IV length) {
       
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Complex(length, std::complex<NV>(0, 0));
+      elements->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
       elements->type = Rstats::VectorType::COMPLEX;
       
       return elements;
@@ -452,7 +438,7 @@ namespace Rstats {
     static Rstats::Vector* new_complex(IV length, std::complex<NV> z) {
       
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Complex(length, z);
+      elements->values = new std::vector<std::complex<NV> >(length, z);
       elements->type = Rstats::VectorType::COMPLEX;
       
       return elements;
@@ -468,7 +454,7 @@ namespace Rstats {
     
     static Rstats::Vector* new_double(IV length) {
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Double(length);
+      elements->values = new std::vector<NV>(length);
       elements->type = Rstats::VectorType::DOUBLE;
       
       return elements;
@@ -476,7 +462,7 @@ namespace Rstats {
 
     static Rstats::Vector* new_double(IV length, NV value) {
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Double(length, value);
+      elements->values = new std::vector<NV>(length, value);
       elements->type = Rstats::VectorType::DOUBLE;
       
       return elements;
@@ -493,7 +479,7 @@ namespace Rstats {
     static Rstats::Vector* new_integer(IV length) {
       
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Integer(length);
+      elements->values = new std::vector<IV>(length);
       elements->type = Rstats::VectorType::INTEGER;
       
       return elements;
@@ -502,7 +488,7 @@ namespace Rstats {
     static Rstats::Vector* new_integer(IV length, IV value) {
       
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Integer(length, value);
+      elements->values = new std::vector<IV>(length, value);
       elements->type = Rstats::VectorType::INTEGER;
       
       return elements;
@@ -518,7 +504,7 @@ namespace Rstats {
     
     static Rstats::Vector* new_logical(IV length) {
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Integer(length);
+      elements->values = new std::vector<IV>(length);
       elements->type = Rstats::VectorType::LOGICAL;
       
       return elements;
@@ -526,7 +512,7 @@ namespace Rstats {
 
     static Rstats::Vector* new_logical(IV length, IV value) {
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Integer(length, value);
+      elements->values = new std::vector<IV>(length, value);
       elements->type = Rstats::VectorType::LOGICAL;
       
       return elements;
@@ -554,7 +540,7 @@ namespace Rstats {
     
     static Rstats::Vector* new_na() {
       Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new Rstats::Values::Integer(1, 0);
+      elements->values = new std::vector<IV>(1, 0);
       elements->type = Rstats::VectorType::LOGICAL;
       elements->add_na_position(0);
       
@@ -2374,8 +2360,8 @@ namespace Rstats {
       Rstats::Vector* rets;
       if (elements->get_type() == Rstats::VectorType::DOUBLE) {
         rets = Rstats::Vector::new_logical(length);
-        Rstats::Values::Double* values = elements->get_double_values();
-        Rstats::Values::Integer* rets_values = rets->get_integer_values();
+        std::vector<NV>* values = elements->get_double_values();
+        std::vector<IV>* rets_values = rets->get_integer_values();
         for (IV i = 0; i < length; i++) {
           if(std::isinf((*values)[i])) {
             (*rets_values)[i] = 1;
@@ -2398,8 +2384,8 @@ namespace Rstats {
       Rstats::Vector* rets;
       if (elements->get_type() == Rstats::VectorType::DOUBLE) {
         rets = Rstats::Vector::new_logical(length);
-        Rstats::Values::Double* values = elements->get_double_values();
-        Rstats::Values::Integer* rets_values = rets->get_integer_values();
+        std::vector<NV>* values = elements->get_double_values();
+        std::vector<IV>* rets_values = rets->get_integer_values();
         for (IV i = 0; i < length; i++) {
           if(std::isinf((*values)[i]) && (*values)[i] > 0) {
             (*rets_values)[i] = 1;
@@ -2422,8 +2408,8 @@ namespace Rstats {
       Rstats::Vector* rets;
       if (elements->get_type() == Rstats::VectorType::DOUBLE) {
         rets = Rstats::Vector::new_logical(length);
-        Rstats::Values::Double* values = elements->get_double_values();
-        Rstats::Values::Integer* rets_values = rets->get_integer_values();
+        std::vector<NV>* values = elements->get_double_values();
+        std::vector<IV>* rets_values = rets->get_integer_values();
         for (IV i = 0; i < length; i++) {
           if(std::isinf((*values)[i]) && (*values)[i] < 0) {
             (*rets_values)[i] = 1;
@@ -2444,8 +2430,8 @@ namespace Rstats {
       IV length = elements->get_length();
       Rstats::Vector* rets = Rstats::Vector::new_logical(length);
       if (elements->get_type() == Rstats::VectorType::DOUBLE) {
-        Rstats::Values::Double* values = elements->get_double_values();
-        Rstats::Values::Integer* rets_values = rets->get_integer_values();
+        std::vector<NV>* values = elements->get_double_values();
+        std::vector<IV>* rets_values = rets->get_integer_values();
         for (IV i = 0; i < length; i++) {
           if(std::isnan((*values)[i])) {
             (*rets_values)[i] = 1;
@@ -2470,9 +2456,9 @@ namespace Rstats {
         rets = Rstats::Vector::new_logical(length, 1);
       }
       else if (elements->is_double()) {
-        Rstats::Values::Double* values = elements->get_double_values();
+        std::vector<NV>* values = elements->get_double_values();
         rets = Rstats::Vector::new_logical(length);
-        Rstats::Values::Integer* rets_values = rets->get_integer_values();
+        std::vector<IV>* rets_values = rets->get_integer_values();
         for (IV i = 0; i < length; i++) {
           if (std::isfinite((*values)[i])) {
             (*rets_values)[i] = 1;

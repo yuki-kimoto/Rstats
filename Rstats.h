@@ -1,4 +1,5 @@
 namespace Rstats {
+  
   // Rstats::PerlAPI
   namespace PerlAPI {
     
@@ -162,7 +163,7 @@ namespace Rstats {
       return ret;
     }
   };
-  
+
   // Rstats::VectorType
   namespace VectorType {
     enum Enum {

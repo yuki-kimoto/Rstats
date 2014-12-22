@@ -379,12 +379,12 @@ sub class {
 sub dim_as_array {
   my $x1 = shift;
   
-  if ($x1->dim->length_value) {
+  if (exists $x1->{dim}) {
     return $x1->dim;
   }
   else {
     my $length = $x1->length_value;
-    return Rstats::Func::c($length);
+    return Rstats::Func::new_double($length);
   }
 }
 

@@ -1429,7 +1429,7 @@ sub equal { operation('equal', @_)}
 
 sub not_equal { operation('not_equal', @_)}
 
-sub abs { process_unary(\&Rstats::VectorFunc::abs, @_) }
+sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
 sub acos { process(\&Rstats::VectorFunc::acos, @_) }
 sub acosh { process(\&Rstats::VectorFunc::acosh, @_) }
 
@@ -1608,11 +1608,11 @@ sub colSums {
   }
 }
 
-sub cos { process_unary(\&Rstats::VectorFunc::cos, @_) }
+sub cos { operate_unary(\&Rstats::VectorFunc::cos, @_) }
 
 sub atan2 { operation("atan2", @_) }
 
-sub cosh { process_unary(\&Rstats::VectorFunc::cosh, @_) }
+sub cosh { operate_unary(\&Rstats::VectorFunc::cosh, @_) }
 
 sub cummax {
   my $x1 = to_c(shift);
@@ -1763,7 +1763,7 @@ sub complex {
   return c($x2_elements);
 }
 
-sub exp { process_unary(\&Rstats::VectorFunc::exp, @_) }
+sub exp { operate_unary(\&Rstats::VectorFunc::exp, @_) }
 
 sub expm1 { process(\&Rstats::VectorFunc::expm1, @_) }
 
@@ -1866,10 +1866,10 @@ sub ifelse {
   return array(\@x2_values);
 }
 
-sub log { process_unary(\&Rstats::VectorFunc::log, @_) }
-sub logb { process_unary(\&Rstats::VectorFunc::logb, @_) }
-sub log2 { process_unary(\&Rstats::VectorFunc::log2, @_) }
-sub log10 { process_unary(\&Rstats::VectorFunc::log10, @_) }
+sub log { operate_unary(\&Rstats::VectorFunc::log, @_) }
+sub logb { operate_unary(\&Rstats::VectorFunc::logb, @_) }
+sub log2 { operate_unary(\&Rstats::VectorFunc::log2, @_) }
+sub log10 { operate_unary(\&Rstats::VectorFunc::log10, @_) }
 
 sub max {
   my $x1 = c(@_);
@@ -2343,8 +2343,8 @@ sub sequence {
   return c(\@x2_values);
 }
 
-sub sinh { process_unary(\&Rstats::VectorFunc::sinh, @_) }
-sub sqrt { process_unary(\&Rstats::VectorFunc::sqrt, @_) }
+sub sinh { operate_unary(\&Rstats::VectorFunc::sinh, @_) }
+sub sqrt { operate_unary(\&Rstats::VectorFunc::sqrt, @_) }
 
 sub sort {
 
@@ -2382,7 +2382,7 @@ sub tail {
   return $x2;
 }
 
-sub tan { process_unary(\&Rstats::VectorFunc::tan, @_) }
+sub tan { operate_unary(\&Rstats::VectorFunc::tan, @_) }
 
 sub process {
   my $func = shift;
@@ -2396,9 +2396,9 @@ sub process {
   return $x2;
 }
 
-sub sin { process_unary(\&Rstats::VectorFunc::sin, @_) }
+sub sin { operate_unary(\&Rstats::VectorFunc::sin, @_) }
 
-sub process_unary {
+sub operate_unary {
   my $func = shift;
   my $x1 = to_c(shift);
   
@@ -2410,7 +2410,7 @@ sub process_unary {
   return $x2;
 }
 
-sub tanh { process_unary(\&Rstats::VectorFunc::tanh, @_) }
+sub tanh { operate_unary(\&Rstats::VectorFunc::tanh, @_) }
 
 sub trunc {
   my ($_x1) = @_;

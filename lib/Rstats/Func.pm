@@ -2710,14 +2710,7 @@ sub row {
   return array(\@values, [$nrow, $ncol]);
 }
 
-sub sum {
-  my $x1 = to_c(shift);
-  
-  my $x2 = Rstats::Array->new;
-  $x2->vector(Rstats::VectorFunc::sum($x1->vector));
-  
-  return $x2;
-}
+sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
 
 sub ncol {
   my $x1 = shift;

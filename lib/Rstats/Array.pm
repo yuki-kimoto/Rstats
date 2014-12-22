@@ -10,23 +10,23 @@ our @CARP_NOT = ('Rstats');
 
 use overload
   bool => \&bool,
-  '+' => sub { shift->operate_binary('add', @_) },
-  '-' => sub { shift->operate_binary('subtract', @_) },
-  '*' => sub { shift->operate_binary('multiply', @_) },
-  '/' => sub { shift->operate_binary('divide', @_) },
-  '%' => sub { shift->operate_binary('remainder', @_) },
+  '+' => sub { shift->operate_binary(\&Rstats::VectorFunc::add, @_) },
+  '-' => sub { shift->operate_binary(\&Rstats::VectorFunc::subtract, @_) },
+  '*' => sub { shift->operate_binary(\&Rstats::VectorFunc::multiply, @_) },
+  '/' => sub { shift->operate_binary(\&Rstats::VectorFunc::divide, @_) },
+  '%' => sub { shift->operate_binary(\&Rstats::VectorFunc::remainder, @_) },
   'neg' => sub { shift->negation(@_) },
-  '**' => sub { shift->operate_binary('pow', @_) },
+  '**' => sub { shift->operate_binary(\&Rstats::VectorFunc::pow, @_) },
   'x' => sub { shift->inner_product(@_) },
-  '<' => sub { shift->operate_binary('less_than', @_) },
-  '<=' => sub { shift->operate_binary('less_than_or_equal', @_) },
-  '>' => sub { shift->operate_binary('more_than', @_) },
-  '>=' => sub { shift->operate_binary('more_than_or_equal', @_) },
-  '==' => sub { shift->operate_binary('equal', @_) },
-  '!=' => sub { shift->operate_binary('not_equal', @_) },
+  '<' => sub { shift->operate_binary(\&Rstats::VectorFunc::less_than, @_) },
+  '<=' => sub { shift->operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) },
+  '>' => sub { shift->operate_binary(\&Rstats::VectorFunc::more_than, @_) },
+  '>=' => sub { shift->operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) },
+  '==' => sub { shift->operate_binary(\&Rstats::VectorFunc::equal, @_) },
+  '!=' => sub { shift->operate_binary(\&Rstats::VectorFunc::not_equal, @_) },
   '""' => sub { shift->to_string(@_) },
-  '&' => sub { shift->operate_binary('and', @_) },
-  '|' => sub { shift->operate_binary('or', @_) },
+  '&' => sub { shift->operate_binary(\&Rstats::VectorFunc::and, @_) },
+  '|' => sub { shift->operate_binary(\&Rstats::VectorFunc::or, @_) },
   fallback => 1;
 
 sub to_string {
@@ -417,12 +417,12 @@ sub inner_product {
 sub negation { Rstats::Func::negation(@_) }
 
 sub operate_binary {
-  my ($self, $op, $data, $reverse) = @_;
+  my ($self, $func, $data, $reverse) = @_;
   
   # fix postion
   my ($x1, $x2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Func::operate_binary($op, $x1, $x2);
+  return Rstats::Func::operate_binary($func, $x1, $x2);
 }
 
 sub _fix_position {

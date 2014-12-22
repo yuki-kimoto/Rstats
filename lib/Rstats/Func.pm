@@ -1365,7 +1365,7 @@ my %comparison_op = map { $_ => 1 } qw/
 my %logical_op = map { $_ => 1 } ('&&', '||');
 
 sub operate_binary {
-  my ($op, $x1, $x2) = @_;
+  my ($func, $x1, $x2) = @_;
   
   $x1 = to_c($x1);
   $x2 = to_c($x2);
@@ -1390,9 +1390,8 @@ sub operate_binary {
   }
   
   no strict 'refs';
-  my $operate_binary = "Rstats::VectorFunc::$op";
   my $x3;
-  my $x3_elements = &$operate_binary($x1->vector, $x2->vector);
+  my $x3_elements = $func->($x1->vector, $x2->vector);
   $x3 = Rstats::Func::NULL();
   $x3->vector($x3_elements);
   
@@ -1401,33 +1400,33 @@ sub operate_binary {
   return $x3;
 }
 
-sub and { operate_binary('and', @_) }
+sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
 
-sub or { operate_binary('or', @_) }
+sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
 
-sub add { operate_binary('add', @_) }
+sub add { operate_binary(\&Rstats::VectorFunc::add, @_) }
 
-sub subtract { operate_binary('subtract', @_)}
+sub subtract { operate_binary(\&Rstats::VectorFunc::subtract, @_)}
 
-sub multiply { operate_binary('multiply', @_)}
+sub multiply { operate_binary(\&Rstats::VectorFunc::multiply, @_)}
 
-sub divide { operate_binary('divide', @_)}
+sub divide { operate_binary(\&Rstats::VectorFunc::divide, @_)}
 
-sub pow { operate_binary('pow', @_)}
+sub pow { operate_binary(\&Rstats::VectorFunc::pow, @_)}
 
-sub remainder { operate_binary('remainder', @_)}
+sub remainder { operate_binary(\&Rstats::VectorFunc::remainder, @_)}
 
-sub more_than { operate_binary('more_than', @_)}
+sub more_than { operate_binary(\&Rstats::VectorFunc::more_than, @_)}
 
-sub more_than_or_equal { operate_binary('more_than_or_equal', @_)}
+sub more_than_or_equal { operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_)}
 
-sub less_than { operate_binary('less_than', @_)}
+sub less_than { operate_binary(\&Rstats::VectorFunc::less_than, @_)}
 
-sub less_than_or_equal { operate_binary('less_than_or_equal', @_)}
+sub less_than_or_equal { operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_)}
 
-sub equal { operate_binary('equal', @_)}
+sub equal { operate_binary(\&Rstats::VectorFunc::equal, @_)}
 
-sub not_equal { operate_binary('not_equal', @_)}
+sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_)}
 
 sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
 sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }
@@ -1610,7 +1609,7 @@ sub colSums {
 
 sub cos { operate_unary(\&Rstats::VectorFunc::cos, @_) }
 
-sub atan2 { operate_binary("atan2", @_) }
+sub atan2 { operate_binary(\&Rstats::VectorFunc::atan2, @_) }
 
 sub cosh { operate_unary(\&Rstats::VectorFunc::cosh, @_) }
 

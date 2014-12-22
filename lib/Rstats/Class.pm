@@ -44,7 +44,7 @@ my @funcs = qw/
   atan
   atanh
   c
-  ve
+  se
   charmatch
   chartr
   cbind

@@ -153,7 +153,7 @@ use Rstats::Util;
     ['c1', 'c2']
   ];
   
-  my $x1 = array(ve('1:3'));
+  my $x1 = array(se('1:3'));
   my $result =  Rstats::Util::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
@@ -194,7 +194,7 @@ use Rstats::Util;
 
 # index_to_pos
 {
-  my $x1 = array(ve('1:24'), c(4, 3, 2));
+  my $x1 = array(se('1:24'), c(4, 3, 2));
   my $dim = [4, 3, 2];
   
   {

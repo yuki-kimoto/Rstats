@@ -437,7 +437,7 @@ sub factor {
   my $levels_length = $x_levels->length->value;
   if ($labels_length == 1 && $x1->length_value != 1) {
     my $value = $x_labels->value;
-    $x_labels = paste($value, ve("1:$levels_length"), {sep => ""});
+    $x_labels = paste($value, se("1:$levels_length"), {sep => ""});
   }
   elsif ($labels_length != $levels_length) {
     croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
@@ -988,7 +988,7 @@ sub c {
   return $x1;
 }
 
-sub ve {
+sub se {
   my $seq_str = shift;
 
   my $by;
@@ -1848,7 +1848,7 @@ sub head {
   if ($x1->is_data_frame) {
     my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
     
-    my $x_range = ve("1:$max");
+    my $x_range = se("1:$max");
     my $x2 = $x1->get($x_range, Rstats::Func::NULL());
     
     return $x2;

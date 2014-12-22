@@ -627,28 +627,28 @@ use Rstats::VectorFunc;
 {
   # is_* - is_vector
   {
-    my $x = ve('1:24');
+    my $x = se('1:24');
     ok(r->is_vector($x));
     ok(!r->is_array($x));
   }
 
   # is_* - is_vector
   {
-    my $x = array(ve('1:24'));
+    my $x = array(se('1:24'));
     ok(!r->is_vector($x));
     ok(r->is_array($x));
   }
     
   # is_* - is_matrix
   {
-    my $x = matrix(ve('1:12'), 4, 3);
+    my $x = matrix(se('1:12'), 4, 3);
     ok(r->is_matrix($x));
     ok(r->is_array($x));
   }
 
   # is_* - is_array
   {
-    my $x = array(ve('1:24'), [4, 3, 2]);
+    my $x = array(se('1:24'), [4, 3, 2]);
     ok(r->is_array($x));
     ok(!r->is_vector($x));
     ok(!r->is_matrix($x));
@@ -659,19 +659,19 @@ use Rstats::VectorFunc;
 {
   # is_* - is_vector
   {
-    my $x = array(ve('1:24'));
+    my $x = array(se('1:24'));
     ok(!r->is_vector($x));
   }
   
   # is_* - is_matrix
   {
-    my $x = matrix(ve('1:24'), 4, 3);
+    my $x = matrix(se('1:24'), 4, 3);
     ok(r->is_matrix($x));
   }
 
   # is_* - is_array
   {
-    my $x = array(ve('1:12'), c(4, 3, 2));
+    my $x = array(se('1:12'), c(4, 3, 2));
     ok(r->is_array($x));
   }
 }
@@ -680,28 +680,28 @@ use Rstats::VectorFunc;
 {
   # as_* - as_vector
   {
-    my $x = array(ve('1:24'), c(4, 3, 2));
+    my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_vector($x))->values, []);
   }
   
   # as_* - as_matrix, from vector
   {
-    my $x = c(ve('1:24'));
+    my $x = c(se('1:24'));
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }
 
   # as_* - as_matrix, from matrix
   {
-    my $x = matrix(ve('1:12'), 4, 3);
+    my $x = matrix(se('1:12'), 4, 3);
     is_deeply(r->as_matrix($x)->values, [1 .. 12]);
     is_deeply(r->dim(r->as_matrix($x))->values, [4, 3]);
   }
 
   # as_* - as_matrix, from array
   {
-    my $x = array(ve('1:24'), c(4, 3, 2));
+    my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }
@@ -711,28 +711,28 @@ use Rstats::VectorFunc;
 {
   # as_* from Rstats object - as_vector
   {
-    my $x = array(ve('1:24'), c(4, 3, 2));
+    my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_vector($x))->values, []);
   }
   
   # as_* from Rstats object - as_matrix, from vector
   {
-    my $x = ve('1:24');
+    my $x = se('1:24');
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }
 
   # as_* from Rstats object - as_matrix, from matrix
   {
-    my $x = matrix(ve('1:12'), 4, 3);
+    my $x = matrix(se('1:12'), 4, 3);
     is_deeply(r->as_matrix($x)->values, [1 .. 12]);
     is_deeply(r->dim(r->as_matrix($x))->values, [4, 3]);
   }
 
   # as_* from Rstats object - as_matrix, from array
   {
-    my $x = array(ve('1:24'), c(4, 3, 2));
+    my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }

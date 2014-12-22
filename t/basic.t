@@ -54,7 +54,7 @@ use Math::Trig ();
 
   # class - array
   {
-    my $x1 = array(ve('1:24'), c(4, 3, 2));
+    my $x1 = array(se('1:24'), c(4, 3, 2));
     is_deeply($x1->class->values, ['array']);
   }
   
@@ -207,7 +207,7 @@ use Math::Trig ();
 # sample
 {
   {
-    my $v1 = ve('1:100');
+    my $v1 = se('1:100');
     my $v2 = r->sample($v1, 50);
     is(r->length($v2)->value, 50);
     my $duplicate_h = {};
@@ -226,7 +226,7 @@ use Math::Trig ();
   
   # sample - replace => 0
   {
-    my $v1 = ve('1:100');
+    my $v1 = se('1:100');
     my $v2 = r->sample($v1, 50, {replace => 0});
     is(r->length($v2)->value, 50);
     my $duplicate_h = {};
@@ -245,7 +245,7 @@ use Math::Trig ();
 
   # sample - replace => 0
   {
-    my $v1 = ve('1:100');
+    my $v1 = se('1:100');
     my $v2 = r->sample($v1, 50, {replace => 1});
     is(r->length($v2)->value, 50);
     my $duplicate_h = {};
@@ -386,15 +386,15 @@ use Math::Trig ();
     is_deeply($v->values, [1, 2, 3]);
   }
   
-  # c(ve('1:3')
+  # c(se('1:3')
   {
-    my $v = ve('1:3');
+    my $v = se('1:3');
     is_deeply($v->values, [1, 2, 3]);
   }
   
   # c('0.5*1:3')
   {
-    my $v = ve('0.5*1:3');
+    my $v = se('0.5*1:3');
     is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
   }
 }

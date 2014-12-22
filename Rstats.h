@@ -597,7 +597,7 @@ namespace Rstats {
     
     SV* to_string() {
       
-      SV* sv_strs;
+      SV* sv_strs = PerlAPI::new_mAVRV();
       for (IV i = 0; i < this->get_length(); i++) {
         SV* sv_str;
         if (this->exists_na_position(i)) {
@@ -615,7 +615,7 @@ namespace Rstats {
               NV im = z.imag();
               
               sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
-              if (std::isinf(re) && re > 0) {
+             if (std::isinf(re) && re > 0) {
                 sv_catpv(sv_str, "Inf");
               }
               else if (std::isinf(re) && re < 0) {
@@ -638,26 +638,35 @@ namespace Rstats {
                 sv_catpv(sv_str, "+NaN");
               }
               else {
-                sv_str = Rstats::PerlAPI::new_mSVnv(im);
                 if (im >= 0) {
                   sv_catpv(sv_str, "+");
-                  sv_catpv(sv_str, SvPV_nolen(sv_str));
                 }
-                else {
-                  sv_catpv(sv_str, SvPV_nolen(sv_str));
-                }
+                sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(im)));
               }
               
               sv_catpv(sv_str, "i");
               break;
             }
-            case Rstats::VectorType::DOUBLE :
-              sv_str = Rstats::PerlAPI::new_mSVnv(this->get_double_value(i));
-              SvPOK_on(sv_str);
+            case Rstats::VectorType::DOUBLE : {
+              NV value = this->get_double_value(i);
+              if (std::isinf(value) && value > 0) {
+                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
+              }
+              else if (std::isinf(value) && value < 0) {
+                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
+              }
+              else if (std::isnan(value)) {
+                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
+              }
+              else {
+                sv_str = Rstats::PerlAPI::new_mSVnv(value);
+                sv_catpv(sv_str, "");
+              }
               break;
+            }
             case Rstats::VectorType::INTEGER :
               sv_str = Rstats::PerlAPI::new_mSViv(this->get_integer_value(i));
-              SvPOK_on(sv_str);
+              sv_catpv(sv_str, "");
               break;
             case Rstats::VectorType::LOGICAL :
               sv_str = this->get_integer_value(i)
@@ -669,7 +678,8 @@ namespace Rstats {
         }
         Rstats::PerlAPI::avrv_push_inc(sv_strs, sv_str);
       }
-      
+
+
       SV* sv_str_all = Rstats::PerlAPI::new_mSVpv_nolen("");
       IV sv_strs_length = Rstats::PerlAPI::avrv_len_fix(sv_strs);
       for (IV i = 0; i < sv_strs_length; i++) {

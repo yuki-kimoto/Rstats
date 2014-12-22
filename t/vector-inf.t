@@ -6,13 +6,6 @@ use Rstats::VectorFunc;
 
 # Inf
 {
-  # Inf - negation
-  {
-    my $inf = Rstats::VectorFunc::Inf;
-    my $negative_inf = Rstats::VectorFunc::negation($inf);
-    ok($negative_inf->is_negative_infinite->value);
-  }
-
   # Inf - negation repeat
   {
     my $inf = Rstats::VectorFunc::Inf;
@@ -25,6 +18,13 @@ use Rstats::VectorFunc;
   {
     my $inf = Rstats::VectorFunc::Inf;
     is("$inf", 'Inf');
+  }
+
+  # Inf - negation
+  {
+    my $inf = Rstats::VectorFunc::Inf;
+    my $negative_inf = Rstats::VectorFunc::negation($inf);
+    ok($negative_inf->is_negative_infinite->value);
   }
 
   # Inf - to_string, minus

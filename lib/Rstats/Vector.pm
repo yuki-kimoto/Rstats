@@ -8,49 +8,6 @@ use overload
   '""' => \&to_string,
   fallback => 1;
 
-sub to_string {
-  my $self = shift;
-  
-  my @strs;
-  my $values = $self->values;
-  for my $value (@$values) {
-    my $str;
-    if (defined $value) {
-      if ($self->is_character) {
-        $str = $value . "";
-      }
-      elsif ($self->is_complex) {
-        my $re = $value->{re};
-        my $im = $value->{im};
-        
-        $str = "$re";
-        $str .= '+' if $im >= 0;
-        $str .= $im . 'i';
-      }
-      elsif ($self->is_double) {
-        $str = $value . "";
-      }
-      elsif ($self->is_integer) {
-        $str = $value . "";
-      }
-      elsif ($self->is_logical) {
-        $str = $value ? 'TRUE' : 'FALSE'
-      }
-      else {
-        croak "Invalid type";
-      }
-    }
-    else {
-      $str = 'NA';
-    }
-    push @strs, $str;
-  }
-  
-  my $str_all = join ' ', @strs;
-  
-  return $str_all;
-}
-
 1;
 
 =head1 NAME
@@ -101,9 +58,10 @@ Rstats::Vector - Vector
 
 =head2 flag (xs)
 
-=head2  is_nan (xs)
+=head2 is_nan (xs)
 
-=head2  is_infinite (xs)
+=head2 is_infinite (xs)
 
-=head2  is_finite (xs)
+=head2 is_finite (xs)
 
+=head2 to_string (xs)

@@ -128,6 +128,14 @@ SV* as(...)
   return_sv(sv_e2);
 }
 
+SV* to_string(...)
+  PPCODE:
+{
+  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
+  SV* sv_str = self->to_string();
+  return_sv(sv_str);
+}
+
 SV* as_character(...)
   PPCODE:
 {

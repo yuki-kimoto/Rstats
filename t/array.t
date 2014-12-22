@@ -9,6 +9,11 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+{
+  my $x1 = Rstats::Func::new_integer(3);
+  $x1->vector->to_string;
+}
+
 # bool context
 {
   {

@@ -755,7 +755,21 @@ use Math::Trig ();
 
 # cumprod
 {
-  # cumprod - numeric
+  # cumprod - logical
+  {
+    my $v1 = Rstats::Func::new_logical(1, 1, 0);
+    my $v2 = r->cumprod($v1);
+    is_deeply($v2->values, [1, 1, 0]);
+  }
+  
+  # cumprod - integer
+  {
+    my $v1 = Rstats::Func::new_integer(2, 3, 4);
+    my $v2 = r->cumprod($v1);
+    is_deeply($v2->values, [2, 6, 24]);
+  }
+  
+  # cumprod - double
   {
     my $v1 = c(2, 3, 4);
     my $v2 = r->cumprod($v1);

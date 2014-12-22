@@ -275,41 +275,6 @@ sub hash {
   return $hash;
 }
 
-sub expm1 {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na->value;
-  
-  my $e2;
-  if ($e1->is_complex) {
-    croak 'Error in expm1 : unimplemented complex function';
-  }
-  elsif ($e1->is_double) {
-    return $e1 if $e1->is_nan->value;
-    if (less_than($e1, new_double(1e-5))->value && more_than($e1, negativeInf)->value) {
-      $e2 = add(
-        $e1,
-        multiply(
-          new_double(0.5),
-          multiply(
-            $e1,
-            $e1
-          )
-        )
-      );
-    }
-    else {
-      $e2 = Rstats::VectorFunc::subtract(Rstats::VectorFunc::exp($e1), new_double(1));
-    }
-  }
-  elsif ($e1->is_integer || $e1->is_logical) {
-    $e2 = Rstats::VectorFunc::subtract(Rstats::VectorFunc::exp($e1), new_double(1));
-  }
-  else {
-    croak 'Not implemented';
-  }
-}
-
 sub acos {
   my $e1 = shift;
 

@@ -24,9 +24,9 @@ use overload
   '>=' => sub { shift->operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) },
   '==' => sub { shift->operate_binary(\&Rstats::VectorFunc::equal, @_) },
   '!=' => sub { shift->operate_binary(\&Rstats::VectorFunc::not_equal, @_) },
-  '""' => sub { shift->to_string(@_) },
   '&' => sub { shift->operate_binary(\&Rstats::VectorFunc::and, @_) },
   '|' => sub { shift->operate_binary(\&Rstats::VectorFunc::or, @_) },
+  '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
 sub to_string {

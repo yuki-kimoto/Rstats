@@ -1764,7 +1764,7 @@ sub complex {
 
 sub exp { operate_unary(\&Rstats::VectorFunc::exp, @_) }
 
-sub expm1 { operate_unary_old(\&Rstats::VectorFunc::expm1, @_) }
+sub expm1 { operate_unary(\&Rstats::VectorFunc::expm1, @_) }
 
 sub max_type {
   my @xs = @_;

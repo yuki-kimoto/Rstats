@@ -2551,6 +2551,40 @@ namespace Rstats {
       return e2;
     }
 
+    Rstats::Vector* expm1(Rstats::Vector* e1) {
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
+      switch (type) {
+        case Rstats::VectorType::CHARACTER :
+          croak("Error in a - b : non-numeric argument to binary operator");
+          break;
+        case Rstats::VectorType::COMPLEX :
+          croak("Error in expm1 : unimplemented complex function");
+          break;
+        case Rstats::VectorType::DOUBLE :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            e2->set_double_value(i, ::expm1(e1->get_double_value(i)));
+          }
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            e2->set_double_value(i, ::expm1(e1->get_integer_value(i)));
+          }
+          break;
+        default:
+          croak("Invalid type");
+
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+  
     Rstats::Vector* exp(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

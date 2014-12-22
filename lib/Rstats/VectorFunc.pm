@@ -540,30 +540,6 @@ sub create {
 
 sub Mod { Rstats::VectorFunc::abs(@_) }
 
-sub Arg {
-  my $e1 = shift;
-  
-  if ($e1->is_complex) {
-    my $e1_re = Rstats::VectorFunc::new_double($e1->value->{re});
-    my $e1_im = Rstats::VectorFunc::new_double($e1->value->{im});
-    my $re = $e1_re->value;
-    my $im = $e1_im->value;
-    
-    my $e2;
-    if ($re == 0 && $im == 0) {
-      $e2 = new_double(0);
-    }
-    else {
-      $e2 = new_double(CORE::atan2($im, $re));
-    }
-    
-    return $e2;
-  }
-  else {
-    croak "Not implemented";
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

@@ -2584,7 +2584,45 @@ namespace Rstats {
       
       return e2;
     }
-  
+
+    Rstats::Vector* Arg(Rstats::Vector* e1) {
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
+      switch (type) {
+        case Rstats::VectorType::CHARACTER :
+          croak("Error in a - b : non-numeric argument to binary operator");
+          break;
+        case Rstats::VectorType::COMPLEX :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            std::complex<NV> z = e1->get_complex_value(i);
+            NV re = z.real();
+            NV im = z.imag();
+            
+            if (re == 0 && im == 0) {
+              e2->set_double_value(i, 0);
+            }
+            else {
+              e2->set_double_value(i, ::atan2(im, re));
+            }
+          }
+          break;
+        case Rstats::VectorType::DOUBLE :
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
+          croak("Not implemented");
+          break;
+        default:
+          croak("Invalid type");
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
+
     Rstats::Vector* exp(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

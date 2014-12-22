@@ -781,15 +781,7 @@ sub outer {
   return $x3;
 }
 
-sub Arg {
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { Rstats::VectorFunc::Arg($_) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
+sub Arg { operate_unary(\&Rstats::VectorFunc::Arg, @_) }
 
 sub sub {
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)

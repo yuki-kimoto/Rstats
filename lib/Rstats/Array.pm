@@ -10,23 +10,23 @@ our @CARP_NOT = ('Rstats');
 
 use overload
   bool => \&bool,
-  '+' => sub { shift->operation('add', @_) },
-  '-' => sub { shift->operation('subtract', @_) },
-  '*' => sub { shift->operation('multiply', @_) },
-  '/' => sub { shift->operation('divide', @_) },
-  '%' => sub { shift->operation('remainder', @_) },
+  '+' => sub { shift->operate_binary('add', @_) },
+  '-' => sub { shift->operate_binary('subtract', @_) },
+  '*' => sub { shift->operate_binary('multiply', @_) },
+  '/' => sub { shift->operate_binary('divide', @_) },
+  '%' => sub { shift->operate_binary('remainder', @_) },
   'neg' => sub { shift->negation(@_) },
-  '**' => sub { shift->operation('pow', @_) },
+  '**' => sub { shift->operate_binary('pow', @_) },
   'x' => sub { shift->inner_product(@_) },
-  '<' => sub { shift->operation('less_than', @_) },
-  '<=' => sub { shift->operation('less_than_or_equal', @_) },
-  '>' => sub { shift->operation('more_than', @_) },
-  '>=' => sub { shift->operation('more_than_or_equal', @_) },
-  '==' => sub { shift->operation('equal', @_) },
-  '!=' => sub { shift->operation('not_equal', @_) },
+  '<' => sub { shift->operate_binary('less_than', @_) },
+  '<=' => sub { shift->operate_binary('less_than_or_equal', @_) },
+  '>' => sub { shift->operate_binary('more_than', @_) },
+  '>=' => sub { shift->operate_binary('more_than_or_equal', @_) },
+  '==' => sub { shift->operate_binary('equal', @_) },
+  '!=' => sub { shift->operate_binary('not_equal', @_) },
   '""' => sub { shift->to_string(@_) },
-  '&' => sub { shift->operation('and', @_) },
-  '|' => sub { shift->operation('or', @_) },
+  '&' => sub { shift->operate_binary('and', @_) },
+  '|' => sub { shift->operate_binary('or', @_) },
   fallback => 1;
 
 sub to_string {
@@ -416,13 +416,13 @@ sub inner_product {
 
 sub negation { Rstats::Func::negation(@_) }
 
-sub operation {
+sub operate_binary {
   my ($self, $op, $data, $reverse) = @_;
   
   # fix postion
   my ($x1, $x2) = $self->_fix_position($data, $reverse);
   
-  return Rstats::Func::operation($op, $x1, $x2);
+  return Rstats::Func::operate_binary($op, $x1, $x2);
 }
 
 sub _fix_position {

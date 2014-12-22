@@ -1364,7 +1364,7 @@ my %comparison_op = map { $_ => 1 } qw/
 
 my %logical_op = map { $_ => 1 } ('&&', '||');
 
-sub operation {
+sub operate_binary {
   my ($op, $x1, $x2) = @_;
   
   $x1 = to_c($x1);
@@ -1390,9 +1390,9 @@ sub operation {
   }
   
   no strict 'refs';
-  my $operation = "Rstats::VectorFunc::$op";
+  my $operate_binary = "Rstats::VectorFunc::$op";
   my $x3;
-  my $x3_elements = &$operation($x1->vector, $x2->vector);
+  my $x3_elements = &$operate_binary($x1->vector, $x2->vector);
   $x3 = Rstats::Func::NULL();
   $x3->vector($x3_elements);
   
@@ -1401,33 +1401,33 @@ sub operation {
   return $x3;
 }
 
-sub and { operation('and', @_) }
+sub and { operate_binary('and', @_) }
 
-sub or { operation('or', @_) }
+sub or { operate_binary('or', @_) }
 
-sub add { operation('add', @_) }
+sub add { operate_binary('add', @_) }
 
-sub subtract { operation('subtract', @_)}
+sub subtract { operate_binary('subtract', @_)}
 
-sub multiply { operation('multiply', @_)}
+sub multiply { operate_binary('multiply', @_)}
 
-sub divide { operation('divide', @_)}
+sub divide { operate_binary('divide', @_)}
 
-sub pow { operation('pow', @_)}
+sub pow { operate_binary('pow', @_)}
 
-sub remainder { operation('remainder', @_)}
+sub remainder { operate_binary('remainder', @_)}
 
-sub more_than { operation('more_than', @_)}
+sub more_than { operate_binary('more_than', @_)}
 
-sub more_than_or_equal { operation('more_than_or_equal', @_)}
+sub more_than_or_equal { operate_binary('more_than_or_equal', @_)}
 
-sub less_than { operation('less_than', @_)}
+sub less_than { operate_binary('less_than', @_)}
 
-sub less_than_or_equal { operation('less_than_or_equal', @_)}
+sub less_than_or_equal { operate_binary('less_than_or_equal', @_)}
 
-sub equal { operation('equal', @_)}
+sub equal { operate_binary('equal', @_)}
 
-sub not_equal { operation('not_equal', @_)}
+sub not_equal { operate_binary('not_equal', @_)}
 
 sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
 sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }
@@ -1610,7 +1610,7 @@ sub colSums {
 
 sub cos { operate_unary(\&Rstats::VectorFunc::cos, @_) }
 
-sub atan2 { operation("atan2", @_) }
+sub atan2 { operate_binary("atan2", @_) }
 
 sub cosh { operate_unary(\&Rstats::VectorFunc::cosh, @_) }
 

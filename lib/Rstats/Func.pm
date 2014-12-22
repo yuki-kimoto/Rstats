@@ -1610,34 +1610,7 @@ sub colSums {
 
 sub cos { process_unary(\&Rstats::VectorFunc::cos, @_) }
 
-sub atan2 {
-  my ($x1, $x2) = (to_c(shift), to_c(shift));
-  
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
-  my @a3_elements;
-  for (my $i = 0; $i < $x1->length_value; $i++) {
-    my $element1 = $x1_elements->[$i];
-    my $element2 = $x2_elements->[$i];
-    my $element3 = Rstats::VectorFunc::atan2($element1, $element2);
-    push @a3_elements, $element3;
-  }
-
-  my $x3 = c(\@a3_elements);
-  $x1->copy_attrs_to($x3);
-  
-  # mode
-  my $x3_mode;
-  if ($x1->is_complex) {
-    $x3_mode = 'complex';
-  }
-  else {
-    $x3_mode = 'double';
-  }
-  $x3->mode($x3_mode);
-  
-  return $x3;
-}
+sub atan2 { operation("atan2", @_) }
 
 sub cosh { process_unary(\&Rstats::VectorFunc::cosh, @_) }
 

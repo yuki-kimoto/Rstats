@@ -748,6 +748,17 @@ add(...)
 }
 
 SV*
+atan2(...)
+  PPCODE:
+{
+  Rstats::Vector* e1 = my::to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = my::to_c_obj<Rstats::Vector*>(ST(1));
+  Rstats::Vector* e3 = Rstats::VectorFunc::atan2(e1, e2);
+  SV* sv_e3 = my::to_perl_obj(e3, "Rstats::Vector");
+  return_sv(sv_e3);
+}
+
+SV*
 subtract(...)
   PPCODE:
 {

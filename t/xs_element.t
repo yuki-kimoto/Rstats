@@ -5,10 +5,6 @@ use warnings;
 use Rstats::VectorFunc;
 use Rstats;
 
-my $x1 = c(1, 2, 3);
-1;
-
-
 # element
 {
   # element - new_na
@@ -64,7 +60,7 @@ my $x1 = c(1, 2, 3);
     my $e1 = Rstats::VectorFunc::new_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite->value);
-    ok($e1->value > 0);
+    is($e1->value, 'Inf');
   }
   
   # element - negativeInf_xs
@@ -72,7 +68,7 @@ my $x1 = c(1, 2, 3);
     my $e1 = Rstats::VectorFunc::new_negative_inf();
     is($e1->type, 'double');
     ok($e1->is_infinite->value);
-    ok($e1->value < 0);
+    is($e1->value, '-Inf');
   }
 
   # element - NaN_xs

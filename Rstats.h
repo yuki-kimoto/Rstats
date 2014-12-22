@@ -2354,7 +2354,7 @@ namespace Rstats {
       
       return e2;
     }
-
+    
     Rstats::Vector* abs(Rstats::Vector* e1) {
       
       IV length = e1->get_length();
@@ -2397,6 +2397,8 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Vector* Mod(Rstats::Vector* e1) { abs(e1); }
 
     Rstats::Vector* clone(Rstats::Vector* e1) {
       

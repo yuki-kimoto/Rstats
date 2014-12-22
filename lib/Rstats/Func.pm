@@ -781,6 +781,8 @@ sub outer {
   return $x3;
 }
 
+sub Mod { operate_unary(\&Rstats::VectorFunc::Mod, @_) }
+
 sub Arg { operate_unary(\&Rstats::VectorFunc::Arg, @_) }
 
 sub sub {
@@ -2659,8 +2661,6 @@ sub matrix {
   
   return $matrix;
 }
-
-sub Mod { Rstats::Func::abs(@_) }
 
 sub inner_product {
   my ($x1, $x2) = @_;

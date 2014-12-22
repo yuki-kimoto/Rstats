@@ -538,8 +538,6 @@ sub create {
   }
 }
 
-sub Mod { Rstats::VectorFunc::abs(@_) }
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

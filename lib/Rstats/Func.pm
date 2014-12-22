@@ -1430,8 +1430,8 @@ sub equal { operation('equal', @_)}
 sub not_equal { operation('not_equal', @_)}
 
 sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
-sub acos { process(\&Rstats::VectorFunc::acos, @_) }
-sub acosh { process(\&Rstats::VectorFunc::acosh, @_) }
+sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }
+sub acosh { operate_unary_old(\&Rstats::VectorFunc::acosh, @_) }
 
 sub append {
   my ($x1, $x2, $x_after) = args(['x1', 'x2', 'after'], @_);
@@ -1488,10 +1488,10 @@ sub array {
   return $x2;
 }
 
-sub asin { process(\&Rstats::VectorFunc::asin, @_) }
-sub asinh { process(\&Rstats::VectorFunc::asinh, @_) }
-sub atan { process(\&Rstats::VectorFunc::atan, @_) }
-sub atanh { process(\&Rstats::VectorFunc::atanh, @_) }
+sub asin { operate_unary_old(\&Rstats::VectorFunc::asin, @_) }
+sub asinh { operate_unary_old(\&Rstats::VectorFunc::asinh, @_) }
+sub atan { operate_unary_old(\&Rstats::VectorFunc::atan, @_) }
+sub atanh { operate_unary_old(\&Rstats::VectorFunc::atanh, @_) }
 
 sub cbind {
   my @xs = @_;
@@ -1765,7 +1765,7 @@ sub complex {
 
 sub exp { operate_unary(\&Rstats::VectorFunc::exp, @_) }
 
-sub expm1 { process(\&Rstats::VectorFunc::expm1, @_) }
+sub expm1 { operate_unary_old(\&Rstats::VectorFunc::expm1, @_) }
 
 sub max_type {
   my @xs = @_;
@@ -2384,7 +2384,7 @@ sub tail {
 
 sub tan { operate_unary(\&Rstats::VectorFunc::tan, @_) }
 
-sub process {
+sub operate_unary_old {
   my $func = shift;
   my $x1 = to_c(shift);
   

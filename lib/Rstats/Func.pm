@@ -1664,15 +1664,7 @@ sub cummin {
   return c(\@a2_elements);
 }
 
-sub cumsum {
-  my $x1 = to_c(shift);
-  my $type = $x1->vector->type;
-  my $total = Rstats::VectorFunc::create($type);
-  my @a2_elements;
-  push @a2_elements, $total = Rstats::VectorFunc::add($total, $_) for @{$x1->decompose_elements};
-  
-  return c(\@a2_elements);
-}
+sub cumsum { operate_unary(\&Rstats::VectorFunc::cumsum, @_) }
 
 sub cumprod {
   my $x1 = to_c(shift);

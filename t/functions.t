@@ -777,7 +777,21 @@ use Math::Trig ();
 
 # cumsum
 {
-  # cumsum - numeric
+  # cumsum - logical
+  {
+    my $v1 = Rstats::Func::new_logical(1, 0, 1);
+    my $v2 = r->cumsum($v1);
+    is_deeply($v2->values, [1, 1, 2]);
+  }
+
+  # cumsum - integer
+  {
+    my $v1 = Rstats::Func::new_integer(1, 2, 3);
+    my $v2 = r->cumsum($v1);
+    is_deeply($v2->values, [1, 3, 6]);
+  }
+
+  # cumsum - double
   {
     my $v1 = c(1, 2, 3);
     my $v2 = r->cumsum($v1);

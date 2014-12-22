@@ -2033,17 +2033,7 @@ sub pmin {
   return c(\@mins);
 }
 
-sub prod {
-  my $x1 = c(@_);
-  
-  my $type = $x1->vector->type;
-  my $prod = Rstats::VectorFunc::create($type, 1);
-  for my $element (@{$x1->decompose_elements}) {
-    $prod = Rstats::VectorFunc::multiply($prod, $element);
-  }
-
-  return c($prod);
-}
+sub prod { operate_unary(\&Rstats::VectorFunc::prod, @_) }
 
 sub range {
   my $x1 = shift;

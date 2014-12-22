@@ -47,13 +47,6 @@ use Math::Trig ();
     my $length = r->length($v1);
     is($length->value, 3);
   }
-
-  # prod
-  {
-    my $v1 = c(2, 3, 4);
-    my $prod = r->prod($v1);
-    is($prod->value, 24);
-  }
   
   # mean
   {
@@ -87,11 +80,66 @@ use Math::Trig ();
   }
 }
 
+# prod
+{
+  # prod - complex
+  {
+    my $v1 = c(1+1*i, 2+3*i);
+    my $prod = r->prod($v1);
+    is_deeply($prod->values, [{re => -1, im => 5}]);
+  }
+
+  # prod - double
+  {
+    my $v1 = c(2, 3, 4);
+    my $prod = r->prod($v1);
+    is_deeply($prod->values, [24]);
+  }
+
+  # prod - integer
+  {
+    my $v1 = c(2, 3, 4)->as_integer;
+    my $prod = r->prod($v1);
+    is_deeply($prod->values, [24]);
+  }
+
+  # prod - logical
+  {
+    my $v1 = c(T, T, T);
+    my $prod = r->prod($v1);
+    is_deeply($prod->values, [1]);
+  }
+}
+
 # sum
 {
-  my $x1 = c(1, 2, 3);
-  my $x2 = r->sum($x1);
-  is_deeply($x2->values->[0], 6);
+  # sum - complex
+  {
+    my $x1 = c(1+1*i, 2+2*i, 3+3*i);
+    my $x2 = r->sum($x1);
+    is_deeply($x2->values, [{re => 6, im => 6}]);
+  }
+  
+  # sum - double
+  {
+    my $x1 = c(1, 2, 3);
+    my $x2 = r->sum($x1);
+    is_deeply($x2->values, [6]);
+  }
+  
+  # sum - integer
+  {
+    my $x1 = c(1, 2, 3)->as_integer;
+    my $x2 = r->sum($x1);
+    is_deeply($x2->values, [6]);
+  }
+  
+  # sum - logical
+  {
+    my $x1 = c(T, T, F);
+    my $x2 = r->sum($x1);
+    is_deeply($x2->values, [2]);
+  }
 }
 
 # ve - minus

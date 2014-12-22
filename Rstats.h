@@ -595,90 +595,95 @@ namespace Rstats {
       return e2;
     }
     
+    SV* to_string_pos(IV pos) {
+      Rstats::VectorType::Enum type = this->get_type();
+      SV* sv_str;
+      if (this->exists_na_position(pos)) {
+        sv_str = Rstats::PerlAPI::new_mSVpv_nolen("NA");
+      }
+      else {
+        switch (type) {
+          case Rstats::VectorType::CHARACTER :
+            sv_str = this->get_character_value(pos);
+            break;
+          case Rstats::VectorType::COMPLEX : {
+            std::complex<NV> z = this->get_complex_value(pos);
+            NV re = z.real();
+            NV im = z.imag();
+            
+            sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
+           if (std::isinf(re) && re > 0) {
+              sv_catpv(sv_str, "Inf");
+            }
+            else if (std::isinf(re) && re < 0) {
+              sv_catpv(sv_str, "-Inf");
+            }
+            else if (std::isnan(re)) {
+              sv_catpv(sv_str, "NaN");
+            }
+            else {
+              sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(re)));
+            }
+
+            if (std::isinf(im) && im > 0) {
+              sv_catpv(sv_str, "+Inf");
+            }
+            else if (std::isinf(im) && im < 0) {
+              sv_catpv(sv_str, "-Inf");
+            }
+            else if (std::isnan(im)) {
+              sv_catpv(sv_str, "+NaN");
+            }
+            else {
+              if (im >= 0) {
+                sv_catpv(sv_str, "+");
+              }
+              sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(im)));
+            }
+            
+            sv_catpv(sv_str, "i");
+            break;
+          }
+          case Rstats::VectorType::DOUBLE : {
+            NV value = this->get_double_value(pos);
+            if (std::isinf(value) && value > 0) {
+              sv_str = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
+            }
+            else if (std::isinf(value) && value < 0) {
+              sv_str = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
+            }
+            else if (std::isnan(value)) {
+              sv_str = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
+            }
+            else {
+              sv_str = Rstats::PerlAPI::new_mSVnv(value);
+              sv_catpv(sv_str, "");
+            }
+            break;
+          }
+          case Rstats::VectorType::INTEGER :
+            sv_str = Rstats::PerlAPI::new_mSViv(this->get_integer_value(pos));
+            sv_catpv(sv_str, "");
+            break;
+          case Rstats::VectorType::LOGICAL :
+            sv_str = this->get_integer_value(pos)
+              ? Rstats::PerlAPI::new_mSVpv_nolen("TRUE") : Rstats::PerlAPI::new_mSVpv_nolen("FALSE");
+            break;
+          default:
+            croak("Invalid type");
+        }
+      }
+      
+      return sv_str;
+    }
+    
     SV* to_string() {
       
       SV* sv_strs = PerlAPI::new_mAVRV();
       for (IV i = 0; i < this->get_length(); i++) {
-        SV* sv_str;
-        if (this->exists_na_position(i)) {
-          sv_str = Rstats::PerlAPI::new_mSVpv_nolen("NA");
-        }
-        else {
-          Rstats::VectorType::Enum type = this->get_type();
-          switch (type) {
-            case Rstats::VectorType::CHARACTER :
-              sv_str = this->get_character_value(i);
-              break;
-            case Rstats::VectorType::COMPLEX : {
-              std::complex<NV> z = this->get_complex_value(i);
-              NV re = z.real();
-              NV im = z.imag();
-              
-              sv_str = Rstats::PerlAPI::new_mSVpv_nolen("");
-             if (std::isinf(re) && re > 0) {
-                sv_catpv(sv_str, "Inf");
-              }
-              else if (std::isinf(re) && re < 0) {
-                sv_catpv(sv_str, "-Inf");
-              }
-              else if (std::isnan(re)) {
-                sv_catpv(sv_str, "NaN");
-              }
-              else {
-                sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(re)));
-              }
-
-              if (std::isinf(im) && im > 0) {
-                sv_catpv(sv_str, "+Inf");
-              }
-              else if (std::isinf(im) && im < 0) {
-                sv_catpv(sv_str, "-Inf");
-              }
-              else if (std::isnan(im)) {
-                sv_catpv(sv_str, "+NaN");
-              }
-              else {
-                if (im >= 0) {
-                  sv_catpv(sv_str, "+");
-                }
-                sv_catpv(sv_str, SvPV_nolen(Rstats::PerlAPI::new_mSVnv(im)));
-              }
-              
-              sv_catpv(sv_str, "i");
-              break;
-            }
-            case Rstats::VectorType::DOUBLE : {
-              NV value = this->get_double_value(i);
-              if (std::isinf(value) && value > 0) {
-                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("Inf");
-              }
-              else if (std::isinf(value) && value < 0) {
-                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("-Inf");
-              }
-              else if (std::isnan(value)) {
-                sv_str = Rstats::PerlAPI::new_mSVpv_nolen("NaN");
-              }
-              else {
-                sv_str = Rstats::PerlAPI::new_mSVnv(value);
-                sv_catpv(sv_str, "");
-              }
-              break;
-            }
-            case Rstats::VectorType::INTEGER :
-              sv_str = Rstats::PerlAPI::new_mSViv(this->get_integer_value(i));
-              sv_catpv(sv_str, "");
-              break;
-            case Rstats::VectorType::LOGICAL :
-              sv_str = this->get_integer_value(i)
-                ? Rstats::PerlAPI::new_mSVpv_nolen("TRUE") : Rstats::PerlAPI::new_mSVpv_nolen("FALSE");
-              break;
-            default:
-              croak("Invalid type");
-          }
-        }
+        SV* sv_str = this->to_string_pos(i);
         Rstats::PerlAPI::avrv_push_inc(sv_strs, sv_str);
       }
-
 
       SV* sv_str_all = Rstats::PerlAPI::new_mSVpv_nolen("");
       IV sv_strs_length = Rstats::PerlAPI::avrv_len_fix(sv_strs);

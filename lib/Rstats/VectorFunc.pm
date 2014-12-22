@@ -513,31 +513,6 @@ sub asin {
   return $e2;
 }
 
-sub create {
-  my ($type, $value) = @_;
-  
-  $value = 0 unless defined $value;
-
-  if ($type eq 'character') {
-    return character("$value");
-  }
-  elsif ($type eq 'complex') {
-    return new_complex({re => $value, im => 0});
-  }
-  elsif ($type eq 'double') {
-    return new_double($value);
-  }
-  elsif ($type eq 'integer') {
-    return new_integer($value);
-  }
-  elsif ($type eq 'logical') {
-    return new_logical($value ? Rstats::VectorFunc::TRUE : Rstats::VectorFunc::FALSE);
-  }
-  else {
-    croak 'Invalid type';
-  }
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

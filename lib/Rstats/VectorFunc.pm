@@ -225,14 +225,6 @@ sub asinh {
   return $e2;
 }
 
-sub hash {
-  my $e1 = shift;
-  
-  my $hash = $e1->type . '-' . "$e1";
-  
-  return $hash;
-}
-
 sub acos {
   my $e1 = shift;
 

@@ -2123,7 +2123,7 @@ sub replace {
   my $x2_elements = $x2->decompose_elements;
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
-    my $x2_element_hash = Rstats::VectorFunc::hash($x2_element->as_double);
+    my $x2_element_hash = $x2_element->to_string;
     
     $x2_elements_h->{$x2_element_hash}++;
     croak "replace second argument can't have duplicate number"
@@ -2135,7 +2135,7 @@ sub replace {
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::VectorFunc::hash(Rstats::VectorFunc::new_double($i + 1));
+    my $hash = Rstats::VectorFunc::new_double($i + 1)->to_string;
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;

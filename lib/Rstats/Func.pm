@@ -34,7 +34,7 @@ sub negativeInf () { c(Rstats::VectorFunc::negativeInf()) }
 sub FALSE () { c(Rstats::VectorFunc::FALSE()) }
 sub F () { FALSE }
 
-sub TRUE () { c(Rstats::VectorFunc::TRUE()) }
+sub TRUE () { Rstats::Func::new_logical(1) }
 sub T () { TRUE }
 
 sub pi () { c(Rstats::VectorFunc::pi()) }
@@ -593,7 +593,7 @@ sub upper_tri {
   
   my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
   
-  my $x2_elements = [];
+  my $x2_values = [];
   if ($x1_m->is_matrix) {
     my $x1_dim_values = $x1_m->dim->values;
     my $rows_count = $x1_dim_values->[0];
@@ -601,18 +601,18 @@ sub upper_tri {
     
     for (my $col = 0; $col < $cols_count; $col++) {
       for (my $row = 0; $row < $rows_count; $row++) {
-        my $x2_element;
+        my $x2_value;
         if ($diag) {
-          $x2_element = $col >= $row ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+          $x2_value = $col >= $row ? 1 : 0;
         }
         else {
-          $x2_element = $col > $row ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+          $x2_value = $col > $row ? 1 : 0;
         }
-        push @$x2_elements, $x2_element;
+        push @$x2_values, $x2_value;
       }
     }
     
-    my $x2 = matrix($x2_elements, $rows_count, $cols_count);
+    my $x2 = matrix(Rstats::Func::new_logical(@$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -626,7 +626,7 @@ sub lower_tri {
   
   my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
   
-  my $x2_elements = [];
+  my $x2_values = [];
   if ($x1_m->is_matrix) {
     my $x1_dim_values = $x1_m->dim->values;
     my $rows_count = $x1_dim_values->[0];
@@ -634,18 +634,18 @@ sub lower_tri {
     
     for (my $col = 0; $col < $cols_count; $col++) {
       for (my $row = 0; $row < $rows_count; $row++) {
-        my $x2_element;
+        my $x2_value;
         if ($diag) {
-          $x2_element = $col <= $row ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+          $x2_value = $col <= $row ? 1 : 0;
         }
         else {
-          $x2_element = $col < $row ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+          $x2_value = $col < $row ? 1 : 0;
         }
-        push @$x2_elements, $x2_element;
+        push @$x2_values, $x2_value;
       }
     }
     
-    my $x2 = matrix($x2_elements, $rows_count, $cols_count);
+    my $x2 = matrix(Rstats::Func::new_logical(@$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -1141,7 +1141,7 @@ sub is_element {
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
-  my $x3_elements = [];
+  my $x3_values = [];
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
@@ -1150,10 +1150,10 @@ sub is_element {
         last;
       }
     }
-    push @$x3_elements, $match ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+    push @$x3_values, $match ? 1 : 0;
   }
   
-  return c($x3_elements);
+  return Rstats::Func::new_logical(@$x3_values);
 }
 
 sub setequal {

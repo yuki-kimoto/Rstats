@@ -700,71 +700,73 @@ sub value {
 sub is_vector {
   my $self = shift;
   
-  my $is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 0 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 0
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_matrix {
   my $self = shift;
 
-  my $is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 2 ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 2
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_numeric {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && (($self->vector->type || '') eq 'double' || ($self->vector->type || '') eq 'integer')
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && (($self->vector->type || '') eq 'double' || ($self->vector->type || '') eq 'integer')
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_double {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'double'
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'double'
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_integer {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'integer'
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'integer'
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_complex {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'complex'
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'complex'
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_character {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'character'
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'character'
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_logical {
   my $self = shift;
   
-  my $is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'logical'
-    ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE();
+  my $x_is = ($self->is_array || $self->is_vector) && ($self->vector->type || '') eq 'logical'
+    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return Rstats::Func::c($is);
+  return $x_is;
 }
 
 sub is_data_frame {

@@ -87,7 +87,7 @@ use Rstats::VectorFunc;
   
   # as_character - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
     is($x2->values->[0], "TRUE");
@@ -172,7 +172,7 @@ use Rstats::VectorFunc;
   
   # as_logical - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
     is($x2->values->[0], 1);
@@ -272,7 +272,7 @@ use Rstats::VectorFunc;
   
   # as_integer - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
     is($x2->values->[0], 1);
@@ -372,7 +372,7 @@ use Rstats::VectorFunc;
   
   # as_numeric - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     my $x2 = r->as_numeric($x1);
     ok(r->is_numeric($x2));
     is($x2->values->[0], 1);
@@ -551,7 +551,7 @@ use Rstats::VectorFunc;
   
   # as_complex - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
     is($x2->values->[0]->{re}, 1);
@@ -582,7 +582,7 @@ use Rstats::VectorFunc;
   
   # array decide type - logical
   {
-    my $x1 = array(c(Rstats::VectorFunc::TRUE, Rstats::VectorFunc::FALSE));
+    my $x1 = array(c(TRUE, FALSE));
     is_deeply($x1->values, [1, 0]);
     ok(r->is_logical($x1));
   }

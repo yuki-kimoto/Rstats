@@ -213,12 +213,9 @@ sub is_nan {
 sub is_null {
   my $x1 = Rstats::Func::to_c(shift);
   
-  my @a2_elements = [!$x1->length_value ? Rstats::VectorFunc::TRUE() : Rstats::VectorFunc::FALSE()];
-  my $x2 = Rstats::Func::c(\@a2_elements);
-  $x1->copy_attrs_to($x1);
-  $x2->mode('logical');
+  my $x_is = $x1->length_value == 0 ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
-  return $x2;
+  return $x_is;
 }
 
 sub getin { shift->get(@_) }

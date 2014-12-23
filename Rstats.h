@@ -2446,6 +2446,128 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Vector* acos(Rstats::Vector* e1) {
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
+      switch (type) {
+        case Rstats::VectorType::CHARACTER :
+          croak("Error in a - b : non-numeric argument to binary operator");
+          break;
+        case Rstats::VectorType::COMPLEX :
+          e2 = Rstats::Vector::new_complex(length);
+          for (IV i = 0; i < length; i++) {
+            std::complex<NV> z = e1->get_complex_value(i);
+            NV e1_re = z.real();
+            NV e1_im = z.imag();
+            
+            if ((e1_re == 1) && (e1_im == 0)) {
+              e2->set_complex_value(i, std::complex<NV>(0, 0));
+            }
+            else {
+              NV e2_t1 = std::sqrt(
+                (
+                  (
+                    (e1_re + 1)
+                    *
+                    (e1_re + 1)
+                  )
+                  +
+                  (e1_im * e1_im)
+                )
+              );
+              NV e2_t2 = std::sqrt(
+                (
+                  (
+                    (e1_re - 1)
+                    *
+                    (e1_re - 1)
+                  )
+                  +
+                  (e1_im * e1_im)
+                )
+              );
+              
+              NV e2_alpha = (
+                (e2_t1 + e2_t2)
+                /
+                2
+              );
+              
+              NV e2_beta  = (
+                (e2_t1 - e2_t2)
+                /
+                2
+              );
+              
+              if (e2_alpha < 1) {
+                e2_alpha = 1;
+              }
+              
+              if (e2_beta > 1) {
+                e2_beta = 1;
+              }
+              else if (e2_beta < -1) {
+                e2_beta = -1;
+              }
+              
+              NV e2_u = ::atan2(
+                std::sqrt(
+                  (
+                    1
+                    -
+                    (e2_beta * e2_beta)
+                  )
+                ),
+                e2_beta
+              );
+              
+              NV e2_v = std::log(
+                (
+                  e2_alpha
+                  +
+                  std::sqrt(
+                    (
+                      (e2_alpha * e2_alpha)
+                      -
+                      1
+                    )
+                  )
+                )
+              );
+              
+              if ((e1_im > 0) || ((e1_im == 0) && (e1_re < -1))) {
+                e2_v = -e2_v;
+              }
+              
+              e2->set_complex_value(i, std::complex<NV>(e2_u, e2_v));
+            }
+          }
+          break;
+        case Rstats::VectorType::DOUBLE :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            e2->set_double_value(i, std::acos(e1->get_double_value(i)));
+          }
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            e2->set_double_value(i, std::acos(e1->get_integer_value(i)));
+          }
+          break;
+        default:
+          croak("Invalid type");
+
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
     
     Rstats::Vector* sin(Rstats::Vector* e1) {
       

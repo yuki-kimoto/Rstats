@@ -26,7 +26,7 @@ sub NULL {
   return $x1;
 }
 
-sub NA { c(Rstats::VectorFunc::NA()) }
+sub NA { Rstats::Func::new_logical(undef); }
 
 sub NaN { c(Rstats::VectorFunc::NaN()) }
 
@@ -457,21 +457,21 @@ sub factor {
     $levels->{$value} = $i;
   }
   
-  my $f1_elements = [];
+  my $f1_values = [];
   for my $x1_element (@$x1_elements) {
-    if ($x1_element->is_na->value) {
-      push @$f1_elements, Rstats::VectorFunc::NA();
+    if (!defined $x1_element->value) {
+      push @$f1_values, undef;
     }
     else {
       my $value = $x1_element->value;
-      my $f1_element = exists $levels->{$value}
-        ? Rstats::VectorFunc::new_integer($levels->{$value})
-        : Rstats::VectorFunc::NA();
-      push @$f1_elements, $f1_element;
+      my $f1_value = exists $levels->{$value}
+        ? $levels->{$value}
+        : undef;
+      push @$f1_values, $f1_value;
     }
   }
   
-  my $f1 = c($f1_elements)->as_integer;
+  my $f1 = Rstats::Func::new_integer(@$f1_values);
   if ($x_ordered) {
     $f1->{class} = Rstats::VectorFunc::new_character('factor', 'ordered');
   }
@@ -1056,7 +1056,7 @@ sub charmatch {
   die "Not implemented"
     unless $x1_x->vector->type eq 'character' && $x1_table->vector->type eq 'character';
   
-  my $x2_elements = [];
+  my $x2_values = [];
   for my $x1_x_element (@{$x1_x->decompose_elements}) {
     my $x1_x_char = $x1_x_element->value;
     my $x1_x_char_q = quotemeta($x1_x_char);
@@ -1072,17 +1072,17 @@ sub charmatch {
       }
     }
     if ($match_count == 0) {
-      push @$x2_elements, Rstats::VectorFunc::NA();
+      push @$x2_values, undef;
     }
     elsif ($match_count == 1) {
-      push @$x2_elements, Rstats::VectorFunc::new_double($match_pos + 1);
+      push @$x2_values, $match_pos + 1;
     }
     elsif ($match_count > 1) {
-      push @$x2_elements, Rstats::VectorFunc::new_double(0);
+      push @$x2_values, 0;
     }
   }
   
-  return c($x2_elements);
+  return Rstats::Func::new_double(@$x2_values);
 }
 
 sub Conj {
@@ -1342,14 +1342,14 @@ sub match {
       $i++;
     }
     if ($match) {
-      push @matches, Rstats::VectorFunc::new_double($i);
+      push @matches, $i;
     }
     else {
-      push @matches, Rstats::VectorFunc::NA();
+      push @matches, undef;
     }
   }
   
-  return c(\@matches);
+  return Rstats::Func::new_double(@matches);
 }
 
 my %comparison_op = map { $_ => 1 } qw/

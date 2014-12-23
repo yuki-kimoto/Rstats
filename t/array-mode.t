@@ -37,8 +37,7 @@ use Rstats::VectorFunc;
   {
     my $r = Rstats::VectorFunc::new_logical(1);
     my $q = Rstats::VectorFunc::Inf();
-    my $p = Rstats::VectorFunc::NA();
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
     is_deeply($x2->values, [undef]);
@@ -107,7 +106,7 @@ use Rstats::VectorFunc;
 
   # as_logical - NA
   {
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
     is_deeply($x2->values, [undef]);
@@ -192,7 +191,7 @@ use Rstats::VectorFunc;
 
   # as_integer - NA
   {
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
     is_deeply($x2->values, [undef]);
@@ -292,7 +291,7 @@ use Rstats::VectorFunc;
 
   # as_numeric - NA
   {
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     my $x2 = r->as_numeric($x1);
     ok(r->is_numeric($x2));
     is_deeply($x2->values, [undef]);
@@ -393,7 +392,7 @@ use Rstats::VectorFunc;
 
   # as_complex - NA
   {
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
     is_deeply($x2->values, [undef]);
@@ -617,7 +616,7 @@ use Rstats::VectorFunc;
 
   # array decide type - NA
   {
-    my $x1 = array(Rstats::VectorFunc::NA);
+    my $x1 = array(NA);
     is_deeply($x1->values, [undef]);
     ok(r->is_logical($x1));
   }

@@ -300,7 +300,7 @@ sub set {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if ($element->is_na->value) {
-        $self_elements->[$pos] = Rstats::VectorFunc::NA();
+        $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
       }
       else {
         my $value = $element->to_string;
@@ -309,7 +309,7 @@ sub set {
         }
         else {
           carp "invalid factor level, NA generated";
-          $self_elements->[$pos] = Rstats::VectorFunc::NA();
+          $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
         }
       }
     }

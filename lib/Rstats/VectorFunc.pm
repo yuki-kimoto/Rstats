@@ -8,7 +8,6 @@ require Rstats;
 use Rstats::Vector;
 use Math::Trig ();
 
-sub NA () { new_na() }
 sub NaN () { new_nan() }
 sub Inf () { new_inf() }
 sub negativeInf () { new_negative_inf() }

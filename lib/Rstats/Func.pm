@@ -31,7 +31,7 @@ sub Inf () { c(Rstats::VectorFunc::Inf()) }
 
 sub negativeInf () { c(Rstats::VectorFunc::negativeInf()) }
 
-sub FALSE () { c(Rstats::VectorFunc::FALSE()) }
+sub FALSE () { Rstats::Func::new_logical(0) }
 sub F () { FALSE }
 
 sub TRUE () { Rstats::Func::new_logical(1) }

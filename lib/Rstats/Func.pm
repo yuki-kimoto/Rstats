@@ -26,7 +26,8 @@ sub NULL {
   return $x1;
 }
 
-sub NA { Rstats::Func::new_logical(undef); }
+my $na;
+sub NA { defined $na ? $na : $na = Rstats::Func::new_logical(undef); }
 
 sub NaN { c(Rstats::VectorFunc::NaN()) }
 

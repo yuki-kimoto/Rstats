@@ -225,48 +225,6 @@ sub asinh {
   return $e2;
 }
 
-sub atan {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na->value;
-  
-  my $e2;
-  if ($e1->is_complex) {
-    
-    if (equal($e1, new_complex({re => 0, im => 0}))->value) {
-      $e2 = new_complex({re => 0, im => 0});
-    }
-    elsif (equal($e1, new_complex({re => 0, im => 1}))->value) {
-      $e2 = complex_double(new_double(0), Inf);
-    }
-    elsif (equal($e1, new_complex({re => 0, im => -1}))->value) {
-      $e2 = complex_double(new_double(0), negativeInf);
-    }
-    else {
-      my $e2_i = new_complex({re => 0, im => 1});
-      my $e2_log = Rstats::VectorFunc::log(
-        divide(
-          add($e2_i, $e1),
-          subtract($e2_i, $e1)
-        )
-      );
-      
-      $e2 = multiply(
-        divide($e2_i, new_complex({re => 2, im => 0})),
-        $e2_log
-      );
-    }
-  }
-  elsif ($e1->is_numeric || $e1->is_logical) {
-    $e2 = Rstats::VectorFunc::atan2($e1->as_double, new_double(1));
-  }
-  else {
-    croak "Not implemented";
-  }
-  
-  return $e2;
-}
-
 sub hash {
   my $e1 = shift;
   

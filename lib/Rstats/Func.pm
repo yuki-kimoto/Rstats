@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use Carp qw/croak carp/;
 
+use Rstats ();
+use Rstats::Vector;
+
 use Rstats::Array;
 use Rstats::List;
 use Rstats::DataFrame;
@@ -31,10 +34,12 @@ sub Inf () { c(Rstats::VectorFunc::Inf()) }
 
 sub negativeInf () { c(Rstats::VectorFunc::negativeInf()) }
 
-sub FALSE () { Rstats::Func::new_logical(0) }
+my $false;
+sub FALSE () { defined $false ? $false : $false = Rstats::Func::new_logical(0) }
 sub F () { FALSE }
 
-sub TRUE () { Rstats::Func::new_logical(1) }
+my $true;
+sub TRUE () { defined $true ? $true : $true = Rstats::Func::new_logical(1) }
 sub T () { TRUE }
 
 sub pi () { c(Rstats::VectorFunc::pi()) }

@@ -259,10 +259,15 @@ namespace Rstats {
     }
     NV tanh(NV e1) { return std::tanh(e1); }
     NV tanh(IV e1) { return tanh((NV)e1); }
+
+    // abs
+    NV abs(std::complex<NV> e1) { return std::abs(e1); }
+    NV abs(NV e1) { return std::abs(e1); }
+    NV abs(IV e1) { return abs((NV)e1); }
   }
   
   // Macro for Rstats::Vector
-# define RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(FUNC_NAME, ELEMENT_FUNC_NAME) \
+# define RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
       Rstats::Vector* e2; \
@@ -295,6 +300,39 @@ namespace Rstats {
       return e2; \
     }
 
+# define RSTATS_DEF_VECTOR_FUNC_UN_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to Rstats::Vector::%s", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+  
   // Rstats::Vector
   class Vector {
     private:
@@ -2993,55 +3031,13 @@ namespace Rstats {
       return e2;
     }
     
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(sin, Rstats::ElementFunc::sin)
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(cos, Rstats::ElementFunc::cos)
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(tan, Rstats::ElementFunc::tan)
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(sinh, Rstats::ElementFunc::sinh)
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(cosh, Rstats::ElementFunc::cosh)
-    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(tanh, Rstats::ElementFunc::tanh)
-    
-    Rstats::Vector* abs(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::abs(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::abs(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, (IV)std::abs((NV)e1->get_integer_value(i)));
-          }
-          break;
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_logical(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, (IV)std::abs((NV)e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
+    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
+    RSTATS_DEF_VECTOR_FUNC_UN_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
 
     Rstats::Vector* Mod(Rstats::Vector* e1) { abs(e1); }
 

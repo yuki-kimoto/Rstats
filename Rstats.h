@@ -262,7 +262,7 @@ namespace Rstats {
   }
   
   // Macro for Rstats::Vector
-# define RSTATS_VECTOR_DEF_FUNC_UN_NUM(FUNC_NAME, ELEMENT_FUNC_NAME) \
+# define RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
       Rstats::Vector* e2; \
@@ -2993,12 +2993,12 @@ namespace Rstats {
       return e2;
     }
     
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(sin, Rstats::ElementFunc::sin)
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(cos, Rstats::ElementFunc::cos)
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(tan, Rstats::ElementFunc::tan)
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(sinh, Rstats::ElementFunc::sinh)
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(cosh, Rstats::ElementFunc::cosh)
-    RSTATS_VECTOR_DEF_FUNC_UN_NUM(tanh, Rstats::ElementFunc::tanh)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(sin, Rstats::ElementFunc::sin)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(cos, Rstats::ElementFunc::cos)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(tan, Rstats::ElementFunc::tan)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(sinh, Rstats::ElementFunc::sinh)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(cosh, Rstats::ElementFunc::cosh)
+    RSTATS_VECTOR_DEF_FUNC_UN_INTTONUM(tanh, Rstats::ElementFunc::tanh)
     
     Rstats::Vector* abs(Rstats::Vector* e1) {
       

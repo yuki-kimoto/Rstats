@@ -2602,6 +2602,79 @@ namespace Rstats {
       
       return e2;
     }
+
+    Rstats::Vector* asinh(Rstats::Vector* e1) {
+      
+      IV length = e1->get_length();
+      Rstats::Vector* e2;
+      Rstats::VectorType::Enum type = e1->get_type();
+      switch (type) {
+        case Rstats::VectorType::CHARACTER :
+          croak("Error in a - b : non-numeric argument to binary operator");
+          break;
+        case Rstats::VectorType::COMPLEX :
+          e2 = Rstats::Vector::new_complex(length);
+          for (IV i = 0; i < length; i++) {
+            std::complex<NV> e2_t = (
+              std::sqrt(
+                (
+                  (e1->get_complex_value(i) * e1->get_complex_value(i))
+                  +
+                  std::complex<NV>(1, 0)
+                )
+              )
+              +
+              e1->get_complex_value(i)
+            );
+            
+            e2->set_complex_value(i, std::log(e2_t));
+          }
+          break;
+        case Rstats::VectorType::DOUBLE :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            NV e2_t = (
+              e1->get_double_value(i)
+              +
+              std::sqrt(
+                (
+                  (e1->get_double_value(i) * e1->get_double_value(i))
+                  +
+                  1
+                )
+              )
+            );
+            
+            e2->set_double_value(i, std::log(e2_t));
+          }
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
+          e2 = Rstats::Vector::new_double(length);
+          for (IV i = 0; i < length; i++) {
+            NV e2_t = (
+              e1->get_integer_value(i)
+              +
+              std::sqrt(
+                (
+                  (e1->get_integer_value(i) * e1->get_integer_value(i))
+                  +
+                  1
+                )
+              )
+            );
+            
+            e2->set_double_value(i, std::log(e2_t));
+          }
+          break;
+        default:
+          croak("Invalid type");
+      }
+      
+      e2->merge_na_positions(e1);
+      
+      return e2;
+    }
     
     Rstats::Vector* sin(Rstats::Vector* e1) {
       

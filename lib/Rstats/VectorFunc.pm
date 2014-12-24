@@ -171,57 +171,6 @@ sub acosh {
   return $e2;
 }
 
-sub asinh {
-  my $e1 = shift;
-  
-  return $e1 if $e1->is_na->value;
-  
-  my $e2;
-  if ($e1->is_complex) {
-  
-    my $e2_t = add(
-      Rstats::VectorFunc::sqrt(
-        add(
-          multiply($e1, $e1),
-          new_complex({re => 1, im => 0})
-        )
-      ),
-      $e1
-    );
-    
-    $e2 = Rstats::VectorFunc::log($e2_t);
-  }
-  elsif ($e1->is_numeric || $e1->is_logical) {
-    $e1 = $e1->as_double;
-    return $e1 if $e1->is_nan->value;
-    
-    if ($e1->is_positive_infinite->value) {
-      $e2 = Inf;
-    }
-    elsif ($e1->is_negative_infinite->value) {
-      $e2 = negativeInf;
-    }
-    else {
-      my $e2_t = add(
-        $e1,
-        Rstats::VectorFunc::sqrt(
-          add(
-            multiply($e1, $e1),
-            new_double(1)
-          )
-        )
-      );
-      
-      $e2 = Rstats::VectorFunc::log($e2_t);
-    }
-  }
-  else {
-    croak "Not implemented";
-  }
-  
-  return $e2;
-}
-
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

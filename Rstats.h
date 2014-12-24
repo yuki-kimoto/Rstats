@@ -218,6 +218,45 @@ namespace Rstats {
     SV* looks_like_complex(SV*);
   }
   
+  // Macro for Rstats::Vector
+# define RSTATS_VECTOR_DEFINE_OPERATE_BINARY
+# define RSTATS_VECTOR_DEFINE_OPERATE_BINARY_NUMERIC
+# define RSTATS_VECTOR_DEFINE_OPERATE_UNARY
+# define RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(NAME, FUNC_NAME) \
+    Rstats::Vector* NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::CHARACTER : \
+          croak("Error in a - b : non-numeric argument to binary operator(Rstats::Vector::NAME"); \
+          break; \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_complex_value(i, FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Invalid type"); \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+
   // Rstats::Vector
   class Vector {
     private:
@@ -2916,196 +2955,12 @@ namespace Rstats {
       return e2;
     }
     
-    Rstats::Vector* sin(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::sin(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sin(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sin(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(sin, std::sin)
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(cos, std::cos)
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(tan, std::tan)
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(sinh, std::sinh)
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(cosh, std::cosh)
     
-    Rstats::Vector* cos(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::cos(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cos(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cos(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-
-    Rstats::Vector* tan(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::tan(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tan(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tan(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-
-    Rstats::Vector* sinh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::sinh(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sinh(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sinh(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-    
-    Rstats::Vector* cosh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::cosh(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cosh(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::cosh(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-
     Rstats::Vector* tanh(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

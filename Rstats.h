@@ -218,6 +218,25 @@ namespace Rstats {
     SV* looks_like_complex(SV*);
   }
   
+  namespace ElementFunc {
+    template <typename T>
+    NV tanh(T e1) {
+      return std::tanh(e1);
+    }
+    std::complex<NV> tanh (std::complex<NV> z) {
+      NV re = z.real();
+      
+      // For fix FreeBSD bug
+      // FreeBAD return (NaN + NaNi) when real value is negative infinite
+      if (std::isinf(re) && re < 0) {
+        return std::complex<NV>(-1, 0);
+      }
+      else {
+        return std::tanh(z);
+      }
+    }
+  }
+  
   // Macro for Rstats::Vector
 # define RSTATS_VECTOR_DEFINE_OPERATE_BINARY
 # define RSTATS_VECTOR_DEFINE_OPERATE_BINARY_NUMERIC
@@ -2960,54 +2979,7 @@ namespace Rstats {
     RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(tan, std::tan)
     RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(sinh, std::sinh)
     RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(cosh, std::cosh)
-    
-    Rstats::Vector* tanh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          NV e1_value_re;
-          for (IV i = 0; i < length; i++) {
-            e1_value_re = e1->get_complex_value(i).real();
-            
-            // For fix FreeBSD bug
-            // FreeBAD return (NaN + NaNi) when real value is negative infinite
-            if (std::isinf(e1_value_re) && e1_value_re < 0) {
-              e2->set_complex_value(i, std::complex<NV>(-1, 0));
-            }
-            else {
-              e2->set_complex_value(i, std::tanh(e1->get_complex_value(i)));
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tanh(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::tanh(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(tanh, Rstats::ElementFunc::tanh)
     
     Rstats::Vector* abs(Rstats::Vector* e1) {
       

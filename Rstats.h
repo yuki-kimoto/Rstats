@@ -219,10 +219,32 @@ namespace Rstats {
   }
   
   namespace ElementFunc {
-    template <typename T>
-    NV tanh(T e1) {
-      return std::tanh(e1);
-    }
+    // sin
+    std::complex<NV> sin(std::complex<NV> e1) { return std::sin(e1); }
+    NV sin(NV e1) { return std::sin(e1); }
+    NV sin(IV e1) { return sin((NV)e1); }
+    
+    // cos
+    std::complex<NV> cos(std::complex<NV> e1) { return std::cos(e1); }
+    NV cos(NV e1) { return std::cos(e1); }
+    NV cos(IV e1) { return cos((NV)e1); }
+
+    // tan
+    std::complex<NV> tan(std::complex<NV> e1) { return std::tan(e1); }
+    NV tan(NV e1) { return std::tan(e1); }
+    NV tan(IV e1) { return tan((NV)e1); }
+
+    // sinh
+    std::complex<NV> sinh(std::complex<NV> e1) { return std::sinh(e1); }
+    NV sinh(NV e1) { return std::sinh(e1); }
+    NV sinh(IV e1) { return sinh((NV)e1); }
+
+    // cosh
+    std::complex<NV> cosh(std::complex<NV> e1) { return std::cosh(e1); }
+    NV cosh(NV e1) { return std::cosh(e1); }
+    NV cosh(IV e1) { return cosh((NV)e1); }
+
+    // tanh
     std::complex<NV> tanh (std::complex<NV> z) {
       NV re = z.real();
       
@@ -235,42 +257,39 @@ namespace Rstats {
         return std::tanh(z);
       }
     }
+    NV tanh(NV e1) { return std::tanh(e1); }
+    NV tanh(IV e1) { return tanh((NV)e1); }
   }
   
   // Macro for Rstats::Vector
-# define RSTATS_VECTOR_DEFINE_OPERATE_BINARY
-# define RSTATS_VECTOR_DEFINE_OPERATE_BINARY_NUMERIC
-# define RSTATS_VECTOR_DEFINE_OPERATE_UNARY
-# define RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(NAME, FUNC_NAME) \
-    Rstats::Vector* NAME(Rstats::Vector* e1) { \
+# define RSTATS_VECTOR_DEF_FUNC_UN_NUM(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
       Rstats::Vector* e2; \
       Rstats::VectorType::Enum type = e1->get_type(); \
       switch (type) { \
-        case Rstats::VectorType::CHARACTER : \
-          croak("Error in a - b : non-numeric argument to binary operator(Rstats::Vector::NAME"); \
-          break; \
         case Rstats::VectorType::COMPLEX : \
           e2 = Rstats::Vector::new_complex(length); \
           for (IV i = 0; i < length; i++) { \
-            e2->set_complex_value(i, FUNC_NAME(e1->get_complex_value(i))); \
+            e2->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
           } \
           break; \
         case Rstats::VectorType::DOUBLE : \
           e2 = Rstats::Vector::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            e2->set_double_value(i, FUNC_NAME(e1->get_double_value(i))); \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
           } \
           break; \
         case Rstats::VectorType::INTEGER : \
         case Rstats::VectorType::LOGICAL : \
           e2 = Rstats::Vector::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            e2->set_double_value(i, FUNC_NAME(e1->get_integer_value(i))); \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
           } \
           break; \
         default: \
-          croak("Invalid type"); \
+          croak("Error in %s() : non-numeric argument to Rstats::Vector::%s", #FUNC_NAME, #FUNC_NAME); \
+          break; \
       } \
       e2->merge_na_positions(e1); \
       return e2; \
@@ -2974,12 +2993,12 @@ namespace Rstats {
       return e2;
     }
     
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(sin, std::sin)
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(cos, std::cos)
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(tan, std::tan)
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(sinh, std::sinh)
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(cosh, std::cosh)
-    RSTATS_VECTOR_DEFINE_OPERATE_UNARY_NUMERIC(tanh, Rstats::ElementFunc::tanh)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(sin, Rstats::ElementFunc::sin)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(cos, Rstats::ElementFunc::cos)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(tan, Rstats::ElementFunc::tan)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(sinh, Rstats::ElementFunc::sinh)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(cosh, Rstats::ElementFunc::cosh)
+    RSTATS_VECTOR_DEF_FUNC_UN_NUM(tanh, Rstats::ElementFunc::tanh)
     
     Rstats::Vector* abs(Rstats::Vector* e1) {
       

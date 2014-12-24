@@ -264,10 +264,15 @@ namespace Rstats {
     NV abs(std::complex<NV> e1) { return std::abs(e1); }
     NV abs(NV e1) { return std::abs(e1); }
     NV abs(IV e1) { return abs((NV)e1); }
+
+    // abs
+    NV Mod(std::complex<NV> e1) { return abs(e1); }
+    NV Mod(NV e1) { return abs(e1); }
+    NV Mod(IV e1) { return abs((NV)e1); }
   }
   
   // Macro for Rstats::Vector
-# define RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
       Rstats::Vector* e2; \
@@ -300,7 +305,7 @@ namespace Rstats {
       return e2; \
     }
 
-# define RSTATS_DEF_VECTOR_FUNC_UN_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
       Rstats::Vector* e2; \
@@ -3031,15 +3036,14 @@ namespace Rstats {
       return e2;
     }
     
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
-    RSTATS_DEF_VECTOR_FUNC_UN_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
-    RSTATS_DEF_VECTOR_FUNC_UN_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
-
-    Rstats::Vector* Mod(Rstats::Vector* e1) { abs(e1); }
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
 
     Rstats::Vector* clone(Rstats::Vector* e1) {
       

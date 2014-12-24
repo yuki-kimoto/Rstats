@@ -2756,7 +2756,34 @@ namespace Rstats {
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sin(e1->get_integer_value(i)));
+            if (e1->get_integer_value(i) >= 1) {
+              if (std::isinf(e1->get_integer_value(i))) {
+                e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
+                warn("In acosh() : NaNs produced");
+              }
+              else {
+
+                e2->set_double_value(i,
+                  std::log(
+                    (
+                      e1->get_integer_value(i)
+                      +
+                      std::sqrt(
+                        (
+                          (e1->get_integer_value(i) * e1->get_integer_value(i))
+                          -
+                          1
+                        )
+                      )
+                    )
+                  )
+                );
+              }
+            }
+            else {
+              e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
+              warn("In acosh() : NaNs produced");
+            }
           }
           break;
         default:
@@ -2846,7 +2873,37 @@ namespace Rstats {
         case Rstats::VectorType::LOGICAL :
           e2 = Rstats::Vector::new_double(length);
           for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::sin(e1->get_integer_value(i)));
+            if (std::isinf(e1->get_integer_value(i))) {
+                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
+                warn("In acosh() : NaNs produced");
+            }
+            else {
+              if (e1->get_integer_value(i) == 1) {
+                e2->set_double_value(i, INFINITY);
+              }
+              else if (e1->get_integer_value(i) == -1) {
+                e2->set_double_value(i, -INFINITY);
+              }
+              else if (std::abs(e1->get_integer_value(i)) < 1) {
+                e2->set_double_value(i, 
+                  (
+                    std::log(
+                      (
+                        (1 + e1->get_integer_value(i))
+                        /
+                        (1 - e1->get_integer_value(i))
+                      )
+                    )
+                    /
+                    2
+                  )
+                );
+              }
+              else {
+                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
+                warn("In acosh() : NaNs produced");
+              }
+            }
           }
           break;
         default:

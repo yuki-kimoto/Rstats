@@ -263,6 +263,16 @@ namespace Rstats {
       return e1 % e2;
     }
 
+    // Re
+    NV Re(std::complex<NV> e1) { return e1.real(); }
+    NV Re(NV e1) { return e1; }
+    NV Re(IV e1) { return e1; }
+
+    // Im
+    NV Im(std::complex<NV> e1) { return e1.imag(); }
+    NV Im(NV e1) { return 0; }
+    NV Im(IV e1) { return 0; }
+
     // sin
     std::complex<NV> sin(std::complex<NV> e1) { return std::sin(e1); }
     NV sin(NV e1) { return std::sin(e1); }
@@ -1770,72 +1780,6 @@ namespace Rstats {
       return e2;
     }
     
-    Rstats::Vector* Re (Rstats::Vector* e1) {
-      IV length = e1->get_length();
-      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, e1->get_complex_value(i).real());
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, e1->get_double_value(i));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, e1->get_integer_value(i));
-          }
-          break;
-        default:
-          croak("unexpected type");
-      }
-
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-    
-    Rstats::Vector* Im (Rstats::Vector* e1) {
-      IV length = e1->get_length();
-      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error : non-numeric argument to function(Rstats::VectorFunc::Im())");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, e1->get_complex_value(i).imag());
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, 0);
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, 0);
-          }
-          break;
-        default:
-          croak("unexpected type");
-      }
-
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-    
     Rstats::Vector* less_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
@@ -2460,6 +2404,12 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
 
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Re, Rstats::ElementFunc::Re)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Im, Rstats::ElementFunc::Im)
+
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(add, Rstats::ElementFunc::add)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(subtract, Rstats::ElementFunc::subtract)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(multiply, Rstats::ElementFunc::multiply)
@@ -2469,9 +2419,6 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
 
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
 
     Rstats::Vector* clone(Rstats::Vector* e1) {
       

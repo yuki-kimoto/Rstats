@@ -2157,7 +2157,7 @@ namespace Rstats {
       Rstats::VectorType::Enum type = e1->get_type();
       switch (type) {
         case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
+          croak("Error in cumprod() : non-numeric argument to binary operator");
           break;
         case Rstats::VectorType::COMPLEX : {
           e2 = Rstats::Vector::new_complex(length);
@@ -2203,7 +2203,7 @@ namespace Rstats {
       Rstats::VectorType::Enum type = e1->get_type();
       switch (type) {
         case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
+          croak("Error in cumsum() : non-numeric argument to binary operator");
           break;
         case Rstats::VectorType::COMPLEX : {
           e2 = Rstats::Vector::new_complex(length);
@@ -2249,7 +2249,7 @@ namespace Rstats {
       Rstats::VectorType::Enum type = e1->get_type();
       switch (type) {
         case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
+          croak("Error in prod() : non-numeric argument to prod()");
           break;
         case Rstats::VectorType::COMPLEX : {
           e2 = Rstats::Vector::new_complex(1);

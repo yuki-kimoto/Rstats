@@ -1054,14 +1054,14 @@ EOS
     is_deeply($x2->values, [1, 1/2, 1/3]);
   }
   
-  # operator - raise
+  # operator - pow
   {
     my $x1 = c(1, 2, 3);
     my $x2 = $x1 ** 2;
     is_deeply($x2->values, [1, 4, 9]);
   }
 
-  # operator - raise, reverse
+  # operator - pow, reverse
   {
     my $x1 = c(1, 2, 3);
     my $x2 = 2 ** $x1;
@@ -1080,6 +1080,15 @@ EOS
     my $x1 = c(1, 2, 3);
     my $x2 = 2 % $x1;
     is_deeply($x2->values, [0, 0, 2]);
+  }
+  
+  # operator - remainder, integer
+  {
+    my $x1 = r->as_integer(c(1, 2, 3));
+    my $x2 = r->as_integer(c(2, 2, 0));
+    my $x3 = $x1 % $x2;
+    ok($x3->is_integer);
+    is_deeply($x3->values, [1, 0, undef]);
   }
 }
 

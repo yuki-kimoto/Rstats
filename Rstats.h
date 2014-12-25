@@ -653,7 +653,25 @@ namespace Rstats {
     }
     NV atan2(NV e1, NV e2) { ::atan2(e1, e2); }
     NV atan2(IV e1, IV e2) { return atan2((NV)e1, (NV)e2); }
-
+    
+    // equal
+    IV equal(SV* e1, SV* e2) {
+      return sv_cmp(e1, e2) == 0 ? 1 : 0;
+    }
+    IV equal(std::complex<NV> e1, std::complex<NV> e2) {
+      return e1 == e2 ? 1 : 0;
+    }
+    IV equal(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) {
+        throw "Can't compare NaN";
+      }
+      else {
+        return e1 == e2 ? 1 : 0;
+      }
+    }
+    IV equal(IV e1, IV e2) {
+      return e1 == e2 ? 1 : 0;
+    }
   }
   
   // Macro for Rstats::Vector
@@ -723,6 +741,56 @@ namespace Rstats {
       return e2; \
     }
 
+# define RSTATS_DEF_VECTOR_FUNC_COMPARE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3 = Rstats::Vector::new_logical(length); \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::CHARACTER : \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_character_value(i), e2->get_character_value(i)) ? 1 : 0); \
+          } \
+          break; \
+        case Rstats::VectorType::COMPLEX : \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i)) ? 1 : 0); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          for (IV i = 0; i < length; i++) { \
+            try {\
+              e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i)) ? 1 : 0); \
+            } catch (const char* e) {\
+              e3->add_na_position(i);\
+            }\
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          for (IV i = 0; i < length; i++) { \
+            try {\
+              e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i)) ? 1 : 0); \
+            }\
+            catch (const char* e) {\
+              e3->add_na_position(i);\
+            }\
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-comparable argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
+    }
+    
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
@@ -766,7 +834,7 @@ namespace Rstats {
       e3->merge_na_positions(e2); \
       return e3; \
     }
-    
+
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
@@ -1806,6 +1874,8 @@ namespace Rstats {
       
       return e3;
     }
+
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(equal, Rstats::ElementFunc::equal);
     
     Rstats::Vector* more_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
@@ -2060,79 +2130,6 @@ namespace Rstats {
         case Rstats::VectorType::LOGICAL :
           for (IV i = 0; i < length; i++) {
             if (e1->get_integer_value(i) != e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-    
-    Rstats::Vector* equal(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::equal())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::equal())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) == 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_complex_value(i) == e2->get_complex_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) == e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) == e2->get_integer_value(i)) {
               e3->set_integer_value(i, 1);
             }
             else {

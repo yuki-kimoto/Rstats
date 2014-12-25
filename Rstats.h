@@ -298,7 +298,21 @@ namespace Rstats {
     std::complex<NV> expm1(std::complex<NV> e1) { croak("Error in expm1 : unimplemented complex function"); }
     NV expm1(NV e1) { return ::expm1(e1); }
     NV expm1(IV e1) { return expm1((NV)e1); }
-    
+
+    // Arg
+    NV Arg(std::complex<NV> e1) {
+      NV re = e1.real();
+      NV im = e1.imag();
+      
+      if (re == 0 && im == 0) {
+        return 0;
+      }
+      else {
+        return ::atan2(im, re);
+      }
+    }
+    NV Arg(NV e1) { croak("Error in expm1 : unimplemented double function"); }
+    NV Arg(IV e1) { return Arg((NV)e1); }
   }
   
   // Macro for Rstats::Vector
@@ -3126,44 +3140,7 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
-
-    Rstats::Vector* Arg(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            std::complex<NV> z = e1->get_complex_value(i);
-            NV re = z.real();
-            NV im = z.imag();
-            
-            if (re == 0 && im == 0) {
-              e2->set_double_value(i, 0);
-            }
-            else {
-              e2->set_double_value(i, ::atan2(im, re));
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          croak("Not implemented");
-          break;
-        default:
-          croak("Invalid type");
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
 
     Rstats::Vector* exp(Rstats::Vector* e1) {
       

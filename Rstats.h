@@ -279,6 +279,20 @@ namespace Rstats {
     std::complex<NV> logb(std::complex<NV> e1) { return log(e1); }
     NV logb(NV e1) { return log(e1); }
     NV logb(IV e1) { return log((NV)e1); }
+
+    // log10
+    std::complex<NV> log10(std::complex<NV> e1) { return std::log10(e1); }
+    NV log10(NV e1) { return std::log10(e1); }
+    NV log10(IV e1) { return std::log10((NV)e1); }
+
+    // log2
+    std::complex<NV> log2(std::complex<NV> e1) {
+      return std::log(e1) / std::log(std::complex<NV>(2, 0));
+    }
+    NV log2(NV e1) {
+      return std::log(e1) / std::log(2);
+    }
+    NV log2(IV e1) { return log2((NV)e1); }
   }
   
   // Macro for Rstats::Vector
@@ -3102,73 +3116,9 @@ namespace Rstats {
     }
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log, Rstats::ElementFunc::log)
-
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(logb, Rstats::ElementFunc::logb)
-    
-    Rstats::Vector* log10(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_complex_value(i, std::log10(e1->get_complex_value(i)));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::log10(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, std::log10(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-
-    Rstats::Vector* log2(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = divide(log(e1), log(Rstats::Vector::new_complex(length, std::complex<NV>(2, 0))));
-          break;
-        case Rstats::VectorType::DOUBLE :
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = divide(log(e1), log(Rstats::Vector::new_double(length, 2)));
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
 
     Rstats::Vector* expm1(Rstats::Vector* e1) {
       IV length = e1->get_length();

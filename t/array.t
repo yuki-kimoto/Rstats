@@ -88,8 +88,8 @@ use Rstats::Func;
 
   # numeric operator auto upgrade - integer
   {
-    my $x1 = r->as_integer(array(c(3, 5)));
-    my $x2 = array(c(r->TRUE, r->FALSE));
+    my $x1 = r->as_integer(c(3, 5));
+    my $x2 = c(TRUE, FALSE);
     my $x3 = $x1 + $x2;
     ok(r->is_integer($x3));
     is_deeply($x3->values, [4, 5])
@@ -109,7 +109,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 + $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, -

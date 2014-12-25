@@ -219,6 +219,11 @@ namespace Rstats {
   }
   
   namespace ElementFunc {
+    // add
+    std::complex<NV> add(std::complex<NV> e1, std::complex<NV> e2) { return e1 + e2; }
+    NV add(NV e1, NV e2) { return e1 + e2; }
+    IV add(IV e1, IV e2) { return e1 + e2; }
+
     // sin
     std::complex<NV> sin(std::complex<NV> e1) { return std::sin(e1); }
     NV sin(NV e1) { return std::sin(e1); }
@@ -664,6 +669,45 @@ namespace Rstats {
       return e2; \
     }
 
+# define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e3 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e3 = Rstats::Vector::new_integer(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
+    }
+    
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
@@ -2407,53 +2451,6 @@ namespace Rstats {
       return e2;
     }
 
-    Rstats::Vector* add(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't add different type(Rstats::VectorFunc::add())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't add different length(Rstats::VectorFunc::add())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3;
-      Rstats::VectorType::Enum type = e1->get_type();
-      
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a + b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e3 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_complex_value(i, e1->get_complex_value(i) + e2->get_complex_value(i));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, e1->get_double_value(i) + e2->get_double_value(i));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_integer_value(i, e1->get_integer_value(i) + e2->get_integer_value(i));
-          }
-          break;
-        default:
-          croak("Invalid type");
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
@@ -2474,6 +2471,7 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
 
+    RSTATS_DEF_VECTOR_FUNC_BIN_MATH(add, Rstats::ElementFunc::add)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)

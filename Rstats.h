@@ -2438,13 +2438,8 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e3 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_integer_value(i, e1->get_integer_value(i) + e2->get_integer_value(i));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_logical(length);
+          e3 = Rstats::Vector::new_integer(length);
           for (IV i = 0; i < length; i++) {
             e3->set_integer_value(i, e1->get_integer_value(i) + e2->get_integer_value(i));
           }
@@ -2515,13 +2510,8 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e3 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_integer_value(i, e1->get_integer_value(i) - e2->get_integer_value(i));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_logical(length);
+          e3 = Rstats::Vector::new_integer(length);
           for (IV i = 0; i < length; i++) {
             e3->set_integer_value(i, e1->get_integer_value(i) - e2->get_integer_value(i));
           }
@@ -2567,13 +2557,8 @@ namespace Rstats {
           }
           break;
         case Rstats::VectorType::INTEGER :
-          e3 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_integer_value(i, e1->get_integer_value(i) * e2->get_integer_value(i));
-          }
-          break;
         case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_logical(length);
+          e3 = Rstats::Vector::new_integer(length);
           for (IV i = 0; i < length; i++) {
             e3->set_integer_value(i, e1->get_integer_value(i) * e2->get_integer_value(i));
           }

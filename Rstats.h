@@ -224,6 +224,11 @@ namespace Rstats {
     NV add(NV e1, NV e2) { return e1 + e2; }
     IV add(IV e1, IV e2) { return e1 + e2; }
 
+    // subtract
+    std::complex<NV> subtract(std::complex<NV> e1, std::complex<NV> e2) { return e1 - e2; }
+    NV subtract(NV e1, NV e2) { return e1 - e2; }
+    IV subtract(IV e1, IV e2) { return e1 - e2; }
+
     // sin
     std::complex<NV> sin(std::complex<NV> e1) { return std::sin(e1); }
     NV sin(NV e1) { return std::sin(e1); }
@@ -2472,58 +2477,12 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
 
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(add, Rstats::ElementFunc::add)
+    RSTATS_DEF_VECTOR_FUNC_BIN_MATH(subtract, Rstats::ElementFunc::subtract)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-
-    Rstats::Vector* subtract(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't subtract different type(Rstats::VectorFunc::subtract())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't subtract different length(Rstats::VectorFunc::subtract())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e3 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_complex_value(i, e1->get_complex_value(i) - e2->get_complex_value(i));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, e1->get_double_value(i) - e2->get_double_value(i));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_integer_value(i, e1->get_integer_value(i) - e2->get_integer_value(i));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
 
     Rstats::Vector* multiply(Rstats::Vector* e1, Rstats::Vector* e2) {
       

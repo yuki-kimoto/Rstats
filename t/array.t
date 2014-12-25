@@ -117,7 +117,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 - $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, *
@@ -125,7 +125,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 * $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, /
@@ -133,7 +133,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 / $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, ^
@@ -141,7 +141,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 ** $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, %
@@ -149,7 +149,7 @@ use Rstats::Func;
     my $x1 = array(c("1", "2", "3"));
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 % $x2 };
-    like($@, qr/non-numeric argument to binary operator/);
+    like($@, qr/non-numeric argument/);
   }
 }
 

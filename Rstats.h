@@ -350,7 +350,7 @@ namespace Rstats {
       }
     }
     NV atan(NV e1) { return ::atan2(e1, 1); }
-    NV atan(IV e1) { return ::atan2((NV)e1, (NV)1); }
+    NV atan(IV e1) { return atan2((NV)e1, (NV)1); }
 
     // asin
     std::complex<NV> asin(std::complex<NV> e1) {
@@ -405,7 +405,7 @@ namespace Rstats {
       }
     }
     NV asin(NV e1) { return std::asin(e1); }
-    NV asin(IV e1) { return std::asin((NV)e1); }
+    NV asin(IV e1) { return asin((NV)e1); }
 
     // acos
     std::complex<NV> acos(std::complex<NV> e1) {
@@ -460,8 +460,28 @@ namespace Rstats {
       }
     }
     NV acos(NV e1) { return std::acos(e1); }
-    NV acos(IV e1) { return std::acos((NV)e1); }
+    NV acos(IV e1) { return acos((NV)e1); }
 
+    // asinh
+    std::complex<NV> asinh(std::complex<NV> e1) {
+      std::complex<NV> e2_t = (
+        std::sqrt((e1 * e1) + std::complex<NV>(1, 0))
+        +
+        e1
+      );
+      
+      return std::log(e2_t);
+    }
+    NV asinh(NV e1) {
+      NV e2_t = (
+        e1
+        +
+        std::sqrt((e1 * e1) + 1)
+      );
+      
+      return std::log(e2_t);
+    }
+    NV asinh(IV e1) { return asinh((NV)e1); }
   }
   
   // Macro for Rstats::Vector
@@ -2567,84 +2587,12 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atan, Rstats::ElementFunc::atan)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asin, Rstats::ElementFunc::asin)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acos, Rstats::ElementFunc::acos)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-
-    Rstats::Vector* asinh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            std::complex<NV> e2_t = (
-              std::sqrt(
-                (
-                  (e1->get_complex_value(i) * e1->get_complex_value(i))
-                  +
-                  std::complex<NV>(1, 0)
-                )
-              )
-              +
-              e1->get_complex_value(i)
-            );
-            
-            e2->set_complex_value(i, std::log(e2_t));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            NV e2_t = (
-              e1->get_double_value(i)
-              +
-              std::sqrt(
-                (
-                  (e1->get_double_value(i) * e1->get_double_value(i))
-                  +
-                  1
-                )
-              )
-            );
-            
-            e2->set_double_value(i, std::log(e2_t));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            NV e2_t = (
-              e1->get_integer_value(i)
-              +
-              std::sqrt(
-                (
-                  (e1->get_integer_value(i) * e1->get_integer_value(i))
-                  +
-                  1
-                )
-              )
-            );
-            
-            e2->set_double_value(i, std::log(e2_t));
-          }
-          break;
-        default:
-          croak("Invalid type");
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-
+    
     Rstats::Vector* acosh(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

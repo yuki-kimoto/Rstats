@@ -671,7 +671,50 @@ namespace Rstats {
       else { return e1 != e2 ? 1 : 0; }
     }
     IV not_equal(IV e1, IV e2) { return e1 != e2 ? 1 : 0; }
-    
+
+    // more_than
+    IV more_than(SV* e1, SV* e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
+    IV more_than(std::complex<NV> e1, std::complex<NV> e2) {
+      croak("invalid comparison with complex values(more_than())");
+    }
+    IV more_than(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 > e2 ? 1 : 0; }
+    }
+    IV more_than(IV e1, IV e2) { return e1 > e2 ? 1 : 0; }
+
+    // less_than
+    IV less_than(SV* e1, SV* e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
+    IV less_than(std::complex<NV> e1, std::complex<NV> e2) {
+      croak("invalid comparison with complex values(less_than())");
+    }
+    IV less_than(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 < e2 ? 1 : 0; }
+    }
+    IV less_than(IV e1, IV e2) { return e1 < e2 ? 1 : 0; }
+
+    // more_than_or_equal
+    IV more_than_or_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
+    IV more_than_or_equal(std::complex<NV> e1, std::complex<NV> e2) {
+      croak("invalid comparison with complex values(more_than_or_equal())");
+    }
+    IV more_than_or_equal(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 >= e2 ? 1 : 0; }
+    }
+    IV more_than_or_equal(IV e1, IV e2) { return e1 >= e2 ? 1 : 0; }
+
+    // less_than_or_equal
+    IV less_than_or_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
+    IV less_than_or_equal(std::complex<NV> e1, std::complex<NV> e2) {
+      croak("invalid comparison with complex values(less_than_or_equal())");
+    }
+    IV less_than_or_equal(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 <= e2 ? 1 : 0; }
+    }
+    IV less_than_or_equal(IV e1, IV e2) { return e1 <= e2 ? 1 : 0; }
   }
   
   // Macro for Rstats::Vector
@@ -1810,269 +1853,6 @@ namespace Rstats {
       return e3;
     }
     
-    Rstats::Vector* less_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::less_than_or_equal())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::less_than_or_equal())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) <= 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          croak("invalid comparison with complex values(Rstats::VectorFunc::less_than_or_equal())");
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) <= e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) <= e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-
-    Rstats::Vector* more_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::more_than_or_equal())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::more_than_or_equal())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) >= 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          croak("invalid comparison with complex values(Rstats::VectorFunc::more_than_or_equal())");
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) >= e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) >= e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-    
-    Rstats::Vector* less_than(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::less_than())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::less_than())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) < 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          croak("invalid comparison with complex values(Rstats::VectorFunc::less_than())");
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) < e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) < e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-    
-    Rstats::Vector* more_than(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::more_than())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::more_than())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) > 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          croak("invalid comparison with complex values(Rstats::VectorFunc::more_than())");
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) > e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) > e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-    
     Rstats::Vector* cumprod(Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2;
@@ -2306,6 +2086,10 @@ namespace Rstats {
 
     RSTATS_DEF_VECTOR_FUNC_COMPARE(equal, Rstats::ElementFunc::equal);
     RSTATS_DEF_VECTOR_FUNC_COMPARE(not_equal, Rstats::ElementFunc::not_equal);
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(more_than, Rstats::ElementFunc::more_than);
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(less_than, Rstats::ElementFunc::less_than);
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(more_than_or_equal, Rstats::ElementFunc::more_than_or_equal);
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(less_than_or_equal, Rstats::ElementFunc::less_than_or_equal);
 
     Rstats::Vector* clone(Rstats::Vector* e1) {
       

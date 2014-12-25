@@ -482,6 +482,60 @@ namespace Rstats {
       return std::log(e2_t);
     }
     NV asinh(IV e1) { return asinh((NV)e1); }
+
+    // acosh
+    std::complex<NV> acosh(std::complex<NV> e1) {
+      NV e1_re = e1.real();
+      NV e1_im = e1.imag();
+
+      std::complex<NV> e2_t = (
+        std::sqrt(
+          (e1 * e1)
+          -
+          std::complex<NV>(1, 0)
+        )
+        +
+        e1
+      );
+      std::complex<NV> e2_u = std::log(e2_t);
+      NV e2_re = e2_u.real();
+      NV e2_im = e2_u.imag();
+      
+      std::complex<NV> e2;
+      if (e1_re < 0 && e1_im == 0) {
+        e2 = std::complex<NV>(e2_re, -e2_im);
+      }
+      else {
+        e2 = std::complex<NV>(e2_re, e2_im);
+      }
+      
+      if (e1_re < 0) {
+        return -e2;
+      }
+      else {
+        return e2;
+      }
+    }
+    NV acosh(NV e1) {
+      if (e1 >= 1) {
+        if (std::isinf(e1)) {
+          warn("In acosh() : NaNs produced");
+          return std::numeric_limits<NV>::signaling_NaN();
+        }
+        else {
+          return std::log(
+            e1
+            +
+            std::sqrt((e1 * e1) - 1)
+          );
+        }
+      }
+      else {
+        warn("In acosh() : NaNs produced");
+        return std::numeric_limits<NV>::signaling_NaN();
+      }
+    }
+    NV acosh(IV e1) { return acosh((NV)e1); }
   }
   
   // Macro for Rstats::Vector
@@ -2588,130 +2642,11 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asin, Rstats::ElementFunc::asin)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acos, Rstats::ElementFunc::acos)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-    
-    Rstats::Vector* acosh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            std::complex<NV> z = e1->get_complex_value(i);
-            NV e1_re = z.real();
-            NV e1_im = z.imag();
-
-            std::complex<NV> e2_t = (
-              std::sqrt(
-                (
-                  (e1->get_complex_value(i) * e1->get_complex_value(i))
-                  -
-                  std::complex<NV>(1, 0)
-                )
-              )
-              +
-              e1->get_complex_value(i)
-            );
-            std::complex<NV> e2_u = std::log(e2_t);
-            NV e2_re = e2_u.real();
-            NV e2_im = e2_u.imag();
-            
-            if ((e1_re < 0) && (e1_im == 0)) {
-              e2->set_complex_value(i, std::complex<NV>(e2_re, -e2_im));
-            }
-            else {
-              e2->set_complex_value(i, std::complex<NV>(e2_re, e2_im));
-            }
-            
-            if (e1_re < 0) {
-              e2->set_complex_value(i,  -e2->get_complex_value(i));
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_double_value(i) >= 1) {
-              if (std::isinf(e1->get_double_value(i))) {
-                e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-              }
-              else {
-
-                e2->set_double_value(i,
-                  std::log(
-                    (
-                      e1->get_double_value(i)
-                      +
-                      std::sqrt(
-                        (
-                          (e1->get_double_value(i) * e1->get_double_value(i))
-                          -
-                          1
-                        )
-                      )
-                    )
-                  )
-                );
-              }
-            }
-            else {
-              e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
-              warn("In acosh() : NaNs produced");
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) >= 1) {
-              if (std::isinf(e1->get_integer_value(i))) {
-                e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-              }
-              else {
-
-                e2->set_double_value(i,
-                  std::log(
-                    (
-                      e1->get_integer_value(i)
-                      +
-                      std::sqrt(
-                        (
-                          (e1->get_integer_value(i) * e1->get_integer_value(i))
-                          -
-                          1
-                        )
-                      )
-                    )
-                  )
-                );
-              }
-            }
-            else {
-              e2->set_double_value(i,  std::numeric_limits<NV>::signaling_NaN());
-              warn("In acosh() : NaNs produced");
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
 
     Rstats::Vector* atanh(Rstats::Vector* e1) {
       

@@ -331,6 +331,26 @@ namespace Rstats {
     }
     NV sqrt(NV e1) { return std::sqrt(e1); }
     NV sqrt(IV e1) { return sqrt((NV)e1); }
+
+    // atan
+    std::complex<NV> atan(std::complex<NV> e1) {
+      if (e1 == std::complex<NV>(0, 0)) {
+        return std::complex<NV>(0, 0);
+      }
+      else if (e1 == std::complex<NV>(0, 1)) {
+        return std::complex<NV>(0, INFINITY);
+      }
+      else if (e1 == std::complex<NV>(0, -1)) {
+        return std::complex<NV>(0, -INFINITY);
+      }
+      else {  
+        std::complex<NV> e2_i = std::complex<NV>(0, 1);
+        std::complex<NV> e2_log = std::log((e2_i + e1) / (e2_i - e1));
+        return (e2_i / std::complex<NV>(2, 0)) * e2_log;
+      }
+    }
+    NV atan(NV e1) { return ::atan2(e1, 1); }
+    NV atan(IV e1) { return ::atan2((NV)e1, (NV)1); }
   }
   
   // Macro for Rstats::Vector
@@ -2433,72 +2453,11 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(exp, Rstats::ElementFunc::exp)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sqrt, Rstats::ElementFunc::sqrt)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atan, Rstats::ElementFunc::atan)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-
-    Rstats::Vector* atan(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_complex_value(i) == std::complex<NV>(0, 0)) {
-              e2->set_complex_value(i, std::complex<NV>(0, 0));
-            }
-            else if (e1->get_complex_value(i) == std::complex<NV>(0, 1)) {
-              e2->set_complex_value(i, std::complex<NV>(0, INFINITY));
-            }
-            else if (e1->get_complex_value(i) == std::complex<NV>(0, -1)) {
-              e2->set_complex_value(i, std::complex<NV>(0, -INFINITY));
-            }
-            else {  
-              std::complex<NV> e2_i = std::complex<NV>(0, 1);
-              std::complex<NV> e2_log = std::log(
-                (
-                  (e2_i + e1->get_complex_value(i))
-                  /
-                  (e2_i - e1->get_complex_value(i))
-                )
-              );
-              
-              e2->set_complex_value(i,
-                (e2_i / std::complex<NV>(2, 0))
-                *
-                e2_log
-              );
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, ::atan2(e1->get_double_value(i), 1));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, ::atan2(e1->get_double_value(i), 1));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
 
     Rstats::Vector* asin(Rstats::Vector* e1) {
       

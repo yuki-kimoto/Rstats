@@ -273,6 +273,11 @@ namespace Rstats {
     NV Im(NV e1) { return 0; }
     NV Im(IV e1) { return 0; }
 
+    // Conj
+    std::complex<NV> Conj(std::complex<NV> e1) { return std::complex<NV>(e1.real(), -e1.imag()); }
+    NV Conj(NV e1) { return e1; }
+    NV Conj(IV e1) { return e1; }
+
     // sin
     std::complex<NV> sin(std::complex<NV> e1) { return std::sin(e1); }
     NV sin(NV e1) { return std::sin(e1); }
@@ -1737,49 +1742,6 @@ namespace Rstats {
       return e3;
     }
     
-    Rstats::Vector* Conj (Rstats::Vector* e1) {
-      IV length = e1->get_length();
-      Rstats::Vector* e2 = Rstats::Vector::new_double(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error : non-numeric argument to function(Rstats::VectorFunc::Re())");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            std::complex<NV> e1_value = e1->get_complex_value(i);
-            std::complex<NV> e2_value(e1_value.real(), -e1_value.imag());
-            e2->set_complex_value(i, e2_value);
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, e1->get_double_value(i));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-          e2 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, e1->get_integer_value(i));
-          }
-          break;
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_logical(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, e1->get_integer_value(i));
-          }
-          break;
-        default:
-          croak("unexpected type");
-      }
-
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-    
     Rstats::Vector* less_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
@@ -2403,6 +2365,7 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Conj, Rstats::ElementFunc::Conj)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)

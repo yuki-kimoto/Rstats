@@ -357,44 +357,23 @@ namespace Rstats {
       NV e1_re = e1.real();
       NV e1_im = e1.imag();
       
-      if ((e1_re == 0) && (e1_im == 0)) {
+      if (e1_re == 0 && e1_im == 0) {
         return std::complex<NV>(0, 0);
       }
       else {
         NV e2_t1 = std::sqrt(
-          (
-            (
-              (e1_re + 1)
-              *
-              (e1_re + 1)
-            )
-            +
-            (e1_im * e1_im)
-          )
+          ((e1_re + 1) * (e1_re + 1))
+          +
+          (e1_im * e1_im)
         );
         NV e2_t2 = std::sqrt(
-          (
-            (
-              (e1_re - 1)
-              *
-              (e1_re - 1)
-            )
-            +
-            (e1_im * e1_im)
-          )
+          ((e1_re - 1) * (e1_re - 1))
+          +
+          (e1_im * e1_im)
         );
         
-        NV e2_alpha = (
-          (e2_t1 + e2_t2)
-          /
-          2
-        );
-        
-        NV e2_beta  = (
-          (e2_t1 - e2_t2)
-          /
-          2
-        );
+        NV e2_alpha = (e2_t1 + e2_t2) / 2;
+        NV e2_beta  = (e2_t1 - e2_t2) / 2;
         
         if (e2_alpha < 1) {
           e2_alpha = 1;
@@ -409,29 +388,13 @@ namespace Rstats {
         
         NV e2_u = ::atan2(
           e2_beta,
-          std::sqrt(
-            (
-              1
-              -
-              (e2_beta * e2_beta)
-            )
-          )
+          std::sqrt(1 - (e2_beta * e2_beta))
         );
         
-        NV e2_v = -(
-          std::log(
-            (
-              e2_alpha
-              +
-              std::sqrt(
-                (
-                  (e2_alpha * e2_alpha)
-                  -
-                  1
-                )
-              )
-            )
-          )
+        NV e2_v = -std::log(
+          e2_alpha
+          +
+          std::sqrt((e2_alpha * e2_alpha) - 1)
         );
         
         if (e1_im > 0 || ((e1_im == 0) && (e1_re < -1))) {

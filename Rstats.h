@@ -655,23 +655,23 @@ namespace Rstats {
     NV atan2(IV e1, IV e2) { return atan2((NV)e1, (NV)e2); }
     
     // equal
-    IV equal(SV* e1, SV* e2) {
-      return sv_cmp(e1, e2) == 0 ? 1 : 0;
-    }
-    IV equal(std::complex<NV> e1, std::complex<NV> e2) {
-      return e1 == e2 ? 1 : 0;
-    }
+    IV equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
+    IV equal(std::complex<NV> e1, std::complex<NV> e2) { return e1 == e2 ? 1 : 0; }
     IV equal(NV e1, NV e2) {
-      if (std::isnan(e1) || std::isnan(e2)) {
-        throw "Can't compare NaN";
-      }
-      else {
-        return e1 == e2 ? 1 : 0;
-      }
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 == e2 ? 1 : 0; }
     }
-    IV equal(IV e1, IV e2) {
-      return e1 == e2 ? 1 : 0;
+    IV equal(IV e1, IV e2) { return e1 == e2 ? 1 : 0; }
+
+    // not equal
+    IV not_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
+    IV not_equal(std::complex<NV> e1, std::complex<NV> e2) { return e1 != e2 ? 1 : 0; }
+    IV not_equal(NV e1, NV e2) {
+      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      else { return e1 != e2 ? 1 : 0; }
     }
+    IV not_equal(IV e1, IV e2) { return e1 != e2 ? 1 : 0; }
+    
   }
   
   // Macro for Rstats::Vector
@@ -1875,8 +1875,6 @@ namespace Rstats {
       return e3;
     }
 
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(equal, Rstats::ElementFunc::equal);
-    
     Rstats::Vector* more_than_or_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
       
       if (e1->get_type() != e2->get_type()) {
@@ -2075,79 +2073,6 @@ namespace Rstats {
       return e3;
     }
     
-    Rstats::Vector* not_equal(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't compare different type(Rstats::VectorFunc::not_equal())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't compare different length(Rstats::VectorFunc::not_equal())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3 = Rstats::Vector::new_logical(length);
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            if (sv_cmp(e1->get_character_value(i), e2->get_character_value(i)) != 0) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::COMPLEX :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_complex_value(i) != e2->get_complex_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            NV value1 = e1->get_double_value(i);
-            NV value2 = e2->get_double_value(i);
-            if (std::isnan(value1) || std::isnan(value2)) {
-              e3->add_na_position(i);
-            }
-            else {
-              if (e1->get_double_value(i) != e2->get_double_value(i)) {
-                e3->set_integer_value(i, 1);
-              }
-              else {
-                e3->set_integer_value(i, 0);
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_integer_value(i) != e2->get_integer_value(i)) {
-              e3->set_integer_value(i, 1);
-            }
-            else {
-              e3->set_integer_value(i, 0);
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
-
     Rstats::Vector* cumprod(Rstats::Vector* e1) {
       IV length = e1->get_length();
       Rstats::Vector* e2;
@@ -2379,6 +2304,8 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
 
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(equal, Rstats::ElementFunc::equal);
+    RSTATS_DEF_VECTOR_FUNC_COMPARE(not_equal, Rstats::ElementFunc::not_equal);
 
     Rstats::Vector* clone(Rstats::Vector* e1) {
       

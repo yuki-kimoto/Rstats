@@ -536,6 +536,65 @@ namespace Rstats {
       }
     }
     NV acosh(IV e1) { return acosh((NV)e1); }
+
+    // atanh
+    std::complex<NV> atanh(std::complex<NV> e1) {
+      if (e1 == std::complex<NV>(1, 0)) {
+        warn("In atanh() : NaNs produced");
+        return std::complex<NV>(INFINITY, std::numeric_limits<NV>::signaling_NaN());
+      }
+      else if (e1 == std::complex<NV>(-1, 0)) {
+        warn("In atanh() : NaNs produced");
+        return std::complex<NV>(-INFINITY, std::numeric_limits<NV>::signaling_NaN());
+      }
+      else {
+        return std::complex<NV>(0.5, 0)
+          *
+          std::log(
+            (std::complex<NV>(1, 0) + e1)
+            /
+            (std::complex<NV>(1, 0) - e1)
+          );
+      }
+    }
+    NV atanh(NV e1) {
+      if (std::isinf(e1)) {
+        warn("In acosh() : NaNs produced");
+        return std::numeric_limits<NV>::signaling_NaN();
+      }
+      else {
+        if (e1 == 1) {
+          return INFINITY;
+        }
+        else if (e1 == -1) {
+          return -INFINITY;
+        }
+        else if (std::abs(e1) < 1) {
+          return std::log((1 + e1) / (1 - e1)) / 2;
+        }
+        else {
+          warn("In acosh() : NaNs produced");
+          return std::numeric_limits<NV>::signaling_NaN();
+        }
+      }
+    }
+    NV atanh(IV e1) { return atanh((NV)e1); }
+
+    // atan2
+    std::complex<NV> atan2(std::complex<NV> e1, std::complex<NV> e2) {
+      std::complex<NV> e3_s = (e1 * e1) + (e2 * e2);
+      if (e3_s == std::complex<NV>(0, 0)) {
+        return std::complex<NV>(0, 0);
+      }
+      else {
+        std::complex<NV> e3_i = std::complex<NV>(0, 1);
+        std::complex<NV> e3_r = e2 + (e1 * e3_i);
+        return -e3_i * std::log(e3_r / std::sqrt(e3_s));
+      }
+    }
+    NV atan2(NV e1, NV e2) { ::atan2(e1, e2); }
+    NV atan2(IV e1, IV e2) { return atan2((NV)e1, (NV)e2); }
+
   }
   
   // Macro for Rstats::Vector
@@ -603,6 +662,45 @@ namespace Rstats {
       } \
       e2->merge_na_positions(e1); \
       return e2; \
+    }
+
+# define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e3 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
     }
   
   // Rstats::Vector
@@ -2360,72 +2458,32 @@ namespace Rstats {
       
       return e3;
     }
-    
-    Rstats::Vector* atan2(Rstats::Vector* e1, Rstats::Vector* e2) {
-      
-      if (e1->get_type() != e2->get_type()) {
-        croak("Can't add different type(Rstats::VectorFunc::atan2())");
-      }
-      
-      if (e1->get_length() != e2->get_length()) {
-        croak("Can't add different length(Rstats::VectorFunc::atan2())");
-      }
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e3;
-      Rstats::VectorType::Enum type = e1->get_type();
-      
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a + b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e3 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
 
-            std::complex<NV> e3_s = ((e1->get_complex_value(i) * e1->get_complex_value(i)) + (e2->get_complex_value(i) * e2->get_complex_value(i)));
-            if (e3_s == std::complex<NV>(0, 0)) {
-              e3->set_complex_value(i, std::complex<NV>(0, 0));
-            }
-            else {
-              std::complex<NV> e3_i = std::complex<NV>(0, 1);
-              std::complex<NV> e3_r = (e2->get_complex_value(i) + (e1->get_complex_value(i) * e3_i));
-              e3->set_complex_value(i,
-                -e3_i
-                *
-                std::log(
-                  (
-                    e3_r
-                    /
-                    std::sqrt(e3_s)
-                  )
-                )
-              );
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, ::atan2(e1->get_double_value(i), e2->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e3 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e3->set_double_value(i, ::atan2(e1->get_integer_value(i), e2->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-      }
-      
-      e3->merge_na_positions(e1);
-      e3->merge_na_positions(e2);
-      
-      return e3;
-    }
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log, Rstats::ElementFunc::log)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(logb, Rstats::ElementFunc::logb)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(exp, Rstats::ElementFunc::exp)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sqrt, Rstats::ElementFunc::sqrt)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atan, Rstats::ElementFunc::atan)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asin, Rstats::ElementFunc::asin)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acos, Rstats::ElementFunc::acos)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
+
+    RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
+
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
 
     Rstats::Vector* subtract(Rstats::Vector* e1, Rstats::Vector* e2) {
       
@@ -2625,149 +2683,6 @@ namespace Rstats {
       return e3;
     }
 
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log, Rstats::ElementFunc::log)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(logb, Rstats::ElementFunc::logb)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(exp, Rstats::ElementFunc::exp)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sqrt, Rstats::ElementFunc::sqrt)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atan, Rstats::ElementFunc::atan)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asin, Rstats::ElementFunc::asin)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acos, Rstats::ElementFunc::acos)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
-
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
-    RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-
-    Rstats::Vector* atanh(Rstats::Vector* e1) {
-      
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            if (e1->get_complex_value(i) == std::complex<NV>(1, 0)) {
-              e2->set_complex_value(i, std::complex<NV>(INFINITY, std::numeric_limits<NV>::signaling_NaN()));
-              warn("In atanh() : NaNs produced");
-            }
-            else if (e1->get_complex_value(i) == std::complex<NV>(-1, 0)) {
-              e2->set_complex_value(i, std::complex<NV>(-INFINITY, std::numeric_limits<NV>::signaling_NaN()));
-              warn("In atanh() : NaNs produced");
-            }
-            else {
-              e2->set_complex_value(i, 
-                (
-                  std::complex<NV>(0.5, 0)
-                  *
-                  std::log(
-                    (
-                      (std::complex<NV>(1, 0) + e1->get_complex_value(i))
-                      /
-                      (std::complex<NV>(1, 0) - e1->get_complex_value(i))
-                    )
-                  )
-                )
-              );
-            }
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            if (std::isinf(e1->get_double_value(i))) {
-                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-            }
-            else {
-              if (e1->get_double_value(i) == 1) {
-                e2->set_double_value(i, INFINITY);
-              }
-              else if (e1->get_double_value(i) == -1) {
-                e2->set_double_value(i, -INFINITY);
-              }
-              else if (std::abs(e1->get_double_value(i)) < 1) {
-                e2->set_double_value(i, 
-                  (
-                    std::log(
-                      (
-                        (1 + e1->get_double_value(i))
-                        /
-                        (1 - e1->get_double_value(i))
-                      )
-                    )
-                    /
-                    2
-                  )
-                );
-              }
-              else {
-                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-              }
-            }
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            if (std::isinf(e1->get_integer_value(i))) {
-                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-            }
-            else {
-              if (e1->get_integer_value(i) == 1) {
-                e2->set_double_value(i, INFINITY);
-              }
-              else if (e1->get_integer_value(i) == -1) {
-                e2->set_double_value(i, -INFINITY);
-              }
-              else if (std::abs(e1->get_integer_value(i)) < 1) {
-                e2->set_double_value(i, 
-                  (
-                    std::log(
-                      (
-                        (1 + e1->get_integer_value(i))
-                        /
-                        (1 - e1->get_integer_value(i))
-                      )
-                    )
-                    /
-                    2
-                  )
-                );
-              }
-              else {
-                e2->set_double_value(i, std::numeric_limits<NV>::signaling_NaN());
-                warn("In acosh() : NaNs produced");
-              }
-            }
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
-    
     Rstats::Vector* clone(Rstats::Vector* e1) {
       
       IV length = e1->get_length();

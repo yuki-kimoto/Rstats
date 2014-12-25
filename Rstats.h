@@ -293,6 +293,12 @@ namespace Rstats {
       return std::log(e1) / std::log(2);
     }
     NV log2(IV e1) { return log2((NV)e1); }
+    
+    // expm1
+    std::complex<NV> expm1(std::complex<NV> e1) { croak("Error in expm1 : unimplemented complex function"); }
+    NV expm1(NV e1) { return ::expm1(e1); }
+    NV expm1(IV e1) { return expm1((NV)e1); }
+    
   }
   
   // Macro for Rstats::Vector
@@ -3119,40 +3125,7 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(logb, Rstats::ElementFunc::logb)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
-
-    Rstats::Vector* expm1(Rstats::Vector* e1) {
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("Error in a - b : non-numeric argument to binary operator");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          croak("Error in expm1 : unimplemented complex function");
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, ::expm1(e1->get_double_value(i)));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, ::expm1(e1->get_integer_value(i)));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
 
     Rstats::Vector* Arg(Rstats::Vector* e1) {
       

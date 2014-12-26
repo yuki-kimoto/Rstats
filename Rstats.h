@@ -761,6 +761,19 @@ namespace Rstats {
     }
     IV is_infinite(NV e1) { return std::isinf(e1); }
     IV is_infinite(IV e1) { return 0; }
+
+    // is_finite
+    IV is_finite(SV* e1) { return 0; }
+    IV is_finite(std::complex<NV> e1) {
+      if (std::isfinite(e1.real()) && std::isfinite(e1.imag())) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    }
+    IV is_finite(NV e1) { return std::isfinite(e1); }
+    IV is_finite(IV e1) { return 1; }
   }
   
   // Macro for Rstats::Vector
@@ -1847,7 +1860,8 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
-    RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite);
+    RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite)
+    RSTATS_DEF_VECTOR_FUNC_UN_IS(is_finite, Rstats::ElementFunc::is_finite)
     
     RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
 
@@ -2206,35 +2220,9 @@ namespace Rstats {
       
       return rets;
     }
-
-    Rstats::Vector* is_finite(Rstats::Vector* elements) {
-      
-      IV length = elements->get_length();
-      Rstats::Vector* rets;
-      if (elements->is_integer()) {
-        rets = Rstats::Vector::new_logical(length, 1);
-      }
-      else if (elements->is_double()) {
-        std::vector<NV>* values = elements->get_double_values();
-        rets = Rstats::Vector::new_logical(length);
-        std::vector<IV>* rets_values = rets->get_integer_values();
-        for (IV i = 0; i < length; i++) {
-          if (std::isfinite((*values)[i])) {
-            (*rets_values)[i] = 1;
-          }
-          else {
-            (*rets_values)[i] = 0;
-          }
-        }
-      }
-      else {
-        rets = Rstats::Vector::new_logical(length, 0);
-      }
-      
-      return rets;
-    }
   }
-  
+
+ 
   // Rstats::Util body
   namespace Util {
     REGEXP* LOGICAL_RE = pregcomp(newSVpv("^ *(T|TRUE|F|FALSE) *$", 0), 0);

@@ -2176,6 +2176,58 @@ namespace Rstats {
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
 
+    SV* cross_product(SV* sv_values) {
+      
+      IV values_length = Rstats::PerlAPI::avrv_len_fix(sv_values);
+      SV* sv_idxs = Rstats::PerlAPI::new_mAVRV();
+      for (IV i = 0; i < values_length; i++) {
+        Rstats::PerlAPI::avrv_push_inc(sv_idxs, Rstats::PerlAPI::new_mSViv(0)); 
+      }
+      
+      SV* sv_idx_idx = Rstats::PerlAPI::new_mAVRV();
+      for (IV i = 0; i < values_length; i++) {
+        Rstats::PerlAPI::avrv_push_inc(sv_idx_idx, Rstats::PerlAPI::new_mSViv(i));
+      }
+      
+      SV* sv_x1 = Rstats::PerlAPI::new_mAVRV();
+      for (IV i = 0; i < values_length; i++) {
+        SV* sv_value = Rstats::PerlAPI::avrv_fetch_simple(sv_values, i);
+        Rstats::PerlAPI::avrv_push_inc(sv_x1, Rstats::PerlAPI::avrv_fetch_simple(sv_value, 0));
+      }
+
+      SV* sv_result = Rstats::PerlAPI::new_mAVRV();
+      Rstats::PerlAPI::avrv_push_inc(sv_result, Rstats::PerlAPI::copy_av(sv_x1));
+      IV end_loop = 0;
+      while (1) {
+        for (IV i = 0; i < values_length; i++) {
+          
+          if (SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_idxs, i)) < Rstats::PerlAPI::avrv_len_fix(Rstats::PerlAPI::avrv_fetch_simple(sv_values, i)) - 1) {
+            
+            SV* sv_idxs_tmp = Rstats::PerlAPI::avrv_fetch_simple(sv_idxs, i);
+            sv_inc(sv_idxs_tmp);
+            Rstats::PerlAPI::avrv_store_inc(sv_x1, i, Rstats::PerlAPI::avrv_fetch_simple(Rstats::PerlAPI::avrv_fetch_simple(sv_values, i), SvIV(sv_idxs_tmp)));
+            
+            Rstats::PerlAPI::avrv_push_inc(sv_result, Rstats::PerlAPI::copy_av(sv_x1));
+            
+            break;
+          }
+          
+          if (i == SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_idx_idx, values_length - 1))) {
+            end_loop = 1;
+            break;
+          }
+          
+          Rstats::PerlAPI::avrv_store_inc(sv_idxs, i, Rstats::PerlAPI::new_mSViv(0));
+          Rstats::PerlAPI::avrv_store_inc(sv_x1, i, Rstats::PerlAPI::avrv_fetch_simple(Rstats::PerlAPI::avrv_fetch_simple(sv_values, i), 0));
+        }
+        if (end_loop) {
+          break;
+        }
+      }
+
+      return sv_result;
+    }
+
     SV* pos_to_index(SV* sv_pos, SV* sv_dim) {
       
       SV* sv_index = Rstats::PerlAPI::new_mAVRV();

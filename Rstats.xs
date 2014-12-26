@@ -1281,56 +1281,8 @@ SV*
 cross_product(...)
   PPCODE:
 {
-  SV* sv_values = ST(0);
-  
-  IV values_length = my::avrv_len_fix(sv_values);
-  SV* sv_idxs = my::new_mAVRV();
-  for (IV i = 0; i < values_length; i++) {
-    my::avrv_push_inc(sv_idxs, my::new_mSViv(0)); 
-  }
-  
-  SV* sv_idx_idx = my::new_mAVRV();
-  for (IV i = 0; i < values_length; i++) {
-    my::avrv_push_inc(sv_idx_idx, my::new_mSViv(i));
-  }
-  
-  SV* sv_x1 = my::new_mAVRV();
-  for (IV i = 0; i < values_length; i++) {
-    SV* sv_value = my::avrv_fetch_simple(sv_values, i);
-    my::avrv_push_inc(sv_x1, my::avrv_fetch_simple(sv_value, 0));
-  }
-
-  SV* sv_result = my::new_mAVRV();
-  my::avrv_push_inc(sv_result, my::copy_av(sv_x1));
-  IV end_loop = 0;
-  while (1) {
-    for (IV i = 0; i < values_length; i++) {
-      
-      if (SvIV(my::avrv_fetch_simple(sv_idxs, i)) < my::avrv_len_fix(my::avrv_fetch_simple(sv_values, i)) - 1) {
-        
-        SV* sv_idxs_tmp = my::avrv_fetch_simple(sv_idxs, i);
-        sv_inc(sv_idxs_tmp);
-        my::avrv_store_inc(sv_x1, i, my::avrv_fetch_simple(my::avrv_fetch_simple(sv_values, i), SvIV(sv_idxs_tmp)));
-        
-        my::avrv_push_inc(sv_result, my::copy_av(sv_x1));
-        
-        break;
-      }
-      
-      if (i == SvIV(my::avrv_fetch_simple(sv_idx_idx, values_length - 1))) {
-        end_loop = 1;
-        break;
-      }
-      
-      my::avrv_store_inc(sv_idxs, i, my::new_mSViv(0));
-      my::avrv_store_inc(sv_x1, i, my::avrv_fetch_simple(my::avrv_fetch_simple(sv_values, i), 0));
-    }
-    if (end_loop) {
-      break;
-    }
-  }
-
-  return_sv(sv_result);
+  SV* sv_ret = Rstats::Util::cross_product(ST(0));
+  return_sv(sv_ret);
 }
 
 SV*

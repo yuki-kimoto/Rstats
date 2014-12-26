@@ -6,9 +6,6 @@ use Carp 'croak', 'carp';
 
 require Rstats;
 use Rstats::Vector;
-use Math::Trig ();
-
-sub pi () { new_double(Math::Trig::pi) }
 
 sub new_vector {
   my $type = shift;
@@ -33,6 +30,7 @@ sub new_vector {
   }
 }
 
+1;
 =head1 NAME
 
 Rstats::VectorFunc - Vector functions

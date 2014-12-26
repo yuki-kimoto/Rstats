@@ -39,7 +39,7 @@ my $true;
 sub TRUE () { defined $true ? $true : $true = Rstats::Func::new_logical(1) }
 sub T () { TRUE }
 
-sub pi () { c(Rstats::VectorFunc::pi()) }
+sub pi () { Rstats::Func::new_double(Math::Trig::pi) }
 
 sub I {
   my $x1 = shift;

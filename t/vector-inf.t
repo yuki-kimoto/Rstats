@@ -11,7 +11,7 @@ use Rstats::VectorFunc;
     my $inf = Rstats::VectorFunc::Inf;
     my $negative_inf = Rstats::VectorFunc::negation($inf);
     my $inf2 = Rstats::VectorFunc::negation($negative_inf);
-    ok($inf2->is_positive_infinite->value);
+    ok($inf2->value, 'Inf');
   }
   
   # Inf - to_string, plus

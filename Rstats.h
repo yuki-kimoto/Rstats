@@ -2151,30 +2151,6 @@ namespace Rstats {
       return e2;
     }
 
-    Rstats::Vector* is_positive_infinite(Rstats::Vector* elements) {
-      
-      IV length = elements->get_length();
-      Rstats::Vector* rets;
-      if (elements->get_type() == Rstats::VectorType::DOUBLE) {
-        rets = Rstats::Vector::new_logical(length);
-        std::vector<NV>* values = elements->get_double_values();
-        std::vector<IV>* rets_values = rets->get_integer_values();
-        for (IV i = 0; i < length; i++) {
-          if(std::isinf((*values)[i]) && (*values)[i] > 0) {
-            (*rets_values)[i] = 1;
-          }
-          else {
-            (*rets_values)[i] = 0;
-          }
-        }
-      }
-      else {
-        rets = Rstats::Vector::new_logical(length, 0);
-      }
-      
-      return rets;
-    }
-
     Rstats::Vector* is_nan(Rstats::Vector* elements) {
       IV length = elements->get_length();
       Rstats::Vector* rets = Rstats::Vector::new_logical(length);

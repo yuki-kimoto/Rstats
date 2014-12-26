@@ -459,19 +459,6 @@ is_infinite(...)
 }
 
 SV*
-is_positive_infinite(...)
-  PPCODE:
-{
-  Rstats::Vector* self = my::to_c_obj<Rstats::Vector*>(ST(0));
-  
-  Rstats::Vector* rets = Rstats::VectorFunc::is_positive_infinite(self);
-  
-  SV* sv_rets = my::to_perl_obj(rets, "Rstats::Vector");
-  
-  return_sv(sv_rets);
-}
-
-SV*
 is_nan(...)
   PPCODE:
 {

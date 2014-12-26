@@ -227,7 +227,7 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->asinh($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
   
   # asinh - -Inf
@@ -369,14 +369,14 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->cosh($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
   
   # cosh - -Inf
   {
     my $x1 = c(-Inf);
     my $x2 = r->cosh($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
 
   # cosh - NA

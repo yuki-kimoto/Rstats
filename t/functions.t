@@ -261,7 +261,7 @@ use Math::Trig ();
   {
     my $x1 = c(Inf);
     my $x2 = r->expm1($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
   
   # expm1 - -Inf
@@ -311,7 +311,7 @@ use Math::Trig ();
   {
     my $x1 = c(Inf);
     my $x2 = r->exp($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
   
   # exp - -Inf

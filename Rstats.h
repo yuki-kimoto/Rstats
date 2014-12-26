@@ -745,9 +745,64 @@ namespace Rstats {
       else { return e1 <= e2 ? 1 : 0; }
     }
     IV less_than_or_equal(IV e1, IV e2) { return e1 <= e2 ? 1 : 0; }
+
+    // is_infinite
+    IV is_infinite(SV* e1) { return 0; }
+    IV is_infinite(std::complex<NV> e1) {
+      if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
+        return 0;
+      }
+      else if (std::isinf(e1.real()) || std::isinf(e1.imag())) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    }
+    IV is_infinite(NV e1) { return std::isinf(e1); }
+    IV is_infinite(IV e1) { return 0; }
   }
   
   // Macro for Rstats::Vector
+# define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2 = Rstats::Vector::new_logical(length); \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::CHARACTER : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_character_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::COMPLEX : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : invalid argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      for (IV i = 0; i < length; i++) { \
+        if (e1->exists_na_position(i)) { \
+          e2->set_integer_value(i, 0); \
+        } \
+      } \
+      return e2; \
+    }
+
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
@@ -1155,19 +1210,21 @@ namespace Rstats {
       return this->type;
     }
     
-    void add_na_position (IV position) {
+    void add_na_position(IV position) {
       this->na_positions[position] = 1;
     }
 
-    bool exists_na_position (IV position) {
+    bool exists_na_position(IV position) {
       return this->na_positions.count(position);
     }
     
-    void merge_na_positions (Rstats::Vector* elements) {
+    void merge_na_positions(Rstats::Vector* elements) {
       for(std::map<IV, IV>::iterator it = elements->na_positions.begin(); it != elements->na_positions.end(); ++it) {
         this->add_na_position(it->first);
       }
     }
+    
+    std::map<IV, IV> get_na_positions() { return this->na_positions; }
     
     IV get_length () {
       if (this->values == NULL) {
@@ -1790,6 +1847,8 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
+    RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite);
+    
     RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
@@ -2076,30 +2135,6 @@ namespace Rstats {
       e2->merge_na_positions(e1);
       
       return e2;
-    }
-
-    Rstats::Vector* is_infinite(Rstats::Vector* elements) {
-      
-      IV length = elements->get_length();
-      Rstats::Vector* rets;
-      if (elements->get_type() == Rstats::VectorType::DOUBLE) {
-        rets = Rstats::Vector::new_logical(length);
-        std::vector<NV>* values = elements->get_double_values();
-        std::vector<IV>* rets_values = rets->get_integer_values();
-        for (IV i = 0; i < length; i++) {
-          if(std::isinf((*values)[i])) {
-            (*rets_values)[i] = 1;
-          }
-          else {
-            (*rets_values)[i] = 0;
-          }
-        }
-      }
-      else {
-        rets = Rstats::Vector::new_logical(length, 0);
-      }
-      
-      return rets;
     }
 
     Rstats::Vector* is_positive_infinite(Rstats::Vector* elements) {

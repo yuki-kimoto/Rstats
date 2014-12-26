@@ -28,12 +28,8 @@ sub NULL {
 
 my $na;
 sub NA  () { defined $na ? $na : $na = Rstats::Func::new_logical(undef) }
-
 sub NaN () { Rstats::Func::new_double('NaN') }
-
 sub Inf () { Rstats::Func::new_double('Inf') }
-
-sub negativeInf () { Rstats::VectorFunc::new_double('-Inf') }
 
 my $false;
 sub FALSE () { defined $false ? $false : $false = Rstats::Func::new_logical(0) }
@@ -1618,7 +1614,7 @@ sub cummax {
   
   unless ($x1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
-    return negativeInf;
+    return -(Inf);
   }
   
   my @a2_elements;
@@ -1647,7 +1643,7 @@ sub cummin {
   
   unless ($x1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
-    return negativeInf;
+    return -(Inf);
   }
   
   my @a2_elements;
@@ -1859,7 +1855,7 @@ sub max {
   
   unless ($x1->length_value) {
     carp 'no non-missing arguments to max; returning -Inf';
-    return negativeInf;
+    return -(Inf);
   }
   
   my $x1_elements = $x1->decompose_elements;

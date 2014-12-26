@@ -784,7 +784,7 @@ namespace Rstats {
       return e2; \
     }
 
-# define RSTATS_DEF_VECTOR_FUNC_COMPARE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+# define RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
         croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
@@ -1755,6 +1755,13 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Re, Rstats::ElementFunc::Re)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Im, Rstats::ElementFunc::Im)
 
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(equal, Rstats::ElementFunc::equal);
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(not_equal, Rstats::ElementFunc::not_equal);
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(more_than, Rstats::ElementFunc::more_than);
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(less_than, Rstats::ElementFunc::less_than);
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(more_than_or_equal, Rstats::ElementFunc::more_than_or_equal);
+    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(less_than_or_equal, Rstats::ElementFunc::less_than_or_equal);
+
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(add, Rstats::ElementFunc::add)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(subtract, Rstats::ElementFunc::subtract)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH(multiply, Rstats::ElementFunc::multiply)
@@ -1763,13 +1770,6 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(divide, Rstats::ElementFunc::divide)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
-
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(equal, Rstats::ElementFunc::equal);
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(not_equal, Rstats::ElementFunc::not_equal);
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(more_than, Rstats::ElementFunc::more_than);
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(less_than, Rstats::ElementFunc::less_than);
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(more_than_or_equal, Rstats::ElementFunc::more_than_or_equal);
-    RSTATS_DEF_VECTOR_FUNC_COMPARE(less_than_or_equal, Rstats::ElementFunc::less_than_or_equal);
 
     Rstats::Vector* negation (Rstats::Vector* e1) {
       IV length = e1->get_length();

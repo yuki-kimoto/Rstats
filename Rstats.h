@@ -639,6 +639,11 @@ namespace Rstats {
       }
     }
     NV atanh(IV e1) { return atanh((NV)e1); }
+    
+    // negation
+    std::complex<NV> negation(std::complex<NV> e1) { return -e1; }
+    NV negation(NV e1) { return -e1; }
+    IV negation(IV e1) { return -e1; }
 
     // atan2
     std::complex<NV> atan2(std::complex<NV> e1, std::complex<NV> e2) {
@@ -743,6 +748,39 @@ namespace Rstats {
   }
   
   // Macro for Rstats::Vector
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_integer(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : invalid argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+    
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1) { \
       IV length = e1->get_length(); \
@@ -1752,6 +1790,7 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
+    RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
@@ -1797,43 +1836,6 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(divide, Rstats::ElementFunc::divide)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
-
-    Rstats::Vector* negation (Rstats::Vector* e1) {
-      IV length = e1->get_length();
-      Rstats::Vector* e2;
-      Rstats::VectorType::Enum type = e1->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          croak("argument is not interpretable as logical(Rstats::VectorFunc::negation())");
-          break;
-        case Rstats::VectorType::COMPLEX :
-          e2 = Rstats::Vector::new_complex(length);
-          for (IV i = 0; i < length; i++) {
-            std::complex<NV> value = e1->get_complex_value(i);
-            e2->set_complex_value(i, std::complex<NV>(-value.real(), -value.imag()));
-          }
-          break;
-        case Rstats::VectorType::DOUBLE :
-          e2 = Rstats::Vector::new_double(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_double_value(i, -e1->get_double_value(i));
-          }
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          e2 = Rstats::Vector::new_integer(length);
-          for (IV i = 0; i < length; i++) {
-            e2->set_integer_value(i, -e1->get_integer_value(i));
-          }
-          break;
-        default:
-          croak("unexpected type");
-      }
-
-      e2->merge_na_positions(e1);
-      
-      return e2;
-    }
     
     Rstats::Vector* cumprod(Rstats::Vector* e1) {
       IV length = e1->get_length();

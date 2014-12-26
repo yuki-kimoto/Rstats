@@ -8,7 +8,7 @@ use Rstats::VectorFunc;
 {
   # Inf - negation repeat
   {
-    my $inf = Rstats::VectorFunc::Inf;
+    my $inf = Rstats::VectorFunc::new_double('Inf');
     my $negative_inf = Rstats::VectorFunc::negation($inf);
     my $inf2 = Rstats::VectorFunc::negation($negative_inf);
     ok($inf2->value, 'Inf');
@@ -16,20 +16,20 @@ use Rstats::VectorFunc;
   
   # Inf - to_string, plus
   {
-    my $inf = Rstats::VectorFunc::Inf;
+    my $inf = Rstats::VectorFunc::new_double('Inf');
     is("$inf", 'Inf');
   }
 
   # Inf - negation
   {
-    my $inf = Rstats::VectorFunc::Inf;
+    my $inf = Rstats::VectorFunc::new_double('Inf');
     my $negative_inf = Rstats::VectorFunc::negation($inf);
     is($negative_inf->value, '-Inf');
   }
 
   # Inf - to_string, minus
   {
-    my $negative_inf = Rstats::VectorFunc::negativeInf;
+    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
     is("$negative_inf", '-Inf');
   }
 }
@@ -38,13 +38,13 @@ use Rstats::VectorFunc;
 {
   # is_infinite - Inf, true
   {
-    my $inf = Rstats::VectorFunc::Inf;
+    my $inf = Rstats::VectorFunc::new_double('Inf');
     ok($inf->is_infinite->value);
   }
   
   # is_infinite - -Inf, true
   {
-    my $negative_inf = Rstats::VectorFunc::negativeInf;
+    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
     ok($negative_inf->is_infinite->value);
   }
   
@@ -59,13 +59,13 @@ use Rstats::VectorFunc;
 {
   # is_finite - Inf, false
   {
-    my $inf = Rstats::VectorFunc::Inf;
+    my $inf = Rstats::VectorFunc::new_double('Inf');
     ok(!$inf->is_finite->value);
   }
   
   # is_finite - -Inf, false
   {
-    my $negative_inf = Rstats::VectorFunc::negativeInf;
+    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
     ok(!$negative_inf->is_finite->value);
   }
   

@@ -8,8 +8,6 @@ require Rstats;
 use Rstats::Vector;
 use Math::Trig ();
 
-sub Inf () { new_inf() }
-sub negativeInf () { new_negative_inf() }
 sub pi () { new_double(Math::Trig::pi) }
 
 sub new_vector {

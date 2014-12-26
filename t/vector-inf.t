@@ -24,7 +24,7 @@ use Rstats::VectorFunc;
   {
     my $inf = Rstats::VectorFunc::Inf;
     my $negative_inf = Rstats::VectorFunc::negation($inf);
-    ok($negative_inf->is_negative_infinite->value);
+    is($negative_inf->value, '-Inf');
   }
 
   # Inf - to_string, minus

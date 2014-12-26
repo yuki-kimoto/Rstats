@@ -234,7 +234,7 @@ use Math::Complex ();
   {
     my $x1 = c(-Inf);
     my $x2 = r->asinh($x1);
-    ok($x2->vector_part->is_negative_infinite);
+    ok($x2->value, '-Inf');
   }
 
   # asinh - NA
@@ -437,14 +437,14 @@ use Math::Complex ();
   {
     my $x1 = c(Inf);
     my $x2 = r->sinh($x1);
-    ok($x2->vector_part->is_positive_infinite);
+    is($x2->value, 'Inf');
   }
   
   # sinh - -Inf
   {
     my $x1 = c(-Inf);
     my $x2 = r->sinh($x1);
-    ok($x2->vector_part->is_negative_infinite);
+    is($x2->value, '-Inf');
   }
 
   # sinh - NA

@@ -16,8 +16,6 @@ Rstats::Vector - Vector
 
 =heaa1 METHODS
 
-=head2 is_negative_infinite
-
 =head2 is_positive_infinite
 
 =head2 typeof

@@ -1365,28 +1365,11 @@ pos_to_index(...)
 
 SV*
 index_to_pos(...)
-  PPCODE :
+  PPCODE:
 {
-  SV* sv_index = ST(0);
-  SV* sv_dim_values = ST(1);
-  
-  IV pos = 0;
-  for (IV i = 0; i < my::avrv_len_fix(sv_dim_values); i++) {
-    if (i > 0) {
-      IV tmp = 1;
-      for (IV k = 0; k < i; k++) {
-        tmp *= SvIV(my::avrv_fetch_simple(sv_dim_values, k));
-      }
-      pos += tmp * (SvIV(my::avrv_fetch_simple(sv_index, i)) - 1);
-    }
-    else {
-      pos += SvIV(my::avrv_fetch_simple(sv_index, i));
-    }
-  }
-  
-  SV* sv_pos = my::new_mSViv(pos - 1);
-  
-  return_sv(sv_pos);
+  SV* sv_ret = Rstats::Util::index_to_pos(ST(0), ST(1));
+  return_sv(sv_ret);
 }
+
 
 MODULE = Rstats PACKAGE = Rstats

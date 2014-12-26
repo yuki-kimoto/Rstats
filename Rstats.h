@@ -2175,7 +2175,28 @@ namespace Rstats {
     REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
-    
+
+    SV* index_to_pos(SV* sv_index, SV* sv_dim_values) {
+      
+      IV pos = 0;
+      for (IV i = 0; i < Rstats::PerlAPI::avrv_len_fix(sv_dim_values); i++) {
+        if (i > 0) {
+          IV tmp = 1;
+          for (IV k = 0; k < i; k++) {
+            tmp *= SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_dim_values, k));
+          }
+          pos += tmp * (SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_index, i)) - 1);
+        }
+        else {
+          pos += SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_index, i));
+        }
+      }
+      
+      SV* sv_pos = Rstats::PerlAPI::new_mSViv(pos - 1);
+      
+      return sv_pos;
+    }
+
     SV* looks_like_complex (SV* sv_value) {
       
       SV* sv_ret;

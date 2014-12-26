@@ -1337,30 +1337,8 @@ SV*
 pos_to_index(...)
   PPCODE:
 {
-  SV* sv_pos = ST(0);
-  SV* sv_dim = ST(1);
-  
-  SV* sv_index = my::new_mAVRV();
-  IV pos = SvIV(sv_pos);
-  IV before_dim_product = 1;
-  for (IV i = 0; i < my::avrv_len_fix(sv_dim); i++) {
-    before_dim_product *= SvIV(my::avrv_fetch_simple(sv_dim, i));
-  }
-  
-  for (IV i = my::avrv_len_fix(sv_dim) - 1; i >= 0; i--) {
-    IV dim_product = 1;
-    for (IV k = 0; k < i; k++) {
-      dim_product *= SvIV(my::avrv_fetch_simple(sv_dim, k));
-    }
-    
-    IV reminder = pos % before_dim_product;
-    IV quotient = (IV)(reminder / dim_product);
-    
-    my::avrv_unshift_real_inc(sv_index, my::new_mSViv(quotient + 1));
-    before_dim_product = dim_product;
-  }
-  
-  return_sv(sv_index);
+  SV* sv_ret = Rstats::Util::pos_to_index(ST(0), ST(1));
+  return_sv(sv_ret);
 }
 
 SV*

@@ -2176,6 +2176,31 @@ namespace Rstats {
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
 
+    SV* pos_to_index(SV* sv_pos, SV* sv_dim) {
+      
+      SV* sv_index = Rstats::PerlAPI::new_mAVRV();
+      IV pos = SvIV(sv_pos);
+      IV before_dim_product = 1;
+      for (IV i = 0; i < Rstats::PerlAPI::avrv_len_fix(sv_dim); i++) {
+        before_dim_product *= SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_dim, i));
+      }
+      
+      for (IV i = Rstats::PerlAPI::avrv_len_fix(sv_dim) - 1; i >= 0; i--) {
+        IV dim_product = 1;
+        for (IV k = 0; k < i; k++) {
+          dim_product *= SvIV(Rstats::PerlAPI::avrv_fetch_simple(sv_dim, k));
+        }
+        
+        IV reminder = pos % before_dim_product;
+        IV quotient = (IV)(reminder / dim_product);
+        
+        Rstats::PerlAPI::avrv_unshift_real_inc(sv_index, Rstats::PerlAPI::new_mSViv(quotient + 1));
+        before_dim_product = dim_product;
+      }
+      
+      return sv_index;
+    }
+
     SV* index_to_pos(SV* sv_index, SV* sv_dim_values) {
       
       IV pos = 0;

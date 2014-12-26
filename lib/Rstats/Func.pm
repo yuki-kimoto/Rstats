@@ -27,13 +27,13 @@ sub NULL {
 }
 
 my $na;
-sub NA { defined $na ? $na : $na = Rstats::Func::new_logical(undef); }
+sub NA  () { defined $na ? $na : $na = Rstats::Func::new_logical(undef) }
 
-sub NaN { c(Rstats::VectorFunc::NaN()) }
+sub NaN () { Rstats::Func::new_double('NaN') }
 
-sub Inf () { c(Rstats::VectorFunc::Inf()) }
+sub Inf () { Rstats::Func::new_double('Inf') }
 
-sub negativeInf () { c(Rstats::VectorFunc::negativeInf()) }
+sub negativeInf () { Rstats::VectorFunc::new_double('-Inf') }
 
 my $false;
 sub FALSE () { defined $false ? $false : $false = Rstats::Func::new_logical(0) }

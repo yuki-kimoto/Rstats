@@ -53,7 +53,7 @@ use Rstats::VectorFunc;
 
   # as_character - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
     is_deeply($x2->values, ["NaN"]);
@@ -114,7 +114,7 @@ use Rstats::VectorFunc;
 
   # as_logical - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
     is_deeply($x2->values, [undef]);
@@ -199,7 +199,7 @@ use Rstats::VectorFunc;
 
   # as_integer - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
     is_deeply($x2->values, [undef]);
@@ -299,7 +299,7 @@ use Rstats::VectorFunc;
 
   # as_numeric - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     my $x2 = r->as_numeric($x1);
     ok(r->is_numeric($x2));
     is_deeply($x2->values, ['NaN']);
@@ -400,7 +400,7 @@ use Rstats::VectorFunc;
 
   # as_complex - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
     is_deeply($x2->values, [undef]);
@@ -609,7 +609,7 @@ use Rstats::VectorFunc;
 
   # array decide type - NaN
   {
-    my $x1 = array(Rstats::VectorFunc::NaN);
+    my $x1 = NaN;
     is_deeply($x1->values, ['NaN']);
     ok(r->is_numeric($x1));
   }

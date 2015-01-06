@@ -2166,6 +2166,27 @@ namespace Rstats {
     }
   }
 
+  // Rstats::ArrayFunc
+  namespace ArrayFunc {
+    SV* new_array() {
+      
+      SV* sv_self = Rstats::PerlAPI::new_mHVRV();
+      sv_bless(sv_self, gv_stashpv("Rstats::Array", 1));
+      
+      return sv_self;
+    }
+    
+    void set_vector(SV* sv_a1, Rstats::Vector* v1) {
+      SV* sv_vector = Rstats::PerlAPI::to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
+      Rstats::PerlAPI::hvrv_store_nolen_inc(sv_a1, "vector", sv_vector);
+    }
+    
+    Rstats::Vector* get_vector(SV* sv_a1) {
+      SV* sv_vector = Rstats::PerlAPI::hvrv_fetch_simple(sv_a1, "vector");
+      Rstats::Vector* vector = Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_vector);
+      return vector;
+    }
+  }
  
   // Rstats::Util body
   namespace Util {

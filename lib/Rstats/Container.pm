@@ -9,15 +9,6 @@ use Rstats::Vector;
 has list => sub { [] };
 has 'vector';
 
-sub is_perl_array_class {
-  my $self  = shift;
-  
-  my $is;
-  eval { $is = $self->isa('Rstats::Array') };
-  
-  return $is;
-}
-
 sub is_perl_list_class {
   my $self  = shift;
   
@@ -30,7 +21,7 @@ sub is_perl_list_class {
 sub decompose_elements {
   my $self = shift;
   
-  if ($self->is_perl_array_class) {
+  if (exists $self->{vector}) {
     return $self->vector->decompose;
   }
   else {
@@ -298,7 +289,7 @@ sub length_value {
   my $self = shift;
   
   my $length;
-  if ($self->is_perl_array_class) {
+  if (exists $self->{vector}) {
     $length = $self->vector->length_value;
   }
   else {
@@ -692,10 +683,9 @@ sub values {
 sub is_vector {
   my $self = shift;
   
-  my $x_is = ref $self eq 'Rstats::Array' && $self->dim->length_value == 0
-    ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+  my $is = ref $self eq 'Rstats::Array' && !exists $self->{dim};
   
-  return $x_is;
+  return Rstats::Func::new_logical($is);
 }
 
 sub is_matrix {
@@ -772,7 +762,7 @@ sub is_array {
   
   my $is = ref $self eq 'Rstats::Array' && exists $self->{dim};
   
-  return $is;
+  return Rstats::Func::new_logical($is);
 }
 
 sub names {

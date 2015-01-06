@@ -52,7 +52,7 @@ sub copy_attrs_to {
     else {
       $x2_names_values = $self->{names}->values;
     }
-    $x2->{names} = Rstats::ArrayFunc::new_character(@$x2_names_values);
+    $x2->{names} = Rstats::VectorFunc::new_character(@$x2_names_values);
   }
   
   # dimnames
@@ -74,7 +74,7 @@ sub copy_attrs_to {
         else {
           $new_dimname_values = $dimname_values;
         }
-        push @$new_dimnames, Rstats::ArrayFunc::new_character(@$new_dimname_values);
+        push @$new_dimnames, Rstats::VectorFunc::new_character(@$new_dimname_values);
       }
     }
     $x2->{dimnames} = $new_dimnames;
@@ -296,7 +296,7 @@ sub is_na {
   my $x1 = Rstats::Func::to_c($_a1);
   my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
   my $x2 = Rstats::Func::NULL();
-  $x2->vector(Rstats::ArrayFunc::new_logical(@$x2_values));
+  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
   
   return $x2;
 }
@@ -342,16 +342,16 @@ sub class {
       $x_class->vector($self->mode->vector->clone);
     }
     elsif ($self->is_matrix) {
-      $x_class->vector(Rstats::ArrayFunc::new_character('matrix'));
+      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
     }
     elsif ($self->is_array) {
-      $x_class->vector(Rstats::ArrayFunc::new_character('array'));
+      $x_class->vector(Rstats::VectorFunc::new_character('array'));
     }
     elsif ($self->is_data_frame) {
-      $x_class->vector(Rstats::ArrayFunc::new_character('data.frame'));
+      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
     }
     elsif ($self->is_list) {
-      $x_class->vector(Rstats::ArrayFunc::new_character('list'));
+      $x_class->vector(Rstats::VectorFunc::new_character('list'));
     }
     
     return $x_class;
@@ -646,7 +646,7 @@ sub as_character {
       }
     }
     $x2 = Rstats::Func::NULL();
-    $x2->vector(Rstats::ArrayFunc::new_character(@$x2_values));
+    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
     
     $self->copy_attrs_to($x2)
   }

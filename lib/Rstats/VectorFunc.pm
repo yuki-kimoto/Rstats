@@ -1,4 +1,4 @@
-package Rstats::ArrayFunc;
+package Rstats::VectorFunc;
 
 use strict;
 use warnings;
@@ -33,6 +33,6 @@ sub new_vector {
 1;
 =head1 NAME
 
-Rstats::ArrayFunc - Vector functions
+Rstats::VectorFunc - Vector functions
 
 1;

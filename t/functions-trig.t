@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::ArrayFunc;
+use Rstats::VectorFunc;
 use Math::Trig ();
 use Math::Complex ();
 

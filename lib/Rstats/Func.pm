@@ -529,7 +529,7 @@ sub data_frame {
           $fix_name = $name;
         }
         push @$column_names, $fix_name;
-        push @$elements, splice(@{$v->decompose_elements}, 0, $count);
+        push @$elements, splice(@{$v->values}, 0, $count);
       }
     }
     else {
@@ -656,21 +656,21 @@ sub diag {
   my $x1 = to_c(shift);
   
   my $size;
-  my $x2_elements;
+  my $x2_values;
   if ($x1->length_value == 1) {
     $size = $x1->value;
-    $x2_elements = [];
-    push @$x2_elements, Rstats::VectorFunc::new_double(1) for (1 .. $size);
+    $x2_values = [];
+    push @$x2_values, 1 for (1 .. $size);
   }
   else {
     $size = $x1->length_value;
-    $x2_elements = $x1->decompose_elements;
+    $x2_values = $x1->values;
   }
   
   my $x2 = matrix(0, $size, $size);
   for (my $i = 0; $i < $size; $i++) {
     $x2->at($i + 1, $i + 1);
-    $x2->set($x2_elements->[$i]);
+    $x2->set($x2_values->[$i]);
   }
 
   return $x2;
@@ -685,11 +685,11 @@ sub set_diag {
   my $size = $x1_dim_values->[0] < $x1_dim_values->[1] ? $x1_dim_values->[0] : $x1_dim_values->[1];
   
   $x2 = array($x2, $size);
-  $x2_elements = $x2->decompose_elements;
+  my $x2_values = $x2->values;
   
   for (my $i = 0; $i < $size; $i++) {
     $x1->at($i + 1, $i + 1);
-    $x1->set($x2_elements->[$i]);
+    $x1->set($x2_values->[$i]);
   }
   
   return $x1;

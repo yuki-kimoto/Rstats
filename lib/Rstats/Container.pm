@@ -9,15 +9,6 @@ use Rstats::Vector;
 has list => sub { [] };
 has 'vector';
 
-sub is_perl_list_class {
-  my $self  = shift;
-  
-  my $is;
-  eval { $is = $self->isa('Rstats::List') };
-  
-  return $is;
-}
-
 sub decompose_elements {
   my $self = shift;
   
@@ -313,7 +304,7 @@ sub is_na {
 sub as_list {
   my $self = shift;
   
-  if ($self->is_perl_list_class) {
+  if (exists $self->{list}) {
     return $self;
   }
   else {
@@ -329,7 +320,7 @@ sub as_list {
 sub is_list {
   my $self = shift;
 
-  return $self->is_perl_list_class ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
+  return exists $self->{list} ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
 }
 
 sub class {

@@ -791,24 +791,23 @@ sub sub {
   my $replacement = $x1_replacement->value;
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
-  my $x2_elements = [];
-  for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na->value) {
-      push @$x2_elements, $x_e;
+  my $x2_values = [];
+  for my $x (@{$x1_x->values}) {
+    if (!defined $x) {
+      push @$x2_values, undef;
     }
     else {
-      my $x = $x_e->value;
       if ($ignore_case) {
         $x =~ s/$pattern/$replacement/i;
       }
       else {
         $x =~ s/$pattern/$replacement/;
       }
-      push @$x2_elements, Rstats::VectorFunc::new_character($x);
+      push @$x2_values, "$x";
     }
   }
   
-  my $x2 = c($x2_elements);
+  my $x2 = Rstats::Func::new_character(@$x2_values);
   $x1_x->copy_attrs_to($x2);
   
   return $x2;

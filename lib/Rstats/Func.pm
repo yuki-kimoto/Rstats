@@ -995,15 +995,30 @@ sub is_element {
   
   croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $type = $x1->type;
+  my $x1_values = $x1->values;
+  my $x2_values = $x2->values;
   my $x3_values = [];
-  for my $x1_element (@$x1_elements) {
+  for my $x1_value (@$x1_values) {
     my $match;
-    for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
-        $match = 1;
-        last;
+    for my $x2_value (@$x2_values) {
+      if ($type eq 'character') {
+        if ($x1_value eq $x2_value) {
+          $match = 1;
+          last;
+        }
+      }
+      elsif ($type eq 'double' || $type eq 'integer') {
+        if ($x1_value == $x2_value) {
+          $match = 1;
+          last;
+        }
+      }
+      elsif ($type eq 'complex') {
+        if ($x1_value->{re} == $x2_value->{re} && $x1_value->{im} == $x2_value->{im}) {
+          $match = 1;
+          last;
+        }
       }
     }
     push @$x3_values, $match ? 1 : 0;

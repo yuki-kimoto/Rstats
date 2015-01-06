@@ -821,24 +821,23 @@ sub gsub {
   my $replacement = $x1_replacement->value;
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
-  my $x2_elements = [];
-  for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na->value) {
-      push @$x2_elements, $x_e;
+  my $x2_values = [];
+  for my $x (@{$x1_x->values}) {
+    if (!defined $x) {
+      push @$x2_values, $x;
     }
     else {
-      my $x = $x_e->value;
       if ($ignore_case) {
         $x =~ s/$pattern/$replacement/gi;
       }
       else {
         $x =~ s/$pattern/$replacement/g;
       }
-      push @$x2_elements, Rstats::VectorFunc::new_character($x);
+      push @$x2_values, $x;
     }
   }
   
-  my $x2 = c($x2_elements);
+  my $x2 = Rstats::Func::new_character(@$x2_values);
   $x1_x->copy_attrs_to($x2);
   
   return $x2;
@@ -850,133 +849,26 @@ sub grep {
   my $pattern = $x1_pattern->value;
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
-  my $x2_elements = [];
-  my $x1_x_elements = $x1_x->decompose_elements;
-  for (my $i = 0; $i < @$x1_x_elements; $i++) {
-    my $x_e = $x1_x_elements->[$i];
+  my $x2_values = [];
+  my $x1_x_values = $x1_x->values;
+  for (my $i = 0; $i < @$x1_x_values; $i++) {
+    my $x = $x1_x_values->[$i];
     
-    unless ($x_e->is_na->value) {
-      my $x = $x_e->value;
+    unless (!defined $x) {
       if ($ignore_case) {
         if ($x =~ /$pattern/i) {
-          push @$x2_elements, Rstats::VectorFunc::new_double($i + 1);
+          push @$x2_values, $i + 1;
         }
       }
       else {
         if ($x =~ /$pattern/) {
-          push @$x2_elements, Rstats::VectorFunc::new_double($i + 1);
+          push @$x2_values, $i + 1;
         }
       }
     }
   }
   
-  return c($x2_elements);
-}
-
-sub c {
-  my @elements_tmp1 = @_;
-  
-  # Fix elements
-  my $elements_tmp2;
-  if (@elements_tmp1 == 0) {
-    return NULL();
-  }
-  elsif (@elements_tmp1 > 1) {
-    $elements_tmp2 = \@elements_tmp1;
-  }
-  else {
-    $elements_tmp2 = $elements_tmp1[0];
-  }
-
-  my $elements = [];
-  if (defined $elements_tmp2) {
-    if (ref $elements_tmp2 eq 'ARRAY') {
-      for my $element (@$elements_tmp2) {
-        if (ref $element eq 'ARRAY') {
-          push @$elements, @$element;
-        }
-        elsif (ref $element eq 'Rstats::Array') {
-          push @$elements, @{$element->decompose_elements};
-        }
-        else {
-          push @$elements, $element;
-        }
-      }
-    }
-    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
-      $elements = $elements_tmp2->decompose_elements;
-    }
-    else {
-      $elements = [$elements_tmp2];
-    }
-  }
-  else {
-    return NA();
-  }
-  
-  # Check elements
-  my $mode_h = {};
-  for my $element (@$elements) {
-    
-    if (!ref $element) {
-      if (Rstats::Util::is_perl_number($element)) {
-        $element = Rstats::VectorFunc::new_double($element);
-        $mode_h->{double}++;
-      }
-      else {
-        $element = Rstats::VectorFunc::new_character("$element");
-        $mode_h->{character}++;
-      }
-    }
-    elsif ($element->is_na->value) {
-      next;
-    }
-    elsif ($element->is_character) {
-      $mode_h->{character}++;
-    }
-    elsif ($element->is_complex) {
-      $mode_h->{complex}++;
-    }
-    elsif ($element->is_double) {
-      $mode_h->{double}++;
-    }
-    elsif ($element->is_integer) {
-      $element = Rstats::VectorFunc::new_double($element->value);
-      $mode_h->{double}++;
-    }
-    elsif ($element->is_logical) {
-      $mode_h->{logical}++;
-    }
-  }
-
-  # Array
-  my $x1 = NULL();
-
-  # Upgrade elements and type
-  my @modes = keys %$mode_h;
-  my $mode;
-  if (@modes > 1) {
-    if ($mode_h->{character}) {
-      $elements = [map { $_->as_character } @$elements];
-      $mode = 'character';
-    }
-    elsif ($mode_h->{complex}) {
-      $elements = [map { $_->as_complex } @$elements];
-      $mode = 'complex';
-    }
-    elsif ($mode_h->{double}) {
-      $elements = [map { $_->as_double } @$elements];
-      $mode = 'double';
-    }
-  }
-  else {
-    $mode = $modes[0] || 'logical';
-  }
-  
-  my $compose_elements = Rstats::Vector->compose($mode, $elements);
-  $x1->vector($compose_elements);
-  
-  return $x1;
+  return Rstats::Func::new_double(@$x2_values);
 }
 
 sub se {
@@ -1021,22 +913,21 @@ sub chartr {
   my $old = $x1_old->value;
   my $new = $x1_new->value;
   
-  my $x2_elements = [];
-  for my $x_e (@{$x1_x->decompose_elements}) {
-    if ($x_e->is_na->value) {
-      push @$x2_elements, $x_e;
+  my $x2_values = [];
+  for my $x (@{$x1_x->values}) {
+    if (!defined $x) {
+      push @$x2_values, $x;
     }
     else {
-      my $x = $x_e->value;
       $old =~ s#/#\/#;
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";
       croak $@ if $@;
-      push @$x2_elements, Rstats::VectorFunc::new_character($x);
+      push @$x2_values, "$x";
     }
   }
   
-  my $x2 = c($x2_elements);
+  my $x2 = Rstats::Func::new_character(@$x2_values);
   $x1_x->copy_attrs_to($x2);
   
   return $x2;
@@ -1049,15 +940,14 @@ sub charmatch {
     unless $x1_x->vector->type eq 'character' && $x1_table->vector->type eq 'character';
   
   my $x2_values = [];
-  for my $x1_x_element (@{$x1_x->decompose_elements}) {
-    my $x1_x_char = $x1_x_element->value;
+  for my $x1_x_value (@{$x1_x->values}) {
+    my $x1_x_char = $x1_x_value;
     my $x1_x_char_q = quotemeta($x1_x_char);
     my $match_count;
     my $match_pos;
-    my $x1_table_elements = $x1_table->decompose_elements;
+    my $x1_table_values = $x1_table->values;
     for (my $k = 0; $k < $x1_table->length_value; $k++) {
-      my $x1_table = $x1_table_elements->[$k];
-      my $x1_table_char = $x1_table->value;
+      my $x1_table_char = $x1_table_values->[$k];
       if ($x1_table_char =~ /$x1_x_char_q/) {
         $match_count++;
         $match_pos = $k;
@@ -1077,34 +967,11 @@ sub charmatch {
   return Rstats::Func::new_double(@$x2_values);
 }
 
-sub Conj {
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { Rstats::VectorFunc::Conj($_) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
-  $x1->copy_attrs_to($x2);
-  return $x2;
-}
+sub Conj { operate_unary(\&Rstats::VectorFunc::Conj, @_) }
 
-sub Re {
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { Rstats::VectorFunc::Re($_) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
+sub Re { operate_unary(\&Rstats::VectorFunc::Re, @_) }
 
-sub Im {
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { Rstats::VectorFunc::Im($_) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
+sub Im { operate_unary(\&Rstats::VectorFunc::Im, @_) }
 
 sub nrow {
   my $x1 = shift;
@@ -2844,6 +2711,113 @@ sub upgrade_type {
   }
   
   return @xs;
+}
+
+sub c {
+  my @elements_tmp1 = @_;
+  
+  # Fix elements
+  my $elements_tmp2;
+  if (@elements_tmp1 == 0) {
+    return NULL();
+  }
+  elsif (@elements_tmp1 > 1) {
+    $elements_tmp2 = \@elements_tmp1;
+  }
+  else {
+    $elements_tmp2 = $elements_tmp1[0];
+  }
+
+  my $elements = [];
+  if (defined $elements_tmp2) {
+    if (ref $elements_tmp2 eq 'ARRAY') {
+      for my $element (@$elements_tmp2) {
+        if (ref $element eq 'ARRAY') {
+          push @$elements, @$element;
+        }
+        elsif (ref $element eq 'Rstats::Array') {
+          push @$elements, @{$element->decompose_elements};
+        }
+        else {
+          push @$elements, $element;
+        }
+      }
+    }
+    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
+      $elements = $elements_tmp2->decompose_elements;
+    }
+    else {
+      $elements = [$elements_tmp2];
+    }
+  }
+  else {
+    return NA();
+  }
+  
+  # Check elements
+  my $mode_h = {};
+  for my $element (@$elements) {
+    next unless defined $element;
+    
+    if (!ref $element) {
+      if (Rstats::Util::is_perl_number($element)) {
+        $element = Rstats::VectorFunc::new_double($element);
+        $mode_h->{double}++;
+      }
+      else {
+        $element = Rstats::VectorFunc::new_character("$element");
+        $mode_h->{character}++;
+      }
+    }
+    elsif ($element->is_na->value) {
+      next;
+    }
+    elsif ($element->is_character) {
+      $mode_h->{character}++;
+    }
+    elsif ($element->is_complex) {
+      $mode_h->{complex}++;
+    }
+    elsif ($element->is_double) {
+      $mode_h->{double}++;
+    }
+    elsif ($element->is_integer) {
+      $element = Rstats::VectorFunc::new_double($element->value);
+      $mode_h->{double}++;
+    }
+    elsif ($element->is_logical) {
+      $mode_h->{logical}++;
+    }
+  }
+
+  # Array
+  my $x1 = NULL();
+
+  # Upgrade elements and type
+  my @modes = keys %$mode_h;
+  my $mode;
+  if (@modes > 1) {
+    if ($mode_h->{character}) {
+      $elements = [map { $_->as_character } @$elements];
+      $mode = 'character';
+    }
+    elsif ($mode_h->{complex}) {
+      $elements = [map { $_->as_complex } @$elements];
+      $mode = 'complex';
+    }
+    elsif ($mode_h->{double}) {
+      $elements = [map { $_->as_double } @$elements];
+      $mode = 'double';
+    }
+  }
+  else {
+    $mode = $modes[0] || 'logical';
+  }
+  
+  my $compose_elements = Rstats::Vector->compose($mode, $elements);
+  $x1->vector($compose_elements);
+  
+  return $x1;
 }
 
 1;

@@ -14,6 +14,16 @@ use Rstats::Func;
   $x1->vector->to_string;
 }
 
+# outer
+{
+  # outer - basic
+  my $x1 = array(se('1:2'), c(1, 2));
+  my $x2 = array(se('1:24'), c(3, 4));
+  my $x3 = r->outer($x1, $x2);
+  is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
+  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
+}
+
 # bool context
 {
   {
@@ -822,16 +832,6 @@ EOS
       /]);
     is_deeply(r->dim($x3)->values, [12, 12, 2]);
   }
-}
-
-# outer
-{
-  # outer - basic
-  my $x1 = array(se('1:2'), c(1, 2));
-  my $x2 = array(se('1:24'), c(3, 4));
-  my $x3 = r->outer($x1, $x2);
-  is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
-  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
 }
 
 # comparison operator numeric

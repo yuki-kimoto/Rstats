@@ -772,9 +772,9 @@ sub outer {
     my $pos_tmp = [@$pos];
     my $x1_pos = [splice @$pos_tmp, 0, $x1_dim_length];
     my $x2_pos = $pos_tmp;
-    my $x1_value = $x1->vector_part(@$x1_pos);
-    my $x2_value = $x2->vector_part(@$x2_pos);
-    my $x3_value = Rstats::VectorFunc::multiply($x1_value, $x2_value);
+    my $x1_value = $x1->value(@$x1_pos);
+    my $x2_value = $x2->value(@$x2_pos);
+    my $x3_value = $x1_value * $x2_value;
     push @$x3_values, $x3_value;
   }
   
@@ -793,7 +793,7 @@ sub sub {
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
@@ -824,7 +824,7 @@ sub gsub {
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
   my $x2_elements = [];
   for my $x_e (@{$x1_x->decompose_elements}) {
@@ -853,7 +853,7 @@ sub grep {
   my ($x1_pattern, $x1_x, $x1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->vector_part : FALSE;
+  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
   
   my $x2_elements = [];
   my $x1_x_elements = $x1_x->decompose_elements;
@@ -1755,9 +1755,8 @@ sub max_type {
     my $x_type = $x->typeof->value;
     $type_h->{$x_type}++;
     unless ($x->is_null) {
-      my $element = $x->vector_part;
-      my $element_type = $element->type;
-      $type_h->{$element_type}++;
+      my $type = $x->type;
+      $type_h->{$type}++;
     }
   }
   
@@ -2074,17 +2073,17 @@ sub rbind {
     # Create new vectors
     my @new_vectors;
     for my $name (@$first_names) {
-      my @vector_parts;
+      my @vectors;
       for my $x (@xs) {
         my $v = $x->getin($name);
         if ($v->is_factor) {
-          push @vector_parts, $v->as_character;
+          push @vectors, $v->as_character;
         }
         else {
-          push @vector_parts, $v;
+          push @vectors, $v;
         }
       }
-      my $new_vector = c(@vector_parts);
+      my $new_vector = c(@vectors);
       push @new_vectors, $new_vector;
     }
     

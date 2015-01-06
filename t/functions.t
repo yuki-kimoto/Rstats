@@ -275,7 +275,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->expm1($x1);
-    ok($x2->vector_part->is_na);
+    ok(!defined $x2->value);
   }
 
   # expm1 - NaN
@@ -325,7 +325,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->exp($x1);
-    ok($x2->vector_part->is_na);
+    ok(!defined $x2->value);
   }  
 
   # exp - NaN
@@ -459,7 +459,7 @@ use Math::Trig ();
   {
     my $x1 = c(NA);
     my $x2 = r->log($x1);
-    ok($x2->vector_part->is_na);
+    ok(!defined $x2->value);
   }  
 
   # log - NaN
@@ -1173,8 +1173,8 @@ use Math::Trig ();
 # NA
 {
   my $na = NA;
-  my $na_element = $na->vector_part;
-  is($na_element->value, undef);
+  my $na_value = $na->value;
+  is($na_value, undef);
 }
 
 # round

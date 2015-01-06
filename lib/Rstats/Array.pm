@@ -348,64 +348,58 @@ sub bool {
     carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
-  my $element = $self->vector_part;
+  my $type = $self->type;
+  my $value = $self->value;
 
   my $is;
-  if ($element->is_character || $element->is_complex) {
+  if ($type eq 'character' || $type eq 'complex') {
     croak 'Error in -a : invalid argument to unary operator ';
   }
-  elsif ($element->is_double) {
-    if ($element->is_infinite->value) {
+  elsif ($type eq 'double') {
+    if ($value eq 'Inf' || $value eq '-Inf') {
       $is = 1;
     }
-    elsif ($element->is_nan->value) {
+    elsif ($value eq 'NaN') {
       croak 'argument is not interpretable as logical';
     }
     else {
-      $is = $element->value;
+      $is = $value;
     }
   }
-  elsif ($element->is_integer || $element->is_logical) {
-    $is = $element->value;
+  elsif ($type eq 'integer' || $type eq 'logical') {
+    $is = $value;
   }
   else {
     croak "Invalid type";
   }
   
-  my $is_na = $element->is_na->value;
-  if ($is_na) {
+  if (!defined $value) {
     croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
   }
 
   return $is;
 }
 
-sub vector_part {
+sub value {
   my $self = shift;
 
+  my $e1;
   my $dim_values = $self->dim_as_array->values;
-  
   my $self_elements = $self->decompose_elements;
   if (@_) {
     if (@$dim_values == 1) {
-      return $self_elements->[$_[0] - 1];
+      $e1 = $self_elements->[$_[0] - 1];
     }
     elsif (@$dim_values == 2) {
-      return $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+      $e1 = $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      return $self->get(@_)->decompose_elements->[0];
+      $e1 = $self->get(@_)->decompose_elements->[0];
     }
   }
   else {
-    return $self_elements->[0];
+    $e1 = $self_elements->[0];
   }
-}
-
-sub value {
-  my $self = shift;
-  
-  my $e1 = $self->vector_part(@_);
   
   return defined $e1 ? $e1->value : undef;
 }

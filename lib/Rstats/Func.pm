@@ -405,13 +405,11 @@ sub factor {
   $x_exclude = NA unless defined $x_exclude;
   
   # fix levels
-  if (!$x_exclude->is_na->value && $x_exclude->length->value) {
-    my $new_a_levels_elements = [];
-    for my $x_levels_element (@{$x_levels->decompose_elements}) {
+  if (defined $x_exclude->value && $x_exclude->length->value) {
+    my $new_a_levels_values = [];
+    for my $x_levels_value (@{$x_levels->values}) {
       my $match;
-      for my $x_exclude_element (@{$x_exclude->decompose_elements}) {
-        my $x_levels_value = $x_levels_element->value;
-        my $x_exclude_value = $x_exclude_element->value;
+      for my $x_exclude_value (@{$x_exclude->values}) {
         if (defined $x_levels_value
           && defined $x_exclude_value
           && $x_levels_value eq $x_exclude_value)
@@ -420,9 +418,9 @@ sub factor {
           last;
         }
       }
-      push @$new_a_levels_elements, $x_levels_element unless $match;
+      push @$new_a_levels_values, $x_levels_value unless $match;
     }
-    $x_levels = c($new_a_levels_elements);
+    $x_levels = c($new_a_levels_values);
   }
   
   # default - labels

@@ -988,15 +988,7 @@ sub nrow {
 }
 
 
-sub negation {
-  my $x1 = shift;
-  
-  my $x2_elements = [map { Rstats::VectorFunc::negation($_) } @{$x1->decompose_elements}];
-  my $x2 = c($x2_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
+sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
 
 sub is_element {
   my ($x1, $x2) = (to_c(shift), to_c(shift));

@@ -337,7 +337,7 @@ sub mapply {
   # Apply
   my $new_xs = [];
   for (my $i = 0; $i < $max_length; $i++) {
-    my @args = map { $_->vector_part($i + 1) } @xs;
+    my @args = map { $_->value($i + 1) } @xs;
     my $x = $func->(@args);
     push @$new_xs, $x;
   }
@@ -369,7 +369,7 @@ sub apply {
   my $new_elements_array = [];
   for (my $i = 0; $i < $x1_length; $i++) {
     my $index = Rstats::Util::pos_to_index($i, $dim_values);
-    my $e1 = $x1->vector_part(@$index);
+    my $e1 = $x1->value(@$index);
     my $new_index = [];
     for my $i (@$margin_values) {
       push @$new_index, $index->[$i - 1];
@@ -419,7 +419,7 @@ sub sweep {
       push @$new_index, $x1_index->[$x_margin_value - 1];
     }
     
-    my $e1 = $x2->vector_part(@{$new_index});
+    my $e1 = $x2->value(@{$new_index});
     push @$x_result_elements, $e1;
   }
   my $x3 = Rstats::Func::c($x_result_elements);

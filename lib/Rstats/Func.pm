@@ -72,9 +72,9 @@ sub t {
   
   for my $row (1 .. $x1_row) {
     for my $col (1 .. $x1_col) {
-      my $element = $x1->vector_part($row, $col);
+      my $value = $x1->value($row, $col);
       $x2->at($col, $row);
-      $x2->set($element);
+      $x2->set($value);
     }
   }
   
@@ -130,7 +130,7 @@ sub na_omit {
   my @poss;
   for my $v (@{$x1->list}) {
     for (my $index = 1; $index <= $x1->{row_length}; $index++) {
-      push @poss, $index if $v->vector_part($index)->is_na->value;
+      push @poss, $index unless defined $v->value($index);
     }
   }
   
@@ -593,7 +593,7 @@ sub data_frame {
 sub upper_tri {
   my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
+  my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
   if ($x1_m->is_matrix) {
@@ -626,7 +626,7 @@ sub upper_tri {
 sub lower_tri {
   my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
   
-  my $diag = defined $x1_diag ? $x1_diag->vector_part : FALSE;
+  my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
   if ($x1_m->is_matrix) {
@@ -723,7 +723,7 @@ sub kronecker {
   my $x3_dim_product = 1;
   $x3_dim_product *= $_ for @{$x3_dim_values};
   
-  my $x3_elements = [];
+  my $x3_values = [];
   for (my $i = 0; $i < $x3_dim_product; $i++) {
     my $x3_index = Rstats::Util::pos_to_index($i, $x3_dim_values);
     my $x1_index = [];
@@ -739,13 +739,13 @@ sub kronecker {
       my $x2_ind = $x3_i - $x2_dim_value * ($x1_ind - 1);
       push @$x2_index, $x2_ind;
     }
-    my $x1_element = $x1->vector_part(@$x1_index);
-    my $x2_element = $x2->vector_part(@$x2_index);
-    my $x3_element = multiply($x1_element, $x2_element);
-    push @$x3_elements, $x3_element;
+    my $x1_value = $x1->value(@$x1_index);
+    my $x2_value = $x2->value(@$x2_index);
+    my $x3_value = multiply($x1_value, $x2_value);
+    push @$x3_values, $x3_value;
   }
 
-  my $x3 = array($x3_elements, c($x3_dim_values));
+  my $x3 = array($x3_values, c($x3_dim_values));
   
   return $x3;
 }
@@ -767,18 +767,18 @@ sub outer {
   my $poses = Rstats::Util::cross_product($indexs);
   
   my $x1_dim_length = $x1_dim->length_value;
-  my $x3_elements = [];
+  my $x3_values = [];
   for my $pos (@$poses) {
     my $pos_tmp = [@$pos];
     my $x1_pos = [splice @$pos_tmp, 0, $x1_dim_length];
     my $x2_pos = $pos_tmp;
-    my $x1_element = $x1->vector_part(@$x1_pos);
-    my $x2_element = $x2->vector_part(@$x2_pos);
-    my $x3_element = Rstats::VectorFunc::multiply($x1_element, $x2_element);
-    push @$x3_elements, $x3_element;
+    my $x1_value = $x1->vector_part(@$x1_pos);
+    my $x2_value = $x2->vector_part(@$x2_pos);
+    my $x3_value = Rstats::VectorFunc::multiply($x1_value, $x2_value);
+    push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($x3_elements, c($x3_dim));
+  my $x3 = array($x3_values, c($x3_dim));
   
   return $x3;
 }

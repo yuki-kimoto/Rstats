@@ -247,7 +247,7 @@ namespace Rstats {
 
     // reminder
     std::complex<NV> reminder(std::complex<NV> e1, std::complex<NV> e2) {
-      croak("unimplemented complex operation(Rstats::VectorFunc::reminder())");
+      croak("unimplemented complex operation(Rstats::ArrayFunc::reminder())");
     }
     NV reminder(NV e1, NV e2) {
       if (std::isnan(e1) || std::isnan(e2) || e2 == 0) {
@@ -931,10 +931,10 @@ namespace Rstats {
 # define RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
-        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different type(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       if (e1->get_length() != e2->get_length()) { \
-        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different length(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       IV length = e1->get_length(); \
       Rstats::Vector* e3 = Rstats::Vector::new_logical(length); \
@@ -981,10 +981,10 @@ namespace Rstats {
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
-        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different type(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       if (e1->get_length() != e2->get_length()) { \
-        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different length(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       IV length = e1->get_length(); \
       Rstats::Vector* e3; \
@@ -1025,10 +1025,10 @@ namespace Rstats {
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
       if (e1->get_type() != e2->get_type()) { \
-        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different type(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       if (e1->get_length() != e2->get_length()) { \
-        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+        croak("Can't add different length(Rstats::ArrayFunc::%s())", #FUNC_NAME); \
       } \
       IV length = e1->get_length(); \
       Rstats::Vector* e3; \
@@ -1871,8 +1871,8 @@ namespace Rstats {
     }
   };
 
-  // Rstats::VectorFunc
-  namespace VectorFunc {
+  // Rstats::ArrayFunc
+  namespace ArrayFunc {
     RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite)
     RSTATS_DEF_VECTOR_FUNC_UN_IS(is_finite, Rstats::ElementFunc::is_finite)
     RSTATS_DEF_VECTOR_FUNC_UN_IS(is_nan, Rstats::ElementFunc::is_nan)

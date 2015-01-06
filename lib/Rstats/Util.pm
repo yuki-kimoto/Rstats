@@ -7,7 +7,7 @@ use Scalar::Util ();
 use B ();
 use Carp 'croak';
 use Rstats::Func;
-use Rstats::VectorFunc;
+use Rstats::ArrayFunc;
 
 sub is_perl_number {
   my ($value) = @_;

@@ -75,7 +75,7 @@ sub get {
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->list($new_elements);
   $self->copy_attrs_to($data_frame, {new_indexes => [$row_index, Rstats::Func::c($col_index_values)]});
-  $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(1 .. $data_frame->getin(1)->length_value);
+  $data_frame->{dimnames}[0] = Rstats::ArrayFunc::new_character(1 .. $data_frame->getin(1)->length_value);
   
   return $data_frame;
 }

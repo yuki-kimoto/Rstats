@@ -2,7 +2,7 @@ package Rstats::Vector;
 use Object::Simple -base;
 
 use Carp 'croak', 'carp';
-use Rstats::VectorFunc;
+use Rstats::ArrayFunc;
 
 use overload
   '""' => \&to_string,

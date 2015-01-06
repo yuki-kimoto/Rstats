@@ -1,7 +1,7 @@
 package Rstats::Array;
 use Rstats::Container -base;
 
-use Rstats::VectorFunc;
+use Rstats::ArrayFunc;
 use Rstats::Func;
 use Rstats::Util;
 use Carp 'croak', 'carp';
@@ -10,22 +10,22 @@ our @CARP_NOT = ('Rstats');
 
 use overload
   bool => \&bool,
-  '+' => sub { shift->operate_binary(\&Rstats::VectorFunc::add, @_) },
-  '-' => sub { shift->operate_binary(\&Rstats::VectorFunc::subtract, @_) },
-  '*' => sub { shift->operate_binary(\&Rstats::VectorFunc::multiply, @_) },
-  '/' => sub { shift->operate_binary(\&Rstats::VectorFunc::divide, @_) },
-  '%' => sub { shift->operate_binary(\&Rstats::VectorFunc::remainder, @_) },
+  '+' => sub { shift->operate_binary(\&Rstats::ArrayFunc::add, @_) },
+  '-' => sub { shift->operate_binary(\&Rstats::ArrayFunc::subtract, @_) },
+  '*' => sub { shift->operate_binary(\&Rstats::ArrayFunc::multiply, @_) },
+  '/' => sub { shift->operate_binary(\&Rstats::ArrayFunc::divide, @_) },
+  '%' => sub { shift->operate_binary(\&Rstats::ArrayFunc::remainder, @_) },
   'neg' => sub { shift->negation(@_) },
-  '**' => sub { shift->operate_binary(\&Rstats::VectorFunc::pow, @_) },
+  '**' => sub { shift->operate_binary(\&Rstats::ArrayFunc::pow, @_) },
   'x' => sub { shift->inner_product(@_) },
-  '<' => sub { shift->operate_binary(\&Rstats::VectorFunc::less_than, @_) },
-  '<=' => sub { shift->operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) },
-  '>' => sub { shift->operate_binary(\&Rstats::VectorFunc::more_than, @_) },
-  '>=' => sub { shift->operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) },
-  '==' => sub { shift->operate_binary(\&Rstats::VectorFunc::equal, @_) },
-  '!=' => sub { shift->operate_binary(\&Rstats::VectorFunc::not_equal, @_) },
-  '&' => sub { shift->operate_binary(\&Rstats::VectorFunc::and, @_) },
-  '|' => sub { shift->operate_binary(\&Rstats::VectorFunc::or, @_) },
+  '<' => sub { shift->operate_binary(\&Rstats::ArrayFunc::less_than, @_) },
+  '<=' => sub { shift->operate_binary(\&Rstats::ArrayFunc::less_than_or_equal, @_) },
+  '>' => sub { shift->operate_binary(\&Rstats::ArrayFunc::more_than, @_) },
+  '>=' => sub { shift->operate_binary(\&Rstats::ArrayFunc::more_than_or_equal, @_) },
+  '==' => sub { shift->operate_binary(\&Rstats::ArrayFunc::equal, @_) },
+  '!=' => sub { shift->operate_binary(\&Rstats::ArrayFunc::not_equal, @_) },
+  '&' => sub { shift->operate_binary(\&Rstats::ArrayFunc::and, @_) },
+  '|' => sub { shift->operate_binary(\&Rstats::ArrayFunc::or, @_) },
   '""' => sub { shift->to_string(@_) },
   fallback => 1;
 
@@ -276,7 +276,7 @@ sub _levels_h {
   my $levels_h = {};
   my $levels = $self->levels->values;
   for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
+    $levels_h->{$levels->[$i - 1]} = Rstats::ArrayFunc::new_integer($i);
   }
   
   return $levels_h;
@@ -300,7 +300,7 @@ sub set {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if ($element->is_na->value) {
-        $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+        $self_elements->[$pos] = Rstats::ArrayFunc::new_logical(undef);
       }
       else {
         my $value = $element->to_string;
@@ -309,7 +309,7 @@ sub set {
         }
         else {
           carp "invalid factor level, NA generated";
-          $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+          $self_elements->[$pos] = Rstats::ArrayFunc::new_logical(undef);
         }
       }
     }

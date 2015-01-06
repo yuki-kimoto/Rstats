@@ -431,7 +431,7 @@ sub factor {
   # default - ordered
   $x_ordered = $x1->is_ordered unless defined $x_ordered;
   
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_values = $x1->values;
   
   my $labels_length = $x_labels->length->value;
   my $levels_length = $x_levels->length->value;
@@ -445,22 +445,20 @@ sub factor {
   
   # Levels hash
   my $levels;
-  my $x_levels_elements = $x_levels->decompose_elements;
+  my $x_levels_values = $x_levels->values;
   for (my $i = 1; $i <= $levels_length; $i++) {
-    my $x_levels_element = $x_levels_elements->[$i - 1];
-    my $value = $x_levels_element->value;
-    $levels->{$value} = $i;
+    my $x_levels_value = $x_levels_values->[$i - 1];
+    $levels->{$x_levels_value} = $i;
   }
   
   my $f1_values = [];
-  for my $x1_element (@$x1_elements) {
-    if (!defined $x1_element->value) {
+  for my $x1_value (@$x1_values) {
+    if (!defined $x1_value) {
       push @$f1_values, undef;
     }
     else {
-      my $value = $x1_element->value;
-      my $f1_value = exists $levels->{$value}
-        ? $levels->{$value}
+      my $f1_value = exists $levels->{$x1_value}
+        ? $levels->{$x1_value}
         : undef;
       push @$f1_values, $f1_value;
     }

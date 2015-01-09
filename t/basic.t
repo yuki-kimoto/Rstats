@@ -5,6 +5,49 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
+# c
+{
+  # c("a", "b")
+  {
+    my $v = c("a", "b");
+    is_deeply($v->values, ["a", "b"]);
+  }
+
+  # c($x)
+  {
+    my $v = c(1, 2, 3);
+    is(r->typeof($v)->value, 'double');
+    is_deeply($v->values, [1, 2, 3]);
+  }
+  
+  # c(c(1, 2, 3))
+  {
+    my $v = c(c(1, 2, 3));
+    is_deeply($v->values, [1, 2, 3]);
+  }
+  
+  # c(1, 2, c(3, 4, 5))
+  {
+    my $v = c(1, 2, c(3, 4, 5));
+    is_deeply($v->values, [1, 2, 3, 4, 5]);
+  }
+}
+
+# se
+{
+  # se('1:3')
+  {
+    my $v = se('1:3');
+    is_deeply($v->values, [1, 2, 3]);
+  }
+  
+  # se('0.5*1:3')
+  {
+    my $v = se('0.5*1:3');
+    is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
+  }
+}
+
 # NULL
 {
   my $v1 = r->NULL;
@@ -370,33 +413,6 @@ use Math::Trig ();
   is_deeply($x->get(3)->values, [3]);
   $x->at(1)->set(5);;
   is_deeply($x->get(1)->values, [5]);
-}
-
-# c
-{
-  # c($x)
-  {
-    my $v = c(1, 2, 3);
-    is_deeply($v->values, [1, 2, 3]);
-  }
-  
-  # c($vector)
-  {
-    my $v = c(c(1, 2, 3));
-    is_deeply($v->values, [1, 2, 3]);
-  }
-  
-  # c(se('1:3')
-  {
-    my $v = se('1:3');
-    is_deeply($v->values, [1, 2, 3]);
-  }
-  
-  # c('0.5*1:3')
-  {
-    my $v = se('0.5*1:3');
-    is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
-  }
 }
 
 # rep function

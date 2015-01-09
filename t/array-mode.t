@@ -5,6 +5,21 @@ use warnings;
 use Rstats;
 use Rstats::VectorFunc;
 
+# array upgrade mode
+{
+  # array decide mode - complex
+  {
+    my $x0 = r->complex(3, 4);
+    my $x0_1 = c(1, $x0);
+    my $x1 = array($x0_1);
+    is($x1->values->[0]->{re}, 1);
+    is($x1->values->[0]->{im}, 0);
+    is($x1->values->[1]->{re}, 3);
+    is($x1->values->[1]->{im}, 4);
+    ok(r->is_complex($x1));
+  }
+}
+
 # is_*
 {
   # is_* - is_array
@@ -34,21 +49,6 @@ use Rstats::VectorFunc;
     my $x = array(se('1:24'));
     ok(!r->is_vector($x));
     ok(r->is_array($x));
-  }
-}
-
-# array upgrade mode
-{
-  # array decide mode - complex
-  {
-    my $x0 = r->complex(3, 4);
-    my $x0_1 = c(1, $x0);
-    my $x1 = array($x0_1);
-    is($x1->values->[0]->{re}, 1);
-    is($x1->values->[0]->{im}, 0);
-    is($x1->values->[1]->{re}, 3);
-    is($x1->values->[1]->{im}, 4);
-    ok(r->is_complex($x1));
   }
 }
 

@@ -201,11 +201,11 @@ namespace Rstats {
   // Rstats::VectorType
   namespace VectorType {
     enum Enum {
-      LOGICAL,
-      INTEGER ,
-      DOUBLE,
-      COMPLEX,
-      CHARACTER
+      LOGICAL = 0,
+      INTEGER = 1 ,
+      DOUBLE = 2,
+      COMPLEX = 3,
+      CHARACTER = 4
     };
   }
   
@@ -2187,7 +2187,7 @@ namespace Rstats {
       return vector;
     }
   }
- 
+  
   // Rstats::Util body
   namespace Util {
     REGEXP* LOGICAL_RE = pregcomp(newSVpv("^ *(T|TRUE|F|FALSE) *$", 0), 0);
@@ -2197,16 +2197,16 @@ namespace Rstats {
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
     
-    SV* is_perl_number(SV* sv_str) {
+    IV is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
-        return &PL_sv_undef;
+        return 0;
       }
       
       if ((SvIOKp(sv_str) || SvNOKp(sv_str)) && 0 + sv_cmp(sv_str, sv_str) == 0 && SvIV(sv_str) * 0 == 0) {
-        return Rstats::PerlAPI::new_mSViv(1);
+        return 1;
       }
       else {
-        return &PL_sv_undef;
+        return 0;
       }
     }
     

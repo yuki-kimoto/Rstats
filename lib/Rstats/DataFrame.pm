@@ -17,7 +17,7 @@ sub get {
   # Fix column index and row index
   unless (defined $_col_index) {
     $_col_index = $_row_index;
-    $_row_index = [];
+    $_row_index = Rstats::Func::NULL();
   }
   my $row_index = Rstats::Func::to_c($_row_index);
   my $col_index = Rstats::Func::to_c($_col_index);
@@ -74,7 +74,7 @@ sub get {
   # Create new data frame
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->list($new_elements);
-  $self->copy_attrs_to($data_frame, {new_indexes => [$row_index, Rstats::Func::c($col_index_values)]});
+  $self->copy_attrs_to($data_frame, {new_indexes => [$row_index, Rstats::Func::c(@$col_index_values)]});
   $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(1 .. $data_frame->getin(1)->length_value);
   
   return $data_frame;

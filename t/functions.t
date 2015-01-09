@@ -685,7 +685,7 @@ use Math::Trig ();
   # append - vector
   {
     my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = r->append($v1, c([6, 7]));
+    my $v2 = r->append($v1, c(6, 7));
     is_deeply($v2->values, [1, 2, 3, 4, 5, 6, 7]);
   }
 }
@@ -1354,13 +1354,13 @@ use Math::Trig ();
 {
   # abs - array refference
   {
-    my $x1 = r->abs([-3, 4]);
+    my $x1 = r->abs(c(-3, 4));
     is_deeply($x1->values, [3, 4]);
   }
 
   # abs - matrix
   {
-    my $x1 = r->abs(matrix([-3, 4]));
+    my $x1 = r->abs(matrix(c(-3, 4)));
     is_deeply($x1->values, [3, 4]);
   }
   

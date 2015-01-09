@@ -184,7 +184,7 @@ use Math::Trig ();
   
   # matrix - repeat values
   {
-    my $mat = matrix([1,2], 2, 5);
+    my $mat = matrix(c(1,2), 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply(r->dim($mat)->values, [2, 5]);
     ok(r->is_matrix($mat));

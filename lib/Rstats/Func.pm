@@ -134,7 +134,7 @@ sub na_omit {
     }
   }
   
-  my $x2 = $x1->get(-(c(\@poss)), NULL);
+  my $x2 = $x1->get(-(c(@poss)), NULL);
   
   return $x2;
 }
@@ -264,23 +264,23 @@ sub read_table {
     }
     my $type = $type_columns->[$i];
     if ($type eq 'character') {
-      my $x1 = Rstats::Func::c($columns->[$i]);
+      my $x1 = Rstats::Func::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_factor;
     }
     elsif ($type eq 'complex') {
-      my $x1 = Rstats::Func::c($columns->[$i]);
+      my $x1 = Rstats::Func::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_complex;
     }
     elsif ($type eq 'double') {
-      my $x1 = Rstats::Func::c($columns->[$i]);
+      my $x1 = Rstats::Func::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_double;
     }
     elsif ($type eq 'integer') {
-      my $x1 = Rstats::Func::c($columns->[$i]);
+      my $x1 = Rstats::Func::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_integer;
     }
     else {
-      my $x1 = Rstats::Func::c($columns->[$i]);
+      my $x1 = Rstats::Func::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_logical;
     }
   }
@@ -327,7 +327,7 @@ sub interaction {
   my $f1_levels_elements = [];
   if ($x_drop) {
     $f1_levels_elements = $f1_elements;
-    $f1 = factor($f1_elements);
+    $f1 = factor(c(@$f1_elements));
   }
   else {
     my $levels = [];
@@ -340,7 +340,7 @@ sub interaction {
       push @$f1_levels_elements, $value;
     }
     $f1_levels_elements = [sort {$a cmp $b} @$f1_levels_elements];
-    $f1 = factor($f1_elements, {levels => $f1_levels_elements});
+    $f1 = factor(c(@$f1_elements), {levels => c(@$f1_levels_elements)});
   }
   
   return $f1;
@@ -374,7 +374,7 @@ sub gl {
     $j++;
   }
   
-  my $x1 = c($x1_elements);
+  my $x1 = c(@$x1_elements);
   
   $x_labels = $x_levels unless defined $x_labels;
   $x_ordered = Rstats::Func::FALSE() unless defined $x_ordered;
@@ -420,7 +420,7 @@ sub factor {
       }
       push @$new_a_levels_values, $x_levels_value unless $match;
     }
-    $x_levels = c($new_a_levels_values);
+    $x_levels = c(@$new_a_levels_values);
   }
   
   # default - labels
@@ -568,7 +568,7 @@ sub data_frame {
     if ($repeat > 1) {
       my $repeat_elements = [];
       push @$repeat_elements, $elements->[$i] for (1 .. $repeat);
-      $elements->[$i] = Rstats::Func::c($repeat_elements);
+      $elements->[$i] = Rstats::Func::c(@$repeat_elements);
     }
   }
   
@@ -578,8 +578,8 @@ sub data_frame {
   $data_frame->list($elements);
   $data_frame->dimnames(
     Rstats::Func::list(
-      Rstats::Func::c($row_names),
-      Rstats::Func::c($column_names)
+      Rstats::Func::c(@$row_names),
+      Rstats::Func::c(@$column_names)
     )
   );
   
@@ -740,8 +740,8 @@ sub kronecker {
     my $x3_value = multiply($x1_value, $x2_value);
     push @$x3_values, $x3_value;
   }
-
-  my $x3 = array($x3_values, c($x3_dim_values));
+  
+  my $x3 = array(c(@$x3_values), c(@$x3_dim_values));
   
   return $x3;
 }
@@ -774,7 +774,7 @@ sub outer {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($x3_values, c($x3_dim));
+  my $x3 = array(c(@$x3_values), c(@$x3_dim));
   
   return $x3;
 }
@@ -904,7 +904,7 @@ sub col {
     push @values, ($col) x $nrow;
   }
   
-  return array(\@values, [$nrow, $ncol]);
+  return array(c(@values), c($nrow, $ncol));
 }
 
 sub chartr {
@@ -1069,7 +1069,7 @@ sub setdiff {
     push @$x3_elements, $x1_element unless $match;
   }
 
-  return c($x3_elements);
+  return c(@$x3_elements);
 }
 
 sub intersect {
@@ -1088,7 +1088,7 @@ sub intersect {
     }
   }
   
-  return c($x3_elements);
+  return c(@$x3_elements);
 }
 
 sub union {
@@ -1113,7 +1113,7 @@ sub diff {
     my $x2_element = Rstats::VectorFunc::subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
-  my $x2 = c($x2_elements);
+  my $x2 = c(@$x2_elements);
   $x1->copy_attrs_to($x2);
   
   return $x2;
@@ -1133,7 +1133,7 @@ sub nchar {
         push @$x2_elements, $x2_element;
       }
     }
-    my $x2 = c($x2_elements);
+    my $x2 = c(@$x2_elements);
     $x1->copy_attrs_to($x2);
     
     return $x2;
@@ -1157,7 +1157,7 @@ sub tolower {
         push @$x2_elements, $x2_element;
       }
     }
-    my $x2 = c($x2_elements);
+    my $x2 = c(@$x2_elements);
     $x1->copy_attrs_to($x2);
     
     return $x2;
@@ -1181,7 +1181,7 @@ sub toupper {
         push @$x2_elements, $x2_element;
       }
     }
-    my $x2 = c($x2_elements);
+    my $x2 = c(@$x2_elements);
     $x1->copy_attrs_to($x2);
     
     return $x2;
@@ -1318,23 +1318,17 @@ sub append {
 }
 
 sub array {
+  my ($x1, $x_dim) = args(['x1', 'dim'], @_);
   
-  # Arguments
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my ($x1, $_dim) = @_;
-  $_dim = $opt->{dim} unless defined $_dim;
-  
-  $x1 = to_c($x1);
-
   # Dimention
   my $elements = $x1->decompose_elements;
-  my $dim = defined $_dim ? to_c($_dim) : NULL;
+  $x_dim = NULL unless defined $x_dim;
   my $x1_length = $x1->length_value;
-  unless ($dim->vector->length_value) {
-    $dim = c($x1_length);
+  unless ($x_dim->vector->length_value) {
+    $x_dim = c($x1_length);
   }
   my $dim_product = 1;
-  $dim_product *= $_ for @{$dim->values};
+  $dim_product *= $_ for @{$x_dim->values};
   
   # Fix elements
   if ($x1_length > $dim_product) {
@@ -1346,8 +1340,8 @@ sub array {
     @$elements = splice @$elements, 0, $dim_product;
   }
   
-  my $x2 = c($elements);
-  $x2->dim($dim);
+  my $x2 = c(@$elements);
+  $x2->dim($x_dim);
   
   return $x2;
 }
@@ -1416,7 +1410,7 @@ sub cbind {
       
       push @$x2_elements, @{$a1->decompose_elements};
     }
-    my $matrix = matrix($x2_elements, $row_count_needed, $col_count_total);
+    my $matrix = matrix(c(@$x2_elements), $row_count_needed, $col_count_total);
     
     return $matrix;
   }
@@ -1428,7 +1422,7 @@ sub ceiling {
   my $x1 = to_c($_x1);
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{$x1->decompose_elements};
   
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   
   $x2->mode('double');
@@ -1447,7 +1441,7 @@ sub colMeans {
       $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$x1_values, $x1_value / $dim_values->[1];
     }
-    return c($x1_values);
+    return c(@$x1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -1465,7 +1459,7 @@ sub colSums {
       $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$x1_values, $x1_value;
     }
-    return c($x1_values);
+    return c(@$x1_values);
   }
   else {
     croak "Can't culculate colSums";
@@ -1504,7 +1498,7 @@ sub cummax {
     push @a2_elements, $max;
   }
   
-  return c(\@a2_elements);
+  return c(@a2_elements);
 }
 
 sub cummin {
@@ -1532,7 +1526,7 @@ sub cummin {
     push @a2_elements, $min;
   }
   
-  return c(\@a2_elements);
+  return c(@a2_elements);
 }
 
 sub cumsum { operate_unary(\&Rstats::VectorFunc::cumsum, @_) }
@@ -1608,7 +1602,7 @@ sub complex {
     }
   }
   
-  return c($x2_elements);
+  return c(@$x2_elements);
 }
 
 sub exp { operate_unary(\&Rstats::VectorFunc::exp, @_) }
@@ -1653,7 +1647,7 @@ sub floor {
   
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{$x1->decompose_elements};
 
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
@@ -1681,7 +1675,7 @@ sub head {
       push @x2_elements, $x1_elements->[$i];
     }
     
-    my $x2 = c(\@x2_elements);
+    my $x2 = c(@x2_elements);
     $x1->copy_attrs_to($x2);
   
     return $x2;
@@ -1710,7 +1704,7 @@ sub ifelse {
     }
   }
   
-  return array(\@x2_values);
+  return array(c(@x2_values));
 }
 
 sub log { operate_unary(\&Rstats::VectorFunc::log, @_) }
@@ -1816,7 +1810,7 @@ sub order {
       } @pos_vals;
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
-  return c(\@orders);
+  return c(@orders);
 }
 
 # TODO
@@ -1855,7 +1849,7 @@ sub rank {
   my @sorted_pos_values2 = sort { $a->{pos} <=> $b->{pos} } @sorted_pos_values;
   my @rank = map { $_->{rank_average} } @sorted_pos_values2;
   
-  return c(\@rank);
+  return c(@rank);
 }
 
 sub paste {
@@ -1870,7 +1864,7 @@ sub paste {
   my $x2_values = [];
   push @$x2_values, "$str$sep$_" for @$x1_values;
   
-  return c($x2_values);
+  return c(@$x2_values);
 }
 
 sub pmax {
@@ -1885,7 +1879,7 @@ sub pmax {
     }
   }
   
-  return  c(\@maxs);
+  return  c(@maxs);
 }
 
 sub pmin {
@@ -1900,7 +1894,7 @@ sub pmin {
     }
   }
   
-  return c(\@mins);
+  return c(@mins);
 }
 
 sub prod { operate_unary(\&Rstats::VectorFunc::prod, @_) }
@@ -1979,7 +1973,7 @@ sub rep {
   
   my $elements = [];
   push @$elements, @{$x1->decompose_elements} for 1 .. $times;
-  my $x2 = c($elements);
+  my $x2 = c(@$elements);
   
   return $x2;
 }
@@ -2015,7 +2009,7 @@ sub replace {
     }
   }
   
-  return array($v4_elements);
+  return array(c(@$v4_elements));
 }
 
 sub rev {
@@ -2023,7 +2017,7 @@ sub rev {
   
   # Reverse elements
   my @a2_elements = reverse @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   
   return $x2;
@@ -2058,7 +2052,7 @@ sub rnorm {
     push @x1_elements, $rnorm;
   }
   
-  return c(\@x1_elements);
+  return c(@x1_elements);
 }
 
 sub round {
@@ -2072,7 +2066,7 @@ sub round {
 
   my $r = 10 ** $digits;
   my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
@@ -2090,7 +2084,7 @@ sub rowMeans {
       $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$x1_values, $x1_value / $dim_values->[0];
     }
-    return c($x1_values);
+    return c(@$x1_values);
   }
   else {
     croak "Can't culculate rowMeans";
@@ -2108,7 +2102,7 @@ sub rowSums {
       $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$x1_values, $x1_value;
     }
-    return c($x1_values);
+    return c(@$x1_values);
   }
   else {
     croak "Can't culculate rowSums";
@@ -2135,7 +2129,7 @@ sub runif {
     push @x1_elements, $rand;
   }
   
-  return c(\@x1_elements);
+  return c(@x1_elements);
 }
 
 # TODO: prob option
@@ -2163,7 +2157,7 @@ sub sample {
     push @$x1_elements, $rand_element if $replace;
   }
   
-  return c(\@x2_elements);
+  return c(@x2_elements);
 }
 
 sub sequence {
@@ -2177,17 +2171,16 @@ sub sequence {
     push @x2_values, @{seq(1, $x1_value)->values};
   }
   
-  return c(\@x2_values);
+  return c(@x2_values);
 }
 
 sub sinh { operate_unary(\&Rstats::VectorFunc::sinh, @_) }
 sub sqrt { operate_unary(\&Rstats::VectorFunc::sqrt, @_) }
 
 sub sort {
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = to_c(shift);
-  my $decreasing = $opt->{decreasing};
+  my ($x1, $x_decreasing) = args(['x1', 'decreasing', 'na.last'], @_);
+  
+  my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
   my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose_elements};
   
@@ -2195,16 +2188,13 @@ sub sort {
     ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
     : [sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements];
 
-  return c($x3_elements);
+  return c(@$x3_elements);
 }
 
 sub tail {
-
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = shift;
+  my ($x1, $x_n) = args(['x1', 'n'], @_);
   
-  my $n = $opt->{n};
-  $n = 6 unless defined $n;
+  my $n = defined $x_n ? $x_n->value : 6;
   
   my $e1 = $x1->decompose_elements;
   my $max = $x1->length_value < $n ? $x1->length_value : $n;
@@ -2213,7 +2203,7 @@ sub tail {
     unshift @e2, $e1->[$x1->length_value - ($i  + 1)];
   }
   
-  my $x2 = c(\@e2);
+  my $x2 = c(@e2);
   $x1->copy_attrs_to($x1);
   
   return $x2;
@@ -2226,7 +2216,7 @@ sub operate_unary_old {
   my $x1 = to_c(shift);
   
   my @a2_elements = map { $func->($_) } @{$x1->decompose_elements};
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode(max_type($x1, $x2));
   
@@ -2257,7 +2247,7 @@ sub trunc {
   my @a2_elements
     = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose_elements};
 
-  my $x2 = c(\@a2_elements);
+  my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode('double');
   
@@ -2287,7 +2277,7 @@ sub unique {
       }
     }
 
-    return c($x2_elements);
+    return c(@$x2_elements);
   }
   else {
     return $x1;
@@ -2368,7 +2358,7 @@ sub quantile {
   # Max
   push @$quantile_elements , $x3->get($x3_length);
   
-  my $x4 = Rstats::Func::c($quantile_elements);
+  my $x4 = Rstats::Func::c(@$quantile_elements);
   $x4->names(Rstats::Func::c(qw/0%  25%  50%  75% 100%/));
   
   return $x4;
@@ -2403,7 +2393,7 @@ sub which {
     }
   }
   
-  return c(\@x2_values);
+  return c(@x2_values);
 }
 
 sub new_vector {
@@ -2494,13 +2484,13 @@ sub matrix {
   if ($byrow) {
     $matrix = array(
       $x_matrix,
-      [$dim->[1], $dim->[0]],
+      c($dim->[1], $dim->[0]),
     );
     
     $matrix = t($matrix);
   }
   else {
-    $matrix = array($x_matrix, $dim);
+    $matrix = array($x_matrix, c(@$dim));
   }
   
   return $matrix;
@@ -2534,7 +2524,7 @@ sub inner_product {
       }
     }
     
-    my $x3 = matrix($x3_elements, $row_max, $col_max);
+    my $x3 = matrix(c(@$x3_elements), $row_max, $col_max);
     
     return $x3;
   }
@@ -2551,7 +2541,7 @@ sub row {
   
   my @values = (1 .. $nrow) x $ncol;
   
-  return array(\@values, [$nrow, $ncol]);
+  return array(c(@values), c($nrow, $ncol));
 }
 
 sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
@@ -2646,7 +2636,7 @@ sub seq {
       }
     }
     
-    return c($elements);
+    return c(@$elements);
   }
 }
 
@@ -2721,46 +2711,26 @@ sub upgrade_type {
 }
 
 sub c {
-  my @elements_tmp1 = @_;
-  
-  # Fix elements
-  my $elements_tmp2;
-  if (@elements_tmp1 == 0) {
-    return NULL();
-  }
-  elsif (@elements_tmp1 > 1) {
-    $elements_tmp2 = \@elements_tmp1;
-  }
-  else {
-    $elements_tmp2 = $elements_tmp1[0];
-  }
-
   my $elements = [];
-  if (defined $elements_tmp2) {
-    if (ref $elements_tmp2 eq 'ARRAY') {
-      for my $element (@$elements_tmp2) {
-        if (ref $element eq 'Rstats::Array') {
-          push @$elements, @{$element->decompose_elements};
-        }
-        else {
-          push @$elements, $element;
-        }
-      }
+  for my $element (@_) {
+    if (ref $element eq 'Rstats::Array') {
+      push @$elements, @{$element->decompose_elements};
     }
-    elsif (ref $elements_tmp2 eq 'Rstats::Array') {
-      $elements = $elements_tmp2->decompose_elements;
+    elsif (ref $element eq 'Array') {
+      croak "Array";
     }
     else {
-      $elements = [$elements_tmp2];
+      push @$elements, $element;
     }
-  }
-  else {
-    return NA();
   }
   
   # Check elements
   my $mode_h = {};
   for my $element (@$elements) {
+    if (ref $element eq 'ARRAY') {
+      Carp::confess "Array";
+    }
+    
     next unless defined $element;
     
     if (!ref $element) {

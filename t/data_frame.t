@@ -4,6 +4,34 @@ use warnings;
 
 use Rstats;
 
+# set
+{
+  # set - NULL
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    $x1->at(2)->set(NULL);
+    is_deeply($x1->getin(1)->as_character->values, ['F', 'M', 'F']);
+    is_deeply($x1->getin(2)->values, [5, 6, 7]);
+    is_deeply($x1->names->values, ['sex', 'weight']);
+    is_deeply($x1->colnames->values, ['sex', 'weight']);
+  }
+  
+  # set - index
+  {
+    my $sex = c('F', 'M', 'F');
+    my $height = c(172, 168, 155);
+    my $weight = c(5, 6, 7);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    $x1->at(2)->set(c(1, 2, 3));
+    is_deeply($x1->getin('height')->values, [1, 2, 3]);
+  }
+}
+
 # typeof
 {
   my $x1 = data_frame(sex => c(1, 2, 1));
@@ -422,34 +450,6 @@ use Rstats;
   my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
   my $x2 = r->nrow($x1);
   ok($x2->values, [2]);
-}
-
-# set
-{
-  # set - NULL
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    $x1->at(2)->set(NULL);
-    is_deeply($x1->getin(1)->as_character->values, ['F', 'M', 'F']);
-    is_deeply($x1->getin(2)->values, [5, 6, 7]);
-    is_deeply($x1->names->values, ['sex', 'weight']);
-    is_deeply($x1->colnames->values, ['sex', 'weight']);
-  }
-  
-  # set - index
-  {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    $x1->at(2)->set(c(1, 2, 3));
-    is_deeply($x1->getin('height')->values, [1, 2, 3]);
-  }
 }
 
 # data_frame - to_string

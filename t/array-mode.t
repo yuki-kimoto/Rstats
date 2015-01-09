@@ -5,6 +5,38 @@ use warnings;
 use Rstats;
 use Rstats::VectorFunc;
 
+# is_*
+{
+  # is_* - is_array
+  {
+    my $x = array(se('1:24'), c(4, 3, 2));
+    ok(r->is_array($x));
+    ok(!r->is_vector($x));
+    ok(!r->is_matrix($x));
+  }
+
+  # is_* - is_matrix
+  {
+    my $x = matrix(se('1:12'), 4, 3);
+    ok(r->is_matrix($x));
+    ok(r->is_array($x));
+  }
+
+  # is_* - is_vector
+  {
+    my $x = se('1:24');
+    ok(r->is_vector($x));
+    ok(!r->is_array($x));
+  }
+
+  # is_* - is_vector
+  {
+    my $x = array(se('1:24'));
+    ok(!r->is_vector($x));
+    ok(r->is_array($x));
+  }
+}
+
 # array upgrade mode
 {
   # array decide mode - complex
@@ -460,7 +492,7 @@ use Rstats::VectorFunc;
 
   # as_complex - character, only image number, minus
   {
-    my $x1 = array(["-1.23i"]);
+    my $x1 = array("-1.23i");
     my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
     is($x2->values->[0]->{re}, 0);
@@ -620,38 +652,6 @@ use Rstats::VectorFunc;
   }
 }
 
-# is_*
-{
-  # is_* - is_vector
-  {
-    my $x = se('1:24');
-    ok(r->is_vector($x));
-    ok(!r->is_array($x));
-  }
-
-  # is_* - is_vector
-  {
-    my $x = array(se('1:24'));
-    ok(!r->is_vector($x));
-    ok(r->is_array($x));
-  }
-    
-  # is_* - is_matrix
-  {
-    my $x = matrix(se('1:12'), 4, 3);
-    ok(r->is_matrix($x));
-    ok(r->is_array($x));
-  }
-
-  # is_* - is_array
-  {
-    my $x = array(se('1:24'), [4, 3, 2]);
-    ok(r->is_array($x));
-    ok(!r->is_vector($x));
-    ok(!r->is_matrix($x));
-  }
-}
-
 # is_* fro Rstats object
 {
   # is_* - is_vector
@@ -668,6 +668,7 @@ use Rstats::VectorFunc;
 
   # is_* - is_array
   {
+    
     my $x = array(se('1:12'), c(4, 3, 2));
     ok(r->is_array($x));
   }

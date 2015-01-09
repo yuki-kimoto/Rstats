@@ -52,8 +52,8 @@ sub get {
   for my $i (@{$index_values}) {
     push @$list_elements, $elements->[$i - 1];
   }
-
-  $self->copy_attrs_to($list, {new_indexes => [Rstats::Func::to_c($index_values)]});
+  
+  $self->copy_attrs_to($list, {new_indexes => [Rstats::Func::c(@$index_values)]});
 
   return $list;
 }
@@ -62,7 +62,7 @@ sub set {
   my ($self, $v1) = @_;
   
   my $_index = $self->at;
-  my $x1_index = Rstats::Func::to_c($_index);
+  my $x1_index = Rstats::Func::to_c(@$_index);
   my $index;
   if ($x1_index->is_character) {
     $index = $self->_name_to_index($x1_index);

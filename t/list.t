@@ -4,23 +4,16 @@ use warnings;
 
 use Rstats;
 
-# typeof
-{
-  my $x1 = list(1, 2);
-  my $x2 = r->typeof($x1);
-  ok($x2->is_character);
-  is_deeply($x2->values, ['list']);
-}
-
 # list
 {
-  
-  # list - as_list, input is array
+  # list - get, multiple, names
   {
-    my $x1 = c("a", "b");
-    my $x2 = r->as_list($x1);
-    ok(r->is_list($x2));
-    is_deeply($x2->getin(1)->values, ["a", "b"]);
+    my $x1 = list(1, 2, 3);
+    r->names($x1, c("n1", "n2", "n3"));
+    my $l2 = $x1->get(c("n1", "n3"));
+    ok(r->is_list($l2));
+    is_deeply($l2->getin(1)->values, [1]);
+    is_deeply($l2->getin(2)->values, [3]);
   }
 
   # list - get
@@ -29,6 +22,14 @@ use Rstats;
     my $l2 = $x1->get(1);
     ok(r->is_list($l2));
     is_deeply($l2->getin(1)->values, [1]);
+  }
+  
+  # list - as_list, input is array
+  {
+    my $x1 = c("a", "b");
+    my $x2 = r->as_list($x1);
+    ok(r->is_list($x2));
+    is_deeply($x2->getin(1)->values, ["a", "b"]);
   }
 
   # list - basic
@@ -114,16 +115,14 @@ EOS
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
+}
 
-  # list - get, multiple, names
-  {
-    my $x1 = list(1, 2, 3);
-    r->names($x1, c("n1", "n2", "n3"));
-    my $l2 = $x1->get(c("n1", "n3"));
-    ok(r->is_list($l2));
-    is_deeply($l2->getin(1)->values, [1]);
-    is_deeply($l2->getin(2)->values, [3]);
-  }
+# typeof
+{
+  my $x1 = list(1, 2);
+  my $x2 = r->typeof($x1);
+  ok($x2->is_character);
+  is_deeply($x2->values, ['list']);
 }
 
 # ncol

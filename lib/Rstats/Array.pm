@@ -256,7 +256,7 @@ sub get {
   # array
   my $x2 = Rstats::Func::array(
     Rstats::Func::new_vector($self->vector->type, @a2_values),
-    $x2_dim
+    Rstats::Func::c(@$x2_dim)
   );
   
   # Copy attributes

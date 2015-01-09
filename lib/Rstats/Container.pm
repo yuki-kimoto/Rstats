@@ -662,7 +662,7 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    $self->vector(Rstats::Func::c($_[0])->vector);
+    $self->vector(Rstats::Func::c(@{$_[0]})->vector);
   }
   else {
     my $values = $self->vector->values;

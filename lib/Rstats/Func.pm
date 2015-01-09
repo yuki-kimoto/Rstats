@@ -1309,10 +1309,10 @@ sub append {
   
   my $x1_elements = $x1->decompose_elements;
   my $x2_elements = $x2->decompose_elements;
-  my $x3_elements = [@$x1_elements];
-  splice @$x3_elements, $after, 0, $x2_elements;
+  my @x3_elements = @$x1_elements;
+  splice @x3_elements, $after, 0, @$x2_elements;
   
-  my $x3 = c($x3_elements);
+  my $x3 = c(@x3_elements);
   
   return $x3;
 }
@@ -1414,7 +1414,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, $a1->decompose_elements;
+      push @$x2_elements, @{$a1->decompose_elements};
     }
     my $matrix = matrix($x2_elements, $row_count_needed, $col_count_total);
     
@@ -2174,7 +2174,7 @@ sub sequence {
   
   my @x2_values;
   for my $x1_value (@$x1_values) {
-    push @x2_values, seq(1, $x1_value)->values;
+    push @x2_values, @{seq(1, $x1_value)->values};
   }
   
   return c(\@x2_values);
@@ -2739,10 +2739,7 @@ sub c {
   if (defined $elements_tmp2) {
     if (ref $elements_tmp2 eq 'ARRAY') {
       for my $element (@$elements_tmp2) {
-        if (ref $element eq 'ARRAY') {
-          push @$elements, @$element;
-        }
-        elsif (ref $element eq 'Rstats::Array') {
+        if (ref $element eq 'Rstats::Array') {
           push @$elements, @{$element->decompose_elements};
         }
         else {

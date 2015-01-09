@@ -6,6 +6,10 @@
 
 namespace my = Rstats::PerlAPI;
 
+MODULE = Rstats::Array PACKAGE = Rstats::Array
+
+
+
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
 SV* values(...)

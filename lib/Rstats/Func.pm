@@ -2716,9 +2716,6 @@ sub c {
     if (ref $element eq 'Rstats::Array') {
       push @$elements, @{$element->decompose_elements};
     }
-    elsif (ref $element eq 'Array') {
-      croak "Array";
-    }
     else {
       push @$elements, $element;
     }
@@ -2727,10 +2724,7 @@ sub c {
   # Check elements
   my $mode_h = {};
   for my $element (@$elements) {
-    if (ref $element eq 'ARRAY') {
-      Carp::confess "Array";
-    }
-    
+
     next unless defined $element;
     
     if (!ref $element) {
@@ -2788,7 +2782,7 @@ sub c {
     $mode = $modes[0] || 'logical';
   }
   
-  my $compose_elements = Rstats::Vector->compose($mode, $elements);
+  my $v1 = compose_elements = Rstats::Vector->compose($mode, $elements);
   $x1->vector($compose_elements);
   
   return $x1;

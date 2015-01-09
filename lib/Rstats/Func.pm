@@ -1038,8 +1038,8 @@ sub setequal {
   return FALSE if $x3->length_value ne $x4->length_value;
   
   my $not_equal;
-  my $x3_elements = $x3->decompose_elements;
-  my $x4_elements = $x4->decompose_elements;
+  my $x3_elements = $x3->decompose;
+  my $x4_elements = $x4->decompose;
   for (my $i = 0; $i < $x3->length_value; $i++) {
     unless (Rstats::VectorFunc::equal($x3_elements->[$i], $x4_elements->[$i])->value) {
       $not_equal = 1;
@@ -1055,8 +1055,8 @@ sub setdiff {
   
   croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $x1_elements = $x1->decompose;
+  my $x2_elements = $x2->decompose;
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     my $match;
@@ -1077,8 +1077,8 @@ sub intersect {
   
   croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $x1_elements = $x1->decompose;
+  my $x2_elements = $x2->decompose;
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
@@ -1106,7 +1106,7 @@ sub diff {
   my $x1 = to_c(shift);
   
   my $x2_elements = [];
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   for (my $i = 0; $i < $x1->length_value - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
@@ -1124,7 +1124,7 @@ sub nchar {
   
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->decompose_elements}) {
+    for my $x1_element (@{$x1->decompose}) {
       if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
@@ -1148,7 +1148,7 @@ sub tolower {
   
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->decompose_elements}) {
+    for my $x1_element (@{$x1->decompose}) {
       if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
@@ -1172,7 +1172,7 @@ sub toupper {
   
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{$x1->decompose_elements}) {
+    for my $x1_element (@{$x1->decompose}) {
       if ($x1_element->is_na->value) {
         push @$x2_elements, $x1_element;
       }
@@ -1194,8 +1194,8 @@ sub toupper {
 sub match {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $x1_elements = $x1->decompose;
+  my $x2_elements = $x2->decompose;
   my @matches;
   for my $x1_element (@$x1_elements) {
     my $i = 1;
@@ -1296,8 +1296,8 @@ sub append {
   $x_after = c($x1_length) if $x_after->is_null;
   my $after = $x_after->value;
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $x1_elements = $x1->decompose;
+  my $x2_elements = $x2->decompose;
   my @x3_elements = @$x1_elements;
   splice @x3_elements, $after, 0, @$x2_elements;
   
@@ -1310,7 +1310,7 @@ sub array {
   my ($x1, $x_dim) = args(['x1', 'dim'], @_);
   
   # Dimention
-  my $elements = $x1->decompose_elements;
+  my $elements = $x1->decompose;
   $x_dim = NULL unless defined $x_dim;
   my $x1_length = $x1->length_value;
   unless ($x_dim->vector->length_value) {
@@ -1379,7 +1379,7 @@ sub cbind {
     for my $_x (@xs) {
       
       my $a1 = to_c($_x);
-      my $a1_dim_elements = $a1->dim->decompose_elements;
+      my $a1_dim_elements = $a1->dim->decompose;
       
       my $row_count;
       if ($a1->is_matrix) {
@@ -1397,7 +1397,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, @{$a1->decompose_elements};
+      push @$x2_elements, @{$a1->decompose};
     }
     my $matrix = matrix(c(@$x2_elements), $row_count_needed, $col_count_total);
     
@@ -1409,7 +1409,7 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{$x1->decompose};
   
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
@@ -1470,7 +1470,7 @@ sub cummax {
   }
   
   my @a2_elements;
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   my $max = shift @$x1_elements;
   push @a2_elements, $max;
   for my $element (@$x1_elements) {
@@ -1499,7 +1499,7 @@ sub cummin {
   }
   
   my @a2_elements;
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   my $min = shift @$x1_elements;
   push @a2_elements, $min;
   for my $element (@$x1_elements) {
@@ -1556,8 +1556,8 @@ sub complex {
     my $x1_arg_length = $x1_arg->length_value;
     my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
     
-    my $x1_mod_elements = $x1_mod->decompose_elements;
-    my $x1_arg_elements = $x1_arg->decompose_elements;
+    my $x1_mod_elements = $x1_mod->decompose;
+    my $x1_arg_elements = $x1_arg->decompose;
     for (my $i = 0; $i < $longer_length; $i++) {
       my $mod = $x1_mod_elements->[$i];
       $mod = Rstats::VectorFunc::new_double(1) unless $mod;
@@ -1581,8 +1581,8 @@ sub complex {
   else {
     croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
     
-    my $x1_re_elements = $x1_re->decompose_elements;
-    my $x1_im_elements = $x1_im->decompose_elements;
+    my $x1_re_elements = $x1_re->decompose;
+    my $x1_im_elements = $x1_im->decompose;
     for (my $i = 0; $i <  $x1_im->length_value; $i++) {
       my $re = $x1_re_elements->[$i] || Rstats::VectorFunc::new_double(0);
       my $im = $x1_im_elements->[$i];
@@ -1634,7 +1634,7 @@ sub floor {
   
   my $x1 = to_c($_x1);
   
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{$x1->decompose};
 
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
@@ -1657,7 +1657,7 @@ sub head {
     return $x2;
   }
   else {
-    my $x1_elements = $x1->decompose_elements;
+    my $x1_elements = $x1->decompose;
     my $max = $x1->length_value < $n ? $x1->length_value : $n;
     my @x2_elements;
     for (my $i = 0; $i < $max; $i++) {
@@ -1709,7 +1709,7 @@ sub max {
     return -(Inf);
   }
   
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -1743,7 +1743,7 @@ sub min {
     return Inf;
   }
   
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -1861,7 +1861,7 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $elements = $v->decompose_elements;
+    my $elements = $v->decompose;
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
         if !defined $maxs[$i] || Rstats::VectorFunc::more_than($elements->[$i], $maxs[$i])->value
@@ -1876,7 +1876,7 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $elements = $v->decompose_elements;
+    my $elements = $v->decompose;
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
         if !defined $mins[$i] || Rstats::VectorFunc::less_than($elements->[$i], $mins[$i])->value
@@ -1961,7 +1961,7 @@ sub rep {
   my $times = defined $x_times ? $x_times->value : 1;
   
   my $elements = [];
-  push @$elements, @{$x1->decompose_elements} for 1 .. $times;
+  push @$elements, @{$x1->decompose} for 1 .. $times;
   my $x2 = c(@$elements);
   
   return $x2;
@@ -1972,8 +1972,8 @@ sub replace {
   my $x2 = to_c(shift);
   my $v3 = to_c(shift);
   
-  my $x1_elements = $x1->decompose_elements;
-  my $x2_elements = $x2->decompose_elements;
+  my $x1_elements = $x1->decompose;
+  my $x2_elements = $x2->decompose;
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
     my $x2_element_hash = $x2_element->to_string;
@@ -1982,7 +1982,7 @@ sub replace {
     croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
-  my $v3_elements = $v3->decompose_elements;
+  my $v3_elements = $v3->decompose;
   my $v3_length = @{$v3_elements};
   
   my $v4_elements = [];
@@ -2005,7 +2005,7 @@ sub rev {
   my $x1 = shift;
   
   # Reverse elements
-  my @a2_elements = reverse @{$x1->decompose_elements};
+  my @a2_elements = reverse @{$x1->decompose};
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   
@@ -2054,7 +2054,7 @@ sub round {
   my $x1 = to_c($_x1);
 
   my $r = 10 ** $digits;
-  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose_elements};
+  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose};
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode('double');
@@ -2138,7 +2138,7 @@ sub sample {
     if $length > $x1_length && !$replace;
   
   my @x2_elements;
-  my $x1_elements = $x1->decompose_elements;
+  my $x1_elements = $x1->decompose;
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand @$x1_elements);
     my $rand_element = splice @$x1_elements, $rand_num, 1;
@@ -2171,7 +2171,7 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose_elements};
+  my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose};
   
   my $x3_elements = $decreasing
     ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
@@ -2185,7 +2185,7 @@ sub tail {
   
   my $n = defined $x_n ? $x_n->value : 6;
   
-  my $e1 = $x1->decompose_elements;
+  my $e1 = $x1->decompose;
   my $max = $x1->length_value < $n ? $x1->length_value : $n;
   my @e2;
   for (my $i = 0; $i < $max; $i++) {
@@ -2204,7 +2204,7 @@ sub operate_unary_old {
   my $func = shift;
   my $x1 = to_c(shift);
   
-  my @a2_elements = map { $func->($_) } @{$x1->decompose_elements};
+  my @a2_elements = map { $func->($_) } @{$x1->decompose};
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode(max_type($x1, $x2));
@@ -2234,7 +2234,7 @@ sub trunc {
   my $x1 = to_c($_x1);
   
   my @a2_elements
-    = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose_elements};
+    = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose};
 
   my $x2 = c(@a2_elements);
   $x1->copy_attrs_to($x2);
@@ -2250,7 +2250,7 @@ sub unique {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
-    for my $x1_element (@{$x1->decompose_elements}) {
+    for my $x1_element (@{$x1->decompose}) {
       if ($x1_element->is_na->value) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;

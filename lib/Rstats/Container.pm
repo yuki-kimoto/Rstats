@@ -9,7 +9,7 @@ use Rstats::Vector;
 has list => sub { [] };
 has 'vector';
 
-sub decompose_elements {
+sub decompose {
   my $self = shift;
   
   if (exists $self->{vector}) {

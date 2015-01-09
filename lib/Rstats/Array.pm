@@ -292,9 +292,9 @@ sub set {
   
   my $self_elements;
   if ($self->is_factor) {
-    $self_elements = $self->decompose_elements;
+    $self_elements = $self->decompose;
     $x2 = $x2->as_character unless $x2->is_character;
-    my $x2_elements = $x2->decompose_elements;
+    my $x2_elements = $x2->decompose;
     my $levels_h = $self->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
@@ -323,9 +323,9 @@ sub set {
       $self->vector($self_tmp->vector);
     }
 
-    $self_elements = $self->decompose_elements;
+    $self_elements = $self->decompose;
 
-    my $x2_elements = $x2->decompose_elements;
+    my $x2_elements = $x2->decompose;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       $self_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
@@ -385,7 +385,7 @@ sub value {
 
   my $e1;
   my $dim_values = $self->dim_as_array->values;
-  my $self_elements = $self->decompose_elements;
+  my $self_elements = $self->decompose;
   if (@_) {
     if (@$dim_values == 1) {
       $e1 = $self_elements->[$_[0] - 1];
@@ -394,7 +394,7 @@ sub value {
       $e1 = $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      $e1 = $self->get(@_)->decompose_elements->[0];
+      $e1 = $self->get(@_)->decompose->[0];
     }
   }
   else {

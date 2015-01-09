@@ -2196,7 +2196,20 @@ namespace Rstats {
     REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
-
+    
+    SV* is_perl_number(SV* sv_str) {
+      if (!SvOK(sv_str)) {
+        return &PL_sv_undef;
+      }
+      
+      if ((SvIOKp(sv_str) || SvNOKp(sv_str)) && 0 + sv_cmp(sv_str, sv_str) == 0 && SvIV(sv_str) * 0 == 0) {
+        return Rstats::PerlAPI::new_mSViv(1);
+      }
+      else {
+        return &PL_sv_undef;
+      }
+    }
+    
     SV* cross_product(SV* sv_values) {
       
       IV values_length = Rstats::PerlAPI::avrv_len_fix(sv_values);

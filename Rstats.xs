@@ -1237,6 +1237,15 @@ new_integer(...)
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
 SV*
+is_perl_number(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::is_perl_number(sv_str);
+  return_sv(sv_ret);
+}
+
+SV*
 looks_like_integer(...)
   PPCODE:
 {

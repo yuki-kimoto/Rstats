@@ -9,16 +9,6 @@ use Carp 'croak';
 use Rstats::Func;
 use Rstats::VectorFunc;
 
-sub is_perl_number {
-  my ($value) = @_;
-  
-  return unless defined $value;
-  
-  return B::svref_2object(\$value)->FLAGS & (B::SVp_IOK | B::SVp_NOK) 
-        && 0 + $value eq $value
-        && $value * 0 == 0
-}
-
 my $type_level = {
   character => 6,
   complex => 5,

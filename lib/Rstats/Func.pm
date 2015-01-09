@@ -1218,17 +1218,6 @@ sub match {
   return Rstats::Func::new_double(@matches);
 }
 
-my %comparison_op = map { $_ => 1 } qw/
-  less_than
-  less_than_or_equal
-  more_than
-  more_than_or_equal
-  equal
-  not_equal
-/;
-
-my %logical_op = map { $_ => 1 } ('&&', '||');
-
 sub operate_binary {
   my ($func, $x1, $x2) = @_;
   

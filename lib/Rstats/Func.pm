@@ -2782,7 +2782,7 @@ sub c {
     $mode = $modes[0] || 'logical';
   }
   
-  my $v1 = compose_elements = Rstats::Vector->compose($mode, $elements);
+  my $compose_elements = Rstats::Vector->compose($mode, $elements);
   $x1->vector($compose_elements);
   
   return $x1;

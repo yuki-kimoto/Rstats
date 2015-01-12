@@ -105,7 +105,23 @@ namespace Rstats {
       AV* av = (AV*)SvRV_safe(av_ref);
       return av_fetch_simple(av, pos);
     }
+    
+    bool hv_exists_simple(HV* hv_hash, char* key) {
+      return hv_exists(hv_hash, key, strlen(key));
+    }
 
+    bool hvrv_exists_simple(SV* sv_hash_ref, char* key) {
+      return hv_exists((HV*)SvRV_safe(sv_hash_ref), key, strlen(key));
+    }
+
+    SV* hv_delete_simple(HV* hv_hash, char* key) {
+      return hv_delete(hv_hash, key, strlen(key), 0);
+    }
+    
+    SV* hvrv_delete_simple(SV* sv_hash_ref, char* key) {
+      return hv_delete((HV*)SvRV_safe(sv_hash_ref), key, strlen(key), 0);
+    }
+    
     SV* hv_fetch_simple(HV* hv, const char* key) {
       SV** const element_ptr = hv_fetch(hv, key, strlen(key), FALSE);
       SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
@@ -152,6 +168,10 @@ namespace Rstats {
     
     void avrv_push_inc(SV* av_ref, SV* sv) {
       return av_push_inc((AV*)SvRV_safe(av_ref), sv);
+    }
+
+    SV* avrv_pop(SV* sv_array_ref) {
+      return av_pop((AV*)SvRV_safe(sv_array_ref));
     }
 
     void av_unshift_real_inc(AV* av, SV* sv) {
@@ -2198,9 +2218,9 @@ namespace Rstats {
       Rstats::Vector* dim = Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_dim);
       return dim;
     }
-        
+
     SV* c(SV* sv_elements) {
-      
+
       IV element_length = Rstats::PerlAPI::avrv_len_fix(sv_elements);
       // Check type and length
       std::map<Rstats::VectorType::Enum, IV> type_h;
@@ -2208,12 +2228,12 @@ namespace Rstats {
       for (IV i = 0; i < element_length; i++) {
         Rstats::VectorType::Enum type;
         SV* sv_element = Rstats::PerlAPI::avrv_fetch_simple(sv_elements, i);
-        if (sv_derived_from(sv_element, "Rstats::Array")) {
+        if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Array")) {
           length += Rstats::ArrayFunc::get_vector(sv_element)->get_length();
           type = Rstats::ArrayFunc::get_vector(sv_element)->get_type();
           type_h[type] = 1;
         }
-        else if (sv_derived_from(sv_element, "Rstats::Vector")) {
+        else if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Vector")) {
           length += Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_element)->get_length();
           type = Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_element)->get_type();
           type_h[type] = 1;
@@ -2233,7 +2253,7 @@ namespace Rstats {
           length += 1;
         }
       }
-      
+
       // Decide type
       Rstats::Vector* v2;
       if (type_h[Rstats::VectorType::CHARACTER]) {
@@ -2349,6 +2369,23 @@ namespace Rstats {
 
       return sv_x1;
     }
+
+    SV* to_c(SV* sv_x) {
+
+      IV is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Container");
+      
+      SV* sv_x1;
+      if (is_container) {
+        sv_x1 = sv_x;
+      }
+      else {
+        SV* sv_tmp = Rstats::PerlAPI::new_mAVRV();
+        Rstats::PerlAPI::avrv_push_inc(sv_tmp, sv_x);
+        sv_x1 = Rstats::ArrayFunc::c(sv_tmp);
+      }
+      
+      return sv_x1;
+    }
   }
   
   // Rstats::Util body
@@ -2359,7 +2396,51 @@ namespace Rstats {
     REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) *$", 0), 0);
     REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
-    
+
+    SV* args(SV* sv_names, SV* sv_args) {
+      
+      IV args_length = Rstats::PerlAPI::avrv_len_fix(sv_args);
+      SV* sv_opt;
+      SV* sv_arg_last = Rstats::PerlAPI::avrv_fetch_simple(sv_args, args_length - 1);
+      if (!sv_isobject(sv_arg_last) && sv_derived_from(sv_arg_last, "HASH")) {
+        sv_opt = Rstats::PerlAPI::avrv_pop(sv_args);
+      }
+      else {
+        sv_opt = Rstats::PerlAPI::new_mHVRV();
+      }
+      
+      SV* sv_new_opt = Rstats::PerlAPI::new_mHVRV();
+      IV names_length = Rstats::PerlAPI::avrv_len_fix(sv_names);
+      for (IV i = 0; i < names_length; i++) {
+        SV* sv_name = Rstats::PerlAPI::avrv_fetch_simple(sv_names, i);
+        if (Rstats::PerlAPI::hvrv_exists_simple(sv_opt, SvPV_nolen(sv_name))) {
+          Rstats::PerlAPI::hvrv_store_nolen_inc(
+            sv_new_opt,
+            SvPV_nolen(sv_name),
+            Rstats::ArrayFunc::to_c(Rstats::PerlAPI::hvrv_delete_simple(sv_opt, SvPV_nolen(sv_name)))
+          );
+        }
+        else if (i < names_length) {
+          SV* sv_name = Rstats::PerlAPI::avrv_fetch_simple(sv_names, i);
+          SV* sv_arg = Rstats::PerlAPI::avrv_fetch_simple(sv_args, i);
+          if (SvOK(sv_arg)) {
+            Rstats::PerlAPI::hvrv_store_nolen_inc(
+              sv_new_opt,
+              SvPV_nolen(sv_name),
+              Rstats::ArrayFunc::to_c(sv_arg)
+            );
+          }
+        }
+      }
+
+      // SV* sv_key;
+      // while ((sv_key = hv_iterkeysv(hv_iternext((HV*)Rstats::PerlAPI::SvRV_safe(sv_opt)))) != NULL) {
+        // croak("unused argument (%s)", SvPV_nolen(sv_key));
+      // }
+      
+      return sv_new_opt;
+    }
+
     IV is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
         return 0;

@@ -9,52 +9,6 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
-# clone
-{
-  # clone - matrix with value
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    my $x2 = $x1->clone;
-    $x2->values([2 .. 25]);
-    is_deeply($x2->values, [2 .. 25]);
-  }
-  
-  # clone - matrix
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = $x1->clone;
-    ok(r->is_matrix($x2));
-    is_deeply(r->dim($x2)->values, [3, 2]);
-    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-  }
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = $x1->clone;
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
-  }
-}
-
-# outer
-{
-  # outer - basic
-  my $x1 = array(se('1:2'), c(1, 2));
-  my $x2 = array(se('1:24'), c(3, 4));
-  my $x3 = r->outer($x1, $x2);
-  is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
-  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
-}
-
-{
-  my $x1 = Rstats::Func::new_integer(3);
-  $x1->vector->to_string;
-}
-
 # bool context
 {
   {
@@ -99,6 +53,69 @@ use Rstats::Func;
     };
     like($@, qr/zero/);
   }
+}
+
+# array
+{
+  # array - basic
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply($x1->values, [1 .. 24]);
+    is_deeply(r->dim($x1)->values, [4, 3, 2]);
+  }
+  
+  # array - dim option
+  {
+    my $x1 = array(se('1:24'), {dim => c(4, 3, 2)});
+    is_deeply($x1->values, [1 .. 24]);
+    is_deeply(r->dim($x1)->values, [4, 3, 2]);
+  }
+}
+
+# clone
+{
+  # clone - matrix with value
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    my $x2 = $x1->clone;
+    $x2->values([2 .. 25]);
+    is_deeply($x2->values, [2 .. 25]);
+  }
+  
+  # clone - matrix
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->rownames($x1 => c('r1', 'r2', 'r3'));
+    r->colnames($x1 => c('c1', 'c2'));
+    my $x2 = $x1->clone;
+    ok(r->is_matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
+  }
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = $x1->clone;
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
+}
+
+# outer
+{
+  # outer - basic
+  my $x1 = array(se('1:2'), c(1, 2));
+  my $x2 = array(se('1:24'), c(3, 4));
+  my $x3 = r->outer($x1, $x2);
+  is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
+  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
+}
+
+{
+  my $x1 = Rstats::Func::new_integer(3);
+  $x1->vector->to_string;
 }
 
 # get logical array
@@ -1122,23 +1139,6 @@ EOS
   {
     my $x1 = array(se('1:24'), c(4, 3, 1));
     is($x1->value(3, 2, 1), 7);
-  }
-}
-
-# array
-{
-  # array - basic
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    is_deeply($x1->values, [1 .. 24]);
-    is_deeply(r->dim($x1)->values, [4, 3, 2]);
-  }
-  
-  # array - dim option
-  {
-    my $x1 = array(se('1:24'), {dim => c(4, 3, 2)});
-    is_deeply($x1->values, [1 .. 24]);
-    is_deeply(r->dim($x1)->values, [4, 3, 2]);
   }
 }
 

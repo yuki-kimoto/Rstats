@@ -1545,28 +1545,6 @@ sub args_array {
   return @args;
 }
 
-sub args {
-  my $names = shift;
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $new_opt = {};
-  my @args;
-  for (my $i = 0; $i < @$names; $i++) {
-    my $name = $names->[$i];
-    my $arg;
-    if (exists $opt->{$name}) {
-      $new_opt->{$name} = to_c(delete $opt->{$name});
-    }
-    elsif ($i < @_) {
-      $new_opt->{$name} = to_c($_[$i]);
-    }
-    push @args, $arg;
-  }
-  
-  croak "unused argument ($_)" for keys %$opt;
-  
-  return $new_opt;
-}
-
 sub complex {
   my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array(['re', 'im', 'mod', 'arg'], @_);
   
@@ -2658,6 +2636,8 @@ sub numeric {
   
   return Rstats::ArrayFunc::c((0) x $num);
 }
+
+sub args { Rstats::ArrayFunc::args(@_) }
 
 sub to_c {
   my $_x = shift;

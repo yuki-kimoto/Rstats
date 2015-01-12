@@ -1315,6 +1315,29 @@ index_to_pos(...)
 
 MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
 
+SV* args(...)
+  PPCODE:
+{
+  SV* sv_names = ST(0);
+  SV* sv_args = Rstats::PerlAPI::new_mAVRV();
+  
+  for (IV i = 1; i < items; i++) {
+    Rstats::PerlAPI::avrv_push_inc(sv_args, ST(i));
+  }
+  
+  SV* sv_opt = Rstats::Util::args(sv_names, sv_args);
+  
+  return_sv(sv_opt);
+}
+
+SV* to_c(...)
+  PPCODE:
+{
+  SV* sv_x = Rstats::ArrayFunc::to_c(ST(0));
+  
+  return_sv(sv_x);
+}
+
 SV* c(...)
   PPCODE:
 {

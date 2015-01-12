@@ -1313,7 +1313,7 @@ index_to_pos(...)
   return_sv(sv_ret);
 }
 
-MODULE = Rstats::Func PACKAGE = Rstats::Func
+MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
 
 SV* c(...)
   PPCODE:
@@ -1333,5 +1333,7 @@ SV* c(...)
   
   return_sv(sv_x1);
 }
+
+MODULE = Rstats::Func PACKAGE = Rstats::Func
 
 MODULE = Rstats PACKAGE = Rstats

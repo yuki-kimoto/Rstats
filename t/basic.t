@@ -13,9 +13,9 @@ use Math::Trig ();
     is_deeply($v->values, ["a", "b"]);
   }
 
-  # c($x)
+  # c([1, 2, 3])
   {
-    my $v = c(1, 2, 3);
+    my $v = c([1, 2, 3]);
     is(r->typeof($v)->value, 'double');
     is_deeply($v->values, [1, 2, 3]);
   }

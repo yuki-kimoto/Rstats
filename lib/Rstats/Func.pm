@@ -265,23 +265,23 @@ sub read_table {
     }
     my $type = $type_columns->[$i];
     if ($type eq 'character') {
-      my $x1 = Rstats::Func::c(@{$columns->[$i]});
+      my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_factor;
     }
     elsif ($type eq 'complex') {
-      my $x1 = Rstats::Func::c(@{$columns->[$i]});
+      my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_complex;
     }
     elsif ($type eq 'double') {
-      my $x1 = Rstats::Func::c(@{$columns->[$i]});
+      my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_double;
     }
     elsif ($type eq 'integer') {
-      my $x1 = Rstats::Func::c(@{$columns->[$i]});
+      my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_integer;
     }
     else {
-      my $x1 = Rstats::Func::c(@{$columns->[$i]});
+      my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
       push @$data_frame_args, $x1->as_logical;
     }
   }
@@ -569,7 +569,7 @@ sub data_frame {
     if ($repeat > 1) {
       my $repeat_elements = [];
       push @$repeat_elements, $elements->[$i] for (1 .. $repeat);
-      $elements->[$i] = Rstats::Func::c(@$repeat_elements);
+      $elements->[$i] = Rstats::ArrayFunc::c(@$repeat_elements);
     }
   }
   
@@ -579,8 +579,8 @@ sub data_frame {
   $data_frame->list($elements);
   $data_frame->dimnames(
     Rstats::Func::list(
-      Rstats::Func::c(@$row_names),
-      Rstats::Func::c(@$column_names)
+      Rstats::ArrayFunc::c(@$row_names),
+      Rstats::ArrayFunc::c(@$column_names)
     )
   );
   
@@ -2371,8 +2371,8 @@ sub quantile {
   # Max
   push @$quantile_elements , $x3->get($x3_length);
   
-  my $x4 = Rstats::Func::c(@$quantile_elements);
-  $x4->names(Rstats::Func::c(qw/0%  25%  50%  75% 100%/));
+  my $x4 = Rstats::ArrayFunc::c(@$quantile_elements);
+  $x4->names(Rstats::ArrayFunc::c(qw/0%  25%  50%  75% 100%/));
   
   return $x4;
 }

@@ -265,7 +265,7 @@ sub _name_to_index {
 sub nlevels {
   my $self = shift;
   
-  return Rstats::Func::c($self->levels->length_value);
+  return Rstats::ArrayFunc::c($self->levels->length_value);
 }
 
 sub length {
@@ -273,7 +273,7 @@ sub length {
   
   my $length = $self->length_value;
   
-  return Rstats::Func::c($length);
+  return Rstats::ArrayFunc::c($length);
 }
 
 sub length_value {
@@ -424,7 +424,7 @@ sub mode {
       croak qq/could not find function "as_$type"/;
     }
 
-    return Rstats::Func::c($mode);
+    return Rstats::ArrayFunc::c($mode);
   }
 }
 
@@ -662,7 +662,7 @@ sub values {
   my $self = shift;
   
   if (@_) {
-    $self->vector(Rstats::Func::c(@{$_[0]})->vector);
+    $self->vector(Rstats::ArrayFunc::c(@{$_[0]})->vector);
   }
   else {
     my $values = $self->vector->values;

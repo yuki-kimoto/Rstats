@@ -259,7 +259,7 @@ sub _set_seed {
 sub sapply {
   my $x1 = shift->lapply(@_);
   
-  my $x2 = Rstats::Func::c(@{$x1->list});
+  my $x2 = Rstats::ArrayFunc::c(@{$x1->list});
   
   return $x2;
 }
@@ -307,12 +307,12 @@ sub tapply {
   # Apply
   my $new_values2 = [];
   for (my $i = 1; $i < @$new_values; $i++) {
-    my $x = $func->(Rstats::Func::c(@{$new_values->[$i]}));
+    my $x = $func->(Rstats::ArrayFunc::c(@{$new_values->[$i]}));
     push @$new_values2, $x;
   }
   
   my $x4_length = @$new_values2;
-  my $x4 = Rstats::Func::array(Rstats::Func::c(@$new_values2), $x4_length);
+  my $x4 = Rstats::Func::array(Rstats::ArrayFunc::c(@$new_values2), $x4_length);
   $x4->names($x2->levels);
   
   return $x4;
@@ -324,7 +324,7 @@ sub mapply {
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
 
   my @xs = @_;
-  @xs = map { Rstats::Func::c($_) } @xs;
+  @xs = map { Rstats::ArrayFunc::c($_) } @xs;
   
   # Fix length
   my @xs_length = map { $_->length_value } @xs;
@@ -382,11 +382,11 @@ sub apply {
   
   my $new_elements = [];
   for my $element_array (@$new_elements_array) {
-    push @$new_elements, $func->(Rstats::Func::c(@$element_array));
+    push @$new_elements, $func->(Rstats::ArrayFunc::c(@$element_array));
   }
 
   my $x2 = Rstats::Func::NULL();
-  $x2->vector(Rstats::Func::c(@$new_elements)->vector);
+  $x2->vector(Rstats::ArrayFunc::c(@$new_elements)->vector);
   $x1->copy_attrs_to($x1);
   $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
   
@@ -423,7 +423,7 @@ sub sweep {
     my $e1 = $x2->value(@{$new_index});
     push @$x_result_elements, $e1;
   }
-  my $x3 = Rstats::Func::c(@$x_result_elements);
+  my $x3 = Rstats::ArrayFunc::c(@$x_result_elements);
   
   my $x4;
   if ($func eq '+') {

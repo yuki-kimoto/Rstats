@@ -256,7 +256,7 @@ sub get {
   # array
   my $x2 = Rstats::Func::array(
     Rstats::Func::new_vector($self->vector->type, @a2_values),
-    Rstats::Func::c(@$x2_dim)
+    Rstats::ArrayFunc::c(@$x2_dim)
   );
   
   # Copy attributes
@@ -435,12 +435,12 @@ sub _fix_position {
   }
   else {
     if ($reverse) {
-      $x1 = Rstats::Func::c($data);
+      $x1 = Rstats::ArrayFunc::c($data);
       $x2 = $self;
     }
     else {
       $x1 = $self;
-      $x2 = Rstats::Func::c($data);
+      $x2 = Rstats::ArrayFunc::c($data);
     }
   }
   

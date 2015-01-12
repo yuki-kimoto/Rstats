@@ -1307,11 +1307,12 @@ sub append {
 }
 
 sub array {
-  my ($x1, $x_dim) = args_array(['x', 'dim'], @_);
+  my $opt = args(['x', 'dim'], @_);
+  my $x1 = $opt->{x};
   
   # Dimention
   my $elements = $x1->decompose;
-  $x_dim = NULL unless defined $x_dim;
+  my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL;
   my $x1_length = $x1->length_value;
   unless ($x_dim->vector->length_value) {
     $x_dim = c($x1_length);
@@ -1541,6 +1542,28 @@ sub args_array {
   croak "unused argument ($_)" for keys %$opt;
   
   return @args;
+}
+
+sub args {
+  my $names = shift;
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  my $new_opt = {};
+  my @args;
+  for (my $i = 0; $i < @$names; $i++) {
+    my $name = $names->[$i];
+    my $arg;
+    if (exists $opt->{$name}) {
+      $new_opt->{$name} = to_c(delete $opt->{$name});
+    }
+    elsif ($i < @_) {
+      $new_opt->{$name} = to_c($_[$i]);
+    }
+    push @args, $arg;
+  }
+  
+  croak "unused argument ($_)" for keys %$opt;
+  
+  return $new_opt;
 }
 
 sub complex {

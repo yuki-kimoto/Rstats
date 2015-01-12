@@ -53,7 +53,7 @@ sub I {
 
 sub subset {
   my ($x1, $x_condition, $x_names)
-    = args(['x1', 'condition', 'names'], @_);
+    = args_array(['x1', 'condition', 'names'], @_);
   
   $x_names = Rstats::Func::NULL() unless defined $x_names;
   
@@ -144,7 +144,7 @@ sub merge {
   die "merge is not implemented yet";
   
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
-    = args([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
+    = args_array([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
   
   # Join way
   $x_all = FALSE unless defined $x_all;
@@ -188,7 +188,7 @@ sub merge {
 #           encoding = "unknown")
 sub read_table {
   my ($x_file, $x_sep, $x_skip, $x_nrows, $x_header, $x_comment_char, $x_row_names, $x_encoding)
-    = args([qw/file sep skip nrows header comment.char row.names encoding/], @_);
+    = args_array([qw/file sep skip nrows header comment.char row.names encoding/], @_);
   
   my $file = $x_file->value;
   open(my $fh, '<', $file)
@@ -295,7 +295,7 @@ sub interaction {
   $opt = ref $_[-1] eq 'HASH' ? pop : {};
   my @xs = map { to_c($_)->as_factor } @_;
   my ($x_drop, $x_sep);
-  ($x_drop, $x_sep) = args(['drop', 'sep'], $opt);
+  ($x_drop, $x_sep) = args_array(['drop', 'sep'], $opt);
   
   $x_sep = c(".") unless defined $x_sep;
   my $sep = $x_sep->value;
@@ -348,7 +348,7 @@ sub interaction {
 
 sub gl {
   my ($x_n, $x_k, $x_length, $x_labels, $x_ordered)
-    = args([qw/n k length labels ordered/], @_);
+    = args_array([qw/n k length labels ordered/], @_);
   
   my $n = $x_n->value;
   my $k = $x_k->value;
@@ -391,7 +391,7 @@ sub ordered {
 
 sub factor {
   my ($x1, $x_levels, $x_labels, $x_exclude, $x_ordered)
-    = args([qw/x levels labels exclude ordered/], @_);
+    = args_array([qw/x levels labels exclude ordered/], @_);
 
   # default - x
   $x1 = $x1->as_character unless $x1->is_character;
@@ -587,7 +587,7 @@ sub data_frame {
 }
 
 sub upper_tri {
-  my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
+  my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
@@ -620,7 +620,7 @@ sub upper_tri {
 }
 
 sub lower_tri {
-  my ($x1_m, $x1_diag) = args(['m', 'diag'], @_);
+  my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
@@ -785,7 +785,7 @@ sub Arg { operate_unary(\&Rstats::VectorFunc::Arg, @_) }
 
 sub sub {
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+    = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
@@ -815,7 +815,7 @@ sub sub {
 
 sub gsub {
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+    = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
@@ -844,7 +844,7 @@ sub gsub {
 }
 
 sub grep {
-  my ($x1_pattern, $x1_x, $x1_ignore_case) = args(['pattern', 'x', 'ignore.case'], @_);
+  my ($x1_pattern, $x1_x, $x1_ignore_case) = args_array(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
@@ -908,7 +908,7 @@ sub col {
 }
 
 sub chartr {
-  my ($x1_old, $x1_new, $x1_x) = args(['old', 'new', 'x'], @_);
+  my ($x1_old, $x1_new, $x1_x) = args_array(['old', 'new', 'x'], @_);
   
   my $old = $x1_old->value;
   my $new = $x1_new->value;
@@ -934,7 +934,7 @@ sub chartr {
 }
 
 sub charmatch {
-  my ($x1_x, $x1_table) = args(['x', 'table'], @_);
+  my ($x1_x, $x1_table) = args_array(['x', 'table'], @_);
   
   die "Not implemented"
     unless $x1_x->vector->type eq 'character' && $x1_table->vector->type eq 'character';
@@ -1287,7 +1287,7 @@ sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }
 sub acosh { operate_unary_old(\&Rstats::VectorFunc::acosh, @_) }
 
 sub append {
-  my ($x1, $x2, $x_after) = args(['x1', 'x2', 'after'], @_);
+  my ($x1, $x2, $x_after) = args_array(['x1', 'x2', 'after'], @_);
   
   # Default
   $x_after = NULL unless defined $x_after;
@@ -1307,7 +1307,7 @@ sub append {
 }
 
 sub array {
-  my ($x1, $x_dim) = args(['x1', 'dim'], @_);
+  my ($x1, $x_dim) = args_array(['x', 'dim'], @_);
   
   # Dimention
   my $elements = $x1->decompose;
@@ -1329,7 +1329,7 @@ sub array {
     @$elements = splice @$elements, 0, $dim_product;
   }
   
-  my $x2 = c(@$elements);
+  my $x2 = c($elements);
   $x2->dim($x_dim);
   
   return $x2;
@@ -1522,7 +1522,7 @@ sub cumsum { operate_unary(\&Rstats::VectorFunc::cumsum, @_) }
 
 sub cumprod { operate_unary(\&Rstats::VectorFunc::cumprod, @_) }
 
-sub args {
+sub args_array {
   my $names = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my @args;
@@ -1544,7 +1544,7 @@ sub args {
 }
 
 sub complex {
-  my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args(['re', 'im', 'mod', 'arg'], @_);
+  my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array(['re', 'im', 'mod', 'arg'], @_);
   
   $x1_mod = NULL unless defined $x1_mod;
   $x1_arg = NULL unless defined $x1_arg;
@@ -1644,7 +1644,7 @@ sub floor {
 }
 
 sub head {
-  my ($x1, $x_n) = args(['x1', 'n'], @_);
+  my ($x1, $x_n) = args_array(['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
   
@@ -1956,7 +1956,7 @@ sub rbind {
 }
 
 sub rep {
-  my ($x1, $x_times) = args(['x1', 'times'], @_);
+  my ($x1, $x_times) = args_array(['x1', 'times'], @_);
   
   my $times = defined $x_times ? $x_times->value : 1;
   
@@ -2167,7 +2167,7 @@ sub sinh { operate_unary(\&Rstats::VectorFunc::sinh, @_) }
 sub sqrt { operate_unary(\&Rstats::VectorFunc::sqrt, @_) }
 
 sub sort {
-  my ($x1, $x_decreasing) = args(['x1', 'decreasing', 'na.last'], @_);
+  my ($x1, $x_decreasing) = args_array(['x1', 'decreasing', 'na.last'], @_);
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
@@ -2181,7 +2181,7 @@ sub sort {
 }
 
 sub tail {
-  my ($x1, $x_n) = args(['x1', 'n'], @_);
+  my ($x1, $x_n) = args_array(['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
   
@@ -2435,7 +2435,7 @@ sub new_logical {
 
 sub matrix {
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
-    = args(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
+    = args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
   croak "matrix method need data as frist argument"
     unless defined $x1;

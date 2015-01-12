@@ -2187,7 +2187,18 @@ namespace Rstats {
       Rstats::Vector* vector = Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_vector);
       return vector;
     }
+
+    void set_dim(SV* sv_a1, Rstats::Vector* v1) {
+      SV* sv_dim = Rstats::PerlAPI::to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
+      Rstats::PerlAPI::hvrv_store_nolen_inc(sv_a1, "dim", sv_dim);
+    }
     
+    Rstats::Vector* get_dim(SV* sv_a1) {
+      SV* sv_dim = Rstats::PerlAPI::hvrv_fetch_simple(sv_a1, "dim");
+      Rstats::Vector* dim = Rstats::PerlAPI::to_c_obj<Rstats::Vector*>(sv_dim);
+      return dim;
+    }
+        
     SV* c(SV* sv_elements) {
       
       IV element_length = Rstats::PerlAPI::avrv_len_fix(sv_elements);

@@ -268,7 +268,7 @@ sub lapply {
   my $self = shift;
   my $func_name = splice(@_, 1, 1);
   my ($x1)
-    = Rstats::Func::args(['x1'], @_);
+    = Rstats::Func::args_array(['x1'], @_);
   
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
   
@@ -288,7 +288,7 @@ sub tapply {
 
   my $func_name = splice(@_, 2, 1);
   my ($x1, $x2)
-    = Rstats::Func::args(['x1', 'x2'], @_);
+    = Rstats::Func::args_array(['x1', 'x2'], @_);
   
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
   
@@ -355,7 +355,7 @@ sub apply {
   my $self = shift;
   my $func_name = splice(@_, 2, 1);
   my ($x1, $x_margin)
-    = Rstats::Func::args(['x1', 'margin'], @_);
+    = Rstats::Func::args_array(['x1', 'margin'], @_);
   
   my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
 
@@ -401,7 +401,7 @@ sub sweep {
   my $self = shift;
 
   my ($x1, $x_margin, $x2, $x_func)
-    = Rstats::Func::args(['x1', 'margin', 'x2', 'FUN'], @_);
+    = Rstats::Func::args_array(['x1', 'margin', 'x2', 'FUN'], @_);
   
   my $x_margin_values = $x_margin->values;
   my $func = defined $x_func ? $x_func->value : '-';

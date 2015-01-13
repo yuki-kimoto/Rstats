@@ -1103,132 +1103,38 @@ namespace Rstats {
     
     SV* get_value(IV);
     SV* get_values();
+    
     bool is_character ();
     bool is_complex ();
     bool is_double ();
     bool is_integer ();
     bool is_numeric ();
     bool is_logical ();
+    
     std::vector<SV*>* get_character_values();
     std::vector<std::complex<NV> >* get_complex_values();
     std::vector<NV>* get_double_values();
     std::vector<IV>* get_integer_values();
+    
     Rstats::VectorType::Enum get_type();
     void add_na_position(IV);
     bool exists_na_position(IV position);
     void merge_na_positions(Rstats::Vector* elements);
     std::map<IV, IV> get_na_positions();
+    IV get_length ();
     
-    IV get_length () {
-      if (this->values == NULL) {
-        return 0;
-      }
-      
-      switch (type) {
-        case Rstats::VectorType::CHARACTER :
-          return this->get_character_values()->size();
-          break;
-        case Rstats::VectorType::COMPLEX :
-          return this->get_complex_values()->size();
-          break;
-        case Rstats::VectorType::DOUBLE :
-          return this->get_double_values()->size();
-          break;
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL :
-          return this->get_integer_values()->size();
-          break;
-      }
-    }
-
-    static Rstats::Vector* new_character(IV length, SV* sv_str) {
-
-      Rstats::Vector* elements = Rstats::Vector::new_character(length);
-      for (IV i = 0; i < length; i++) {
-        elements->set_character_value(i, sv_str);
-      }
-      elements->type = Rstats::VectorType::CHARACTER;
-      
-      return elements;
-    }
-
-    static Rstats::Vector* new_character(IV length) {
-
-      Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new std::vector<SV*>(length);
-      elements->type = Rstats::VectorType::CHARACTER;
-      
-      return elements;
-    }
-
-    SV* get_character_value(IV pos) {
-      SV* value = (*this->get_character_values())[pos];
-      if (value == NULL) {
-        return NULL;
-      }
-      else {
-        return Rstats::pl_new_sv_sv(value);
-      }
-    }
-    
-    void set_character_value(IV pos, SV* value) {
-      if (value != NULL) {
-        SvREFCNT_dec((*this->get_character_values())[pos]);
-      }
-      
-      SV* new_value = Rstats::pl_new_sv_sv(value);
-      (*this->get_character_values())[pos] = SvREFCNT_inc(new_value);
-    }
-
-    static Rstats::Vector* new_complex(IV length) {
-      
-      Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
-      elements->type = Rstats::VectorType::COMPLEX;
-      
-      return elements;
-    }
-        
-    static Rstats::Vector* new_complex(IV length, std::complex<NV> z) {
-      
-      Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new std::vector<std::complex<NV> >(length, z);
-      elements->type = Rstats::VectorType::COMPLEX;
-      
-      return elements;
-    }
-
-    std::complex<NV> get_complex_value(IV pos) {
-      return (*this->get_complex_values())[pos];
-    }
-    
-    void set_complex_value(IV pos, std::complex<NV> value) {
-      (*this->get_complex_values())[pos] = value;
-    }
-    
-    static Rstats::Vector* new_double(IV length) {
-      Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new std::vector<NV>(length);
-      elements->type = Rstats::VectorType::DOUBLE;
-      
-      return elements;
-    }
-
-    static Rstats::Vector* new_double(IV length, NV value) {
-      Rstats::Vector* elements = new Rstats::Vector;
-      elements->values = new std::vector<NV>(length, value);
-      elements->type = Rstats::VectorType::DOUBLE;
-      
-      return elements;
-    }
-    
-    NV get_double_value(IV pos) {
-      return (*this->get_double_values())[pos];
-    }
-    
-    void set_double_value(IV pos, NV value) {
-      (*this->get_double_values())[pos] = value;
-    }
+    static Rstats::Vector* new_character(IV, SV*);
+    static Rstats::Vector* new_character(IV);
+    SV* get_character_value(IV);
+    void set_character_value(IV, SV*);
+    static Rstats::Vector* new_complex(IV);
+    static Rstats::Vector* new_complex(IV, std::complex<NV>);
+    std::complex<NV> get_complex_value(IV);
+    void set_complex_value(IV, std::complex<NV>);
+    static Rstats::Vector* new_double(IV);
+    static Rstats::Vector* new_double(IV, NV);
+    NV get_double_value(IV);
+    void set_double_value(IV, NV);
 
     static Rstats::Vector* new_integer(IV length) {
       
@@ -1936,6 +1842,117 @@ namespace Rstats {
     
     std::map<IV, IV> Rstats::Vector::get_na_positions() {
       return this->na_positions;
+    }
+
+    IV Rstats::Vector::get_length () {
+      if (this->values == NULL) {
+        return 0;
+      }
+      
+      switch (type) {
+        case Rstats::VectorType::CHARACTER :
+          return this->get_character_values()->size();
+          break;
+        case Rstats::VectorType::COMPLEX :
+          return this->get_complex_values()->size();
+          break;
+        case Rstats::VectorType::DOUBLE :
+          return this->get_double_values()->size();
+          break;
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL :
+          return this->get_integer_values()->size();
+          break;
+      }
+    }
+
+    Rstats::Vector* Rstats::Vector::new_character(IV length, SV* sv_str) {
+
+      Rstats::Vector* elements = Rstats::Vector::new_character(length);
+      for (IV i = 0; i < length; i++) {
+        elements->set_character_value(i, sv_str);
+      }
+      elements->type = Rstats::VectorType::CHARACTER;
+      
+      return elements;
+    }
+
+    Rstats::Vector* Rstats::Vector::new_character(IV length) {
+
+      Rstats::Vector* elements = new Rstats::Vector;
+      elements->values = new std::vector<SV*>(length);
+      elements->type = Rstats::VectorType::CHARACTER;
+      
+      return elements;
+    }
+
+    SV* Rstats::Vector::get_character_value(IV pos) {
+      SV* value = (*this->get_character_values())[pos];
+      if (value == NULL) {
+        return NULL;
+      }
+      else {
+        return Rstats::pl_new_sv_sv(value);
+      }
+    }
+    
+    void Rstats::Vector::set_character_value(IV pos, SV* value) {
+      if (value != NULL) {
+        SvREFCNT_dec((*this->get_character_values())[pos]);
+      }
+      
+      SV* new_value = Rstats::pl_new_sv_sv(value);
+      (*this->get_character_values())[pos] = SvREFCNT_inc(new_value);
+    }
+
+    Rstats::Vector* Rstats::Vector::new_complex(IV length) {
+      
+      Rstats::Vector* elements = new Rstats::Vector;
+      elements->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
+      elements->type = Rstats::VectorType::COMPLEX;
+      
+      return elements;
+    }
+        
+    Rstats::Vector* Rstats::Vector::new_complex(IV length, std::complex<NV> z) {
+      
+      Rstats::Vector* elements = new Rstats::Vector;
+      elements->values = new std::vector<std::complex<NV> >(length, z);
+      elements->type = Rstats::VectorType::COMPLEX;
+      
+      return elements;
+    }
+
+    std::complex<NV> Rstats::Vector::get_complex_value(IV pos) {
+      return (*this->get_complex_values())[pos];
+    }
+    
+    void Rstats::Vector::set_complex_value(IV pos, std::complex<NV> value) {
+      (*this->get_complex_values())[pos] = value;
+    }
+    
+    Rstats::Vector* Rstats::Vector::new_double(IV length) {
+      Rstats::Vector* elements = new Rstats::Vector;
+      elements->values = new std::vector<NV>(length);
+      elements->type = Rstats::VectorType::DOUBLE;
+      
+      return elements;
+    }
+
+    Rstats::Vector* Rstats::Vector::new_double(IV length, NV value) {
+      Rstats::Vector* elements = new Rstats::Vector;
+      elements->values = new std::vector<NV>(length, value);
+      elements->type = Rstats::VectorType::DOUBLE;
+      
+      return elements;
+    }
+    
+    NV Rstats::Vector::get_double_value(IV pos) {
+      return (*this->get_double_values())[pos];
+    }
+    
+    void Rstats::Vector::set_double_value(IV pos, NV value) {
+      (*this->get_double_values())[pos] = value;
     }
 
 namespace Rstats {

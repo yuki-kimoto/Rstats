@@ -1109,42 +1109,15 @@ namespace Rstats {
     bool is_integer ();
     bool is_numeric ();
     bool is_logical ();
-    
-    std::vector<SV*>* get_character_values() {
-      return (std::vector<SV*>*)this->values;
-    }
-    
-    std::vector<std::complex<NV> >* get_complex_values() {
-      return (std::vector<std::complex<NV> >*)this->values;
-    }
-    
-    std::vector<NV>* get_double_values() {
-      return (std::vector<NV>*)this->values;
-    }
-    
-    std::vector<IV>* get_integer_values() {
-      return (std::vector<IV>*)this->values;
-    }
-    
-    Rstats::VectorType::Enum get_type() {
-      return this->type;
-    }
-    
-    void add_na_position(IV position) {
-      this->na_positions[position] = 1;
-    }
-
-    bool exists_na_position(IV position) {
-      return this->na_positions.count(position);
-    }
-    
-    void merge_na_positions(Rstats::Vector* elements) {
-      for(std::map<IV, IV>::iterator it = elements->na_positions.begin(); it != elements->na_positions.end(); ++it) {
-        this->add_na_position(it->first);
-      }
-    }
-    
-    std::map<IV, IV> get_na_positions() { return this->na_positions; }
+    std::vector<SV*>* get_character_values();
+    std::vector<std::complex<NV> >* get_complex_values();
+    std::vector<NV>* get_double_values();
+    std::vector<IV>* get_integer_values();
+    Rstats::VectorType::Enum get_type();
+    void add_na_position(IV);
+    bool exists_na_position(IV position);
+    void merge_na_positions(Rstats::Vector* elements);
+    std::map<IV, IV> get_na_positions();
     
     IV get_length () {
       if (this->values == NULL) {
@@ -1925,6 +1898,44 @@ namespace Rstats {
 
     bool Rstats::Vector::is_logical () {
       return this->get_type() == Rstats::VectorType::LOGICAL;
+    }
+
+    std::vector<SV*>* Rstats::Vector::get_character_values() {
+      return (std::vector<SV*>*)this->values;
+    }
+    
+    std::vector<std::complex<NV> >* Rstats::Vector::get_complex_values() {
+      return (std::vector<std::complex<NV> >*)this->values;
+    }
+    
+    std::vector<NV>* Rstats::Vector::get_double_values() {
+      return (std::vector<NV>*)this->values;
+    }
+    
+    std::vector<IV>* Rstats::Vector::get_integer_values() {
+      return (std::vector<IV>*)this->values;
+    }
+    
+    Rstats::VectorType::Enum Rstats::Vector::get_type() {
+      return this->type;
+    }
+
+    void Rstats::Vector::add_na_position(IV position) {
+      this->na_positions[position] = 1;
+    }
+
+    bool Rstats::Vector::exists_na_position(IV position) {
+      return this->na_positions.count(position);
+    }
+    
+    void Rstats::Vector::merge_na_positions(Rstats::Vector* elements) {
+      for(std::map<IV, IV>::iterator it = elements->na_positions.begin(); it != elements->na_positions.end(); ++it) {
+        this->add_na_position(it->first);
+      }
+    }
+    
+    std::map<IV, IV> Rstats::Vector::get_na_positions() {
+      return this->na_positions;
     }
 
 namespace Rstats {

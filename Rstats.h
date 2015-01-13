@@ -1098,61 +1098,17 @@ namespace Rstats {
     void* values;
     
     public:
-    
-    ~Vector () {
-      IV length = this->get_length();
-      
-      Rstats::VectorType::Enum type = this->get_type();
-      switch (type) {
-        case Rstats::VectorType::CHARACTER : {
-          std::vector<SV*>* values = this->get_character_values();
-          for (IV i = 0; i < length; i++) {
-            if ((*values)[i] != NULL) {
-              SvREFCNT_dec((*values)[i]);
-            }
-          }
-          delete values;
-          break;
-        }
-        case Rstats::VectorType::COMPLEX : {
-          std::vector<std::complex<NV> >* values = this->get_complex_values();
-          delete values;
-          break;
-        }
-        case Rstats::VectorType::DOUBLE : {
-          std::vector<NV>* values = this->get_double_values();
-          delete values;
-          break;
-        }
-        case Rstats::VectorType::INTEGER :
-        case Rstats::VectorType::LOGICAL : {
-          std::vector<IV>* values = this->get_integer_values();
-          delete values;
-        }
-      }
-    }
 
+    ~Vector ();
+    
     SV* get_value(IV);
-
-    SV* get_values() {
-      
-      IV length = this->get_length();
-      SV* sv_values = Rstats::pl_new_av_ref();
-      for (IV i = 0; i < length; i++) {
-        Rstats::pl_av_push(sv_values, this->get_value(i));
-      }
-      
-      return sv_values;
-    }
-    
-    bool is_character () { return this->get_type() == Rstats::VectorType::CHARACTER; }
-    bool is_complex () { return this->get_type() == Rstats::VectorType::COMPLEX; }
-    bool is_double () { return this->get_type() == Rstats::VectorType::DOUBLE; }
-    bool is_integer () { return this->get_type() == Rstats::VectorType::INTEGER; }
-    bool is_numeric () {
-      return this->get_type() == Rstats::VectorType::DOUBLE || this->get_type() == Rstats::VectorType::INTEGER;
-    }
-    bool is_logical () { return this->get_type() == Rstats::VectorType::LOGICAL; }
+    SV* get_values();
+    bool is_character ();
+    bool is_complex ();
+    bool is_double ();
+    bool is_integer ();
+    bool is_numeric ();
+    bool is_logical ();
     
     std::vector<SV*>* get_character_values() {
       return (std::vector<SV*>*)this->values;
@@ -1810,6 +1766,39 @@ namespace Rstats {
   };
 }
 
+    Rstats::Vector::~Vector () {
+      IV length = this->get_length();
+      
+      Rstats::VectorType::Enum type = this->get_type();
+      switch (type) {
+        case Rstats::VectorType::CHARACTER : {
+          std::vector<SV*>* values = this->get_character_values();
+          for (IV i = 0; i < length; i++) {
+            if ((*values)[i] != NULL) {
+              SvREFCNT_dec((*values)[i]);
+            }
+          }
+          delete values;
+          break;
+        }
+        case Rstats::VectorType::COMPLEX : {
+          std::vector<std::complex<NV> >* values = this->get_complex_values();
+          delete values;
+          break;
+        }
+        case Rstats::VectorType::DOUBLE : {
+          std::vector<NV>* values = this->get_double_values();
+          delete values;
+          break;
+        }
+        case Rstats::VectorType::INTEGER :
+        case Rstats::VectorType::LOGICAL : {
+          std::vector<IV>* values = this->get_integer_values();
+          delete values;
+        }
+      }
+    }
+    
     SV* Rstats::Vector::get_value(IV pos) {
 
       SV* sv_value;
@@ -1901,6 +1890,41 @@ namespace Rstats {
       }
       
       return sv_value;
+    }
+
+    SV* Rstats::Vector::get_values() {
+      
+      IV length = this->get_length();
+      SV* sv_values = Rstats::pl_new_av_ref();
+      for (IV i = 0; i < length; i++) {
+        Rstats::pl_av_push(sv_values, this->get_value(i));
+      }
+      
+      return sv_values;
+    }
+
+    bool Rstats::Vector::is_character () {
+      return this->get_type() == Rstats::VectorType::CHARACTER;
+    }
+
+    bool Rstats::Vector::is_complex () {
+      return this->get_type() == Rstats::VectorType::COMPLEX;
+    }
+
+    bool Rstats::Vector::is_double () {
+      return this->get_type() == Rstats::VectorType::DOUBLE;
+    }
+
+    bool Rstats::Vector::is_integer () {
+      return this->get_type() == Rstats::VectorType::INTEGER;
+    }
+
+    bool Rstats::Vector::is_numeric () {
+      return this->get_type() == Rstats::VectorType::DOUBLE || this->get_type() == Rstats::VectorType::INTEGER;
+    }
+
+    bool Rstats::Vector::is_logical () {
+      return this->get_type() == Rstats::VectorType::LOGICAL;
     }
 
 namespace Rstats {

@@ -72,6 +72,27 @@ namespace Rstats {
   template <class X> X pl_to_c_obj(SV*);
   template <class X> SV* pl_to_perl_obj(X, const char*);
   IV pl_pregexec(SV*, REGEXP*);
+
+  // Rstats::VectorType header
+  namespace VectorType {
+    enum Enum {
+      LOGICAL = 0,
+      INTEGER = 1 ,
+      DOUBLE = 2,
+      COMPLEX = 3,
+      CHARACTER = 4
+    };
+  }
+  
+  // Rstats::Util header
+  namespace Util {
+    SV* looks_like_na(SV*);
+    SV* looks_like_integer(SV*);
+    SV* looks_like_double(SV*);
+    SV* looks_like_logical(SV*);
+    SV* looks_like_complex(SV*);
+    IV is_perl_number(SV*);
+  }
 }
 
 // Rstats body
@@ -268,27 +289,6 @@ namespace Rstats {
   }
 
 namespace Rstats {
-  // Rstats::VectorType
-  namespace VectorType {
-    enum Enum {
-      LOGICAL = 0,
-      INTEGER = 1 ,
-      DOUBLE = 2,
-      COMPLEX = 3,
-      CHARACTER = 4
-    };
-  }
-  
-  // Rstats::Util header
-  namespace Util {
-    SV* looks_like_na(SV*);
-    SV* looks_like_integer(SV*);
-    SV* looks_like_double(SV*);
-    SV* looks_like_logical(SV*);
-    SV* looks_like_complex(SV*);
-    IV is_perl_number(SV*);
-  }
-  
   namespace ElementFunc {
 
     // add

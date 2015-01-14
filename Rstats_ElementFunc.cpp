@@ -1,13 +1,3 @@
-#include <complex>
-#include <cmath>
-#include <limits>
-
-/* Perl headers */
-#include "EXTERN.h"
-#include "perl.h"
-#include "XSUB.h"
-#include "ppport.h"
-
 #include "Rstats.h"
 
 // add

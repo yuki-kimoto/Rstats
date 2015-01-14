@@ -9,6 +9,8 @@
 #include <vector>
 #include <map>
 #include <complex>
+#include <cmath>
+#include <limits>
 
 /* Perl headers */
 #include "EXTERN.h"

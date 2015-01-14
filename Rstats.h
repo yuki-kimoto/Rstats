@@ -2523,6 +2523,7 @@ namespace Rstats {
       return e2;
     }
   }
+}
 
 // Rstats::ArrayFunc body
   SV* Rstats::ArrayFunc::new_array() {
@@ -3006,4 +3007,3 @@ namespace Rstats {
     
     return sv_ret;
   }
-}

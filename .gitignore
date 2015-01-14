@@ -15,4 +15,4 @@ Makefile.old
 xt/tmp/*
 Rstats.bs
 Rstats.c
-Rstats.o
+*.o

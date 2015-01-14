@@ -352,6 +352,338 @@ namespace Rstats {
     Rstats::Vector* as_logical();
   };
 
+  // Macro for Rstats::Vector
+# define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2 = Rstats::Vector::new_logical(length); \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::CHARACTER : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_character_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::COMPLEX : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : invalid argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      for (IV i = 0; i < length; i++) { \
+        if (e1->exists_na_position(i)) { \
+          e2->set_integer_value(i, 0); \
+        } \
+      } \
+      return e2; \
+    }
+
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_integer(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : invalid argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+    
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to Rstats::Vector::%s", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+
+# define RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1) { \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e2; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e2 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e2->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to Rstats::Vector::%s", #FUNC_NAME, #FUNC_NAME); \
+          break; \
+      } \
+      e2->merge_na_positions(e1); \
+      return e2; \
+    }
+
+# define RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3 = Rstats::Vector::new_logical(length); \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::CHARACTER : \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_character_value(i), e2->get_character_value(i)) ? 1 : 0); \
+          } \
+          break; \
+        case Rstats::VectorType::COMPLEX : \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i)) ? 1 : 0); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          for (IV i = 0; i < length; i++) { \
+            try {\
+              e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i)) ? 1 : 0); \
+            } catch (const char* e) {\
+              e3->add_na_position(i);\
+            }\
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          for (IV i = 0; i < length; i++) { \
+            try {\
+              e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i)) ? 1 : 0); \
+            }\
+            catch (const char* e) {\
+              e3->add_na_position(i);\
+            }\
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-comparable argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
+    }
+    
+# define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e3 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e3 = Rstats::Vector::new_integer(length); \
+          for (IV i = 0; i < length; i++) { \
+            try {\
+              e3->set_integer_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i))); \
+            }\
+            catch (const char* e) {\
+              e3->add_na_position(i);\
+            }\
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
+    }
+
+# define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
+    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* e1, Rstats::Vector* e2) { \
+      if (e1->get_type() != e2->get_type()) { \
+        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      if (e1->get_length() != e2->get_length()) { \
+        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
+      } \
+      IV length = e1->get_length(); \
+      Rstats::Vector* e3; \
+      Rstats::VectorType::Enum type = e1->get_type(); \
+      switch (type) { \
+        case Rstats::VectorType::COMPLEX : \
+          e3 = Rstats::Vector::new_complex(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_complex_value(i, ELEMENT_FUNC_NAME(e1->get_complex_value(i), e2->get_complex_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::DOUBLE : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_double_value(i), e2->get_double_value(i))); \
+          } \
+          break; \
+        case Rstats::VectorType::INTEGER : \
+        case Rstats::VectorType::LOGICAL : \
+          e3 = Rstats::Vector::new_double(length); \
+          for (IV i = 0; i < length; i++) { \
+            e3->set_double_value(i, ELEMENT_FUNC_NAME(e1->get_integer_value(i), e2->get_integer_value(i))); \
+          } \
+          break; \
+        default: \
+          croak("Error in %s() : non-numeric argument to %s()", #FUNC_NAME, #FUNC_NAME); \
+      } \
+      e3->merge_na_positions(e1); \
+      e3->merge_na_positions(e2); \
+      return e3; \
+    }
+
+  // Rstats::VectorFunc
+  namespace VectorFunc {
+    Rstats::Vector* is_infinite(Rstats::Vector*);
+    Rstats::Vector* is_finite(Rstats::Vector*);
+    Rstats::Vector* is_nan(Rstats::Vector*);
+    
+    Rstats::Vector* negation(Rstats::Vector*);
+
+    Rstats::Vector* sin(Rstats::Vector*);
+    Rstats::Vector* cos(Rstats::Vector*);
+    Rstats::Vector* tan(Rstats::Vector*);
+    Rstats::Vector* sinh(Rstats::Vector*);
+    Rstats::Vector* cosh(Rstats::Vector*);
+    Rstats::Vector* tanh(Rstats::Vector*);
+    Rstats::Vector* log(Rstats::Vector*);
+    Rstats::Vector* logb(Rstats::Vector*);
+    Rstats::Vector* log10(Rstats::Vector*);
+    Rstats::Vector* log2(Rstats::Vector*);
+    Rstats::Vector* expm1(Rstats::Vector*);
+    Rstats::Vector* exp(Rstats::Vector*);
+    Rstats::Vector* sqrt(Rstats::Vector*);
+    Rstats::Vector* atan(Rstats::Vector*);
+    Rstats::Vector* asin(Rstats::Vector*);
+    Rstats::Vector* acos(Rstats::Vector*);
+    Rstats::Vector* asinh(Rstats::Vector*);
+    Rstats::Vector* acosh(Rstats::Vector*);
+    Rstats::Vector* atanh(Rstats::Vector*);
+    Rstats::Vector* Conj(Rstats::Vector*);
+
+    Rstats::Vector* Arg(Rstats::Vector*);
+    Rstats::Vector* abs(Rstats::Vector*);
+    Rstats::Vector* Mod(Rstats::Vector*);
+    Rstats::Vector* Re(Rstats::Vector*);
+    Rstats::Vector* Im(Rstats::Vector*);
+
+    Rstats::Vector* equal(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* not_equal(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* more_than(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* less_than(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* more_than_or_equal(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* less_than_or_equal(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* And(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* Or(Rstats::Vector*, Rstats::Vector*);
+
+    Rstats::Vector* add(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* subtract(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* multiply(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* reminder(Rstats::Vector*, Rstats::Vector*);
+
+    Rstats::Vector* divide(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* atan2(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* pow(Rstats::Vector*, Rstats::Vector*);
+    
+    Rstats::Vector* cumprod(Rstats::Vector*);
+    Rstats::Vector* cumsum(Rstats::Vector*);
+    Rstats::Vector* prod(Rstats::Vector*);
+    Rstats::Vector* sum(Rstats::Vector*);
+    Rstats::Vector* clone(Rstats::Vector*);
+  }
+  
   namespace ArrayFunc {
     SV* new_array();
     void set_vector(SV*, Rstats::Vector*);

@@ -43,7 +43,7 @@ WriteMakefile(
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Rstats-*' },
     CC => $cc,
-    OPTIMIZE => '-O1',
+    OPTIMIZE => '-O3',
     LD => $ld,
     LIBS              => [],
     DEFINE            => '',

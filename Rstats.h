@@ -1,5 +1,5 @@
-#ifndef PERL_RSTATS_ELEMENT_FUNC_H
-#define PERL_RSTATS_ELEMENT_FUNC_H
+#ifndef PERL_RSTATS_H
+#define PERL_RSTATS_H
 
 // Rstats::ElementFunc header
 namespace Rstats {

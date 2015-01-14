@@ -1,6 +1,11 @@
 #ifndef PERL_RSTATS_H
 #define PERL_RSTATS_H
 
+/* Fix std::isnan problem in Windows */
+#ifndef _isnan
+#define _isnan isnan
+#endif
+
 #include <vector>
 #include <map>
 #include <complex>
@@ -10,6 +15,21 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+
+/* suppress error - Cent OS(symbol collisions) */
+#undef init_tm
+#undef do_open
+#undef do_close
+#ifdef ENTER
+#undef ENTER
+#endif
+
+/* suppress error - Mac OS X(error: declaration of 'Perl___notused' has a different language linkage) */
+#ifdef __cplusplus
+#  define dNOOP (void)0
+#else
+#  define dNOOP extern int Perl___notused(void)
+#endif
 
 // Rstats::ElementFunc header
 namespace Rstats {

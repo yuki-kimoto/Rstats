@@ -1,5 +1,5 @@
 /* Rstats headers */
-#include "Rstats_old.h"
+#include "Rstats.h"
 
 /* Shortcut of return sv */
 #define return_sv(x) XPUSHs(x); XSRETURN(1)

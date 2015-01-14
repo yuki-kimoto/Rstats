@@ -1,8 +1,94 @@
 #ifndef PERL_RSTATS_H
 #define PERL_RSTATS_H
 
+#include <vector>
+#include <map>
+#include <complex>
+
+/* Perl headers */
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+#include "ppport.h"
+
 // Rstats::ElementFunc header
 namespace Rstats {
+
+  REGEXP* pl_pregcomp (SV*, IV);
+  SV* pl_new_ref(SV*);
+  SV* pl_new_sv_sv(SV*);
+  SV* pl_new_sv_pv(const char*);
+  SV* pl_new_sv_iv(IV);
+  SV* pl_new_sv_nv(NV);
+  AV* pl_new_av();
+  SV* pl_new_av_ref();
+  HV* pl_new_hv();
+  SV* pl_new_hv_ref();
+  SV* pl_deref(SV*);
+  AV* pl_av_deref(SV*);
+  HV* pl_hv_deref(SV*);
+  IV pl_av_len (AV*);
+  IV pl_av_len (SV*);
+  SV* pl_av_fetch(AV*, IV);
+  SV* pl_av_fetch(SV*, IV);
+  bool pl_hv_exists(HV*, char*);
+  bool pl_hv_exists(SV*, char*);
+  SV* pl_hv_delete(HV*, char*);
+  SV* pl_hv_delete(SV*, char*);
+  SV* pl_hv_fetch(HV*, const char*);
+  SV* pl_hv_fetch(SV*, const char*);
+  void pl_av_store(AV*, IV, SV*);
+  void pl_av_store(SV*, IV, SV*);
+  SV* pl_av_copy(SV*);
+  void pl_hv_store(HV*, const char*, SV*);
+  void pl_hv_store(SV*, const char* key, SV*);
+  void pl_av_push(AV*, SV*);
+  void pl_av_push(SV*, SV*);
+  SV* pl_av_pop(AV*);
+  SV* pl_av_pop(SV*);
+  void pl_av_unshift(AV*, SV*);
+  void pl_av_unshift(SV*, SV*);
+  template <class X> X pl_to_c_obj(SV* perl_obj_ref) {
+    SV* perl_obj = SvROK(perl_obj_ref) ? SvRV(perl_obj_ref) : perl_obj_ref;
+    IV obj_addr = SvIV(perl_obj);
+    X c_obj = INT2PTR(X, obj_addr);
+    
+    return c_obj;
+  }
+
+  template <class X> SV* pl_to_perl_obj(X c_obj, const char* class_name) {
+    IV obj_addr = PTR2IV(c_obj);
+    SV* sv_obj_addr = pl_new_sv_iv(obj_addr);
+    SV* sv_obj_addr_ref = pl_new_ref(sv_obj_addr);
+    SV* perl_obj = sv_bless(sv_obj_addr_ref, gv_stashpv(class_name, 1));
+    
+    return perl_obj;
+  }
+  IV pl_pregexec(SV*, REGEXP*);
+
+  namespace VectorType {
+    enum Enum {
+      LOGICAL = 0,
+      INTEGER = 1 ,
+      DOUBLE = 2,
+      COMPLEX = 3,
+      CHARACTER = 4
+    };
+  }
+
+  namespace Util {
+    SV* args(SV*, SV*);
+    IV is_perl_number(SV*);
+    SV* cross_product(SV*);
+    SV* pos_to_index(SV*, SV*);
+    SV* index_to_pos(SV*, SV*);
+    SV* looks_like_complex (SV*);
+    SV* looks_like_logical (SV*);
+    SV* looks_like_na (SV*);
+    SV* looks_like_integer(SV*);
+    SV* looks_like_double (SV*);
+  }
+
   namespace ElementFunc {
 
     std::complex<NV> add(std::complex<NV>, std::complex<NV>);
@@ -192,6 +278,88 @@ namespace Rstats {
     IV is_nan(std::complex<NV>);
     IV is_nan(NV);
     IV is_nan(IV);
+  }
+
+  class Vector {
+    private:
+    Rstats::VectorType::Enum type;
+    std::map<IV, IV> na_positions;
+    void* values;
+    
+    public:
+
+    ~Vector ();
+    
+    SV* get_value(IV);
+    SV* get_values();
+    
+    bool is_character ();
+    bool is_complex ();
+    bool is_double ();
+    bool is_integer ();
+    bool is_numeric ();
+    bool is_logical ();
+    
+    std::vector<SV*>* get_character_values();
+    std::vector<std::complex<NV> >* get_complex_values();
+    std::vector<NV>* get_double_values();
+    std::vector<IV>* get_integer_values();
+    
+    Rstats::VectorType::Enum get_type();
+    void add_na_position(IV);
+    bool exists_na_position(IV position);
+    void merge_na_positions(Rstats::Vector* elements);
+    std::map<IV, IV> get_na_positions();
+    IV get_length ();
+    
+    static Rstats::Vector* new_character(IV, SV*);
+    static Rstats::Vector* new_character(IV);
+    SV* get_character_value(IV);
+    void set_character_value(IV, SV*);
+    static Rstats::Vector* new_complex(IV);
+    static Rstats::Vector* new_complex(IV, std::complex<NV>);
+    std::complex<NV> get_complex_value(IV);
+    void set_complex_value(IV, std::complex<NV>);
+    static Rstats::Vector* new_double(IV);
+    static Rstats::Vector* new_double(IV, NV);
+    NV get_double_value(IV);
+    void set_double_value(IV, NV);
+
+    static Rstats::Vector* new_integer(IV);
+    static Rstats::Vector* new_integer(IV, IV);
+    
+    IV get_integer_value(IV);
+    void set_integer_value(IV, IV);
+    
+    static Rstats::Vector* new_logical(IV);
+    static Rstats::Vector* new_logical(IV, IV);
+    static Rstats::Vector* new_true();
+    static Rstats::Vector* new_false();
+    static Rstats::Vector* new_nan();
+    static Rstats::Vector* new_negative_inf();
+    static Rstats::Vector* new_inf();
+    static Rstats::Vector* new_na();
+    static Rstats::Vector* new_null();
+    
+    Rstats::Vector* as (SV*);
+    SV* to_string_pos(IV);
+    SV* to_string();
+    Rstats::Vector* as_character();
+    Rstats::Vector* as_double();
+    Rstats::Vector* as_numeric();
+    Rstats::Vector* as_integer();
+    Rstats::Vector* as_complex();
+    Rstats::Vector* as_logical();
+  };
+
+  namespace ArrayFunc {
+    SV* new_array();
+    void set_vector(SV*, Rstats::Vector*);
+    Rstats::Vector* get_vector(SV*);
+    void set_dim(SV*, Rstats::Vector*);
+    Rstats::Vector* get_dim(SV*);
+    SV* c(SV*);
+    SV* to_c(SV*);
   }
 }
 

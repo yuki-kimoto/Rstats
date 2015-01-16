@@ -33,105 +33,12 @@ Rstats::Vector::~Vector () {
   }
 }
 
-SV* Rstats::Vector::get_value(IV pos) {
-
-  SV* sv_value;
-  
-  Rstats::VectorType::Enum type = this->get_type();
-  switch (type) {
-    case Rstats::VectorType::CHARACTER :
-      if (this->exists_na_position(pos)) {
-        sv_value = &PL_sv_undef;
-      }
-      else {
-        sv_value = this->get_character_value(pos);
-      }
-      break;
-    case Rstats::VectorType::COMPLEX :
-      if (this->exists_na_position(pos)) {
-        sv_value = &PL_sv_undef;
-      }
-      else {
-        std::complex<NV> z = this->get_complex_value(pos);
-        
-        NV re = z.real();
-        SV* sv_re;
-        if (std::isnan(re)) {
-          sv_re = Rstats::pl_new_sv_pv("NaN");
-        }
-        else if (std::isinf(re) && re > 0) {
-          sv_re = Rstats::pl_new_sv_pv("Inf");
-        }
-        else if (std::isinf(re) && re < 0) {
-          sv_re = Rstats::pl_new_sv_pv("-Inf");
-        }
-        else {
-          sv_re = Rstats::pl_new_sv_nv(re);
-        }
-        
-        NV im = z.imag();
-        SV* sv_im;
-        if (std::isnan(im)) {
-          sv_im = Rstats::pl_new_sv_pv("NaN");
-        }
-        else if (std::isinf(im) && im > 0) {
-          sv_im = Rstats::pl_new_sv_pv("Inf");
-        }
-        else if (std::isinf(im) && im < 0) {
-          sv_im = Rstats::pl_new_sv_pv("-Inf");
-        }
-        else {
-          sv_im = Rstats::pl_new_sv_nv(im);
-        }
-
-        sv_value = Rstats::pl_new_hv_ref();
-        Rstats::pl_hv_store(sv_value, "re", sv_re);
-        Rstats::pl_hv_store(sv_value, "im", sv_im);
-      }
-      break;
-    case Rstats::VectorType::DOUBLE :
-      if (this->exists_na_position(pos)) {
-        sv_value = &PL_sv_undef;
-      }
-      else {
-        NV value = this->get_double_value(pos);
-        if (std::isnan(value)) {
-          sv_value = Rstats::pl_new_sv_pv("NaN");
-        }
-        else if (std::isinf(value) && value > 0) {
-          sv_value = Rstats::pl_new_sv_pv("Inf");
-        }
-        else if (std::isinf(value) && value < 0) {
-          sv_value = Rstats::pl_new_sv_pv("-Inf");
-        }
-        else {
-          sv_value = Rstats::pl_new_sv_nv(value);
-        }
-      }
-      break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
-      if (this->exists_na_position(pos)) {
-        sv_value = &PL_sv_undef;
-      }
-      else {
-        IV value = this->get_integer_value(pos);
-        sv_value = Rstats::pl_new_sv_iv(value);
-      }
-      break;
-    default:
-      sv_value = &PL_sv_undef;
-  }
-  
-  return sv_value;
-}
-
 SV* Rstats::Vector::get_values() {
   
   IV length = this->get_length();
   SV* sv_values = Rstats::pl_new_av_ref();
   for (IV i = 0; i < length; i++) {
-    Rstats::pl_av_push(sv_values, this->get_value(i));
+    Rstats::pl_av_push(sv_values, Rstats::VectorFunc::get_value(this, i));
   }
   
   return sv_values;

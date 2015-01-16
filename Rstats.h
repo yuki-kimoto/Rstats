@@ -312,7 +312,6 @@ namespace Rstats {
 
     ~Vector ();
     
-    SV* get_value(IV);
     SV* get_values();
     
     bool is_character ();
@@ -648,6 +647,7 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
+    SV* get_value(Rstats::Vector*, IV);
     Rstats::Vector* is_infinite(Rstats::Vector*);
     Rstats::Vector* is_finite(Rstats::Vector*);
     Rstats::Vector* is_nan(Rstats::Vector*);

@@ -51,6 +51,99 @@ RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(divide, Rstats::ElementFunc::d
 RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
 RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
 
+SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
+
+  SV* sv_value;
+  
+  Rstats::VectorType::Enum type = v1->get_type();
+  switch (type) {
+    case Rstats::VectorType::CHARACTER :
+      if (v1->exists_na_position(pos)) {
+        sv_value = &PL_sv_undef;
+      }
+      else {
+        sv_value = v1->get_character_value(pos);
+      }
+      break;
+    case Rstats::VectorType::COMPLEX :
+      if (v1->exists_na_position(pos)) {
+        sv_value = &PL_sv_undef;
+      }
+      else {
+        std::complex<NV> z = v1->get_complex_value(pos);
+        
+        NV re = z.real();
+        SV* sv_re;
+        if (std::isnan(re)) {
+          sv_re = Rstats::pl_new_sv_pv("NaN");
+        }
+        else if (std::isinf(re) && re > 0) {
+          sv_re = Rstats::pl_new_sv_pv("Inf");
+        }
+        else if (std::isinf(re) && re < 0) {
+          sv_re = Rstats::pl_new_sv_pv("-Inf");
+        }
+        else {
+          sv_re = Rstats::pl_new_sv_nv(re);
+        }
+        
+        NV im = z.imag();
+        SV* sv_im;
+        if (std::isnan(im)) {
+          sv_im = Rstats::pl_new_sv_pv("NaN");
+        }
+        else if (std::isinf(im) && im > 0) {
+          sv_im = Rstats::pl_new_sv_pv("Inf");
+        }
+        else if (std::isinf(im) && im < 0) {
+          sv_im = Rstats::pl_new_sv_pv("-Inf");
+        }
+        else {
+          sv_im = Rstats::pl_new_sv_nv(im);
+        }
+
+        sv_value = Rstats::pl_new_hv_ref();
+        Rstats::pl_hv_store(sv_value, "re", sv_re);
+        Rstats::pl_hv_store(sv_value, "im", sv_im);
+      }
+      break;
+    case Rstats::VectorType::DOUBLE :
+      if (v1->exists_na_position(pos)) {
+        sv_value = &PL_sv_undef;
+      }
+      else {
+        NV value = v1->get_double_value(pos);
+        if (std::isnan(value)) {
+          sv_value = Rstats::pl_new_sv_pv("NaN");
+        }
+        else if (std::isinf(value) && value > 0) {
+          sv_value = Rstats::pl_new_sv_pv("Inf");
+        }
+        else if (std::isinf(value) && value < 0) {
+          sv_value = Rstats::pl_new_sv_pv("-Inf");
+        }
+        else {
+          sv_value = Rstats::pl_new_sv_nv(value);
+        }
+      }
+      break;
+    case Rstats::VectorType::INTEGER :
+    case Rstats::VectorType::LOGICAL :
+      if (v1->exists_na_position(pos)) {
+        sv_value = &PL_sv_undef;
+      }
+      else {
+        IV value = v1->get_integer_value(pos);
+        sv_value = Rstats::pl_new_sv_iv(value);
+      }
+      break;
+    default:
+      sv_value = &PL_sv_undef;
+  }
+  
+  return sv_value;
+}
+
 Rstats::Vector* Rstats::VectorFunc::cumprod(Rstats::Vector* e1) {
   IV length = e1->get_length();
   Rstats::Vector* e2;

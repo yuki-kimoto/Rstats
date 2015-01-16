@@ -31,7 +31,7 @@ SV* value(...)
   
   SV* sv_value;
   if (pos >= 0 && pos < self->get_length()) {
-    sv_value = self->get_value(pos);
+    sv_value = Rstats::VectorFunc::get_value(self, pos);
   }
   else {
     sv_value = &PL_sv_undef;

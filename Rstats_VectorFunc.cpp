@@ -1,55 +1,55 @@
 #include "Rstats.h"
 
-RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite)
-RSTATS_DEF_VECTOR_FUNC_UN_IS(is_finite, Rstats::ElementFunc::is_finite)
-RSTATS_DEF_VECTOR_FUNC_UN_IS(is_nan, Rstats::ElementFunc::is_nan)
+RSTATS_DEF_VECTOR_FUNC_UN_IS(Rstats::VectorFunc::is_infinite, Rstats::ElementFunc::is_infinite)
+RSTATS_DEF_VECTOR_FUNC_UN_IS(Rstats::VectorFunc::is_finite, Rstats::ElementFunc::is_finite)
+RSTATS_DEF_VECTOR_FUNC_UN_IS(Rstats::VectorFunc::is_nan, Rstats::ElementFunc::is_nan)
 
-RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH(Rstats::VectorFunc::negation, Rstats::ElementFunc::negation)
 
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sinh, Rstats::ElementFunc::sinh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cosh, Rstats::ElementFunc::cosh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tanh, Rstats::ElementFunc::tanh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log, Rstats::ElementFunc::log)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(logb, Rstats::ElementFunc::logb)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log10, Rstats::ElementFunc::log10)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(log2, Rstats::ElementFunc::log2)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(expm1, Rstats::ElementFunc::expm1)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(exp, Rstats::ElementFunc::exp)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sqrt, Rstats::ElementFunc::sqrt)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atan, Rstats::ElementFunc::atan)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asin, Rstats::ElementFunc::asin)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acos, Rstats::ElementFunc::acos)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(asinh, Rstats::ElementFunc::asinh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(acosh, Rstats::ElementFunc::acosh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(atanh, Rstats::ElementFunc::atanh)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Conj, Rstats::ElementFunc::Conj)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::sin, Rstats::ElementFunc::sin)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::cos, Rstats::ElementFunc::cos)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::tan, Rstats::ElementFunc::tan)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::sinh, Rstats::ElementFunc::sinh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::cosh, Rstats::ElementFunc::cosh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::tanh, Rstats::ElementFunc::tanh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::log, Rstats::ElementFunc::log)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::logb, Rstats::ElementFunc::logb)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::log10, Rstats::ElementFunc::log10)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::log2, Rstats::ElementFunc::log2)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::expm1, Rstats::ElementFunc::expm1)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::exp, Rstats::ElementFunc::exp)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::sqrt, Rstats::ElementFunc::sqrt)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::atan, Rstats::ElementFunc::atan)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::asin, Rstats::ElementFunc::asin)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::acos, Rstats::ElementFunc::acos)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::asinh, Rstats::ElementFunc::asinh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::acosh, Rstats::ElementFunc::acosh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::atanh, Rstats::ElementFunc::atanh)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::Conj, Rstats::ElementFunc::Conj)
 
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Arg, Rstats::ElementFunc::Arg)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(abs, Rstats::ElementFunc::abs)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Mod, Rstats::ElementFunc::Mod)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Re, Rstats::ElementFunc::Re)
-RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Im, Rstats::ElementFunc::Im)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Rstats::VectorFunc::Arg, Rstats::ElementFunc::Arg)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Rstats::VectorFunc::abs, Rstats::ElementFunc::abs)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Rstats::VectorFunc::Mod, Rstats::ElementFunc::Mod)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Rstats::VectorFunc::Re, Rstats::ElementFunc::Re)
+RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(Rstats::VectorFunc::Im, Rstats::ElementFunc::Im)
 
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(equal, Rstats::ElementFunc::equal);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(not_equal, Rstats::ElementFunc::not_equal);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(more_than, Rstats::ElementFunc::more_than);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(less_than, Rstats::ElementFunc::less_than);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(more_than_or_equal, Rstats::ElementFunc::more_than_or_equal);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(less_than_or_equal, Rstats::ElementFunc::less_than_or_equal);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(And, Rstats::ElementFunc::And);
-RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Or, Rstats::ElementFunc::Or);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::equal, Rstats::ElementFunc::equal);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::not_equal, Rstats::ElementFunc::not_equal);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::more_than, Rstats::ElementFunc::more_than);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::less_than, Rstats::ElementFunc::less_than);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::more_than_or_equal, Rstats::ElementFunc::more_than_or_equal);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::less_than_or_equal, Rstats::ElementFunc::less_than_or_equal);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::And, Rstats::ElementFunc::And);
+RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(Rstats::VectorFunc::Or, Rstats::ElementFunc::Or);
 
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH(add, Rstats::ElementFunc::add)
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH(subtract, Rstats::ElementFunc::subtract)
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH(multiply, Rstats::ElementFunc::multiply)
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH(reminder, Rstats::ElementFunc::reminder)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH(Rstats::VectorFunc::add, Rstats::ElementFunc::add)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH(Rstats::VectorFunc::subtract, Rstats::ElementFunc::subtract)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH(Rstats::VectorFunc::multiply, Rstats::ElementFunc::multiply)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH(Rstats::VectorFunc::reminder, Rstats::ElementFunc::reminder)
 
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(divide, Rstats::ElementFunc::divide)
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
-RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::divide, Rstats::ElementFunc::divide)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::atan2, Rstats::ElementFunc::atan2)
+RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::pow, Rstats::ElementFunc::pow)
 
 
 SV* Rstats::VectorFunc::get_values(Rstats::Vector* v1) {

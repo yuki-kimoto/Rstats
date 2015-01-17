@@ -310,7 +310,7 @@ namespace Rstats {
 
   // Macro for Rstats::Vector
 # define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \
       Rstats::Vector* v2 = Rstats::VectorFunc::new_logical(length); \
       Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1); \
@@ -349,7 +349,7 @@ namespace Rstats {
     }
 
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \
       Rstats::Vector* v2; \
       Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1); \
@@ -382,7 +382,7 @@ namespace Rstats {
     }
     
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \
       Rstats::Vector* v2; \
       Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1); \
@@ -415,7 +415,7 @@ namespace Rstats {
     }
 
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \
       Rstats::Vector* v2; \
       Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1); \
@@ -448,7 +448,7 @@ namespace Rstats {
     }
 
 # define RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
       if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) { \
         croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
       } \
@@ -498,7 +498,7 @@ namespace Rstats {
     }
     
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
       if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) { \
         croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
       } \
@@ -542,7 +542,7 @@ namespace Rstats {
     }
 
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* Rstats::VectorFunc::FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
+    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
       if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) { \
         croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
       } \

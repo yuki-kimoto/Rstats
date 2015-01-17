@@ -9,6 +9,8 @@ use Rstats;
 {
   # names - get
   {
+    NA;
+    
     my $v1 = c(1, 2, 3, 4);
     r->names($v1 => c('a', 'b', 'c', 'd'));
     my $v2 = $v1->get(c('b', 'd'));

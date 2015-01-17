@@ -31,5 +31,6 @@ Rstats::Vector::~Vector () {
       delete values;
     }
   }
+  delete na_positions;
 }
 

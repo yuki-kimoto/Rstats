@@ -104,25 +104,25 @@ std::vector<IV>* Rstats::VectorFunc::get_integer_values(Rstats::Vector* v1) {
 }
 
 Rstats::VectorType::Enum Rstats::VectorFunc::get_type(Rstats::Vector* v1) {
-  return (*v1).type;
+  return v1->type;
 }
 
 void Rstats::VectorFunc::add_na_position(Rstats::Vector* v1, IV position) {
-  (*v1).na_positions[position] = 1;
+  (*v1->na_positions)[position] = 1;
 }
 
 bool Rstats::VectorFunc::exists_na_position(Rstats::Vector* v1, IV position) {
-  return (*v1).na_positions.count(position);
+  return v1->na_positions->count(position);
 }
 
 void Rstats::VectorFunc::merge_na_positions(Rstats::Vector* v2, Rstats::Vector* v1) {
-  for(std::map<IV, IV>::iterator it = (*v1).na_positions.begin(); it != (*v1).na_positions.end(); ++it) {
+  for(std::map<IV, IV>::iterator it = v1->na_positions->begin(); it != v1->na_positions->end(); ++it) {
     Rstats::VectorFunc::add_na_position(v2, it->first);
   }
 }
 
-std::map<IV, IV> Rstats::VectorFunc::get_na_positions(Rstats::Vector* v1) {
-  return (*v1).na_positions;
+std::map<IV, IV>* Rstats::VectorFunc::get_na_positions(Rstats::Vector* v1) {
+  return v1->na_positions;
 }
 
 IV Rstats::VectorFunc::get_length (Rstats::Vector* v1) {
@@ -148,22 +148,28 @@ IV Rstats::VectorFunc::get_length (Rstats::Vector* v1) {
   }
 }
 
-Rstats::Vector* Rstats::VectorFunc::new_character(IV length, SV* sv_str) {
-
-  Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
-  for (IV i = 0; i < length; i++) {
-    Rstats::VectorFunc::set_character_value(v1, i, sv_str);
-  }
-  v1->type = Rstats::VectorType::CHARACTER;
+Rstats::Vector* Rstats::VectorFunc::new_vector() {
+  Rstats::Vector* v1 = new Rstats::Vector;
+  v1->na_positions = new std::map<IV, IV>;
   
   return v1;
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_character(IV length) {
 
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<SV*>(length);
   v1->type = Rstats::VectorType::CHARACTER;
+  
+  return v1;
+}
+
+Rstats::Vector* Rstats::VectorFunc::new_character(IV length, SV* sv_str) {
+
+  Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
+  for (IV i = 0; i < length; i++) {
+    Rstats::VectorFunc::set_character_value(v1, i, sv_str);
+  }
   
   return v1;
 }
@@ -189,7 +195,7 @@ void Rstats::VectorFunc::set_character_value(Rstats::Vector* v1, IV pos, SV* val
 
 Rstats::Vector* Rstats::VectorFunc::new_complex(IV length) {
   
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
   v1->type = Rstats::VectorType::COMPLEX;
   
@@ -198,10 +204,10 @@ Rstats::Vector* Rstats::VectorFunc::new_complex(IV length) {
     
 Rstats::Vector* Rstats::VectorFunc::new_complex(IV length, std::complex<NV> z) {
   
-  Rstats::Vector* v1 = new Rstats::Vector;
-  v1->values = new std::vector<std::complex<NV> >(length, z);
-  v1->type = Rstats::VectorType::COMPLEX;
-  
+  Rstats::Vector* v1 = new_complex(length);
+  for (IV i = 0; i < length; i++) {
+    Rstats::VectorFunc::set_complex_value(v1, i, z);
+  }
   return v1;
 }
 
@@ -214,7 +220,7 @@ void Rstats::VectorFunc::set_complex_value(Rstats::Vector* v1, IV pos, std::comp
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_double(IV length) {
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<NV>(length);
   v1->type = Rstats::VectorType::DOUBLE;
   
@@ -222,10 +228,10 @@ Rstats::Vector* Rstats::VectorFunc::new_double(IV length) {
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_double(IV length, NV value) {
-  Rstats::Vector* v1 = new Rstats::Vector;
-  v1->values = new std::vector<NV>(length, value);
-  v1->type = Rstats::VectorType::DOUBLE;
-  
+  Rstats::Vector* v1 = new_double(length);
+  for (IV i = 0; i < length; i++) {
+    Rstats::VectorFunc::set_double_value(v1, i, value);
+  }
   return v1;
 }
 
@@ -239,7 +245,7 @@ void Rstats::VectorFunc::set_double_value(Rstats::Vector* v1, IV pos, NV value) 
 
 Rstats::Vector* Rstats::VectorFunc::new_integer(IV length) {
   
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<IV>(length);
   v1->type = Rstats::VectorType::INTEGER;
   
@@ -248,10 +254,10 @@ Rstats::Vector* Rstats::VectorFunc::new_integer(IV length) {
 
 Rstats::Vector* Rstats::VectorFunc::new_integer(IV length, IV value) {
   
-  Rstats::Vector* v1 = new Rstats::Vector;
-  v1->values = new std::vector<IV>(length, value);
-  v1->type = Rstats::VectorType::INTEGER;
-  
+  Rstats::Vector* v1 = new_integer(length);;
+  for (IV i = 0; i < length; i++) {
+    Rstats::VectorFunc::set_integer_value(v1, i, value);
+  }
   return v1;
 }
 
@@ -264,7 +270,8 @@ void Rstats::VectorFunc::set_integer_value(Rstats::Vector* v1, IV pos, IV value)
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_logical(IV length) {
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
+
   v1->values = new std::vector<IV>(length);
   v1->type = Rstats::VectorType::LOGICAL;
   
@@ -272,10 +279,10 @@ Rstats::Vector* Rstats::VectorFunc::new_logical(IV length) {
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_logical(IV length, IV value) {
-  Rstats::Vector* v1 = new Rstats::Vector;
-  v1->values = new std::vector<IV>(length, value);
-  v1->type = Rstats::VectorType::LOGICAL;
-  
+  Rstats::Vector* v1 = new_logical(length);
+  for (IV i = 0; i < length; i++) {
+    Rstats::VectorFunc::set_integer_value(v1, i, value);
+  }
   return v1;
 }
 
@@ -300,16 +307,13 @@ Rstats::Vector* Rstats::VectorFunc::new_inf() {
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_na() {
-  Rstats::Vector* v1 = new Rstats::Vector;
-  v1->values = new std::vector<IV>(1, 0);
-  v1->type = Rstats::VectorType::LOGICAL;
+  Rstats::Vector* v1 = new_logical(1);
   Rstats::VectorFunc::add_na_position(v1, 0);
-  
   return v1;
 }
 
 Rstats::Vector* Rstats::VectorFunc::new_null() {
-  Rstats::Vector* v1 = new Rstats::Vector;
+  Rstats::Vector* v1 = new_vector();
   v1->values = NULL;
   v1->type = Rstats::VectorType::LOGICAL;
   return v1;

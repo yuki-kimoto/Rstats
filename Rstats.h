@@ -305,7 +305,7 @@ namespace Rstats {
   class Vector {
     public:
     Rstats::VectorType::Enum type;
-    std::map<IV, IV> na_positions;
+    std::map<IV, IV>* na_positions;
     void* values;
     ~Vector ();
   };
@@ -584,6 +584,7 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
+    Rstats::Vector* new_vector();
     SV* get_value(Rstats::Vector*, IV);
     SV* get_values(Rstats::Vector*);
     
@@ -603,7 +604,7 @@ namespace Rstats {
     void add_na_position(Rstats::Vector*, IV);
     bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
-    std::map<IV, IV> get_na_positions(Rstats::Vector*);
+    std::map<IV, IV>* get_na_positions(Rstats::Vector*);
     IV get_length (Rstats::Vector*);
     
     Rstats::Vector* new_character(IV, SV*);

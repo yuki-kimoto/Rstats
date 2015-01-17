@@ -436,7 +436,25 @@ std::complex<NV> Rstats::ElementFunc::atan2(std::complex<NV> e1, std::complex<NV
     return -e3_i * std::log(e3_r / std::sqrt(e3_s));
   }
 }
-NV Rstats::ElementFunc::atan2(NV e1, NV e2) { ::atan2(e1, e2); }
+NV Rstats::ElementFunc::atan2(NV e1, NV e2) {
+  if (std::isinf(e1) && std::isinf(e2)) {
+    if (e1 > 0 && e2 > 0) {
+      return (M_PI / 4);
+    }
+    else if (e1 > 0 && e2 < 0) {
+      return ((3 * M_PI) / 4);
+    }
+    else if (e1 < 0 && e2 > 0) {
+      return -(M_PI / 4);
+    }
+    else {
+      return -((3 * M_PI) / 4);
+    }
+  }
+  else {
+    return ::atan2(e1, e2);
+  }
+}
 NV Rstats::ElementFunc::atan2(IV e1, IV e2) { return atan2((NV)e1, (NV)e2); }
 
 // And

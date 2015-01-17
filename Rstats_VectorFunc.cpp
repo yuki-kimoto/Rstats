@@ -155,6 +155,40 @@ Rstats::Vector* Rstats::VectorFunc::new_vector() {
   return v1;
 }
 
+void Rstats::VectorFunc::delete_vector (Rstats::Vector* v1) {
+  IV length = Rstats::VectorFunc::get_length(v1);
+  
+  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  switch (type) {
+    case Rstats::VectorType::CHARACTER : {
+      std::vector<SV*>* values = Rstats::VectorFunc::get_character_values(v1);
+      for (IV i = 0; i < length; i++) {
+        if ((*values)[i] != NULL) {
+          SvREFCNT_dec((*values)[i]);
+        }
+      }
+      delete values;
+      break;
+    }
+    case Rstats::VectorType::COMPLEX : {
+      std::vector<std::complex<NV> >* values = Rstats::VectorFunc::get_complex_values(v1);
+      delete values;
+      break;
+    }
+    case Rstats::VectorType::DOUBLE : {
+      std::vector<NV>* values = Rstats::VectorFunc::get_double_values(v1);
+      delete values;
+      break;
+    }
+    case Rstats::VectorType::INTEGER :
+    case Rstats::VectorType::LOGICAL : {
+      std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(v1);
+      delete values;
+    }
+  }
+  delete v1->na_positions;
+}
+
 Rstats::Vector* Rstats::VectorFunc::new_character(IV length) {
 
   Rstats::Vector* v1 = new_vector();

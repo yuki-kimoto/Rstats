@@ -302,12 +302,10 @@ namespace Rstats {
     IV is_nan(IV);
   }
 
-  class Vector {
-    public:
+  struct Vector {
     Rstats::VectorType::Enum type;
     std::map<IV, IV>* na_positions;
     void* values;
-    ~Vector ();
   };
 
   // Macro for Rstats::Vector
@@ -585,6 +583,7 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
     Rstats::Vector* new_vector();
+    void delete_vector(Rstats::Vector*);
     SV* get_value(Rstats::Vector*, IV);
     SV* get_values(Rstats::Vector*);
     

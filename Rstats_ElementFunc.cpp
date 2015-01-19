@@ -130,7 +130,7 @@ std::complex<NV> Rstats::ElementFunc::log2(std::complex<NV> e1) {
   return std::log(e1) / std::log(std::complex<NV>(2, 0));
 }
 NV Rstats::ElementFunc::log2(NV e1) {
-  return std::log(e1) / std::log(2);
+  return std::log(e1) / std::log((NV)2);
 }
 NV Rstats::ElementFunc::log2(IV e1) { return log2((NV)e1); }
 

@@ -147,7 +147,7 @@ NV Rstats::ElementFunc::Arg(std::complex<NV> e1) {
     return 0;
   }
   else {
-    return ::atan2(im, re);
+    return Rstats::ElementFunc::atan2(im, re);
   }
 }
 NV Rstats::ElementFunc::Arg(NV e1) { croak("Error in Arg : unimplemented double function"); }
@@ -225,7 +225,7 @@ std::complex<NV> Rstats::ElementFunc::asin(std::complex<NV> e1) {
       e2_beta = -1;
     }
     
-    NV e2_u = ::atan2(
+    NV e2_u = Rstats::ElementFunc::atan2(
       e2_beta,
       std::sqrt(1 - (e2_beta * e2_beta))
     );
@@ -280,7 +280,7 @@ std::complex<NV> Rstats::ElementFunc::acos(std::complex<NV> e1) {
       e2_beta = -1;
     }
     
-    NV e2_u = ::atan2(
+    NV e2_u = Rstats::ElementFunc::atan2(
       std::sqrt(1 - (e2_beta * e2_beta)),
       e2_beta
     );

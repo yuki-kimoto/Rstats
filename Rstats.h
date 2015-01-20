@@ -656,20 +656,10 @@ namespace Rstats {
       return v2;
     }
     
-    void sin2(Rstats::Vector2<SV*>* v1) {
-      croak("Error in sin : invalid argument to sin()");
-    }
-    Rstats::Vector2<std::complex<NV> >* sin2(Rstats::Vector2<std::complex<NV> >* v1) {
-      return Rstats::VectorFunc::operate_un_math<
-          std::complex<NV>  (*)(std::complex<NV> ), std::complex<NV> , std::complex<NV>
-        >(&Rstats::ElementFunc::sin, v1);
-    }
-    Rstats::Vector2<NV>* sin2(Rstats::Vector2<NV>* v1) {
-      return Rstats::VectorFunc::operate_un_math<NV (*)(NV), NV, NV>(&Rstats::ElementFunc::sin, v1);
-    }
-    Rstats::Vector2<NV>* sin2(Rstats::Vector2<IV>* v1) {
-      return Rstats::VectorFunc::operate_un_math<NV (*)(IV), NV, IV>(&Rstats::ElementFunc::sin, v1);
-    }
+    void sin2(Rstats::Vector2<SV*>* v1);
+    Rstats::Vector2<std::complex<NV> >* sin2(Rstats::Vector2<std::complex<NV> >* v1);
+    Rstats::Vector2<NV>* sin2(Rstats::Vector2<NV>* v1);
+    Rstats::Vector2<NV>* sin2(Rstats::Vector2<IV>* v1);
         
     std::vector<SV*>* get_character_values(Rstats::Vector*);
     std::vector<std::complex<NV> >* get_complex_values(Rstats::Vector*);

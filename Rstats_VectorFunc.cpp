@@ -6,6 +6,22 @@ RSTATS_DEF_VECTOR_FUNC_UN_IS(Rstats::VectorFunc::is_nan, Rstats::ElementFunc::is
 
 RSTATS_DEF_VECTOR_FUNC_UN_MATH(Rstats::VectorFunc::negation, Rstats::ElementFunc::negation)
 
+// sin2
+void Rstats::VectorFunc::sin2(Rstats::Vector2<SV*>* v1) {
+  croak("Error in sin() : invalid argument to sin()");
+}
+Rstats::Vector2<std::complex<NV> >* Rstats::VectorFunc::sin2(Rstats::Vector2<std::complex<NV> >* v1) {
+  return Rstats::VectorFunc::operate_un_math<
+      std::complex<NV>  (*)(std::complex<NV> ), std::complex<NV> , std::complex<NV>
+    >(&Rstats::ElementFunc::sin, v1);
+}
+Rstats::Vector2<NV>* Rstats::VectorFunc::sin2(Rstats::Vector2<NV>* v1) {
+  return Rstats::VectorFunc::operate_un_math<NV (*)(NV), NV, NV>(&Rstats::ElementFunc::sin, v1);
+}
+Rstats::Vector2<NV>* Rstats::VectorFunc::sin2(Rstats::Vector2<IV>* v1) {
+  return Rstats::VectorFunc::operate_un_math<NV (*)(IV), NV, IV>(&Rstats::ElementFunc::sin, v1);
+}
+
 RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::sin, Rstats::ElementFunc::sin)
 RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::cos, Rstats::ElementFunc::cos)
 RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(Rstats::VectorFunc::tan, Rstats::ElementFunc::tan)

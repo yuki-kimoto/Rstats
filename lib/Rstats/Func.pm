@@ -12,6 +12,7 @@ use Rstats::List;
 use Rstats::DataFrame;
 use Rstats::VectorFunc;
 use Rstats::ArrayFunc;
+use Rstats::Util;
 
 use List::Util;
 use Math::Trig ();
@@ -40,7 +41,7 @@ my $true;
 sub TRUE () { defined $true ? $true : $true = Rstats::Func::new_logical(1) }
 sub T () { TRUE }
 
-sub pi () { Rstats::Func::new_double(Math::Trig::pi) }
+sub pi () { new_double(Rstats::Util::pi()); }
 
 sub I {
   my $x1 = shift;

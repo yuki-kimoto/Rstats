@@ -1233,6 +1233,16 @@ new_integer(...)
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
 SV*
+pi(...)
+  PPCODE:
+{
+  NV pi = Rstats::Util::pi();
+  SV* sv_pi = Rstats::pl_new_sv_nv(pi);
+  
+  return_sv(sv_pi);
+}
+
+SV*
 is_perl_number(...)
   PPCODE:
 {

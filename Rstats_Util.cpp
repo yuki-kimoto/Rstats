@@ -7,6 +7,10 @@ static REGEXP* DOUBLE_RE = pregcomp(newSVpv("^ *([\\-\\+]?[0-9]+(?:\\.[0-9]+)?) 
 static REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
 static REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
 
+NV Rstats::Util::pi () {
+  return 4 * Rstats::ElementFunc::atan2((NV)1, (NV)1);
+}
+
 SV* Rstats::Util::args(SV* sv_names, SV* sv_args) {
   
   IV args_length = Rstats::pl_av_len(sv_args);

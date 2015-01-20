@@ -104,11 +104,12 @@ namespace Rstats {
     SV* cross_product(SV*);
     SV* pos_to_index(SV*, SV*);
     SV* index_to_pos(SV*, SV*);
-    SV* looks_like_complex (SV*);
-    SV* looks_like_logical (SV*);
-    SV* looks_like_na (SV*);
+    SV* looks_like_complex(SV*);
+    SV* looks_like_logical(SV*);
+    SV* looks_like_na(SV*);
     SV* looks_like_integer(SV*);
-    SV* looks_like_double (SV*);
+    SV* looks_like_double(SV*);
+    NV pi();
   }
 
   namespace ElementFunc {
@@ -197,7 +198,6 @@ namespace Rstats {
     NV log2(NV);
     NV log2(IV);
     
-    // expm1 (Can't separate body. I don't know the reason)
     std::complex<NV> expm1(std::complex<NV>);
     NV expm1(NV);
     NV expm1(IV);

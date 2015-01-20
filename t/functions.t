@@ -4,7 +4,7 @@ use warnings;
 
 use Rstats;
 use Rstats::VectorFunc;
-use Math::Trig ();
+use Rstats::Util;
 
 # Method
 {
@@ -476,7 +476,7 @@ use Math::Trig ();
   {
     my $x1 = c(1 + 1*i, 2 + 2*i);
     my $x2 = r->Arg($x1);
-    is_deeply($x2->values, [Math::Trig::pi / 4, Math::Trig::pi / 4]);
+    is_deeply($x2->values, [Rstats::Util::pi() / 4, Rstats::Util::pi() / 4]);
   }
   
   # Arg - 0 values

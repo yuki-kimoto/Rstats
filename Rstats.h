@@ -307,6 +307,12 @@ namespace Rstats {
     std::map<IV, IV>* na_positions;
     void* values;
   };
+  
+  template <typename T>
+  struct Vector2 {
+    std::vector<T>* values;
+    std::map<IV, IV>* na_positions;
+  };
 
   // Macro for Rstats::Vector
 # define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
@@ -593,6 +599,69 @@ namespace Rstats {
     bool is_integer (Rstats::Vector*);
     bool is_numeric (Rstats::Vector*);
     bool is_logical (Rstats::Vector*);
+    
+    template <typename T>
+    Rstats::Vector2<T>* new_vector2 (IV length) {
+      Rstats::Vector2<T>* v1 = new Rstats::Vector2<T>;
+      v1->values = new std::vector<T>(length);
+      v1->na_positions = new std::map<IV, IV>;
+      
+      return v1;
+    }
+
+    template <typename T>
+    std::vector<T>* get_values2(Rstats::Vector2<T>* v1) {
+      return (std::vector<T>*)v1->values;
+    }
+    
+    template <typename T>
+    IV get_length2 (T* v1) {
+      if (v1->values == NULL) {
+        return 0;
+      }
+      
+      return Rstats::VectorFunc::get_values2(v1)->size();
+    }
+    
+    template <typename T>
+    void set_value2(Rstats::Vector2<T>* v1, IV pos, T value) {
+      (*Rstats::VectorFunc::get_values2(v1))[pos] = value;
+    }
+    
+    template <typename T>
+    void add_na_position2(Rstats::Vector2<T>* v1, IV position) {
+      (*v1->na_positions)[position] = 1;
+    }
+    
+    template <typename T>
+    void merge_na_positions2(Rstats::Vector2<T>* v2, Rstats::Vector2<T>* v1) {
+      for(std::map<IV, IV>::iterator it = v1->na_positions->begin(); it != v1->na_positions->end(); ++it) {
+        Rstats::VectorFunc::add_na_position2(v2, it->first);
+      }
+    }
+    
+    template <typename T>
+    T get_value2(Rstats::Vector2<T>* v1, IV pos) {
+      return (*Rstats::VectorFunc::get_values2(v1))[pos];
+    }
+    
+    template <typename T_func, typename T_in, typename T_out>
+    Rstats::Vector2<T_out>* operate_un_math(T_func func, Rstats::Vector2<T_in>* v1) {
+      IV length = Rstats::VectorFunc::get_length2(v1);
+      Rstats::Vector2<T_out>* v2 = Rstats::VectorFunc::new_vector2<T_out>(length);
+      for (IV i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value2(v2, i, func(Rstats::VectorFunc::get_value2(v1, i)));
+      }
+      Rstats::VectorFunc::merge_na_positions2(v2, v1);
+      return v2;
+    }
+    
+    /*
+    Rstats::Vector2<NV>* sin2(Rstats::Vector2<NV>* v1) {
+      NV (*func)(NV) = &Rstats::ElementFunc::sin;
+      return Rstats::VectorFunc::operate_un_math(func, v1);
+    }
+    */
     
     std::vector<SV*>* get_character_values(Rstats::Vector*);
     std::vector<std::complex<NV> >* get_complex_values(Rstats::Vector*);

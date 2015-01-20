@@ -439,16 +439,16 @@ std::complex<NV> Rstats::ElementFunc::atan2(std::complex<NV> e1, std::complex<NV
 NV Rstats::ElementFunc::atan2(NV e1, NV e2) {
   if (std::isinf(e1) && std::isinf(e2)) {
     if (e1 > 0 && e2 > 0) {
-      return (M_PI / 4);
+      return (Rstats::Util::pi() / 4);
     }
     else if (e1 > 0 && e2 < 0) {
-      return ((3 * M_PI) / 4);
+      return ((3 * Rstats::Util::pi()) / 4);
     }
     else if (e1 < 0 && e2 > 0) {
-      return -(M_PI / 4);
+      return -(Rstats::Util::pi() / 4);
     }
     else {
-      return -((3 * M_PI) / 4);
+      return -((3 * Rstats::Util::pi()) / 4);
     }
   }
   else {

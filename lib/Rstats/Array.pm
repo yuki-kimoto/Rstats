@@ -11,7 +11,7 @@ our @CARP_NOT = ('Rstats');
 
 use overload
   bool => sub { Rstats::ArrayFunc::bool(@_) },
-  '+' => sub { Rstats::ArrayFunc::add(@_) },
+  '+' => sub { Rstats::ArrayFunc::add(Rstats::ArrayFunc::_fix_pos(@_)) },
   '-' => sub { Rstats::ArrayFunc::subtract(@_) },
   '*' => sub { Rstats::ArrayFunc::multiply(@_) },
   '/' => sub { Rstats::ArrayFunc::divide(@_) },

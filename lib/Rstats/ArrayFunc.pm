@@ -20,8 +20,9 @@ sub more_than { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than, @
 sub more_than_or_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than_or_equal, @_) }
 sub equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::equal, @_) }
 sub not_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::not_equal, @_) }
-sub and { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::and, @_) }
 sub or { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::or, @_) }
+
+sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
 
 sub operate_unary {
   my $func = shift;
@@ -38,26 +39,62 @@ sub operate_unary {
 sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
 
 sub _fix_pos {
-  my ($self, $data, $reverse) = @_;
+  my ($data1, $data2, $reverse) = @_;
   
   my $x1;
   my $x2;
-  if (ref $data eq 'Rstats::Array') {
-    $x1 = $self;
-    $x2 = $data;
+  if (ref $data2 eq 'Rstats::Array') {
+    $x1 = $data1;
+    $x2 = $data2;
   }
   else {
     if ($reverse) {
-      $x1 = Rstats::ArrayFunc::c($data);
-      $x2 = $self;
+      $x1 = Rstats::ArrayFunc::c($data2);
+      $x2 = $data1;
     }
     else {
-      $x1 = $self;
-      $x2 = Rstats::ArrayFunc::c($data);
+      $x1 = $data1;
+      $x2 = Rstats::ArrayFunc::c($data2);
     }
   }
   
   return ($x1, $x2);
+}
+
+sub operate_binary {
+  my ($func, $x1, $x2) = @_;
+  
+  $x1 = to_c($x1);
+  $x2 = to_c($x2);
+  
+  # Upgrade mode if type is different
+  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
+  
+  # Upgrade length if length is defferent
+  my $x1_length = $x1->length_value;
+  my $x2_length = $x2->length_value;
+  my $length;
+  if ($x1_length > $x2_length) {
+    $x2 = array($x2, $x1_length);
+    $length = $x1_length;
+  }
+  elsif ($x1_length < $x2_length) {
+    $x1 = array($x1, $x2_length);
+    $length = $x2_length;
+  }
+  else {
+    $length = $x1_length;
+  }
+  
+  no strict 'refs';
+  my $x3;
+  my $x3_elements = $func->($x1->vector, $x2->vector);
+  $x3 = Rstats::Func::NULL();
+  $x3->vector($x3_elements);
+  
+  $x1->copy_attrs_to($x3);
+
+  return $x3;
 }
 
 sub operate_binary_fix_pos {

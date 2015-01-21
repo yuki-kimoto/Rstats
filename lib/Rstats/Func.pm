@@ -1253,7 +1253,7 @@ sub operate_binary {
   return $x3;
 }
 
-sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
+sub and { Rstats::ArrayFunc::and(@_) }
 
 sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
 

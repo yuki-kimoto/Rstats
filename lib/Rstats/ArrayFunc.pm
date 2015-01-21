@@ -8,6 +8,21 @@ use Rstats::Func;
 use Rstats::Util;
 use Rstats::VectorFunc;
 
+sub add { shift->operate_binary(\&Rstats::VectorFunc::add, @_) }
+sub subtract { shift->operate_binary(\&Rstats::VectorFunc::subtract, @_) }
+sub multiply { shift->operate_binary(\&Rstats::VectorFunc::multiply, @_) }
+sub divide { shift->operate_binary(\&Rstats::VectorFunc::divide, @_) }
+sub remainder { shift->operate_binary(\&Rstats::VectorFunc::remainder, @_) }
+sub pow { shift->operate_binary(\&Rstats::VectorFunc::pow, @_) }
+sub less_than { shift->operate_binary(\&Rstats::VectorFunc::less_than, @_) }
+sub less_than_or_equal { shift->operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) }
+sub more_than { shift->operate_binary(\&Rstats::VectorFunc::more_than, @_) }
+sub more_than_or_equal { shift->operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) }
+sub equal { shift->operate_binary(\&Rstats::VectorFunc::equal, @_) }
+sub not_equal { shift->operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
+sub and { shift->operate_binary(\&Rstats::VectorFunc::and, @_) }
+sub or { shift->operate_binary(\&Rstats::VectorFunc::or, @_) }
+
 sub operate_unary {
   my $func = shift;
   my $x1 = to_c(shift);

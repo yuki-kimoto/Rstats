@@ -701,7 +701,7 @@ sub kronecker {
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
   
   my $x1_dim = $x1->dim;
   my $x2_dim = $x2->dim;
@@ -752,7 +752,7 @@ sub outer {
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
   
   my $x1_dim = $x1->dim;
   my $x2_dim = $x2->dim;
@@ -1224,7 +1224,7 @@ sub operate_binary {
   $x2 = to_c($x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
   
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
@@ -2549,159 +2549,12 @@ sub ncol {
   }
 }
 
-sub seq {
-  
-  # Option
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  
-  # Along
-  my $_along = $opt->{along};
-  if (defined $_along) {
-    my $along = to_c($_along);
-    my $length = $along->length_value;
-    return seq(1, $length);
-  }
-  else {
-    my ($from, $to) = @_;
-    
-    # From
-    $from = $opt->{from} unless defined $from;
-    croak "seq function need from option" unless defined $from;
-    
-    # To
-    $to = $opt->{to} unless defined $to;
-    croak "seq function need to option" unless defined $to;
+sub seq { Rstats::ArrayFunc::seq(@_) }
 
-    # Length
-    my $length = $opt->{length};
-    
-    # By
-    my $by = $opt->{by};
-    
-    if (defined $length && defined $by) {
-      croak "Can't use by option and length option as same time";
-    }
-    
-    unless (defined $by) {
-      if ($to >= $from) {
-        $by = 1;
-      }
-      else {
-        $by = -1;
-      }
-    }
-    croak "by option should be except for 0" if $by == 0;
-    
-    $to = $from unless defined $to;
-    
-    if (defined $length && $from ne $to) {
-      $by = ($to - $from) / ($length - 1);
-    }
-    
-    my $elements = [];
-    if ($to == $from) {
-      $elements->[0] = $to;
-    }
-    elsif ($to > $from) {
-      if ($by < 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $element = $from;
-      while ($element <= $to) {
-        push @$elements, $element;
-        $element += $by;
-      }
-    }
-    else {
-      if ($by > 0) {
-        croak "by option is invalid number(seq function)";
-      }
-      
-      my $element = $from;
-      while ($element >= $to) {
-        push @$elements, $element;
-        $element += $by;
-      }
-    }
-    
-    return Rstats::ArrayFunc::c(@$elements);
-  }
-}
-
-sub numeric {
-  my $num = shift;
-  
-  return Rstats::ArrayFunc::c((0) x $num);
-}
-
+sub numeric { Rstats::ArrayFunc::numeric(@_) }
 sub args { Rstats::ArrayFunc::args(@_) }
-
-sub to_c {
-  my $_x = shift;
-  
-  my $is_container;
-  eval {
-    $is_container = $_x->isa('Rstats::Container');
-  };
-  my $x1 = $is_container ? $_x : Rstats::ArrayFunc::c($_x);
-  
-  return $x1;
-}
-
+sub to_c { Rstats::ArrayFunc::to_c(@_) }
 sub c { Rstats::ArrayFunc::c(@_) }
-
-sub upgrade_type {
-  my (@xs) = @_;
-  
-  # Check elements
-  my $type_h = {};
-  for my $x1 (@xs) {
-    my $type = $x1->vector->type || '';
-    if ($type eq 'character') {
-      $type_h->{character}++;
-    }
-    elsif ($type eq 'complex') {
-      $type_h->{complex}++;
-    }
-    elsif ($type eq 'double') {
-      $type_h->{double}++;
-    }
-    elsif ($type eq 'integer') {
-      $type_h->{integer}++;
-    }
-    elsif ($type eq 'logical') {
-      $type_h->{logical}++;
-    }
-    else {
-      croak "Invalid type";
-    }
-  }
-
-  # Upgrade elements and type if type is different
-  my @types = keys %$type_h;
-  if (@types > 1) {
-    my $to_type;
-    if ($type_h->{character}) {
-      $to_type = 'character';
-    }
-    elsif ($type_h->{complex}) {
-      $to_type = 'complex';
-    }
-    elsif ($type_h->{double}) {
-      $to_type = 'double';
-    }
-    elsif ($type_h->{integer}) {
-      $to_type = 'integer';
-    }
-    elsif ($type_h->{logical}) {
-      $to_type = 'logical';
-    }
-    $_ = $_->as($to_type) for @xs;
-  }
-  
-  return @xs;
-}
 
 1;
 

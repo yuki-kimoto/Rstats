@@ -8,6 +8,25 @@ use Rstats::Func;
 use Rstats::Util;
 use Rstats::VectorFunc;
 
+sub row {
+  my $x1 = shift;
+  
+  my $nrow = Rstats::Func::nrow($x1)->value;
+  my $ncol = Rstats::Func::ncol($x1)->value;
+  
+  my @values = (1 .. $nrow) x $ncol;
+  
+  return Rstats::Func::array(Rstats::ArrayFunc::c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
+}
+
+sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
+
+sub ncol {
+  my $x1 = shift;
+  
+  return Rstats::ArrayFunc::c($x1->dim->values->[1]);
+}
+
 sub seq {
   
   # Option
@@ -92,18 +111,6 @@ sub numeric {
   my $num = shift;
   
   return Rstats::ArrayFunc::c((0) x $num);
-}
-
-sub to_c {
-  my $_x = shift;
-  
-  my $is_container;
-  eval {
-    $is_container = $_x->isa('Rstats::Container');
-  };
-  my $x1 = $is_container ? $_x : Rstats::ArrayFunc::c($_x);
-  
-  return $x1;
 }
 
 sub upgrade_type {

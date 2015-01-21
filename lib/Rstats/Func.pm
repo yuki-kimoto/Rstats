@@ -2522,18 +2522,9 @@ sub inner_product {
   }
 }
 
-sub row {
-  my $x1 = shift;
-  
-  my $nrow = nrow($x1)->value;
-  my $ncol = ncol($x1)->value;
-  
-  my @values = (1 .. $nrow) x $ncol;
-  
-  return array(c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
-}
+sub row { Rstats::ArrayFunc::row(@_) }
 
-sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
+sub sum { Rstats::ArrayFunc::sum(@_) }
 
 sub ncol {
   my $x1 = shift;

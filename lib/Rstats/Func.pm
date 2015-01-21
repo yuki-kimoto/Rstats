@@ -989,9 +989,6 @@ sub nrow {
   }
 }
 
-
-sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
-
 sub is_element {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   

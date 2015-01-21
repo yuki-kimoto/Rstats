@@ -8,20 +8,20 @@ use Rstats::Func;
 use Rstats::Util;
 use Rstats::VectorFunc;
 
-sub add { shift->operate_binary(\&Rstats::VectorFunc::add, @_) }
-sub subtract { shift->operate_binary(\&Rstats::VectorFunc::subtract, @_) }
-sub multiply { shift->operate_binary(\&Rstats::VectorFunc::multiply, @_) }
-sub divide { shift->operate_binary(\&Rstats::VectorFunc::divide, @_) }
-sub remainder { shift->operate_binary(\&Rstats::VectorFunc::remainder, @_) }
-sub pow { shift->operate_binary(\&Rstats::VectorFunc::pow, @_) }
-sub less_than { shift->operate_binary(\&Rstats::VectorFunc::less_than, @_) }
-sub less_than_or_equal { shift->operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) }
-sub more_than { shift->operate_binary(\&Rstats::VectorFunc::more_than, @_) }
-sub more_than_or_equal { shift->operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) }
-sub equal { shift->operate_binary(\&Rstats::VectorFunc::equal, @_) }
-sub not_equal { shift->operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
-sub and { shift->operate_binary(\&Rstats::VectorFunc::and, @_) }
-sub or { shift->operate_binary(\&Rstats::VectorFunc::or, @_) }
+sub add { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::add, @_) }
+sub subtract { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::subtract, @_) }
+sub multiply { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::multiply, @_) }
+sub divide { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::divide, @_) }
+sub remainder { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::remainder, @_) }
+sub pow { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::pow, @_) }
+sub less_than { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::less_than, @_) }
+sub less_than_or_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::less_than_or_equal, @_) }
+sub more_than { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than, @_) }
+sub more_than_or_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than_or_equal, @_) }
+sub equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::equal, @_) }
+sub not_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::not_equal, @_) }
+sub and { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::and, @_) }
+sub or { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::or, @_) }
 
 sub operate_unary {
   my $func = shift;
@@ -37,7 +37,7 @@ sub operate_unary {
 
 sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
 
-sub _fix_position {
+sub _fix_pos {
   my ($self, $data, $reverse) = @_;
   
   my $x1;
@@ -60,11 +60,11 @@ sub _fix_position {
   return ($x1, $x2);
 }
 
-sub operate_binary {
+sub operate_binary_fix_pos {
   my ($self, $func, $data, $reverse) = @_;
   
   # fix postion
-  my ($x1, $x2) = $self->_fix_position($data, $reverse);
+  my ($x1, $x2) = Rstats::ArrayFunc::_fix_pos($self, $data, $reverse);
   
   return Rstats::Func::operate_binary($func, $x1, $x2);
 }
@@ -73,7 +73,7 @@ sub inner_product {
   my ($self, $data, $reverse) = @_;
   
   # fix postion
-  my ($x1, $x2) = $self->_fix_position($data, $reverse);
+  my ($x1, $x2) = Rstats::ArrayFunc::_fix_pos($self, $data, $reverse);
   
   return Rstats::Func::inner_product($x1, $x2);
 }

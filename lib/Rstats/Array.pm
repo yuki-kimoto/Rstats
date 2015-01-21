@@ -43,7 +43,7 @@ sub bool { Rstats::ArrayFunc::bool(@_) }
 sub value { Rstats::ArrayFunc::value(@_) }
 sub inner_product { Rstats::ArrayFunc::inner_product(@_) }
 sub negation { Rstats::ArrayFunc::negation(@_) }
-sub operate_binary { Rstats::ArrayFunc::operate_binary(@_) }
+sub operate_binary_fix_pos { Rstats::ArrayFunc::operate_binary_fix_pos(@_) }
 sub _fix_position { Rstats::ArrayFunc::_fix_position(@_) }
 
 1;

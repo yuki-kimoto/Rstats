@@ -2433,99 +2433,10 @@ sub new_logical {
   $x1->vector(Rstats::VectorFunc::new_logical(@_));
 }
 
-sub matrix {
-  my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
-    = args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
-
-  croak "matrix method need data as frist argument"
-    unless defined $x1;
-  
-  # Row count
-  my $nrow;
-  $nrow = $x_nrow->value if defined $x_nrow;
-  
-  # Column count
-  my $ncol;
-  $ncol = $x_ncol->value if defined $x_ncol;
-  
-  # By row
-  my $byrow;
-  $byrow = $x_byrow->value if defined $x_byrow;
-  
-  my $x1_values = $x1->values;
-  my $x1_length = $x1->length_value;
-  if (!defined $nrow && !defined $ncol) {
-    $nrow = $x1_length;
-    $ncol = 1;
-  }
-  elsif (!defined $nrow) {
-    $nrow = int($x1_length / $ncol);
-  }
-  elsif (!defined $ncol) {
-    $ncol = int($x1_length / $nrow);
-  }
-  my $length = $nrow * $ncol;
-  
-  my $dim = [$nrow, $ncol];
-  my $matrix;
-  my $x_matrix = Rstats::Func::NULL();
-  $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->vector->type, @$x1_values));
-  if ($byrow) {
-    $matrix = array(
-      $x_matrix,
-      Rstats::ArrayFunc::c($dim->[1], $dim->[0]),
-    );
-    
-    $matrix = t($matrix);
-  }
-  else {
-    $matrix = array($x_matrix, Rstats::ArrayFunc::c(@$dim));
-  }
-  
-  return $matrix;
-}
-
-sub inner_product {
-  my ($x1, $x2) = @_;
-  
-  # Convert to matrix
-  $x1 = t($x1->as_matrix) if $x1->is_vector;
-  $x2 = $x2->as_matrix if $x2->is_vector;
-  
-  # Calculate
-  if ($x1->is_matrix && $x2->is_matrix) {
-    
-    croak "requires numeric/complex matrix/vector arguments"
-      if $x1->length_value == 0 || $x2->length_value == 0;
-    croak "Error in a x b : non-conformable arguments"
-      unless $x1->dim->values->[1] == $x2->dim->values->[0];
-    
-    my $row_max = $x1->dim->values->[0];
-    my $col_max = $x2->dim->values->[1];
-    
-    my $x3_elements = [];
-    for (my $col = 1; $col <= $col_max; $col++) {
-      for (my $row = 1; $row <= $row_max; $row++) {
-        my $x1_part = $x1->get($row);
-        my $x2_part = $x2->get(NULL, $col);
-        my $x3_part = sum($x1 * $x2);
-        push @$x3_elements, $x3_part;
-      }
-    }
-    
-    my $x3 = matrix(c(@$x3_elements), $row_max, $col_max);
-    
-    return $x3;
-  }
-  else {
-    croak "inner_product should be dim < 3."
-  }
-}
-
+sub matrix { Rstats::ArrayFunc::matrix(@_) }
+sub inner_product { Rstats::ArrayFunc::inner_product(@_) }
 sub row { Rstats::ArrayFunc::row(@_) }
-
 sub sum { Rstats::ArrayFunc::sum(@_) }
-
 sub ncol {
   my $x1 = shift;
   
@@ -2539,9 +2450,7 @@ sub ncol {
     return Rstats::ArrayFunc::c($x1->dim->values->[1]);
   }
 }
-
 sub seq { Rstats::ArrayFunc::seq(@_) }
-
 sub numeric { Rstats::ArrayFunc::numeric(@_) }
 sub args { Rstats::ArrayFunc::args(@_) }
 sub to_c { Rstats::ArrayFunc::to_c(@_) }

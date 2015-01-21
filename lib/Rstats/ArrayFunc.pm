@@ -8,21 +8,20 @@ use Rstats::Func;
 use Rstats::Util;
 use Rstats::VectorFunc;
 
-sub add { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::add, @_) }
-sub subtract { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::subtract, @_) }
-sub multiply { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::multiply, @_) }
-sub divide { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::divide, @_) }
-sub remainder { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::remainder, @_) }
-sub pow { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::pow, @_) }
-sub less_than { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::less_than, @_) }
-sub less_than_or_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::less_than_or_equal, @_) }
-sub more_than { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than, @_) }
-sub more_than_or_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::more_than_or_equal, @_) }
-sub equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::equal, @_) }
-sub not_equal { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::not_equal, @_) }
-sub or { shift->operate_binary_fix_pos(\&Rstats::VectorFunc::or, @_) }
-
+sub add { operate_binary(\&Rstats::VectorFunc::add, @_) }
+sub subtract { operate_binary(\&Rstats::VectorFunc::subtract, @_) }
+sub multiply { operate_binary(\&Rstats::VectorFunc::multiply, @_) }
+sub divide { operate_binary(\&Rstats::VectorFunc::divide, @_) }
+sub remainder { operate_binary(\&Rstats::VectorFunc::remainder, @_) }
+sub pow { operate_binary(\&Rstats::VectorFunc::pow, @_) }
+sub less_than { operate_binary(\&Rstats::VectorFunc::less_than, @_) }
+sub less_than_or_equal { operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) }
+sub more_than { operate_binary(\&Rstats::VectorFunc::more_than, @_) }
+sub more_than_or_equal { operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) }
+sub equal { operate_binary(\&Rstats::VectorFunc::equal, @_) }
+sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
 sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
+sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
 
 sub operate_unary {
   my $func = shift;
@@ -68,18 +67,18 @@ sub operate_binary {
   $x2 = to_c($x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
+  ($x1, $x2) = Rstats::Func::upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
   
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
   my $x2_length = $x2->length_value;
   my $length;
   if ($x1_length > $x2_length) {
-    $x2 = array($x2, $x1_length);
+    $x2 = Rstats::Func::array($x2, $x1_length);
     $length = $x1_length;
   }
   elsif ($x1_length < $x2_length) {
-    $x1 = array($x1, $x2_length);
+    $x1 = Rstats::Func::array($x1, $x2_length);
     $length = $x2_length;
   }
   else {

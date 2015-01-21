@@ -1255,31 +1255,31 @@ sub operate_binary {
 
 sub and { Rstats::ArrayFunc::and(@_) }
 
-sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
+sub or { Rstats::ArrayFunc::or(@_) }
 
-sub add { operate_binary(\&Rstats::VectorFunc::add, @_) }
+sub add { Rstats::ArrayFunc::add(@_) }
 
-sub subtract { operate_binary(\&Rstats::VectorFunc::subtract, @_)}
+sub subtract { Rstats::ArrayFunc::subtract(@_) }
 
-sub multiply { operate_binary(\&Rstats::VectorFunc::multiply, @_)}
+sub multiply { Rstats::ArrayFunc::multiply(@_) }
 
-sub divide { operate_binary(\&Rstats::VectorFunc::divide, @_)}
+sub divide { Rstats::ArrayFunc::divide(@_) }
 
-sub pow { operate_binary(\&Rstats::VectorFunc::pow, @_)}
+sub pow { Rstats::ArrayFunc::pow(@_) }
 
-sub remainder { operate_binary(\&Rstats::VectorFunc::remainder, @_)}
+sub remainder { Rstats::ArrayFunc::remainder(@_) }
 
-sub more_than { operate_binary(\&Rstats::VectorFunc::more_than, @_)}
+sub more_than {Rstats::ArrayFunc::more_than(@_) }
 
-sub more_than_or_equal { operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_)}
+sub more_than_or_equal { Rstats::ArrayFunc::more_than_or_equal(@_) }
 
-sub less_than { operate_binary(\&Rstats::VectorFunc::less_than, @_)}
+sub less_than { Rstats::ArrayFunc::less_than(@_) }
 
-sub less_than_or_equal { operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_)}
+sub less_than_or_equal { Rstats::ArrayFunc::less_than_or_equal(@_) }
 
-sub equal { operate_binary(\&Rstats::VectorFunc::equal, @_)}
+sub equal { Rstats::ArrayFunc::equal(@_) }
 
-sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_)}
+sub not_equal { Rstats::ArrayFunc::not_equal(@_) }
 
 sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
 sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }

@@ -2697,33 +2697,33 @@ sub operate_binary {
 }
 
 sub value {
-  my $self = shift;
+  my $x1 = shift;
 
   my $e1;
-  my $dim_values = $self->dim_as_array->values;
-  my $self_elements = $self->decompose;
+  my $dim_values = $x1->dim_as_array->values;
+  my $x1_elements = $x1->decompose;
   if (@_) {
     if (@$dim_values == 1) {
-      $e1 = $self_elements->[$_[0] - 1];
+      $e1 = $x1_elements->[$_[0] - 1];
     }
     elsif (@$dim_values == 2) {
-      $e1 = $self_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+      $e1 = $x1_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      $e1 = $self->get(@_)->decompose->[0];
+      $e1 = $x1->get(@_)->decompose->[0];
     }
   }
   else {
-    $e1 = $self_elements->[0];
+    $e1 = $x1_elements->[0];
   }
   
   return defined $e1 ? $e1->value : undef;
 }
 
 sub bool {
-  my $self = shift;
+  my $x1 = shift;
   
-  my $length = $self->length_value;
+  my $length = $x1->length_value;
   if ($length == 0) {
     Carp::croak 'Error in if (a) { : argument is of length zero';
   }
@@ -2731,8 +2731,8 @@ sub bool {
     Carp::carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
-  my $type = $self->type;
-  my $value = $self->value;
+  my $type = $x1->type;
+  my $value = $x1->value;
 
   my $is;
   if ($type eq 'character' || $type eq 'complex') {
@@ -2764,65 +2764,65 @@ sub bool {
 }
 
 sub set {
-  my $self = shift;
+  my $x1 = shift;
   my $x2 = Rstats::ArrayFunc::to_c(shift);
   
-  my $at = $self->at;
+  my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  my ($poss, $x2_dim) = Rstats::Util::parse_index($self, 0, @$_indexs);
+  my ($poss, $x2_dim) = Rstats::Util::parse_index($x1, 0, @$_indexs);
   
-  my $self_elements;
-  if ($self->is_factor) {
-    $self_elements = $self->decompose;
+  my $x1_elements;
+  if ($x1->is_factor) {
+    $x1_elements = $x1->decompose;
     $x2 = $x2->as_character unless $x2->is_character;
     my $x2_elements = $x2->decompose;
-    my $levels_h = $self->_levels_h;
+    my $levels_h = $x1->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if ($element->is_na->value) {
-        $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+        $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
       }
       else {
         my $value = $element->to_string;
         if ($levels_h->{$value}) {
-          $self_elements->[$pos] = $levels_h->{$value};
+          $x1_elements->[$pos] = $levels_h->{$value};
         }
         else {
           Carp::carp "invalid factor level, NA generated";
-          $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+          $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
         }
       }
     }
   }
   else {
     # Upgrade mode if type is different
-    if ($self->vector->type ne $x2->vector->type) {
-      my $self_tmp;
-      ($self_tmp, $x2) = Rstats::ArrayFunc::upgrade_type($self, $x2);
-      $self_tmp->copy_attrs_to($self);
-      $self->vector($self_tmp->vector);
+    if ($x1->vector->type ne $x2->vector->type) {
+      my $x1_tmp;
+      ($x1_tmp, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2);
+      $x1_tmp->copy_attrs_to($x1);
+      $x1->vector($x1_tmp->vector);
     }
 
-    $self_elements = $self->decompose;
+    $x1_elements = $x1->decompose;
 
     my $x2_elements = $x2->decompose;
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
-      $self_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
+      $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
   
-  $self->vector(Rstats::Vector->compose($self->vector->type, $self_elements));
+  $x1->vector(Rstats::Vector->compose($x1->vector->type, $x1_elements));
   
-  return $self;
+  return $x1;
 }
 
 sub _levels_h {
-  my $self = shift;
+  my $x1 = shift;
   
   my $levels_h = {};
-  my $levels = $self->levels->values;
+  my $levels = $x1->levels->values;
   for (my $i = 1; $i <= @$levels; $i++) {
     $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
   }
@@ -2831,12 +2831,12 @@ sub _levels_h {
 }
 
 sub get {
-  my $self = shift;
+  my $x1 = shift;
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
   my $level_drop;
-  if ($self->is_factor) {
+  if ($x1->is_factor) {
     $level_drop = $opt->{drop};
   }
   else {
@@ -2853,24 +2853,24 @@ sub get {
     $_indexs = \@_indexs;
   }
   else {
-    my $at = $self->at;
+    my $at = $x1->at;
     $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   }
-  $self->at($_indexs);
+  $x1->at($_indexs);
   
-  my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($self, $dim_drop, @$_indexs);
+  my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($x1, $dim_drop, @$_indexs);
   
-  my $self_values = $self->values;
-  my @a2_values = map { $self_values->[$_] } @$poss;
+  my $x1_values = $x1->values;
+  my @a2_values = map { $x1_values->[$_] } @$poss;
   
   # array
   my $x2 = Rstats::ArrayFunc::array(
-    Rstats::ArrayFunc::new_vector($self->vector->type, @a2_values),
+    Rstats::ArrayFunc::new_vector($x1->vector->type, @a2_values),
     Rstats::ArrayFunc::c(@$x2_dim)
   );
   
   # Copy attributes
-  $self->copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
+  $x1->copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
   # level drop
   if ($level_drop) {
@@ -2936,23 +2936,23 @@ sub is_finite {
 }
 
 sub to_string {
-  my $self = shift;
+  my $x1 = shift;
   
-  my $is_factor = $self->is_factor;
-  my $is_ordered = $self->is_ordered;
+  my $is_factor = $x1->is_factor;
+  my $is_ordered = $x1->is_ordered;
   my $levels;
   if ($is_factor) {
-    $levels = $self->levels->values;
+    $levels = $x1->levels->values;
   }
   
-  $self = $self->as_character if $self->is_factor;
+  $x1 = $x1->as_character if $x1->is_factor;
   
-  my $is_character = $self->is_character;
+  my $is_character = $x1->is_character;
 
-  my $values = $self->values;
-  my $type = $self->vector->type;
+  my $values = $x1->values;
+  my $type = $x1->vector->type;
   
-  my $dim_values = $self->dim_as_array->values;
+  my $dim_values = $x1->dim_as_array->values;
   
   my $dim_length = @$dim_values;
   my $dim_num = $dim_length - 1;
@@ -2961,17 +2961,17 @@ sub to_string {
   my $str;
   if (@$values) {
     if ($dim_length == 1) {
-      my $names = $self->names->values;
+      my $names = $x1->names->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { $self->_value_to_string($_, $type, $is_factor) } @$values;
+      my @parts = map { $x1->_value_to_string($_, $type, $is_factor) } @$values;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = $self->colnames->values;
+      my $colnames = $x1->colnames->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
@@ -2981,7 +2981,7 @@ sub to_string {
         }
       }
       
-      my $rownames = $self->rownames->values;
+      my $rownames = $x1->rownames->values;
       my $use_rownames = @$rownames ? 1 : 0;
       for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {
@@ -2994,8 +2994,8 @@ sub to_string {
         
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
-          my $part = $self->value($d1, $d2);
-          push @parts, $self->_value_to_string($part, $type, $is_factor);
+          my $part = $x1->value($d1, $d2);
+          push @parts, $x1->_value_to_string($part, $type, $is_factor);
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -3018,7 +3018,7 @@ sub to_string {
           else {
             $str .= '     ';
             
-            my $l_dimnames = $self->dimnames;
+            my $l_dimnames = $x1->dimnames;
             my $dimnames;
             if ($l_dimnames->is_null) {
               $dimnames = [];
@@ -3042,8 +3042,8 @@ sub to_string {
               
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
-                my $part = $self->value($d1, $d2, @$poss);
-                push @parts, $self->_value_to_string($part, $type, $is_factor);
+                my $part = $x1->value($d1, $d2, @$poss);
+                push @parts, $x1->_value_to_string($part, $type, $is_factor);
               }
               
               $str .= join(' ', @parts) . "\n";

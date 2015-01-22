@@ -29,7 +29,7 @@ use List::Util ();
 # aggregate
 # reshape
 
-my @funcs = qw/
+my @func_names = qw/
   double_xs
   abs
   acos
@@ -157,9 +157,6 @@ my @funcs = qw/
   upper_tri
   var
   which
-/;
-
-my @object_methods = qw/
   as_array
   as_character
   as_complex
@@ -195,9 +192,6 @@ my @object_methods = qw/
   mode
   str
   typeof
-/;
-
-my %no_args_methods_h = map {$_ => 1} qw/
   Inf
   NaN
   NA
@@ -211,26 +205,10 @@ my %no_args_methods_h = map {$_ => 1} qw/
 sub new {
   my $self = shift->SUPER::new(@_);
   
-  for my $func (@funcs) {
-    my $function = "Rstats::Func::$func";
-    my $code;
-    if ($no_args_methods_h{$func}) {
-      $code = "sub { $function() }";
-    }
-    else {
-      $code = "sub { $function(\@_) }";
-    }
-
+  for my $func_name (@func_names) {
     no strict 'refs';
-    $self->function($func => eval $code);
-    croak $@ if $@;
-  }
-  
-  for my $method (@object_methods) {
-    my $code = "sub { shift->$method(\@_) }";
-    no strict 'refs';
-    $self->function($method => eval $code);
-    croak $@ if $@;
+    my $func = \&{"Rstats::Func::$func_name"};
+    $self->function($func_name => $func);
   }
   
   $self->function(runif => sub { $self->_runif(@_) });

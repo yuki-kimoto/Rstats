@@ -2,23 +2,10 @@ package Rstats::Func;
 
 use strict;
 use warnings;
-use Carp qw/croak carp/;
 
-use Rstats ();
-use Rstats::Vector;
+require Rstats;
 
-use Rstats::Array;
-use Rstats::List;
-use Rstats::DataFrame;
-use Rstats::VectorFunc;
 use Rstats::ArrayFunc;
-use Rstats::Util;
-
-use List::Util;
-use Math::Trig ();
-use POSIX ();
-use Math::Round ();
-use Encode ();
 
 sub NULL { Rstats::ArrayFunc::NULL }
 sub NA  () { Rstats::ArrayFunc::NA }
@@ -174,7 +161,7 @@ sub ncol {
     return Rstats::ArrayFunc::c($x1->length_value);
   }
   elsif ($x1->is_list) {
-    return Rstats::Func::NULL();
+    return Rstats::ArrayFunc::NULL();
   }
   else {
     return Rstats::ArrayFunc::c($x1->dim->values->[1]);

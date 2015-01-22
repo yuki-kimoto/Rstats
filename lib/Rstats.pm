@@ -77,8 +77,8 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   # all methods is called from r
   my $x1 = r->sum(c(1, 2, 3));
   
-  # Register function
-  r->function(my_sum => sub {
+  # Register helper
+  r->helper(my_sum => sub {
     my ($self, $x1) = @_;
     
     my $total = 0;

@@ -10,6 +10,7 @@ use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
 
+
 sub to_string { Rstats::ArrayFunc::to_string(@_) }
 sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
 sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }

@@ -208,11 +208,11 @@ sub new {
   for my $func_name (@func_names) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$func_name"};
-    $self->function($func_name => $func);
+    $self->helper($func_name => $func);
   }
   
-  $self->function(runif => sub { $self->_runif(@_) });
-  $self->function(set_seed => sub { $self->_set_seed(@_) });
+  $self->helper(runif => sub { $self->_runif(@_) });
+  $self->helper(set_seed => sub { $self->_set_seed(@_) });
 
   return $self;
 }
@@ -248,7 +248,7 @@ sub lapply {
   my ($x1)
     = Rstats::Func::args_array(['x1'], @_);
   
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
   
   my $new_elements = [];
   for my $element (@{$x1->list}) {
@@ -268,7 +268,7 @@ sub tapply {
   my ($x1, $x2)
     = Rstats::Func::args_array(['x1', 'x2'], @_);
   
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
   
   my $new_values = [];
   my $x1_values = $x1->values;
@@ -299,7 +299,7 @@ sub tapply {
 sub mapply {
   my $self = shift;
   my $func_name = splice(@_, 0, 1);
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
 
   my @xs = @_;
   @xs = map { Rstats::ArrayFunc::c($_) } @xs;
@@ -335,7 +335,7 @@ sub apply {
   my ($x1, $x_margin)
     = Rstats::Func::args_array(['x1', 'margin'], @_);
   
-  my $func = ref $func_name ? $func_name : $self->functions->{$func_name};
+  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
 
   my $dim_values = $x1->dim->values;
   my $margin_values = $x_margin->values;
@@ -428,7 +428,7 @@ sub sweep {
   return $x4;
 }
 
-has functions => sub { {} };
+has helpers => sub { {} };
 
 sub AUTOLOAD {
   my $self = shift;
@@ -439,18 +439,18 @@ sub AUTOLOAD {
 
   # Call helper with current controller
   Carp::croak qq{Can't locate object method "$method" via package "$package"}
-    unless my $function = $self->functions->{$method};
-  return $function->(@_);
+    unless my $helper = $self->helpers->{$method};
+  return $helper->(@_);
 }
 
 sub DESTROY { }
 
-sub function {
+sub helper {
   my $self = shift;
   
   # Merge
-  my $functions = ref $_[0] eq 'HASH' ? $_[0] : {@_};
-  $self->functions({%{$self->functions}, %$functions});
+  my $helpers = ref $_[0] eq 'HASH' ? $_[0] : {@_};
+  $self->helpers({%{$self->helpers}, %$helpers});
   
   return $self;
 }

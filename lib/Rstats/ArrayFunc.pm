@@ -2696,15 +2696,6 @@ sub operate_binary {
   return $x3;
 }
 
-sub operate_binary_fix_pos {
-  my ($self, $func, $data, $reverse) = @_;
-  
-  # fix postion
-  my ($x1, $x2) = Rstats::ArrayFunc::_fix_pos($self, $data, $reverse);
-  
-  return Rstats::ArrayFunc::operate_binary($func, $x1, $x2);
-}
-
 sub value {
   my $self = shift;
 

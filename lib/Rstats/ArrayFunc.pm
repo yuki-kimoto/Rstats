@@ -27,18 +27,18 @@ sub NULL {
 }
 
 my $na;
-sub NA  () { defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef) }
-sub NaN () { Rstats::ArrayFunc::new_double('NaN') }
-sub Inf () { Rstats::ArrayFunc::new_double('Inf') }
+sub NA { defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef) }
+sub NaN { Rstats::ArrayFunc::new_double('NaN') }
+sub Inf { Rstats::ArrayFunc::new_double('Inf') }
 
 my $false;
-sub FALSE () { defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(0) }
-sub F () { FALSE }
+sub FALSE { defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(0) }
+sub F { FALSE }
 
 my $true;
-sub TRUE () { defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1) }
-sub T () { TRUE }
-sub pi () { new_double(Rstats::Util::pi()); }
+sub TRUE { defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1) }
+sub T { TRUE }
+sub pi { new_double(Rstats::Util::pi()); }
 
 sub I {
   my $x1 = shift;
@@ -2471,7 +2471,15 @@ sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
 sub ncol {
   my $x1 = shift;
   
-  return Rstats::ArrayFunc::c($x1->dim->values->[1]);
+  if ($x1->is_data_frame) {
+    return Rstats::ArrayFunc::c($x1->length_value);
+  }
+  elsif ($x1->is_list) {
+    return Rstats::ArrayFunc::NULL();
+  }
+  else {
+    return Rstats::ArrayFunc::c($x1->dim->values->[1]);
+  }
 }
 
 sub seq {

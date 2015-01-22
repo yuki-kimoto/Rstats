@@ -7,15 +7,15 @@ require Rstats;
 
 use Rstats::ArrayFunc;
 
-sub NULL { Rstats::ArrayFunc::NULL }
-sub NA  () { Rstats::ArrayFunc::NA }
-sub NaN () { Rstats::ArrayFunc::NaN }
-sub Inf () { Rstats::ArrayFunc::Inf }
-sub FALSE () { Rstats::ArrayFunc::FALSE }
-sub F () { Rstats::ArrayFunc::F }
-sub TRUE () { Rstats::ArrayFunc::TRUE }
-sub T () { Rstats::ArrayFunc::T }
-sub pi () { Rstats::ArrayFunc::pi }
+sub NULL { Rstats::ArrayFunc::NULL(@_) }
+sub NA { Rstats::ArrayFunc::NA(@_) }
+sub NaN { Rstats::ArrayFunc::NaN(@_) }
+sub Inf { Rstats::ArrayFunc::Inf(@_) }
+sub FALSE { Rstats::ArrayFunc::FALSE(@_) }
+sub F { Rstats::ArrayFunc::F(@_) }
+sub TRUE { Rstats::ArrayFunc::TRUE(@_) }
+sub T { Rstats::ArrayFunc::T(@_) }
+sub pi { Rstats::ArrayFunc::pi(@_) }
 sub I { Rstats::ArrayFunc::I(@_) }
 sub subset { Rstats::ArrayFunc::subset(@_) }
 sub t { Rstats::ArrayFunc::t(@_) }
@@ -154,19 +154,7 @@ sub matrix { Rstats::ArrayFunc::matrix(@_) }
 sub inner_product { Rstats::ArrayFunc::inner_product(@_) }
 sub row { Rstats::ArrayFunc::row(@_) }
 sub sum { Rstats::ArrayFunc::sum(@_) }
-sub ncol {
-  my $x1 = shift;
-  
-  if ($x1->is_data_frame) {
-    return Rstats::ArrayFunc::c($x1->length_value);
-  }
-  elsif ($x1->is_list) {
-    return Rstats::ArrayFunc::NULL();
-  }
-  else {
-    return Rstats::ArrayFunc::c($x1->dim->values->[1]);
-  }
-}
+sub ncol { Rstats::ArrayFunc::ncol(@_) }
 sub seq { Rstats::ArrayFunc::seq(@_) }
 sub numeric { Rstats::ArrayFunc::numeric(@_) }
 sub args { Rstats::ArrayFunc::args(@_) }

@@ -1,13 +1,7 @@
 package Rstats::Array;
 use Rstats::Container -base;
 
-use Rstats::VectorFunc;
-use Rstats::Func;
 use Rstats::ArrayFunc;
-use Rstats::Util;
-use Carp 'croak', 'carp';
-
-our @CARP_NOT = ('Rstats');
 
 use overload
   '+' => sub { Rstats::ArrayFunc::add(Rstats::ArrayFunc::_fix_pos(@_)) },

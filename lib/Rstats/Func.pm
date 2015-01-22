@@ -7,6 +7,19 @@ require Rstats;
 
 use Rstats::ArrayFunc;
 
+sub to_string { Rstats::ArrayFunc::to_string(@_) }
+sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
+sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }
+sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
+sub is_null { Rstats::ArrayFunc::is_null(@_) }
+sub getin { Rstats::ArrayFunc::getin(@_) }
+sub get { Rstats::ArrayFunc::get(@_) }
+sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
+sub set { Rstats::ArrayFunc::set(@_) }
+sub bool { Rstats::ArrayFunc::bool(@_) }
+sub value { Rstats::ArrayFunc::value(@_) }
+sub negation { Rstats::ArrayFunc::negation(@_) }
+sub _fix_pos { Rstats::ArrayFunc::_fix_pos(@_) }
 sub NULL { Rstats::ArrayFunc::NULL(@_) }
 sub NA { Rstats::ArrayFunc::NA(@_) }
 sub NaN { Rstats::ArrayFunc::NaN(@_) }

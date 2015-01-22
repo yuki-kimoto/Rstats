@@ -478,7 +478,12 @@ sub factor {
 sub length {
   my $container = shift;
   
-  return $container->length;
+  if (ref $container eq 'Rstats::Array') {
+    return c($container->vector->length_value);
+  }
+  else {
+    return $container->length;
+  }
 }
 
 sub list {

@@ -2,18 +2,17 @@ package Rstats::ArrayFunc;
 
 use strict;
 use warnings;
-use Carp 'croak', 'carp';
+use Carp ();
 
-require Rstats;;
+use Rstats ();
 use Rstats::Vector;
-
 use Rstats::Array;
 use Rstats::List;
 use Rstats::DataFrame;
 use Rstats::VectorFunc;
 use Rstats::Util;
 
-use List::Util;
+use List::Util ();
 use Math::Trig ();
 use POSIX ();
 use Math::Round ();
@@ -192,7 +191,7 @@ sub read_table {
   
   my $file = $x_file->value;
   open(my $fh, '<', $file)
-    or croak "cannot open file '$file': $!";
+    or Carp::croak "cannot open file '$file': $!";
   
   # Separater
   my $sep = defined $x_sep ? $x_sep->value : "\\s+";
@@ -222,7 +221,7 @@ sub read_table {
     $row_size ||= $current_row_size;
     
     # Row size different
-    croak "line $. did not have $row_size elements"
+    Carp::croak "line $. did not have $row_size elements"
       if $current_row_size != $row_size;
     
     $type_columns ||= [('logical') x $row_size];
@@ -440,7 +439,7 @@ sub factor {
     $x_labels = paste($value, se("1:$levels_length"), {sep => ""});
   }
   elsif ($labels_length != $levels_length) {
-    croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
+    Carp::croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
   }
   
   # Levels hash
@@ -556,7 +555,7 @@ sub data_frame {
   # Check multiple number
   for my $count (@$counts) {
     if ($max_count % $count != 0) {
-      croak "Error in data.frame: arguments imply differing number of rows: @$counts";
+      Carp::croak "Error in data.frame: arguments imply differing number of rows: @$counts";
     }
   }
   
@@ -615,7 +614,7 @@ sub upper_tri {
     return $x2;
   }
   else {
-    croak 'Not implemented';
+    Carp::croak 'Not implemented';
   }
 }
 
@@ -648,7 +647,7 @@ sub lower_tri {
     return $x2;
   }
   else {
-    croak 'Not implemented';
+    Carp::croak 'Not implemented';
   }
 }
 
@@ -922,7 +921,7 @@ sub chartr {
       $old =~ s#/#\/#;
       $new =~ s#/#\/#;
       eval "\$x =~ tr/$old/$new/";
-      croak $@ if $@;
+      Carp::croak $@ if $@;
       push @$x2_values, "$x";
     }
   }
@@ -990,7 +989,7 @@ sub nrow {
 sub is_element {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
+  Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $type = $x1->type;
   my $x1_values = $x1->values;
@@ -1027,7 +1026,7 @@ sub is_element {
 sub setequal {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
+  Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x3 = Rstats::ArrayFunc::sort($x1);
   my $x4 = Rstats::ArrayFunc::sort($x2);
@@ -1050,7 +1049,7 @@ sub setequal {
 sub setdiff {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
+  Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x1_elements = $x1->decompose;
   my $x2_elements = $x2->decompose;
@@ -1072,7 +1071,7 @@ sub setdiff {
 sub intersect {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
-  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
+  Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x1_elements = $x1->decompose;
   my $x2_elements = $x2->decompose;
@@ -1091,7 +1090,7 @@ sub intersect {
 sub union {
   my ($x1, $x2) = (to_c(shift), to_c(shift));
 
-  croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
+  Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x3 = Rstats::ArrayFunc::c($x1, $x2);
   my $x4 = unique($x3);
@@ -1136,7 +1135,7 @@ sub nchar {
     return $x2;
   }
   else {
-    croak "Not implemented";
+    Carp::croak "Not implemented";
   }
 }
 
@@ -1291,7 +1290,7 @@ sub cbind {
         $first_row_length = $x->{row_length};
       }
     }
-    croak "cbind need same row count data frame"
+    Carp::croak "cbind need same row count data frame"
       if $different;
     
     # Create new data frame
@@ -1325,11 +1324,11 @@ sub cbind {
         $col_count_total += 1;
       }
       else {
-        croak "cbind or rbind can only receive matrix and vector";
+        Carp::croak "cbind or rbind can only receive matrix and vector";
       }
       
       $row_count_needed = $row_count unless defined $row_count_needed;
-      croak "Row count is different" if $row_count_needed ne $row_count;
+      Carp::croak "Row count is different" if $row_count_needed ne $row_count;
       
       push @$x2_elements, @{$a1->decompose};
     }
@@ -1367,7 +1366,7 @@ sub colMeans {
     return Rstats::ArrayFunc::c(@$x1_values);
   }
   else {
-    croak "Can't culculate colSums";
+    Carp::croak "Can't culculate colSums";
   }
 }
 
@@ -1385,7 +1384,7 @@ sub colSums {
     return Rstats::ArrayFunc::c(@$x1_values);
   }
   else {
-    croak "Can't culculate colSums";
+    Carp::croak "Can't culculate colSums";
   }
 }
 
@@ -1399,7 +1398,7 @@ sub cummax {
   my $x1 = to_c(shift);
   
   unless ($x1->length_value) {
-    carp 'no non-missing arguments to max; returning -Inf';
+    Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::ArrayFunc::Inf());
   }
   
@@ -1428,7 +1427,7 @@ sub cummin {
   my $x1 = to_c(shift);
   
   unless ($x1->length_value) {
-    carp 'no non-missing arguments to max; returning -Inf';
+    Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::ArrayFunc::Inf());
   }
   
@@ -1472,7 +1471,7 @@ sub args_array {
     push @args, $arg;
   }
   
-  croak "unused argument ($_)" for keys %$opt;
+  Carp::croak "unused argument ($_)" for keys %$opt;
   
   return @args;
 }
@@ -1513,7 +1512,7 @@ sub complex {
   }
   # Create complex from re and im
   else {
-    croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
+    Carp::croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
     
     my $x1_re_elements = $x1_re->decompose;
     my $x1_im_elements = $x1_im->decompose;
@@ -1639,7 +1638,7 @@ sub max {
   my $x1 = Rstats::ArrayFunc::c(@_);
   
   unless ($x1->length_value) {
-    carp 'no non-missing arguments to max; returning -Inf';
+    Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::ArrayFunc::Inf());
   }
   
@@ -1673,7 +1672,7 @@ sub min {
   my $x1 = Rstats::ArrayFunc::c(@_);
   
   unless ($x1->length_value) {
-    carp 'no non-missing arguments to min; returning -Inf';
+    Carp::carp 'no non-missing arguments to min; returning -Inf';
     return Rstats::ArrayFunc::Inf();
   }
   
@@ -1848,7 +1847,7 @@ sub rbind {
         for (my $i = 0; $i < @$first_names; $i++) {
           $different = 1 if $names->[$i] ne $first_names->[$i];
         }
-        croak "rbind require same names having data frame"
+        Carp::croak "rbind require same names having data frame"
           if $different;
       }
       else {
@@ -1913,7 +1912,7 @@ sub replace {
     my $x2_element_hash = $x2_element->to_string;
     
     $x2_elements_h->{$x2_element_hash}++;
-    croak "replace second argument can't have duplicate number"
+    Carp::croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
   my $v3_elements = $v3->decompose;
@@ -1953,7 +1952,7 @@ sub rnorm {
   
   # Count
   my ($count, $mean, $sd) = @_;
-  croak "rnorm count should be bigger than 0"
+  Carp::croak "rnorm count should be bigger than 0"
     if $count < 1;
   
   # Mean
@@ -2010,7 +2009,7 @@ sub rowMeans {
     return Rstats::ArrayFunc::c(@$x1_values);
   }
   else {
-    croak "Can't culculate rowMeans";
+    Carp::croak "Can't culculate rowMeans";
   }
 }
 
@@ -2028,7 +2027,7 @@ sub rowSums {
     return Rstats::ArrayFunc::c(@$x1_values);
   }
   else {
-    croak "Can't culculate rowSums";
+    Carp::croak "Can't culculate rowSums";
   }
 }
 
@@ -2039,7 +2038,7 @@ sub runif {
   
   $min = 0 unless defined $min;
   $max = 1 unless defined $max;
-  croak "runif third argument must be bigger than second argument"
+  Carp::croak "runif third argument must be bigger than second argument"
     if $min > $max;
   
   my $diff = $max - $min;
@@ -2068,7 +2067,7 @@ sub sample {
   my $x1_length = $x1->length_value;
   $length = $x1_length unless defined $length;
   
-  croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
+  Carp::croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
     if $length > $x1_length && !$replace;
   
   my @x2_elements;
@@ -2338,7 +2337,7 @@ sub new_vector {
     return new_logical(@_);
   }
   else {
-    croak("Invalid type $type is passed(new_vector)");
+    Carp::croak("Invalid type $type is passed(new_vector)");
   }
 }
 
@@ -2371,7 +2370,7 @@ sub matrix {
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = Rstats::ArrayFunc::args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
-  croak "matrix method need data as frist argument"
+  Carp::croak "matrix method need data as frist argument"
     unless defined $x1;
   
   # Row count
@@ -2429,9 +2428,9 @@ sub inner_product {
   # Calculate
   if ($x1->is_matrix && $x2->is_matrix) {
     
-    croak "requires numeric/complex matrix/vector arguments"
+    Carp::croak "requires numeric/complex matrix/vector arguments"
       if $x1->length_value == 0 || $x2->length_value == 0;
-    croak "Error in a x b : non-conformable arguments"
+    Carp::croak "Error in a x b : non-conformable arguments"
       unless $x1->dim->values->[1] == $x2->dim->values->[0];
     
     my $row_max = $x1->dim->values->[0];
@@ -2452,7 +2451,7 @@ sub inner_product {
     return $x3;
   }
   else {
-    croak "inner_product should be dim < 3."
+    Carp::croak "inner_product should be dim < 3."
   }
 }
 
@@ -2492,11 +2491,11 @@ sub seq {
     
     # From
     $from = $opt->{from} unless defined $from;
-    croak "seq function need from option" unless defined $from;
+    Carp::croak "seq function need from option" unless defined $from;
     
     # To
     $to = $opt->{to} unless defined $to;
-    croak "seq function need to option" unless defined $to;
+    Carp::croak "seq function need to option" unless defined $to;
 
     # Length
     my $length = $opt->{length};
@@ -2505,7 +2504,7 @@ sub seq {
     my $by = $opt->{by};
     
     if (defined $length && defined $by) {
-      croak "Can't use by option and length option as same time";
+      Carp::croak "Can't use by option and length option as same time";
     }
     
     unless (defined $by) {
@@ -2516,7 +2515,7 @@ sub seq {
         $by = -1;
       }
     }
-    croak "by option should be except for 0" if $by == 0;
+    Carp::croak "by option should be except for 0" if $by == 0;
     
     $to = $from unless defined $to;
     
@@ -2530,7 +2529,7 @@ sub seq {
     }
     elsif ($to > $from) {
       if ($by < 0) {
-        croak "by option is invalid number(seq function)";
+        Carp::croak "by option is invalid number(seq function)";
       }
       
       my $element = $from;
@@ -2541,7 +2540,7 @@ sub seq {
     }
     else {
       if ($by > 0) {
-        croak "by option is invalid number(seq function)";
+        Carp::croak "by option is invalid number(seq function)";
       }
       
       my $element = $from;
@@ -2584,7 +2583,7 @@ sub upgrade_type {
       $type_h->{logical}++;
     }
     else {
-      croak "Invalid type";
+      Carp::croak "Invalid type";
     }
   }
 
@@ -2727,10 +2726,10 @@ sub bool {
   
   my $length = $self->length_value;
   if ($length == 0) {
-    croak 'Error in if (a) { : argument is of length zero';
+    Carp::croak 'Error in if (a) { : argument is of length zero';
   }
   elsif ($length > 1) {
-    carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
+    Carp::carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
   my $type = $self->type;
@@ -2738,14 +2737,14 @@ sub bool {
 
   my $is;
   if ($type eq 'character' || $type eq 'complex') {
-    croak 'Error in -a : invalid argument to unary operator ';
+    Carp::croak 'Error in -a : invalid argument to unary operator ';
   }
   elsif ($type eq 'double') {
     if ($value eq 'Inf' || $value eq '-Inf') {
       $is = 1;
     }
     elsif ($value eq 'NaN') {
-      croak 'argument is not interpretable as logical';
+      Carp::croak 'argument is not interpretable as logical';
     }
     else {
       $is = $value;
@@ -2755,11 +2754,11 @@ sub bool {
     $is = $value;
   }
   else {
-    croak "Invalid type";
+    Carp::croak "Invalid type";
   }
   
   if (!defined $value) {
-    croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
+    Carp::croak "Error in bool context (a) { : missing value where TRUE/FALSE needed"
   }
 
   return $is;
@@ -2791,7 +2790,7 @@ sub set {
           $self_elements->[$pos] = $levels_h->{$value};
         }
         else {
-          carp "invalid factor level, NA generated";
+          Carp::carp "invalid factor level, NA generated";
           $self_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
         }
       }
@@ -2903,7 +2902,7 @@ sub is_nan {
     return $x2;
   }
   else {
-    croak "Error : is_nan is not implemented except array";
+    Carp::croak "Error : is_nan is not implemented except array";
   }
 }
 
@@ -2918,7 +2917,7 @@ sub is_infinite {
     return $x2;
   }
   else {
-    croak "Error : is_infinite is not implemented except array";
+    Carp::croak "Error : is_infinite is not implemented except array";
   }
 }
 
@@ -2933,7 +2932,7 @@ sub is_finite {
     return $x2;
   }
   else {
-    croak "Error : is_finite is not implemented except array";
+    Carp::croak "Error : is_finite is not implemented except array";
   }
 }
 

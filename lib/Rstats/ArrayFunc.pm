@@ -482,7 +482,7 @@ sub length {
     return c($container->vector->length_value);
   }
   else {
-    return $container->length;
+    return c(Rstats::Func::length_value($container));
   }
 }
 

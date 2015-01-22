@@ -8,6 +8,318 @@ use Rstats::Func;
 use Rstats::Util;
 use Rstats::VectorFunc;
 
+# TODO: prob option
+sub sample {
+  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+  
+  my ($_x1, $length) = @_;
+  my $x1 = to_c($_x1);
+  
+  # Replace
+  my $replace = $opt->{replace};
+  
+  my $x1_length = $x1->length_value;
+  $length = $x1_length unless defined $length;
+  
+  croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
+    if $length > $x1_length && !$replace;
+  
+  my @x2_elements;
+  my $x1_elements = $x1->decompose;
+  for my $i (0 .. $length - 1) {
+    my $rand_num = int(rand @$x1_elements);
+    my $rand_element = splice @$x1_elements, $rand_num, 1;
+    push @x2_elements, $rand_element;
+    push @$x1_elements, $rand_element if $replace;
+  }
+  
+  return Rstats::ArrayFunc::c(@x2_elements);
+}
+
+sub sequence {
+  my $_x1 = shift;
+  
+  my $x1 = to_c($_x1);
+  my $x1_values = $x1->values;
+  
+  my @x2_values;
+  for my $x1_value (@$x1_values) {
+    push @x2_values, @{seq(1, $x1_value)->values};
+  }
+  
+  return Rstats::ArrayFunc::c(@x2_values);
+}
+
+sub sinh { operate_unary(\&Rstats::VectorFunc::sinh, @_) }
+sub sqrt { operate_unary(\&Rstats::VectorFunc::sqrt, @_) }
+
+sub sort {
+  my ($x1, $x_decreasing) = Rstats::Func::args_array(['x1', 'decreasing', 'na.last'], @_);
+  
+  my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
+  
+  my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose};
+  
+  my $x3_elements = $decreasing
+    ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
+    : [sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements];
+
+  return Rstats::ArrayFunc::c(@$x3_elements);
+}
+
+sub tail {
+  my ($x1, $x_n) = Rstats::Func::args_array(['x1', 'n'], @_);
+  
+  my $n = defined $x_n ? $x_n->value : 6;
+  
+  my $e1 = $x1->decompose;
+  my $max = $x1->length_value < $n ? $x1->length_value : $n;
+  my @e2;
+  for (my $i = 0; $i < $max; $i++) {
+    unshift @e2, $e1->[$x1->length_value - ($i  + 1)];
+  }
+  
+  my $x2 = Rstats::ArrayFunc::c(@e2);
+  $x1->copy_attrs_to($x1);
+  
+  return $x2;
+}
+
+sub tan { operate_unary(\&Rstats::VectorFunc::tan, @_) }
+
+sub operate_unary_old {
+  my $func = shift;
+  my $x1 = to_c(shift);
+  
+  my @a2_elements = map { $func->($_) } @{$x1->decompose};
+  my $x2 = Rstats::ArrayFunc::c(@a2_elements);
+  $x1->copy_attrs_to($x2);
+  $x2->mode(Rstats::Func::max_type($x1, $x2));
+  
+  return $x2;
+}
+
+sub sin { operate_unary(\&Rstats::VectorFunc::sin, @_) }
+
+sub operate_unary {
+  my $func = shift;
+  my $x1 = to_c(shift);
+  
+  my $x2_elements = $func->($x1->vector);
+  my $x2 = Rstats::Func::NULL();
+  $x2->vector($x2_elements);
+  $x1->copy_attrs_to($x2);
+  
+  return $x2;
+}
+
+sub tanh { operate_unary(\&Rstats::VectorFunc::tanh, @_) }
+
+sub trunc {
+  my ($_x1) = @_;
+  
+  my $x1 = to_c($_x1);
+  
+  my @a2_elements
+    = map { Rstats::VectorFunc::new_double(int $_->value) } @{$x1->decompose};
+
+  my $x2 = Rstats::ArrayFunc::c(@a2_elements);
+  $x1->copy_attrs_to($x2);
+  $x2->mode('double');
+  
+  return $x2;
+}
+
+sub unique {
+  my $x1 = to_c(shift);
+  
+  if ($x1->is_vector) {
+    my $x2_elements = [];
+    my $elements_count = {};
+    my $na_count;
+    for my $x1_element (@{$x1->decompose}) {
+      if ($x1_element->is_na->value) {
+        unless ($na_count) {
+          push @$x2_elements, $x1_element;
+        }
+        $na_count++;
+      }
+      else {
+        my $str = $x1_element->to_string;
+        unless ($elements_count->{$str}) {
+          push @$x2_elements, $x1_element;
+        }
+        $elements_count->{$str}++;
+      }
+    }
+
+    return Rstats::ArrayFunc::c(@$x2_elements);
+  }
+  else {
+    return $x1;
+  }
+}
+
+sub median {
+  my $x1 = to_c(shift);
+  
+  my $x2 = unique($x1);
+  my $x3 = Rstats::Func::sort($x2);
+  my $x3_length = $x3->length_value;
+  
+  if ($x3_length % 2 == 0) {
+    my $middle = $x3_length / 2;
+    my $x4 = $x3->get($middle);
+    my $x5 = $x3->get($middle + 1);
+    
+    return ($x4 + $x5) / 2;
+  }
+  else {
+    my $middle = int($x3_length / 2) + 1;
+    return $x3->get($middle);
+  }
+}
+
+sub quantile {
+  my $x1 = to_c(shift);
+  
+  my $x2 = Rstats::Func::unique($x1);
+  my $x3 = Rstats::Func::sort($x2);
+  my $x3_length = $x3->length_value;
+  
+  my $quantile_elements = [];
+  
+  # Min
+  push @$quantile_elements , $x3->get(1);
+  
+  # 1st quoter
+  if ($x3_length % 4 == 0) {
+    my $first_quoter = $x3_length * (1 / 4);
+    my $x4 = $x3->get($first_quoter);
+    my $x5 = $x3->get($first_quoter + 1);
+    
+    push @$quantile_elements, ((($x4 + $x5) / 2) + $x5) / 2;
+  }
+  else {
+    my $first_quoter = int($x3_length * (1 / 4)) + 1;
+    push @$quantile_elements, $x3->get($first_quoter);
+  }
+  
+  # middle
+  if ($x3_length % 2 == 0) {
+    my $middle = $x3_length / 2;
+    my $x4 = $x3->get($middle);
+    my $x5 = $x3->get($middle + 1);
+    
+    push @$quantile_elements, (($x4 + $x5) / 2);
+  }
+  else {
+    my $middle = int($x3_length / 2) + 1;
+    push @$quantile_elements, $x3->get($middle);
+  }
+  
+  # 3rd quoter
+  if ($x3_length % 4 == 0) {
+    my $third_quoter = $x3_length * (3 / 4);
+    my $x4 = $x3->get($third_quoter);
+    my $x5 = $x3->get($third_quoter + 1);
+    
+    push @$quantile_elements, (($x4 + (($x4 + $x5) / 2)) / 2);
+  }
+  else {
+    my $third_quoter = int($x3_length * (3 / 4)) + 1;
+    push @$quantile_elements, $x3->get($third_quoter);
+  }
+  
+  # Max
+  push @$quantile_elements , $x3->get($x3_length);
+  
+  my $x4 = Rstats::ArrayFunc::c(@$quantile_elements);
+  $x4->names(Rstats::ArrayFunc::c(qw/0%  25%  50%  75% 100%/));
+  
+  return $x4;
+}
+
+sub sd {
+  my $x1 = to_c(shift);
+  
+  my $sd = Rstats::Func::sqrt(var($x1));
+  
+  return $sd;
+}
+
+sub var {
+  my $x1 = to_c(shift);
+  
+  my $var = sum(($x1 - Rstats::Func::mean($x1)) ** 2) / ($x1->length_value - 1);
+  
+  return $var;
+}
+
+sub which {
+  my ($_x1, $cond_cb) = @_;
+  
+  my $x1 = to_c($_x1);
+  my $x1_values = $x1->values;
+  my @x2_values;
+  for (my $i = 0; $i < @$x1_values; $i++) {
+    local $_ = $x1_values->[$i];
+    if ($cond_cb->($x1_values->[$i])) {
+      push @x2_values, $i + 1;
+    }
+  }
+  
+  return Rstats::ArrayFunc::c(@x2_values);
+}
+
+sub new_vector {
+  my $type = shift;
+  
+  if ($type eq 'character') {
+    return new_character(@_);
+  }
+  elsif ($type eq 'complex') {
+    return new_complex(@_);
+  }
+  elsif ($type eq 'double') {
+    return new_double(@_);
+  }
+  elsif ($type eq 'integer') {
+    return new_integer(@_);
+  }
+  elsif ($type eq 'logical') {
+    return new_logical(@_);
+  }
+  else {
+    croak("Invalid type $type is passed(new_vector)");
+  }
+}
+
+sub new_character {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_character(@_));
+}
+
+sub new_complex {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_complex(@_));
+}
+
+sub new_double {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_double(@_));
+}
+
+sub new_integer {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_integer(@_));
+}
+
+sub new_logical {
+  my $x1 = Rstats::Func::NULL();
+  $x1->vector(Rstats::VectorFunc::new_logical(@_));
+}
+
 sub matrix {
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = Rstats::Func::args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
@@ -268,18 +580,6 @@ sub equal { operate_binary(\&Rstats::VectorFunc::equal, @_) }
 sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
 sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
 sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
-
-sub operate_unary {
-  my $func = shift;
-  my $x1 = to_c(shift);
-  
-  my $x2_elements = $func->($x1->vector);
-  my $x2 = Rstats::Func::NULL();
-  $x2->vector($x2_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
 
 sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
 

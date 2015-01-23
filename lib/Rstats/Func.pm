@@ -10,6 +10,49 @@ use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
 
+sub apply {
+  my $func = splice(@_, 2, 1);
+  my ($x1, $x_margin)
+    = Rstats::Func::args_array(['x1', 'margin'], @_);
+
+  my $dim_values = $x1->dim->values;
+  my $margin_values = $x_margin->values;
+  my $new_dim_values = [];
+  for my $i (@$margin_values) {
+    push @$new_dim_values, $dim_values->[$i - 1];
+  }
+  
+  my $x1_length = $x1->length_value;
+  my $new_elements_array = [];
+  for (my $i = 0; $i < $x1_length; $i++) {
+    my $index = Rstats::Util::pos_to_index($i, $dim_values);
+    my $e1 = $x1->value(@$index);
+    my $new_index = [];
+    for my $i (@$margin_values) {
+      push @$new_index, $index->[$i - 1];
+    }
+    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
+    $new_elements_array->[$new_pos] ||= [];
+    push @{$new_elements_array->[$new_pos]}, $e1;
+  }
+  
+  my $new_elements = [];
+  for my $element_array (@$new_elements_array) {
+    push @$new_elements, $func->(Rstats::ArrayFunc::c(@$element_array));
+  }
+
+  my $x2 = Rstats::Func::NULL();
+  $x2->vector(Rstats::ArrayFunc::c(@$new_elements)->vector);
+  $x1->copy_attrs_to($x1);
+  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
+  
+  if ($x2->{dim}->length_value == 1) {
+    delete $x2->{dim};
+  }
+  
+  return $x2;
+}
+
 sub sweep {
   my ($x1, $x_margin, $x2, $x_func)
     = Rstats::Func::args_array(['x1', 'margin', 'x2', 'FUN'], @_);

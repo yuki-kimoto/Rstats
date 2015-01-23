@@ -222,7 +222,6 @@ sub new {
   
   # runif
   $self->helper(runif => sub {
-    $DB::single = 1;
     my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
     $opt->{seed} = $self->{seed} if defined $self->{seed};
 
@@ -230,6 +229,15 @@ sub new {
     $self->{seed} = undef;
     
     return $x1;
+  });
+  
+  # apply
+  $self->helper(apply => sub {
+    my @args = @_;
+    my $func_name = $args[2];
+    my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
+    $args[2] = $func;
+    return Rstats::Func::apply(@args);
   });
 
   return $self;
@@ -329,55 +337,6 @@ sub mapply {
     return Rstats::Func::list(@$new_xs);
   }
 }
-
-sub apply {
-  my $self = shift;
-  my $func_name = splice(@_, 2, 1);
-  my ($x1, $x_margin)
-    = Rstats::Func::args_array(['x1', 'margin'], @_);
-  
-  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
-
-  my $dim_values = $x1->dim->values;
-  my $margin_values = $x_margin->values;
-  my $new_dim_values = [];
-  for my $i (@$margin_values) {
-    push @$new_dim_values, $dim_values->[$i - 1];
-  }
-  
-  my $x1_length = $x1->length_value;
-  my $new_elements_array = [];
-  for (my $i = 0; $i < $x1_length; $i++) {
-    my $index = Rstats::Util::pos_to_index($i, $dim_values);
-    my $e1 = $x1->value(@$index);
-    my $new_index = [];
-    for my $i (@$margin_values) {
-      push @$new_index, $index->[$i - 1];
-    }
-    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
-    $new_elements_array->[$new_pos] ||= [];
-    push @{$new_elements_array->[$new_pos]}, $e1;
-  }
-  
-  my $new_elements = [];
-  for my $element_array (@$new_elements_array) {
-    push @$new_elements, $func->(Rstats::ArrayFunc::c(@$element_array));
-  }
-
-  my $x2 = Rstats::Func::NULL();
-  $x2->vector(Rstats::ArrayFunc::c(@$new_elements)->vector);
-  $x1->copy_attrs_to($x1);
-  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
-  
-  if ($x2->{dim}->length_value == 1) {
-    delete $x2->{dim};
-  }
-  
-  return $x2;
-}
-
-
-
 
 sub AUTOLOAD {
   my $self = shift;

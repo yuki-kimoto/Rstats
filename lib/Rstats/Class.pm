@@ -5,6 +5,8 @@ require Rstats::Func;
 use Carp 'croak';
 use List::Util ();
 
+has helpers => sub { {} };
+
 # TODO
 # logp1x
 # gamma
@@ -211,27 +213,26 @@ sub new {
     $self->helper($func_name => $func);
   }
   
-  $self->helper(runif => sub { $self->_runif(@_) });
-  $self->helper(set_seed => sub { $self->_set_seed(@_) });
+  # set_seed
+  $self->helper(set_seed => sub {
+    my $seed = shift;
+    
+    $self->{seed} = $seed;
+  });
+  
+  # runif
+  $self->helper(runif => sub {
+    $DB::single = 1;
+    my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
+    $opt->{seed} = $self->{seed} if defined $self->{seed};
+
+    my $x1 = Rstats::Func::runif(@_, $opt);
+    $self->{seed} = undef;
+    
+    return $x1;
+  });
 
   return $self;
-}
-
-sub _runif {
-  my $self = shift;
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  $opt->{seed} = $self->{seed};
-
-  my $x1 = Rstats::Func::runif(@_, $opt);
-  $self->{seed} = undef;
-  
-  return $x1;
-}
-
-sub _set_seed {
-  my ($self, $seed) = @_;
-  
-  $self->{seed} = $seed;
 }
 
 sub sapply {
@@ -375,60 +376,8 @@ sub apply {
   return $x2;
 }
 
-sub sweep {
-  my $self = shift;
 
-  my ($x1, $x_margin, $x2, $x_func)
-    = Rstats::Func::args_array(['x1', 'margin', 'x2', 'FUN'], @_);
-  
-  my $x_margin_values = $x_margin->values;
-  my $func = defined $x_func ? $x_func->value : '-';
-  
-  my $x2_dim_values = $x2->dim->values;
-  my $x1_dim_values = $x1->dim->values;
-  
-  my $x1_length = $x1->length_value;
-  
-  my $x_result_elements = [];
-  for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
-    my $x1_index = Rstats::Util::pos_to_index($x1_pos, $x1_dim_values);
-    
-    my $new_index = [];
-    for my $x_margin_value (@$x_margin_values) {
-      push @$new_index, $x1_index->[$x_margin_value - 1];
-    }
-    
-    my $e1 = $x2->value(@{$new_index});
-    push @$x_result_elements, $e1;
-  }
-  my $x3 = Rstats::ArrayFunc::c(@$x_result_elements);
-  
-  my $x4;
-  if ($func eq '+') {
-    $x4 = $x1 + $x3;
-  }
-  elsif ($func eq '-') {
-    $x4 = $x1 - $x3;
-  }
-  elsif ($func eq '*') {
-    $x4 = $x1 * $x3;
-  }
-  elsif ($func eq '/') {
-    $x4 = $x1 / $x3;
-  }
-  elsif ($func eq '**') {
-    $x4 = $x1 ** $x3;
-  }
-  elsif ($func eq '%') {
-    $x4 = $x1 % $x3;
-  }
-  
-  $x1->copy_attrs_to($x4);
-  
-  return $x4;
-}
 
-has helpers => sub { {} };
 
 sub AUTOLOAD {
   my $self = shift;

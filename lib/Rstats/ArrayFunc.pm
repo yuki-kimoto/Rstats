@@ -2037,20 +2037,21 @@ sub rowSums {
 }
 
 sub runif {
-  my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-
-  my ($count, $min, $max) = @_;
+  my ($x_count, $x_min, $x_max, $x_seed)
+    =  Rstats::ArrayFunc::args_array(['count', 'min', 'max', 'seed'], @_);
   
-  $min = 0 unless defined $min;
-  $max = 1 unless defined $max;
+  my $count = $x_count->value;
+  my $min = defined $x_min ? $x_min->value : 0;
+  my $max = defined $x_max ? $x_max->value : 1;
   Carp::croak "runif third argument must be bigger than second argument"
     if $min > $max;
   
   my $diff = $max - $min;
   my @x1_elements;
-  if (defined $opt->{seed}) {
-    srand $opt->{seed};
+  if (defined $x_seed) {
+    srand $x_seed->value;
   }
+  
   for (1 .. $count) {
     my $rand = rand($diff) + $min;
     push @x1_elements, $rand;

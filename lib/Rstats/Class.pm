@@ -45,12 +45,10 @@ my @func_names2 = qw/
   acos
   acosh
   append
+  Arg
 /;
 
 my @func_names = qw/
-  apply
-  Arg
-  array
   asin
   asinh
   atan2
@@ -212,6 +210,7 @@ my @func_names = qw/
   FALSE
   F
   pi
+  array
 /;
 
 

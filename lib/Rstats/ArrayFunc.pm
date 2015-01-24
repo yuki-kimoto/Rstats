@@ -785,7 +785,10 @@ sub outer {
 
 sub Mod { operate_unary(\&Rstats::VectorFunc::Mod, @_) }
 
-sub Arg { operate_unary(\&Rstats::VectorFunc::Arg, @_) }
+sub Arg {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::Arg, @_);
+}
 
 sub sub {
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
@@ -1254,36 +1257,6 @@ sub append {
   my $x3 = Rstats::ArrayFunc::c(@x3_elements);
   
   return $x3;
-}
-
-sub array {
-  my $opt = args(['x', 'dim'], @_);
-  my $x1 = $opt->{x};
-  
-  # Dimention
-  my $elements = $x1->decompose;
-  my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL;
-  my $x1_length = $x1->length_value;
-  unless ($x_dim->vector->length_value) {
-    $x_dim = Rstats::ArrayFunc::c($x1_length);
-  }
-  my $dim_product = 1;
-  $dim_product *= $_ for @{$x_dim->values};
-  
-  # Fix elements
-  if ($x1_length > $dim_product) {
-    @$elements = splice @$elements, 0, $dim_product;
-  }
-  elsif ($x1_length < $dim_product) {
-    my $repeat_count = int($dim_product / @$elements) + 1;
-    @$elements = (@$elements) x $repeat_count;
-    @$elements = splice @$elements, 0, $dim_product;
-  }
-  
-  my $x2 = Rstats::ArrayFunc::c($elements);
-  $x2->dim($x_dim);
-  
-  return $x2;
 }
 
 sub asin { operate_unary(\&Rstats::VectorFunc::asin, @_) }
@@ -3055,6 +3028,36 @@ sub to_string {
   }
   
   return $str;
+}
+
+sub array {
+  my $opt = args(['x', 'dim'], @_);
+  my $x1 = $opt->{x};
+  
+  # Dimention
+  my $elements = $x1->decompose;
+  my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL;
+  my $x1_length = $x1->length_value;
+  unless ($x_dim->vector->length_value) {
+    $x_dim = Rstats::ArrayFunc::c($x1_length);
+  }
+  my $dim_product = 1;
+  $dim_product *= $_ for @{$x_dim->values};
+  
+  # Fix elements
+  if ($x1_length > $dim_product) {
+    @$elements = splice @$elements, 0, $dim_product;
+  }
+  elsif ($x1_length < $dim_product) {
+    my $repeat_count = int($dim_product / @$elements) + 1;
+    @$elements = (@$elements) x $repeat_count;
+    @$elements = splice @$elements, 0, $dim_product;
+  }
+  
+  my $x2 = Rstats::ArrayFunc::c($elements);
+  $x2->dim($x_dim);
+  
+  return $x2;
 }
 
 1;

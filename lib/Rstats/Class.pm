@@ -133,15 +133,15 @@ my @func_names2 = qw/
   sample
   seq
   sequence
-/;
-
-my @func_names = qw/
   set_diag
   setdiff
   setequal
   sinh
   sum
   sqrt
+/;
+
+my @func_names = qw/
   sort
   sub
   subset

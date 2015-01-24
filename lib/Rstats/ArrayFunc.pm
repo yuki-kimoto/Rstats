@@ -725,6 +725,8 @@ sub diag {
 }
 
 sub set_diag {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
@@ -1106,6 +1108,8 @@ sub is_element {
 }
 
 sub setequal {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
@@ -1129,6 +1133,8 @@ sub setequal {
 }
 
 sub setdiff {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
@@ -1805,7 +1811,7 @@ sub mean {
   
   my $x1 = to_c(shift);
   
-  my $x2 = divide(sum($x1), $x1->length_value);
+  my $x2 = divide(sum(undef(), $x1), $x1->length_value);
   
   return $x2;
 }
@@ -2248,8 +2254,15 @@ sub sequence {
   return Rstats::ArrayFunc::c(@x2_values);
 }
 
-sub sinh { operate_unary(\&Rstats::VectorFunc::sinh, @_) }
-sub sqrt { operate_unary(\&Rstats::VectorFunc::sqrt, @_) }
+sub sinh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::sinh, @_);
+}
+
+sub sqrt {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::sqrt, @_);
+}
 
 sub sort {
   my ($x1, $x_decreasing) = Rstats::ArrayFunc::args_array(['x1', 'decreasing', 'na.last'], @_);
@@ -2436,7 +2449,7 @@ sub quantile {
 sub sd {
   my $x1 = to_c(shift);
   
-  my $sd = Rstats::ArrayFunc::sqrt(var($x1));
+  my $sd = Rstats::ArrayFunc::sqrt(undef(), var($x1));
   
   return $sd;
 }
@@ -2444,7 +2457,7 @@ sub sd {
 sub var {
   my $x1 = to_c(shift);
   
-  my $var = sum(($x1 - Rstats::ArrayFunc::mean(undef(), $x1)) ** 2) / ($x1->length_value - 1);
+  my $var = sum(undef(), ($x1 - Rstats::ArrayFunc::mean(undef(), $x1)) ** 2) / ($x1->length_value - 1);
   
   return $var;
 }
@@ -2590,7 +2603,7 @@ sub inner_product {
       for (my $row = 1; $row <= $row_max; $row++) {
         my $x1_part = $x1->get($row);
         my $x2_part = $x2->get(Rstats::ArrayFunc::NULL(), $col);
-        my $x3_part = sum($x1 * $x2);
+        my $x3_part = sum(undef(), $x1 * $x2);
         push @$x3_elements, $x3_part;
       }
     }
@@ -2617,7 +2630,10 @@ sub row {
   return Rstats::ArrayFunc::array(Rstats::ArrayFunc::c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
 }
 
-sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
+sub sum {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::sum, @_);
+}
 
 sub ncol {
   my $r = shift;

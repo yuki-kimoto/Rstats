@@ -33,6 +33,14 @@ has helpers => sub { {} };
 
 my @func_names2 = qw/
   sin
+  sweep
+  set_seed
+  runif
+  apply
+  mapply
+  tapply
+  lapply
+  sapply
 /;
 
 my @func_names = qw/
@@ -207,7 +215,6 @@ my @func_names = qw/
   pi
 /;
 
-sub sin { Rstats::ArrayFunc::sin(@_) }
 
 sub new {
   my $self = shift->SUPER::new(@_);
@@ -221,17 +228,10 @@ sub new {
   for my $func_name (@func_names2) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$func_name"};
-    $self->helper($func_name => $func);
+    $self->helper($func_name => sub { $func->($self, @_) });
   }
   
-  $self->helper(sweep => sub { Rstats::Func::sweep($self, @_) });
-  $self->helper(set_seed => sub { Rstats::Func::set_seed($self, @_) });
-  $self->helper(runif => sub { Rstats::Func::runif($self, @_) });
-  $self->helper(apply => sub { Rstats::Func::apply($self, @_) });
-  $self->helper(mapply => sub { Rstats::Func::mapply($self, @_) });
-  $self->helper(tapply => sub { Rstats::Func::tapply($self, @_) });
-  $self->helper(lapply => sub { Rstats::Func::lapply($self, @_) });
-  $self->helper(sapply => sub { Rstats::Func::sapply($self, @_) });
+  return $self;
 }
 
 sub AUTOLOAD {

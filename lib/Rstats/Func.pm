@@ -898,6 +898,8 @@ sub as_matrix {
 }
 
 sub as_array {
+  my $r = shift;
+  
   my $x1 = shift;
 
   my $x2 = Rstats::Func::NULL();

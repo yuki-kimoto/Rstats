@@ -157,10 +157,10 @@ my @func_names2 = qw/
   upper_tri
   var
   which
+  as_array
 /;
 
 my @func_names = qw/
-  as_array
   as_character
   as_complex
   as_integer

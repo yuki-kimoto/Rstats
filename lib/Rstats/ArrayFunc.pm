@@ -32,8 +32,15 @@ sub NaN { Rstats::ArrayFunc::new_double('NaN') }
 sub Inf { Rstats::ArrayFunc::new_double('Inf') }
 
 my $false;
-sub FALSE { defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(0) }
-sub F { FALSE }
+sub FALSE {
+  my $r = shift;
+  return defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(0);
+}
+
+sub F {
+  my $r = shift;
+  return $r->FALSE;
+}
 
 my $true;
 sub TRUE { defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1) }
@@ -41,6 +48,8 @@ sub T { TRUE }
 sub pi { new_double(Rstats::Util::pi()); }
 
 sub I {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2 = Rstats::ArrayFunc::c($x1);
@@ -91,7 +100,7 @@ sub transform {
   
   while (my ($new_name, $new_v) = splice(@args, 0, 2)) {
     if ($new_v->is_character) {
-      $new_v = Rstats::ArrayFunc::I($new_v);
+      $new_v = Rstats::ArrayFunc::I(undef(), $new_v);
     }
 
     my $found_pos = -1;
@@ -290,6 +299,8 @@ sub read_table {
 }
 
 sub interaction {
+  my $r = shift;
+  
   my $opt;
   $opt = ref $_[-1] eq 'HASH' ? pop : {};
   my @xs = map { to_c($_)->as_factor } @_;
@@ -346,6 +357,8 @@ sub interaction {
 }
 
 sub gl {
+  my $r = shift;
+  
   my ($x_n, $x_k, $x_length, $x_labels, $x_ordered)
     = args_array([qw/n k length labels ordered/], @_);
   
@@ -489,6 +502,8 @@ sub length {
 }
 
 sub list {
+  my $r = shift;
+  
   my @elements = @_;
   
   @elements = map { ref $_ ne 'Rstats::List' ? Rstats::ArrayFunc::to_c($_) : $_ } @elements;
@@ -586,6 +601,7 @@ sub data_frame {
   $data_frame->list($elements);
   $data_frame->dimnames(
     Rstats::ArrayFunc::list(
+      undef(),
       Rstats::ArrayFunc::c(@$row_names),
       Rstats::ArrayFunc::c(@$column_names)
     )
@@ -706,6 +722,8 @@ sub set_diag {
 }
 
 sub kronecker {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
@@ -827,6 +845,8 @@ sub sub {
 }
 
 sub gsub {
+  my $r = shift;
+  
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
     = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
@@ -857,6 +877,8 @@ sub gsub {
 }
 
 sub grep {
+  my $r = shift;
+  
   my ($x1_pattern, $x1_x, $x1_ignore_case) = args_array(['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
@@ -991,9 +1013,15 @@ sub Conj {
   return operate_unary(\&Rstats::VectorFunc::Conj, @_);
 }
 
-sub Re { operate_unary(\&Rstats::VectorFunc::Re, @_) }
+sub Re {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::Re, @_);
+}
 
-sub Im { operate_unary(\&Rstats::VectorFunc::Im, @_) }
+sub Im {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::Im, @_);
+}
 
 sub nrow {
   my $x1 = shift;
@@ -1010,6 +1038,8 @@ sub nrow {
 }
 
 sub is_element {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
@@ -1092,6 +1122,8 @@ sub setdiff {
 }
 
 sub intersect {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
@@ -1616,6 +1648,8 @@ sub max_type {
 }
 
 sub floor {
+  my $r = shift;
+  
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
@@ -1630,6 +1664,8 @@ sub floor {
 }
 
 sub head {
+  my $r = shift;
+  
   my ($x1, $x_n) = args_array(['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
@@ -1664,6 +1700,8 @@ sub i {
 }
 
 sub ifelse {
+  my $r = shift;
+  
   my ($_x1, $value1, $value2) = @_;
   
   my $x1 = to_c($_x1);

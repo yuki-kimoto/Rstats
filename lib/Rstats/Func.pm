@@ -175,7 +175,7 @@ sub mapply {
     return $new_xs->[0];
   }
   else {
-    return Rstats::Func::list(@$new_xs);
+    return Rstats::Func::list(undef(), @$new_xs);
   }
 }
   
@@ -227,7 +227,7 @@ sub lapply {
     push @$new_elements, $func->($element);
   }
   
-  my $x2 = Rstats::Func::list(@$new_elements);
+  my $x2 = Rstats::Func::list(undef(), @$new_elements);
   $x1->copy_attrs_to($x2);
   
   return $x2;
@@ -1201,7 +1201,7 @@ sub dimnames {
   }
   else {
     if (exists $x1->{dimnames}) {
-      my $x_dimnames = Rstats::Func::list();
+      my $x_dimnames = Rstats::Func::list(undef());
       $x_dimnames->list($x1->{dimnames});
     }
     else {

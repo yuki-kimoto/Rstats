@@ -72,10 +72,6 @@ my @func_names2 = qw/
   exp
   expm1
   factor
-/;
-
-my @func_names = qw/
-  
   F
   FALSE
   floor
@@ -83,17 +79,18 @@ my @func_names = qw/
   grep
   gsub
   head
-  i
   ifelse
   interaction
   is_element
   I
   Im
-  Inf
+  Re
   intersect
   kronecker
-  length
   list
+/;
+
+my @func_names = qw/
   log
   logb
   log2
@@ -126,7 +123,6 @@ my @func_names = qw/
   range
   rank
   rbind
-  Re
   quantile
   read_table
   rep
@@ -210,8 +206,10 @@ my @func_names = qw/
   F
   pi
   complex
+  i
   array
   c
+  length
 /;
 
 

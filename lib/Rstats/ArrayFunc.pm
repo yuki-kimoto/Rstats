@@ -1219,11 +1219,24 @@ sub match {
   return Rstats::ArrayFunc::new_double(@matches);
 }
 
-sub abs { operate_unary(\&Rstats::VectorFunc::abs, @_) }
-sub acos { operate_unary_old(\&Rstats::VectorFunc::acos, @_) }
-sub acosh { operate_unary_old(\&Rstats::VectorFunc::acosh, @_) }
+sub abs {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::abs, @_);
+}
+
+sub acos {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::acos, @_);
+}
+sub acosh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::acosh, @_);
+}
+
 
 sub append {
+  my $r = shift;
+  
   my ($x1, $x2, $x_after) = args_array(['x1', 'x2', 'after'], @_);
   
   # Default
@@ -1273,10 +1286,10 @@ sub array {
   return $x2;
 }
 
-sub asin { operate_unary_old(\&Rstats::VectorFunc::asin, @_) }
-sub asinh { operate_unary_old(\&Rstats::VectorFunc::asinh, @_) }
-sub atan { operate_unary_old(\&Rstats::VectorFunc::atan, @_) }
-sub atanh { operate_unary_old(\&Rstats::VectorFunc::atanh, @_) }
+sub asin { operate_unary(\&Rstats::VectorFunc::asin, @_) }
+sub asinh { operate_unary(\&Rstats::VectorFunc::asinh, @_) }
+sub atan { operate_unary(\&Rstats::VectorFunc::atan, @_) }
+sub atanh { operate_unary(\&Rstats::VectorFunc::atanh, @_) }
 
 sub cbind {
   my @xs = @_;
@@ -2114,18 +2127,6 @@ sub tail {
 }
 
 sub tan { operate_unary(\&Rstats::VectorFunc::tan, @_) }
-
-sub operate_unary_old {
-  my $func = shift;
-  my $x1 = to_c(shift);
-  
-  my @a2_elements = map { $func->($_) } @{$x1->decompose};
-  my $x2 = Rstats::ArrayFunc::c(@a2_elements);
-  $x1->copy_attrs_to($x2);
-  $x2->mode(Rstats::ArrayFunc::max_type($x1, $x2));
-  
-  return $x2;
-}
 
 sub sin {
   my $r = shift;

@@ -41,14 +41,13 @@ my @func_names2 = qw/
   tapply
   lapply
   sapply
-/;
-
-my @func_names = qw/
-  double_xs
   abs
   acos
   acosh
   append
+/;
+
+my @func_names = qw/
   apply
   Arg
   array

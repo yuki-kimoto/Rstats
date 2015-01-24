@@ -500,7 +500,7 @@ sub list {
 sub data_frame {
   my @data = @_;
   
-  return cbind(@data) if ref $data[0] && $data[0]->is_data_frame;
+  return cbind(undef(), @data) if ref $data[0] && $data[0]->is_data_frame;
   
   my $elements = [];
   
@@ -916,6 +916,8 @@ sub col {
 }
 
 sub chartr {
+  my $r = shift;
+  
   my ($x1_old, $x1_new, $x1_x) = args_array(['old', 'new', 'x'], @_);
   
   my $old = $x1_old->value;
@@ -942,6 +944,8 @@ sub chartr {
 }
 
 sub charmatch {
+  my $r = shift;
+  
   my ($x1_x, $x1_table) = args_array(['x', 'table'], @_);
   
   die "Not implemented"
@@ -1281,6 +1285,8 @@ sub atanh {
 }
 
 sub cbind {
+  my $r = shift;
+  
   my @xs = @_;
 
   return Rstats::ArrayFunc::NULL() unless @xs;
@@ -1892,7 +1898,7 @@ sub rbind {
     return $data_frame;
   }
   else {
-    my $matrix = cbind(@xs);
+    my $matrix = cbind(undef(), @xs);
     
     return Rstats::ArrayFunc::t($matrix);
   }

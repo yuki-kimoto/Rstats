@@ -52,12 +52,12 @@ my @func_names2 = qw/
   atanh
   atan2
   se
-/;
-
-my @func_names = qw/
   charmatch
   chartr
   cbind
+/;
+
+my @func_names = qw/
   ceiling
   col
   colMeans

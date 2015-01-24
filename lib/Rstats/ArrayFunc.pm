@@ -1763,6 +1763,8 @@ sub log10 {
 }
 
 sub max {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::c(@_);
   
   unless ($x1->length_value) {
@@ -1789,6 +1791,8 @@ sub max {
 }
 
 sub mean {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $x2 = divide(sum($x1), $x1->length_value);
@@ -1797,6 +1801,8 @@ sub mean {
 }
 
 sub min {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::c(@_);
   
   unless ($x1->length_value) {
@@ -1952,8 +1958,8 @@ sub prod { operate_unary(\&Rstats::VectorFunc::prod, @_) }
 sub range {
   my $x1 = shift;
   
-  my $min = min($x1);
-  my $max = max($x1);
+  my $min = min(undef(), $x1);
+  my $max = max(undef(), $x1);
   
   return Rstats::ArrayFunc::c($min, $max);
 }
@@ -2395,7 +2401,7 @@ sub sd {
 sub var {
   my $x1 = to_c(shift);
   
-  my $var = sum(($x1 - Rstats::ArrayFunc::mean($x1)) ** 2) / ($x1->length_value - 1);
+  my $var = sum(($x1 - Rstats::ArrayFunc::mean(undef(), $x1)) ** 2) / ($x1->length_value - 1);
   
   return $var;
 }

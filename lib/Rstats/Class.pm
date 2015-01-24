@@ -105,12 +105,12 @@ my @func_names2 = qw/
   NULL
   numeric
   matrix
-/;
-
-my @func_names = qw/
   max
   mean
   min
+/;
+
+my @func_names = qw/
   nchar
   order
   ordered

@@ -10,29 +10,6 @@ use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
 
-sub sapply {
-  my $x1 = Rstats::Func::lapply(@_);
-  
-  my $x2 = Rstats::ArrayFunc::c(@{$x1->list});
-  
-  return $x2;
-}
-
-sub lapply {
-  my $func = splice(@_, 1, 1);
-  my ($x1) = Rstats::Func::args_array(['x1'], @_);
-  
-  my $new_elements = [];
-  for my $element (@{$x1->list}) {
-    push @$new_elements, $func->($element);
-  }
-  
-  my $x2 = Rstats::Func::list(@$new_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
-}
-
 sub tapply {
   my $func = splice(@_, 2, 1);
   my ($x1, $x2)

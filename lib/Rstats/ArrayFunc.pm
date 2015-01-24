@@ -2151,7 +2151,10 @@ sub operate_unary_old {
   return $x2;
 }
 
-sub sin { operate_unary(\&Rstats::VectorFunc::sin, @_) }
+sub sin {
+  my $r = shift;
+  operate_unary(\&Rstats::VectorFunc::sin, @_);
+}
 
 sub operate_unary {
   my $func = shift;

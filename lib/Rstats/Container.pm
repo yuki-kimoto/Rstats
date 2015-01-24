@@ -3,7 +3,7 @@ use Object::Simple -base;
 
 use Rstats::Func;
 
-has 'rstats';
+has 'r';
 has list => sub { [] };
 has 'vector';
 

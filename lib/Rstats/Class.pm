@@ -125,9 +125,6 @@ my @func_names2 = qw/
   rep
   replace
   rev
-/;
-
-my @func_names = qw/
   rnorm
   round
   row
@@ -136,6 +133,9 @@ my @func_names = qw/
   sample
   seq
   sequence
+/;
+
+my @func_names = qw/
   set_diag
   setdiff
   setequal

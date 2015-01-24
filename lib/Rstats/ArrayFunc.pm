@@ -951,7 +951,7 @@ sub se {
     $to = $from unless defined $to;
   }
   
-  my $vector = seq({from => $from, to => $to, by => $by});
+  my $vector = seq(undef(),{from => $from, to => $to, by => $by});
   
   return $vector;
 }
@@ -2111,6 +2111,7 @@ sub rev {
 }
 
 sub rnorm {
+  my $r = shift;
   
   # Option
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
@@ -2143,7 +2144,8 @@ sub rnorm {
 }
 
 sub round {
-
+  my $r = shift;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my ($_x1, $digits) = @_;
   $digits = $opt->{digits} unless defined $digits;
@@ -2151,8 +2153,8 @@ sub round {
   
   my $x1 = to_c($_x1);
 
-  my $r = 10 ** $digits;
-  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $r) / $r) } @{$x1->decompose};
+  my $ro = 10 ** $digits;
+  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $ro) / $ro) } @{$x1->decompose};
   my $x2 = Rstats::ArrayFunc::c(@a2_elements);
   $x1->copy_attrs_to($x2);
   $x2->mode('double');
@@ -2161,6 +2163,8 @@ sub round {
 }
 
 sub rowMeans {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $dim_values = $x1->dim->values;
@@ -2179,6 +2183,8 @@ sub rowMeans {
 }
 
 sub rowSums {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $dim_values = $x1->dim->values;
@@ -2198,6 +2204,8 @@ sub rowSums {
 
 # TODO: prob option
 sub sample {
+  my $r = shift;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_x1, $length) = @_;
@@ -2225,6 +2233,8 @@ sub sample {
 }
 
 sub sequence {
+  my $r = shift;
+  
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
@@ -2232,7 +2242,7 @@ sub sequence {
   
   my @x2_values;
   for my $x1_value (@$x1_values) {
-    push @x2_values, @{seq(1, $x1_value)->values};
+    push @x2_values, @{seq(undef(), 1, $x1_value)->values};
   }
   
   return Rstats::ArrayFunc::c(@x2_values);
@@ -2595,6 +2605,8 @@ sub inner_product {
 }
 
 sub row {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $nrow = Rstats::ArrayFunc::nrow(undef(), $x1)->value;
@@ -2624,6 +2636,7 @@ sub ncol {
 }
 
 sub seq {
+  my $r = shift;
   
   # Option
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
@@ -2633,7 +2646,7 @@ sub seq {
   if (defined $_along) {
     my $along = to_c($_along);
     my $length = $along->length_value;
-    return seq(1, $length);
+    return seq(undef(), 1, $length);
   }
   else {
     my ($from, $to) = @_;

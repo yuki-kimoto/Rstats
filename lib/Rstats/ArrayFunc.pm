@@ -118,7 +118,7 @@ sub transform {
     push @new_args, $new_names->[$i], $new_elements->[$i];
   }
   
-  my $x2 = Rstats::ArrayFunc::data_frame(@new_args);
+  my $x2 = Rstats::ArrayFunc::data_frame(undef(), @new_args);
   
   return $x2;
 }
@@ -284,7 +284,7 @@ sub read_table {
     }
   }
   
-  my $d1 = Rstats::ArrayFunc::data_frame(@$data_frame_args);
+  my $d1 = Rstats::ArrayFunc::data_frame(undef(), @$data_frame_args);
   
   return $d1;
 }
@@ -326,7 +326,7 @@ sub interaction {
   my $f1_levels_elements = [];
   if ($x_drop) {
     $f1_levels_elements = $f1_elements;
-    $f1 = factor(c(@$f1_elements));
+    $f1 = factor(undef(), c(@$f1_elements));
   }
   else {
     my $levels = [];
@@ -339,7 +339,7 @@ sub interaction {
       push @$f1_levels_elements, $value;
     }
     $f1_levels_elements = [sort {$a cmp $b} @$f1_levels_elements];
-    $f1 = factor(c(@$f1_elements), {levels => Rstats::ArrayFunc::c(@$f1_levels_elements)});
+    $f1 = factor(undef(), c(@$f1_elements), {levels => Rstats::ArrayFunc::c(@$f1_levels_elements)});
   }
   
   return $f1;
@@ -378,17 +378,19 @@ sub gl {
   $x_labels = $x_levels unless defined $x_labels;
   $x_ordered = Rstats::ArrayFunc::FALSE() unless defined $x_ordered;
   
-  return factor($x1, {levels => $x_levels, labels => $x_labels, ordered => $x_ordered});
+  return factor(undef(), $x1, {levels => $x_levels, labels => $x_labels, ordered => $x_ordered});
 }
 
 sub ordered {
   my $opt = ref $_[-1] eq 'HASH' ? pop : {};
   $opt->{ordered} = Rstats::ArrayFunc::TRUE();
   
-  factor(@_, $opt);
+  factor(undef(), @_, $opt);
 }
 
 sub factor {
+  my $r = shift;
+  
   my ($x1, $x_levels, $x_labels, $x_exclude, $x_ordered)
     = args_array([qw/x levels labels exclude ordered/], @_);
 
@@ -498,6 +500,8 @@ sub list {
 }
 
 sub data_frame {
+  my $r = shift;
+  
   my @data = @_;
   
   return cbind(undef(), @data) if ref $data[0] && $data[0]->is_data_frame;
@@ -657,6 +661,8 @@ sub lower_tri {
 }
 
 sub diag {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $size;
@@ -902,6 +908,7 @@ sub se {
 }
 
 sub col {
+  my $r = shift;
   my $x1 = shift;
   
   my $nrow = nrow($x1)->value;
@@ -979,7 +986,10 @@ sub charmatch {
   return Rstats::ArrayFunc::new_double(@$x2_values);
 }
 
-sub Conj { operate_unary(\&Rstats::VectorFunc::Conj, @_) }
+sub Conj {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::Conj, @_);
+}
 
 sub Re { operate_unary(\&Rstats::VectorFunc::Re, @_) }
 
@@ -1112,6 +1122,8 @@ sub union {
 }
 
 sub diff {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $x2_elements = [];
@@ -1314,7 +1326,7 @@ sub cbind {
         push @data_frame_args, $name, $x->getin($name);
       }
     }
-    my $data_frame = Rstats::ArrayFunc::data_frame(@data_frame_args);
+    my $data_frame = Rstats::ArrayFunc::data_frame(undef(), @data_frame_args);
     
     return $data_frame;
   }
@@ -1352,6 +1364,7 @@ sub cbind {
 }
 
 sub ceiling {
+  my $r = shift;
   my $_x1 = shift;
   
   my $x1 = to_c($_x1);
@@ -1366,6 +1379,7 @@ sub ceiling {
 }
 
 sub colMeans {
+  my $r = shift;
   my $x1 = shift;
   
   my $dim_values = $x1->dim->values;
@@ -1384,6 +1398,7 @@ sub colMeans {
 }
 
 sub colSums {
+  my $r = shift;
   my $x1 = shift;
   
   my $dim_values = $x1->dim->values;
@@ -1401,16 +1416,24 @@ sub colSums {
   }
 }
 
-sub cos { operate_unary(\&Rstats::VectorFunc::cos, @_) }
+sub cos {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::cos, @_);
+}
 
 sub atan2 {
   my $r = shift;
   return operate_binary(\&Rstats::VectorFunc::atan2, @_);
 }
 
-sub cosh { operate_unary(\&Rstats::VectorFunc::cosh, @_) }
+sub cosh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::cosh, @_);
+}
 
 sub cummax {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   unless ($x1->length_value) {
@@ -1440,6 +1463,8 @@ sub cummax {
 }
 
 sub cummin {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   unless ($x1->length_value) {
@@ -1467,9 +1492,15 @@ sub cummin {
   return Rstats::ArrayFunc::c(@a2_elements);
 }
 
-sub cumsum { operate_unary(\&Rstats::VectorFunc::cumsum, @_) }
+sub cumsum {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::cumsum, @_);
+}
 
-sub cumprod { operate_unary(\&Rstats::VectorFunc::cumprod, @_) }
+sub cumprod {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::cumprod, @_);
+}
 
 sub args_array {
   my $names = shift;
@@ -1543,9 +1574,15 @@ sub complex {
   return Rstats::ArrayFunc::c(@$x2_elements);
 }
 
-sub exp { operate_unary(\&Rstats::VectorFunc::exp, @_) }
+sub exp {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::exp, @_);
+}
 
-sub expm1 { operate_unary(\&Rstats::VectorFunc::expm1, @_) }
+sub expm1 {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::expm1, @_);
+}
 
 sub max_type {
   my @xs = @_;
@@ -1893,7 +1930,7 @@ sub rbind {
     for (my $i = 0; $i < @$first_names; $i++) {
       push @data_frame_args, $first_names->[$i], $new_vectors[$i];
     }
-    my $data_frame = Rstats::ArrayFunc::data_frame(@data_frame_args);
+    my $data_frame = Rstats::ArrayFunc::data_frame(undef(), @data_frame_args);
     
     return $data_frame;
   }
@@ -2858,7 +2895,7 @@ sub get {
 
   # level drop
   if ($level_drop) {
-    $x2 = Rstats::ArrayFunc::factor($x2->as_character);
+    $x2 = Rstats::ArrayFunc::factor(undef(), $x2->as_character);
   }
   
   return $x2;

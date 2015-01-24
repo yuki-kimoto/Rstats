@@ -866,7 +866,7 @@ sub as_factor {
   }
   else {
     my $a = $x1->is_character ? $x1 :  $x1->as_character;
-    my $f = Rstats::Func::factor($a);
+    my $f = Rstats::ArrayFunc::factor(undef(), $a);
     
     return $f;
   }

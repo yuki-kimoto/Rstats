@@ -55,9 +55,6 @@ my @func_names2 = qw/
   charmatch
   chartr
   cbind
-/;
-
-my @func_names = qw/
   ceiling
   col
   colMeans
@@ -69,13 +66,16 @@ my @func_names = qw/
   cummin
   cumsum
   cumprod
-  complex
   data_frame
   diag
   diff
   exp
   expm1
   factor
+/;
+
+my @func_names = qw/
+  
   F
   FALSE
   floor
@@ -209,6 +209,7 @@ my @func_names = qw/
   FALSE
   F
   pi
+  complex
   array
   c
 /;

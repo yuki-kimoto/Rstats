@@ -436,7 +436,7 @@ sub factor {
   my $levels_length = $x_levels->length->value;
   if ($labels_length == 1 && $x1->length_value != 1) {
     my $value = $x_labels->value;
-    $x_labels = paste($value, se("1:$levels_length"), {sep => ""});
+    $x_labels = paste($value, se(undef(), "1:$levels_length"), {sep => ""});
   }
   elsif ($labels_length != $levels_length) {
     Carp::croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
@@ -879,6 +879,7 @@ sub grep {
 }
 
 sub se {
+  my $r = shift;
   my $seq_str = shift;
 
   my $by;
@@ -1396,7 +1397,10 @@ sub colSums {
 
 sub cos { operate_unary(\&Rstats::VectorFunc::cos, @_) }
 
-sub atan2 { operate_binary(\&Rstats::VectorFunc::atan2, @_) }
+sub atan2 {
+  my $r = shift;
+  return operate_binary(\&Rstats::VectorFunc::atan2, @_);
+}
 
 sub cosh { operate_unary(\&Rstats::VectorFunc::cosh, @_) }
 
@@ -1590,7 +1594,7 @@ sub head {
   if ($x1->is_data_frame) {
     my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
     
-    my $x_range = Rstats::ArrayFunc::se("1:$max");
+    my $x_range = Rstats::ArrayFunc::se(undef(), "1:$max");
     my $x2 = $x1->get($x_range, Rstats::ArrayFunc::NULL());
     
     return $x2;

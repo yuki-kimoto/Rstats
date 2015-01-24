@@ -50,12 +50,11 @@ my @func_names2 = qw/
   asinh
   atan
   atanh
+  atan2
+  se
 /;
 
 my @func_names = qw/
-  atan2
-  c
-  se
   charmatch
   chartr
   cbind
@@ -211,6 +210,7 @@ my @func_names = qw/
   F
   pi
   array
+  c
 /;
 
 

@@ -46,14 +46,14 @@ my @func_names2 = qw/
   acosh
   append
   Arg
+  asin
+  asinh
+  atan
+  atanh
 /;
 
 my @func_names = qw/
-  asin
-  asinh
   atan2
-  atan
-  atanh
   c
   se
   charmatch

@@ -1259,10 +1259,25 @@ sub append {
   return $x3;
 }
 
-sub asin { operate_unary(\&Rstats::VectorFunc::asin, @_) }
-sub asinh { operate_unary(\&Rstats::VectorFunc::asinh, @_) }
-sub atan { operate_unary(\&Rstats::VectorFunc::atan, @_) }
-sub atanh { operate_unary(\&Rstats::VectorFunc::atanh, @_) }
+sub asin {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::asin, @_);
+}
+
+sub asinh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::asinh, @_);
+}
+
+sub atan {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::atan, @_);
+}
+
+sub atanh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::atanh, @_);
+}
 
 sub cbind {
   my @xs = @_;

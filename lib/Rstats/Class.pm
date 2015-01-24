@@ -108,9 +108,6 @@ my @func_names2 = qw/
   max
   mean
   min
-/;
-
-my @func_names = qw/
   nchar
   order
   ordered
@@ -120,6 +117,9 @@ my @func_names = qw/
   pmax
   pmin
   prod
+/;
+
+my @func_names = qw/
   range
   rank
   rbind

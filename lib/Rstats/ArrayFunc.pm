@@ -54,7 +54,10 @@ sub F {
 my $true;
 sub TRUE { defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1) }
 sub T { TRUE }
-sub pi { new_double(Rstats::Util::pi()); }
+sub pi {
+  my $r = shift;
+  return new_double(Rstats::Util::pi());
+}
 
 sub I {
   my $r = shift;
@@ -408,6 +411,8 @@ sub gl {
 }
 
 sub ordered {
+  my $r = shift;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop : {};
   $opt->{ordered} = Rstats::ArrayFunc::TRUE();
   
@@ -464,7 +469,7 @@ sub factor {
   my $levels_length = $x_levels->length->value;
   if ($labels_length == 1 && $x1->length_value != 1) {
     my $value = $x_labels->value;
-    $x_labels = paste($value, se(undef(), "1:$levels_length"), {sep => ""});
+    $x_labels = paste(undef(), $value, se(undef(), "1:$levels_length"), {sep => ""});
   }
   elsif ($labels_length != $levels_length) {
     Carp::croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
@@ -790,6 +795,8 @@ sub kronecker {
 }
 
 sub outer {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
@@ -1193,6 +1200,7 @@ sub diff {
 }
 
 sub nchar {
+  my $r = shift;
   my $x1 = to_c(shift);
   
   if ($x1->vector->type eq 'character') {
@@ -1829,6 +1837,7 @@ sub min {
 }
 
 sub order {
+  my $r = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my @xs = map { to_c($_) } @_;
   
@@ -1909,6 +1918,8 @@ sub rank {
 }
 
 sub paste {
+  my $r = shift;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $sep = $opt->{sep};
   $sep = ' ' unless defined $sep;
@@ -1924,6 +1935,8 @@ sub paste {
 }
 
 sub pmax {
+  my $r = shift;
+  
   my @vs = @_;
   
   my @maxs;
@@ -1939,6 +1952,8 @@ sub pmax {
 }
 
 sub pmin {
+  my $r = shift;
+  
   my @vs = @_;
   
   my @mins;
@@ -1953,7 +1968,10 @@ sub pmin {
   return Rstats::ArrayFunc::c(@mins);
 }
 
-sub prod { operate_unary(\&Rstats::VectorFunc::prod, @_) }
+sub prod {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::prod, @_);
+}
 
 sub range {
   my $x1 = shift;

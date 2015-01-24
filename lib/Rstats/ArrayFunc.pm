@@ -211,6 +211,8 @@ sub merge {
 #           stringsAsFactors = default.stringsAsFactors(),
 #           encoding = "unknown")
 sub read_table {
+  my $r = shift;
+  
   my ($x_file, $x_sep, $x_skip, $x_nrows, $x_header, $x_comment_char, $x_row_names, $x_encoding)
     = args_array([qw/file sep skip nrows header comment.char row.names encoding/], @_);
   
@@ -1881,6 +1883,8 @@ sub order {
 # TODO
 # na.last
 sub rank {
+  my $r = shift;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $x1 = to_c(shift);
   my $decreasing = $opt->{decreasing};
@@ -1974,6 +1978,8 @@ sub prod {
 }
 
 sub range {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $min = min(undef(), $x1);
@@ -1983,6 +1989,7 @@ sub range {
 }
 
 sub rbind {
+  my $r = shift;
   my (@xs) = @_;
   
   return Rstats::ArrayFunc::NULL() unless @xs;
@@ -2041,6 +2048,8 @@ sub rbind {
 }
 
 sub rep {
+  my $r = shift;
+  
   my ($x1, $x_times) = args_array(['x1', 'times'], @_);
   
   my $times = defined $x_times ? $x_times->value : 1;
@@ -2053,6 +2062,8 @@ sub rep {
 }
 
 sub replace {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   my $v3 = to_c(shift);
@@ -2087,6 +2098,8 @@ sub replace {
 }
 
 sub rev {
+  my $r = shift;
+  
   my $x1 = shift;
   
   # Reverse elements
@@ -2349,6 +2362,8 @@ sub median {
 }
 
 sub quantile {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $x2 = Rstats::ArrayFunc::unique($x1);

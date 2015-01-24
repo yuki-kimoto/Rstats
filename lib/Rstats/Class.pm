@@ -117,9 +117,6 @@ my @func_names2 = qw/
   pmax
   pmin
   prod
-/;
-
-my @func_names = qw/
   range
   rank
   rbind
@@ -128,6 +125,9 @@ my @func_names = qw/
   rep
   replace
   rev
+/;
+
+my @func_names = qw/
   rnorm
   round
   row

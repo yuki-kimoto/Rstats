@@ -10,37 +10,6 @@ use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
 
-sub mapply {
-  my $func = splice(@_, 0, 1);
-
-  my @xs = @_;
-  @xs = map { Rstats::ArrayFunc::c($_) } @xs;
-  
-  # Fix length
-  my @xs_length = map { $_->length_value } @xs;
-  my $max_length = List::Util::max @xs_length;
-  for my $x (@xs) {
-    if ($x->length_value < $max_length) {
-      $x = Rstats::Func::array($x, $max_length);
-    }
-  }
-  
-  # Apply
-  my $new_xs = [];
-  for (my $i = 0; $i < $max_length; $i++) {
-    my @args = map { $_->value($i + 1) } @xs;
-    my $x = $func->(@args);
-    push @$new_xs, $x;
-  }
-  
-  if (@$new_xs == 1) {
-    return $new_xs->[0];
-  }
-  else {
-    return Rstats::Func::list(@$new_xs);
-  }
-}
-
 sub apply {
   my $func = splice(@_, 2, 1);
   my ($x1, $x_margin)

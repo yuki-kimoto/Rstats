@@ -252,7 +252,6 @@ sub new {
 
   # tapply
   $self->helper(tapply => sub {
-    $DB::single = 1;
     my @args = @_;
     my $func_name = $args[2];
     my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
@@ -260,33 +259,36 @@ sub new {
     
     return Rstats::Func::tapply(@args);
   });
-}
 
-sub sapply {
-  my $x1 = shift->lapply(@_);
-  
-  my $x2 = Rstats::ArrayFunc::c(@{$x1->list});
-  
-  return $x2;
-}
+  # lapply
+  $self->helper(lapply => sub {
+    my @args = @_;
+    my $func_name = $args[1];
+    my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
+    $args[1] = $func;
+    
+    return Rstats::Func::lapply(@args);
+  });
 
-sub lapply {
-  my $self = shift;
-  my $func_name = splice(@_, 1, 1);
-  my ($x1)
-    = Rstats::Func::args_array(['x1'], @_);
-  
-  my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
-  
-  my $new_elements = [];
-  for my $element (@{$x1->list}) {
-    push @$new_elements, $func->($element);
-  }
-  
-  my $x2 = Rstats::Func::list(@$new_elements);
-  $x1->copy_attrs_to($x2);
-  
-  return $x2;
+  # lapply
+  $self->helper(lapply => sub {
+    my @args = @_;
+    my $func_name = $args[1];
+    my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
+    $args[1] = $func;
+    
+    return Rstats::Func::lapply(@args);
+  });
+
+  # sapply
+  $self->helper(sapply => sub {
+    my @args = @_;
+    my $func_name = $args[1];
+    my $func = ref $func_name ? $func_name : $self->helpers->{$func_name};
+    $args[1] = $func;
+    
+    return Rstats::Func::sapply(@args);
+  });
 }
 
 sub AUTOLOAD {

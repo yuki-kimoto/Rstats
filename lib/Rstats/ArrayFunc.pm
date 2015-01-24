@@ -52,8 +52,15 @@ sub F {
 }
 
 my $true;
-sub TRUE { defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1) }
-sub T { TRUE }
+sub TRUE {
+  my $r = shift;
+  return defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1);
+}
+sub T {
+  my $r = shift;
+  return TRUE
+}
+
 sub pi {
   my $r = shift;
   return new_double(Rstats::Util::pi());
@@ -72,6 +79,8 @@ sub I {
 }
 
 sub subset {
+  my $r = shift;
+  
   my ($x1, $x_condition, $x_names)
     = args_array(['x1', 'condition', 'names'], @_);
   
@@ -83,6 +92,8 @@ sub subset {
 }
 
 sub t {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x1_row = $x1->dim->values->[0];
@@ -102,6 +113,8 @@ sub t {
 }
 
 sub transform {
+  my $r = shift;
+  
   my $x1 = shift;
   my @args = @_;
 
@@ -432,7 +445,7 @@ sub factor {
   
   # default - levels
   unless (defined $x_levels) {
-    $x_levels = Rstats::ArrayFunc::sort(unique($x1), {'na.last' => TRUE});
+    $x_levels = Rstats::ArrayFunc::sort(undef(), unique(undef(), $x1), {'na.last' => TRUE});
   }
   
   # default - exclude
@@ -631,6 +644,8 @@ sub data_frame {
 }
 
 sub upper_tri {
+  my $r = shift;
+  
   my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
@@ -844,6 +859,8 @@ sub Arg {
 }
 
 sub sub {
+  my $r = shift;
+  
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
     = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
@@ -1114,8 +1131,8 @@ sub setequal {
   
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
-  my $x3 = Rstats::ArrayFunc::sort($x1);
-  my $x4 = Rstats::ArrayFunc::sort($x2);
+  my $x3 = Rstats::ArrayFunc::sort(undef(), $x1);
+  my $x4 = Rstats::ArrayFunc::sort(undef(), $x2);
   
   return FALSE if $x3->length_value ne $x4->length_value;
   
@@ -1178,12 +1195,14 @@ sub intersect {
 }
 
 sub union {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
 
   Carp::croak "mode is diffrence" if $x1->vector->type ne $x2->vector->type;
   
   my $x3 = Rstats::ArrayFunc::c($x1, $x2);
-  my $x4 = unique($x3);
+  my $x4 = unique(undef(), $x3);
   
   return $x4;
 }
@@ -1233,6 +1252,8 @@ sub nchar {
 }
 
 sub tolower {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   if ($x1->vector->type eq 'character') {
@@ -1257,6 +1278,8 @@ sub tolower {
 }
 
 sub toupper {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   if ($x1->vector->type eq 'character') {
@@ -2049,7 +2072,7 @@ sub rbind {
   else {
     my $matrix = cbind(undef(), @xs);
     
-    return Rstats::ArrayFunc::t($matrix);
+    return Rstats::ArrayFunc::t(undef(), $matrix);
   }
 }
 
@@ -2265,6 +2288,8 @@ sub sqrt {
 }
 
 sub sort {
+  my $r = shift;
+  
   my ($x1, $x_decreasing) = Rstats::ArrayFunc::args_array(['x1', 'decreasing', 'na.last'], @_);
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
@@ -2279,6 +2304,8 @@ sub sort {
 }
 
 sub tail {
+  my $r = shift;
+  
   my ($x1, $x_n) = Rstats::ArrayFunc::args_array(['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
@@ -2296,7 +2323,10 @@ sub tail {
   return $x2;
 }
 
-sub tan { operate_unary(\&Rstats::VectorFunc::tan, @_) }
+sub tan {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::tan, @_);
+}
 
 sub sin {
   my $r = shift;
@@ -2315,9 +2345,14 @@ sub operate_unary {
   return $x2;
 }
 
-sub tanh { operate_unary(\&Rstats::VectorFunc::tanh, @_) }
+sub tanh {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::tanh, @_);
+}
 
 sub trunc {
+  my $r = shift;
+  
   my ($_x1) = @_;
   
   my $x1 = to_c($_x1);
@@ -2333,6 +2368,8 @@ sub trunc {
 }
 
 sub unique {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   if ($x1->is_vector) {
@@ -2367,8 +2404,8 @@ sub median {
   
   my $x1 = to_c(shift);
   
-  my $x2 = unique($x1);
-  my $x3 = Rstats::ArrayFunc::sort($x2);
+  my $x2 = unique(undef(), $x1);
+  my $x3 = Rstats::ArrayFunc::sort(undef(), $x2);
   my $x3_length = $x3->length_value;
   
   if ($x3_length % 2 == 0) {
@@ -2389,8 +2426,8 @@ sub quantile {
   
   my $x1 = to_c(shift);
   
-  my $x2 = Rstats::ArrayFunc::unique($x1);
-  my $x3 = Rstats::ArrayFunc::sort($x2);
+  my $x2 = Rstats::ArrayFunc::unique(undef(), $x1);
+  my $x3 = Rstats::ArrayFunc::sort(undef(), $x2);
   my $x3_length = $x3->length_value;
   
   my $quantile_elements = [];
@@ -2449,12 +2486,14 @@ sub quantile {
 sub sd {
   my $x1 = to_c(shift);
   
-  my $sd = Rstats::ArrayFunc::sqrt(undef(), var($x1));
+  my $sd = Rstats::ArrayFunc::sqrt(undef(), var(undef(), $x1));
   
   return $sd;
 }
 
 sub var {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $var = sum(undef(), ($x1 - Rstats::ArrayFunc::mean(undef(), $x1)) ** 2) / ($x1->length_value - 1);
@@ -2463,6 +2502,8 @@ sub var {
 }
 
 sub which {
+  my $r = shift;
+  
   my ($_x1, $cond_cb) = @_;
   
   my $x1 = to_c($_x1);
@@ -2571,7 +2612,7 @@ sub matrix {
       Rstats::ArrayFunc::c($dim->[1], $dim->[0]),
     );
     
-    $matrix = Rstats::ArrayFunc::t($matrix);
+    $matrix = Rstats::ArrayFunc::t(undef(), $matrix);
   }
   else {
     $matrix = Rstats::ArrayFunc::array($x_matrix, Rstats::ArrayFunc::c(@$dim));
@@ -2584,7 +2625,7 @@ sub inner_product {
   my ($x1, $x2) = @_;
   
   # Convert to matrix
-  $x1 = Rstats::ArrayFunc::t($x1->as_matrix) if $x1->is_vector;
+  $x1 = Rstats::ArrayFunc::t(undef(), $x1->as_matrix) if $x1->is_vector;
   $x2 = $x2->as_matrix if $x2->is_vector;
   
   # Calculate

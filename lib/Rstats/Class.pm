@@ -139,18 +139,13 @@ my @func_names2 = qw/
   sinh
   sum
   sqrt
-/;
-
-my @func_names = qw/
   sort
   sub
   subset
-  sweep
   t
   tail
   tan
   tanh
-  tapply
   tolower
   toupper
   T
@@ -162,6 +157,9 @@ my @func_names = qw/
   upper_tri
   var
   which
+/;
+
+my @func_names = qw/
   as_array
   as_character
   as_complex

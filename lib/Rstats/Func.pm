@@ -10,98 +10,13 @@ use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
 
-sub apply {
-  my $func = splice(@_, 2, 1);
-  my ($x1, $x_margin)
-    = Rstats::Func::args_array(['x1', 'margin'], @_);
-
-  my $dim_values = $x1->dim->values;
-  my $margin_values = $x_margin->values;
-  my $new_dim_values = [];
-  for my $i (@$margin_values) {
-    push @$new_dim_values, $dim_values->[$i - 1];
-  }
+sub sapply {
+  my $r = shift;
+  my $x1 = $r->lapply(@_);
   
-  my $x1_length = $x1->length_value;
-  my $new_elements_array = [];
-  for (my $i = 0; $i < $x1_length; $i++) {
-    my $index = Rstats::Util::pos_to_index($i, $dim_values);
-    my $e1 = $x1->value(@$index);
-    my $new_index = [];
-    for my $i (@$margin_values) {
-      push @$new_index, $index->[$i - 1];
-    }
-    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
-    $new_elements_array->[$new_pos] ||= [];
-    push @{$new_elements_array->[$new_pos]}, $e1;
-  }
-  
-  my $new_elements = [];
-  for my $element_array (@$new_elements_array) {
-    push @$new_elements, $func->(Rstats::ArrayFunc::c(@$element_array));
-  }
-
-  my $x2 = Rstats::Func::NULL();
-  $x2->vector(Rstats::ArrayFunc::c(@$new_elements)->vector);
-  $x1->copy_attrs_to($x1);
-  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
-  
-  if ($x2->{dim}->length_value == 1) {
-    delete $x2->{dim};
-  }
+  my $x2 = Rstats::ArrayFunc::c(@{$x1->list});
   
   return $x2;
-}
-
-sub sweep {
-  my ($x1, $x_margin, $x2, $x_func)
-    = Rstats::Func::args_array(['x1', 'margin', 'x2', 'FUN'], @_);
-  
-  my $x_margin_values = $x_margin->values;
-  my $func = defined $x_func ? $x_func->value : '-';
-  
-  my $x2_dim_values = $x2->dim->values;
-  my $x1_dim_values = $x1->dim->values;
-  
-  my $x1_length = $x1->length_value;
-  
-  my $x_result_elements = [];
-  for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
-    my $x1_index = Rstats::Util::pos_to_index($x1_pos, $x1_dim_values);
-    
-    my $new_index = [];
-    for my $x_margin_value (@$x_margin_values) {
-      push @$new_index, $x1_index->[$x_margin_value - 1];
-    }
-    
-    my $e1 = $x2->value(@{$new_index});
-    push @$x_result_elements, $e1;
-  }
-  my $x3 = Rstats::ArrayFunc::c(@$x_result_elements);
-  
-  my $x4;
-  if ($func eq '+') {
-    $x4 = $x1 + $x3;
-  }
-  elsif ($func eq '-') {
-    $x4 = $x1 - $x3;
-  }
-  elsif ($func eq '*') {
-    $x4 = $x1 * $x3;
-  }
-  elsif ($func eq '/') {
-    $x4 = $x1 / $x3;
-  }
-  elsif ($func eq '**') {
-    $x4 = $x1 ** $x3;
-  }
-  elsif ($func eq '%') {
-    $x4 = $x1 % $x3;
-  }
-  
-  $x1->copy_attrs_to($x4);
-  
-  return $x4;
 }
 
 sub to_string { Rstats::ArrayFunc::to_string(@_) }

@@ -88,9 +88,6 @@ my @func_names2 = qw/
   intersect
   kronecker
   list
-/;
-
-my @func_names = qw/
   log
   logb
   log2
@@ -105,6 +102,9 @@ my @func_names = qw/
   na_omit
   ncol
   nrow
+/;
+
+my @func_names = qw/
   NULL
   numeric
   matrix

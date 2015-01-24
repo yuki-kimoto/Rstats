@@ -27,8 +27,16 @@ sub NULL {
 }
 
 my $na;
-sub NA { defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef) }
-sub NaN { Rstats::ArrayFunc::new_double('NaN') }
+sub NA {
+  my $r = shift;
+  return defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef);
+}
+
+sub NaN {
+  my $r = shift;
+  return Rstats::ArrayFunc::new_double('NaN');
+}
+
 sub Inf { Rstats::ArrayFunc::new_double('Inf') }
 
 my $false;
@@ -133,6 +141,8 @@ sub transform {
 }
 
 sub na_omit {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my @poss;
@@ -150,6 +160,8 @@ sub na_omit {
 # TODO: merge is not implemented yet
 sub merge {
   die "merge is not implemented yet";
+
+  my $r = shift;
   
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
     = args_array([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
@@ -644,6 +656,8 @@ sub upper_tri {
 }
 
 sub lower_tri {
+  my $r = shift;
+  
   my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
@@ -807,7 +821,10 @@ sub outer {
   return $x3;
 }
 
-sub Mod { operate_unary(\&Rstats::VectorFunc::Mod, @_) }
+sub Mod {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::Mod, @_);
+}
 
 sub Arg {
   my $r = shift;
@@ -933,8 +950,8 @@ sub col {
   my $r = shift;
   my $x1 = shift;
   
-  my $nrow = nrow($x1)->value;
-  my $ncol = ncol($x1)->value;
+  my $nrow = nrow(undef(), $x1)->value;
+  my $ncol = ncol(undef(), $x1)->value;
   
   my @values;
   for my $col (1 .. $ncol) {
@@ -1024,6 +1041,8 @@ sub Im {
 }
 
 sub nrow {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if ($x1->is_data_frame) {
@@ -1245,6 +1264,8 @@ sub toupper {
 }
 
 sub match {
+  my $r = shift;
+  
   my ($x1, $x2) = (to_c(shift), to_c(shift));
   
   my $x1_elements = $x1->decompose;
@@ -1720,10 +1741,25 @@ sub ifelse {
   return Rstats::ArrayFunc::array(c(@x2_values));
 }
 
-sub log { operate_unary(\&Rstats::VectorFunc::log, @_) }
-sub logb { operate_unary(\&Rstats::VectorFunc::logb, @_) }
-sub log2 { operate_unary(\&Rstats::VectorFunc::log2, @_) }
-sub log10 { operate_unary(\&Rstats::VectorFunc::log10, @_) }
+sub log {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::log, @_);
+}
+
+sub logb {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::logb, @_);
+}
+
+sub log2 {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::log2, @_);
+}
+
+sub log10 {
+  my $r = shift;
+  return operate_unary(\&Rstats::VectorFunc::log10, @_);
+}
 
 sub max {
   my $x1 = Rstats::ArrayFunc::c(@_);
@@ -2266,6 +2302,8 @@ sub unique {
 }
 
 sub median {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $x2 = unique($x1);
@@ -2517,8 +2555,8 @@ sub inner_product {
 sub row {
   my $x1 = shift;
   
-  my $nrow = Rstats::ArrayFunc::nrow($x1)->value;
-  my $ncol = Rstats::ArrayFunc::ncol($x1)->value;
+  my $nrow = Rstats::ArrayFunc::nrow(undef(), $x1)->value;
+  my $ncol = Rstats::ArrayFunc::ncol(undef(), $x1)->value;
   
   my @values = (1 .. $nrow) x $ncol;
   
@@ -2528,6 +2566,8 @@ sub row {
 sub sum { operate_unary(\&Rstats::VectorFunc::sum, @_) }
 
 sub ncol {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if ($x1->is_data_frame) {

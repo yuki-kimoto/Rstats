@@ -894,7 +894,7 @@ sub as_matrix {
   my $x2_vector = $x1->vector->clone;
   $x2->vector($x2_vector);
   
-  return Rstats::Func::matrix($x2, $row, $col);
+  return Rstats::Func::matrix(undef(), $x2, $row, $col);
 }
 
 sub as_array {

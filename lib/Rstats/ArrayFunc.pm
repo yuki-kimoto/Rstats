@@ -19,6 +19,7 @@ use Math::Round ();
 use Encode ();
 
 sub NULL {
+  my $r = shift;
   
   my $x1 = Rstats::Array->new;
   $x1->vector(Rstats::Vector->new_null);
@@ -84,7 +85,7 @@ sub t {
   my $x1_row = $x1->dim->values->[0];
   my $x1_col = $x1->dim->values->[1];
   
-  my $x2 = matrix(0, $x1_col, $x1_row);
+  my $x2 = matrix(undef(), 0, $x1_col, $x1_row);
   
   for my $row (1 .. $x1_row) {
     for my $col (1 .. $x1_col) {
@@ -646,7 +647,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = matrix(Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -681,7 +682,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = matrix(Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -707,7 +708,7 @@ sub diag {
     $x2_values = $x1->values;
   }
   
-  my $x2 = matrix(0, $size, $size);
+  my $x2 = matrix(undef(), 0, $size, $size);
   for (my $i = 0; $i < $size; $i++) {
     $x2->at($i + 1, $i + 1);
     $x2->set($x2_values->[$i]);
@@ -1410,7 +1411,7 @@ sub cbind {
       
       push @$x2_elements, @{$a1->decompose};
     }
-    my $matrix = matrix(c(@$x2_elements), $row_count_needed, $col_count_total);
+    my $matrix = matrix(undef(), c(@$x2_elements), $row_count_needed, $col_count_total);
     
     return $matrix;
   }
@@ -2464,6 +2465,8 @@ sub new_logical {
 }
 
 sub matrix {
+  my $r = shift;
+  
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = Rstats::ArrayFunc::args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
@@ -2543,7 +2546,7 @@ sub inner_product {
       }
     }
     
-    my $x3 = Rstats::ArrayFunc::matrix(c(@$x3_elements), $row_max, $col_max);
+    my $x3 = Rstats::ArrayFunc::matrix(undef(), c(@$x3_elements), $row_max, $col_max);
     
     return $x3;
   }
@@ -2662,6 +2665,8 @@ sub seq {
 }
 
 sub numeric {
+  my $r = shift;
+  
   my $num = shift;
   
   return Rstats::ArrayFunc::c((0) x $num);

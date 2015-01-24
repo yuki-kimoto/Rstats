@@ -102,12 +102,12 @@ my @func_names2 = qw/
   na_omit
   ncol
   nrow
-/;
-
-my @func_names = qw/
   NULL
   numeric
   matrix
+/;
+
+my @func_names = qw/
   max
   mean
   min

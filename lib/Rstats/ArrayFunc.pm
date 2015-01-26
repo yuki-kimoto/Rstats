@@ -1356,7 +1356,7 @@ sub append {
   $x_after = NULL unless defined $x_after;
   
   my $x1_length = $x1->length_value;
-  $x_after = Rstats::ArrayFunc::c($x1_length) if $x_after->is_null;
+  $x_after = Rstats::ArrayFunc::c($x1_length) if Rstats::Func::is_null(undef(), $x_after);
   my $after = $x_after->value;
   
   my $x1_elements = $x1->decompose;
@@ -1685,7 +1685,7 @@ sub max_type {
   for my $x (@xs) {
     my $x_type = $x->typeof->value;
     $type_h->{$x_type}++;
-    unless ($x->is_null) {
+    unless (Rstats::Func::is_null(undef, $x)) {
       my $type = $x->type;
       $type_h->{$type}++;
     }
@@ -3096,6 +3096,8 @@ sub get {
 sub getin { get(@_) }
 
 sub is_null {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::to_c(shift);
   
   my $x_is = $x1->length_value == 0 ? Rstats::ArrayFunc::TRUE() : Rstats::ArrayFunc::FALSE();
@@ -3239,7 +3241,7 @@ sub to_string {
             
             my $l_dimnames = $x1->dimnames;
             my $dimnames;
-            if ($l_dimnames->is_null) {
+            if (Rstats::Func::is_null(undef(), $l_dimnames)) {
               $dimnames = [];
             }
             else {

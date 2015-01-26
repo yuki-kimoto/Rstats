@@ -24,7 +24,7 @@ sub get {
   
   # Convert name index to number index
   my $col_index_values;
-  if ($col_index->is_null) {
+  if (Rstats::Func::is_null(undef(), $col_index)) {
     $col_index_values = [1 .. $self->names->length_value];
   }
   elsif (Rstats::Func::is_character(undef(), $col_index)) {
@@ -68,7 +68,8 @@ sub get {
   
   # Extract rows
   for my $new_element (@$new_elements) {
-    $new_element = $new_element->get($row_index) unless $row_index->is_null;
+    $new_element = $new_element->get($row_index)
+      unless Rstats::Func::is_null(undef(), $row_index);
   }
   
   # Create new data frame

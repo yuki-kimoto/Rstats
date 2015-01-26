@@ -164,10 +164,10 @@ my @func_names2 = qw/
   is_finite
   is_infinite
   is_list
+  is_matrix
 /;
 
 my @func_names = qw/
-  is_matrix
   is_na
   is_nan
   is_null

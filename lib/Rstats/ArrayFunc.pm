@@ -651,7 +651,7 @@ sub upper_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if ($x1_m->is_matrix) {
+  if (Rstats::Func::is_matrix(undef(), $x1_m)) {
     my $x1_dim_values = $x1_m->dim->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
@@ -686,7 +686,7 @@ sub lower_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if ($x1_m->is_matrix) {
+  if (Rstats::Func::is_matrix(undef(), $x1_m)) {
     my $x1_dim_values = $x1_m->dim->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
@@ -1433,7 +1433,7 @@ sub cbind {
       my $a1_dim_elements = $a1->dim->decompose;
       
       my $row_count;
-      if ($a1->is_matrix) {
+      if (Rstats::Func::is_matrix(undef(), $a1)) {
         $row_count = $a1_dim_elements->[0];
         $col_count_total += $a1_dim_elements->[1];
       }
@@ -2629,7 +2629,7 @@ sub inner_product {
   $x2 = $x2->as_matrix if $x2->is_vector;
   
   # Calculate
-  if ($x1->is_matrix && $x2->is_matrix) {
+  if (Rstats::Func::is_matrix(undef(), $x1) && Rstats::Func::is_matrix(undef(), $x2)) {
     
     Carp::croak "requires numeric/complex matrix/vector arguments"
       if $x1->length_value == 0 || $x2->length_value == 0;

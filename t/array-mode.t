@@ -662,6 +662,7 @@ use Rstats::VectorFunc;
   
   # is_* - is_matrix
   {
+    $DB::single = 1;
     my $x = matrix(se('1:24'), 4, 3);
     ok(r->is_matrix($x));
   }

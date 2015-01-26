@@ -734,7 +734,7 @@ sub class {
     elsif ($x1->is_vector) {
       $x_class->vector($x1->mode->vector->clone);
     }
-    elsif ($x1->is_matrix) {
+    elsif (is_matrix(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
     }
     elsif (is_array(undef(), $x1)) {
@@ -1075,6 +1075,8 @@ sub is_vector {
 }
 
 sub is_matrix {
+  my $r = shift;
+  
   my $x1 = shift;
 
   my $x_is = ref $x1 eq 'Rstats::Array' && $x1->dim->length_value == 2

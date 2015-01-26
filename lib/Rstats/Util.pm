@@ -91,7 +91,7 @@ sub parse_index {
           }
           $indexs[$i] = Rstats::Func::new_integer(@$index_new_values);
         }
-        elsif ($x1->is_matrix) {
+        elsif (Rstats::Func::is_matrix(undef(), $x1)) {
           
         }
         else {

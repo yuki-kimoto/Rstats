@@ -191,12 +191,12 @@ my @func_names2 = qw/
   dim
   names
   nlevels
-/;
-
-my @func_names = qw/
   dimnames
   colnames
   rownames
+/;
+
+my @func_names = qw/
   mode
   str
   typeof

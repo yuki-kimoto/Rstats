@@ -1232,6 +1232,8 @@ sub names {
 }
 
 sub dimnames {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {
@@ -1271,6 +1273,8 @@ sub dimnames {
 }
 
 sub rownames {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {
@@ -1293,6 +1297,8 @@ sub rownames {
 
 
 sub colnames {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

@@ -11,13 +11,12 @@ use Rstats;
     my $sex = c('F', 'M', 'F');
     my $height = c(172, 168, 155);
     my $weight = c(5, 6, 7);
-    
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     $x1->at(2)->set(NULL);
     is_deeply(r->as_character($x1->getin(1))->values, ['F', 'M', 'F']);
     is_deeply($x1->getin(2)->values, [5, 6, 7]);
     is_deeply(r->names($x1)->values, ['sex', 'weight']);
-    is_deeply($x1->colnames->values, ['sex', 'weight']);
+    is_deeply(r->colnames($x1)->values, ['sex', 'weight']);
   }
   
   # set - index
@@ -54,7 +53,7 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    my $tmp = $x2->dimnames;
+    my $tmp = r->dimnames($x2);
     is_deeply($tmp->getin(2)->values, ['sex', 'weight']);
   }
 
@@ -96,7 +95,7 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'height', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply(r->rownames($x2)->values, [qw/1 2/]);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M/]);
     is_deeply($x2->getin(2)->values, [qw/155 168/]);
     is_deeply($x2->getin(3)->values, [qw/7 6/]);
@@ -113,7 +112,7 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'height', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
+    is_deeply(r->rownames($x2)->values, [qw/1 2/]);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M/]);
     is_deeply($x2->getin(2)->values, [qw/155 168/]);
     is_deeply($x2->getin(3)->values, [qw/7 6/]);
@@ -130,8 +129,8 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply(r->rownames($x2)->values, [qw/1 2/]);
+    is_deeply(r->colnames($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M/]);
     is_deeply($x2->getin(2)->values, [qw/7 6/]);
   }
@@ -146,8 +145,8 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply(r->rownames($x2)->values, [qw/1 2/]);
+    is_deeply(r->colnames($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F F/]);
     is_deeply($x2->getin(2)->values, [qw/5 7/]);
   }
@@ -163,8 +162,8 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2 3/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply(r->rownames($x2)->values, [qw/1 2 3/]);
+    is_deeply(r->colnames($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M F/]);
     is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
   }
@@ -180,8 +179,8 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply(r->rownames($x2)->values, [qw/1 2/]);
+    is_deeply(r->colnames($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/M F/]);
     is_deeply($x2->getin(2)->values, [qw/6 7/]);
   }
@@ -197,8 +196,8 @@ use Rstats;
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
-    is_deeply($x2->rownames->values, [qw/1 2 3/]);
-    is_deeply($x2->colnames->values, ['sex', 'weight']);
+    is_deeply(r->rownames($x2)->values, [qw/1 2 3/]);
+    is_deeply(r->colnames($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M F/]);
     is_deeply($x2->getin(2)->values, [qw/5 6 7/]);
   }

@@ -226,8 +226,8 @@ use Rstats::Func;
     my $x1 = r->matrix(se('1:24'), 3, 2);
     r->dimnames($x1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
     my $x2 = $x1->get(c(1, 3), c(2));
-    is_deeply($x2->dimnames->getin(1)->values, ['r1', 'r3']);
-    is_deeply($x2->dimnames->getin(2)->values, ['c2']);
+    is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
+    is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
   
   # get - have names

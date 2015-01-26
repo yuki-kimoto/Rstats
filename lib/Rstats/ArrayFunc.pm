@@ -632,7 +632,9 @@ sub data_frame {
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->{row_length} = $max_count;
   $data_frame->list($elements);
-  $data_frame->dimnames(
+  Rstats::Func::dimnames(
+    undef(),
+    $data_frame,
     Rstats::ArrayFunc::list(
       undef(),
       Rstats::ArrayFunc::c(@$row_names),
@@ -3194,7 +3196,7 @@ sub to_string {
     elsif ($dim_length == 2) {
       $str .= '     ';
       
-      my $colnames = $x1->colnames->values;
+      my $colnames = Rstats::Func::colnames(undef(), $x1)->values;
       if (@$colnames) {
         $str .= join(' ', @$colnames) . "\n";
       }
@@ -3204,7 +3206,7 @@ sub to_string {
         }
       }
       
-      my $rownames = $x1->rownames->values;
+      my $rownames = Rstats::Func::rownames(undef(), $x1)->values;
       my $use_rownames = @$rownames ? 1 : 0;
       for my $d1 (1 .. $dim_values->[0]) {
         if ($use_rownames) {

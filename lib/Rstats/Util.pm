@@ -37,9 +37,9 @@ sub parse_index {
   my @x2_dim;
   
   if (ref $_indexs[0] && Rstats::Func::is_array(undef(), $_indexs[0])
-    && Rstats::Func::is_logical(undef(), $_indexs[0]) && $_indexs[0]->dim->length_value > 1) {
+    && Rstats::Func::is_logical(undef(), $_indexs[0]) && Rstats::Func::dim(undef(), $_indexs[0])->length_value > 1) {
     my $x2 = $_indexs[0];
-    my $x2_dim_values = $x2->dim->values;
+    my $x2_dim_values = Rstats::Func::dim(undef(), $x2)->values;
     my $x2_values = $x2->values;
     my $poss = [];
     for (my $i = 0; $i < @$x2_values; $i++) {

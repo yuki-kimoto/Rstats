@@ -19,8 +19,8 @@ sub sweep {
   my $x_margin_values = $x_margin->values;
   my $func = defined $x_func ? $x_func->value : '-';
   
-  my $x2_dim_values = $x2->dim->values;
-  my $x1_dim_values = $x1->dim->values;
+  my $x2_dim_values = Rstats::Func::dim(undef(), $x2)->values;
+  my $x1_dim_values = Rstats::Func::dim(undef(), $x1)->values;
   
   my $x1_length = $x1->length_value;
   
@@ -106,7 +106,7 @@ sub apply {
   my ($x1, $x_margin)
     = Rstats::Func::args_array(['x1', 'margin'], @_);
 
-  my $dim_values = $x1->dim->values;
+  my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   my $margin_values = $x_margin->values;
   my $new_dim_values = [];
   for my $i (@$margin_values) {
@@ -760,7 +760,7 @@ sub dim_as_array {
   my $x1 = shift;
   
   if (exists $x1->{dim}) {
-    return $x1->dim;
+    return Rstats::Func::dim(undef(), $x1);
   }
   else {
     my $length = $x1->length_value;
@@ -769,6 +769,8 @@ sub dim_as_array {
 }
 
 sub dim {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {
@@ -1111,7 +1113,7 @@ sub is_matrix {
   
   my $x1 = shift;
 
-  my $x_is = ref $x1 eq 'Rstats::Array' && $x1->dim->length_value == 2
+  my $x_is = ref $x1 eq 'Rstats::Array' && Rstats::Func::dim(undef(), $x1)->length_value == 2
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;

@@ -96,8 +96,8 @@ sub t {
   
   my $x1 = shift;
   
-  my $x1_row = $x1->dim->values->[0];
-  my $x1_col = $x1->dim->values->[1];
+  my $x1_row = Rstats::Func::dim(undef(), $x1)->values->[0];
+  my $x1_col = Rstats::Func::dim(undef(), $x1)->values->[1];
   
   my $x2 = matrix(undef(), 0, $x1_col, $x1_row);
   
@@ -569,7 +569,7 @@ sub data_frame {
       $v = Rstats::Func::as_factor(undef(), $v);
     }
 
-    my $dim_values = $v->dim->values;
+    my $dim_values = Rstats::Func::dim(undef(), $v)->values;
     if (@$dim_values > 1) {
       my $count = $dim_values->[0];
       my $dim_product = 1;
@@ -652,7 +652,7 @@ sub upper_tri {
   
   my $x2_values = [];
   if (Rstats::Func::is_matrix(undef(), $x1_m)) {
-    my $x1_dim_values = $x1_m->dim->values;
+    my $x1_dim_values = Rstats::Func::dim(undef(), $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
     
@@ -687,7 +687,7 @@ sub lower_tri {
   
   my $x2_values = [];
   if (Rstats::Func::is_matrix(undef(), $x1_m)) {
-    my $x1_dim_values = $x1_m->dim->values;
+    my $x1_dim_values = Rstats::Func::dim(undef(), $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
     
@@ -746,7 +746,7 @@ sub set_diag {
   my $x2 = to_c(shift);
   
   my $x2_elements;
-  my $x1_dim_values = $x1->dim->values;
+  my $x1_dim_values = Rstats::Func::dim(undef(), $x1)->values;
   my $size = $x1_dim_values->[0] < $x1_dim_values->[1] ? $x1_dim_values->[0] : $x1_dim_values->[1];
   
   $x2 = array($x2, $size);
@@ -768,8 +768,8 @@ sub kronecker {
   
   ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
   
-  my $x1_dim = $x1->dim;
-  my $x2_dim = $x2->dim;
+  my $x1_dim = Rstats::Func::dim(undef(), $x1);
+  my $x2_dim = Rstats::Func::dim(undef(), $x2);
   my $dim_max_length
     = $x1_dim->length_value > $x2_dim->length_value ? $x1_dim->length_value : $x2_dim->length_value;
   
@@ -821,8 +821,8 @@ sub outer {
   
   ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
   
-  my $x1_dim = $x1->dim;
-  my $x2_dim = $x2->dim;
+  my $x1_dim = Rstats::Func::dim(undef(), $x1);
+  my $x2_dim = Rstats::Func::dim(undef(), $x2);
   my $x3_dim = [@{$x1_dim->values}, @{$x2_dim->values}];
   
   my $indexs = [];
@@ -1081,7 +1081,7 @@ sub nrow {
     return Rstats::ArrayFunc::NULL();
   }
   else {
-    return Rstats::ArrayFunc::c($x1->dim->values->[0]);
+    return Rstats::ArrayFunc::c(Rstats::Func::dim(undef(), $x1)->values->[0]);
   }
 }
 
@@ -1430,7 +1430,7 @@ sub cbind {
     for my $_x (@xs) {
       
       my $a1 = to_c($_x);
-      my $a1_dim_elements = $a1->dim->decompose;
+      my $a1_dim_elements = Rstats::Func::dim(undef(), $a1)->decompose;
       
       my $row_count;
       if (Rstats::Func::is_matrix(undef(), $a1)) {
@@ -1475,7 +1475,7 @@ sub colMeans {
   my $r = shift;
   my $x1 = shift;
   
-  my $dim_values = $x1->dim->values;
+  my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   if (@$dim_values == 2) {
     my $x1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -1494,7 +1494,7 @@ sub colSums {
   my $r = shift;
   my $x1 = shift;
   
-  my $dim_values = $x1->dim->values;
+  my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   if (@$dim_values == 2) {
     my $x1_values = [];
     for my $row (1 .. $dim_values->[0]) {
@@ -2197,7 +2197,7 @@ sub rowMeans {
   
   my $x1 = shift;
   
-  my $dim_values = $x1->dim->values;
+  my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   if (@$dim_values == 2) {
     my $x1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -2217,7 +2217,7 @@ sub rowSums {
   
   my $x1 = shift;
   
-  my $dim_values = $x1->dim->values;
+  my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   if (@$dim_values == 2) {
     my $x1_values = [];
     for my $col (1 .. $dim_values->[1]) {
@@ -2636,10 +2636,10 @@ sub inner_product {
     Carp::croak "requires numeric/complex matrix/vector arguments"
       if $x1->length_value == 0 || $x2->length_value == 0;
     Carp::croak "Error in a x b : non-conformable arguments"
-      unless $x1->dim->values->[1] == $x2->dim->values->[0];
+      unless Rstats::Func::dim(undef(), $x1)->values->[1] == Rstats::Func::dim(undef(), $x2)->values->[0];
     
-    my $row_max = $x1->dim->values->[0];
-    my $col_max = $x2->dim->values->[1];
+    my $row_max = Rstats::Func::dim(undef(), $x1)->values->[0];
+    my $col_max = Rstats::Func::dim(undef(), $x2)->values->[1];
     
     my $x3_elements = [];
     for (my $col = 1; $col <= $col_max; $col++) {
@@ -2690,7 +2690,7 @@ sub ncol {
     return Rstats::ArrayFunc::NULL();
   }
   else {
-    return Rstats::ArrayFunc::c($x1->dim->values->[1]);
+    return Rstats::ArrayFunc::c(Rstats::Func::dim(undef(), $x1)->values->[1]);
   }
 }
 
@@ -3319,7 +3319,7 @@ sub array {
   }
   
   my $x2 = Rstats::ArrayFunc::c($elements);
-  $x2->dim($x_dim);
+  Rstats::Func::dim(undef(), $x2, $x_dim);
   
   return $x2;
 }

@@ -446,7 +446,7 @@ EOS
   # to_string - character,3 dimention
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
-    $x1 = $x1->as_character;
+    $x1 = r->as_character($x1);
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -1042,8 +1042,8 @@ EOS
 
   # operator - divide
   {
-    my $x1 = c(6, 3, 12)->as_integer;
-    my $x2 = c(2, 3, 4)->as_integer;
+    my $x1 = r->as_integer(c(6, 3, 12));
+    my $x2 = r->as_integer(c(2, 3, 4));
     my $v3 = $x1 / $x2;
     is_deeply($v3->values, [3, 1, 3]);
     ok(r->is_double($v3));

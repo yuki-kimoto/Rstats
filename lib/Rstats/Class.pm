@@ -206,6 +206,7 @@ my @func_names = qw/
   as_character
   as_complex
   as_integer
+  as_double
   as_list
   as_logical
   as_matrix

@@ -216,7 +216,7 @@ use Rstats;
   {
     my $x1 = factor(c(2, 3, 4, 2, 3, 4));
     my $x1_levels = $x1->levels;
-    my $x2_levels = $x1_levels->as_numeric;
+    my $x2_levels = r->as_numeric($x1_levels);
     my $x3 = $x2_levels->get($x1);
     ok(r->is_numeric($x3));
     is_deeply($x3->values, [2, 3, 4, 2, 3, 4]);
@@ -233,7 +233,7 @@ use Rstats;
   # factor - as_character
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $x2 = $x1->as_character;
+    my $x2 = r->as_character($x1);
     ok(r->is_character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
@@ -241,7 +241,7 @@ use Rstats;
   # factor - as_logical
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x2 = $x1->as_logical;
+    my $x2 = r->as_logical($x1);
     ok($x2->is_logical);
     is_deeply($x2->values, [1, 1, 1]);
   }
@@ -249,7 +249,7 @@ use Rstats;
   # factor - as_complex
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x2 = $x1->as_complex;
+    my $x2 = r->as_complex($x1);
     ok(r->is_complex($x2));
     is_deeply($x2->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
   }
@@ -257,7 +257,7 @@ use Rstats;
   # factor - as_double
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x2 = $x1->as_double;
+    my $x2 = r->as_double($x1);
     ok(r->is_double($x2));
     is_deeply($x2->values, [1, 2, 3]);
   }
@@ -265,7 +265,7 @@ use Rstats;
   # factor - as_integer
   {
     my $x1 = factor(c("a", "b", "c"));
-    my $x2 = $x1->as_integer;
+    my $x2 = r->as_integer($x1);
     ok(r->is_integer($x2));
     is_deeply($x2->values, [1, 2, 3]);
   }

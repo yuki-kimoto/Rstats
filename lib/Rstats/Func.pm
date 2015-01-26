@@ -1109,6 +1109,8 @@ sub is_integer {
 }
 
 sub is_complex {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'complex'

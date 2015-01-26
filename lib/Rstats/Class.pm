@@ -160,10 +160,10 @@ my @func_names2 = qw/
   as_array
   is_array
   is_character
+  is_complex
 /;
 
 my @func_names = qw/
-  is_complex
   is_finite
   is_infinite
   is_list

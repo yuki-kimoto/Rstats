@@ -13,7 +13,7 @@ use FindBin;
     ok($d1->getin(1)->is_factor);
     is_deeply($d1->getin(1)->values, [qw/2 3 4 5 1/]);
     is_deeply($d1->getin(1)->levels->values, [qw/NA NB NC ND NE/]);
-    ok($d1->getin(2)->is_complex);
+    ok(r->is_complex($d1->getin(2)));
     is_deeply($d1->getin(2)->values, [{re => 1, im => 1}, {re => 1, im => 2}, {re => 1, im => 3}, {re => 1, im => 4}, undef]);
     ok($d1->getin(3)->is_double);
     is_deeply($d1->getin(3)->values, [qw/1.1 1.2 1.3 1.4/, undef]);

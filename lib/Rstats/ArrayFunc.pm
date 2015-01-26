@@ -3134,6 +3134,8 @@ sub is_infinite {
 }
 
 sub is_finite {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::to_c(shift);
   
   if (my $vector = $x1->vector) {

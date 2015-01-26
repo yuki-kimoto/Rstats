@@ -121,7 +121,7 @@ EOS
 {
   my $x1 = list(1, 2);
   my $x2 = r->typeof($x1);
-  ok($x2->is_character);
+  ok(r->is_character($x2));
   is_deeply($x2->values, ['list']);
 }
 

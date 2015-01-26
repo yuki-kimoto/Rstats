@@ -580,7 +580,7 @@ sub str {
     # Vector
     my @element_str;
     my $max_count = $length > 10 ? 10 : $length;
-    my $is_character = $x1->is_character;
+    my $is_character = is_character(undef(), $x1);
     my $values = $x1->values;
     for (my $i = 0; $i < $max_count; $i++) {
       push @element_str, $x1->_value_to_string($values->[$i], $type);
@@ -602,7 +602,7 @@ sub levels {
   
   if (@_) {
     my $x_levels = Rstats::Func::to_c(shift);
-    $x_levels = $x_levels->as_character unless $x_levels->is_character;
+    $x_levels = $x_levels->as_character unless is_character(undef(), $x_levels);
     
     $x1->{levels} = $x_levels->vector->clone;
     
@@ -865,7 +865,7 @@ sub as_factor {
     return $x1;
   }
   else {
-    my $a = $x1->is_character ? $x1 :  $x1->as_character;
+    my $a = is_character(undef(), $x1) ? $x1 :  $x1->as_character;
     my $f = Rstats::ArrayFunc::factor(undef(), $a);
     
     return $f;
@@ -1118,6 +1118,8 @@ sub is_complex {
 }
 
 sub is_character {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'character'
@@ -1157,7 +1159,7 @@ sub names {
   if (@_) {
     my $names = Rstats::Func::to_c(shift);
     
-    $names = $names->as_character unless $names->is_character;
+    $names = $names->as_character unless is_character(undef(), $names);
     $x1->{names} = $names->vector->clone;
     
     if ($x1->is_data_frame) {
@@ -1185,7 +1187,7 @@ sub dimnames {
       my $dimnames = [];
       for (my $i = 0; $i < $length; $i++) {
         my $x_dimname = $dimnames_list->getin($i + 1);
-        if ($x_dimname->is_character) {
+        if (is_character(undef(), $x_dimname)) {
           my $dimname = $x_dimname->vector->clone;
           push @$dimnames, $dimname;
         }

@@ -27,7 +27,7 @@ sub get {
   if ($col_index->is_null) {
     $col_index_values = [1 .. $self->names->length_value];
   }
-  elsif ($col_index->is_character) {
+  elsif (Rstats::Func::is_character(undef(), $col_index)) {
     $col_index_values = [];
     for my $col_index_value (@{$col_index->values}) {
       push @$col_index_values, $self->_name_to_index($col_index_value);

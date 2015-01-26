@@ -159,10 +159,10 @@ my @func_names2 = qw/
   which
   as_array
   is_array
+  is_character
 /;
 
 my @func_names = qw/
-  is_character
   is_complex
   is_finite
   is_infinite

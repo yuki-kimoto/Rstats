@@ -124,7 +124,7 @@ sub transform {
   my $names = $x1->names->values;
   
   while (my ($new_name, $new_v) = splice(@args, 0, 2)) {
-    if ($new_v->is_character) {
+    if (Rstats::Func::is_character(undef(), $new_v)) {
       $new_v = Rstats::ArrayFunc::I(undef(), $new_v);
     }
 
@@ -441,7 +441,7 @@ sub factor {
     = args_array([qw/x levels labels exclude ordered/], @_);
 
   # default - x
-  $x1 = $x1->as_character unless $x1->is_character;
+  $x1 = $x1->as_character unless Rstats::Func::is_character(undef(), $x1);
   
   # default - levels
   unless (defined $x_levels) {
@@ -565,7 +565,7 @@ sub data_frame {
   my $row_names = [];
   my $row_count = 1;
   while (my ($name, $v) = splice(@data, 0, 2)) {
-    if ($v->is_character && !grep {$_ eq 'AsIs'} @{$v->class->values}) {
+    if (Rstats::Func::is_character(undef(), $v) && !grep {$_ eq 'AsIs'} @{$v->class->values}) {
       $v = $v->as_factor;
     }
 
@@ -2987,7 +2987,7 @@ sub set {
   my $x1_elements;
   if ($x1->is_factor) {
     $x1_elements = $x1->decompose;
-    $x2 = $x2->as_character unless $x2->is_character;
+    $x2 = $x2->as_character unless Rstats::Func::is_character(undef(), $x2);
     my $x2_elements = $x2->decompose;
     my $levels_h = $x1->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
@@ -3160,7 +3160,7 @@ sub to_string {
   
   $x1 = $x1->as_character if $x1->is_factor;
   
-  my $is_character = $x1->is_character;
+  my $is_character = Rstats::Func::is_character(undef(), $x1);
 
   my $values = $x1->values;
   my $type = $x1->vector->type;

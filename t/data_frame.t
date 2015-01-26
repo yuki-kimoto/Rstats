@@ -36,7 +36,7 @@ use Rstats;
 {
   my $x1 = data_frame(sex => c(1, 2, 1));
   my $x2 = r->typeof($x1);
-  ok($x2->is_character);
+  ok(r->is_character($x2));
   is_deeply($x2->values, ['list']);
 }
 
@@ -286,7 +286,7 @@ use Rstats;
     my $height = c(172, 168, 155);
     
     my $x1 = data_frame(sex => $sex, height => $height);
-    ok($x1->getin(1)->is_character);
+    ok(r->is_character($x1->getin(1)));
     is_deeply($x1->getin(1)->values, ["F", "M", "F"]);
     is_deeply($x1->getin(2)->values, [172, 168, 155]);
   }

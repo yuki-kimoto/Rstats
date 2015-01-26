@@ -17,7 +17,7 @@ sub getin {
   
   my $x1_index = Rstats::Func::to_c($_index);
   my $index;
-  if ($x1_index->is_character) {
+  if (Rstats::Func::is_character(undef(), $x1_index)) {
     $index = $self->_name_to_index($x1_index);
   }
   else {
@@ -40,7 +40,7 @@ sub get {
   my $list_elements = $list->list;
   
   my $index_values;
-  if ($index->is_character) {
+  if (Rstats::Func::is_character(undef(), $index)) {
     $index_values = [];
     for my $value (@{$index->values}) {
       push @$index_values, $self->_name_to_index($value);
@@ -64,7 +64,7 @@ sub set {
   my $_index = $self->at;
   my $x1_index = Rstats::Func::to_c(@$_index);
   my $index;
-  if ($x1_index->is_character) {
+  if (Rstats::Func::is_character(undef(), $x1_index)) {
     $index = $self->_name_to_index($x1_index);
   }
   else {

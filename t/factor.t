@@ -226,7 +226,7 @@ use Rstats;
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
     my $x2 = $x1->labels;
-    ok($x2->is_character);
+    ok(r->is_character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
@@ -234,7 +234,7 @@ use Rstats;
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
     my $x2 = $x1->as_character;
-    ok($x2->is_character);
+    ok(r->is_character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   

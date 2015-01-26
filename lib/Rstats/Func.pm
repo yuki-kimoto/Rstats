@@ -709,6 +709,8 @@ sub as_list {
 }
 
 sub is_list {
+  my $r = shift;
+  
   my $x1 = shift;
 
   return exists $x1->{list} ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
@@ -741,7 +743,7 @@ sub class {
     elsif ($x1->is_data_frame) {
       $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
     }
-    elsif ($x1->is_list) {
+    elsif (is_list(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('list'));
     }
     
@@ -826,7 +828,7 @@ sub typeof {
     my $type = $x1->vector->type;
     return Rstats::Func::new_character($type);
   }
-  elsif ($x1->is_list) {
+  elsif (is_list(undef(), $x1)) {
     return Rstats::Func::new_character('list');
   }
   else {

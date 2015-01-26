@@ -1077,7 +1077,7 @@ sub nrow {
   if ($x1->is_data_frame) {
     return Rstats::ArrayFunc::c($x1->{row_length});
   }
-  elsif ($x1->is_list) {
+  elsif (Rstats::Func::is_list(undef(), $x1)) {
     return Rstats::ArrayFunc::NULL();
   }
   else {
@@ -2684,7 +2684,7 @@ sub ncol {
   if ($x1->is_data_frame) {
     return Rstats::ArrayFunc::c($x1->length_value);
   }
-  elsif ($x1->is_list) {
+  elsif (Rstats::Func::is_list(undef(), $x1)) {
     return Rstats::ArrayFunc::NULL();
   }
   else {
@@ -3119,6 +3119,8 @@ sub is_nan {
 }
 
 sub is_infinite {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::to_c(shift);
   
   if (my $vector = $x1->vector) {

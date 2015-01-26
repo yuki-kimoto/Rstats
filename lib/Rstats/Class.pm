@@ -162,11 +162,11 @@ my @func_names2 = qw/
   is_character
   is_complex
   is_finite
+  is_infinite
+  is_list
 /;
 
 my @func_names = qw/
-  is_infinite
-  is_list
   is_matrix
   is_na
   is_nan

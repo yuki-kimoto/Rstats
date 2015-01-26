@@ -682,9 +682,9 @@ sub length_value {
 }
 
 sub is_na {
-  my $_a1 = shift;
+  my $r = shift;
   
-  my $x1 = Rstats::Func::to_c($_a1);
+  my $x1 = Rstats::Func::to_c(shift);
   my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));

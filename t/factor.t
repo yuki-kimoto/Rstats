@@ -225,7 +225,7 @@ use Rstats;
   # factor - labels
   {
     my $x1 = factor(c("a", "b", "c", "a", "b", "c"));
-    my $x2 = $x1->labels;
+    my $x2 = r->labels($x1);
     ok(r->is_character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }

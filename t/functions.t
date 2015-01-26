@@ -98,7 +98,7 @@ use Rstats::Util;
 
   # prod - integer
   {
-    my $v1 = c(2, 3, 4)->as_integer;
+    my $v1 = r->as_integer(c(2, 3, 4));
     my $prod = r->prod($v1);
     is_deeply($prod->values, [24]);
   }
@@ -129,7 +129,7 @@ use Rstats::Util;
   
   # sum - integer
   {
-    my $x1 = c(1, 2, 3)->as_integer;
+    my $x1 = r->as_integer(c(1, 2, 3));
     my $x2 = r->sum($x1);
     is_deeply($x2->values, [6]);
   }
@@ -189,7 +189,7 @@ use Rstats::Util;
 
   # str - vector, integer
   {
-    my $x1 = c(1, 2)->as_integer;
+    my $x1 = r->as_integer(c(1, 2));
     is(r->str($x1), 'int [1:2] 1 2');
   }
 

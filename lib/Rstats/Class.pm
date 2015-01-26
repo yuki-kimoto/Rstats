@@ -176,10 +176,20 @@ my @func_names2 = qw/
   is_factor
   is_ordered
   is_data_frame
+  as_character
+  as_complex
+  as_integer
+  as_double
+  as_list
+  as_logical
+  as_matrix
+  as_numeric
+  as_vector
+  as
+  labels
 /;
 
 my @func_names = qw/
-  labels
   levels
   dim
   names
@@ -203,15 +213,6 @@ my @func_names = qw/
   array
   c
   length
-  as_character
-  as_complex
-  as_integer
-  as_double
-  as_list
-  as_logical
-  as_matrix
-  as_numeric
-  as_vector
 /;
 
 

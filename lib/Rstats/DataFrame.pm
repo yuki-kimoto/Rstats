@@ -94,7 +94,7 @@ sub to_string {
   my $columns = [];
   for (my $i = 1; $i <= @$column_names; $i++) {
     my $x = $self->getin($i);
-    $x = $x->as_character if Rstats::Func::is_factor(undef(), $x);
+    $x = Rstats::Func::as_character(undef(), $x) if Rstats::Func::is_factor(undef(), $x);
     push @$columns, $x->values;
   }
   my $col_count = @{$columns};

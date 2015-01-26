@@ -602,7 +602,8 @@ sub levels {
   
   if (@_) {
     my $x_levels = Rstats::Func::to_c(shift);
-    $x_levels = $x_levels->as_character unless is_character(undef(), $x_levels);
+    $x_levels = Rstats::Func::as_character(undef(), $x_levels)
+      unless is_character(undef(), $x_levels);
     
     $x1->{levels} = $x_levels->vector->clone;
     
@@ -693,6 +694,8 @@ sub is_na {
 }
 
 sub as_list {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (exists $x1->{list}) {
@@ -865,13 +868,15 @@ sub is_ordered {
 }
 
 sub as_factor {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (Rstats::Func::is_factor(undef(), $x1)) {
     return $x1;
   }
   else {
-    my $a = is_character(undef(), $x1) ? $x1 :  $x1->as_character;
+    my $a = is_character(undef(), $x1) ? $x1 :  Rstats::Func::as_character(undef(), $x1);
     my $f = Rstats::ArrayFunc::factor(undef(), $a);
     
     return $f;
@@ -879,6 +884,8 @@ sub as_factor {
 }
 
 sub as_matrix {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x1_dim_elements = $x1->dim_as_array->values;
@@ -918,6 +925,8 @@ sub as_array {
 }
 
 sub as_vector {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2 = Rstats::Func::NULL();
@@ -928,25 +937,27 @@ sub as_vector {
 }
 
 sub as {
+  my $r = shift;
+  
   my ($x1, $type) = @_;
   
   if ($type eq 'character') {
-    return as_character($x1);
+    return as_character(undef(), $x1);
   }
   elsif ($type eq 'complex') {
-    return as_complex($x1);
+    return as_complex(undef(), $x1);
   }
   elsif ($type eq 'double') {
-    return as_double($x1);
+    return as_double(undef(), $x1);
   }
   elsif ($type eq 'numeric') {
-    return as_numeric($x1);
+    return as_numeric(undef(), $x1);
   }
   elsif ($type eq 'integer') {
-    return as_integer($x1);
+    return as_integer(undef(), $x1);
   }
   elsif ($type eq 'logical') {
-    return as_logical($x1);
+    return as_logical(undef(), $x1);
   }
   else {
     croak "Invalid mode is passed";
@@ -954,11 +965,13 @@ sub as {
 }
 
 sub as_complex {
+  my $r = shift;
+  
   my $x1 = shift;
 
   my $x_tmp;
   if (Rstats::Func::is_factor(undef(), $x1)) {
-    $x_tmp = $x1->as_integer;
+    $x_tmp = Rstats::Func::as_integer(undef(), $x1);
   }
   else {
     $x_tmp = $x1;
@@ -971,9 +984,11 @@ sub as_complex {
   return $x2;
 }
 
-sub as_numeric { shift->as_double(@_) }
+sub as_numeric { as_double(@_) }
 
 sub as_double {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2;
@@ -989,6 +1004,8 @@ sub as_double {
 }
 
 sub as_integer {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2;
@@ -1004,6 +1021,8 @@ sub as_integer {
 }
 
 sub as_logical {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2;
@@ -1018,9 +1037,14 @@ sub as_logical {
   return $x2;
 }
 
-sub labels { shift->as_character(@_) }
+sub labels {
+  my $r = shift;
+  return $r->as_character(@_);
+}
 
 sub as_character {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $x2;
@@ -1181,7 +1205,7 @@ sub names {
   if (@_) {
     my $names = Rstats::Func::to_c(shift);
     
-    $names = $names->as_character unless is_character(undef(), $names);
+    $names = Rstats::Func::as_character(undef(), $names) unless is_character(undef(), $names);
     $x1->{names} = $names->vector->clone;
     
     if (Rstats::Func::is_data_frame(undef(), $x1)) {

@@ -304,23 +304,23 @@ sub read_table {
     my $type = $type_columns->[$i];
     if ($type eq 'character') {
       my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
-      push @$data_frame_args, $x1->as_factor;
+      push @$data_frame_args, Rstats::Func::as_factor(undef(), $x1);
     }
     elsif ($type eq 'complex') {
       my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
-      push @$data_frame_args, $x1->as_complex;
+      push @$data_frame_args, Rstats::Func::as_complex(undef(), $x1);
     }
     elsif ($type eq 'double') {
       my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
-      push @$data_frame_args, $x1->as_double;
+      push @$data_frame_args, Rstats::Func::as_double(undef(), Rstats::Func::as_double(undef(), $x1));
     }
     elsif ($type eq 'integer') {
       my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
-      push @$data_frame_args, $x1->as_integer;
+      push @$data_frame_args, Rstats::Func::as_integer(undef(), $x1);
     }
     else {
       my $x1 = Rstats::ArrayFunc::c(@{$columns->[$i]});
-      push @$data_frame_args, $x1->as_logical;
+      push @$data_frame_args, Rstats::Func::as_logical(undef(), $x1);
     }
   }
   
@@ -334,7 +334,7 @@ sub interaction {
   
   my $opt;
   $opt = ref $_[-1] eq 'HASH' ? pop : {};
-  my @xs = map { to_c($_)->as_factor } @_;
+  my @xs = map { Rstats::Func::as_factor(undef(), to_c($_)) } @_;
   my ($x_drop, $x_sep);
   ($x_drop, $x_sep) = args_array(['drop', 'sep'], $opt);
   
@@ -355,7 +355,7 @@ sub interaction {
   for (my $i = 0; $i < $max_length; $i++) {
     my $chars = [];
     for my $x (@xs) {
-      my $fix_x = $x->as_character;
+      my $fix_x = Rstats::Func::as_character(undef(), $x);
       my $length = $fix_x->length_value;
       push @$chars, $fix_x->value(($i % $length) + 1)
     }
@@ -399,7 +399,7 @@ sub gl {
   my $length = $x_length->value;
   
   my $x_levels = Rstats::ArrayFunc::c(1 .. $n);
-  $x_levels = $x_levels->as_character;
+  $x_levels = Rstats::Func::as_character(undef(), $x_levels);
   my $levels = $x_levels->values;
   
   my $x1_elements = [];
@@ -441,7 +441,7 @@ sub factor {
     = args_array([qw/x levels labels exclude ordered/], @_);
 
   # default - x
-  $x1 = $x1->as_character unless Rstats::Func::is_character(undef(), $x1);
+  $x1 = Rstats::Func::as_character(undef(), $x1) unless Rstats::Func::is_character(undef(), $x1);
   
   # default - levels
   unless (defined $x_levels) {
@@ -566,7 +566,7 @@ sub data_frame {
   my $row_count = 1;
   while (my ($name, $v) = splice(@data, 0, 2)) {
     if (Rstats::Func::is_character(undef(), $v) && !grep {$_ eq 'AsIs'} @{$v->class->values}) {
-      $v = $v->as_factor;
+      $v = Rstats::Func::as_factor(undef(), $v);
     }
 
     my $dim_values = $v->dim->values;
@@ -2051,7 +2051,7 @@ sub rbind {
       for my $x (@xs) {
         my $v = $x->getin($name);
         if (Rstats::Func::is_factor(undef(), $v)) {
-          push @vectors, $v->as_character;
+          push @vectors, Rstats::Func::as_character(undef(), $v);
         }
         else {
           push @vectors, $v;
@@ -2626,8 +2626,9 @@ sub inner_product {
   my ($x1, $x2) = @_;
   
   # Convert to matrix
-  $x1 = Rstats::ArrayFunc::t(undef(), $x1->as_matrix) if Rstats::Func::is_vector(undef(), $x1);
-  $x2 = $x2->as_matrix if Rstats::Func::is_vector(undef(), $x2);
+  $x1 = Rstats::ArrayFunc::t(undef(), Rstats::Func::as_matrix(undef(), $x1))
+    if Rstats::Func::is_vector(undef(), $x1);
+  $x2 = Rstats::Func::as_matrix(undef(), $x2) if Rstats::Func::is_vector(undef(), $x2);
   
   # Calculate
   if (Rstats::Func::is_matrix(undef(), $x1) && Rstats::Func::is_matrix(undef(), $x2)) {
@@ -2828,7 +2829,7 @@ sub upgrade_type {
     elsif ($type_h->{logical}) {
       $to_type = 'logical';
     }
-    $_ = $_->as($to_type) for @xs;
+    $_ = Rstats::Func::as(undef(), $_, $to_type) for @xs;
   }
   
   return @xs;
@@ -2988,7 +2989,7 @@ sub set {
   my $x1_elements;
   if (Rstats::Func::is_factor(undef(), $x1)) {
     $x1_elements = $x1->decompose;
-    $x2 = $x2->as_character unless Rstats::Func::is_character(undef(), $x2);
+    $x2 = Rstats::Func::as_character(undef(), $x2) unless Rstats::Func::is_character(undef(), $x2);
     my $x2_elements = $x2->decompose;
     my $levels_h = $x1->_levels_h;
     for (my $i = 0; $i < @$poss; $i++) {
@@ -3088,7 +3089,7 @@ sub get {
 
   # level drop
   if ($level_drop) {
-    $x2 = Rstats::ArrayFunc::factor(undef(), $x2->as_character);
+    $x2 = Rstats::ArrayFunc::factor(undef(), Rstats::Func::as_character(undef(), $x2));
   }
   
   return $x2;
@@ -3167,7 +3168,7 @@ sub to_string {
     $levels = $x1->levels->values;
   }
   
-  $x1 = $x1->as_character if Rstats::Func::is_factor(undef(), $x1);
+  $x1 = Rstats::Func::as_character(undef(), $x1) if Rstats::Func::is_factor(undef(), $x1);
   
   my $is_character = Rstats::Func::is_character(undef(), $x1);
 

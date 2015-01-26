@@ -187,10 +187,10 @@ my @func_names2 = qw/
   as_vector
   as
   labels
+  levels
 /;
 
 my @func_names = qw/
-  levels
   dim
   names
   nlevels

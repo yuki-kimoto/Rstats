@@ -343,11 +343,11 @@ use Rstats;
     
     my $x1 = data_frame(sex => $sex, sex => $sex1, sex => $sex2);
     is_deeply($x1->getin('sex')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex')->levels->values, ['a', 'b', 'c']);
+    is_deeply(r->levels($x1->getin('sex'))->values, ['a', 'b', 'c']);
     is_deeply($x1->getin('sex.1')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex.1')->levels->values, ['a1', 'b1', 'c1']);
+    is_deeply(r->levels($x1->getin('sex.1'))->values, ['a1', 'b1', 'c1']);
     is_deeply($x1->getin('sex.2')->values, [1, 2, 3]);
-    is_deeply($x1->getin('sex.2')->levels->values, ['a2', 'b2', 'c2']);
+    is_deeply(r->levels($x1->getin('sex.2'))->values, ['a2', 'b2', 'c2']);
   }
 }
 

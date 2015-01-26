@@ -209,7 +209,7 @@ sub tapply {
   
   my $x4_length = @$new_values2;
   my $x4 = Rstats::Func::array(Rstats::ArrayFunc::c(@$new_values2), $x4_length);
-  $x4->names($x2->levels);
+  $x4->names(Rstats::Func::levels(undef(), $x2));
   
   return $x4;
 }
@@ -598,6 +598,8 @@ sub str {
 }
 
 sub levels {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {
@@ -665,7 +667,7 @@ sub _name_to_index {
 sub nlevels {
   my $x1 = shift;
   
-  return Rstats::ArrayFunc::c($x1->levels->length_value);
+  return Rstats::ArrayFunc::c(Rstats::Func::levels(undef(), $x1)->length_value);
 }
 
 sub length_value {
@@ -1050,7 +1052,7 @@ sub as_character {
   my $x2;
   if (Rstats::Func::is_factor(undef(), $x1)) {
     my $levels = {};
-    my $x_levels = $x1->levels;
+    my $x_levels = Rstats::Func::levels(undef(), $x1);
     my $x_levels_values = $x_levels->values;
     my $levels_length = $x_levels->length_value;
     for (my $i = 1; $i <= $levels_length; $i++) {

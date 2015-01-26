@@ -373,7 +373,7 @@ sub interaction {
   else {
     my $levels = [];
     for my $x (@xs) {
-      push @$levels, $x->levels->values;
+      push @$levels, Rstats::Func::levels(undef(), $x)->values;
     }
     my $cps = Rstats::Util::cross_product($levels);
     for my $cp (@$cps) {
@@ -3037,7 +3037,7 @@ sub _levels_h {
   my $x1 = shift;
   
   my $levels_h = {};
-  my $levels = $x1->levels->values;
+  my $levels = Rstats::Func::levels(undef(), $x1)->values;
   for (my $i = 1; $i <= @$levels; $i++) {
     $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
   }
@@ -3165,7 +3165,7 @@ sub to_string {
   my $is_ordered = Rstats::Func::is_ordered(undef(), $x1);
   my $levels;
   if ($is_factor) {
-    $levels = $x1->levels->values;
+    $levels = Rstats::Func::levels(undef(), $x1)->values;
   }
   
   $x1 = Rstats::Func::as_character(undef(), $x1) if Rstats::Func::is_factor(undef(), $x1);

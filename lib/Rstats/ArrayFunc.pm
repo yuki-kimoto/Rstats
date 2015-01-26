@@ -118,10 +118,10 @@ sub transform {
   my $x1 = shift;
   my @args = @_;
 
-  my $new_names = $x1->names->values;
+  my $new_names = Rstats::Func::names(undef(), $x1)->values;
   my $new_elements = $x1->list;
   
-  my $names = $x1->names->values;
+  my $names = Rstats::Func::names(undef(), $x1)->values;
   
   while (my ($new_name, $new_v) = splice(@args, 0, 2)) {
     if (Rstats::Func::is_character(undef(), $new_v)) {
@@ -202,7 +202,7 @@ sub merge {
   }
   
   # ID
-  $x_by = $x1->names->get(1) unless defined $x_by;
+  $x_by = Rstats::Func::names(undef(), $x1)->get(1) unless defined $x_by;
   $x_by_x = $x_by unless defined $x_by_x;
   $x_by_y = $x_by unless defined $x_by_y;
   my $by_x = $x_by_x->value;
@@ -1414,7 +1414,7 @@ sub cbind {
     # Create new data frame
     my @data_frame_args;
     for my $x (@xs) {
-      my $names = $x->names->values;
+      my $names = Rstats::Func::names(undef(), $x)->values;
       for my $name (@$names) {
         push @data_frame_args, $name, $x->getin($name);
       }
@@ -2030,7 +2030,7 @@ sub rbind {
     my $first_names;
     for my $x (@xs) {
       if ($first_names) {
-        my $names = $x->names->values;
+        my $names = Rstats::Func::names(undef(), $x)->values;
         my $different;
         $different = 1 if @$first_names != @$names;
         for (my $i = 0; $i < @$first_names; $i++) {
@@ -2040,7 +2040,7 @@ sub rbind {
           if $different;
       }
       else {
-        $first_names = $x->names->values;
+        $first_names = Rstats::Func::names(undef(), $x)->values;
       }
     }
     
@@ -2479,7 +2479,7 @@ sub quantile {
   push @$quantile_elements , $x3->get($x3_length);
   
   my $x4 = Rstats::ArrayFunc::c(@$quantile_elements);
-  $x4->names(Rstats::ArrayFunc::c(qw/0%  25%  50%  75% 100%/));
+  Rstats::Func::names(undef(), $x4, Rstats::ArrayFunc::c(qw/0%  25%  50%  75% 100%/));
   
   return $x4;
 }
@@ -3184,7 +3184,7 @@ sub to_string {
   my $str;
   if (@$values) {
     if ($dim_length == 1) {
-      my $names = $x1->names->values;
+      my $names = Rstats::Func::names(undef(), $x1)->values;
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }

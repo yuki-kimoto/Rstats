@@ -155,11 +155,11 @@ EOS
   # set - NULL, names
   {
     my $x1 = list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9));
-    $x1->names(c("c1", "c2", "c3"));
+    r->names($x1, c("c1", "c2", "c3"));
     $x1->at(2)->set(NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
-    is_deeply($x1->names->values, ["c1", "c3"]);
+    is_deeply(r->names($x1)->values, ["c1", "c3"]);
   }
   
   # set - basic

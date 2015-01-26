@@ -80,7 +80,7 @@ sub parse_index {
           for my $name (@{$index->values}) {
             my $i = 0;
             my $value;
-            for my $x1_name (@{$x1->names->values}) {
+            for my $x1_name (@{Rstats::Func::names(undef(), $x1)->values}) {
               if ($name eq $x1_name) {
                 $value = $x1->values->[$i];
                 last;

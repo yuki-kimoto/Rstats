@@ -233,10 +233,10 @@ use Rstats::Func;
   # get - have names
   {
     my $v1 = c(4, 5, 6);
-    $v1->names(c("a", "b", "c"));
+    r->names($v1, c("a", "b", "c"));
     my $v2 = $v1->get(c(1, 3));
     is_deeply($v2->values, [4, 6]);
-    is_deeply($v2->names->values, ["a", "c"]);
+    is_deeply(r->names($v2)->values, ["a", "c"]);
   }
 
   # get - one value

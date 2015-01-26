@@ -209,7 +209,7 @@ sub tapply {
   
   my $x4_length = @$new_values2;
   my $x4 = Rstats::Func::array(Rstats::ArrayFunc::c(@$new_values2), $x4_length);
-  $x4->names(Rstats::Func::levels(undef(), $x2));
+  Rstats::Func::names(undef(), $x4, Rstats::Func::levels(undef(), $x2));
   
   return $x4;
 }
@@ -649,7 +649,7 @@ sub _name_to_index {
   
   my $e1_name = $x1_index->value;
   my $found;
-  my $names = $x1->names->values;
+  my $names = Rstats::Func::names(undef(), $x1)->values;
   my $index;
   for (my $i = 0; $i < @$names; $i++) {
     my $name = $names->[$i];
@@ -1204,6 +1204,8 @@ sub is_array {
 }
 
 sub names {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

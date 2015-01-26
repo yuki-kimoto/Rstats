@@ -25,7 +25,7 @@ sub get {
   # Convert name index to number index
   my $col_index_values;
   if (Rstats::Func::is_null(undef(), $col_index)) {
-    $col_index_values = [1 .. $self->names->length_value];
+    $col_index_values = [1 .. Rstats::Func::names(undef(), $self)->length_value];
   }
   elsif (Rstats::Func::is_character(undef(), $col_index)) {
     $col_index_values = [];
@@ -50,7 +50,7 @@ sub get {
       }
       
       $col_index_values = [];
-      for (my $index = 1; $index <= $self->names->length_value; $index++) {
+      for (my $index = 1; $index <= Rstats::Func::names(undef(), $self)->length_value; $index++) {
         push @$col_index_values, $index unless $delete_col_index_values_h->{$index};
       }
     }
@@ -87,7 +87,7 @@ sub to_string {
   my $t = Text::UnicodeTable::Simple->new(border => 0, alignment => 'right');
   
   # Names
-  my $column_names = $self->names->values;
+  my $column_names = Rstats::Func::names(undef(), $self)->values;
   $t->set_header('', @$column_names);
   
   # columns

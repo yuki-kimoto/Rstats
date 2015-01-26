@@ -1144,7 +1144,7 @@ use Rstats::Util;
     my $v1 = se('0:100');
     my $v2 = r->quantile($v1);
     is_deeply($v2->values, [0, 25, 50, 75, 100]);
-    is_deeply($v2->names->values, [qw/0%  25%  50%  75% 100% /]);
+    is_deeply(r->names($v2)->values, [qw/0%  25%  50%  75% 100% /]);
   }
   
   # quantile - even number

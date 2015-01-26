@@ -125,7 +125,7 @@ use Rstats;
   my $x2 = factor(c("M", "L", "M", "L", "M"));
   my $x3 = r->tapply($x1, $x2, 'mean');
   is_deeply($x3->values, [3.5, 3]);
-  is_deeply($x3->names->values, ["L", "M"]);
+  is_deeply(r->names($x3)->values, ["L", "M"]);
   is_deeply(r->dim($x3)->values, [2]);
 }
 

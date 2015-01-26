@@ -129,14 +129,14 @@ EOS
 {
   my $x1 = list(1, 2, 3);
   my $x2 = r->ncol($x1);
-  ok($x2->is_null);
+  ok(r->is_null($x2));
 }
 
 # nrow
 {
   my $x1 = list(1, 2, 3);
   my $x2 = r->nrow($x1);
-  ok($x2->is_null);
+  ok(r->is_null($x2));
 }
 
 # set

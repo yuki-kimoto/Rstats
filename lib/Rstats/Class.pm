@@ -176,6 +176,9 @@ my @func_names = qw/
   is_integer
   is_logical
   is_vector
+  is_factor
+  is_ordered
+  is_data_frame
   labels
   levels
   dim

@@ -32,7 +32,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 < $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
   
@@ -41,7 +41,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 < $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -50,7 +50,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 <= $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
   }
 
@@ -59,7 +59,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 <= $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
   }
 
@@ -68,7 +68,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 > $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
   }
 
@@ -77,7 +77,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 > $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
   }
 
@@ -86,7 +86,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2,1,3));
     my $x3 = $x1 >= $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -95,7 +95,7 @@ use Rstats;
     my $x1 = array(c(1,2,3));
     my $x2 = array(c(2));
     my $x3 = $x1 >= $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -104,7 +104,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 == $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -113,7 +113,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 == $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -122,7 +122,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2,2));
     my $x3 = $x1 != $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 
@@ -131,7 +131,7 @@ use Rstats;
     my $x1 = array(c(1,2));
     my $x2 = array(c(2));
     my $x3 = $x1 != $x2;
-    ok($x3->is_logical);
+    ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 }

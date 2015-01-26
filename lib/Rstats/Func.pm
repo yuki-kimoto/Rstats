@@ -441,7 +441,7 @@ sub copy_attrs_to {
   # names
   if (!$exclude_h{names} && exists $x1->{names}) {
     my $x2_names_values = [];
-    my $index = $x1->is_data_frame ? $new_indexes->[1] : $new_indexes->[0];
+    my $index = Rstats::Func::is_data_frame(undef(), $x1) ? $new_indexes->[1] : $new_indexes->[0];
     if (defined $index) {
       my $x1_names_values = $x1->{names}->values;
       for my $i (@{$index->values}) {
@@ -522,7 +522,7 @@ sub str {
   
   my @str;
   
-  if ($x1->is_vector || is_array(undef(), $x1)) {
+  if (Rstats::Func::is_vector(undef(), $x1) || is_array(undef(), $x1)) {
     # Short type
     my $type = $x1->vector->type;
     my $short_type;
@@ -731,7 +731,7 @@ sub class {
     if (exists $x1->{class}) {
       $x_class->vector($x1->{class}->clone);
     }
-    elsif ($x1->is_vector) {
+    elsif (Rstats::Func::is_vector(undef(), $x1)) {
       $x_class->vector($x1->mode->vector->clone);
     }
     elsif (is_matrix(undef(), $x1)) {
@@ -740,7 +740,7 @@ sub class {
     elsif (is_array(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('array'));
     }
-    elsif ($x1->is_data_frame) {
+    elsif (Rstats::Func::is_data_frame(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
     }
     elsif (is_list(undef(), $x1)) {
@@ -824,7 +824,7 @@ sub mode {
 sub typeof {
   my $x1 = shift;
   
-  if ($x1->is_vector || is_array(undef(), $x1)) {
+  if (Rstats::Func::is_vector(undef(), $x1) || is_array(undef(), $x1)) {
     my $type = $x1->vector->type;
     return Rstats::Func::new_character($type);
   }
@@ -841,6 +841,8 @@ sub type {
 }
 
 sub is_factor {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $classes = $x1->class->values;
@@ -851,6 +853,8 @@ sub is_factor {
 }
 
 sub is_ordered {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $classes = $x1->class->values;
@@ -863,7 +867,7 @@ sub is_ordered {
 sub as_factor {
   my $x1 = shift;
   
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     return $x1;
   }
   else {
@@ -953,7 +957,7 @@ sub as_complex {
   my $x1 = shift;
 
   my $x_tmp;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $x_tmp = $x1->as_integer;
   }
   else {
@@ -973,7 +977,7 @@ sub as_double {
   my $x1 = shift;
   
   my $x2;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $x2 = Rstats::Array->new->vector($x1->vector->as_double);
   }
   else {
@@ -988,7 +992,7 @@ sub as_integer {
   my $x1 = shift;
   
   my $x2;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $x2 = Rstats::Array->new->vector($x1->vector->as_integer);
   }
   else {
@@ -1003,7 +1007,7 @@ sub as_logical {
   my $x1 = shift;
   
   my $x2;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $x2 = Rstats::Array->new->vector($x1->vector->as_logical);
   }
   else {
@@ -1020,7 +1024,7 @@ sub as_character {
   my $x1 = shift;
   
   my $x2;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     my $levels = {};
     my $x_levels = $x1->levels;
     my $x_levels_values = $x_levels->values;
@@ -1067,6 +1071,8 @@ sub values {
 }
 
 sub is_vector {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $is = ref $x1 eq 'Rstats::Array' && !exists $x1->{dim};
@@ -1086,27 +1092,33 @@ sub is_matrix {
 }
 
 sub is_numeric {
+  my $r = shift;
+  
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
 }
 
 sub is_double {
+  my $r = shift;
+  
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'double'
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && ($x1->vector->type || '') eq 'double'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
 }
 
 sub is_integer {
+  my $r = shift;
+  
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'integer'
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && ($x1->vector->type || '') eq 'integer'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1117,7 +1129,7 @@ sub is_complex {
   
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'complex'
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && ($x1->vector->type || '') eq 'complex'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1128,22 +1140,26 @@ sub is_character {
   
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'character'
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && ($x1->vector->type || '') eq 'character'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
 }
 
 sub is_logical {
+  my $r = shift;
+  
   my $x1 = shift;
   
-  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'logical'
+  my $x_is = (is_array(undef(), $x1) || Rstats::Func::is_vector(undef(), $x1)) && ($x1->vector->type || '') eq 'logical'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
 }
 
 sub is_data_frame {
+  my $r = shift;
+  
   my $x1 = shift;
   
   return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
@@ -1168,7 +1184,7 @@ sub names {
     $names = $names->as_character unless is_character(undef(), $names);
     $x1->{names} = $names->vector->clone;
     
-    if ($x1->is_data_frame) {
+    if (Rstats::Func::is_data_frame(undef(), $x1)) {
       $x1->{dimnames}[1] = $x1->{names}->vector->clone;
     }
     
@@ -1203,7 +1219,7 @@ sub dimnames {
       }
       $x1->{dimnames} = $dimnames;
       
-      if ($x1->is_data_frame) {
+      if (Rstats::Func::is_data_frame(undef(), $x1)) {
         $x1->{names} = $x1->{dimnames}[1]->clone;
       }
     }

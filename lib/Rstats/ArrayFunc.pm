@@ -476,7 +476,7 @@ sub factor {
   }
   
   # default - ordered
-  $x_ordered = $x1->is_ordered unless defined $x_ordered;
+  $x_ordered = Rstats::Func::is_ordered(undef(), $x1) unless defined $x_ordered;
   
   my $x1_values = $x1->values;
   
@@ -552,7 +552,7 @@ sub data_frame {
   
   my @data = @_;
   
-  return cbind(undef(), @data) if ref $data[0] && $data[0]->is_data_frame;
+  return cbind(undef(), @data) if ref $data[0] && Rstats::Func::is_data_frame(undef(), $data[0]);
   
   my $elements = [];
   
@@ -1074,7 +1074,7 @@ sub nrow {
   
   my $x1 = shift;
   
-  if ($x1->is_data_frame) {
+  if (Rstats::Func::is_data_frame(undef(), $x1)) {
     return Rstats::ArrayFunc::c($x1->{row_length});
   }
   elsif (Rstats::Func::is_list(undef(), $x1)) {
@@ -1233,7 +1233,7 @@ sub nchar {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose}) {
-      if ($x1_element->is_na->value) {
+      if (Rstats::Func::is_na(undef(), $x1_element)->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1259,7 +1259,7 @@ sub tolower {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose}) {
-      if ($x1_element->is_na->value) {
+      if (Rstats::Func::is_na(undef(), $x1_element)->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1285,7 +1285,7 @@ sub toupper {
   if ($x1->vector->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{$x1->decompose}) {
-      if ($x1_element->is_na->value) {
+      if (Rstats::Func::is_na(undef(), $x1_element)->value) {
         push @$x2_elements, $x1_element;
       }
       else {
@@ -1396,7 +1396,7 @@ sub cbind {
 
   return Rstats::ArrayFunc::NULL() unless @xs;
   
-  if ($xs[0]->is_data_frame) {
+  if (Rstats::Func::is_data_frame(undef(), $xs[0])) {
     # Check row count
     my $first_row_length;
     my $different;
@@ -1437,7 +1437,7 @@ sub cbind {
         $row_count = $a1_dim_elements->[0];
         $col_count_total += $a1_dim_elements->[1];
       }
-      elsif ($a1->is_vector) {
+      elsif (Rstats::Func::is_vector(undef(), $a1)) {
         $row_count = $a1->dim_as_array->values->[0];
         $col_count_total += 1;
       }
@@ -1540,13 +1540,13 @@ sub cummax {
   push @a2_elements, $max;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na->value) {
+    if (Rstats::Func::is_na(undef(), $element)->value) {
       return Rstats::ArrayFunc::NA();
     }
-    elsif ($element->is_nan->value) {
+    elsif (Rstats::Func::is_nan(undef(), $element)->value) {
       $max = $element;
     }
-    if (Rstats::VectorFunc::more_than($element, $max)->value && !$max->is_nan->value) {
+    if (Rstats::VectorFunc::more_than($element, $max)->value && !Rstats::Func::is_nan(undef(), $max)->value) {
       $max = $element;
     }
     push @a2_elements, $max;
@@ -1570,13 +1570,13 @@ sub cummin {
   my $min = shift @$x1_elements;
   push @a2_elements, $min;
   for my $element (@$x1_elements) {
-    if ($element->is_na->value) {
+    if (Rstats::Func::is_na(undef(), $element)->value) {
       return Rstats::ArrayFunc::NA();
     }
-    elsif ($element->is_nan->value) {
+    elsif (Rstats::Func::is_nan(undef(), $element)->value) {
       $min = $element;
     }
-    if (Rstats::VectorFunc::less_than($element, $min)->value && !$min->is_nan->value) {
+    if (Rstats::VectorFunc::less_than($element, $min)->value && !Rstats::Func::is_nan(undef(), $min)->value) {
       $min = $element;
     }
     push @a2_elements, $min;
@@ -1652,7 +1652,8 @@ sub complex {
   }
   # Create complex from re and im
   else {
-    Carp::croak "mode should be numeric" unless $x1_re->is_numeric && $x1_im->is_numeric;
+    Carp::croak "mode should be numeric"
+      unless Rstats::Func::is_numeric(undef(), $x1_re) && Rstats::Func::is_numeric(undef(), $x1_im);
     
     my $x1_re_elements = $x1_re->decompose;
     my $x1_im_elements = $x1_im->decompose;
@@ -1731,7 +1732,7 @@ sub head {
   
   my $n = defined $x_n ? $x_n->value : 6;
   
-  if ($x1->is_data_frame) {
+  if (Rstats::Func::is_data_frame(undef(), $x1)) {
     my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
     
     my $x_range = Rstats::ArrayFunc::se(undef(), "1:$max");
@@ -1815,13 +1816,13 @@ sub max {
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na->value) {
+    if (Rstats::Func::is_na(undef(), $element)->value) {
       return Rstats::ArrayFunc::NA();
     }
-    elsif ($element->is_nan->value) {
+    elsif (Rstats::Func::is_nan(undef(), $element)->value) {
       $max = $element;
     }
-    if (!$max->is_nan->value && Rstats::VectorFunc::more_than($element, $max)->value) {
+    if (!Rstats::Func::is_nan(undef(), $max)->value && Rstats::VectorFunc::more_than($element, $max)->value) {
       $max = $element;
     }
   }
@@ -1853,13 +1854,13 @@ sub min {
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($element->is_na->value) {
+    if (Rstats::Func::is_na(undef(), $element)->value) {
       return Rstats::ArrayFunc::NA();
     }
-    elsif ($element->is_nan->value) {
+    elsif (Rstats::Func::is_nan(undef(), $element)->value) {
       $min = $element;
     }
-    if (!$min->is_nan->value && Rstats::VectorFunc::less_than($element, $min)->value) {
+    if (!Rstats::Func::is_nan(undef(), $min)->value && Rstats::VectorFunc::less_than($element, $min)->value) {
       $min = $element;
     }
   }
@@ -2023,7 +2024,7 @@ sub rbind {
   
   return Rstats::ArrayFunc::NULL() unless @xs;
   
-  if ($xs[0]->is_data_frame) {
+  if (Rstats::Func::is_data_frame(undef(), $xs[0])) {
     
     # Check names
     my $first_names;
@@ -2049,7 +2050,7 @@ sub rbind {
       my @vectors;
       for my $x (@xs) {
         my $v = $x->getin($name);
-        if ($v->is_factor) {
+        if (Rstats::Func::is_factor(undef(), $v)) {
           push @vectors, $v->as_character;
         }
         else {
@@ -2294,7 +2295,7 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @a2_elements = grep { !$_->is_na->value && !$_->is_nan->value } @{$x1->decompose};
+  my @a2_elements = grep { !Rstats::Func::is_na(undef(), $_)->value && !Rstats::Func::is_nan(undef(), $_)->value } @{$x1->decompose};
   
   my $x3_elements = $decreasing
     ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
@@ -2372,12 +2373,12 @@ sub unique {
   
   my $x1 = to_c(shift);
   
-  if ($x1->is_vector) {
+  if (Rstats::Func::is_vector(undef(), $x1)) {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
     for my $x1_element (@{$x1->decompose}) {
-      if ($x1_element->is_na->value) {
+      if (Rstats::Func::is_na(undef(), $x1_element)->value) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;
         }
@@ -2625,8 +2626,8 @@ sub inner_product {
   my ($x1, $x2) = @_;
   
   # Convert to matrix
-  $x1 = Rstats::ArrayFunc::t(undef(), $x1->as_matrix) if $x1->is_vector;
-  $x2 = $x2->as_matrix if $x2->is_vector;
+  $x1 = Rstats::ArrayFunc::t(undef(), $x1->as_matrix) if Rstats::Func::is_vector(undef(), $x1);
+  $x2 = $x2->as_matrix if Rstats::Func::is_vector(undef(), $x2);
   
   # Calculate
   if (Rstats::Func::is_matrix(undef(), $x1) && Rstats::Func::is_matrix(undef(), $x2)) {
@@ -2681,7 +2682,7 @@ sub ncol {
   
   my $x1 = shift;
   
-  if ($x1->is_data_frame) {
+  if (Rstats::Func::is_data_frame(undef(), $x1)) {
     return Rstats::ArrayFunc::c($x1->length_value);
   }
   elsif (Rstats::Func::is_list(undef(), $x1)) {
@@ -2985,7 +2986,7 @@ sub set {
   my ($poss, $x2_dim) = Rstats::Util::parse_index($x1, 0, @$_indexs);
   
   my $x1_elements;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $x1_elements = $x1->decompose;
     $x2 = $x2->as_character unless Rstats::Func::is_character(undef(), $x2);
     my $x2_elements = $x2->decompose;
@@ -2993,7 +2994,7 @@ sub set {
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
-      if ($element->is_na->value) {
+      if (Rstats::Func::is_na(undef(), $element)->value) {
         $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
       }
       else {
@@ -3049,7 +3050,7 @@ sub get {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
   my $level_drop;
-  if ($x1->is_factor) {
+  if (Rstats::Func::is_factor(undef(), $x1)) {
     $level_drop = $opt->{drop};
   }
   else {
@@ -3110,7 +3111,7 @@ sub is_nan {
   
   my $x1 = Rstats::ArrayFunc::to_c(shift);
   
-  if (my $vector = $x1->vector) {
+  if (defined(my $vector = $x1->vector)) {
     my $x2 = Rstats::ArrayFunc::NULL();
     $x2->vector($x1->vector->is_nan);
     $x1->copy_attrs_to($x2);
@@ -3159,14 +3160,14 @@ sub is_finite {
 sub to_string {
   my $x1 = shift;
   
-  my $is_factor = $x1->is_factor;
-  my $is_ordered = $x1->is_ordered;
+  my $is_factor = Rstats::Func::is_factor(undef(), $x1);
+  my $is_ordered = Rstats::Func::is_ordered(undef(), $x1);
   my $levels;
   if ($is_factor) {
     $levels = $x1->levels->values;
   }
   
-  $x1 = $x1->as_character if $x1->is_factor;
+  $x1 = $x1->as_character if Rstats::Func::is_factor(undef(), $x1);
   
   my $is_character = Rstats::Func::is_character(undef(), $x1);
 

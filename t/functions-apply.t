@@ -133,7 +133,7 @@ use Rstats;
 {
   my $x1 = list(c(1, 2), c(3.2, 4.2));
   my $x2 = r->sapply($x1, 'sum');
-  ok($x2->is_vector);
+  ok(r->is_vector($x2));
   is_deeply($x2->values, [3, 7.4]);
 }
 

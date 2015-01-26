@@ -242,7 +242,7 @@ use Rstats;
   {
     my $x1 = factor(c("a", "b", "c"));
     my $x2 = r->as_logical($x1);
-    ok($x2->is_logical);
+    ok(r->is_logical($x2));
     is_deeply($x2->values, [1, 1, 1]);
   }
   

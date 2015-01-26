@@ -445,7 +445,7 @@ use Rstats::Util;
   {
     my $x1 = c(Inf);
     my $x2 = r->log($x1);
-    ok($x2->is_infinite->values, [1]);
+    ok(r->is_infinite($x2)->values, [1]);
   }
   
   # log - Inf()

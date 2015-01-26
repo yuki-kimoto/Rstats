@@ -36,7 +36,8 @@ sub parse_index {
   my @indexs;
   my @x2_dim;
   
-  if (ref $_indexs[0] && Rstats::Func::is_array(undef(), $_indexs[0]) && $_indexs[0]->is_logical && $_indexs[0]->dim->length_value > 1) {
+  if (ref $_indexs[0] && Rstats::Func::is_array(undef(), $_indexs[0])
+    && Rstats::Func::is_logical(undef(), $_indexs[0]) && $_indexs[0]->dim->length_value > 1) {
     my $x2 = $_indexs[0];
     my $x2_dim_values = $x2->dim->values;
     my $x2_values = $x2->values;
@@ -54,7 +55,7 @@ sub parse_index {
 
       my $index = defined $_index ? Rstats::Func::to_c($_index) : Rstats::Func::NULL();
       my $index_values = $index->values;
-      if (@$index_values && !Rstats::Func::is_character(undef(), $index) && !$index->is_logical) {
+      if (@$index_values && !Rstats::Func::is_character(undef(), $index) && !Rstats::Func::is_logical(undef(), $index)) {
         my $minus_count = 0;
         for my $index_value (@$index_values) {
           if ($index_value == 0) {
@@ -74,7 +75,7 @@ sub parse_index {
         $index = Rstats::Func::new_integer(@$index_values_new);
       }
       elsif (Rstats::Func::is_character(undef(), $index)) {
-        if ($x1->is_vector) {
+        if (Rstats::Func::is_vector(undef(), $x1)) {
           my $index_new_values = [];
           for my $name (@{$index->values}) {
             my $i = 0;
@@ -98,7 +99,7 @@ sub parse_index {
           croak "Can't support name except vector and matrix";
         }
       }
-      elsif ($index->is_logical) {
+      elsif (Rstats::Func::is_logical(undef(), $index)) {
         my $index_values_new = [];
         for (my $i = 0; $i < @{$index->values}; $i++) {
           push @$index_values_new, $i + 1 if $index_values->[$i];

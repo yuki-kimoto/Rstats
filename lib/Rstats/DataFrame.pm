@@ -33,7 +33,7 @@ sub get {
       push @$col_index_values, $self->_name_to_index($col_index_value);
     }
   }
-  elsif ($col_index->is_logical) {
+  elsif (Rstats::Func::is_logical(undef(), $col_index)) {
     my $tmp_col_index_values = $col_index->values;
     for (my $i = 0; $i < @$tmp_col_index_values; $i++) {
       push @$col_index_values, $i + 1 if $tmp_col_index_values->[$i];
@@ -94,7 +94,7 @@ sub to_string {
   my $columns = [];
   for (my $i = 1; $i <= @$column_names; $i++) {
     my $x = $self->getin($i);
-    $x = $x->as_character if $x->is_factor;
+    $x = $x->as_character if Rstats::Func::is_factor(undef(), $x);
     push @$columns, $x->values;
   }
   my $col_count = @{$columns};

@@ -168,9 +168,6 @@ my @func_names2 = qw/
   is_na
   is_nan
   is_null
-/;
-
-my @func_names = qw/
   is_numeric
   is_double
   is_integer
@@ -179,6 +176,9 @@ my @func_names = qw/
   is_factor
   is_ordered
   is_data_frame
+/;
+
+my @func_names = qw/
   labels
   levels
   dim

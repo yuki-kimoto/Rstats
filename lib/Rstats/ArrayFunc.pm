@@ -3104,6 +3104,8 @@ sub is_null {
 }
 
 sub is_nan {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::to_c(shift);
   
   if (my $vector = $x1->vector) {

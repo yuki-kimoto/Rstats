@@ -166,10 +166,10 @@ my @func_names2 = qw/
   is_list
   is_matrix
   is_na
+  is_nan
 /;
 
 my @func_names = qw/
-  is_nan
   is_null
   is_numeric
   is_double

@@ -190,10 +190,10 @@ my @func_names2 = qw/
   levels
   dim
   names
+  nlevels
 /;
 
 my @func_names = qw/
-  nlevels
   dimnames
   colnames
   rownames

@@ -51,7 +51,7 @@ use Rstats;
   # nlevels - set values
   {
     my $x1 = factor(c("a1", "a2", "a1", "a2"));
-    is_deeply($x1->nlevels->values, [2]);
+    is_deeply(r->nlevels($x1)->values, [2]);
   }
   
   # nlevels - function

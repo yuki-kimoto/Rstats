@@ -665,6 +665,8 @@ sub _name_to_index {
 }
 
 sub nlevels {
+  my $r = shift;
+  
   my $x1 = shift;
   
   return Rstats::ArrayFunc::c(Rstats::Func::levels(undef(), $x1)->length_value);

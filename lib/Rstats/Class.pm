@@ -158,18 +158,10 @@ my @func_names2 = qw/
   var
   which
   as_array
+  is_array
 /;
 
 my @func_names = qw/
-  as_character
-  as_complex
-  as_integer
-  as_list
-  as_logical
-  as_matrix
-  as_numeric
-  as_vector
-  is_array
   is_character
   is_complex
   is_finite
@@ -208,6 +200,14 @@ my @func_names = qw/
   array
   c
   length
+  as_character
+  as_complex
+  as_integer
+  as_list
+  as_logical
+  as_matrix
+  as_numeric
+  as_vector
 /;
 
 

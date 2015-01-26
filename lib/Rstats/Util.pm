@@ -36,7 +36,7 @@ sub parse_index {
   my @indexs;
   my @x2_dim;
   
-  if (ref $_indexs[0] && $_indexs[0]->is_array && $_indexs[0]->is_logical && $_indexs[0]->dim->length_value > 1) {
+  if (ref $_indexs[0] && Rstats::Func::is_array(undef(), $_indexs[0]) && $_indexs[0]->is_logical && $_indexs[0]->dim->length_value > 1) {
     my $x2 = $_indexs[0];
     my $x2_dim_values = $x2->dim->values;
     my $x2_values = $x2->values;

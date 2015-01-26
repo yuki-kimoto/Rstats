@@ -522,7 +522,7 @@ sub str {
   
   my @str;
   
-  if ($x1->is_vector || $x1->is_array) {
+  if ($x1->is_vector || is_array(undef(), $x1)) {
     # Short type
     my $type = $x1->vector->type;
     my $short_type;
@@ -735,7 +735,7 @@ sub class {
     elsif ($x1->is_matrix) {
       $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
     }
-    elsif ($x1->is_array) {
+    elsif (is_array(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('array'));
     }
     elsif ($x1->is_data_frame) {
@@ -822,7 +822,7 @@ sub mode {
 sub typeof {
   my $x1 = shift;
   
-  if ($x1->is_vector || $x1->is_array) {
+  if ($x1->is_vector || is_array(undef(), $x1)) {
     my $type = $x1->vector->type;
     return Rstats::Func::new_character($type);
   }
@@ -1084,7 +1084,7 @@ sub is_matrix {
 sub is_numeric {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1093,7 +1093,7 @@ sub is_numeric {
 sub is_double {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && ($x1->vector->type || '') eq 'double'
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'double'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1102,7 +1102,7 @@ sub is_double {
 sub is_integer {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && ($x1->vector->type || '') eq 'integer'
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'integer'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1111,7 +1111,7 @@ sub is_integer {
 sub is_complex {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && ($x1->vector->type || '') eq 'complex'
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'complex'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1120,7 +1120,7 @@ sub is_complex {
 sub is_character {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && ($x1->vector->type || '') eq 'character'
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'character'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1129,7 +1129,7 @@ sub is_character {
 sub is_logical {
   my $x1 = shift;
   
-  my $x_is = ($x1->is_array || $x1->is_vector) && ($x1->vector->type || '') eq 'logical'
+  my $x_is = (is_array(undef(), $x1) || $x1->is_vector) && ($x1->vector->type || '') eq 'logical'
     ? Rstats::Func::TRUE() : Rstats::Func::FALSE();
   
   return $x_is;
@@ -1142,6 +1142,8 @@ sub is_data_frame {
 }
 
 sub is_array {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $is = ref $x1 eq 'Rstats::Array' && exists $x1->{dim};

@@ -739,7 +739,7 @@ sub class {
       $x_class->vector($x1->{class}->clone);
     }
     elsif (Rstats::Func::is_vector(undef(), $x1)) {
-      $x_class->vector($x1->mode->vector->clone);
+      $x_class->vector(Rstats::Func::mode(undef(), $x1)->vector->clone);
     }
     elsif (is_matrix(undef(), $x1)) {
       $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
@@ -800,6 +800,8 @@ sub dim {
 }
 
 sub mode {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

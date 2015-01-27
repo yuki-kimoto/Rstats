@@ -1468,7 +1468,7 @@ sub ceiling {
   my $x2 = Rstats::ArrayFunc::c(@a2_elements);
   $x1->copy_attrs_to($x2);
   
-  $x2->mode('double');
+  Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
 }
@@ -1722,7 +1722,7 @@ sub floor {
 
   my $x2 = Rstats::ArrayFunc::c(@a2_elements);
   $x1->copy_attrs_to($x2);
-  $x2->mode('double');
+  Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
 }
@@ -2189,7 +2189,7 @@ sub round {
   my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $ro) / $ro) } @{$x1->decompose};
   my $x2 = Rstats::ArrayFunc::c(@a2_elements);
   $x1->copy_attrs_to($x2);
-  $x2->mode('double');
+  Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
 }
@@ -2365,7 +2365,7 @@ sub trunc {
 
   my $x2 = Rstats::ArrayFunc::c(@a2_elements);
   $x1->copy_attrs_to($x2);
-  $x2->mode('double');
+  Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
 }

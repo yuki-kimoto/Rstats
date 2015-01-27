@@ -194,10 +194,10 @@ my @func_names2 = qw/
   dimnames
   colnames
   rownames
+  mode
 /;
 
 my @func_names = qw/
-  mode
   str
   typeof
   Inf

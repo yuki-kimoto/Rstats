@@ -195,10 +195,10 @@ my @func_names2 = qw/
   colnames
   rownames
   mode
+  str
 /;
 
 my @func_names = qw/
-  str
   typeof
   Inf
   NaN

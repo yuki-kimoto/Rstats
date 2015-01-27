@@ -518,6 +518,8 @@ sub _value_to_string {
 }
 
 sub str {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my @str;

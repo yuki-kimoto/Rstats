@@ -1622,6 +1622,8 @@ sub args_array {
 }
 
 sub complex {
+  my $r = shift;
+  
   my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array(['re', 'im', 'mod', 'arg'], @_);
   
   $x1_mod = Rstats::ArrayFunc::NULL() unless defined $x1_mod;
@@ -1761,6 +1763,8 @@ sub head {
 }
 
 sub i {
+  my $r = shift;
+  
   my $i = Rstats::VectorFunc::new_complex({re => 0, im => 1});
   
   return Rstats::ArrayFunc::c($i);

@@ -205,11 +205,11 @@ my @func_names2 = qw/
   FALSE
   F
   pi
+  complex
+  i
 /;
 
 my @func_names = qw/
-  complex
-  i
   array
   c
   length

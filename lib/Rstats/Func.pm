@@ -14,7 +14,7 @@ sub sweep {
   my $r = shift;
   
   my ($x1, $x_margin, $x2, $x_func)
-    = Rstats::Func::args_array(['x1', 'margin', 'x2', 'FUN'], @_);
+    = Rstats::Func::args_array(undef(), ['x1', 'margin', 'x2', 'FUN'], @_);
   
   my $x_margin_values = $x_margin->values;
   my $func = defined $x_func ? $x_func->value : '-';
@@ -73,7 +73,7 @@ sub runif {
   my $r = shift;
 
   my ($x_count, $x_min, $x_max)
-    =  Rstats::ArrayFunc::args_array(['count', 'min', 'max'], @_);
+    =  Rstats::ArrayFunc::args_array(undef(), ['count', 'min', 'max'], @_);
   
   my $count = $x_count->value;
   my $min = defined $x_min ? $x_min->value : 0;
@@ -104,7 +104,7 @@ sub apply {
   my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
 
   my ($x1, $x_margin)
-    = Rstats::Func::args_array(['x1', 'margin'], @_);
+    = Rstats::Func::args_array(undef(), ['x1', 'margin'], @_);
 
   my $dim_values = Rstats::Func::dim(undef(), $x1)->values;
   my $margin_values = $x_margin->values;
@@ -186,7 +186,7 @@ sub tapply {
   my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
 
   my ($x1, $x2)
-    = Rstats::Func::args_array(['x1', 'x2'], @_);
+    = Rstats::Func::args_array(undef(), ['x1', 'x2'], @_);
   
   my $new_values = [];
   my $x1_values = $x1->values;
@@ -220,7 +220,7 @@ sub lapply {
   my $func_name = splice(@_, 1, 1);
   my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
 
-  my ($x1) = Rstats::Func::args_array(['x1'], @_);
+  my ($x1) = Rstats::Func::args_array(undef(), ['x1'], @_);
   
   my $new_elements = [];
   for my $element (@{$x1->list}) {

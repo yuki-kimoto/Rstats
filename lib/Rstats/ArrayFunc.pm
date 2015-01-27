@@ -85,7 +85,7 @@ sub subset {
   my $r = shift;
   
   my ($x1, $x_condition, $x_names)
-    = args_array(['x1', 'condition', 'names'], @_);
+    = args_array(undef(), ['x1', 'condition', 'names'], @_);
   
   $x_names = Rstats::ArrayFunc::NULL() unless defined $x_names;
   
@@ -179,12 +179,12 @@ sub na_omit {
 
 # TODO: merge is not implemented yet
 sub merge {
-  die "merge is not implemented yet";
-
   my $r = shift;
+
+  die "merge is not implemented yet";
   
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
-    = args_array([qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
+    = args_array(undef(), [qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
   
   # Join way
   $x_all = FALSE unless defined $x_all;
@@ -230,7 +230,7 @@ sub read_table {
   my $r = shift;
   
   my ($x_file, $x_sep, $x_skip, $x_nrows, $x_header, $x_comment_char, $x_row_names, $x_encoding)
-    = args_array([qw/file sep skip nrows header comment.char row.names encoding/], @_);
+    = args_array(undef(), [qw/file sep skip nrows header comment.char row.names encoding/], @_);
   
   my $file = $x_file->value;
   open(my $fh, '<', $file)
@@ -339,7 +339,7 @@ sub interaction {
   $opt = ref $_[-1] eq 'HASH' ? pop : {};
   my @xs = map { Rstats::Func::as_factor(undef(), to_c($_)) } @_;
   my ($x_drop, $x_sep);
-  ($x_drop, $x_sep) = args_array(['drop', 'sep'], $opt);
+  ($x_drop, $x_sep) = args_array(undef(), ['drop', 'sep'], $opt);
   
   $x_sep = Rstats::ArrayFunc::c(undef(), ".") unless defined $x_sep;
   my $sep = $x_sep->value;
@@ -394,7 +394,7 @@ sub gl {
   my $r = shift;
   
   my ($x_n, $x_k, $x_length, $x_labels, $x_ordered)
-    = args_array([qw/n k length labels ordered/], @_);
+    = args_array(undef(), [qw/n k length labels ordered/], @_);
   
   my $n = $x_n->value;
   my $k = $x_k->value;
@@ -441,7 +441,7 @@ sub factor {
   my $r = shift;
   
   my ($x1, $x_levels, $x_labels, $x_exclude, $x_ordered)
-    = args_array([qw/x levels labels exclude ordered/], @_);
+    = args_array(undef(), [qw/x levels labels exclude ordered/], @_);
 
   # default - x
   $x1 = Rstats::Func::as_character(undef(), $x1) unless Rstats::Func::is_character(undef(), $x1);
@@ -653,7 +653,7 @@ sub data_frame {
 sub upper_tri {
   my $r = shift;
   
-  my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
+  my ($x1_m, $x1_diag) = args_array(undef(), ['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
@@ -688,7 +688,7 @@ sub upper_tri {
 sub lower_tri {
   my $r = shift;
   
-  my ($x1_m, $x1_diag) = args_array(['m', 'diag'], @_);
+  my ($x1_m, $x1_diag) = args_array(undef(), ['m', 'diag'], @_);
   
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
@@ -869,7 +869,7 @@ sub sub {
   my $r = shift;
   
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+    = args_array(undef(), ['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
@@ -901,7 +901,7 @@ sub gsub {
   my $r = shift;
   
   my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args_array(['pattern', 'replacement', 'x', 'ignore.case'], @_);
+    = args_array(undef(), ['pattern', 'replacement', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $replacement = $x1_replacement->value;
@@ -932,7 +932,7 @@ sub gsub {
 sub grep {
   my $r = shift;
   
-  my ($x1_pattern, $x1_x, $x1_ignore_case) = args_array(['pattern', 'x', 'ignore.case'], @_);
+  my ($x1_pattern, $x1_x, $x1_ignore_case) = args_array(undef(), ['pattern', 'x', 'ignore.case'], @_);
   
   my $pattern = $x1_pattern->value;
   my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
@@ -1000,7 +1000,7 @@ sub col {
 sub chartr {
   my $r = shift;
   
-  my ($x1_old, $x1_new, $x1_x) = args_array(['old', 'new', 'x'], @_);
+  my ($x1_old, $x1_new, $x1_x) = args_array(undef(), ['old', 'new', 'x'], @_);
   
   my $old = $x1_old->value;
   my $new = $x1_new->value;
@@ -1028,7 +1028,7 @@ sub chartr {
 sub charmatch {
   my $r = shift;
   
-  my ($x1_x, $x1_table) = args_array(['x', 'table'], @_);
+  my ($x1_x, $x1_table) = args_array(undef(), ['x', 'table'], @_);
   
   die "Not implemented"
     unless $x1_x->vector->type eq 'character' && $x1_table->vector->type eq 'character';
@@ -1357,7 +1357,7 @@ sub acosh {
 sub append {
   my $r = shift;
   
-  my ($x1, $x2, $x_after) = args_array(['x1', 'x2', 'after'], @_);
+  my ($x1, $x2, $x_after) = args_array(undef(), ['x1', 'x2', 'after'], @_);
   
   # Default
   $x_after = NULL unless defined $x_after;
@@ -1603,6 +1603,8 @@ sub cumprod {
 }
 
 sub args_array {
+  my $r = shift;
+  
   my $names = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my @args;
@@ -1626,7 +1628,7 @@ sub args_array {
 sub complex {
   my $r = shift;
   
-  my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array(['re', 'im', 'mod', 'arg'], @_);
+  my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array(undef(), ['re', 'im', 'mod', 'arg'], @_);
   
   $x1_mod = Rstats::ArrayFunc::NULL() unless defined $x1_mod;
   $x1_arg = Rstats::ArrayFunc::NULL() unless defined $x1_arg;
@@ -1737,7 +1739,7 @@ sub floor {
 sub head {
   my $r = shift;
   
-  my ($x1, $x_n) = args_array(['x1', 'n'], @_);
+  my ($x1, $x_n) = args_array(undef(), ['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
   
@@ -2091,7 +2093,7 @@ sub rbind {
 sub rep {
   my $r = shift;
   
-  my ($x1, $x_times) = args_array(['x1', 'times'], @_);
+  my ($x1, $x_times) = args_array(undef(), ['x1', 'times'], @_);
   
   my $times = defined $x_times ? $x_times->value : 1;
   
@@ -2302,7 +2304,7 @@ sub sqrt {
 sub sort {
   my $r = shift;
   
-  my ($x1, $x_decreasing) = Rstats::ArrayFunc::args_array(['x1', 'decreasing', 'na.last'], @_);
+  my ($x1, $x_decreasing) = Rstats::ArrayFunc::args_array(undef(), ['x1', 'decreasing', 'na.last'], @_);
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
@@ -2318,7 +2320,7 @@ sub sort {
 sub tail {
   my $r = shift;
   
-  my ($x1, $x_n) = Rstats::ArrayFunc::args_array(['x1', 'n'], @_);
+  my ($x1, $x_n) = Rstats::ArrayFunc::args_array(undef(), ['x1', 'n'], @_);
   
   my $n = defined $x_n ? $x_n->value : 6;
   
@@ -2583,7 +2585,7 @@ sub matrix {
   my $r = shift;
   
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
-    = Rstats::ArrayFunc::args_array(['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
+    = Rstats::ArrayFunc::args_array(undef(), ['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
   Carp::croak "matrix method need data as frist argument"
     unless defined $x1;

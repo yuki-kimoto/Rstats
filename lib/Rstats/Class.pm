@@ -209,12 +209,12 @@ my @func_names2 = qw/
   i
   array
   length
-/;
-
-my @func_names = qw/
   c
 /;
 
+my @func_names = qw/
+  values
+/;
 
 sub new {
   my $self = shift->SUPER::new(@_);

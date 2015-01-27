@@ -30,7 +30,7 @@ Rstats::Vector* Rstats::ArrayFunc::get_dim(SV* sv_a1) {
   return dim;
 }
 
-SV* Rstats::ArrayFunc::c(SV* sv_elements) {
+SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
 
   IV element_length = Rstats::pl_av_len(sv_elements);
   // Check type and length
@@ -192,7 +192,7 @@ SV* Rstats::ArrayFunc::to_c(SV* sv_x) {
   else {
     SV* sv_tmp = Rstats::pl_new_av_ref();
     Rstats::pl_av_push(sv_tmp, sv_x);
-    sv_x1 = Rstats::ArrayFunc::c(sv_tmp);
+    sv_x1 = Rstats::ArrayFunc::c(&PL_sv_undef, sv_tmp);
   }
   
   return sv_x1;

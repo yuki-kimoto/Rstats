@@ -776,7 +776,7 @@ namespace Rstats {
     Rstats::Vector* get_vector(SV*);
     void set_dim(SV*, Rstats::Vector*);
     Rstats::Vector* get_dim(SV*);
-    SV* c(SV*);
+    SV* c(SV*, SV*);
     SV* to_c(SV*);
   }
 }

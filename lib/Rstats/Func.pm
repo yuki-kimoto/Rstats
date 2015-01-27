@@ -380,7 +380,6 @@ sub sqrt { Rstats::ArrayFunc::sqrt(@_) }
 sub sort { Rstats::ArrayFunc::sort(@_) }
 sub tail { Rstats::ArrayFunc::tail(@_) }
 sub tan { Rstats::ArrayFunc::tan(@_) }
-sub operate_unary_old { Rstats::ArrayFunc::operate_unary_old(@_) }
 sub sin { Rstats::ArrayFunc::sin(@_) }
 sub operate_unary { Rstats::ArrayFunc::operate_unary(@_) }
 sub tanh { Rstats::ArrayFunc::tanh(@_) }

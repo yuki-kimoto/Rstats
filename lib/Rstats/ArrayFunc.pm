@@ -857,12 +857,12 @@ sub outer {
 
 sub Mod {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::Mod, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::Mod, @_);
 }
 
 sub Arg {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::Arg, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::Arg, @_);
 }
 
 sub sub {
@@ -1063,17 +1063,17 @@ sub charmatch {
 
 sub Conj {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::Conj, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::Conj, @_);
 }
 
 sub Re {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::Re, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::Re, @_);
 }
 
 sub Im {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::Im, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::Im, @_);
 }
 
 sub nrow {
@@ -1341,16 +1341,16 @@ sub match {
 
 sub abs {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::abs, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::abs, @_);
 }
 
 sub acos {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::acos, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::acos, @_);
 }
 sub acosh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::acosh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::acosh, @_);
 }
 
 
@@ -1378,22 +1378,22 @@ sub append {
 
 sub asin {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::asin, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::asin, @_);
 }
 
 sub asinh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::asinh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::asinh, @_);
 }
 
 sub atan {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::atan, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::atan, @_);
 }
 
 sub atanh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::atanh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::atanh, @_);
 }
 
 sub cbind {
@@ -1518,7 +1518,7 @@ sub colSums {
 
 sub cos {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::cos, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::cos, @_);
 }
 
 sub atan2 {
@@ -1528,7 +1528,7 @@ sub atan2 {
 
 sub cosh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::cosh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::cosh, @_);
 }
 
 sub cummax {
@@ -1594,12 +1594,12 @@ sub cummin {
 
 sub cumsum {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::cumsum, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::cumsum, @_);
 }
 
 sub cumprod {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::cumprod, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::cumprod, @_);
 }
 
 sub args_array {
@@ -1681,12 +1681,12 @@ sub complex {
 
 sub exp {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::exp, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::exp, @_);
 }
 
 sub expm1 {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::expm1, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::expm1, @_);
 }
 
 sub floor {
@@ -1766,22 +1766,22 @@ sub ifelse {
 
 sub log {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::log, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::log, @_);
 }
 
 sub logb {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::logb, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::logb, @_);
 }
 
 sub log2 {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::log2, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::log2, @_);
 }
 
 sub log10 {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::log10, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::log10, @_);
 }
 
 sub max {
@@ -1986,7 +1986,7 @@ sub pmin {
 
 sub prod {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::prod, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::prod, @_);
 }
 
 sub range {
@@ -2262,12 +2262,12 @@ sub sequence {
 
 sub sinh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::sinh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::sinh, @_);
 }
 
 sub sqrt {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::sqrt, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::sqrt, @_);
 }
 
 sub sort {
@@ -2308,15 +2308,17 @@ sub tail {
 
 sub tan {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::tan, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::tan, @_);
 }
 
 sub sin {
   my $r = shift;
-  operate_unary(\&Rstats::VectorFunc::sin, @_);
+  operate_unary(undef(), \&Rstats::VectorFunc::sin, @_);
 }
 
 sub operate_unary {
+  my $r = shift;
+  
   my $func = shift;
   my $x1 = to_c(shift);
   
@@ -2330,7 +2332,7 @@ sub operate_unary {
 
 sub tanh {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::tanh, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::tanh, @_);
 }
 
 sub trunc {
@@ -2658,7 +2660,7 @@ sub row {
 
 sub sum {
   my $r = shift;
-  return operate_unary(\&Rstats::VectorFunc::sum, @_);
+  return operate_unary(undef(), \&Rstats::VectorFunc::sum, @_);
 }
 
 sub ncol {
@@ -2833,7 +2835,7 @@ sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
 sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
 sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
 
-sub negation { operate_unary(\&Rstats::VectorFunc::negation, @_) }
+sub negation { operate_unary(undef(), \&Rstats::VectorFunc::negation, @_) }
 
 sub _fix_pos {
   my ($data1, $data2, $reverse) = @_;

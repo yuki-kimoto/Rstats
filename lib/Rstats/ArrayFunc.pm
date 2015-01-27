@@ -1523,7 +1523,7 @@ sub cos {
 
 sub atan2 {
   my $r = shift;
-  return operate_binary(\&Rstats::VectorFunc::atan2, @_);
+  return operate_binary(undef(), \&Rstats::VectorFunc::atan2, @_);
 }
 
 sub cosh {
@@ -2820,20 +2820,20 @@ sub upgrade_type {
   return @xs;
 }
 
-sub add { operate_binary(\&Rstats::VectorFunc::add, @_) }
-sub subtract { operate_binary(\&Rstats::VectorFunc::subtract, @_) }
-sub multiply { operate_binary(\&Rstats::VectorFunc::multiply, @_) }
-sub divide { operate_binary(\&Rstats::VectorFunc::divide, @_) }
-sub remainder { operate_binary(\&Rstats::VectorFunc::remainder, @_) }
-sub pow { operate_binary(\&Rstats::VectorFunc::pow, @_) }
-sub less_than { operate_binary(\&Rstats::VectorFunc::less_than, @_) }
-sub less_than_or_equal { operate_binary(\&Rstats::VectorFunc::less_than_or_equal, @_) }
-sub more_than { operate_binary(\&Rstats::VectorFunc::more_than, @_) }
-sub more_than_or_equal { operate_binary(\&Rstats::VectorFunc::more_than_or_equal, @_) }
-sub equal { operate_binary(\&Rstats::VectorFunc::equal, @_) }
-sub not_equal { operate_binary(\&Rstats::VectorFunc::not_equal, @_) }
-sub and { operate_binary(\&Rstats::VectorFunc::and, @_) }
-sub or { operate_binary(\&Rstats::VectorFunc::or, @_) }
+sub add { operate_binary(undef(), \&Rstats::VectorFunc::add, @_) }
+sub subtract { operate_binary(undef(), \&Rstats::VectorFunc::subtract, @_) }
+sub multiply { operate_binary(undef(), \&Rstats::VectorFunc::multiply, @_) }
+sub divide { operate_binary(undef(), \&Rstats::VectorFunc::divide, @_) }
+sub remainder { operate_binary(undef(), \&Rstats::VectorFunc::remainder, @_) }
+sub pow { operate_binary(undef(), \&Rstats::VectorFunc::pow, @_) }
+sub less_than { operate_binary(undef(), \&Rstats::VectorFunc::less_than, @_) }
+sub less_than_or_equal { operate_binary(undef(), \&Rstats::VectorFunc::less_than_or_equal, @_) }
+sub more_than { operate_binary(undef(), \&Rstats::VectorFunc::more_than, @_) }
+sub more_than_or_equal { operate_binary(undef(), \&Rstats::VectorFunc::more_than_or_equal, @_) }
+sub equal { operate_binary(undef(), \&Rstats::VectorFunc::equal, @_) }
+sub not_equal { operate_binary(undef(), \&Rstats::VectorFunc::not_equal, @_) }
+sub and { operate_binary(undef(), \&Rstats::VectorFunc::and, @_) }
+sub or { operate_binary(undef(), \&Rstats::VectorFunc::or, @_) }
 
 sub negation { operate_unary(undef(), \&Rstats::VectorFunc::negation, @_) }
 
@@ -2861,6 +2861,8 @@ sub _fix_pos {
 }
 
 sub operate_binary {
+  my $r = shift;
+  
   my ($func, $x1, $x2) = @_;
   
   $x1 = to_c($x1);

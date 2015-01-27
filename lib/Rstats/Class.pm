@@ -197,9 +197,6 @@ my @func_names2 = qw/
   mode
   str
   typeof
-/;
-
-my @func_names = qw/
   Inf
   NaN
   NA
@@ -208,6 +205,9 @@ my @func_names = qw/
   FALSE
   F
   pi
+/;
+
+my @func_names = qw/
   complex
   i
   array

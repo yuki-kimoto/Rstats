@@ -38,7 +38,10 @@ sub NaN {
   return Rstats::ArrayFunc::new_double('NaN');
 }
 
-sub Inf { Rstats::ArrayFunc::new_double('Inf') }
+sub Inf {
+  my $r = shift;
+  return Rstats::ArrayFunc::new_double('Inf');
+}
 
 my $false;
 sub FALSE {

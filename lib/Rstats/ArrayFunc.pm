@@ -1436,16 +1436,16 @@ sub cbind {
     my $x2_elements = [];
     for my $_x (@xs) {
       
-      my $a1 = to_c($_x);
-      my $a1_dim_elements = Rstats::Func::decompose(undef(), Rstats::Func::dim(undef(), $a1));
+      my $x1 = to_c($_x);
+      my $x1_dim_elements = Rstats::Func::decompose(undef(), Rstats::Func::dim(undef(), $x1));
       
       my $row_count;
-      if (Rstats::Func::is_matrix(undef(), $a1)) {
-        $row_count = $a1_dim_elements->[0];
-        $col_count_total += $a1_dim_elements->[1];
+      if (Rstats::Func::is_matrix(undef(), $x1)) {
+        $row_count = $x1_dim_elements->[0];
+        $col_count_total += $x1_dim_elements->[1];
       }
-      elsif (Rstats::Func::is_vector(undef(), $a1)) {
-        $row_count = $a1->dim_as_array->values->[0];
+      elsif (Rstats::Func::is_vector(undef(), $x1)) {
+        $row_count = $x1->dim_as_array->values->[0];
         $col_count_total += 1;
       }
       else {
@@ -1455,7 +1455,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       Carp::croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, @{Rstats::Func::decompose(undef(), $a1)};
+      push @$x2_elements, @{Rstats::Func::decompose(undef(), $x1)};
     }
     my $matrix = matrix(undef(), c(undef(), @$x2_elements), $row_count_needed, $col_count_total);
     

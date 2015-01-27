@@ -210,6 +210,7 @@ my @func_names2 = qw/
   array
   length
   c
+  clone
 /;
 
 my @func_names = qw/

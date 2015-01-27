@@ -77,7 +77,7 @@ use Rstats::Func;
   # clone - matrix with value
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
-    my $x2 = $x1->clone;
+    my $x2 = r->clone($x1);
     $x2->values([2 .. 25]);
     is_deeply($x2->values, [2 .. 25]);
   }
@@ -87,7 +87,7 @@ use Rstats::Func;
     my $x1 = r->matrix(se('1:24'), 3, 2);
     r->rownames($x1 => c('r1', 'r2', 'r3'));
     r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = $x1->clone;
+    my $x2 = r->clone($x1);
     ok(r->is_matrix($x2));
     is_deeply(r->dim($x2)->values, [3, 2]);
     is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
@@ -98,7 +98,7 @@ use Rstats::Func;
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
     r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = $x1->clone;
+    my $x2 = r->clone($x1);
     is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
 }

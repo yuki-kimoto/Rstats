@@ -630,6 +630,8 @@ sub levels {
 }
 
 sub clone {
+  my $r = shift;
+  
   my $x1 = shift;;
   
   my $clone = Rstats::Func::NULL();

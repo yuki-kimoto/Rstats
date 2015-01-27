@@ -1689,37 +1689,6 @@ sub expm1 {
   return operate_unary(\&Rstats::VectorFunc::expm1, @_);
 }
 
-sub max_type {
-  my @xs = @_;
-  
-  my $type_h = {};
-  
-  for my $x (@xs) {
-    my $x_type = Rstats::Func::typeof(undef(), $x)->value;
-    $type_h->{$x_type}++;
-    unless (Rstats::Func::is_null(undef, $x)) {
-      my $type = $x->type;
-      $type_h->{$type}++;
-    }
-  }
-  
-  if ($type_h->{character}) {
-    return 'character';
-  }
-  elsif ($type_h->{complex}) {
-    return 'complex';
-  }
-  elsif ($type_h->{double}) {
-    return 'double';
-  }
-  elsif ($type_h->{integer}) {
-    return 'integer';
-  }
-  else {
-    return 'logical';
-  }
-}
-
 sub floor {
   my $r = shift;
   

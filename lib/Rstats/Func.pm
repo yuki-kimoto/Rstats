@@ -58,7 +58,7 @@ sub sweep {
     $x4 = $x1 % $x3;
   }
   
-  $x1->copy_attrs_to($x4);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x4);
   
   return $x4;
 }
@@ -134,7 +134,7 @@ sub apply {
 
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::ArrayFunc::c(undef(), @$new_elements)->vector);
-  $x1->copy_attrs_to($x1);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
   
   if ($x2->{dim}->length_value == 1) {
@@ -228,7 +228,7 @@ sub lapply {
   }
   
   my $x2 = Rstats::Func::list(undef(), @$new_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   return $x2;
 }
@@ -424,6 +424,8 @@ sub decompose {
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 sub copy_attrs_to {
+  my $r = shift;
+  
   my ($x1, $x2, $opt) = @_;
   
   $opt ||= {};
@@ -630,7 +632,7 @@ sub clone {
   
   my $clone = Rstats::Func::NULL();
   $clone->vector($x1->vector->clone);
-  $x1->copy_attrs_to($clone);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $clone);
   
   return $clone;
 }
@@ -993,7 +995,7 @@ sub as_complex {
 
   my $x2;
   $x2 = Rstats::Array->new->vector($x_tmp->vector->as_complex);
-  $x_tmp->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x_tmp, $x2);
 
   return $x2;
 }
@@ -1011,7 +1013,7 @@ sub as_double {
   }
   else {
     $x2 = Rstats::Array->new->vector($x1->vector->as_double);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }
 
   return $x2;
@@ -1028,7 +1030,7 @@ sub as_integer {
   }
   else {
     $x2 = Rstats::Array->new->vector($x1->vector->as_integer);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }
 
   return $x2;
@@ -1045,7 +1047,7 @@ sub as_logical {
   }
   else {
     $x2 = Rstats::Array->new->vector($x1->vector->as_logical);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }
 
   return $x2;
@@ -1085,11 +1087,11 @@ sub as_character {
     $x2 = Rstats::Func::NULL();
     $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
     
-    $x1->copy_attrs_to($x2)
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }
   else {
     $x2 = Rstats::Array->new->vector($x1->vector->as_character);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }
 
   return $x2;

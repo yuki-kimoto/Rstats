@@ -75,7 +75,7 @@ sub I {
   my $x1 = shift;
   
   my $x2 = Rstats::ArrayFunc::c(undef(), $x1);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   $x2->class('AsIs');
   
   return $x2;
@@ -892,7 +892,7 @@ sub sub {
   }
   
   my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
-  $x1_x->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
 }
@@ -924,7 +924,7 @@ sub gsub {
   }
   
   my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
-  $x1_x->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
 }
@@ -1020,7 +1020,7 @@ sub chartr {
   }
   
   my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
-  $x1_x->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
 }
@@ -1228,7 +1228,7 @@ sub diff {
     push @$x2_elements, $x2_element;
   }
   my $x2 = Rstats::ArrayFunc::c(undef(), @$x2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   return $x2;
 }
@@ -1249,7 +1249,7 @@ sub nchar {
       }
     }
     my $x2 = Rstats::ArrayFunc::c(undef(), @$x2_elements);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }
@@ -1275,7 +1275,7 @@ sub tolower {
       }
     }
     my $x2 = Rstats::ArrayFunc::c(undef(), @$x2_elements);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }
@@ -1301,7 +1301,7 @@ sub toupper {
       }
     }
     my $x2 = Rstats::ArrayFunc::c(undef(), @$x2_elements);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }
@@ -1471,7 +1471,7 @@ sub ceiling {
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{Rstats::Func::decompose(undef(), $x1)};
   
   my $x2 = Rstats::ArrayFunc::c(undef(), @a2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   Rstats::Func::mode(undef(), $x2, 'double');
   
@@ -1728,7 +1728,7 @@ sub floor {
   my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{Rstats::Func::decompose(undef(), $x1)};
 
   my $x2 = Rstats::ArrayFunc::c(undef(), @a2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
@@ -1758,7 +1758,7 @@ sub head {
     }
     
     my $x2 = Rstats::ArrayFunc::c(undef(), @x2_elements);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
     return $x2;
   }
@@ -2146,7 +2146,7 @@ sub rev {
   # Reverse elements
   my @a2_elements = reverse @{Rstats::Func::decompose(undef(), $x1)};
   my $x2 = Rstats::ArrayFunc::c(undef(), @a2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   return $x2;
 }
@@ -2197,7 +2197,7 @@ sub round {
   my $ro = 10 ** $digits;
   my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $ro) / $ro) } @{Rstats::Func::decompose(undef(), $x1)};
   my $x2 = Rstats::ArrayFunc::c(undef(), @a2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
@@ -2330,7 +2330,7 @@ sub tail {
   }
   
   my $x2 = Rstats::ArrayFunc::c(undef(), @e2);
-  $x1->copy_attrs_to($x1);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   return $x2;
 }
@@ -2352,7 +2352,7 @@ sub operate_unary {
   my $x2_elements = $func->($x1->vector);
   my $x2 = Rstats::ArrayFunc::NULL();
   $x2->vector($x2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   
   return $x2;
 }
@@ -2373,7 +2373,7 @@ sub trunc {
     = map { Rstats::VectorFunc::new_double(int $_->value) } @{Rstats::Func::decompose(undef(), $x1)};
 
   my $x2 = Rstats::ArrayFunc::c(undef(), @a2_elements);
-  $x1->copy_attrs_to($x2);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   Rstats::Func::mode(undef(), $x2, 'double');
   
   return $x2;
@@ -2918,7 +2918,7 @@ sub operate_binary {
   $x3 = Rstats::ArrayFunc::NULL();
   $x3->vector($x3_elements);
   
-  $x1->copy_attrs_to($x3);
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x3);
 
   return $x3;
 }
@@ -3027,7 +3027,7 @@ sub set {
     if ($x1->vector->type ne $x2->vector->type) {
       my $x1_tmp;
       ($x1_tmp, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2);
-      $x1_tmp->copy_attrs_to($x1);
+      Rstats::Func::copy_attrs_to(undef(), $x1_tmp, $x1);
       $x1->vector($x1_tmp->vector);
     }
 
@@ -3098,7 +3098,7 @@ sub get {
   );
   
   # Copy attributes
-  $x1->copy_attrs_to($x2, {new_indexes => $new_indexes, exclude => ['dim']});
+  Rstats::Func::copy_attrs_to(undef(), $x1, $x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
   # level drop
   if ($level_drop) {
@@ -3128,7 +3128,7 @@ sub is_nan {
   if (defined(my $vector = $x1->vector)) {
     my $x2 = Rstats::ArrayFunc::NULL();
     $x2->vector($x1->vector->is_nan);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }
@@ -3145,7 +3145,7 @@ sub is_infinite {
   if (my $vector = $x1->vector) {
     my $x2 = Rstats::ArrayFunc::NULL();
     $x2->vector($x1->vector->is_infinite);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }
@@ -3162,7 +3162,7 @@ sub is_finite {
   if (my $vector = $x1->vector) {
     my $x2 = Rstats::ArrayFunc::NULL();
     $x2->vector($x1->vector->is_finite);
-    $x1->copy_attrs_to($x2);
+    Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
     
     return $x2;
   }

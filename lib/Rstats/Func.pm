@@ -835,6 +835,8 @@ sub mode {
 }
 
 sub typeof {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (Rstats::Func::is_vector(undef(), $x1) || is_array(undef(), $x1)) {

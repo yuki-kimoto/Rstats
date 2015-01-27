@@ -1686,7 +1686,7 @@ sub max_type {
   my $type_h = {};
   
   for my $x (@xs) {
-    my $x_type = $x->typeof->value;
+    my $x_type = Rstats::Func::typeof(undef(), $x)->value;
     $type_h->{$x_type}++;
     unless (Rstats::Func::is_null(undef, $x)) {
       my $type = $x->type;

@@ -196,10 +196,10 @@ my @func_names2 = qw/
   rownames
   mode
   str
+  typeof
 /;
 
 my @func_names = qw/
-  typeof
   Inf
   NaN
   NA

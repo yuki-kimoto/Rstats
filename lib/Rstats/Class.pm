@@ -208,11 +208,11 @@ my @func_names2 = qw/
   complex
   i
   array
+  length
 /;
 
 my @func_names = qw/
   c
-  length
 /;
 
 

@@ -349,7 +349,7 @@ sub interaction {
   my $max_length;
   my $values_list = [];
   for my $x (@xs) {
-    my $length = $x->length->value;
+    my $length = Rstats::Func::length(undef(), $x)->value;
     $max_length = $length if !defined $max_length || $length > $max_length;
   }
   
@@ -455,7 +455,7 @@ sub factor {
   $x_exclude = NA unless defined $x_exclude;
   
   # fix levels
-  if (defined $x_exclude->value && $x_exclude->length->value) {
+  if (defined $x_exclude->value && Rstats::Func::length(undef(), $x_exclude)->value) {
     my $new_a_levels_values = [];
     for my $x_levels_value (@{$x_levels->values}) {
       my $match;
@@ -483,8 +483,8 @@ sub factor {
   
   my $x1_values = $x1->values;
   
-  my $labels_length = $x_labels->length->value;
-  my $levels_length = $x_levels->length->value;
+  my $labels_length = Rstats::Func::length(undef(), $x_labels)->value;
+  my $levels_length = Rstats::Func::length(undef(), $x_levels)->value;
   if ($labels_length == 1 && $x1->length_value != 1) {
     my $value = $x_labels->value;
     $x_labels = paste(undef(), $value, se(undef(), "1:$levels_length"), {sep => ""});
@@ -527,6 +527,8 @@ sub factor {
 }
 
 sub length {
+  my $r = shift;
+  
   my $container = shift;
   
   if (ref $container eq 'Rstats::Array') {

@@ -207,10 +207,10 @@ my @func_names2 = qw/
   pi
   complex
   i
+  array
 /;
 
 my @func_names = qw/
-  array
   c
   length
 /;

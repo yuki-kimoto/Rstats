@@ -754,7 +754,7 @@ sub set_diag {
   my $x1_dim_values = Rstats::Func::dim(undef(), $x1)->values;
   my $size = $x1_dim_values->[0] < $x1_dim_values->[1] ? $x1_dim_values->[0] : $x1_dim_values->[1];
   
-  $x2 = array($x2, $size);
+  $x2 = array(undef(), $x2, $size);
   my $x2_values = $x2->values;
   
   for (my $i = 0; $i < $size; $i++) {
@@ -813,7 +813,7 @@ sub kronecker {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array(c(@$x3_values), Rstats::ArrayFunc::c(@$x3_dim_values));
+  my $x3 = array(undef(), c(@$x3_values), Rstats::ArrayFunc::c(@$x3_dim_values));
   
   return $x3;
 }
@@ -848,7 +848,7 @@ sub outer {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array(c(@$x3_values), Rstats::ArrayFunc::c(@$x3_dim));
+  my $x3 = array(undef(), c(@$x3_values), Rstats::ArrayFunc::c(@$x3_dim));
   
   return $x3;
 }
@@ -992,7 +992,7 @@ sub col {
     push @values, ($col) x $nrow;
   }
   
-  return array(c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
+  return array(undef(), c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
 }
 
 sub chartr {
@@ -1788,7 +1788,7 @@ sub ifelse {
     }
   }
   
-  return Rstats::ArrayFunc::array(c(@x2_values));
+  return Rstats::ArrayFunc::array(undef(), c(@x2_values));
 }
 
 sub log {
@@ -2133,7 +2133,7 @@ sub replace {
     }
   }
   
-  return Rstats::ArrayFunc::array(c(@$v4_elements));
+  return Rstats::ArrayFunc::array(undef(), c(@$v4_elements));
 }
 
 sub rev {
@@ -2618,6 +2618,7 @@ sub matrix {
   $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->vector->type, @$x1_values));
   if ($byrow) {
     $matrix = Rstats::ArrayFunc::array(
+      undef(),
       $x_matrix,
       Rstats::ArrayFunc::c($dim->[1], $dim->[0]),
     );
@@ -2625,7 +2626,7 @@ sub matrix {
     $matrix = Rstats::ArrayFunc::t(undef(), $matrix);
   }
   else {
-    $matrix = Rstats::ArrayFunc::array($x_matrix, Rstats::ArrayFunc::c(@$dim));
+    $matrix = Rstats::ArrayFunc::array(undef(), $x_matrix, Rstats::ArrayFunc::c(@$dim));
   }
   
   return $matrix;
@@ -2679,7 +2680,7 @@ sub row {
   
   my @values = (1 .. $nrow) x $ncol;
   
-  return Rstats::ArrayFunc::array(Rstats::ArrayFunc::c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
+  return Rstats::ArrayFunc::array(undef(), Rstats::ArrayFunc::c(@values), Rstats::ArrayFunc::c($nrow, $ncol));
 }
 
 sub sum {
@@ -2898,11 +2899,11 @@ sub operate_binary {
   my $x2_length = $x2->length_value;
   my $length;
   if ($x1_length > $x2_length) {
-    $x2 = Rstats::ArrayFunc::array($x2, $x1_length);
+    $x2 = Rstats::ArrayFunc::array(undef(), $x2, $x1_length);
     $length = $x1_length;
   }
   elsif ($x1_length < $x2_length) {
-    $x1 = Rstats::ArrayFunc::array($x1, $x2_length);
+    $x1 = Rstats::ArrayFunc::array(undef(), $x1, $x2_length);
     $length = $x2_length;
   }
   else {
@@ -3089,6 +3090,7 @@ sub get {
   
   # array
   my $x2 = Rstats::ArrayFunc::array(
+    undef(),
     Rstats::ArrayFunc::new_vector($x1->vector->type, @a2_values),
     Rstats::ArrayFunc::c(@$x2_dim)
   );
@@ -3304,6 +3306,8 @@ sub to_string {
 }
 
 sub array {
+  my $r = shift;
+  
   my $opt = args(['x', 'dim'], @_);
   my $x1 = $opt->{x};
   

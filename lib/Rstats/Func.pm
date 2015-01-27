@@ -159,7 +159,7 @@ sub mapply {
   my $max_length = List::Util::max @xs_length;
   for my $x (@xs) {
     if ($x->length_value < $max_length) {
-      $x = Rstats::Func::array($x, $max_length);
+      $x = Rstats::Func::array(undef(), $x, $max_length);
     }
   }
   
@@ -208,7 +208,7 @@ sub tapply {
   }
   
   my $x4_length = @$new_values2;
-  my $x4 = Rstats::Func::array(Rstats::ArrayFunc::c(@$new_values2), $x4_length);
+  my $x4 = Rstats::Func::array(undef(), Rstats::ArrayFunc::c(@$new_values2), $x4_length);
   Rstats::Func::names(undef(), $x4, Rstats::Func::levels(undef(), $x2));
   
   return $x4;
@@ -933,7 +933,7 @@ sub as_array {
 
   my $x1_dim_elements = [@{$x1->dim_as_array->values}];
   
-  return $x1->array($x2, $x1_dim_elements);
+  return array(undef(), $x1, $x2, $x1_dim_elements);
 }
 
 sub as_vector {

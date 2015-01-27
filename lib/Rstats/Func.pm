@@ -409,6 +409,8 @@ sub to_c { Rstats::ArrayFunc::to_c(@_) }
 sub c { Rstats::ArrayFunc::c(@_) }
 
 sub decompose {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (exists $x1->{vector}) {

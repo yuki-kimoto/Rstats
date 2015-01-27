@@ -485,6 +485,8 @@ sub copy_attrs_to {
 }
 
 sub _value_to_string {
+  my $r = shift;
+  
   my ($x1, $value, $type, $is_factor) = @_;
   
   my $string;
@@ -589,7 +591,7 @@ sub str {
     my $is_character = is_character(undef(), $x1);
     my $values = $x1->values;
     for (my $i = 0; $i < $max_count; $i++) {
-      push @element_str, $x1->_value_to_string($values->[$i], $type);
+      push @element_str, Rstats::Func::_value_to_string(undef(), $x1, $values->[$i], $type);
     }
     if ($length > 10) {
       push @element_str, '...';

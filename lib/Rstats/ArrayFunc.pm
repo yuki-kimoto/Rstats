@@ -3201,7 +3201,7 @@ sub to_string {
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { $x1->_value_to_string($_, $type, $is_factor) } @$values;
+      my @parts = map { Rstats::Func::_value_to_string(undef(), $x1, $_, $type, $is_factor) } @$values;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
@@ -3231,7 +3231,7 @@ sub to_string {
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
           my $part = $x1->value($d1, $d2);
-          push @parts, $x1->_value_to_string($part, $type, $is_factor);
+          push @parts, Rstats::Func::_value_to_string(undef(), $x1, $part, $type, $is_factor);
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -3279,7 +3279,7 @@ sub to_string {
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
                 my $part = $x1->value($d1, $d2, @$poss);
-                push @parts, $x1->_value_to_string($part, $type, $is_factor);
+                push @parts, Rstats::Func::_value_to_string(undef(), $x1, $part, $type, $is_factor);
               }
               
               $str .= join(' ', @parts) . "\n";

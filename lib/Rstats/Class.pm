@@ -31,7 +31,8 @@ has helpers => sub { {} };
 # aggregate
 # reshape
 
-my @func_names2 = qw/
+my @func_names = qw/
+  sd
   sin
   sweep
   set_seed
@@ -211,9 +212,6 @@ my @func_names2 = qw/
   length
   c
   clone
-/;
-
-my @func_names = qw/
   values
 /;
 
@@ -221,12 +219,6 @@ sub new {
   my $self = shift->SUPER::new(@_);
   
   for my $func_name (@func_names) {
-    no strict 'refs';
-    my $func = \&{"Rstats::Func::$func_name"};
-    $self->helper($func_name => $func);
-  }
-
-  for my $func_name (@func_names2) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$func_name"};
     $self->helper($func_name => sub { $func->($self, @_) });

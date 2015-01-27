@@ -2469,6 +2469,8 @@ sub quantile {
 }
 
 sub sd {
+  my $r = shift;
+  
   my $x1 = to_c(shift);
   
   my $sd = Rstats::ArrayFunc::sqrt(undef(), var(undef(), $x1));

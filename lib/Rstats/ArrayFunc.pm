@@ -773,7 +773,7 @@ sub kronecker {
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
-  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type(undef(), $x1, $x2) if $x1->type ne $x2->type;
   
   my $x1_dim = Rstats::Func::dim(undef(), $x1);
   my $x2_dim = Rstats::Func::dim(undef(), $x2);
@@ -826,7 +826,7 @@ sub outer {
   my $x1 = to_c(shift);
   my $x2 = to_c(shift);
   
-  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type(undef(), $x1, $x2) if $x1->type ne $x2->type;
   
   my $x1_dim = Rstats::Func::dim(undef(), $x1);
   my $x2_dim = Rstats::Func::dim(undef(), $x2);
@@ -2785,6 +2785,8 @@ sub numeric {
 }
 
 sub upgrade_type {
+  my $r = shift;
+  
   my (@xs) = @_;
   
   # Check elements
@@ -2885,7 +2887,7 @@ sub operate_binary {
   $x2 = to_c($x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2) if $x1->vector->type ne $x2->vector->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type(undef(), $x1, $x2) if $x1->vector->type ne $x2->vector->type;
   
   # Upgrade length if length is defferent
   my $x1_length = $x1->length_value;
@@ -3017,7 +3019,7 @@ sub set {
     # Upgrade mode if type is different
     if ($x1->vector->type ne $x2->vector->type) {
       my $x1_tmp;
-      ($x1_tmp, $x2) = Rstats::ArrayFunc::upgrade_type($x1, $x2);
+      ($x1_tmp, $x2) = Rstats::ArrayFunc::upgrade_type(undef(), $x1, $x2);
       Rstats::Func::copy_attrs_to(undef(), $x1_tmp, $x1);
       $x1->vector($x1_tmp->vector);
     }

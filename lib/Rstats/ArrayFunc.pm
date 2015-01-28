@@ -2964,6 +2964,7 @@ sub operate_binary {
 }
 
 sub value {
+  my $r = shift;
   my $x1 = shift;
 
   my $e1;
@@ -2988,6 +2989,8 @@ sub value {
 }
 
 sub bool {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $length = $x1->length_value;

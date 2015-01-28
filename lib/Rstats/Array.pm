@@ -17,7 +17,7 @@ use overload
   '&' => sub { Rstats::ArrayFunc::and(undef(), Rstats::ArrayFunc::_fix_pos(undef(), @_)) },
   '|' => sub { Rstats::ArrayFunc::or(undef(), Rstats::ArrayFunc::_fix_pos(undef(), @_)) },
   'x' => sub { Rstats::ArrayFunc::inner_product(undef(), Rstats::ArrayFunc::_fix_pos(undef(), @_)) },
-  bool => sub { Rstats::ArrayFunc::bool(@_) },
+  bool => sub { Rstats::ArrayFunc::bool(undef(), @_) },
   'neg' => sub { Rstats::ArrayFunc::negation(undef(), @_) },
   '""' => sub { Rstats::ArrayFunc::to_string(@_) },
   fallback => 1;
@@ -32,7 +32,7 @@ sub get { Rstats::ArrayFunc::get(@_) }
 sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
 sub set { Rstats::ArrayFunc::set(@_) }
 sub bool { Rstats::ArrayFunc::bool(@_) }
-sub value { Rstats::ArrayFunc::value(@_) }
+sub value { Rstats::ArrayFunc::value(undef(), @_) }
 sub negation { Rstats::ArrayFunc::negation(@_) }
 sub _fix_pos { Rstats::ArrayFunc::_fix_pos(@_) }
 sub NULL { Rstats::ArrayFunc::NULL(@_) }

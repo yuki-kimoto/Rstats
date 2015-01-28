@@ -2895,9 +2895,14 @@ sub or {
   operate_binary(undef(), \&Rstats::VectorFunc::or, @_);
 }
 
-sub negation { operate_unary(undef(), \&Rstats::VectorFunc::negation, @_) }
+sub negation {
+  my $r = shift;
+  operate_unary(undef(), \&Rstats::VectorFunc::negation, @_);
+}
 
 sub _fix_pos {
+  my $r = shift;
+  
   my ($data1, $data2, $reverse) = @_;
   
   my $x1;

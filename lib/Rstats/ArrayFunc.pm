@@ -3034,6 +3034,8 @@ sub bool {
 }
 
 sub set {
+  my $r = shift;
+  
   my $x1 = shift;
   my $x2 = Rstats::ArrayFunc::to_c(shift);
   
@@ -3046,7 +3048,7 @@ sub set {
     $x1_elements = Rstats::Func::decompose(undef(), $x1);
     $x2 = Rstats::Func::as_character(undef(), $x2) unless Rstats::Func::is_character(undef(), $x2);
     my $x2_elements = Rstats::Func::decompose(undef(), $x2);
-    my $levels_h = $x1->_levels_h;
+    my $levels_h = Rstats::ArrayFunc::_levels_h(undef(), $x1);
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
@@ -3089,6 +3091,8 @@ sub set {
 }
 
 sub _levels_h {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $levels_h = {};
@@ -3101,6 +3105,8 @@ sub _levels_h {
 }
 
 sub get {
+  my $r = shift;
+  
   my $x1 = shift;
 
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};

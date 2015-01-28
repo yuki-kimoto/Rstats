@@ -2,7 +2,6 @@ package Rstats::List;
 use Rstats::Container -base;
 
 use Rstats::Func::List;
-use Carp 'croak';
 
 use overload '""' => \&to_string,
   fallback => 1;

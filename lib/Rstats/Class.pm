@@ -215,6 +215,7 @@ my @func_names = qw/
   values
   new_character
   new_complex
+  new_double
 /;
 
 sub new {

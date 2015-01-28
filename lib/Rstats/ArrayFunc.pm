@@ -35,12 +35,12 @@ sub NA {
 
 sub NaN {
   my $r = shift;
-  return Rstats::ArrayFunc::new_double('NaN');
+  return Rstats::ArrayFunc::new_double(undef(), 'NaN');
 }
 
 sub Inf {
   my $r = shift;
-  return Rstats::ArrayFunc::new_double('Inf');
+  return Rstats::ArrayFunc::new_double(undef(), 'Inf');
 }
 
 my $false;
@@ -66,7 +66,7 @@ sub T {
 
 sub pi {
   my $r = shift;
-  return new_double(Rstats::Util::pi());
+  return new_double(undef(), Rstats::Util::pi());
 }
 
 sub I {
@@ -956,7 +956,7 @@ sub grep {
     }
   }
   
-  return Rstats::ArrayFunc::new_double(@$x2_values);
+  return Rstats::ArrayFunc::new_double(undef(), @$x2_values);
 }
 
 sub se {
@@ -1058,7 +1058,7 @@ sub charmatch {
     }
   }
   
-  return Rstats::ArrayFunc::new_double(@$x2_values);
+  return Rstats::ArrayFunc::new_double(undef(), @$x2_values);
 }
 
 sub Conj {
@@ -1336,7 +1336,7 @@ sub match {
     }
   }
   
-  return Rstats::ArrayFunc::new_double(@matches);
+  return Rstats::ArrayFunc::new_double(undef(), @matches);
 }
 
 sub abs {
@@ -2518,7 +2518,7 @@ sub new_vector {
     return new_complex(undef(), @_);
   }
   elsif ($type eq 'double') {
-    return new_double(@_);
+    return new_double(undef(), @_);
   }
   elsif ($type eq 'integer') {
     return new_integer(@_);
@@ -2546,6 +2546,8 @@ sub new_complex {
 }
 
 sub new_double {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::NULL();
   $x1->vector(Rstats::VectorFunc::new_double(@_));
 }

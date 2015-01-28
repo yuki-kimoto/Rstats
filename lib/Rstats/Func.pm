@@ -775,7 +775,7 @@ sub dim_as_array {
   }
   else {
     my $length = $x1->length_value;
-    return Rstats::Func::new_double($length);
+    return Rstats::Func::new_double(undef(), $length);
   }
 }
 

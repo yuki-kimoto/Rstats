@@ -1341,7 +1341,7 @@ SV* args(...)
 SV* to_c(...)
   PPCODE:
 {
-  SV* sv_x = Rstats::ArrayFunc::to_c(ST(0));
+  SV* sv_x = Rstats::ArrayFunc::to_c(ST(0), ST(1));
   
   return_sv(sv_x);
 }

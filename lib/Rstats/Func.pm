@@ -610,7 +610,7 @@ sub levels {
   my $x1 = shift;
   
   if (@_) {
-    my $x_levels = Rstats::Func::to_c(shift);
+    my $x_levels = Rstats::Func::to_c(undef(), shift);
     $x_levels = Rstats::Func::as_character(undef(), $x_levels)
       unless is_character(undef(), $x_levels);
     
@@ -658,7 +658,7 @@ sub _name_to_index {
   my $r = shift;
   
   my $x1 = shift;
-  my $x1_index = Rstats::Func::to_c(shift);
+  my $x1_index = Rstats::Func::to_c(undef(), shift);
   
   my $e1_name = $x1_index->value;
   my $found;
@@ -704,7 +704,7 @@ sub length_value {
 sub is_na {
   my $r = shift;
   
-  my $x1 = Rstats::Func::to_c(shift);
+  my $x1 = Rstats::Func::to_c(undef(), shift);
   my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
@@ -744,7 +744,7 @@ sub class {
   my $x1 = shift;
   
   if (@_) {
-    my $x_class = Rstats::Func::to_c($_[0]);
+    my $x_class = Rstats::Func::to_c(undef(), $_[0]);
     
     $x1->{class} = $x_class->vector;
     
@@ -795,7 +795,7 @@ sub dim {
   my $x1 = shift;
   
   if (@_) {
-    my $x_dim = Rstats::Func::to_c($_[0]);
+    my $x_dim = Rstats::Func::to_c(undef(), $_[0]);
     my $x1_length = $x1->length_value;
     my $x1_lenght_by_dim = 1;
     $x1_lenght_by_dim *= $_ for @{$x_dim->values};
@@ -1241,7 +1241,7 @@ sub names {
   my $x1 = shift;
   
   if (@_) {
-    my $names = Rstats::Func::to_c(shift);
+    my $names = Rstats::Func::to_c(undef(), shift);
     
     $names = Rstats::Func::as_character(undef(), $names) unless is_character(undef(), $names);
     $x1->{names} = $names->vector->clone;
@@ -1308,7 +1308,7 @@ sub rownames {
   my $x1 = shift;
   
   if (@_) {
-    my $x_rownames = Rstats::Func::to_c(shift);
+    my $x_rownames = Rstats::Func::to_c(undef(), shift);
     
     unless (exists $x1->{dimnames}) {
       $x1->{dimnames} = [];
@@ -1332,7 +1332,7 @@ sub colnames {
   my $x1 = shift;
   
   if (@_) {
-    my $x_colnames = Rstats::Func::to_c(shift);
+    my $x_colnames = Rstats::Func::to_c(undef(), shift);
     
     unless (exists $x1->{dimnames}) {
       $x1->{dimnames} = [];

@@ -15,7 +15,7 @@ sub getin {
   }
   $self->at($_index);
   
-  my $x1_index = Rstats::Func::to_c($_index);
+  my $x1_index = Rstats::Func::to_c(undef(), $_index);
   my $index;
   if (Rstats::Func::is_character(undef(), $x1_index)) {
     $index = $self->_name_to_index($x1_index);
@@ -31,7 +31,7 @@ sub getin {
 
 sub get {
   my $self = shift;
-  my $index = Rstats::Func::to_c(shift);
+  my $index = Rstats::Func::to_c(undef(), shift);
   
   my $elements = $self->list;
   
@@ -62,7 +62,7 @@ sub set {
   my ($self, $v1) = @_;
   
   my $_index = $self->at;
-  my $x1_index = Rstats::Func::to_c(@$_index);
+  my $x1_index = Rstats::Func::to_c(undef(), @$_index);
   my $index;
   if (Rstats::Func::is_character(undef(), $x1_index)) {
     $index = $self->_name_to_index($x1_index);
@@ -70,7 +70,7 @@ sub set {
   else {
     $index = $x1_index->values->[0];
   }
-  $v1 = Rstats::Func::to_c($v1);
+  $v1 = Rstats::Func::to_c(undef(), $v1);
   
   if (Rstats::Func::is_null(undef(), $v1)) {
     splice @{$self->list}, $index - 1, 1;

@@ -5,6 +5,52 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
+# class
+{
+  
+  # class - data frame
+  {
+    my $x1 = data_frame(sex => c(1, 2));
+    is_deeply($x1->class->values, ['data.frame']);
+  }
+
+  # class - vector, numeric
+  {
+    my $x1 = c(1, 2);
+    is_deeply($x1->class->values, ['numeric']);
+  }
+  
+  # class - matrix
+  {
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->class->values, ['matrix']);
+  }
+
+  # class - array
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply($x1->class->values, ['array']);
+  }
+  
+  # class - factor
+  {
+    my $x1 = factor(c(1, 2, 3));
+    is_deeply($x1->class->values, ['factor']);
+  }
+  
+  # class - factor, ordered
+  {
+    my $x1 = ordered(c(1, 2, 3));
+    is_deeply($x1->class->values, ['factor', 'ordered']);
+  }
+  
+  # class - list
+  {
+    my $x1 = list(1, 2);
+    is_deeply($x1->class->values, ['list']);
+  }
+}
+
 # c
 {
   # c("a", "b")
@@ -78,51 +124,6 @@ use Math::Trig ();
     my $v1 = c(1, 2, 3, 4);
     my $tail = r->tail($v1, {n => 3});
     is_deeply($tail->values, [2, 3, 4]);
-  }
-}
-
-# class
-{
-  # class - vector, numeric
-  {
-    my $x1 = c(1, 2);
-    is_deeply($x1->class->values, ['numeric']);
-  }
-  
-  # class - matrix
-  {
-    my $x1 = matrix(2, 2);
-    is_deeply($x1->class->values, ['matrix']);
-  }
-
-  # class - array
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    is_deeply($x1->class->values, ['array']);
-  }
-  
-  # class - factor
-  {
-    my $x1 = factor(c(1, 2, 3));
-    is_deeply($x1->class->values, ['factor']);
-  }
-  
-  # class - factor, ordered
-  {
-    my $x1 = ordered(c(1, 2, 3));
-    is_deeply($x1->class->values, ['factor', 'ordered']);
-  }
-  
-  # class - list
-  {
-    my $x1 = list(1, 2);
-    is_deeply($x1->class->values, ['list']);
-  }
-  
-  # class - data frame
-  {
-    my $x1 = data_frame(sex => c(1, 2));
-    is_deeply($x1->class->values, ['data.frame']);
   }
 }
 

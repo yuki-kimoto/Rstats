@@ -19,8 +19,8 @@ sub get {
     $_col_index = $_row_index;
     $_row_index = Rstats::Func::NULL();
   }
-  my $row_index = Rstats::Func::to_c($_row_index);
-  my $col_index = Rstats::Func::to_c($_col_index);
+  my $row_index = Rstats::Func::to_c(undef(), $_row_index);
+  my $col_index = Rstats::Func::to_c(undef(), $_col_index);
   
   # Convert name index to number index
   my $col_index_values;

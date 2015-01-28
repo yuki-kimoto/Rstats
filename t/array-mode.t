@@ -685,7 +685,6 @@ use Rstats::VectorFunc;
   
   # as_* - as_matrix, from vector
   {
-    $DB::single = 1;
     my $x = c(se('1:24'));
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);

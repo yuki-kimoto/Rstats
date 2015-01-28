@@ -2507,6 +2507,8 @@ sub which {
 }
 
 sub new_vector {
+  my $r = shift;
+  
   my $type = shift;
   
   if ($type eq 'character') {
@@ -3070,7 +3072,7 @@ sub get {
   # array
   my $x2 = Rstats::ArrayFunc::array(
     undef(),
-    Rstats::ArrayFunc::new_vector($x1->vector->type, @a2_values),
+    Rstats::ArrayFunc::new_vector(undef(), $x1->vector->type, @a2_values),
     Rstats::ArrayFunc::c(undef(), @$x2_dim)
   );
   

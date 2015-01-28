@@ -811,7 +811,7 @@ sub kronecker {
     }
     my $x1_value = $x1->value(@$x1_index);
     my $x2_value = $x2->value(@$x2_index);
-    my $x3_value = multiply($x1_value, $x2_value);
+    my $x3_value = multiply(undef(), $x1_value, $x2_value);
     push @$x3_values, $x3_value;
   }
   
@@ -1817,7 +1817,7 @@ sub mean {
   
   my $x1 = to_c(shift);
   
-  my $x2 = divide(sum(undef(), $x1), $x1->length_value);
+  my $x2 = divide(undef(), sum(undef(), $x1), $x1->length_value);
   
   return $x2;
 }
@@ -2838,11 +2838,26 @@ sub upgrade_type {
   return @xs;
 }
 
-sub add { operate_binary(undef(), \&Rstats::VectorFunc::add, @_) }
-sub subtract { operate_binary(undef(), \&Rstats::VectorFunc::subtract, @_) }
-sub multiply { operate_binary(undef(), \&Rstats::VectorFunc::multiply, @_) }
-sub divide { operate_binary(undef(), \&Rstats::VectorFunc::divide, @_) }
-sub remainder { operate_binary(undef(), \&Rstats::VectorFunc::remainder, @_) }
+sub add {
+  my $r = shift;
+  operate_binary(undef(), \&Rstats::VectorFunc::add, @_);
+}
+sub subtract {
+  my $r = shift;
+  operate_binary(undef(), \&Rstats::VectorFunc::subtract, @_);
+}
+sub multiply {
+  my $r = shift;
+  operate_binary(undef(), \&Rstats::VectorFunc::multiply, @_);
+}
+sub divide {
+  my $r = shift;
+  operate_binary(undef(), \&Rstats::VectorFunc::divide, @_);
+}
+sub remainder {
+  my $r = shift;
+  operate_binary(undef(), \&Rstats::VectorFunc::remainder, @_);
+}
 sub pow { operate_binary(undef(), \&Rstats::VectorFunc::pow, @_) }
 sub less_than { operate_binary(undef(), \&Rstats::VectorFunc::less_than, @_) }
 sub less_than_or_equal { operate_binary(undef(), \&Rstats::VectorFunc::less_than_or_equal, @_) }

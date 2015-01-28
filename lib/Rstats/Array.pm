@@ -2,11 +2,11 @@ package Rstats::Array;
 use Rstats::Container -base;
 
 use overload
-  '+' => sub { Rstats::ArrayFunc::add(Rstats::ArrayFunc::_fix_pos(@_)) },
-  '-' => sub { Rstats::ArrayFunc::subtract(Rstats::ArrayFunc::_fix_pos(@_)) },
-  '*' => sub { Rstats::ArrayFunc::multiply(Rstats::ArrayFunc::_fix_pos(@_)) },
-  '/' => sub { Rstats::ArrayFunc::divide(Rstats::ArrayFunc::_fix_pos(@_)) },
-  '%' => sub { Rstats::ArrayFunc::remainder(Rstats::ArrayFunc::_fix_pos(@_)) },
+  '+' => sub { Rstats::ArrayFunc::add(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
+  '-' => sub { Rstats::ArrayFunc::subtract(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
+  '*' => sub { Rstats::ArrayFunc::multiply(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
+  '/' => sub { Rstats::ArrayFunc::divide(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
+  '%' => sub { Rstats::ArrayFunc::remainder(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
   '**' => sub { Rstats::ArrayFunc::pow(Rstats::ArrayFunc::_fix_pos(@_)) },
   '<' => sub { Rstats::ArrayFunc::less_than(Rstats::ArrayFunc::_fix_pos(@_)) },
   '<=' => sub { Rstats::ArrayFunc::less_than_or_equal(Rstats::ArrayFunc::_fix_pos(@_)) },

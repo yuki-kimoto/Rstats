@@ -10,6 +10,7 @@ has 'vector';
 sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
 sub length_value { Rstats::Func::length_value(undef(), @_) }
+sub dim_as_array { Rstats::Func::dim_as_array(undef(), @_) }
 
 sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
@@ -23,7 +24,6 @@ sub is_na { Rstats::Func::is_na(@_) }
 sub as_list { Rstats::Func::as_list(@_) }
 sub is_list { Rstats::Func::is_list(@_) }
 sub class { Rstats::Func::class(undef(), @_) }
-sub dim_as_array { Rstats::Func::dim_as_array(@_) }
 sub dim { Rstats::Func::dim(@_) }
 sub mode { Rstats::Func::mode(@_) }
 sub typeof { Rstats::Func::typeof(@_) }

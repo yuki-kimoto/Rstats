@@ -222,6 +222,7 @@ my @func_names = qw/
   get
   at
   class
+  dim_as_array
 /;
 
 sub new {

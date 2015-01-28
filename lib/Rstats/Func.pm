@@ -776,6 +776,8 @@ sub class {
 }
 
 sub dim_as_array {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (exists $x1->{dim}) {

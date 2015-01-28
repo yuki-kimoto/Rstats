@@ -812,7 +812,7 @@ use Rstats::Util;
   
   # cumprod - integer
   {
-    my $v1 = Rstats::Func::new_integer(2, 3, 4);
+    my $v1 = r->new_integer(2, 3, 4);
     my $v2 = r->cumprod($v1);
     is_deeply($v2->values, [2, 6, 24]);
   }
@@ -848,7 +848,7 @@ use Rstats::Util;
 
   # cumsum - integer
   {
-    my $v1 = Rstats::Func::new_integer(1, 2, 3);
+    my $v1 = r->new_integer(1, 2, 3);
     my $v2 = r->cumsum($v1);
     is_deeply($v2->values, [1, 3, 6]);
   }

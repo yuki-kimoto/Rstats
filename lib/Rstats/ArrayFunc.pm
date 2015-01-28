@@ -514,7 +514,7 @@ sub factor {
     }
   }
   
-  my $f1 = Rstats::ArrayFunc::new_integer(@$f1_values);
+  my $f1 = Rstats::ArrayFunc::new_integer(undef(), @$f1_values);
   if ($x_ordered) {
     $f1->{class} = Rstats::VectorFunc::new_character('factor', 'ordered');
   }
@@ -2521,7 +2521,7 @@ sub new_vector {
     return new_double(undef(), @_);
   }
   elsif ($type eq 'integer') {
-    return new_integer(@_);
+    return new_integer(undef(), @_);
   }
   elsif ($type eq 'logical') {
     return new_logical(@_);
@@ -2553,6 +2553,8 @@ sub new_double {
 }
 
 sub new_integer {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::NULL();
   $x1->vector(Rstats::VectorFunc::new_integer(@_));
 }

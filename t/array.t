@@ -113,11 +113,6 @@ use Rstats::Func;
   is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
 }
 
-{
-  my $x1 = Rstats::Func::new_integer(3);
-  $x1->vector->to_string;
-}
-
 # get logical array
 {
   # get logical array - basic

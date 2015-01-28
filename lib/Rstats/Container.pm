@@ -11,6 +11,8 @@ sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
 sub length_value { Rstats::Func::length_value(undef(), @_) }
 sub dim_as_array { Rstats::Func::dim_as_array(undef(), @_) }
+sub type { Rstats::Func::type(undef(), @_) }
+sub values { Rstats::Func::values(undef(), @_) }
 
 sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
@@ -27,7 +29,6 @@ sub class { Rstats::Func::class(undef(), @_) }
 sub dim { Rstats::Func::dim(@_) }
 sub mode { Rstats::Func::mode(@_) }
 sub typeof { Rstats::Func::typeof(@_) }
-sub type { Rstats::Func::type(@_) }
 sub is_factor { Rstats::Func::is_factor(@_) }
 sub is_ordered { Rstats::Func::is_ordered(@_) }
 sub as_factor { Rstats::Func::as_factor(@_) }
@@ -42,7 +43,6 @@ sub as_integer { Rstats::Func::as_integer(@_) }
 sub as_logical { Rstats::Func::as_logical(@_) }
 sub labels { Rstats::Func::labels(@_) }
 sub as_character { Rstats::Func::as_character(@_) }
-sub values { Rstats::Func::values(@_) }
 sub is_vector { Rstats::Func::is_vector(@_) }
 sub is_matrix { Rstats::Func::is_matrix(@_) }
 sub is_numeric { Rstats::Func::is_numeric(@_) }

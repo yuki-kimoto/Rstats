@@ -223,6 +223,8 @@ my @func_names = qw/
   at
   class
   dim_as_array
+  type
+  value
 /;
 
 sub new {

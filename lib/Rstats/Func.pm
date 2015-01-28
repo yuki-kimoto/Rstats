@@ -869,6 +869,7 @@ sub typeof {
 }
 
 sub type {
+  my $r = shift;
   return shift->vector->type;
 }
 
@@ -1013,7 +1014,11 @@ sub as_complex {
   return $x2;
 }
 
-sub as_numeric { as_double(@_) }
+sub as_numeric {
+  my $r = shift;
+  
+  as_double(undef(), @_);
+}
 
 sub as_double {
   my $r = shift;
@@ -1111,6 +1116,8 @@ sub as_character {
 }
 
 sub values {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

@@ -16,7 +16,7 @@ use overload
   '!=' => sub { Rstats::ArrayFunc::not_equal(Rstats::ArrayFunc::_fix_pos(@_)) },
   '&' => sub { Rstats::ArrayFunc::and(Rstats::ArrayFunc::_fix_pos(@_)) },
   '|' => sub { Rstats::ArrayFunc::or(Rstats::ArrayFunc::_fix_pos(@_)) },
-  'x' => sub { Rstats::ArrayFunc::inner_product(Rstats::ArrayFunc::_fix_pos(@_)) },
+  'x' => sub { Rstats::ArrayFunc::inner_product(undef(), Rstats::ArrayFunc::_fix_pos(@_)) },
   bool => sub { Rstats::ArrayFunc::bool(@_) },
   'neg' => sub { Rstats::ArrayFunc::negation(@_) },
   '""' => sub { Rstats::ArrayFunc::to_string(@_) },

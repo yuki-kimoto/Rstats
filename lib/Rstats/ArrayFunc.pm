@@ -2622,6 +2622,8 @@ sub matrix {
 }
 
 sub inner_product {
+  my $r = shift;
+  
   my ($x1, $x2) = @_;
   
   # Convert to matrix

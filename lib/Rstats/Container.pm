@@ -22,7 +22,7 @@ sub length { Rstats::Func::length(@_) }
 sub is_na { Rstats::Func::is_na(@_) }
 sub as_list { Rstats::Func::as_list(@_) }
 sub is_list { Rstats::Func::is_list(@_) }
-sub class { Rstats::Func::class(@_) }
+sub class { Rstats::Func::class(undef(), @_) }
 sub dim_as_array { Rstats::Func::dim_as_array(@_) }
 sub dim { Rstats::Func::dim(@_) }
 sub mode { Rstats::Func::mode(@_) }

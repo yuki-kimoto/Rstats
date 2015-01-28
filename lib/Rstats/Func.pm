@@ -739,6 +739,8 @@ sub is_list {
 }
 
 sub class {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

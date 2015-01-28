@@ -221,6 +221,7 @@ my @func_names = qw/
   set
   get
   at
+  class
 /;
 
 sub new {

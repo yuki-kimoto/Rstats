@@ -641,6 +641,8 @@ sub clone {
 }
 
 sub at {
+  my $r = shift;
+  
   my $x1 = shift;
   
   if (@_) {

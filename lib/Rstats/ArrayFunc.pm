@@ -3221,6 +3221,8 @@ sub is_finite {
 }
 
 sub to_string {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $is_factor = Rstats::Func::is_factor(undef(), $x1);

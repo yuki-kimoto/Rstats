@@ -13,7 +13,7 @@ sub _value_to_string { Rstats::Func::_value_to_string(@_) }
 sub str { Rstats::Func::str(@_) }
 sub levels { Rstats::Func::levels(@_) }
 sub clone { Rstats::Func::clone(@_) }
-sub at { Rstats::Func::at(@_) }
+sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(@_) }
 sub nlevels { Rstats::Func::nlevels(@_) }
 sub length { Rstats::Func::length(@_) }

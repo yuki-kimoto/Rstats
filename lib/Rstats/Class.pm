@@ -220,6 +220,7 @@ my @func_names = qw/
   new_logical
   set
   get
+  at
 /;
 
 sub new {

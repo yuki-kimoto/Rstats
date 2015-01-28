@@ -1321,7 +1321,7 @@ index_to_pos(...)
   return_sv(sv_ret);
 }
 
-MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
+MODULE = Rstats::Func::Array PACKAGE = Rstats::Func::Array
 
 SV* args(...)
   PPCODE:
@@ -1341,7 +1341,7 @@ SV* args(...)
 SV* to_c(...)
   PPCODE:
 {
-  SV* sv_x = Rstats::ArrayFunc::to_c(ST(0), ST(1));
+  SV* sv_x = Rstats::Func::Array::to_c(ST(0), ST(1));
   
   return_sv(sv_x);
 }
@@ -1361,7 +1361,7 @@ SV* c(...)
     }
   }
   
-  SV* sv_x1 = Rstats::ArrayFunc::c(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::Array::c(sv_r, sv_values);
   
   return_sv(sv_x1);
 }

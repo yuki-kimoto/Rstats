@@ -770,14 +770,16 @@ namespace Rstats {
     Rstats::Vector* clone(Rstats::Vector*);
   }
   
-  namespace ArrayFunc {
-    SV* new_array(SV*);
-    void set_vector(SV*, SV*, Rstats::Vector*);
-    Rstats::Vector* get_vector(SV*, SV*);
-    void set_dim(SV*, SV*, Rstats::Vector*);
-    Rstats::Vector* get_dim(SV*, SV*);
-    SV* c(SV*, SV*);
-    SV* to_c(SV*, SV*);
+  namespace Func {
+    namespace Array {
+      SV* new_array(SV*);
+      void set_vector(SV*, SV*, Rstats::Vector*);
+      Rstats::Vector* get_vector(SV*, SV*);
+      void set_dim(SV*, SV*, Rstats::Vector*);
+      Rstats::Vector* get_dim(SV*, SV*);
+      SV* c(SV*, SV*);
+      SV* to_c(SV*, SV*);
+    }
   }
 }
 

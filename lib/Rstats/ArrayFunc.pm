@@ -30,7 +30,7 @@ sub NULL {
 my $na;
 sub NA {
   my $r = shift;
-  return defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef);
+  return defined $na ? $na : $na = Rstats::ArrayFunc::new_logical(undef(), undef);
 }
 
 sub NaN {
@@ -46,7 +46,7 @@ sub Inf {
 my $false;
 sub FALSE {
   my $r = shift;
-  return defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(0);
+  return defined $false ? $false : $false = Rstats::ArrayFunc::new_logical(undef(), 0);
 }
 
 sub F {
@@ -57,7 +57,7 @@ sub F {
 my $true;
 sub TRUE {
   my $r = shift;
-  return defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(1);
+  return defined $true ? $true : $true = Rstats::ArrayFunc::new_logical(undef(), 1);
 }
 sub T {
   my $r = shift;
@@ -676,7 +676,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(undef(), @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -711,7 +711,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(@$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix(undef(), Rstats::ArrayFunc::new_logical(undef(), @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -1128,7 +1128,7 @@ sub is_element {
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::ArrayFunc::new_logical(@$x3_values);
+  return Rstats::ArrayFunc::new_logical(undef(), @$x3_values);
 }
 
 sub setequal {
@@ -2560,6 +2560,8 @@ sub new_integer {
 }
 
 sub new_logical {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::NULL();
   $x1->vector(Rstats::VectorFunc::new_logical(@_));
 }

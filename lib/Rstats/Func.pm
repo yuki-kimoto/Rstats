@@ -1120,7 +1120,7 @@ sub is_vector {
   
   my $is = ref $x1 eq 'Rstats::Array' && !exists $x1->{dim};
   
-  return Rstats::Func::new_logical($is);
+  return Rstats::Func::new_logical(undef(), $is);
 }
 
 sub is_matrix {
@@ -1215,7 +1215,7 @@ sub is_array {
   
   my $is = ref $x1 eq 'Rstats::Array' && exists $x1->{dim};
   
-  return Rstats::Func::new_logical($is);
+  return Rstats::Func::new_logical(undef(), $is);
 }
 
 sub names {

@@ -805,7 +805,7 @@ use Rstats::Util;
 {
   # cumprod - logical
   {
-    my $v1 = Rstats::Func::new_logical(1, 1, 0);
+    my $v1 = r->new_logical(1, 1, 0);
     my $v2 = r->cumprod($v1);
     is_deeply($v2->values, [1, 1, 0]);
   }
@@ -841,7 +841,7 @@ use Rstats::Util;
 {
   # cumsum - logical
   {
-    my $v1 = Rstats::Func::new_logical(1, 0, 1);
+    my $v1 = r->new_logical(1, 0, 1);
     my $v2 = r->cumsum($v1);
     is_deeply($v2->values, [1, 1, 2]);
   }

@@ -655,6 +655,8 @@ sub at {
 }
 
 sub _name_to_index {
+  my $r = shift;
+  
   my $x1 = shift;
   my $x1_index = Rstats::Func::to_c(shift);
   
@@ -684,6 +686,8 @@ sub nlevels {
 }
 
 sub length_value {
+  my $r = shift;
+  
   my $x1 = shift;
   
   my $length;

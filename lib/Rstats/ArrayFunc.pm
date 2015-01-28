@@ -535,7 +535,7 @@ sub length {
     return c(undef(), $container->vector->length_value);
   }
   else {
-    return c(undef(), Rstats::Func::length_value($container));
+    return c(undef(), Rstats::Func::length_value(undef(), $container));
   }
 }
 

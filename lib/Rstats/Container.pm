@@ -7,17 +7,18 @@ has 'r';
 has list => sub { [] };
 has 'vector';
 
+sub at { Rstats::Func::at(undef(), @_) }
+sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
+sub length_value { Rstats::Func::length_value(undef(), @_) }
+
 sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
 sub _value_to_string { Rstats::Func::_value_to_string(@_) }
 sub str { Rstats::Func::str(@_) }
 sub levels { Rstats::Func::levels(@_) }
 sub clone { Rstats::Func::clone(@_) }
-sub at { Rstats::Func::at(undef(), @_) }
-sub _name_to_index { Rstats::Func::_name_to_index(@_) }
 sub nlevels { Rstats::Func::nlevels(@_) }
 sub length { Rstats::Func::length(@_) }
-sub length_value { Rstats::Func::length_value(@_) }
 sub is_na { Rstats::Func::is_na(@_) }
 sub as_list { Rstats::Func::as_list(@_) }
 sub is_list { Rstats::Func::is_list(@_) }

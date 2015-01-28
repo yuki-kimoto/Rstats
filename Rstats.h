@@ -771,11 +771,11 @@ namespace Rstats {
   }
   
   namespace ArrayFunc {
-    SV* new_array();
-    void set_vector(SV*, Rstats::Vector*);
-    Rstats::Vector* get_vector(SV*);
-    void set_dim(SV*, Rstats::Vector*);
-    Rstats::Vector* get_dim(SV*);
+    SV* new_array(SV*);
+    void set_vector(SV*, SV*, Rstats::Vector*);
+    Rstats::Vector* get_vector(SV*, SV*);
+    void set_dim(SV*, SV*, Rstats::Vector*);
+    Rstats::Vector* get_dim(SV*, SV*);
     SV* c(SV*, SV*);
     SV* to_c(SV*);
   }

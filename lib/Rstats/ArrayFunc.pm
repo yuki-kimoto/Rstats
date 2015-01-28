@@ -2515,7 +2515,7 @@ sub new_vector {
     return new_character(undef(), @_);
   }
   elsif ($type eq 'complex') {
-    return new_complex(@_);
+    return new_complex(undef(), @_);
   }
   elsif ($type eq 'double') {
     return new_double(@_);
@@ -2539,6 +2539,8 @@ sub new_character {
 }
 
 sub new_complex {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::NULL();
   $x1->vector(Rstats::VectorFunc::new_complex(@_));
 }

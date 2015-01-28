@@ -214,6 +214,7 @@ my @func_names = qw/
   clone
   values
   new_character
+  new_complex
 /;
 
 sub new {

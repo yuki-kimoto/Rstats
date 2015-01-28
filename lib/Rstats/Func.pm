@@ -848,10 +848,10 @@ sub typeof {
   
   if (Rstats::Func::is_vector(undef(), $x1) || is_array(undef(), $x1)) {
     my $type = $x1->vector->type;
-    return Rstats::Func::new_character($type);
+    return Rstats::Func::new_character(undef(), $type);
   }
   elsif (is_list(undef(), $x1)) {
-    return Rstats::Func::new_character('list');
+    return Rstats::Func::new_character(undef(), 'list');
   }
   else {
     return Rstats::Func::NA();

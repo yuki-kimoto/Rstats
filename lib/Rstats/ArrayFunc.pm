@@ -891,7 +891,7 @@ sub sub {
     }
   }
   
-  my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
+  my $x2 = Rstats::ArrayFunc::new_character(undef(), @$x2_values);
   Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
@@ -923,7 +923,7 @@ sub gsub {
     }
   }
   
-  my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
+  my $x2 = Rstats::ArrayFunc::new_character(undef(), @$x2_values);
   Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
@@ -1019,7 +1019,7 @@ sub chartr {
     }
   }
   
-  my $x2 = Rstats::ArrayFunc::new_character(@$x2_values);
+  my $x2 = Rstats::ArrayFunc::new_character(undef(), @$x2_values);
   Rstats::Func::copy_attrs_to(undef(), $x1_x, $x2);
   
   return $x2;
@@ -2512,7 +2512,7 @@ sub new_vector {
   my $type = shift;
   
   if ($type eq 'character') {
-    return new_character(@_);
+    return new_character(undef(), @_);
   }
   elsif ($type eq 'complex') {
     return new_complex(@_);
@@ -2532,6 +2532,8 @@ sub new_vector {
 }
 
 sub new_character {
+  my $r = shift;
+  
   my $x1 = Rstats::ArrayFunc::NULL();
   $x1->vector(Rstats::VectorFunc::new_character(@_));
 }

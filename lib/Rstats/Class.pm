@@ -213,6 +213,7 @@ my @func_names = qw/
   c
   clone
   values
+  new_character
 /;
 
 sub new {

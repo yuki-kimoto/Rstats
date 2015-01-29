@@ -29,7 +29,7 @@ SV* Rstats::Util::args(SV* sv_names, SV* sv_args) {
       Rstats::pl_hv_store(
         sv_new_opt,
         SvPV_nolen(sv_name),
-        Rstats::Func::Array::to_c(&PL_sv_undef, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
+        Rstats::ArrayFunc::to_c(&PL_sv_undef, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
       );
     }
     else if (i < names_length) {
@@ -39,7 +39,7 @@ SV* Rstats::Util::args(SV* sv_names, SV* sv_args) {
         Rstats::pl_hv_store(
           sv_new_opt,
           SvPV_nolen(sv_name),
-          Rstats::Func::Array::to_c(&PL_sv_undef, sv_arg)
+          Rstats::ArrayFunc::to_c(&PL_sv_undef, sv_arg)
         );
       }
     }
@@ -240,7 +240,7 @@ SV* Rstats::Util::looks_like_na (SV* sv_value) {
   else {
     SV* sv_na = Rstats::pl_new_sv_pv("NA");
     if (sv_cmp(sv_value, sv_na) == 0) {
-      sv_ret = Rstats::pl_to_perl_obj(Rstats::Func::Vector::new_na(), "Rstats::Vector");
+      sv_ret = Rstats::pl_to_perl_obj(Rstats::VectorFunc::new_na(), "Rstats::Vector");
     }
     else {
       sv_ret = &PL_sv_undef;

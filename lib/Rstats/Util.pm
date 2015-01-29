@@ -7,7 +7,7 @@ use Scalar::Util ();
 use B ();
 use Carp 'croak';
 use Rstats::Func;
-use Rstats::Func::Vector;
+use Rstats::VectorFunc;
 
 my $type_level = {
   character => 6,

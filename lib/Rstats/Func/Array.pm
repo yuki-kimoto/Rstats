@@ -9,7 +9,7 @@ use Rstats::Vector;
 use Rstats::Array;
 use Rstats::List;
 use Rstats::DataFrame;
-use Rstats::VectorFunc;
+use Rstats::Func::Vector;
 use Rstats::Util;
 
 use List::Util ();
@@ -516,10 +516,10 @@ sub factor {
   
   my $f1 = Rstats::Func::Array::new_integer($r, @$f1_values);
   if ($x_ordered) {
-    $f1->{class} = Rstats::VectorFunc::new_character('factor', 'ordered');
+    $f1->{class} = Rstats::Func::Vector::new_character('factor', 'ordered');
   }
   else {
-    $f1->{class} = Rstats::VectorFunc::new_character('factor');
+    $f1->{class} = Rstats::Func::Vector::new_character('factor');
   }
   $f1->{levels} = $x_labels->vector->clone;
   
@@ -858,12 +858,12 @@ sub outer {
 
 sub Mod {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Mod, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::Mod, @_);
 }
 
 sub Arg {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Arg, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::Arg, @_);
 }
 
 sub sub {
@@ -1064,17 +1064,17 @@ sub charmatch {
 
 sub Conj {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Conj, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::Conj, @_);
 }
 
 sub Re {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Re, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::Re, @_);
 }
 
 sub Im {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Im, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::Im, @_);
 }
 
 sub nrow {
@@ -1148,7 +1148,7 @@ sub setequal {
   my $x3_elements = Rstats::Func::decompose($r, $x3);
   my $x4_elements = Rstats::Func::decompose($r, $x4);
   for (my $i = 0; $i < $x3->length_value; $i++) {
-    unless (Rstats::VectorFunc::equal($x3_elements->[$i], $x4_elements->[$i])->value) {
+    unless (Rstats::Func::Vector::equal($x3_elements->[$i], $x4_elements->[$i])->value) {
       $not_equal = 1;
       last;
     }
@@ -1170,7 +1170,7 @@ sub setdiff {
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
+      if (Rstats::Func::Vector::equal($x1_element, $x2_element)->value) {
         $match = 1;
         last;
       }
@@ -1193,7 +1193,7 @@ sub intersect {
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
+      if (Rstats::Func::Vector::equal($x1_element, $x2_element)->value) {
         push @$x3_elements, $x1_element;
       }
     }
@@ -1225,7 +1225,7 @@ sub diff {
   for (my $i = 0; $i < $x1->length_value - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
-    my $x2_element = Rstats::VectorFunc::subtract($x1_element2, $x1_element1);
+    my $x2_element = Rstats::Func::Vector::subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
   my $x2 = Rstats::Func::Array::c($r, @$x2_elements);
@@ -1245,7 +1245,7 @@ sub nchar {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::new_double(CORE::length $x1_element->value);
+        my $x2_element = Rstats::Func::Vector::new_double(CORE::length $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1271,7 +1271,7 @@ sub tolower {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::new_character(lc $x1_element->value);
+        my $x2_element = Rstats::Func::Vector::new_character(lc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1297,7 +1297,7 @@ sub toupper {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::new_character(uc $x1_element->value);
+        my $x2_element = Rstats::Func::Vector::new_character(uc $x1_element->value);
         push @$x2_elements, $x2_element;
       }
     }
@@ -1323,7 +1323,7 @@ sub match {
     my $i = 1;
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::equal($x1_element, $x2_element)->value) {
+      if (Rstats::Func::Vector::equal($x1_element, $x2_element)->value) {
         $match = 1;
         last;
       }
@@ -1342,16 +1342,16 @@ sub match {
 
 sub abs {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::abs, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::abs, @_);
 }
 
 sub acos {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::acos, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::acos, @_);
 }
 sub acosh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::acosh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::acosh, @_);
 }
 
 
@@ -1379,22 +1379,22 @@ sub append {
 
 sub asin {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::asin, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::asin, @_);
 }
 
 sub asinh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::asinh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::asinh, @_);
 }
 
 sub atan {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::atan, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::atan, @_);
 }
 
 sub atanh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::atanh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::atanh, @_);
 }
 
 sub cbind {
@@ -1469,7 +1469,7 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($r, $_x1);
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil $_->value) } @{Rstats::Func::decompose($r, $x1)};
+  my @a2_elements = map { Rstats::Func::Vector::new_double(POSIX::ceil $_->value) } @{Rstats::Func::decompose($r, $x1)};
   
   my $x2 = Rstats::Func::Array::c($r, @a2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -1519,17 +1519,17 @@ sub colSums {
 
 sub cos {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::cos, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::cos, @_);
 }
 
 sub atan2 {
   my $r = shift;
-  return operate_binary($r, \&Rstats::VectorFunc::atan2, @_);
+  return operate_binary($r, \&Rstats::Func::Vector::atan2, @_);
 }
 
 sub cosh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::cosh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::cosh, @_);
 }
 
 sub cummax {
@@ -1554,7 +1554,7 @@ sub cummax {
     elsif (Rstats::Func::is_nan($r, $element)->value) {
       $max = $element;
     }
-    if (Rstats::VectorFunc::more_than($element, $max)->value && !Rstats::Func::is_nan($r, $max)->value) {
+    if (Rstats::Func::Vector::more_than($element, $max)->value && !Rstats::Func::is_nan($r, $max)->value) {
       $max = $element;
     }
     push @a2_elements, $max;
@@ -1584,7 +1584,7 @@ sub cummin {
     elsif (Rstats::Func::is_nan($r, $element)->value) {
       $min = $element;
     }
-    if (Rstats::VectorFunc::less_than($element, $min)->value && !Rstats::Func::is_nan($r, $min)->value) {
+    if (Rstats::Func::Vector::less_than($element, $min)->value && !Rstats::Func::is_nan($r, $min)->value) {
       $min = $element;
     }
     push @a2_elements, $min;
@@ -1595,12 +1595,12 @@ sub cummin {
 
 sub cumsum {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::cumsum, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::cumsum, @_);
 }
 
 sub cumprod {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::cumprod, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::cumprod, @_);
 }
 
 sub args_array {
@@ -1645,20 +1645,20 @@ sub complex {
     my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
     for (my $i = 0; $i < $longer_length; $i++) {
       my $mod = $x1_mod_elements->[$i];
-      $mod = Rstats::VectorFunc::new_double(1) unless $mod;
+      $mod = Rstats::Func::Vector::new_double(1) unless $mod;
       my $arg = $x1_arg_elements->[$i];
-      $arg = Rstats::VectorFunc::new_double(0) unless $arg;
+      $arg = Rstats::Func::Vector::new_double(0) unless $arg;
       
-      my $re = Rstats::VectorFunc::multiply(
+      my $re = Rstats::Func::Vector::multiply(
         $mod,
-        Rstats::VectorFunc::cos($arg)
+        Rstats::Func::Vector::cos($arg)
       );
-      my $im = Rstats::VectorFunc::multiply(
+      my $im = Rstats::Func::Vector::multiply(
         $mod,
-        Rstats::VectorFunc::sin($arg)
+        Rstats::Func::Vector::sin($arg)
       );
       
-      my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
+      my $x2_element = Rstats::Func::Vector::complex_double($re, $im);
       push @$x2_elements, $x2_element;
     }
   }
@@ -1670,9 +1670,9 @@ sub complex {
     my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
     my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
     for (my $i = 0; $i <  $x1_im->length_value; $i++) {
-      my $re = $x1_re_elements->[$i] || Rstats::VectorFunc::new_double(0);
+      my $re = $x1_re_elements->[$i] || Rstats::Func::Vector::new_double(0);
       my $im = $x1_im_elements->[$i];
-      my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
+      my $x2_element = Rstats::Func::Vector::complex_double($re, $im);
       push @$x2_elements, $x2_element;
     }
   }
@@ -1682,12 +1682,12 @@ sub complex {
 
 sub exp {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::exp, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::exp, @_);
 }
 
 sub expm1 {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::expm1, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::expm1, @_);
 }
 
 sub floor {
@@ -1697,7 +1697,7 @@ sub floor {
   
   my $x1 = to_c($r, $_x1);
   
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor $_->value) } @{Rstats::Func::decompose($r, $x1)};
+  my @a2_elements = map { Rstats::Func::Vector::new_double(POSIX::floor $_->value) } @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::Array::c($r, @a2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -1739,7 +1739,7 @@ sub head {
 sub i {
   my $r = shift;
   
-  my $i = Rstats::VectorFunc::new_complex({re => 0, im => 1});
+  my $i = Rstats::Func::Vector::new_complex({re => 0, im => 1});
   
   return Rstats::Func::Array::c($r, $i);
 }
@@ -1767,22 +1767,22 @@ sub ifelse {
 
 sub log {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::log, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::log, @_);
 }
 
 sub logb {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::logb, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::logb, @_);
 }
 
 sub log2 {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::log2, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::log2, @_);
 }
 
 sub log10 {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::log10, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::log10, @_);
 }
 
 sub max {
@@ -1805,7 +1805,7 @@ sub max {
     elsif (Rstats::Func::is_nan($r, $element)->value) {
       $max = $element;
     }
-    if (!Rstats::Func::is_nan($r, $max)->value && Rstats::VectorFunc::more_than($element, $max)->value) {
+    if (!Rstats::Func::is_nan($r, $max)->value && Rstats::Func::Vector::more_than($element, $max)->value) {
       $max = $element;
     }
   }
@@ -1843,7 +1843,7 @@ sub min {
     elsif (Rstats::Func::is_nan($r, $element)->value) {
       $min = $element;
     }
-    if (!Rstats::Func::is_nan($r, $min)->value && Rstats::VectorFunc::less_than($element, $min)->value) {
+    if (!Rstats::Func::is_nan($r, $min)->value && Rstats::Func::Vector::less_than($element, $min)->value) {
       $min = $element;
     }
   }
@@ -1961,7 +1961,7 @@ sub pmax {
     my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || Rstats::VectorFunc::more_than($elements->[$i], $maxs[$i])->value
+        if !defined $maxs[$i] || Rstats::Func::Vector::more_than($elements->[$i], $maxs[$i])->value
     }
   }
   
@@ -1978,7 +1978,7 @@ sub pmin {
     my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || Rstats::VectorFunc::less_than($elements->[$i], $mins[$i])->value
+        if !defined $mins[$i] || Rstats::Func::Vector::less_than($elements->[$i], $mins[$i])->value
     }
   }
   
@@ -1987,7 +1987,7 @@ sub pmin {
 
 sub prod {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::prod, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::prod, @_);
 }
 
 sub range {
@@ -2097,7 +2097,7 @@ sub replace {
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::VectorFunc::new_double($i + 1)->to_string;
+    my $hash = Rstats::Func::Vector::new_double($i + 1)->to_string;
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
@@ -2167,7 +2167,7 @@ sub round {
   my $x1 = to_c($r, $_x1);
 
   my $ro = 10 ** $digits;
-  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even($_->value * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
+  my @a2_elements = map { Rstats::Func::Vector::new_double(Math::Round::round_even($_->value * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::Array::c($r, @a2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
@@ -2263,12 +2263,12 @@ sub sequence {
 
 sub sinh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::sinh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::sinh, @_);
 }
 
 sub sqrt {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::sqrt, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::sqrt, @_);
 }
 
 sub sort {
@@ -2281,8 +2281,8 @@ sub sort {
   my @a2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements]
-    : [sort { Rstats::VectorFunc::more_than($a, $b)->value ? 1 : Rstats::VectorFunc::equal($a, $b)->value ? 0 : -1 } @a2_elements];
+    ? [reverse sort { Rstats::Func::Vector::more_than($a, $b)->value ? 1 : Rstats::Func::Vector::equal($a, $b)->value ? 0 : -1 } @a2_elements]
+    : [sort { Rstats::Func::Vector::more_than($a, $b)->value ? 1 : Rstats::Func::Vector::equal($a, $b)->value ? 0 : -1 } @a2_elements];
 
   return Rstats::Func::Array::c($r, @$x3_elements);
 }
@@ -2309,12 +2309,12 @@ sub tail {
 
 sub tan {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::tan, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::tan, @_);
 }
 
 sub sin {
   my $r = shift;
-  operate_unary($r, \&Rstats::VectorFunc::sin, @_);
+  operate_unary($r, \&Rstats::Func::Vector::sin, @_);
 }
 
 sub operate_unary {
@@ -2333,7 +2333,7 @@ sub operate_unary {
 
 sub tanh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::tanh, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::tanh, @_);
 }
 
 sub trunc {
@@ -2344,7 +2344,7 @@ sub trunc {
   my $x1 = to_c($r, $_x1);
   
   my @a2_elements
-    = map { Rstats::VectorFunc::new_double(int $_->value) } @{Rstats::Func::decompose($r, $x1)};
+    = map { Rstats::Func::Vector::new_double(int $_->value) } @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::Array::c($r, @a2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2536,35 +2536,35 @@ sub new_character {
   my $r = shift;
   
   my $x1 = Rstats::Func::Array::NULL();
-  $x1->vector(Rstats::VectorFunc::new_character(@_));
+  $x1->vector(Rstats::Func::Vector::new_character(@_));
 }
 
 sub new_complex {
   my $r = shift;
   
   my $x1 = Rstats::Func::Array::NULL();
-  $x1->vector(Rstats::VectorFunc::new_complex(@_));
+  $x1->vector(Rstats::Func::Vector::new_complex(@_));
 }
 
 sub new_double {
   my $r = shift;
   
   my $x1 = Rstats::Func::Array::NULL();
-  $x1->vector(Rstats::VectorFunc::new_double(@_));
+  $x1->vector(Rstats::Func::Vector::new_double(@_));
 }
 
 sub new_integer {
   my $r = shift;
   
   my $x1 = Rstats::Func::Array::NULL();
-  $x1->vector(Rstats::VectorFunc::new_integer(@_));
+  $x1->vector(Rstats::Func::Vector::new_integer(@_));
 }
 
 sub new_logical {
   my $r = shift;
   
   my $x1 = Rstats::Func::Array::NULL();
-  $x1->vector(Rstats::VectorFunc::new_logical(@_));
+  $x1->vector(Rstats::Func::Vector::new_logical(@_));
 }
 
 sub matrix {
@@ -2605,7 +2605,7 @@ sub matrix {
   my $dim = [$nrow, $ncol];
   my $matrix;
   my $x_matrix = Rstats::Func::Array::NULL();
-  $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->vector->type, @$x1_values));
+  $x_matrix->vector(Rstats::Func::Vector::new_vector($x1->vector->type, @$x1_values));
   if ($byrow) {
     $matrix = Rstats::Func::Array::array(
       $r,
@@ -2677,7 +2677,7 @@ sub row {
 
 sub sum {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::sum, @_);
+  return operate_unary($r, \&Rstats::Func::Vector::sum, @_);
 }
 
 sub ncol {
@@ -2841,64 +2841,64 @@ sub upgrade_type {
 
 sub add {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::add, @_);
+  operate_binary($r, \&Rstats::Func::Vector::add, @_);
 }
 sub subtract {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::subtract, @_);
+  operate_binary($r, \&Rstats::Func::Vector::subtract, @_);
 }
 sub multiply {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::multiply, @_);
+  operate_binary($r, \&Rstats::Func::Vector::multiply, @_);
 }
 sub divide {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::divide, @_);
+  operate_binary($r, \&Rstats::Func::Vector::divide, @_);
 }
 sub remainder {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::remainder, @_);
+  operate_binary($r, \&Rstats::Func::Vector::remainder, @_);
 }
 sub pow {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::pow, @_);
+  operate_binary($r, \&Rstats::Func::Vector::pow, @_);
 }
 sub less_than {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than, @_);
+  operate_binary($r, \&Rstats::Func::Vector::less_than, @_);
 }
 sub less_than_or_equal {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than_or_equal, @_);
+  operate_binary($r, \&Rstats::Func::Vector::less_than_or_equal, @_);
 }
 sub more_than {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than, @_);
+  operate_binary($r, \&Rstats::Func::Vector::more_than, @_);
 }
 sub more_than_or_equal {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than_or_equal, @_);
+  operate_binary($r, \&Rstats::Func::Vector::more_than_or_equal, @_);
 }
 sub equal {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::equal, @_);
+  operate_binary($r, \&Rstats::Func::Vector::equal, @_);
 }
 sub not_equal {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::not_equal, @_);
+  operate_binary($r, \&Rstats::Func::Vector::not_equal, @_);
 }
 sub and {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::and, @_);
+  operate_binary($r, \&Rstats::Func::Vector::and, @_);
 }
 sub or {
   my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::or, @_);
+  operate_binary($r, \&Rstats::Func::Vector::or, @_);
 }
 
 sub negation {
   my $r = shift;
-  operate_unary($r, \&Rstats::VectorFunc::negation, @_);
+  operate_unary($r, \&Rstats::Func::Vector::negation, @_);
 }
 
 sub _fix_pos {
@@ -3054,7 +3054,7 @@ sub set {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if (Rstats::Func::is_na($r, $element)->value) {
-        $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+        $x1_elements->[$pos] = Rstats::Func::Vector::new_logical(undef);
       }
       else {
         my $value = $element->to_string;
@@ -3063,7 +3063,7 @@ sub set {
         }
         else {
           Carp::carp "invalid factor level, NA generated";
-          $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+          $x1_elements->[$pos] = Rstats::Func::Vector::new_logical(undef);
         }
       }
     }
@@ -3099,7 +3099,7 @@ sub _levels_h {
   my $levels_h = {};
   my $levels = Rstats::Func::levels($r, $x1)->values;
   for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
+    $levels_h->{$levels->[$i - 1]} = Rstats::Func::Vector::new_integer($i);
   }
   
   return $levels_h;

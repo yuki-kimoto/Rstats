@@ -135,7 +135,7 @@ sub apply {
   my $x2 = Rstats::Func::NULL();
   $x2->vector(Rstats::Func::Array::c(undef(), @$new_elements)->vector);
   Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
-  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
+  $x2->{dim} = Rstats::Func::Vector::new_integer(@$new_dim_values);
   
   if ($x2->{dim}->length_value == 1) {
     delete $x2->{dim};
@@ -454,7 +454,7 @@ sub copy_attrs_to {
     else {
       $x2_names_values = $x1->{names}->values;
     }
-    $x2->{names} = Rstats::VectorFunc::new_character(@$x2_names_values);
+    $x2->{names} = Rstats::Func::Vector::new_character(@$x2_names_values);
   }
   
   # dimnames
@@ -476,7 +476,7 @@ sub copy_attrs_to {
         else {
           $new_dimname_values = $dimname_values;
         }
-        push @$new_dimnames, Rstats::VectorFunc::new_character(@$new_dimname_values);
+        push @$new_dimnames, Rstats::Func::Vector::new_character(@$new_dimname_values);
       }
     }
     $x2->{dimnames} = $new_dimnames;
@@ -707,7 +707,7 @@ sub is_na {
   my $x1 = Rstats::Func::to_c(undef(), shift);
   my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
   my $x2 = Rstats::Func::NULL();
-  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
+  $x2->vector(Rstats::Func::Vector::new_logical(@$x2_values));
   
   return $x2;
 }
@@ -759,16 +759,16 @@ sub class {
       $x_class->vector(Rstats::Func::mode(undef(), $x1)->vector->clone);
     }
     elsif (is_matrix(undef(), $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
+      $x_class->vector(Rstats::Func::Vector::new_character('matrix'));
     }
     elsif (is_array(undef(), $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('array'));
+      $x_class->vector(Rstats::Func::Vector::new_character('array'));
     }
     elsif (Rstats::Func::is_data_frame(undef(), $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
+      $x_class->vector(Rstats::Func::Vector::new_character('data.frame'));
     }
     elsif (is_list(undef(), $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('list'));
+      $x_class->vector(Rstats::Func::Vector::new_character('list'));
     }
     
     return $x_class;
@@ -1103,7 +1103,7 @@ sub as_character {
       }
     }
     $x2 = Rstats::Func::NULL();
-    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
+    $x2->vector(Rstats::Func::Vector::new_character(@$x2_values));
     
     Rstats::Func::copy_attrs_to(undef(), $x1, $x2);
   }

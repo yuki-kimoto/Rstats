@@ -27,7 +27,7 @@ NV Rstats::ElementFunc::pow(IV e1, IV e2) { return pow((NV)e1, (NV)e2); }
 
 // reminder
 std::complex<NV> Rstats::ElementFunc::reminder(std::complex<NV> e1, std::complex<NV> e2) {
-  croak("unimplemented complex operation(Rstats::VectorFunc::reminder())");
+  croak("unimplemented complex operation(Rstats::Func::Vector::reminder())");
 }
 NV Rstats::ElementFunc::reminder(NV e1, NV e2) {
   if (std::isnan(e1) || std::isnan(e2) || e2 == 0) {

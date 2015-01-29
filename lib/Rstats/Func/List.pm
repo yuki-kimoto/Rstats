@@ -76,13 +76,13 @@ sub set {
     if (exists $r->{names}) {
       my $new_names_values = $r->{names}->values;
       splice @$new_names_values, $index - 1, 1;
-      $r->{names} = Rstats::VectorFunc::new_character(@$new_names_values);
+      $r->{names} = Rstats::Func::Vector::new_character(@$new_names_values);
     }
     
     if (exists $r->{dimnames}) {
       my $new_dimname_values = $r->{dimnames}[1]->values;
       splice @$new_dimname_values, $index - 1, 1;
-      $r->{dimnames}[1] = Rstats::VectorFunc::new_character(@$new_dimname_values);
+      $r->{dimnames}[1] = Rstats::Func::Vector::new_character(@$new_dimname_values);
     }
   }
   else {

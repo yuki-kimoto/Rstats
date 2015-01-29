@@ -76,14 +76,14 @@ sub get {
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->list($new_elements);
   Rstats::Func::copy_attrs_to($r, $r, $data_frame, {new_indexes => [$row_index, Rstats::Func::Array::c($r, @$col_index_values)]});
-  $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(1 .. $data_frame->getin(1)->length_value);
+  $data_frame->{dimnames}[0] = Rstats::Func::Vector::new_character(1 .. $data_frame->getin(1)->length_value);
   
   return $data_frame;
 }
 
 sub to_string {
   my $r = shift;
-
+  
   my $t = Text::UnicodeTable::Simple->new(border => 0, alignment => 'right');
   
   # Names

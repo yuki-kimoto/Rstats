@@ -183,7 +183,7 @@ SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
 
 SV* Rstats::ArrayFunc::to_c(SV* sv_r, SV* sv_x) {
 
-  IV is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Container");
+  IV is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
   
   SV* sv_x1;
   if (is_container) {

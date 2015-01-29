@@ -1,4 +1,4 @@
-package Rstats::Container;
+package Rstats::Object;
 use Object::Simple -base;
 
 use Rstats::Func;
@@ -62,6 +62,6 @@ sub colnames { Rstats::Func::colnames(@_) }
 
 =head1 NAME
 
-Rstats::Container - Container base class
+Rstats::Object - Rstats object class
 
 1;

@@ -1,5 +1,5 @@
 package Rstats::List;
-use Rstats::Container -base;
+use Rstats::Object -base;
 
 use Rstats::Func;
 use Carp 'croak';

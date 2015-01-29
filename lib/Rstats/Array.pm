@@ -1,5 +1,5 @@
 package Rstats::Array;
-use Rstats::Container -base;
+use Rstats::Object -base;
 
 use overload
   '+' => sub { Rstats::ArrayFunc::add(undef(), Rstats::ArrayFunc::_fix_pos(undef(), @_)) },

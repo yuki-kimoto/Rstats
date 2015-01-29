@@ -19,6 +19,8 @@ my $type_level = {
 };
 
 sub higher_type {
+  my $r = shift;
+  
   my ($type1, $type2) = @_;
   
   if ($type_level->{$type1} > $type_level->{$type2}) {
@@ -30,16 +32,18 @@ sub higher_type {
 }
 
 sub parse_index {
+  my $r = shift;
+  
   my ($x1, $drop, @_indexs) = @_;
   
   my $x1_dim = $x1->dim_as_array->values;
   my @indexs;
   my @x2_dim;
   
-  if (ref $_indexs[0] && Rstats::Func::is_array(undef(), $_indexs[0])
-    && Rstats::Func::is_logical(undef(), $_indexs[0]) && Rstats::Func::dim(undef(), $_indexs[0])->length_value > 1) {
+  if (ref $_indexs[0] && Rstats::Func::is_array($r, $_indexs[0])
+    && Rstats::Func::is_logical($r, $_indexs[0]) && Rstats::Func::dim($r, $_indexs[0])->length_value > 1) {
     my $x2 = $_indexs[0];
-    my $x2_dim_values = Rstats::Func::dim(undef(), $x2)->values;
+    my $x2_dim_values = Rstats::Func::dim($r, $x2)->values;
     my $x2_values = $x2->values;
     my $poss = [];
     for (my $i = 0; $i < @$x2_values; $i++) {
@@ -53,9 +57,9 @@ sub parse_index {
     for (my $i = 0; $i < @$x1_dim; $i++) {
       my $_index = $_indexs[$i];
 
-      my $index = defined $_index ? Rstats::Func::to_c(undef(), $_index) : Rstats::Func::NULL();
+      my $index = defined $_index ? Rstats::Func::to_c($r, $_index) : Rstats::Func::NULL();
       my $index_values = $index->values;
-      if (@$index_values && !Rstats::Func::is_character(undef(), $index) && !Rstats::Func::is_logical(undef(), $index)) {
+      if (@$index_values && !Rstats::Func::is_character($r, $index) && !Rstats::Func::is_logical($r, $index)) {
         my $minus_count = 0;
         for my $index_value (@$index_values) {
           if ($index_value == 0) {
@@ -72,15 +76,15 @@ sub parse_index {
       
       if (!@{$index->values}) {
         my $index_values_new = [1 .. $x1_dim->[$i]];
-        $index = Rstats::Func::new_integer(undef(), @$index_values_new);
+        $index = Rstats::Func::new_integer($r, @$index_values_new);
       }
-      elsif (Rstats::Func::is_character(undef(), $index)) {
-        if (Rstats::Func::is_vector(undef(), $x1)) {
+      elsif (Rstats::Func::is_character($r, $index)) {
+        if (Rstats::Func::is_vector($r, $x1)) {
           my $index_new_values = [];
           for my $name (@{$index->values}) {
             my $i = 0;
             my $value;
-            for my $x1_name (@{Rstats::Func::names(undef(), $x1)->values}) {
+            for my $x1_name (@{Rstats::Func::names($r, $x1)->values}) {
               if ($name eq $x1_name) {
                 $value = $x1->values->[$i];
                 last;
@@ -90,21 +94,21 @@ sub parse_index {
             croak "Can't find name" unless defined $value;
             push @$index_new_values, $value;
           }
-          $indexs[$i] = Rstats::Func::new_integer(undef(), @$index_new_values);
+          $indexs[$i] = Rstats::Func::new_integer($r, @$index_new_values);
         }
-        elsif (Rstats::Func::is_matrix(undef(), $x1)) {
+        elsif (Rstats::Func::is_matrix($r, $x1)) {
           
         }
         else {
           croak "Can't support name except vector and matrix";
         }
       }
-      elsif (Rstats::Func::is_logical(undef(), $index)) {
+      elsif (Rstats::Func::is_logical($r, $index)) {
         my $index_values_new = [];
         for (my $i = 0; $i < @{$index->values}; $i++) {
           push @$index_values_new, $i + 1 if $index_values->[$i];
         }
-        $index = Rstats::Func::new_integer(undef(), @$index_values_new);
+        $index = Rstats::Func::new_integer($r, @$index_values_new);
       }
       elsif ($index->{_minus}) {
         my $index_value_new = [];
@@ -112,7 +116,7 @@ sub parse_index {
         for my $k (1 .. $x1_dim->[$i]) {
           push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
         }
-        $index = Rstats::Func::new_integer(undef(), @$index_value_new);
+        $index = Rstats::Func::new_integer($r, @$index_value_new);
       }
 
       push @indexs, $index;

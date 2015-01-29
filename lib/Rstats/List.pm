@@ -8,42 +8,42 @@ use overload '""' => \&to_string,
   fallback => 1;
 
 sub getin {
-  my ($self, $_index) = @_;
+  my ($r, $_index) = @_;
   
   unless (defined $_index) {
-    $_index = $self->at;
+    $_index = $r->at;
   }
-  $self->at($_index);
+  $r->at($_index);
   
-  my $x1_index = Rstats::Func::to_c(undef(), $_index);
+  my $x1_index = Rstats::Func::to_c($r, $_index);
   my $index;
-  if (Rstats::Func::is_character(undef(), $x1_index)) {
-    $index = $self->_name_to_index($x1_index);
+  if (Rstats::Func::is_character($r, $x1_index)) {
+    $index = $r->_name_to_index($x1_index);
   }
   else {
     $index = $x1_index->values->[0];
   }
-  my $elements = $self->list;
+  my $elements = $r->list;
   my $element = $elements->[$index - 1];
   
   return $element;
 }
 
 sub get {
-  my $self = shift;
-  my $index = Rstats::Func::to_c(undef(), shift);
+  my $r = shift;
+  my $index = Rstats::Func::to_c($r, shift);
   
-  my $elements = $self->list;
+  my $elements = $r->list;
   
-  my $class = ref $self;
+  my $class = ref $r;
   my $list = $class->new;
   my $list_elements = $list->list;
   
   my $index_values;
-  if (Rstats::Func::is_character(undef(), $index)) {
+  if (Rstats::Func::is_character($r, $index)) {
     $index_values = [];
     for my $value (@{$index->values}) {
-      push @$index_values, $self->_name_to_index($value);
+      push @$index_values, $r->_name_to_index($value);
     }
   }
   else {
@@ -53,66 +53,66 @@ sub get {
     push @$list_elements, $elements->[$i - 1];
   }
   
-  $self->copy_attrs_to($list, {new_indexes => [Rstats::ArrayFunc::c(undef(), @$index_values)]});
+  $r->copy_attrs_to($list, {new_indexes => [Rstats::ArrayFunc::c($r, @$index_values)]});
 
   return $list;
 }
 
 sub set {
-  my ($self, $v1) = @_;
+  my ($r, $v1) = @_;
   
-  my $_index = $self->at;
-  my $x1_index = Rstats::Func::to_c(undef(), @$_index);
+  my $_index = $r->at;
+  my $x1_index = Rstats::Func::to_c($r, @$_index);
   my $index;
-  if (Rstats::Func::is_character(undef(), $x1_index)) {
-    $index = $self->_name_to_index($x1_index);
+  if (Rstats::Func::is_character($r, $x1_index)) {
+    $index = $r->_name_to_index($x1_index);
   }
   else {
     $index = $x1_index->values->[0];
   }
-  $v1 = Rstats::Func::to_c(undef(), $v1);
+  $v1 = Rstats::Func::to_c($r, $v1);
   
-  if (Rstats::Func::is_null(undef(), $v1)) {
-    splice @{$self->list}, $index - 1, 1;
-    if (exists $self->{names}) {
-      my $new_names_values = $self->{names}->values;
+  if (Rstats::Func::is_null($r, $v1)) {
+    splice @{$r->list}, $index - 1, 1;
+    if (exists $r->{names}) {
+      my $new_names_values = $r->{names}->values;
       splice @$new_names_values, $index - 1, 1;
-      $self->{names} = Rstats::VectorFunc::new_character(@$new_names_values);
+      $r->{names} = Rstats::VectorFunc::new_character(@$new_names_values);
     }
     
-    if (exists $self->{dimnames}) {
-      my $new_dimname_values = $self->{dimnames}[1]->values;
+    if (exists $r->{dimnames}) {
+      my $new_dimname_values = $r->{dimnames}[1]->values;
       splice @$new_dimname_values, $index - 1, 1;
-      $self->{dimnames}[1] = Rstats::VectorFunc::new_character(@$new_dimname_values);
+      $r->{dimnames}[1] = Rstats::VectorFunc::new_character(@$new_dimname_values);
     }
   }
   else {
-    if ($self->is_data_frame) {
-      my $self_length = $self->length_value;
+    if ($r->is_data_frame) {
+      my $r_length = $r->length_value;
       my $v1_length = $v1->length_value;
-      if ($self_length != $v1_length) {
-        croak "Error in data_frame set: replacement has $v1_length rows, data has $self_length";
+      if ($r_length != $v1_length) {
+        croak "Error in data_frame set: replacement has $v1_length rows, data has $r_length";
       }
     }
     
-    $self->list->[$index - 1] = $v1;
+    $r->list->[$index - 1] = $v1;
   }
   
-  return $self;
+  return $r;
 }
 
 sub to_string {
-  my $self = shift;
+  my $r = shift;
   
   my $poses = [];
   my $str = '';
-  $self->_to_string($self, $poses, \$str);
+  $r->_to_string($r, $poses, \$str);
   
   return $str;
 }
 
 sub _to_string {
-  my ($self, $list, $poses, $str_ref) = @_;
+  my ($r, $list, $poses, $str_ref) = @_;
   
   my $elements = $list->list;
   for (my $i = 0; $i < @$elements; $i++) {
@@ -121,7 +121,7 @@ sub _to_string {
     
     my $element = $elements->[$i];
     if (ref $element eq 'Rstats::List') {
-      $self->_to_string($element, $poses, $str_ref);
+      $r->_to_string($element, $poses, $str_ref);
     }
     else {
       $$str_ref .= $element->to_string . "\n";

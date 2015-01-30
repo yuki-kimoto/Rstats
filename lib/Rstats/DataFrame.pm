@@ -10,7 +10,7 @@ use Rstats::Func;
 use Text::UnicodeTable::Simple;
 
 sub get {
-  my $r = shift;
+  my $self = shift;
   my $_row_index = shift;
   my $_col_index = shift;
   
@@ -19,21 +19,21 @@ sub get {
     $_col_index = $_row_index;
     $_row_index = Rstats::Func::NULL();
   }
-  my $row_index = Rstats::Func::to_c($r, $_row_index);
-  my $col_index = Rstats::Func::to_c($r, $_col_index);
+  my $row_index = Rstats::Func::to_c($self, $_row_index);
+  my $col_index = Rstats::Func::to_c($self, $_col_index);
   
   # Convert name index to number index
   my $col_index_values;
-  if (Rstats::Func::is_null($r, $col_index)) {
-    $col_index_values = [1 .. Rstats::Func::names($r, $r)->length_value];
+  if (Rstats::Func::is_null($self, $col_index)) {
+    $col_index_values = [1 .. Rstats::Func::names($self, $self)->length_value];
   }
-  elsif (Rstats::Func::is_character($r, $col_index)) {
+  elsif (Rstats::Func::is_character($self, $col_index)) {
     $col_index_values = [];
     for my $col_index_value (@{$col_index->values}) {
-      push @$col_index_values, $r->_name_to_index($col_index_value);
+      push @$col_index_values, $self->_name_to_index($col_index_value);
     }
   }
-  elsif (Rstats::Func::is_logical($r, $col_index)) {
+  elsif (Rstats::Func::is_logical($self, $col_index)) {
     my $tmp_col_index_values = $col_index->values;
     for (my $i = 0; $i < @$tmp_col_index_values; $i++) {
       push @$col_index_values, $i + 1 if $tmp_col_index_values->[$i];
@@ -50,7 +50,7 @@ sub get {
       }
       
       $col_index_values = [];
-      for (my $index = 1; $index <= Rstats::Func::names($r, $r)->length_value; $index++) {
+      for (my $index = 1; $index <= Rstats::Func::names($self, $self)->length_value; $index++) {
         push @$col_index_values, $index unless $delete_col_index_values_h->{$index};
       }
     }
@@ -60,7 +60,7 @@ sub get {
   }
   
   # Extract columns
-  my $elements = $r->list;
+  my $elements = $self->list;
   my $new_elements = [];
   for my $i (@{$col_index_values}) {
     push @$new_elements, $elements->[$i - 1];
@@ -69,32 +69,32 @@ sub get {
   # Extract rows
   for my $new_element (@$new_elements) {
     $new_element = $new_element->get($row_index)
-      unless Rstats::Func::is_null($r, $row_index);
+      unless Rstats::Func::is_null($self, $row_index);
   }
   
   # Create new data frame
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->list($new_elements);
-  Rstats::Func::copy_attrs_to($r, $r, $data_frame, {new_indexes => [$row_index, Rstats::ArrayFunc::c($r, @$col_index_values)]});
+  Rstats::Func::copy_attrs_to($self, $self, $data_frame, {new_indexes => [$row_index, Rstats::ArrayFunc::c($self, @$col_index_values)]});
   $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(1 .. $data_frame->getin(1)->length_value);
   
   return $data_frame;
 }
 
 sub to_string {
-  my $r = shift;
+  my $self = shift;
 
   my $t = Text::UnicodeTable::Simple->new(border => 0, alignment => 'right');
   
   # Names
-  my $column_names = Rstats::Func::names($r, $r)->values;
+  my $column_names = Rstats::Func::names($self, $self)->values;
   $t->set_header('', @$column_names);
   
   # columns
   my $columns = [];
   for (my $i = 1; $i <= @$column_names; $i++) {
-    my $x = $r->getin($i);
-    $x = Rstats::Func::as_character($r, $x) if Rstats::Func::is_factor($r, $x);
+    my $x = $self->getin($i);
+    $x = Rstats::Func::as_character($self, $x) if Rstats::Func::is_factor($self, $x);
     push @$columns, $x->values;
   }
   my $col_count = @{$columns};

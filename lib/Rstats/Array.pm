@@ -27,13 +27,6 @@ sub value { Rstats::ArrayFunc::value(undef(), @_) }
 sub getin { Rstats::ArrayFunc::getin(undef(), @_) }
 sub get { Rstats::ArrayFunc::get(undef(), @_) }
 
-sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
-sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }
-sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
-sub is_null { Rstats::ArrayFunc::is_null(@_) }
-sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
-sub negation { Rstats::ArrayFunc::negation(@_) }
-sub _fix_pos { Rstats::ArrayFunc::_fix_pos(@_) }
 sub NULL { Rstats::ArrayFunc::NULL(@_) }
 sub NA { Rstats::ArrayFunc::NA(@_) }
 sub NaN { Rstats::ArrayFunc::NaN(@_) }

@@ -29,6 +29,8 @@ sub AUTOLOAD {
 
 sub DESTROY {}
 
+sub decompose { Rstats::Func::decompose(@_) }
+sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
 sub class { Rstats::Func::class(undef(), @_) }
 sub dimnames { Rstats::Func::dimnames(@_) }
 sub dim { Rstats::Func::dim(@_) }
@@ -39,8 +41,6 @@ sub dim_as_array { Rstats::Func::dim_as_array(undef(), @_) }
 sub type { Rstats::Func::type(undef(), @_) }
 sub values { Rstats::Func::values(undef(), @_) }
 
-sub decompose { Rstats::Func::decompose(@_) }
-sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
 
 1;
 

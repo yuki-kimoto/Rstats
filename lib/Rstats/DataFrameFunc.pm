@@ -8,6 +8,8 @@ use Text::UnicodeTable::Simple;
 
 sub set { Rstats::ListFunc::set(@_) }
 
+sub getin { Rstats::ListFunc::getin(@_) }
+
 sub get {
   my $r = shift;
   
@@ -74,10 +76,17 @@ sub get {
   }
   
   # Create new data frame
-  my $data_frame = Rstats::DataFrame->new;
+  my $data_frame = Rstats::Func::new_data_frame($r);;
   $data_frame->list($new_elements);
-  Rstats::Func::copy_attrs_to($x1, $x1, $data_frame, {new_indexes => [$row_index, Rstats::ArrayFunc::c($x1, @$col_index_values)]});
-  $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(1 .. $data_frame->getin(1)->length_value);
+  Rstats::Func::copy_attrs_to(
+    $r,
+    $x1,
+    $data_frame,
+    {new_indexes => [$row_index, Rstats::ArrayFunc::c($x1, @$col_index_values)]}
+  );
+  $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(
+    1 .. Rstats::DataFrameFunc::getin($r, $data_frame, 1)->length_value
+  );
   
   return $data_frame;
 }

@@ -546,7 +546,7 @@ sub list {
   
   @elements = map { ref $_ ne 'Rstats::List' ? Rstats::ArrayFunc::to_c($r, $_) : $_ } @elements;
   
-  my $list = Rstats::List->new;
+  my $list = Rstats::Func::new_list($r);
   $list->list(\@elements);
   $list->r($r);
   
@@ -635,7 +635,7 @@ sub data_frame {
   }
   
   # Create data frame
-  my $data_frame = Rstats::DataFrame->new;
+  my $data_frame = Rstats::Func::new_data_frame($r);
   $data_frame->{row_length} = $max_count;
   $data_frame->list($elements);
   Rstats::Func::dimnames(

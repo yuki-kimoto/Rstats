@@ -23,7 +23,6 @@ use overload
 
 sub bool { Rstats::ArrayFunc::bool(undef(), @_) }
 sub value { Rstats::ArrayFunc::value(undef(), @_) }
-sub getin { Rstats::ArrayFunc::getin(undef(), @_) }
 
 1;
 

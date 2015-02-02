@@ -62,7 +62,7 @@ use Rstats;
     my $sex = c('F', 'M', 'F');
     my $height = c(172, 168, 155);
     my $weight = c(5, 6, 7);
-    
+    $DB::single = 1;
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     my $x2 = $x1->get(c(-1, -3), NULL);
     ok(r->is_data_frame($x2));

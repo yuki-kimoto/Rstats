@@ -229,6 +229,7 @@ my @func_names2 = qw/
   to_string
   get
   set
+  getin
 /;
 
 sub new {

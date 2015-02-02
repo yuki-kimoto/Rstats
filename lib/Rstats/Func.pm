@@ -294,11 +294,27 @@ sub get {
   }
 }
 
+sub getin {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::ArrayFunc::getin(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::ListFunc::getin(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::DataFrameFunc::getin(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
 sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
 sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }
 sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
 sub is_null { Rstats::ArrayFunc::is_null(@_) }
-sub getin { Rstats::ArrayFunc::getin(@_) }
 sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
 sub bool { Rstats::ArrayFunc::bool(@_) }
 sub value { Rstats::ArrayFunc::value(@_) }
@@ -770,7 +786,7 @@ sub as_list {
     return $x1;
   }
   else {
-    my $list = Rstats::List->new;
+    my $list = Rstats::Func::new_list($r);;
     my $x2 = Rstats::Func::NULL($r);
     $x2->vector($x1->vector->clone);
     $list->list([$x2]);
@@ -1041,6 +1057,22 @@ sub as {
   else {
     croak "Invalid mode is passed";
   }
+}
+
+sub new_data_frame {
+  my $r = shift;
+  my $data_frame = Rstats::DataFrame->new;
+  $data_frame->r($r);
+  
+  return $data_frame;
+}
+
+sub new_list {
+  my $r = shift;
+  my $list = Rstats::List->new;
+  $list->r($r);
+  
+  return $list;
 }
 
 sub as_complex {

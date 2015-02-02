@@ -29,6 +29,7 @@ sub AUTOLOAD {
 
 sub DESTROY {}
 
+sub dimnames { Rstats::Func::dimnames(@_) }
 sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
 sub length_value { Rstats::Func::length_value(undef(), @_) }
@@ -49,10 +50,6 @@ sub dim { Rstats::Func::dim(@_) }
 sub mode { Rstats::Func::mode(@_) }
 sub typeof { Rstats::Func::typeof(@_) }
 sub labels { Rstats::Func::labels(@_) }
-sub names { Rstats::Func::names(@_) }
-sub dimnames { Rstats::Func::dimnames(@_) }
-sub rownames { Rstats::Func::rownames(@_) }
-sub colnames { Rstats::Func::colnames(@_) }
 
 1;
 

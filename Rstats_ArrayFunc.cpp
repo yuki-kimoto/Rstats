@@ -2,10 +2,11 @@
 
 SV* Rstats::ArrayFunc::new_array(SV* sv_r) {
   
-  SV* sv_self = Rstats::pl_new_hv_ref();
-  sv_bless(sv_self, gv_stashpv("Rstats::Array", 1));
+  SV* sv_array = Rstats::pl_new_hv_ref();
+  sv_bless(sv_array, gv_stashpv("Rstats::Array", 1));
+  Rstats::pl_hv_store(sv_array, "r", sv_r);
   
-  return sv_self;
+  return sv_array;
 }
 
 void Rstats::ArrayFunc::set_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
@@ -30,7 +31,7 @@ Rstats::Vector* Rstats::ArrayFunc::get_dim(SV* sv_r, SV* sv_a1) {
   return dim;
 }
 
-SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
+SV* Rstats::ArrayFunc::c(SV* sv_r, SV* sv_elements) {
 
   IV element_length = Rstats::pl_av_len(sv_elements);
   // Check type and length
@@ -40,8 +41,8 @@ SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
     Rstats::VectorType::Enum type;
     SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
     if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Array")) {
-      length += Rstats::VectorFunc::get_length(Rstats::ArrayFunc::get_vector(&PL_sv_undef, sv_element));
-      type = Rstats::VectorFunc::get_type(Rstats::ArrayFunc::get_vector(&PL_sv_undef, sv_element));
+      length += Rstats::VectorFunc::get_length(Rstats::ArrayFunc::get_vector(sv_r, sv_element));
+      type = Rstats::VectorFunc::get_type(Rstats::ArrayFunc::get_vector(sv_r, sv_element));
       type_h[type] = 1;
     }
     else if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Vector")) {
@@ -92,7 +93,7 @@ SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
       
       Rstats::Vector* v1;
       if (sv_derived_from(sv_element, "Rstats::Array")) {
-        v1 = Rstats::ArrayFunc::get_vector(&PL_sv_undef, sv_element);
+        v1 = Rstats::ArrayFunc::get_vector(sv_r, sv_element);
       }
       else {
         v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
@@ -175,8 +176,8 @@ SV* Rstats::ArrayFunc::c(SV* r, SV* sv_elements) {
   }
   
   // Array
-  SV* sv_x1 = Rstats::ArrayFunc::new_array(&PL_sv_undef);
-  Rstats::ArrayFunc::set_vector(&PL_sv_undef, sv_x1, v2);
+  SV* sv_x1 = Rstats::ArrayFunc::new_array(sv_r);
+  Rstats::ArrayFunc::set_vector(sv_r, sv_x1, v2);
 
   return sv_x1;
 }
@@ -192,7 +193,7 @@ SV* Rstats::ArrayFunc::to_c(SV* sv_r, SV* sv_x) {
   else {
     SV* sv_tmp = Rstats::pl_new_av_ref();
     Rstats::pl_av_push(sv_tmp, sv_x);
-    sv_x1 = Rstats::ArrayFunc::c(&PL_sv_undef, sv_tmp);
+    sv_x1 = Rstats::ArrayFunc::c(sv_r, sv_tmp);
   }
   
   return sv_x1;

@@ -15,7 +15,7 @@ sub get {
   # Fix column index and row index
   unless (defined $_col_index) {
     $_col_index = $_row_index;
-    $_row_index = Rstats::Func::NULL();
+    $_row_index = Rstats::Func::NULL($r);
   }
   my $row_index = Rstats::Func::to_c($x1, $_row_index);
   my $col_index = Rstats::Func::to_c($x1, $_col_index);

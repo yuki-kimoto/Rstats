@@ -1,11 +1,33 @@
 package Rstats::Object;
 use Object::Simple -base;
 
+use overload
+  '""' => sub { shift->to_string },
+  fallback => 1;
+
 use Rstats::Func;
 
 has 'r';
 has list => sub { [] };
 has 'vector';
+
+sub AUTOLOAD {
+  my $self = shift;
+
+  my ($package, $method) = split /::(\w+)$/, our $AUTOLOAD;
+  Carp::croak "Undefined subroutine &${package}::$method called"
+    unless Scalar::Util::blessed $self && $self->isa(__PACKAGE__);
+
+  my $r = $self->r;
+
+  # Call helper with current controller
+  Carp::croak qq{Can't locate object method "$method" via package "$package"}
+    unless $r && (my $helper = $r->helpers->{$method});
+  
+  return $helper->($r, $self, @_);
+}
+
+sub DESTROY {}
 
 sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }

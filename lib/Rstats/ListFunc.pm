@@ -37,7 +37,7 @@ sub get {
   my $elements = $x1->list;
   
   my $class = ref $x1;
-  my $list = $class->new;
+  my $list = Rstats::Func::list($r);;
   my $list_elements = $list->list;
   
   my $index_values;

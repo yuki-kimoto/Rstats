@@ -132,7 +132,7 @@ sub apply {
     push @$new_elements, $func->(Rstats::ArrayFunc::c($r, @$element_array));
   }
 
-  my $x2 = Rstats::Func::NULL();
+  my $x2 = Rstats::Func::NULL($r);
   $x2->vector(Rstats::ArrayFunc::c($r, @$new_elements)->vector);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
@@ -242,7 +242,23 @@ sub sapply {
   return $x2;
 }
 
-sub to_string { Rstats::ArrayFunc::to_string(@_) }
+sub to_string {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::ArrayFunc::to_string(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::ListFunc::to_string(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::DataFrameFunc::to_string(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
 sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
 sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }
 sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
@@ -619,7 +635,7 @@ sub levels {
     return $x1;
   }
   else {
-    my $x_levels = Rstats::Func::NULL();
+    my $x_levels = Rstats::Func::NULL($r);
     if (exists $x1->{levels}) {
       $x_levels->vector($x1->{levels}->clone);
     }
@@ -633,7 +649,7 @@ sub clone {
   
   my $x1 = shift;;
   
-  my $clone = Rstats::Func::NULL();
+  my $clone = Rstats::Func::NULL($r);
   $clone->vector($x1->vector->clone);
   Rstats::Func::copy_attrs_to($r, $x1, $clone);
   
@@ -706,7 +722,7 @@ sub is_na {
   
   my $x1 = Rstats::Func::to_c($r, shift);
   my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
-  my $x2 = Rstats::Func::NULL();
+  my $x2 = Rstats::Func::NULL($r);
   $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
   
   return $x2;
@@ -722,7 +738,7 @@ sub as_list {
   }
   else {
     my $list = Rstats::List->new;
-    my $x2 = Rstats::Func::NULL();
+    my $x2 = Rstats::Func::NULL($r);
     $x2->vector($x1->vector->clone);
     $list->list([$x2]);
     
@@ -751,7 +767,7 @@ sub class {
     return $x1;
   }
   else {
-    my $x_class = Rstats::Func::NULL();
+    my $x_class = Rstats::Func::NULL($r);
     if (exists $x1->{class}) {
       $x_class->vector($x1->{class}->clone);
     }
@@ -809,7 +825,7 @@ sub dim {
     return $x1;
   }
   else {
-    my $x_dim = Rstats::Func::NULL();
+    my $x_dim = Rstats::Func::NULL($r);
     if (defined $x1->{dim}) {
       $x_dim->vector($x1->{dim}->clone);
     }
@@ -933,7 +949,7 @@ sub as_matrix {
     $col = 1;
   }
   
-  my $x2 = Rstats::Func::NULL();
+  my $x2 = Rstats::Func::NULL($r);
   my $x2_vector = $x1->vector->clone;
   $x2->vector($x2_vector);
   
@@ -945,7 +961,7 @@ sub as_array {
   
   my $x1 = shift;
 
-  my $x2 = Rstats::Func::NULL();
+  my $x2 = Rstats::Func::NULL($r);
   my $x2_vector = $x1->vector->clone;
   $x2->vector($x2_vector);
 
@@ -959,7 +975,7 @@ sub as_vector {
   
   my $x1 = shift;
   
-  my $x2 = Rstats::Func::NULL();
+  my $x2 = Rstats::Func::NULL($r);
   my $x2_vector = $x1->vector->clone;
   $x2->vector($x2_vector);
   
@@ -1008,7 +1024,8 @@ sub as_complex {
   }
 
   my $x2;
-  $x2 = Rstats::Array->new->vector($x_tmp->vector->as_complex);
+  $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x_tmp->vector->as_complex);
   Rstats::Func::copy_attrs_to($r, $x_tmp, $x2);
 
   return $x2;
@@ -1027,10 +1044,12 @@ sub as_double {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_double);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_double);
   }
   else {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_double);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_double);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
 
@@ -1044,10 +1063,12 @@ sub as_integer {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_integer);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_integer);
   }
   else {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_integer);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_integer);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
 
@@ -1061,10 +1082,12 @@ sub as_logical {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_logical);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_logical);
   }
   else {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_logical);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_logical);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
 
@@ -1102,13 +1125,14 @@ sub as_character {
         push @$x2_values, undef;
       }
     }
-    $x2 = Rstats::Func::NULL();
+    $x2 = Rstats::Func::NULL($r);
     $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
     
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
   else {
-    $x2 = Rstats::Array->new->vector($x1->vector->as_character);
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_character);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
 
@@ -1253,7 +1277,7 @@ sub names {
     return $x1;
   }
   else {
-    my $x_names = Rstats::Func::NULL();
+    my $x_names = Rstats::Func::NULL($r);
     if (exists $x1->{names}) {
       $x_names->vector($x1->{names}->clone);
     }
@@ -1297,7 +1321,7 @@ sub dimnames {
       $x_dimnames->list($x1->{dimnames});
     }
     else {
-      return Rstats::Func::NULL();
+      return Rstats::Func::NULL($r);
     }
   }
 }
@@ -1317,7 +1341,7 @@ sub rownames {
     $x1->{dimnames}[0] = $x_rownames->vector->clone;
   }
   else {
-    my $x_rownames = Rstats::Func::NULL();
+    my $x_rownames = Rstats::Func::NULL($r);
     if (defined $x1->{dimnames}[0]) {
       $x_rownames->vector($x1->{dimnames}[0]->clone);
     }
@@ -1341,7 +1365,7 @@ sub colnames {
     $x1->{dimnames}[1] = $x_colnames->vector->clone;
   }
   else {
-    my $x_colnames = Rstats::Func::NULL();
+    my $x_colnames = Rstats::Func::NULL($r);
     if (defined $x1->{dimnames}[1]) {
       $x_colnames->vector($x1->{dimnames}[1]->clone);
     }

@@ -227,6 +227,10 @@ my @func_names = qw/
   value
 /;
 
+my @func_names2 = qw/
+  to_string
+/;
+
 sub new {
   my $self = shift->SUPER::new(@_);
   
@@ -234,6 +238,12 @@ sub new {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$func_name"};
     $self->helper($func_name => sub { $func->($self, @_) });
+  }
+
+  for my $func_name (@func_names2) {
+    no strict 'refs';
+    my $func = \&{"Rstats::Func::$func_name"};
+    $self->helper($func_name => $func);
   }
   
   return $self;

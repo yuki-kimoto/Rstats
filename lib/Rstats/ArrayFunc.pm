@@ -21,7 +21,7 @@ use Encode ();
 sub NULL {
   my $r = shift;
   
-  my $x1 = Rstats::Array->new;
+  my $x1 = Rstats::Func::new_array($r);;
   $x1->vector(Rstats::Vector->new_null);
   
   return $x1;
@@ -87,7 +87,7 @@ sub subset {
   my ($x1, $x_condition, $x_names)
     = args_array($r, ['x1', 'condition', 'names'], @_);
   
-  $x_names = Rstats::ArrayFunc::NULL() unless defined $x_names;
+  $x_names = Rstats::ArrayFunc::NULL($r) unless defined $x_names;
   
   my $x2 = $x1->get($x_condition, $x_names);
   
@@ -548,6 +548,7 @@ sub list {
   
   my $list = Rstats::List->new;
   $list->list(\@elements);
+  $list->r($r);
   
   return $list;
 }
@@ -637,7 +638,6 @@ sub data_frame {
   my $data_frame = Rstats::DataFrame->new;
   $data_frame->{row_length} = $max_count;
   $data_frame->list($elements);
-  $DB::single = 1;
   Rstats::Func::dimnames(
     $r,
     $data_frame,
@@ -647,6 +647,7 @@ sub data_frame {
       Rstats::ArrayFunc::c($r, @$column_names)
     )
   );
+  $data_frame->r($r);
   
   return $data_frame;
 }
@@ -1086,7 +1087,7 @@ sub nrow {
     return Rstats::ArrayFunc::c($r, $x1->{row_length});
   }
   elsif (Rstats::Func::is_list($r, $x1)) {
-    return Rstats::ArrayFunc::NULL();
+    return Rstats::ArrayFunc::NULL($r);
   }
   else {
     return Rstats::ArrayFunc::c($r, Rstats::Func::dim($r, $x1)->values->[0]);
@@ -1402,7 +1403,7 @@ sub cbind {
   
   my @xs = @_;
 
-  return Rstats::ArrayFunc::NULL() unless @xs;
+  return Rstats::ArrayFunc::NULL($r) unless @xs;
   
   if (Rstats::Func::is_data_frame($r, $xs[0])) {
     # Check row count
@@ -1631,8 +1632,8 @@ sub complex {
   
   my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array($r, ['re', 'im', 'mod', 'arg'], @_);
   
-  $x1_mod = Rstats::ArrayFunc::NULL() unless defined $x1_mod;
-  $x1_arg = Rstats::ArrayFunc::NULL() unless defined $x1_arg;
+  $x1_mod = Rstats::ArrayFunc::NULL($r) unless defined $x1_mod;
+  $x1_arg = Rstats::ArrayFunc::NULL($r) unless defined $x1_arg;
 
   my $x2_elements = [];
   # Create complex from mod and arg
@@ -1717,7 +1718,7 @@ sub head {
     my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
     
     my $x_range = Rstats::ArrayFunc::se($r, "1:$max");
-    my $x2 = $x1->get($x_range, Rstats::ArrayFunc::NULL());
+    my $x2 = $x1->get($x_range, Rstats::ArrayFunc::NULL($r));
     
     return $x2;
   }
@@ -2005,7 +2006,7 @@ sub rbind {
   my $r = shift;
   my (@xs) = @_;
   
-  return Rstats::ArrayFunc::NULL() unless @xs;
+  return Rstats::ArrayFunc::NULL($r) unless @xs;
   
   if (Rstats::Func::is_data_frame($r, $xs[0])) {
     
@@ -2324,7 +2325,7 @@ sub operate_unary {
   my $x1 = to_c($r, shift);
   
   my $x2_elements = $func->($x1->vector);
-  my $x2 = Rstats::ArrayFunc::NULL();
+  my $x2 = Rstats::ArrayFunc::NULL($r);
   $x2->vector($x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
@@ -2535,35 +2536,35 @@ sub new_vector {
 sub new_character {
   my $r = shift;
   
-  my $x1 = Rstats::ArrayFunc::NULL();
+  my $x1 = Rstats::ArrayFunc::NULL($r);
   $x1->vector(Rstats::VectorFunc::new_character(@_));
 }
 
 sub new_complex {
   my $r = shift;
   
-  my $x1 = Rstats::ArrayFunc::NULL();
+  my $x1 = Rstats::ArrayFunc::NULL($r);
   $x1->vector(Rstats::VectorFunc::new_complex(@_));
 }
 
 sub new_double {
   my $r = shift;
   
-  my $x1 = Rstats::ArrayFunc::NULL();
+  my $x1 = Rstats::ArrayFunc::NULL($r);
   $x1->vector(Rstats::VectorFunc::new_double(@_));
 }
 
 sub new_integer {
   my $r = shift;
   
-  my $x1 = Rstats::ArrayFunc::NULL();
+  my $x1 = Rstats::ArrayFunc::NULL($r);
   $x1->vector(Rstats::VectorFunc::new_integer(@_));
 }
 
 sub new_logical {
   my $r = shift;
   
-  my $x1 = Rstats::ArrayFunc::NULL();
+  my $x1 = Rstats::ArrayFunc::NULL($r);
   $x1->vector(Rstats::VectorFunc::new_logical(@_));
 }
 
@@ -2604,7 +2605,7 @@ sub matrix {
   
   my $dim = [$nrow, $ncol];
   my $matrix;
-  my $x_matrix = Rstats::ArrayFunc::NULL();
+  my $x_matrix = Rstats::ArrayFunc::NULL($r);
   $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->vector->type, @$x1_values));
   if ($byrow) {
     $matrix = Rstats::ArrayFunc::array(
@@ -2647,7 +2648,7 @@ sub inner_product {
     for (my $col = 1; $col <= $col_max; $col++) {
       for (my $row = 1; $row <= $row_max; $row++) {
         my $x1_part = $x1->get($row);
-        my $x2_part = $x2->get(Rstats::ArrayFunc::NULL(), $col);
+        my $x2_part = $x2->get(Rstats::ArrayFunc::NULL($r), $col);
         my $x3_part = sum($r, $x1 * $x2);
         push @$x3_elements, $x3_part;
       }
@@ -2689,7 +2690,7 @@ sub ncol {
     return Rstats::ArrayFunc::c($r, $x1->length_value);
   }
   elsif (Rstats::Func::is_list($r, $x1)) {
-    return Rstats::ArrayFunc::NULL();
+    return Rstats::ArrayFunc::NULL($r);
   }
   else {
     return Rstats::ArrayFunc::c($r, Rstats::Func::dim($r, $x1)->values->[1]);
@@ -2956,7 +2957,7 @@ sub operate_binary {
   no strict 'refs';
   my $x3;
   my $x3_elements = $func->($x1->vector, $x2->vector);
-  $x3 = Rstats::ArrayFunc::NULL();
+  $x3 = Rstats::ArrayFunc::NULL($r);
   $x3->vector($x3_elements);
   
   Rstats::Func::copy_attrs_to($r, $x1, $x3);
@@ -3176,7 +3177,7 @@ sub is_nan {
   my $x1 = Rstats::ArrayFunc::to_c($r, shift);
   
   if (defined(my $vector = $x1->vector)) {
-    my $x2 = Rstats::ArrayFunc::NULL();
+    my $x2 = Rstats::ArrayFunc::NULL($r);
     $x2->vector($x1->vector->is_nan);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
     
@@ -3193,7 +3194,7 @@ sub is_infinite {
   my $x1 = Rstats::ArrayFunc::to_c($r, shift);
   
   if (my $vector = $x1->vector) {
-    my $x2 = Rstats::ArrayFunc::NULL();
+    my $x2 = Rstats::ArrayFunc::NULL($r);
     $x2->vector($x1->vector->is_infinite);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
     
@@ -3210,7 +3211,7 @@ sub is_finite {
   my $x1 = Rstats::ArrayFunc::to_c($r, shift);
   
   if (my $vector = $x1->vector) {
-    my $x2 = Rstats::ArrayFunc::NULL();
+    my $x2 = Rstats::ArrayFunc::NULL($r);
     $x2->vector($x1->vector->is_finite);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
     

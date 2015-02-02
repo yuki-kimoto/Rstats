@@ -19,7 +19,6 @@ use overload
   'x' => sub { Rstats::ArrayFunc::inner_product(undef(), Rstats::ArrayFunc::_fix_pos(undef(), @_)) },
   bool => sub { Rstats::ArrayFunc::bool(undef(), @_) },
   'neg' => sub { Rstats::ArrayFunc::negation(undef(), @_) },
-  '""' => sub { Rstats::ArrayFunc::to_string(undef(), @_) },
   fallback => 1;
 
 sub set { Rstats::ArrayFunc::set(undef(), @_) }
@@ -27,7 +26,6 @@ sub bool { Rstats::ArrayFunc::bool(undef(), @_) }
 sub value { Rstats::ArrayFunc::value(undef(), @_) }
 sub getin { Rstats::ArrayFunc::getin(undef(), @_) }
 sub get { Rstats::ArrayFunc::get(undef(), @_) }
-sub to_string { Rstats::ArrayFunc::to_string(undef(), @_) }
 
 sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
 sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }

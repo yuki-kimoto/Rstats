@@ -4,8 +4,6 @@
 /* Shortcut of return sv */
 #define return_sv(x) XPUSHs(x); XSRETURN(1)
 
-MODULE = Rstats::Array PACKAGE = Rstats::Array
-
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
 SV* values(...)
@@ -1367,5 +1365,15 @@ SV* c(...)
 }
 
 MODULE = Rstats::Func PACKAGE = Rstats::Func
+
+SV* new_array(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_array = Rstats::ArrayFunc::new_array(sv_r);
+  
+  return_sv(sv_array);
+}
 
 MODULE = Rstats PACKAGE = Rstats

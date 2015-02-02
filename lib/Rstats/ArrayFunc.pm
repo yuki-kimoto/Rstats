@@ -2647,8 +2647,8 @@ sub inner_product {
     my $x3_elements = [];
     for (my $col = 1; $col <= $col_max; $col++) {
       for (my $row = 1; $row <= $row_max; $row++) {
-        my $x1_part = $x1->get($row);
-        my $x2_part = $x2->get(Rstats::ArrayFunc::NULL($r), $col);
+        my $x1_part = Rstats::ArrayFunc::get($r, $x1, $row);
+        my $x2_part = Rstats::ArrayFunc::get($r, $x2, Rstats::ArrayFunc::NULL($r), $col);
         my $x3_part = sum($r, $x1 * $x2);
         push @$x3_elements, $x3_part;
       }

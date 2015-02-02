@@ -219,7 +219,6 @@ my @func_names = qw/
   new_integer
   new_logical
   set
-  get
   at
   class
   dim_as_array
@@ -229,6 +228,7 @@ my @func_names = qw/
 
 my @func_names2 = qw/
   to_string
+  get
 /;
 
 sub new {

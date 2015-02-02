@@ -31,6 +31,7 @@ use Rstats;
   {
     my $v1 = c(1, 2, 3);
     my $v2 = c(4, 5, 6);
+    $DB::single = 1;
     my $v3 = $v1 x $v2;
     is_deeply($v3->values, [32]);
     is_deeply(r->dim($v3)->values, [1, 1]);

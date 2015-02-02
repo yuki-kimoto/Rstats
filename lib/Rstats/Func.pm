@@ -5,10 +5,11 @@ use warnings;
 
 require Rstats;
 
-use Rstats::List;
 use Carp 'croak';
 use Rstats::Vector;
 use Rstats::ArrayFunc;
+use Rstats::ListFunc;
+use Rstats::DataFrameFunc;
 
 sub sweep {
   my $r = shift;
@@ -259,12 +260,28 @@ sub to_string {
   }
 }
 
+sub get {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::ArrayFunc::get(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::ListFunc::get(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::DataFrameFunc::get(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
 sub is_finite { Rstats::ArrayFunc::is_finite(@_) }
 sub is_infinite { Rstats::ArrayFunc::is_infinite(@_) }
 sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
 sub is_null { Rstats::ArrayFunc::is_null(@_) }
 sub getin { Rstats::ArrayFunc::getin(@_) }
-sub get { Rstats::ArrayFunc::get(@_) }
 sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
 sub set { Rstats::ArrayFunc::set(@_) }
 sub bool { Rstats::ArrayFunc::bool(@_) }

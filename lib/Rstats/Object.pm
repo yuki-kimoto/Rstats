@@ -44,20 +44,11 @@ sub levels { Rstats::Func::levels(@_) }
 sub clone { Rstats::Func::clone(@_) }
 sub nlevels { Rstats::Func::nlevels(@_) }
 sub length { Rstats::Func::length(@_) }
-sub is_na { Rstats::Func::is_na(@_) }
-sub as_list { Rstats::Func::as_list(@_) }
-sub is_list { Rstats::Func::is_list(@_) }
 sub class { Rstats::Func::class(undef(), @_) }
 sub dim { Rstats::Func::dim(@_) }
 sub mode { Rstats::Func::mode(@_) }
 sub typeof { Rstats::Func::typeof(@_) }
-sub is_factor { Rstats::Func::is_factor(@_) }
-sub is_ordered { Rstats::Func::is_ordered(@_) }
-sub as { Rstats::Func::as(@_) }
-sub as_complex { Rstats::Func::as_complex(@_) }
-sub as_numeric { Rstats::Func::as_numeric(@_) }
 sub labels { Rstats::Func::labels(@_) }
-sub as_character { Rstats::Func::as_character(@_) }
 sub names { Rstats::Func::names(@_) }
 sub dimnames { Rstats::Func::dimnames(@_) }
 sub rownames { Rstats::Func::rownames(@_) }

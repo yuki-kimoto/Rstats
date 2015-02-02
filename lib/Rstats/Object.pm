@@ -29,7 +29,9 @@ sub AUTOLOAD {
 
 sub DESTROY {}
 
+sub class { Rstats::Func::class(undef(), @_) }
 sub dimnames { Rstats::Func::dimnames(@_) }
+sub dim { Rstats::Func::dim(@_) }
 sub at { Rstats::Func::at(undef(), @_) }
 sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
 sub length_value { Rstats::Func::length_value(undef(), @_) }
@@ -39,17 +41,6 @@ sub values { Rstats::Func::values(undef(), @_) }
 
 sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
-sub _value_to_string { Rstats::Func::_value_to_string(@_) }
-sub str { Rstats::Func::str(@_) }
-sub levels { Rstats::Func::levels(@_) }
-sub clone { Rstats::Func::clone(@_) }
-sub nlevels { Rstats::Func::nlevels(@_) }
-sub length { Rstats::Func::length(@_) }
-sub class { Rstats::Func::class(undef(), @_) }
-sub dim { Rstats::Func::dim(@_) }
-sub mode { Rstats::Func::mode(@_) }
-sub typeof { Rstats::Func::typeof(@_) }
-sub labels { Rstats::Func::labels(@_) }
 
 1;
 

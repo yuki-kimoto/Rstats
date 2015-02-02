@@ -21,7 +21,6 @@ use overload
   'neg' => sub { Rstats::ArrayFunc::negation(undef(), @_) },
   fallback => 1;
 
-sub set {Rstats::ArrayFunc::set(undef(), @_) }
 sub bool { Rstats::ArrayFunc::bool(undef(), @_) }
 sub value { Rstats::ArrayFunc::value(undef(), @_) }
 sub getin { Rstats::ArrayFunc::getin(undef(), @_) }

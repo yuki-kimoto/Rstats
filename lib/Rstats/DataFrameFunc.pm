@@ -2,8 +2,11 @@ package Rstats::DataFrameFunc;
 
 use Carp 'croak';
 use Rstats::Func;
+use Rstats::ListFunc;
 
 use Text::UnicodeTable::Simple;
+
+sub set { Rstats::ListFunc::set(@_) }
 
 sub get {
   my $r = shift;

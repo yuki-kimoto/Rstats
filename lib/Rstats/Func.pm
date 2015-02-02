@@ -260,6 +260,23 @@ sub to_string {
   }
 }
 
+sub set {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::ArrayFunc::set(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::ListFunc::set(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::DataFrameFunc::set(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
 sub get {
   my ($r, $x1) = @_;
   
@@ -283,7 +300,6 @@ sub is_nan { Rstats::ArrayFunc::is_nan(@_) }
 sub is_null { Rstats::ArrayFunc::is_null(@_) }
 sub getin { Rstats::ArrayFunc::getin(@_) }
 sub _levels_h { Rstats::ArrayFunc::_levels_h(@_) }
-sub set { Rstats::ArrayFunc::set(@_) }
 sub bool { Rstats::ArrayFunc::bool(@_) }
 sub value { Rstats::ArrayFunc::value(@_) }
 sub negation { Rstats::ArrayFunc::negation(@_) }

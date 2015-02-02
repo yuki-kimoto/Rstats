@@ -108,7 +108,7 @@ sub t {
     for my $col (1 .. $x1_col) {
       my $value = $x1->value($row, $col);
       $x2->at($col, $row);
-      $x2->set($value);
+      Rstats::ArrayFunc::set($r, $x2, $value);
     }
   }
   

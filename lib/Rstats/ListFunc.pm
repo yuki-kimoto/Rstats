@@ -15,10 +15,10 @@ sub getin {
   }
   $x1->at($_index);
   
-  my $x1_index = Rstats::Func::to_c($r, $x1, $_index);
+  my $x1_index = Rstats::Func::to_c($r, $_index);
   my $index;
-  if (Rstats::Func::is_character($r, $x1, $x1_index)) {
-    $index = $x1->_name_to_index($x1_index);
+  if (Rstats::Func::is_character($r, $x1_index)) {
+    $index = Rstats::Func::_name_to_index($r, $x1, $x1_index);
   }
   else {
     $index = $x1_index->values->[0];
@@ -32,7 +32,7 @@ sub getin {
 sub get {
   my $r = shift;
   my $x1 = shift;
-  my $index = Rstats::Func::to_c($r, $x1, shift);
+  my $x_index = Rstats::Func::to_c($r, shift);
   
   my $elements = $x1->list;
   
@@ -41,14 +41,14 @@ sub get {
   my $list_elements = $list->list;
   
   my $index_values;
-  if (Rstats::Func::is_character($r, $x1, $index)) {
+  if (Rstats::Func::is_character($r, $x_index)) {
     $index_values = [];
-    for my $value (@{$index->values}) {
-      push @$index_values, $x1->_name_to_index($value);
+    for my $value (@{$x_index->values}) {
+      push @$index_values, Rstats::Func::_name_to_index($r, $x1, $value);
     }
   }
   else {
-    $index_values = $index->values;
+    $index_values = $x_index->values;
   }
   for my $i (@{$index_values}) {
     push @$list_elements, $elements->[$i - 1];
@@ -64,17 +64,17 @@ sub set {
   my ($x1, $v1) = @_;
   
   my $_index = $x1->at;
-  my $x1_index = Rstats::Func::to_c($r, $x1, @$_index);
+  my $x1_index = Rstats::Func::to_c($r, @$_index);
   my $index;
-  if (Rstats::Func::is_character($r, $x1, $x1_index)) {
-    $index = $x1->_name_to_index($x1_index);
+  if (Rstats::Func::is_character($r, $x1_index)) {
+    $index = Rstats::Func::_name_to_index($r, $x1, $x1_index);
   }
   else {
     $index = $x1_index->values->[0];
   }
-  $v1 = Rstats::Func::to_c($r, $x1, $v1);
+  $v1 = Rstats::Func::to_c($r, $v1);
   
-  if (Rstats::Func::is_null($r, $x1, $v1)) {
+  if (Rstats::Func::is_null($r, $v1)) {
     splice @{$x1->list}, $index - 1, 1;
     if (exists $x1->{names}) {
       my $new_names_values = $x1->{names}->values;

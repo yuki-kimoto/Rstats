@@ -135,7 +135,6 @@ sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
 sub dimnames { Rstats::Func::dimnames(@_) }
 sub dim { Rstats::Func::dim(@_) }
-sub _name_to_index { Rstats::Func::_name_to_index(undef(), @_) }
 
 1;
 

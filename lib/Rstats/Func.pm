@@ -138,7 +138,7 @@ sub apply {
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
   
-  if (Rstats::Func::length_value($r, $x2->{dim}) == 1) {
+  if ($x2->{dim}->length_value == 1) {
     delete $x2->{dim};
   }
   
@@ -301,7 +301,6 @@ sub getin {
     return Rstats::ArrayFunc::getin(@_);
   }
   elsif (ref $x1 eq 'Rstats::List') {
-    $DB::single = 1;
     return Rstats::ListFunc::getin(@_);
   }
   elsif (ref $x1 eq 'Rstats::DataFrame') {
@@ -722,7 +721,6 @@ sub at {
 
 sub _name_to_index {
   my $r = shift;
-  
   my $x1 = shift;
   my $x1_index = Rstats::Func::to_c($r, shift);
   
@@ -857,7 +855,6 @@ sub dim_as_array {
 
 sub dim {
   my $r = shift;
-  
   my $x1 = shift;
   
   if (@_) {

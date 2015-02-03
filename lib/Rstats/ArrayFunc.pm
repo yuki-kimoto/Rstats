@@ -2980,12 +2980,12 @@ sub value {
     else {
       $e1 = Rstats::Func::decompose($r, $x1->get(@_))->[0];
     }
+    
   }
   else {
     $e1 = $x1_elements->[0];
+    return defined $e1 ? $e1->value : undef;
   }
-  
-  return defined $e1 ? $e1->value : undef;
 }
 
 sub bool {

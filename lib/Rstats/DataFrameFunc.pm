@@ -13,6 +13,7 @@ sub getin { Rstats::ListFunc::getin(@_) }
 sub get {
   my $r = shift;
   
+  $DB::single = 1;
   my $x1 = shift;
   my $_row_index = shift;
   my $_col_index = shift;
@@ -22,21 +23,21 @@ sub get {
     $_col_index = $_row_index;
     $_row_index = Rstats::Func::NULL($r);
   }
-  my $row_index = Rstats::Func::to_c($r, $x1, $_row_index);
-  my $col_index = Rstats::Func::to_c($r, $x1, $_col_index);
+  my $row_index = Rstats::Func::to_c($r, $_row_index);
+  my $col_index = Rstats::Func::to_c($r, $_col_index);
   
   # Convert name index to number index
   my $col_index_values;
-  if (Rstats::Func::is_null($r, $x1, $col_index)) {
-    $col_index_values = [1 .. Rstats::Func::names($r, $x1, $x1)->length_value];
+  if (Rstats::Func::is_null($r, $col_index)) {
+    $col_index_values = [1 .. Rstats::Func::names($r, $x1)->length_value];
   }
-  elsif (Rstats::Func::is_character($r, $x1, $col_index)) {
+  elsif (Rstats::Func::is_character($r, $col_index)) {
     $col_index_values = [];
     for my $col_index_value (@{$col_index->values}) {
-      push @$col_index_values, $x1->_name_to_index($col_index_value);
+      push @$col_index_values, Rstats::Func::_name_to_index($r, $x1, $col_index_value);
     }
   }
-  elsif (Rstats::Func::is_logical($r, $x1, $col_index)) {
+  elsif (Rstats::Func::is_logical($r, $col_index)) {
     my $tmp_col_index_values = $col_index->values;
     for (my $i = 0; $i < @$tmp_col_index_values; $i++) {
       push @$col_index_values, $i + 1 if $tmp_col_index_values->[$i];
@@ -72,7 +73,7 @@ sub get {
   # Extract rows
   for my $new_element (@$new_elements) {
     $new_element = $new_element->get($row_index)
-      unless Rstats::Func::is_null($r, $x1, $row_index);
+      unless Rstats::Func::is_null($r, $row_index);
   }
   
   # Create new data frame
@@ -82,7 +83,7 @@ sub get {
     $r,
     $x1,
     $data_frame,
-    {new_indexes => [$row_index, Rstats::ArrayFunc::c($x1, @$col_index_values)]}
+    {new_indexes => [$row_index, Rstats::ArrayFunc::c($r, @$col_index_values)]}
   );
   $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(
     1 .. Rstats::DataFrameFunc::getin($r, $data_frame, 1)->length_value

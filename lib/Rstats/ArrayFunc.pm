@@ -161,6 +161,7 @@ sub transform {
 sub na_omit {
   my $r = shift;
   
+  $DB::single = 1;
   my $x1 = shift;
   
   my @poss;
@@ -2984,8 +2985,9 @@ sub value {
   }
   else {
     $e1 = $x1_elements->[0];
-    return defined $e1 ? $e1->value : undef;
   }
+  
+  return defined $e1 ? $e1->value : undef;
 }
 
 sub bool {

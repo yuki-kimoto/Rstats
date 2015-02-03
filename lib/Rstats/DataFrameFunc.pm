@@ -13,7 +13,6 @@ sub getin { Rstats::ListFunc::getin(@_) }
 sub get {
   my $r = shift;
   
-  $DB::single = 1;
   my $x1 = shift;
   my $_row_index = shift;
   my $_col_index = shift;

@@ -357,6 +357,7 @@ use Rstats;
     my $height = c(172, NA, 155);
     my $weight = c(5, 6, 7);
     
+    $DB::single = 1;
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     my $x2 = r->na_omit($x1);
     ok(r->is_data_frame($x2));

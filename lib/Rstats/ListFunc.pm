@@ -15,9 +15,9 @@ sub getin {
   }
   $x1->at($_index);
   
-  my $x1_index = Rstats::Func::to_c($x1, $_index);
+  my $x1_index = Rstats::Func::to_c($r, $x1, $_index);
   my $index;
-  if (Rstats::Func::is_character($x1, $x1_index)) {
+  if (Rstats::Func::is_character($r, $x1, $x1_index)) {
     $index = $x1->_name_to_index($x1_index);
   }
   else {
@@ -32,7 +32,7 @@ sub getin {
 sub get {
   my $r = shift;
   my $x1 = shift;
-  my $index = Rstats::Func::to_c($x1, shift);
+  my $index = Rstats::Func::to_c($r, $x1, shift);
   
   my $elements = $x1->list;
   
@@ -41,7 +41,7 @@ sub get {
   my $list_elements = $list->list;
   
   my $index_values;
-  if (Rstats::Func::is_character($x1, $index)) {
+  if (Rstats::Func::is_character($r, $x1, $index)) {
     $index_values = [];
     for my $value (@{$index->values}) {
       push @$index_values, $x1->_name_to_index($value);
@@ -54,7 +54,7 @@ sub get {
     push @$list_elements, $elements->[$i - 1];
   }
   
-  $x1->copy_attrs_to($list, {new_indexes => [Rstats::ArrayFunc::c($x1, @$index_values)]});
+  $x1->copy_attrs_to($list, {new_indexes => [Rstats::ArrayFunc::c($r, $x1, @$index_values)]});
 
   return $list;
 }
@@ -64,17 +64,17 @@ sub set {
   my ($x1, $v1) = @_;
   
   my $_index = $x1->at;
-  my $x1_index = Rstats::Func::to_c($x1, @$_index);
+  my $x1_index = Rstats::Func::to_c($r, $x1, @$_index);
   my $index;
-  if (Rstats::Func::is_character($x1, $x1_index)) {
+  if (Rstats::Func::is_character($r, $x1, $x1_index)) {
     $index = $x1->_name_to_index($x1_index);
   }
   else {
     $index = $x1_index->values->[0];
   }
-  $v1 = Rstats::Func::to_c($x1, $v1);
+  $v1 = Rstats::Func::to_c($r, $x1, $v1);
   
-  if (Rstats::Func::is_null($x1, $v1)) {
+  if (Rstats::Func::is_null($r, $x1, $v1)) {
     splice @{$x1->list}, $index - 1, 1;
     if (exists $x1->{names}) {
       my $new_names_values = $x1->{names}->values;
@@ -89,7 +89,7 @@ sub set {
     }
   }
   else {
-    if ($x1->is_data_frame) {
+    if (Rstats::Func::is_data_frame($r, $x1)) {
       my $x1_length = $x1->length_value;
       my $v1_length = $v1->length_value;
       if ($x1_length != $v1_length) {

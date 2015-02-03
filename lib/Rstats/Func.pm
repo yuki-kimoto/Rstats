@@ -301,6 +301,7 @@ sub getin {
     return Rstats::ArrayFunc::getin(@_);
   }
   elsif (ref $x1 eq 'Rstats::List') {
+    $DB::single = 1;
     return Rstats::ListFunc::getin(@_);
   }
   elsif (ref $x1 eq 'Rstats::DataFrame') {
@@ -1290,8 +1291,7 @@ sub is_character {
   my $r = shift;
   
   my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'character'
+  my $x_is = (is_array($r, $x1) || is_vector($r, $x1)) && ($x1->vector->type || '') eq 'character'
     ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
   
   return $x_is;

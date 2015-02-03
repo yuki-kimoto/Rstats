@@ -22,21 +22,21 @@ sub get {
     $_col_index = $_row_index;
     $_row_index = Rstats::Func::NULL($r);
   }
-  my $row_index = Rstats::Func::to_c($x1, $_row_index);
-  my $col_index = Rstats::Func::to_c($x1, $_col_index);
+  my $row_index = Rstats::Func::to_c($r, $x1, $_row_index);
+  my $col_index = Rstats::Func::to_c($r, $x1, $_col_index);
   
   # Convert name index to number index
   my $col_index_values;
-  if (Rstats::Func::is_null($x1, $col_index)) {
-    $col_index_values = [1 .. Rstats::Func::names($x1, $x1)->length_value];
+  if (Rstats::Func::is_null($r, $x1, $col_index)) {
+    $col_index_values = [1 .. Rstats::Func::names($r, $x1, $x1)->length_value];
   }
-  elsif (Rstats::Func::is_character($x1, $col_index)) {
+  elsif (Rstats::Func::is_character($r, $x1, $col_index)) {
     $col_index_values = [];
     for my $col_index_value (@{$col_index->values}) {
       push @$col_index_values, $x1->_name_to_index($col_index_value);
     }
   }
-  elsif (Rstats::Func::is_logical($x1, $col_index)) {
+  elsif (Rstats::Func::is_logical($r, $x1, $col_index)) {
     my $tmp_col_index_values = $col_index->values;
     for (my $i = 0; $i < @$tmp_col_index_values; $i++) {
       push @$col_index_values, $i + 1 if $tmp_col_index_values->[$i];
@@ -53,7 +53,7 @@ sub get {
       }
       
       $col_index_values = [];
-      for (my $index = 1; $index <= Rstats::Func::names($x1, $x1)->length_value; $index++) {
+      for (my $index = 1; $index <= Rstats::Func::names($r, $x1)->length_value; $index++) {
         push @$col_index_values, $index unless $delete_col_index_values_h->{$index};
       }
     }
@@ -72,7 +72,7 @@ sub get {
   # Extract rows
   for my $new_element (@$new_elements) {
     $new_element = $new_element->get($row_index)
-      unless Rstats::Func::is_null($x1, $row_index);
+      unless Rstats::Func::is_null($r, $x1, $row_index);
   }
   
   # Create new data frame
@@ -99,14 +99,14 @@ sub to_string {
   my $t = Text::UnicodeTable::Simple->new(border => 0, alignment => 'right');
   
   # Names
-  my $column_names = Rstats::Func::names($x1, $x1)->values;
+  my $column_names = Rstats::Func::names($r, $x1)->values;
   $t->set_header('', @$column_names);
   
   # columns
   my $columns = [];
   for (my $i = 1; $i <= @$column_names; $i++) {
     my $x = $x1->getin($i);
-    $x = Rstats::Func::as_character($x1, $x) if Rstats::Func::is_factor($x1, $x);
+    $x = Rstats::Func::as_character($r, $x) if Rstats::Func::is_factor($r, $x);
     push @$columns, $x->values;
   }
   my $col_count = @{$columns};

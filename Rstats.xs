@@ -1324,14 +1324,15 @@ MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
 SV* args(...)
   PPCODE:
 {
-  SV* sv_names = ST(0);
+  SV* sv_r = ST(0);
+  SV* sv_names = ST(1);
   SV* sv_args = Rstats::pl_new_av_ref();
   
-  for (IV i = 1; i < items; i++) {
+  for (IV i = 2; i < items; i++) {
     Rstats::pl_av_push(sv_args, ST(i));
   }
   
-  SV* sv_opt = Rstats::Util::args(sv_names, sv_args);
+  SV* sv_opt = Rstats::Util::args(sv_r, sv_names, sv_args);
   
   return_sv(sv_opt);
 }

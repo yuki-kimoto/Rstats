@@ -99,7 +99,7 @@ namespace Rstats {
   }
 
   namespace Util {
-    SV* args(SV*, SV*);
+    SV* args(SV*, SV*, SV*);
     IV is_perl_number(SV*);
     SV* cross_product(SV*);
     SV* pos_to_index(SV*, SV*);

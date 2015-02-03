@@ -9,6 +9,114 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# get
+{
+  # get - have dimnames
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->dimnames($x1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
+    my $x2 = $x1->get(c(1, 3), c(2));
+    is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
+    is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
+  }
+  
+  # get - logical
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
+  # get - have names
+  {
+    my $v1 = c(4, 5, 6);
+    r->names($v1, c("a", "b", "c"));
+    my $v2 = $v1->get(c(1, 3));
+    is_deeply($v2->values, [4, 6]);
+    is_deeply(r->names($v2)->values, ["a", "c"]);
+  }
+
+  # get - one value
+  {
+    my $v1 = c(1);
+    my $v2 = $v1->get(1);
+    is_deeply($v2->values, [1]);
+    is_deeply(r->dim($v2)->values, [1]);
+  }
+
+  # get - single index
+  {
+    my $v1 = c(1, 2, 3, 4);
+    my $v2 = $v1->get(1);
+    is_deeply($v2->values, [1]);
+  }
+  
+  # get - array
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(1, 2));
+    is_deeply($v2->values, [1, 3]);
+  }
+  
+  # get - vector
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(1, 2));
+    is_deeply($v2->values, [1, 3]);
+  }
+  
+  # get - minus number
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(-1);
+    is_deeply($v2->values, [3, 5, 7]);
+  }
+
+  # get - minus number + array
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $v2 = $v1->get(c(-1, -2));
+    is_deeply($v2->values, [5, 7]);
+  }
+  
+  # get - character
+  {
+    my $v1 = c(1, 2, 3, 4);
+    r->names($v1 => c('a', 'b', 'c', 'd'));
+    my $v2 = $v1->get(c('b', 'd'));
+    is_deeply($v2->values, [2, 4]);
+  }
+
+  # get - grep
+  {
+    my $v1 = c(1, 2, 3, 4, 5);
+    my $v2 = $v1 > 3;
+    my $v3 = $v1->get($v2);
+    is_deeply($v3->values, [4, 5]);
+  }
+  
+  # get - as_logical
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
+  # get - as_vector
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_vector($x1)->get(5)->values, [5]);
+  }
+
+  # get - as_matrix
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+  }
+}
+
 # bool context
 {
   {
@@ -203,114 +311,6 @@ use Rstats::Func;
     my $x2 = array(c(1, 2, 3));
     eval { my $ret = $x1 % $x2 };
     like($@, qr/non-numeric argument/);
-  }
-}
-
-# get
-{
-  # get - logical
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
-    my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
-  }
-
-  # get - have dimnames
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->dimnames($x1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
-    my $x2 = $x1->get(c(1, 3), c(2));
-    is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
-    is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
-  }
-  
-  # get - have names
-  {
-    my $v1 = c(4, 5, 6);
-    r->names($v1, c("a", "b", "c"));
-    my $v2 = $v1->get(c(1, 3));
-    is_deeply($v2->values, [4, 6]);
-    is_deeply(r->names($v2)->values, ["a", "c"]);
-  }
-
-  # get - one value
-  {
-    my $v1 = c(1);
-    my $v2 = $v1->get(1);
-    is_deeply($v2->values, [1]);
-    is_deeply(r->dim($v2)->values, [1]);
-  }
-
-  # get - single index
-  {
-    my $v1 = c(1, 2, 3, 4);
-    my $v2 = $v1->get(1);
-    is_deeply($v2->values, [1]);
-  }
-  
-  # get - array
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(1, 2));
-    is_deeply($v2->values, [1, 3]);
-  }
-  
-  # get - vector
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(1, 2));
-    is_deeply($v2->values, [1, 3]);
-  }
-  
-  # get - minus number
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(-1);
-    is_deeply($v2->values, [3, 5, 7]);
-  }
-
-  # get - minus number + array
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $v2 = $v1->get(c(-1, -2));
-    is_deeply($v2->values, [5, 7]);
-  }
-  
-  # get - character
-  {
-    my $v1 = c(1, 2, 3, 4);
-    r->names($v1 => c('a', 'b', 'c', 'd'));
-    my $v2 = $v1->get(c('b', 'd'));
-    is_deeply($v2->values, [2, 4]);
-  }
-
-  # get - grep
-  {
-    my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = $v1 > 3;
-    my $v3 = $v1->get($v2);
-    is_deeply($v3->values, [4, 5]);
-  }
-  
-  # get - as_logical
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
-    my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
-  }
-
-  # get - as_vector
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($x1)->get(5)->values, [5]);
-  }
-
-  # get - as_matrix
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
   }
 }
 

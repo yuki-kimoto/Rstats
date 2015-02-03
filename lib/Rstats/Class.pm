@@ -212,17 +212,11 @@ my @func_names = qw/
   length
   c
   clone
-  values
   new_character
   new_complex
   new_double
   new_integer
   new_logical
-  at
-  class
-  dim_as_array
-  type
-  value
 /;
 
 my @func_names2 = qw/
@@ -230,6 +224,13 @@ my @func_names2 = qw/
   get
   set
   getin
+  value
+  values
+  dim_as_array
+  class
+  type
+  at
+  length_value
 /;
 
 sub new {

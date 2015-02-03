@@ -28,6 +28,8 @@ has 'r';
 has list => sub { [] };
 has 'vector';
 
+sub value { Rstats::ArrayFunc::value(undef(), @_) }
+
 sub AUTOLOAD {
   my $self = shift;
 

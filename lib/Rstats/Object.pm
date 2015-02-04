@@ -6,105 +6,110 @@ use overload
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::add($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::add($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '-' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::subtract($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::subtract($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '*' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::multiply($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::multiply($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '/' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    Rstats::ArrayFunc::divide($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    Rstats::Func::divide($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '%' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::remainder($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::remainder($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '**' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::pow($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::pow($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '<' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::less_than($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::less_than($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '<=' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::less_than_or_equal($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::less_than_or_equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '>' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::more_than($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::more_than($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '>=' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::more_than_or_equal($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::more_than_or_equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '==' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::equal($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '!=' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::not_equal($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::not_equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '&' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::and($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::and($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   '|' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::or($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::or($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   'x' => sub {
     my $x1 = shift;
     my $r = $x1->r;
 
-    return Rstats::ArrayFunc::inner_product($r, Rstats::ArrayFunc::_fix_pos($r, $x1, @_));
+    return Rstats::Func::inner_product($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
   bool => sub {
     my $x1 = shift;
     my $r = $x1->r;
     
-    return Rstats::ArrayFunc::bool($r, $x1, @_);
+    return Rstats::Func::bool($r, $x1, @_);
   },
   'neg' => sub {
     my $x1 = shift;
     my $r = $x1->r;
     
-    return Rstats::ArrayFunc::negation($r, $x1, @_);
+    return Rstats::Func::negation($r, $x1, @_);
   },
-  '""' => sub { shift->to_string },
+  '""' => sub {
+    my $x1 = shift;
+    my $r = $x1->r;
+    
+    return Rstats::Func::to_string($r, $x1, @_);
+  },
   fallback => 1;
 
 use Rstats::Func;

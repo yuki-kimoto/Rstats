@@ -161,7 +161,6 @@ sub transform {
 sub na_omit {
   my $r = shift;
   
-  $DB::single = 1;
   my $x1 = shift;
   
   my @poss;

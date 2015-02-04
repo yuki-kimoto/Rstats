@@ -441,7 +441,6 @@ EOS
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
     $x1 = r->as_character($x1);
-    $DB::single = 1;
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 

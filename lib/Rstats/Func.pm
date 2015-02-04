@@ -512,7 +512,7 @@ sub copy_attrs_to {
     my $index = Rstats::Func::is_data_frame($r, $x1) ? $new_indexes->[1] : $new_indexes->[0];
     if (defined $index) {
       my $x1_names_values = $x1->{names}->values;
-      for my $i (@{$index->values}) {
+      for my $i (@{Rstats::Func::values($r, $index)}) {
         push @$x2_names_values, $x1_names_values->[$i - 1];
       }
     }

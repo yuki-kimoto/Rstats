@@ -137,7 +137,6 @@ sub AUTOLOAD {
 sub DESTROY {}
 
 sub decompose { Rstats::Func::decompose(@_) }
-sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
 
 1;
 

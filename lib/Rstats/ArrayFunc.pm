@@ -2934,7 +2934,8 @@ sub operate_binary {
   $x2 = to_c($r, $x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($r, $x1, $x2) if $x1->vector->type ne $x2->vector->type;
+  ($x1, $x2) = Rstats::ArrayFunc::upgrade_type($r, $x1, $x2)
+    if $x1->vector->type ne $x2->vector->type;
   
   # Upgrade length if length is defferent
   my $x1_length = Rstats::Func::length_value($r, $x1);
@@ -3306,7 +3307,6 @@ sub to_string {
           else {
             $str .= '     ';
             
-            $DB::single = 1;
             my $l_dimnames = Rstats::Func::dimnames($r, $x1);
             my $dimnames;
             if (Rstats::Func::is_null($r, $l_dimnames)) {

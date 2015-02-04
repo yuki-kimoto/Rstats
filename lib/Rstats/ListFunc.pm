@@ -54,7 +54,10 @@ sub get {
     push @$list_elements, $elements->[$i - 1];
   }
   
-  $x1->copy_attrs_to($list, {new_indexes => [Rstats::ArrayFunc::c($r, $x1, @$index_values)]});
+  $DB::single = 1;
+  Rstats::Func::copy_attrs_to(
+    $r, $x1, $list, {new_indexes => [Rstats::ArrayFunc::c($r, @$index_values)]}
+  );
 
   return $list;
 }

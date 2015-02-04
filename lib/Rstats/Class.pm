@@ -189,7 +189,6 @@ my @func_names = qw/
   as
   labels
   levels
-  dim
   names
   nlevels
   dimnames
@@ -217,6 +216,7 @@ my @func_names = qw/
   new_double
   new_integer
   new_logical
+  dim
 /;
 
 my @func_names2 = qw/

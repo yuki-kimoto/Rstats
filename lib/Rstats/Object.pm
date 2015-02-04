@@ -136,8 +136,6 @@ sub AUTOLOAD {
 
 sub DESTROY {}
 
-sub decompose { Rstats::Func::decompose(@_) }
-
 1;
 
 =head1 NAME

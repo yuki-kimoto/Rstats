@@ -3306,7 +3306,8 @@ sub to_string {
           else {
             $str .= '     ';
             
-            my $l_dimnames = $x1->dimnames;
+            $DB::single = 1;
+            my $l_dimnames = Rstats::Func::dimnames($r, $x1);
             my $dimnames;
             if (Rstats::Func::is_null($r, $l_dimnames)) {
               $dimnames = [];

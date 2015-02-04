@@ -138,7 +138,6 @@ sub DESTROY {}
 
 sub decompose { Rstats::Func::decompose(@_) }
 sub copy_attrs_to { Rstats::Func::copy_attrs_to(@_) }
-sub dimnames { Rstats::Func::dimnames(@_) }
 
 1;
 

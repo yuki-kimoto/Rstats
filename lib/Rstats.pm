@@ -85,7 +85,7 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   
   # Register helper
   r->helper(my_sum => sub {
-    my ($self, $x1) = @_;
+    my ($r, $x1) = @_;
     
     my $total = 0;
     for my $value ($x1->values) {

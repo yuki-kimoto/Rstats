@@ -130,7 +130,7 @@ sub apply {
   
   my $new_elements = [];
   for my $element_array (@$new_elements_array) {
-    push @$new_elements, $func->(Rstats::ArrayFunc::c($r, @$element_array));
+    push @$new_elements, $func->($r, Rstats::ArrayFunc::c($r, @$element_array));
   }
 
   my $x2 = Rstats::Func::NULL($r);
@@ -168,7 +168,7 @@ sub mapply {
   my $new_xs = [];
   for (my $i = 0; $i < $max_length; $i++) {
     my @args = map { $_->value($i + 1) } @xs;
-    my $x = $func->(@args);
+    my $x = $func->($r, @args);
     push @$new_xs, $x;
   }
   
@@ -204,7 +204,7 @@ sub tapply {
   # Apply
   my $new_values2 = [];
   for (my $i = 1; $i < @$new_values; $i++) {
-    my $x = $func->(Rstats::ArrayFunc::c($r, @{$new_values->[$i]}));
+    my $x = $func->($r, Rstats::ArrayFunc::c($r, @{$new_values->[$i]}));
     push @$new_values2, $x;
   }
   
@@ -225,7 +225,7 @@ sub lapply {
   
   my $new_elements = [];
   for my $element (@{$x1->list}) {
-    push @$new_elements, $func->($element);
+    push @$new_elements, $func->($r, $element);
   }
   
   my $x2 = Rstats::Func::list($r, @$new_elements);

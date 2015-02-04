@@ -210,9 +210,6 @@ my @func_names = qw/
   new_integer
   new_logical
   dim
-/;
-
-my @func_names2 = qw/
   Inf
   NaN
   NA
@@ -239,12 +236,6 @@ sub new {
   for my $func_name (@func_names) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$func_name"};
-    $self->helper($func_name => sub { $func->($self, @_) });
-  }
-
-  for my $func_name (@func_names2) {
-    no strict 'refs';
-    my $func = \&{"Rstats::Func::$func_name"};
     $self->helper($func_name => $func);
   }
   
@@ -261,7 +252,7 @@ sub AUTOLOAD {
   # Call helper with current controller
   Carp::croak qq{Can't locate object method "$method" via package "$package"}
     unless my $helper = $self->helpers->{$method};
-  return $helper->(@_);
+  return $helper->($self, @_);
 }
 
 sub DESTROY { }

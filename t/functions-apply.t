@@ -142,7 +142,10 @@ use Rstats;
   # apply - code reference
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = r->apply($x1, 1, sub { r->sum($_[0]) });
+    my $x2 = r->apply($x1, 1, sub {
+      my ($r, $x1) = @_;
+      $r->sum($x1)
+    });
     is_deeply($x2->values, [qw/66 72 78 84/]);
     is_deeply(r->dim($x2)->values, []);
   }

@@ -75,7 +75,6 @@ use Rstats::VectorFunc;
 
   # as_character - Inf
   {
-    $DB::single = 1;
     my $x1 = Inf;
     my $x2 = r->as_character($x1);
     ok(r->is_character($x2));

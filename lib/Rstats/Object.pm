@@ -140,6 +140,6 @@ sub DESTROY {}
 
 =head1 NAME
 
-Rstats::Object - Rstats object class
+Rstats::Object - Rstats object
 
 1;

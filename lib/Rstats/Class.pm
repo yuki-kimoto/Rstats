@@ -197,13 +197,6 @@ my @func_names = qw/
   mode
   str
   typeof
-  Inf
-  NaN
-  NA
-  TRUE
-  T
-  FALSE
-  F
   pi
   complex
   i
@@ -220,6 +213,13 @@ my @func_names = qw/
 /;
 
 my @func_names2 = qw/
+  Inf
+  NaN
+  NA
+  TRUE
+  T
+  FALSE
+  F
   to_string
   get
   set

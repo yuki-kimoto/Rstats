@@ -17,14 +17,20 @@ sub import {
   no strict 'refs';
   my @methods = qw/c se array matrix list data_frame factor ordered/;
   for my $method (@methods) {
-    *{"${class}::$method"} = sub { $r->$method(@_) }
+    no strict 'refs';
+    my $func = \&{"Rstats::Func::$method"};
+
+    *{"${class}::$method"} = sub { $func->($r, @_) }
   }
   *{"${class}::r"} = sub { $r };
   
   # Export none argument methods
   my @methods_no_args = qw/i T TRUE F FALSE NA NaN Inf NULL pi/;
   for my $method (@methods_no_args) {
-    *{"${class}::$method"} = sub () { $r->$method };
+    no strict 'refs';
+    my $func = \&{"Rstats::Func::$method"};
+
+    *{"${class}::$method"} = sub () { $func->($r, @_) };
   }
   
   warnings->unimport('ambiguous');

@@ -137,7 +137,7 @@ sub AUTOLOAD {
   }
   #Proxy
   else {
-    $helper->{first_arg} = $self;
+    $helper->{args} = [$self];
     return $helper;
   }
 }

@@ -26,14 +26,8 @@ sub get_helper {
     my $sub = $self->get_helper($1);
     Rstats::Util::monkey_patch $class, $method => sub {
       my $proxy = shift;
-      
-      if (exists $proxy->{first_arg}) {
-        return $proxy->{r}->$sub(delete $proxy->{first_arg}, @_);
-      }
-      else {
-        return $proxy->{r}->$sub(@_);
-      }
-    };
+      return $sub->($proxy->{r}, @{$proxy->{args} || []}, @_);
+    }
   }
 
   $found ? push @{$self->{namespaces}}, $class : return undef;
@@ -296,7 +290,6 @@ sub AUTOLOAD {
   }
   #Proxy
   else {
-    delete $helper->{first_arg};
     return $helper;
   }
 }

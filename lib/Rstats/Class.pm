@@ -9,7 +9,7 @@ use Digest::MD5 'md5_hex';
 has helpers => sub { {} };
 
 sub get_helper {
-  my ($self, $name) = @_;
+  my ($self, $name,) = @_;
 
   if (my $h = $self->{proxy}{$name} || $self->helpers->{$name}) { return $h }
 
@@ -19,11 +19,20 @@ sub get_helper {
   for my $key (keys %{$self->helpers}) {
     $key =~ $re ? ($found, my $method) = (1, $2) : next;
     my $sub = $self->get_helper($1);
-    Rstats::Util::monkey_patch $class, $method => sub { ${shift()}->$sub(@_) };
+    Rstats::Util::monkey_patch $class, $method => sub {
+      my $proxy = shift;
+      
+      if (exists $proxy->{first_arg}) {
+        return $proxy->{code}->$sub(delete $proxy->{first_arg}, @_);
+      }
+      else {
+        return $proxy->{code}->$sub(@_);
+      }
+    };
   }
 
   $found ? push @{$self->{namespaces}}, $class : return undef;
-  return $self->{proxy}{$name} = sub { bless \(my $dummy = shift), $class };
+  return $self->{proxy}{$name} = bless {code => shift}, $class;
 }
 
 # TODO
@@ -257,6 +266,9 @@ sub new {
     my $func = \&{"Rstats::Func::$func_name"};
     $self->helper($func_name => $func);
   }
+
+  no strict 'refs';
+  $self->helper('is.logical' => \&Rstats::Func::is_logical);
   
   return $self;
 }
@@ -271,7 +283,16 @@ sub AUTOLOAD {
   # Call helper with current controller
   Carp::croak qq{Can't locate object method "$method" via package "$package"}
     unless my $helper = $self->get_helper($method);
-  return $helper->($self, @_);
+  
+  # Helper
+  if (ref $helper eq 'CODE') {
+    return $helper->($self, @_);
+  }
+  #Proxy
+  else {
+    delete $helper->{first_arg};
+    return $helper;
+  }
 }
 
 sub DESTROY { }

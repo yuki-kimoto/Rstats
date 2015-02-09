@@ -131,7 +131,15 @@ sub AUTOLOAD {
   Carp::croak qq{Can't locate object method "$method" via package "$package"}
     unless $r && (my $helper = $r->get_helper($method));
   
-  return $helper->($r, $self, @_);
+  # Helper
+  if (ref $helper eq 'CODE') {
+    return $helper->($r, $self, @_);
+  }
+  #Proxy
+  else {
+    $helper->{first_arg} = $self;
+    return $helper;
+  }
 }
 
 sub DESTROY {}

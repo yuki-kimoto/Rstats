@@ -9,6 +9,32 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# logical operator
+{
+  # logical operator - &
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 & $x2;
+    my $proxy = r->is;
+    ok(r->is->logical($x3));
+    ok($x3->is->logical);
+    ok(r->is->logical($x3));
+    ok($x3->is->logical);
+    ok(r->is_logical($x3));
+    is_deeply($x3->values, [qw/1 0 0 0/]);
+  }
+  
+  # logical operator - |
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 | $x2;
+    ok(r->is_logical($x3));
+    is_deeply($x3->values, [qw/1 1 1 0/]);
+  }
+}
+
 # get
 {
   # get - have dimnames
@@ -326,27 +352,6 @@ use Rstats::Func;
   {
     my $x1 = c("a", "b", "c");
     1;
-  }
-}
-
-# logical operator
-{
-  # logical operator - &
-  {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 & $x2;
-    ok(r->is_logical($x3));
-    is_deeply($x3->values, [qw/1 0 0 0/]);
-  }
-
-  # logical operator - |
-  {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 | $x2;
-    ok(r->is_logical($x3));
-    is_deeply($x3->values, [qw/1 1 1 0/]);
   }
 }
 

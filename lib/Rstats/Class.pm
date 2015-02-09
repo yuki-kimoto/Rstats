@@ -10,8 +10,13 @@ has helpers => sub { {} };
 
 sub get_helper {
   my ($self, $name,) = @_;
-
-  if (my $h = $self->{proxy}{$name} || $self->helpers->{$name}) { return $h }
+  
+  if ($self->{proxy}{$name}) {
+    return bless {r => $self}, $self->{proxy}{$name};
+  }
+  elsif (my $h = $self->helpers->{$name}) {
+    return $h;
+  }
 
   my $found;
   my $class = 'Rstats::Helpers::' . md5_hex "$name:$self";
@@ -23,16 +28,17 @@ sub get_helper {
       my $proxy = shift;
       
       if (exists $proxy->{first_arg}) {
-        return $proxy->{code}->$sub(delete $proxy->{first_arg}, @_);
+        return $proxy->{r}->$sub(delete $proxy->{first_arg}, @_);
       }
       else {
-        return $proxy->{code}->$sub(@_);
+        return $proxy->{r}->$sub(@_);
       }
     };
   }
 
   $found ? push @{$self->{namespaces}}, $class : return undef;
-  return $self->{proxy}{$name} = bless {code => shift}, $class;
+  $self->{proxy}{$name} = $class;
+  return $self->get_helper($name);
 }
 
 # TODO

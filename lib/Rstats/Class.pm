@@ -270,7 +270,7 @@ sub AUTOLOAD {
 
   # Call helper with current controller
   Carp::croak qq{Can't locate object method "$method" via package "$package"}
-    unless my $helper = $self->helpers->{$method};
+    unless my $helper = $self->get_helper($method);
   return $helper->($self, @_);
 }
 

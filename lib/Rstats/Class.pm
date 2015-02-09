@@ -3,9 +3,28 @@ package Rstats::Class;
 use Object::Simple -base;
 require Rstats::Func;
 use Carp 'croak';
-use List::Util ();
+use Rstats::Util ();
+use Digest::MD5 'md5_hex';
 
 has helpers => sub { {} };
+
+sub get_helper {
+  my ($self, $name) = @_;
+
+  if (my $h = $self->{proxy}{$name} || $self->helpers->{$name}) { return $h }
+
+  my $found;
+  my $class = 'Rstats::Helpers::' . md5_hex "$name:$self";
+  my $re = $name eq '' ? qr/^(([^.]+))/ : qr/^(\Q$name\E\.([^.]+))/;
+  for my $key (keys %{$self->helpers}) {
+    $key =~ $re ? ($found, my $method) = (1, $2) : next;
+    my $sub = $self->get_helper($1);
+    Rstats::Util::monkey_patch $class, $method => sub { ${shift()}->$sub(@_) };
+  }
+
+  $found ? push @{$self->{namespaces}}, $class : return undef;
+  return $self->{proxy}{$name} = sub { bless \(my $dummy = shift), $class };
+}
 
 # TODO
 # logp1x

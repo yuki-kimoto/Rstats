@@ -9,6 +9,16 @@ use Carp 'croak';
 use Rstats::Func;
 use Rstats::VectorFunc;
 
+my $NAME
+  = eval { require Sub::Util; Sub::Util->can('set_subname') } || sub { $_[1] };
+
+sub monkey_patch {
+  my ($class, %patch) = @_;
+  no strict 'refs';
+  no warnings 'redefine';
+  *{"${class}::$_"} = $NAME->("${class}::$_", $patch{$_}) for keys %patch;
+}
+
 my $type_level = {
   character => 6,
   complex => 5,

@@ -7,6 +7,8 @@ use Math::Trig ();
 
 # class
 {
+  r->helper('ppp.title' => sub { print "ppp" });
+  r->get_helper('ppp');
   
   # class - data frame
   {

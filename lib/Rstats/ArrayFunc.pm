@@ -18,11 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub NaN {
-  my $r = shift;
-  return Rstats::ArrayFunc::new_double($r, 'NaN');
-}
-
 sub Inf {
   my $r = shift;
   return Rstats::ArrayFunc::new_double($r, 'Inf');

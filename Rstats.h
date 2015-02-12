@@ -783,6 +783,7 @@ namespace Rstats {
     SV* new_nan(SV*); /* NaN */
     SV* new_inf(SV*); /* Inf */
     SV* new_false(SV*); /* FALSE */
+    SV* new_true(SV*); /* TRUE */
   }
 }
 

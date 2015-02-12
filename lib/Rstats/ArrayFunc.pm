@@ -18,16 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub TRUE {
-  my $r = shift;
-  return Rstats::ArrayFunc::new_logical($r, 1);
-}
-
-sub T {
-  my $r = shift;
-  return TRUE($r)
-}
-
 sub pi {
   my $r = shift;
   return new_double($r, Rstats::Util::pi());
@@ -412,7 +402,7 @@ sub factor {
   
   # default - levels
   unless (defined $x_levels) {
-    $x_levels = Rstats::ArrayFunc::sort($r, unique($r, $x1), {'na.last' => TRUE});
+    $x_levels = Rstats::ArrayFunc::sort($r, unique($r, $x1), {'na.last' => Rstats::ArrayFunc::TRUE($r)});
   }
   
   # default - exclude

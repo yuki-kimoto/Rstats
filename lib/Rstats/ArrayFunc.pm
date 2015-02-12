@@ -18,15 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub NULL {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::new_array($r);;
-  $x1->vector(Rstats::Vector->new_null);
-  
-  return $x1;
-}
-
 sub NA {
   my $r = shift;
   return Rstats::ArrayFunc::new_logical($r, undef);

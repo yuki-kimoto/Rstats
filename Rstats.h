@@ -778,6 +778,7 @@ namespace Rstats {
     Rstats::Vector* get_dim(SV*, SV*);
     SV* c(SV*, SV*);
     SV* to_c(SV*, SV*);
+    SV* new_null(SV*); /* NULL */
   }
 }
 

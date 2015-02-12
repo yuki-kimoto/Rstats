@@ -1321,6 +1321,15 @@ index_to_pos(...)
 
 MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
 
+SV* NULL(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::ArrayFunc::new_null(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 SV* args(...)
   PPCODE:
 {

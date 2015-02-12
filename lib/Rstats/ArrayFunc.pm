@@ -18,11 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub F {
-  my $r = shift;
-  return Rstats::ArrayFunc::FALSE($r);
-}
-
 sub TRUE {
   my $r = shift;
   return Rstats::ArrayFunc::new_logical($r, 1);

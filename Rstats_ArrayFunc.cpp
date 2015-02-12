@@ -42,6 +42,13 @@ SV* Rstats::ArrayFunc::new_nan(SV* sv_r) {
   return sv_x1;
 }
 
+SV* Rstats::ArrayFunc::new_inf(SV* sv_r) {
+  SV* sv_x1 = Rstats::ArrayFunc::new_array(sv_r);;
+  set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_inf());
+  
+  return sv_x1;
+}
+
 void Rstats::ArrayFunc::set_dim(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
   SV* sv_dim = Rstats::pl_to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
   Rstats::pl_hv_store(sv_a1, "dim", sv_dim);

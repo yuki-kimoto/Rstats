@@ -781,6 +781,7 @@ namespace Rstats {
     SV* new_null(SV*); /* NULL */
     SV* new_na(SV*); /* NA */
     SV* new_nan(SV*); /* NaN */
+    SV* new_inf(SV*); /* Inf */
   }
 }
 

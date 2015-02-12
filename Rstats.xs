@@ -1357,6 +1357,15 @@ SV* Inf(...)
   return_sv(sv_x1);
 }
 
+SV* FALSE(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::ArrayFunc::new_false(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 SV* args(...)
   PPCODE:
 {

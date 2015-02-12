@@ -18,14 +18,9 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub FALSE {
-  my $r = shift;
-  return Rstats::ArrayFunc::new_logical($r, 0);
-}
-
 sub F {
   my $r = shift;
-  return FALSE($r);
+  return Rstats::ArrayFunc::FALSE($r);
 }
 
 sub TRUE {
@@ -161,9 +156,9 @@ sub merge {
     = args_array($r, [qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
   
   # Join way
-  $x_all = FALSE unless defined $x_all;
-  $x_all_x = FALSE unless defined $x_all_x;
-  $x_all_y = FALSE unless defined $x_all_y;
+  $x_all = Rstats::ArrayFunc::FALSE($r) unless defined $x_all;
+  $x_all_x = Rstats::ArrayFunc::FALSE($r) unless defined $x_all_x;
+  $x_all_y = Rstats::ArrayFunc::FALSE($r) unless defined $x_all_y;
   my $all;
   if ($x_all) {
     $all = 'both';
@@ -1117,7 +1112,7 @@ sub setequal {
   my $x3 = Rstats::ArrayFunc::sort($r, $x1);
   my $x4 = Rstats::ArrayFunc::sort($r, $x2);
   
-  return FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
+  return Rstats::ArrayFunc::FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
   
   my $not_equal;
   my $x3_elements = Rstats::Func::decompose($r, $x3);
@@ -1129,7 +1124,7 @@ sub setequal {
     }
   }
   
-  return $not_equal ? FALSE($r) : TRUE($r);
+  return $not_equal ? Rstats::ArrayFunc::FALSE($r) : TRUE($r);
 }
 
 sub setdiff {
@@ -1836,7 +1831,7 @@ sub order {
     push @xs_values, $x->values;
   }
 
-  my $decreasing = $opt->{decreasing} || FALSE($r);
+  my $decreasing = $opt->{decreasing} || Rstats::ArrayFunc::FALSE($r);
   
   my @pos_vals;
   for my $i (0 .. @{$xs_values[0]} - 1) {

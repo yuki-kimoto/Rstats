@@ -1330,6 +1330,15 @@ SV* NULL(...)
   return_sv(sv_x1);
 }
 
+SV* NA(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::ArrayFunc::new_na(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 SV* args(...)
   PPCODE:
 {

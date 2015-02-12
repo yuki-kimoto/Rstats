@@ -779,6 +779,7 @@ namespace Rstats {
     SV* c(SV*, SV*);
     SV* to_c(SV*, SV*);
     SV* new_null(SV*); /* NULL */
+    SV* new_na(SV*); /* NA */
   }
 }
 

@@ -59,6 +59,31 @@ SV* Rstats::ArrayFunc::new_double(SV* sv_r, SV* sv_values) {
   return sv_x1;
 }
 
+SV* Rstats::ArrayFunc::new_complex(SV* sv_r, SV* sv_values) {
+  SV* sv_x1 = new_null(sv_r);
+  I32 length = Rstats::pl_av_len(sv_values);
+  
+  Rstats::Vector* v1 = Rstats::VectorFunc::new_complex(length);
+  for (I32 i = 0; i < length; i++) {
+    SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+    
+    if (SvOK(sv_value)) {
+      Rstats::VectorFunc::set_complex_value(
+        v1,
+        i,
+        SvNV(sv_value)
+      );
+    }
+    else {
+      Rstats::VectorFunc::add_na_position(v1, i);
+    }
+  }
+  
+  set_vector(sv_r, sv_x1, v1);
+  
+  return sv_x1;
+}
+
 void Rstats::ArrayFunc::set_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
   SV* sv_vector = Rstats::pl_to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
   Rstats::pl_hv_store(sv_a1, "vector", sv_vector);

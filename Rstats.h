@@ -786,6 +786,7 @@ namespace Rstats {
     SV* new_true(SV*); /* TRUE */
     SV* new_character(SV*, SV*);
     SV* new_double(SV*, SV*);
+    SV* new_complex(SV*, SV*);
   }
 }
 

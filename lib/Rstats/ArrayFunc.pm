@@ -18,13 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub new_complex {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_complex(@_));
-}
-
 sub new_integer {
   my $r = shift;
   

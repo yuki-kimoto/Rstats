@@ -1500,6 +1500,27 @@ SV* new_complex(...)
   return_sv(sv_x1);
 }
 
+SV* new_integer(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_values;
+  if (sv_derived_from(ST(1), "ARRAY")) {
+    sv_values = ST(1);
+  }
+  else {
+    sv_values = Rstats::pl_new_av_ref();
+  
+    for (IV i = 1; i < items; i++) {
+      Rstats::pl_av_push(sv_values, ST(i));
+    }
+  }
+
+  SV* sv_x1 = Rstats::ArrayFunc::new_integer(sv_r, sv_values);
+  
+  return_sv(sv_x1);
+}
+
 MODULE = Rstats::Func PACKAGE = Rstats::Func
 
 SV* new_array(...)

@@ -25,13 +25,6 @@ sub new_complex {
   $x1->vector(Rstats::VectorFunc::new_complex(@_));
 }
 
-sub new_double {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_double(@_));
-}
-
 sub new_integer {
   my $r = shift;
   
@@ -3096,6 +3089,8 @@ sub get {
     Rstats::ArrayFunc::new_vector($r, $x1->vector->type, @a2_values),
     Rstats::ArrayFunc::c($r, @$x2_dim)
   );
+  
+  $DB::single = 1;
   
   # Copy attributes
   Rstats::Func::copy_attrs_to($r, $x1, $x2, {new_indexes => $new_indexes, exclude => ['dim']});

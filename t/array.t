@@ -9,51 +9,16 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
-# new_character
-{
-  # new_character - arguments is list
-  {
-    my $x1 = r->new_character("a", "b", "c");
-    ok($x1->is_character);
-    is_deeply($x1->values, [qw/a b c/]);
-  }
-
-  # new_character - arguments is array reference
-  {
-    my $x1 = r->new_character(["a", "b", "c"]);
-    ok($x1->is_character);
-    is_deeply($x1->values, [qw/a b c/]);
-  }
-}
-
-# logical operator
-{
-  # logical operator - &
-  {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 & $x2;
-    my $proxy = r->is;
-    ok(r->is->logical($x3));
-    ok($x3->is->logical);
-    ok(r->is->logical($x3));
-    ok($x3->is->logical);
-    ok(r->is_logical($x3));
-    is_deeply($x3->values, [qw/1 0 0 0/]);
-  }
-  
-  # logical operator - |
-  {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
-    my $x3 = $x1 | $x2;
-    ok(r->is_logical($x3));
-    is_deeply($x3->values, [qw/1 1 1 0/]);
-  }
-}
-
 # get
 {
+  # get - logical
+  {
+    my $v1 = c(1, 3, 5, 7);
+    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $v2 = $v1->get($logical_v);
+    is_deeply($v2->values, [3, 7, undef]);
+  }
+
   # get - have dimnames
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
@@ -63,14 +28,6 @@ use Rstats::Func;
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
   
-  # get - logical
-  {
-    my $v1 = c(1, 3, 5, 7);
-    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
-    my $v2 = $v1->get($logical_v);
-    is_deeply($v2->values, [3, 7, undef]);
-  }
-
   # get - have names
   {
     my $v1 = c(4, 5, 6);
@@ -157,6 +114,66 @@ use Rstats::Func;
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+  }
+}
+
+# new_double
+{
+  # new_double - arguments is list
+  {
+    my $x1 = r->new_double(1.1, 1.2, 1.3);
+    ok($x1->is_double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+
+  # new_double - arguments is array reference
+  {
+    my $x1 = r->new_double([1.1, 1.2, 1.3]);
+    ok($x1->is_double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+}
+
+# new_character
+{
+  # new_character - arguments is list
+  {
+    my $x1 = r->new_character("a", "b", "c");
+    ok($x1->is_character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+
+  # new_character - arguments is array reference
+  {
+    my $x1 = r->new_character(["a", "b", "c"]);
+    ok($x1->is_character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+}
+
+# logical operator
+{
+  # logical operator - &
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 & $x2;
+    my $proxy = r->is;
+    ok(r->is->logical($x3));
+    ok($x3->is->logical);
+    ok(r->is->logical($x3));
+    ok($x3->is->logical);
+    ok(r->is_logical($x3));
+    is_deeply($x3->values, [qw/1 0 0 0/]);
+  }
+  
+  # logical operator - |
+  {
+    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x3 = $x1 | $x2;
+    ok(r->is_logical($x3));
+    is_deeply($x3->values, [qw/1 1 1 0/]);
   }
 }
 

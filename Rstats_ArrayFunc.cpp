@@ -16,11 +16,42 @@ SV* Rstats::ArrayFunc::new_character(SV* sv_r, SV* sv_values) {
   Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
   for (I32 i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
-    Rstats::VectorFunc::set_character_value(
-      v1,
-      i,
-      sv_value
-    );
+
+    if (SvOK(sv_value)) {
+      Rstats::VectorFunc::set_character_value(
+        v1,
+        i,
+        sv_value
+      );
+    }
+    else {
+      Rstats::VectorFunc::add_na_position(v1, i);
+    }
+  }
+  
+  set_vector(sv_r, sv_x1, v1);
+  
+  return sv_x1;
+}
+
+SV* Rstats::ArrayFunc::new_double(SV* sv_r, SV* sv_values) {
+  SV* sv_x1 = new_null(sv_r);
+  I32 length = Rstats::pl_av_len(sv_values);
+  
+  Rstats::Vector* v1 = Rstats::VectorFunc::new_double(length);
+  for (I32 i = 0; i < length; i++) {
+    SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+    
+    if (SvOK(sv_value)) {
+      Rstats::VectorFunc::set_double_value(
+        v1,
+        i,
+        SvNV(sv_value)
+      );
+    }
+    else {
+      Rstats::VectorFunc::add_na_position(v1, i);
+    }
   }
   
   set_vector(sv_r, sv_x1, v1);

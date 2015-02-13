@@ -4,6 +4,14 @@ use warnings;
 
 use Rstats;
 
+# typeof
+{
+  my $x1 = list(1, 2);
+  my $x2 = r->typeof($x1);
+  ok(r->is_character($x2));
+  is_deeply($x2->values, ['list']);
+}
+
 # list
 {
   # list - get, multiple, names
@@ -115,14 +123,6 @@ EOS
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
-}
-
-# typeof
-{
-  my $x1 = list(1, 2);
-  my $x2 = r->typeof($x1);
-  ok(r->is_character($x2));
-  is_deeply($x2->values, ['list']);
 }
 
 # ncol

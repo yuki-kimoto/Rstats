@@ -9,6 +9,23 @@ use Rstats::Func;
 #   which
 #   get - logical, undef
 
+# new_character
+{
+  # new_character - arguments is list
+  {
+    my $x1 = r->new_character("a", "b", "c");
+    ok($x1->is_character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+
+  # new_character - arguments is array reference
+  {
+    my $x1 = r->new_character(["a", "b", "c"]);
+    ok($x1->is_character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+}
+
 # logical operator
 {
   # logical operator - &

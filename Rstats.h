@@ -784,6 +784,7 @@ namespace Rstats {
     SV* new_inf(SV*); /* Inf */
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
+    SV* new_character(SV*, SV*);
   }
 }
 

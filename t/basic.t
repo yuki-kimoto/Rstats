@@ -219,7 +219,6 @@ use Math::Trig ();
 # matrix
 {
   {
-    $DB::single = 1;
     my $mat = matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply(r->dim($mat)->values, [2, 5]);

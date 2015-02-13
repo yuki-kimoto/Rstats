@@ -18,6 +18,34 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub new_complex {
+  my $r = shift;
+  
+  my $x1 = Rstats::ArrayFunc::NULL($r);
+  $x1->vector(Rstats::VectorFunc::new_complex(@_));
+}
+
+sub new_double {
+  my $r = shift;
+  
+  my $x1 = Rstats::ArrayFunc::NULL($r);
+  $x1->vector(Rstats::VectorFunc::new_double(@_));
+}
+
+sub new_integer {
+  my $r = shift;
+  
+  my $x1 = Rstats::ArrayFunc::NULL($r);
+  $x1->vector(Rstats::VectorFunc::new_integer(@_));
+}
+
+sub new_logical {
+  my $r = shift;
+  
+  my $x1 = Rstats::ArrayFunc::NULL($r);
+  $x1->vector(Rstats::VectorFunc::new_logical(@_));
+}
+
 sub pi {
   my $r = shift;
   return new_double($r, Rstats::Util::pi());
@@ -2485,41 +2513,6 @@ sub new_vector {
   else {
     Carp::croak("Invalid type $type is passed(new_vector)");
   }
-}
-
-sub new_character {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_character(@_));
-}
-
-sub new_complex {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_complex(@_));
-}
-
-sub new_double {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_double(@_));
-}
-
-sub new_integer {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_integer(@_));
-}
-
-sub new_logical {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_logical(@_));
 }
 
 sub matrix {

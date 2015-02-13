@@ -18,13 +18,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub new_logical {
-  my $r = shift;
-  
-  my $x1 = Rstats::ArrayFunc::NULL($r);
-  $x1->vector(Rstats::VectorFunc::new_logical(@_));
-}
-
 sub pi {
   my $r = shift;
   return new_double($r, Rstats::Util::pi());

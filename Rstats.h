@@ -788,6 +788,7 @@ namespace Rstats {
     SV* new_double(SV*, SV*);
     SV* new_complex(SV*, SV*);
     SV* new_integer(SV*, SV*);
+    SV* new_logical(SV*, SV*);
   }
 }
 

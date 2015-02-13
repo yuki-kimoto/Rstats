@@ -54,27 +54,27 @@ use Math::Trig ();
 {
   # c("a", "b")
   {
-    my $v = c("a", "b");
-    is_deeply($v->values, ["a", "b"]);
+    my $x1 = c("a", "b");
+    is_deeply($x1->values, ["a", "b"]);
   }
 
   # c([1, 2, 3])
   {
-    my $v = c([1, 2, 3]);
-    is(r->typeof($v)->value, 'double');
-    is_deeply($v->values, [1, 2, 3]);
+    my $x1 = c([1, 2, 3]);
+    is(r->typeof($x1)->value, 'double');
+    is_deeply($x1->values, [1, 2, 3]);
   }
   
   # c(c(1, 2, 3))
   {
-    my $v = c(c(1, 2, 3));
-    is_deeply($v->values, [1, 2, 3]);
+    my $x1 = c(c(1, 2, 3));
+    is_deeply($x1->values, [1, 2, 3]);
   }
   
   # c(1, 2, c(3, 4, 5))
   {
-    my $v = c(1, 2, c(3, 4, 5));
-    is_deeply($v->values, [1, 2, 3, 4, 5]);
+    my $x1 = c(1, 2, c(3, 4, 5));
+    is_deeply($x1->values, [1, 2, 3, 4, 5]);
   }
 }
 
@@ -82,46 +82,46 @@ use Math::Trig ();
 {
   # se('1:3')
   {
-    my $v = se('1:3');
-    is_deeply($v->values, [1, 2, 3]);
+    my $x1 = se('1:3');
+    is_deeply($x1->values, [1, 2, 3]);
   }
   
   # se('0.5*1:3')
   {
-    my $v = se('0.5*1:3');
-    is_deeply($v->values, [1, 1.5, 2, 2.5, 3]);
+    my $x1 = se('0.5*1:3');
+    is_deeply($x1->values, [1, 1.5, 2, 2.5, 3]);
   }
 }
 
 # NULL
 {
-  my $v1 = r->NULL;
-  is_deeply($v1->values, []);
-  is("$v1", 'NULL');
-  $v1->at(3)->set(5);
-  is_deeply($v1->values, [undef, undef, 5]);
+  my $x1 = r->NULL;
+  is_deeply($x1->values, []);
+  is("$x1", 'NULL');
+  $x1->at(3)->set(5);
+  is_deeply($x1->values, [undef, undef, 5]);
 }
 
 
 # tail
 {
   {
-    my $v1 = c(1, 2, 3, 4, 5, 6, 7);
-    my $tail = r->tail($v1);
+    my $x1 = c(1, 2, 3, 4, 5, 6, 7);
+    my $tail = r->tail($x1);
     is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
   }
   
   # tail - values is low than 6
   {
-    my $v1 = c(1, 2, 3);
-    my $tail = r->tail($v1);
+    my $x1 = c(1, 2, 3);
+    my $tail = r->tail($x1);
     is_deeply($tail->values, [1, 2, 3]);
   }
   
   # tail - n option
   {
-    my $v1 = c(1, 2, 3, 4);
-    my $tail = r->tail($v1, {n => 3});
+    my $x1 = c(1, 2, 3, 4);
+    my $tail = r->tail($x1, {n => 3});
     is_deeply($tail->values, [2, 3, 4]);
   }
 }
@@ -236,30 +236,30 @@ use Math::Trig ();
 
 # rnorm
 {
-  my $v1 = r->rnorm(100);
-  is(r->length($v1)->value, 100);
+  my $x1 = r->rnorm(100);
+  is(r->length($x1)->value, 100);
 }
 
 # sequence
 {
-  my $v1 = c(1, 2, 3);
-  my $v2 = r->sequence($v1);
-  is_deeply($v2->values, [1, 1, 2, 1, 2, 3])
+  my $x1 = c(1, 2, 3);
+  my $x2 = r->sequence($x1);
+  is_deeply($x2->values, [1, 1, 2, 1, 2, 3])
 }
   
 # sample
 {
   {
-    my $v1 = se('1:100');
-    my $v2 = r->sample($v1, 50);
-    is(r->length($v2)->value, 50);
+    my $x1 = se('1:100');
+    my $x2 = r->sample($x1, 50);
+    is(r->length($x2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
-    for my $v2_value (@{$v2->values}) {
-      $duplicate_h->{$v2_value}++;
-      $duplicate = 1 if $duplicate_h->{$v2_value} > 2;
-      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+    for my $x2_value (@{$x2->values}) {
+      $duplicate_h->{$x2_value}++;
+      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
         $invalid_value = 1;
       }
     }
@@ -269,16 +269,16 @@ use Math::Trig ();
   
   # sample - replace => 0
   {
-    my $v1 = se('1:100');
-    my $v2 = r->sample($v1, 50, {replace => 0});
-    is(r->length($v2)->value, 50);
+    my $x1 = se('1:100');
+    my $x2 = r->sample($x1, 50, {replace => 0});
+    is(r->length($x2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
-    for my $v2_value (@{$v2->values}) {
-      $duplicate_h->{$v2_value}++;
-      $duplicate = 1 if $duplicate_h->{$v2_value} > 2;
-      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+    for my $x2_value (@{$x2->values}) {
+      $duplicate_h->{$x2_value}++;
+      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
         $invalid_value = 1;
       }
     }
@@ -288,14 +288,14 @@ use Math::Trig ();
 
   # sample - replace => 0
   {
-    my $v1 = se('1:100');
-    my $v2 = r->sample($v1, 50, {replace => 1});
-    is(r->length($v2)->value, 50);
+    my $x1 = se('1:100');
+    my $x2 = r->sample($x1, 50, {replace => 1});
+    is(r->length($x2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
     my $invalid_value;
-    for my $v2_value (@{$v2->values}) {
-      unless (grep { $_ eq $v2_value } (1 .. 100)) {
+    for my $x2_value (@{$x2->values}) {
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
         $invalid_value = 1;
       }
     }
@@ -304,10 +304,10 @@ use Math::Trig ();
   
   # sample - replace => 0, (strict check)
   {
-    my $v1 = c(1);
-    my $v2 = r->sample($v1, 5, {replace => 1});
-    is(r->length($v2)->value, 5);
-    is_deeply($v2->values, [1, 1, 1, 1, 1]);
+    my $x1 = c(1);
+    my $x2 = r->sample($x1, 5, {replace => 1});
+    is(r->length($x2)->value, 5);
+    is_deeply($x2->values, [1, 1, 1, 1, 1]);
   }
 }
 
@@ -317,14 +317,14 @@ use Math::Trig ();
     srand 100;
     my $rands = [rand 1, rand 1, rand 1, rand 1, rand 1];
     r->set_seed(100);
-    my $v1 = r->runif(5);
-    is_deeply($v1->values, $rands);
+    my $x1 = r->runif(5);
+    is_deeply($x1->values, $rands);
     
-    my $v2 = r->runif(5);
-    isnt($v1->values->[0], $v2->values->[0]);
+    my $x2 = r->runif(5);
+    isnt($x1->values->[0], $x2->values->[0]);
 
     my $v3 = r->runif(5);
-    isnt($v2->values->[0], $v3->values->[0]);
+    isnt($x2->values->[0], $v3->values->[0]);
     
     my $v4 = r->runif(100);
     my @in_ranges = grep { $_ >= 0 && $_ <= 1 } @{$v4->values};
@@ -342,48 +342,48 @@ use Math::Trig ();
       rand(9) + 1
     ];
     r->set_seed(100);
-    my $v1 = r->runif(5, 1, 10);
-    is_deeply($v1->values, $rands);
+    my $x1 = r->runif(5, 1, 10);
+    is_deeply($x1->values, $rands);
 
-    my $v2 = r->runif(100, 1, 2);
-    my @in_ranges = grep { $_ >= 1 && $_ <= 2 } @{$v2->values};
+    my $x2 = r->runif(100, 1, 2);
+    my @in_ranges = grep { $_ >= 1 && $_ <= 2 } @{$x2->values};
     is(scalar @in_ranges, 100);
   }
 }
 
 # which
 {
-  my $v1 = c('a', 'b', 'a');
-  my $v2 = r->which($v1, sub { $_ eq 'a' });
-  is_deeply($v2->values, [1, 3]);
+  my $x1 = c('a', 'b', 'a');
+  my $x2 = r->which($x1, sub { $_ eq 'a' });
+  is_deeply($x2->values, [1, 3]);
 }
 
 # elseif
 {
-  my $v1 = c(1, 0, 1);
-  my $v2 = r->ifelse($v1, 'a', 'b');
-  is_deeply($v2->values, ['a', 'b', 'a']);
+  my $x1 = c(1, 0, 1);
+  my $x2 = r->ifelse($x1, 'a', 'b');
+  is_deeply($x2->values, ['a', 'b', 'a']);
 }
 
 # head
 {
   {
-    my $v1 = c(1, 2, 3, 4, 5, 6, 7);
-    my $head = r->head($v1);
+    my $x1 = c(1, 2, 3, 4, 5, 6, 7);
+    my $head = r->head($x1);
     is_deeply($head->values, [1, 2, 3, 4, 5, 6]);
   }
   
   # head - values is low than 6
   {
-    my $v1 = c(1, 2, 3);
-    my $head = r->head($v1);
+    my $x1 = c(1, 2, 3);
+    my $head = r->head($x1);
     is_deeply($head->values, [1, 2, 3]);
   }
   
   # head - n option
   {
-    my $v1 = c(1, 2, 3, 4);
-    my $head = r->head($v1, {n => 3});
+    my $x1 = c(1, 2, 3, 4);
+    my $head = r->head($x1, {n => 3});
     is_deeply($head->values, [1, 2, 3]);
   }
 }
@@ -419,9 +419,9 @@ use Math::Trig ();
 {
   # req($v, {times => $times});
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = r->rep($v1, {times => 3});
-    is_deeply($v2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = r->rep($x1, {times => 3});
+    is_deeply($x2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
   }
 }
 
@@ -429,48 +429,48 @@ use Math::Trig ();
 {
   # seq($from, $to),  n > m
   {
-    my $v = r->seq(1, 3);
-    is_deeply($v->values, [1, 2, 3]);
+    my $x1 = r->seq(1, 3);
+    is_deeply($x1->values, [1, 2, 3]);
   }
 
   # seq({from => $from, to => $to}),  n > m
   {
-    my $v = r->seq({from => 1, to => 3});
-    is_deeply($v->values, [1, 2, 3]);
+    my $x1 = r->seq({from => 1, to => 3});
+    is_deeply($x1->values, [1, 2, 3]);
   }
   
   # seq($from, $to),  n < m
   {
-    my $v = r->seq(3, 1);
-    is_deeply($v->values, [3, 2, 1]);
+    my $x1 = r->seq(3, 1);
+    is_deeply($x1->values, [3, 2, 1]);
   }
   
   # seq($from, $to), n = m
   {
-    my $v = r->seq(2, 2);
-    is_deeply($v->values, [2]);
+    my $x1 = r->seq(2, 2);
+    is_deeply($x1->values, [2]);
   }
   
   # seq($from, $to, {by => p}) n > m
   {
-    my $v = r->seq(1, 3, {by => 0.5});
-    is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
+    my $x1 = r->seq(1, 3, {by => 0.5});
+    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 
   # seq($from, $to, {by => p}) n > m
   {
-    my $v = r->seq(3, 1, {by => -0.5});
-    is_deeply($v->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
+    my $x1 = r->seq(3, 1, {by => -0.5});
+    is_deeply($x1->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
   }
   
   # seq($from, {by => p, length => l})
   {
-    my $v = r->seq(1, 3, {length => 5});
-    is_deeply($v->values, [1, 1.5, 2.0, 2.5, 3.0]);
+    my $x1 = r->seq(1, 3, {length => 5});
+    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
   
   # seq(along => $v);
-  my $v1 = c(3, 4, 5);
-  my $v2 = r->seq({along => $v1});
-  is_deeply($v2->values, [1, 2, 3]);
+  my $x1 = c(3, 4, 5);
+  my $x2 = r->seq({along => $x1});
+  is_deeply($x2->values, [1, 2, 3]);
 }

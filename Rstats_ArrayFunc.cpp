@@ -68,10 +68,15 @@ SV* Rstats::ArrayFunc::new_complex(SV* sv_r, SV* sv_values) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
     
     if (SvOK(sv_value)) {
+      SV* sv_value_re = Rstats::pl_hv_fetch(sv_value, "re");
+      SV* sv_value_im = Rstats::pl_hv_fetch(sv_value, "im");
+      NV re = SvNV(sv_value_re);
+      NV im = SvNV(sv_value_im);
+      
       Rstats::VectorFunc::set_complex_value(
         v1,
         i,
-        SvNV(sv_value)
+        std::complex<NV>(re, im)
       );
     }
     else {
@@ -96,7 +101,7 @@ SV* Rstats::ArrayFunc::new_integer(SV* sv_r, SV* sv_values) {
       Rstats::VectorFunc::set_integer_value(
         v1,
         i,
-        SvNV(sv_value)
+        SvIV(sv_value)
       );
     }
     else {
@@ -121,7 +126,7 @@ SV* Rstats::ArrayFunc::new_logical(SV* sv_r, SV* sv_values) {
       Rstats::VectorFunc::set_integer_value(
         v1,
         i,
-        SvNV(sv_value)
+        SvIV(sv_value)
       );
     }
     else {

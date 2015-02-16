@@ -56,7 +56,7 @@ sub get {
   
   $DB::single = 1;
   Rstats::Func::copy_attrs_to(
-    $r, $x1, $list, {new_indexes => [Rstats::ArrayFunc::c($r, @$index_values)]}
+    $r, $x1, $list, {new_indexes => [Rstats::Func::c($r, @$index_values)]}
   );
 
   return $list;
@@ -130,7 +130,7 @@ sub _to_string {
       _to_string($r, $element, $poses, $str_ref);
     }
     else {
-      $$str_ref .= Rstats::ArrayFunc::to_string($r, $element) . "\n";
+      $$str_ref .= Rstats::Func::to_string($r, $element) . "\n";
     }
     pop @$poses;
   }

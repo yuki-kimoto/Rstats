@@ -29,7 +29,7 @@ SV* Rstats::Util::args(SV* sv_r, SV* sv_names, SV* sv_args) {
       Rstats::pl_hv_store(
         sv_new_opt,
         SvPV_nolen(sv_name),
-        Rstats::ArrayFunc::to_c(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
+        Rstats::Func::to_c(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
       );
     }
     else if (i < names_length) {
@@ -39,7 +39,7 @@ SV* Rstats::Util::args(SV* sv_r, SV* sv_names, SV* sv_args) {
         Rstats::pl_hv_store(
           sv_new_opt,
           SvPV_nolen(sv_name),
-          Rstats::ArrayFunc::to_c(sv_r, sv_arg)
+          Rstats::Func::to_c(sv_r, sv_arg)
         );
       }
     }

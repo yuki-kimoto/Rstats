@@ -82,7 +82,7 @@ sub get {
     $r,
     $x1,
     $data_frame,
-    {new_indexes => [$row_index, Rstats::ArrayFunc::c($r, @$col_index_values)]}
+    {new_indexes => [$row_index, Rstats::Func::c($r, @$col_index_values)]}
   );
   $data_frame->{dimnames}[0] = Rstats::VectorFunc::new_character(
     1 .. Rstats::DataFrameFunc::getin($r, $data_frame, 1)->length_value

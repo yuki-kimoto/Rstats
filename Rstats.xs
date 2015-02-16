@@ -1319,13 +1319,13 @@ index_to_pos(...)
   return_sv(sv_ret);
 }
 
-MODULE = Rstats::ArrayFunc PACKAGE = Rstats::ArrayFunc
+MODULE = Rstats::Func PACKAGE = Rstats::Func
 
 SV* NULL(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_null(sv_r);
+  SV* sv_x1 = Rstats::Func::new_null(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1334,7 +1334,7 @@ SV* NA(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_na(sv_r);
+  SV* sv_x1 = Rstats::Func::new_na(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1343,7 +1343,7 @@ SV* NaN(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_nan(sv_r);
+  SV* sv_x1 = Rstats::Func::new_nan(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1352,7 +1352,7 @@ SV* Inf(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_inf(sv_r);
+  SV* sv_x1 = Rstats::Func::new_inf(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1361,7 +1361,7 @@ SV* FALSE(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_false(sv_r);
+  SV* sv_x1 = Rstats::Func::new_false(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1370,7 +1370,7 @@ SV* F(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_false(sv_r);
+  SV* sv_x1 = Rstats::Func::new_false(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1379,7 +1379,7 @@ SV* TRUE(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_true(sv_r);
+  SV* sv_x1 = Rstats::Func::new_true(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1388,7 +1388,7 @@ SV* T(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::ArrayFunc::new_true(sv_r);
+  SV* sv_x1 = Rstats::Func::new_true(sv_r);
   
   return_sv(sv_x1);
 }
@@ -1412,7 +1412,7 @@ SV* args(...)
 SV* to_c(...)
   PPCODE:
 {
-  SV* sv_x = Rstats::ArrayFunc::to_c(ST(0), ST(1));
+  SV* sv_x = Rstats::Func::to_c(ST(0), ST(1));
   
   return_sv(sv_x);
 }
@@ -1432,7 +1432,7 @@ SV* c(...)
     }
   }
   
-  SV* sv_x1 = Rstats::ArrayFunc::c(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::c(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
@@ -1453,7 +1453,7 @@ SV* new_character(...)
     }
   }
 
-  SV* sv_x1 = Rstats::ArrayFunc::new_character(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::new_character(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
@@ -1474,7 +1474,7 @@ SV* new_double(...)
     }
   }
 
-  SV* sv_x1 = Rstats::ArrayFunc::new_double(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::new_double(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
@@ -1495,7 +1495,7 @@ SV* new_complex(...)
     }
   }
 
-  SV* sv_x1 = Rstats::ArrayFunc::new_complex(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::new_complex(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
@@ -1516,7 +1516,7 @@ SV* new_integer(...)
     }
   }
 
-  SV* sv_x1 = Rstats::ArrayFunc::new_integer(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::new_integer(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
@@ -1537,19 +1537,17 @@ SV* new_logical(...)
     }
   }
 
-  SV* sv_x1 = Rstats::ArrayFunc::new_logical(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::new_logical(sv_r, sv_values);
   
   return_sv(sv_x1);
 }
-
-MODULE = Rstats::Func PACKAGE = Rstats::Func
 
 SV* new_array(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   
-  SV* sv_array = Rstats::ArrayFunc::new_array(sv_r);
+  SV* sv_array = Rstats::Func::new_array(sv_r);
   
   return_sv(sv_array);
 }

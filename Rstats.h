@@ -770,7 +770,7 @@ namespace Rstats {
     Rstats::Vector* clone(Rstats::Vector*);
   }
   
-  namespace ArrayFunc {
+  namespace Func {
     SV* new_array(SV*);
     void set_vector(SV*, SV*, Rstats::Vector*);
     Rstats::Vector* get_vector(SV*, SV*);

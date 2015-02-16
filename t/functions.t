@@ -5,6 +5,7 @@ use warnings;
 use Rstats;
 use Rstats::VectorFunc;
 use Rstats::Util;
+use Math::Complex ();
 
 # Method
 {

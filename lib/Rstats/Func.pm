@@ -20,34 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub dim {
-  my $r = shift;
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_dim = Rstats::Func::to_c($r, $_[0]);
-    my $x1_length = Rstats::Func::length_value($r, $x1);
-    my $x1_lenght_by_dim = 1;
-    $x1_lenght_by_dim *= $_ for @{$x_dim->values};
-    
-    if ($x1_length != $x1_lenght_by_dim) {
-      croak "dims [product $x1_lenght_by_dim] do not match the length of object [$x1_length]";
-    }
-  
-    $x1->{dim} = $x_dim->vector->clone;
-    
-    return $x1;
-  }
-  else {
-    my $x_dim = Rstats::Func::NULL($r);
-    if (defined $x1->{dim}) {
-      $x_dim->vector($x1->{dim}->clone);
-    }
-    
-    return $x_dim;
-  }
-}
-
 sub is_matrix {
   my $r = shift;
   

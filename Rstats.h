@@ -793,6 +793,8 @@ namespace Rstats {
     SV* is_vector(SV*, SV*);
     SV* length_value(SV*, SV*);
     SV* values(SV*, SV*);
+    SV* set_dim_(SV*, SV*, SV*);
+    SV* get_dim_(SV*, SV*);
   }
 }
 

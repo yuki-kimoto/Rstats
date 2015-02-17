@@ -1,5 +1,42 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::set_dim_(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
+  sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
+  
+  SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+  IV x1_length = SvIV(sv_x1_length);
+  IV x1_length_by_dim = 1;
+  
+  SV* sv_x_dim_values = values(sv_r, sv_x_dim);
+  IV x_dim_values_length = Rstats::pl_av_len(sv_x_dim_values);
+  
+  for (IV i = 0; i < x_dim_values_length; i++) {
+    SV* sv_x_dim_value = Rstats::pl_av_fetch(sv_x_dim_values, i);
+    IV x_dim_value = SvIV(sv_x_dim_value);
+    x1_length_by_dim *= x_dim_value;
+  }
+  
+  if (x1_length != x1_length_by_dim) {
+    croak("dims [product %d] do not match the length of object [%d]", x1_length_by_dim, x1_length);
+  }
+  
+  Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_vector(sv_r, sv_x_dim));
+  set_dim(sv_r, sv_x1, x_dim);
+  
+  return sv_r;
+}
+
+SV* Rstats::Func::get_dim_(SV* sv_r, SV* sv_x1) {
+  SV* sv_x_dim = Rstats::Func::new_null(sv_r);
+  
+  if (Rstats::pl_hv_exists(sv_x1, "dim")) {
+    Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_dim(sv_r, sv_x1));
+    set_vector(sv_r, sv_x_dim, x_dim);
+  }
+  
+  return sv_x_dim;
+}
+
 SV* Rstats::Func::values(SV* sv_r, SV* sv_x1) {
   Rstats::Vector* x1 = get_vector(sv_r, sv_x1);
   

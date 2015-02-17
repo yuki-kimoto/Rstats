@@ -1321,6 +1321,23 @@ index_to_pos(...)
 
 MODULE = Rstats::Func PACKAGE = Rstats::Func
 
+SV* dim(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  
+  if (items > 2) {
+    SV* sv_x_dim = ST(2);
+    Rstats::Func::set_dim_(sv_r, sv_x1, sv_x_dim);
+    return_sv(sv_r);
+  }
+  else {
+    SV* sv_x_dim = Rstats::Func::get_dim_(sv_r, sv_x1);
+    return_sv(sv_x_dim);
+  }
+}
+
 SV* values(...)
   PPCODE:
 {

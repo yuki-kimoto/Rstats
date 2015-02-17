@@ -20,17 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-
-sub is_vector {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $is = ref $x1 eq 'Rstats::Array' && !exists $x1->{dim};
-  
-  return Rstats::Func::new_logical($r, $is);
-}
-
 sub is_matrix {
   my $r = shift;
   

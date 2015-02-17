@@ -1,5 +1,20 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
+  
+  bool is =
+    sv_isobject(sv_x1)
+    && sv_derived_from(sv_x1, "Rstats::Array")
+    && !Rstats::pl_hv_exists(sv_x1, "dim");
+  
+  SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
+  
+  SV* sv_values = Rstats::pl_new_av_ref();
+  Rstats::pl_av_push(sv_values, sv_is);
+  
+  return Rstats::Func::new_logical(sv_r, sv_values);
+}
+
 SV* Rstats::Func::pi (SV* sv_r) {
   SV* sv_values = Rstats::pl_new_av_ref();
   NV pi = Rstats::Util::pi();

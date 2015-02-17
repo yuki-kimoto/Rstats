@@ -790,6 +790,7 @@ namespace Rstats {
     SV* new_integer(SV*, SV*);
     SV* new_logical(SV*, SV*);
     SV* pi(SV*);
+    SV* is_vector(SV*, SV*);
   }
 }
 

@@ -20,6 +20,174 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+
+sub is_vector {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $is = ref $x1 eq 'Rstats::Array' && !exists $x1->{dim};
+  
+  return Rstats::Func::new_logical($r, $is);
+}
+
+sub is_matrix {
+  my $r = shift;
+  
+  my $x1 = shift;
+
+  my $x_is = ref $x1 eq 'Rstats::Array' && Rstats::Func::length_value($r, Rstats::Func::dim($r, $x1)) == 2
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_numeric {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_double {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'double'
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_integer {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'integer'
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_complex {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'complex'
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_character {
+  my $r = shift;
+  
+  my $x1 = shift;
+  my $x_is = (is_array($r, $x1) || is_vector($r, $x1)) && ($x1->vector->type || '') eq 'character'
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_logical {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'logical'
+    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+  
+  return $x_is;
+}
+
+sub is_data_frame {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+}
+
+sub is_array {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $is = ref $x1 eq 'Rstats::Array' && exists $x1->{dim};
+  
+  return Rstats::Func::new_logical($r, $is);
+}
+
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+
+sub copy_attrs_to {
+  my $r = shift;
+  
+  my ($x1, $x2, $opt) = @_;
+  
+  $opt ||= {};
+  my $new_indexes = $opt->{new_indexes};
+  my $exclude = $opt->{exclude} || [];
+  my %exclude_h = map { $_ => 1 } @$exclude;
+  
+  # dim
+  $x2->{dim} = $x1->{dim}->clone if !$exclude_h{dim} && exists $x1->{dim};
+  
+  # class
+  $x2->{class} =  $x1->{class}->clone if !$exclude_h{class} && exists $x1->{class};
+  
+  # levels
+  $x2->{levels} = $x1->{levels}->clone if !$exclude_h{levels} && exists $x1->{levels};
+  
+  # names
+  if (!$exclude_h{names} && exists $x1->{names}) {
+    my $x2_names_values = [];
+    my $index = Rstats::Func::is_data_frame($r, $x1) ? $new_indexes->[1] : $new_indexes->[0];
+    if (defined $index) {
+      my $x1_names_values = $x1->{names}->values;
+      for my $i (@{Rstats::Func::values($r, $index)}) {
+        push @$x2_names_values, $x1_names_values->[$i - 1];
+      }
+    }
+    else {
+      $x2_names_values = $x1->{names}->values;
+    }
+    $x2->{names} = Rstats::VectorFunc::new_character(@$x2_names_values);
+  }
+  
+  # dimnames
+  if (!$exclude_h{dimnames} && exists $x1->{dimnames}) {
+    my $new_dimnames = [];
+    my $dimnames = $x1->{dimnames};
+    my $length = @$dimnames;
+    for (my $i = 0; $i < $length; $i++) {
+      my $dimname = $dimnames->[$i];
+      if (defined $dimname && $dimname->length_value) {
+        my $index = $new_indexes->[$i];
+        my $dimname_values = $dimname->values;
+        my $new_dimname_values = [];
+        if (defined $index) {
+          for my $k (@{$index->values}) {
+            push @$new_dimname_values, $dimname_values->[$k - 1];
+          }
+        }
+        else {
+          $new_dimname_values = $dimname_values;
+        }
+        push @$new_dimnames, Rstats::VectorFunc::new_character(@$new_dimname_values);
+      }
+    }
+    $x2->{dimnames} = $new_dimnames;
+  }
+}
+
 sub I {
   my $r = shift;
   
@@ -3343,69 +3511,6 @@ sub decompose {
   }
 }
 
-my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
-
-sub copy_attrs_to {
-  my $r = shift;
-  
-  my ($x1, $x2, $opt) = @_;
-  
-  $opt ||= {};
-  my $new_indexes = $opt->{new_indexes};
-  my $exclude = $opt->{exclude} || [];
-  my %exclude_h = map { $_ => 1 } @$exclude;
-  
-  # dim
-  $x2->{dim} = $x1->{dim}->clone if !$exclude_h{dim} && exists $x1->{dim};
-  
-  # class
-  $x2->{class} =  $x1->{class}->clone if !$exclude_h{class} && exists $x1->{class};
-  
-  # levels
-  $x2->{levels} = $x1->{levels}->clone if !$exclude_h{levels} && exists $x1->{levels};
-  
-  # names
-  if (!$exclude_h{names} && exists $x1->{names}) {
-    my $x2_names_values = [];
-    my $index = Rstats::Func::is_data_frame($r, $x1) ? $new_indexes->[1] : $new_indexes->[0];
-    if (defined $index) {
-      my $x1_names_values = $x1->{names}->values;
-      for my $i (@{Rstats::Func::values($r, $index)}) {
-        push @$x2_names_values, $x1_names_values->[$i - 1];
-      }
-    }
-    else {
-      $x2_names_values = $x1->{names}->values;
-    }
-    $x2->{names} = Rstats::VectorFunc::new_character(@$x2_names_values);
-  }
-  
-  # dimnames
-  if (!$exclude_h{dimnames} && exists $x1->{dimnames}) {
-    my $new_dimnames = [];
-    my $dimnames = $x1->{dimnames};
-    my $length = @$dimnames;
-    for (my $i = 0; $i < $length; $i++) {
-      my $dimname = $dimnames->[$i];
-      if (defined $dimname && $dimname->length_value) {
-        my $index = $new_indexes->[$i];
-        my $dimname_values = $dimname->values;
-        my $new_dimname_values = [];
-        if (defined $index) {
-          for my $k (@{$index->values}) {
-            push @$new_dimname_values, $dimname_values->[$k - 1];
-          }
-        }
-        else {
-          $new_dimname_values = $dimname_values;
-        }
-        push @$new_dimnames, Rstats::VectorFunc::new_character(@$new_dimname_values);
-      }
-    }
-    $x2->{dimnames} = $new_dimnames;
-  }
-}
-
 sub _value_to_string {
   my $r = shift;
   
@@ -4075,110 +4180,6 @@ sub values {
     
     return $values;
   }
-}
-
-sub is_vector {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $is = ref $x1 eq 'Rstats::Array' && !exists $x1->{dim};
-  
-  return Rstats::Func::new_logical($r, $is);
-}
-
-sub is_matrix {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  my $x_is = ref $x1 eq 'Rstats::Array' && Rstats::Func::length_value($r, Rstats::Func::dim($r, $x1)) == 2
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_numeric {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && (($x1->vector->type || '') eq 'double' || ($x1->vector->type || '') eq 'integer')
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_double {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'double'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_integer {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'integer'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_complex {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'complex'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_character {
-  my $r = shift;
-  
-  my $x1 = shift;
-  my $x_is = (is_array($r, $x1) || is_vector($r, $x1)) && ($x1->vector->type || '') eq 'character'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_logical {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->vector->type || '') eq 'logical'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_data_frame {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
-sub is_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $is = ref $x1 eq 'Rstats::Array' && exists $x1->{dim};
-  
-  return Rstats::Func::new_logical($r, $is);
 }
 
 sub names {

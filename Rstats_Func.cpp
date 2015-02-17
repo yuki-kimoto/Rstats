@@ -1,5 +1,21 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::length_value(SV* sv_r, SV* sv_x1) {
+  SV* sv_length;
+  if (Rstats::pl_hv_exists(sv_x1, "vector")) {
+    Rstats::Vector* x1 = get_vector(sv_r, sv_x1);
+    IV length = Rstats::VectorFunc::get_length(x1);
+    sv_length = Rstats::pl_new_sv_iv(length);
+  }
+  else {
+    SV* sv_list = Rstats::pl_hv_fetch(sv_x1, "list");
+    IV length = Rstats::pl_av_len(sv_list);
+    sv_length = Rstats::pl_new_sv_iv(length);
+  }
+  
+  return sv_length;
+}
+
 SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
   
   bool is =

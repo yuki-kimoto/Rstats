@@ -259,14 +259,6 @@ use Rstats::Func;
 
 # clone
 {
-  # clone - matrix with value
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    my $x2 = r->clone($x1);
-    $x2->values([2 .. 25]);
-    is_deeply($x2->values, [2 .. 25]);
-  }
-  
   # clone - matrix
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);

@@ -20,6 +20,16 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub values {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $values = $x1->vector->values;
+  
+  return $values;
+}
+
 sub dim {
   my $r = shift;
   my $x1 = shift;
@@ -4138,21 +4148,6 @@ sub as_character {
   }
 
   return $x2;
-}
-
-sub values {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    $x1->vector(Rstats::Func::c($r, @{$_[0]})->vector);
-  }
-  else {
-    my $values = $x1->vector->values;
-    
-    return $values;
-  }
 }
 
 sub names {

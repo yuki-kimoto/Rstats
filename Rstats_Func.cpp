@@ -1,5 +1,13 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::values(SV* sv_r, SV* sv_x1) {
+  Rstats::Vector* x1 = get_vector(sv_r, sv_x1);
+  
+  SV* sv_values = Rstats::VectorFunc::get_values(x1);
+  
+  return sv_values;
+}
+
 SV* Rstats::Func::length_value(SV* sv_r, SV* sv_x1) {
   SV* sv_length;
   if (Rstats::pl_hv_exists(sv_x1, "vector")) {

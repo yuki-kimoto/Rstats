@@ -20,16 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub values {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $values = $x1->vector->values;
-  
-  return $values;
-}
-
 sub dim {
   my $r = shift;
   my $x1 = shift;

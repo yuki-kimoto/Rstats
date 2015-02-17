@@ -1,6 +1,6 @@
 #include "Rstats.h"
 
-SV* Rstats::Func::set_dim_(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
+SV* Rstats::Func::set_dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
   sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
   
   SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
@@ -21,16 +21,16 @@ SV* Rstats::Func::set_dim_(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
   }
   
   Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_vector(sv_r, sv_x_dim));
-  set_dim(sv_r, sv_x1, x_dim);
+  set_dim_vector(sv_r, sv_x1, x_dim);
   
   return sv_r;
 }
 
-SV* Rstats::Func::get_dim_(SV* sv_r, SV* sv_x1) {
+SV* Rstats::Func::get_dim(SV* sv_r, SV* sv_x1) {
   SV* sv_x_dim = Rstats::Func::new_null(sv_r);
   
   if (Rstats::pl_hv_exists(sv_x1, "dim")) {
-    Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_dim(sv_r, sv_x1));
+    Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_dim_vector(sv_r, sv_x1));
     set_vector(sv_r, sv_x_dim, x_dim);
   }
   
@@ -278,12 +278,12 @@ SV* Rstats::Func::new_true(SV* sv_r) {
   return sv_x1;
 }
 
-void Rstats::Func::set_dim(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
+void Rstats::Func::set_dim_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
   SV* sv_dim = Rstats::pl_to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
   Rstats::pl_hv_store(sv_a1, "dim", sv_dim);
 }
 
-Rstats::Vector* Rstats::Func::get_dim(SV* sv_r, SV* sv_a1) {
+Rstats::Vector* Rstats::Func::get_dim_vector(SV* sv_r, SV* sv_a1) {
   SV* sv_dim = Rstats::pl_hv_fetch(sv_a1, "dim");
   Rstats::Vector* dim = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_dim);
   return dim;

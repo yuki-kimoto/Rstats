@@ -20,295 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-
-sub sweep {
-  my $r = shift;
-  
-  my ($x1, $x_margin, $x2, $x_func)
-    = Rstats::Func::args_array($r, ['x1', 'margin', 'x2', 'FUN'], @_);
-  
-  my $x_margin_values = $x_margin->values;
-  my $func = defined $x_func ? $x_func->value : '-';
-  
-  my $x2_dim_values = Rstats::Func::dim($r, $x2)->values;
-  my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
-  
-  my $x1_length = Rstats::Func::length_value($r, $x1);
-  
-  my $x_result_elements = [];
-  for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
-    my $x1_index = Rstats::Util::pos_to_index($x1_pos, $x1_dim_values);
-    
-    my $new_index = [];
-    for my $x_margin_value (@$x_margin_values) {
-      push @$new_index, $x1_index->[$x_margin_value - 1];
-    }
-    
-    my $e1 = $x2->value(@{$new_index});
-    push @$x_result_elements, $e1;
-  }
-  my $x3 = Rstats::Func::c($r, @$x_result_elements);
-  
-  my $x4;
-  if ($func eq '+') {
-    $x4 = $x1 + $x3;
-  }
-  elsif ($func eq '-') {
-    $x4 = $x1 - $x3;
-  }
-  elsif ($func eq '*') {
-    $x4 = $x1 * $x3;
-  }
-  elsif ($func eq '/') {
-    $x4 = $x1 / $x3;
-  }
-  elsif ($func eq '**') {
-    $x4 = $x1 ** $x3;
-  }
-  elsif ($func eq '%') {
-    $x4 = $x1 % $x3;
-  }
-  
-  Rstats::Func::copy_attrs_to($r, $x1, $x4);
-  
-  return $x4;
-}
-  
-sub set_seed {
-  my ($r, $seed) = @_;
-  
-  $r->{seed} = $seed;
-}
-
-sub runif {
-  my $r = shift;
-
-  my ($x_count, $x_min, $x_max)
-    =  Rstats::Func::args_array($r, ['count', 'min', 'max'], @_);
-  
-  my $count = $x_count->value;
-  my $min = defined $x_min ? $x_min->value : 0;
-  my $max = defined $x_max ? $x_max->value : 1;
-  Carp::croak "runif third argument must be bigger than second argument"
-    if $min > $max;
-  
-  my $diff = $max - $min;
-  my @x1_elements;
-  if (defined $r->{seed}) {
-    srand $r->{seed};
-  }
-  
-  for (1 .. $count) {
-    my $rand = rand($diff) + $min;
-    push @x1_elements, $rand;
-  }
-  
-  $r->{seed} = undef;
-  
-  return Rstats::Func::c($r, @x1_elements);
-}
-
-sub apply {
-  my $r = shift;
-  
-  my $func_name = splice(@_, 2, 1);
-  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
-
-  my ($x1, $x_margin)
-    = Rstats::Func::args_array($r, ['x1', 'margin'], @_);
-
-  my $dim_values = Rstats::Func::dim($r, $x1)->values;
-  my $margin_values = $x_margin->values;
-  my $new_dim_values = [];
-  for my $i (@$margin_values) {
-    push @$new_dim_values, $dim_values->[$i - 1];
-  }
-  
-  my $x1_length = Rstats::Func::length_value($r, $x1);
-  my $new_elements_array = [];
-  for (my $i = 0; $i < $x1_length; $i++) {
-    my $index = Rstats::Util::pos_to_index($i, $dim_values);
-    my $e1 = $x1->value(@$index);
-    my $new_index = [];
-    for my $i (@$margin_values) {
-      push @$new_index, $index->[$i - 1];
-    }
-    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
-    $new_elements_array->[$new_pos] ||= [];
-    push @{$new_elements_array->[$new_pos]}, $e1;
-  }
-  
-  my $new_elements = [];
-  for my $element_array (@$new_elements_array) {
-    push @$new_elements, $func->($r, Rstats::Func::c($r, @$element_array));
-  }
-
-  my $x2 = Rstats::Func::NULL($r);
-  $x2->vector(Rstats::Func::c($r, @$new_elements)->vector);
-  Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
-  
-  if ($x2->{dim}->length_value == 1) {
-    delete $x2->{dim};
-  }
-  
-  return $x2;
-
-}
-  
-sub mapply {
-  my $r = shift;
-  
-  my $func_name = splice(@_, 0, 1);
-  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
-
-  my @xs = @_;
-  @xs = map { Rstats::Func::c($r, $_) } @xs;
-  
-  # Fix length
-  my @xs_length = map { Rstats::Func::length_value($r, $_) } @xs;
-  my $max_length = List::Util::max @xs_length;
-  for my $x (@xs) {
-    if (Rstats::Func::length_value($r, $x) < $max_length) {
-      $x = Rstats::Func::array($r, $x, $max_length);
-    }
-  }
-  
-  # Apply
-  my $new_xs = [];
-  for (my $i = 0; $i < $max_length; $i++) {
-    my @args = map { $_->value($i + 1) } @xs;
-    my $x = $func->($r, @args);
-    push @$new_xs, $x;
-  }
-  
-  if (@$new_xs == 1) {
-    return $new_xs->[0];
-  }
-  else {
-    return Rstats::Func::list($r, @$new_xs);
-  }
-}
-  
-sub tapply {
-  my $r = shift;
-  
-  my $func_name = splice(@_, 2, 1);
-  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
-
-  my ($x1, $x2)
-    = Rstats::Func::args_array($r, ['x1', 'x2'], @_);
-  
-  my $new_values = [];
-  my $x1_values = $x1->values;
-  my $x2_values = $x2->values;
-  
-  # Group values
-  for (my $i = 0; $i < Rstats::Func::length_value($r, $x1); $i++) {
-    my $x1_value = $x1_values->[$i];
-    my $index = $x2_values->[$i];
-    $new_values->[$index] ||= [];
-    push @{$new_values->[$index]}, $x1_value;
-  }
-  
-  # Apply
-  my $new_values2 = [];
-  for (my $i = 1; $i < @$new_values; $i++) {
-    my $x = $func->($r, Rstats::Func::c($r, @{$new_values->[$i]}));
-    push @$new_values2, $x;
-  }
-  
-  my $x4_length = @$new_values2;
-  my $x4 = Rstats::Func::array($r, Rstats::Func::c($r, @$new_values2), $x4_length);
-  Rstats::Func::names($r, $x4, Rstats::Func::levels($r, $x2));
-  
-  return $x4;
-}
-
-sub lapply {
-  my $r = shift;
-  
-  my $func_name = splice(@_, 1, 1);
-  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
-
-  my ($x1) = Rstats::Func::args_array($r, ['x1'], @_);
-  
-  my $new_elements = [];
-  for my $element (@{$x1->list}) {
-    push @$new_elements, $func->($r, $element);
-  }
-  
-  my $x2 = Rstats::Func::list($r, @$new_elements);
-  Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  
-  return $x2;
-}
-  
-sub sapply {
-  my $r = shift;
-  my $x1 = $r->lapply(@_);
-  
-  my $x2 = Rstats::Func::c($r, @{$x1->list});
-  
-  return $x2;
-}
-
-sub to_string {
-  my ($r, $x1) = @_;
-  
-  if (ref $x1 eq 'Rstats::Array') {
-    return Rstats::Func::to_string_array(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::List') {
-    return Rstats::Func::to_string_list(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
-    return Rstats::Func::to_string_dataframe(@_);
-  }
-  else {
-    croak "Not implemented";
-  }
-}
-
-sub get {
-  my ($r, $x1) = @_;
-  
-  if (ref $x1 eq 'Rstats::Array') {
-    return Rstats::Func::get_array(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::List') {
-    return Rstats::Func::get_list(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
-    return Rstats::Func::get_dataframe(@_);
-  }
-  else {
-    croak "Not implemented";
-  }
-}
-
-sub getin {
-  my ($r, $x1) = @_;
-  
-  if (ref $x1 eq 'Rstats::Array') {
-    return Rstats::Func::getin_array(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::List') {
-    return Rstats::Func::getin_list(@_);
-  }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
-    return Rstats::Func::getin_dataframe(@_);
-  }
-  else {
-    croak "Not implemented";
-  }
-}
-
-sub pi {
-  my $r = shift;
-  return new_double($r, Rstats::Util::pi());
-}
-
 sub I {
   my $r = shift;
   
@@ -4830,6 +4541,289 @@ sub to_string_dataframe {
   }
   
   return "$t";
+}
+
+sub sweep {
+  my $r = shift;
+  
+  my ($x1, $x_margin, $x2, $x_func)
+    = Rstats::Func::args_array($r, ['x1', 'margin', 'x2', 'FUN'], @_);
+  
+  my $x_margin_values = $x_margin->values;
+  my $func = defined $x_func ? $x_func->value : '-';
+  
+  my $x2_dim_values = Rstats::Func::dim($r, $x2)->values;
+  my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
+  
+  my $x1_length = Rstats::Func::length_value($r, $x1);
+  
+  my $x_result_elements = [];
+  for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
+    my $x1_index = Rstats::Util::pos_to_index($x1_pos, $x1_dim_values);
+    
+    my $new_index = [];
+    for my $x_margin_value (@$x_margin_values) {
+      push @$new_index, $x1_index->[$x_margin_value - 1];
+    }
+    
+    my $e1 = $x2->value(@{$new_index});
+    push @$x_result_elements, $e1;
+  }
+  my $x3 = Rstats::Func::c($r, @$x_result_elements);
+  
+  my $x4;
+  if ($func eq '+') {
+    $x4 = $x1 + $x3;
+  }
+  elsif ($func eq '-') {
+    $x4 = $x1 - $x3;
+  }
+  elsif ($func eq '*') {
+    $x4 = $x1 * $x3;
+  }
+  elsif ($func eq '/') {
+    $x4 = $x1 / $x3;
+  }
+  elsif ($func eq '**') {
+    $x4 = $x1 ** $x3;
+  }
+  elsif ($func eq '%') {
+    $x4 = $x1 % $x3;
+  }
+  
+  Rstats::Func::copy_attrs_to($r, $x1, $x4);
+  
+  return $x4;
+}
+
+sub set_seed {
+  my ($r, $seed) = @_;
+  
+  $r->{seed} = $seed;
+}
+
+sub runif {
+  my $r = shift;
+
+  my ($x_count, $x_min, $x_max)
+    =  Rstats::Func::args_array($r, ['count', 'min', 'max'], @_);
+  
+  my $count = $x_count->value;
+  my $min = defined $x_min ? $x_min->value : 0;
+  my $max = defined $x_max ? $x_max->value : 1;
+  Carp::croak "runif third argument must be bigger than second argument"
+    if $min > $max;
+  
+  my $diff = $max - $min;
+  my @x1_elements;
+  if (defined $r->{seed}) {
+    srand $r->{seed};
+  }
+  
+  for (1 .. $count) {
+    my $rand = rand($diff) + $min;
+    push @x1_elements, $rand;
+  }
+  
+  $r->{seed} = undef;
+  
+  return Rstats::Func::c($r, @x1_elements);
+}
+
+sub apply {
+  my $r = shift;
+  
+  my $func_name = splice(@_, 2, 1);
+  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
+
+  my ($x1, $x_margin)
+    = Rstats::Func::args_array($r, ['x1', 'margin'], @_);
+
+  my $dim_values = Rstats::Func::dim($r, $x1)->values;
+  my $margin_values = $x_margin->values;
+  my $new_dim_values = [];
+  for my $i (@$margin_values) {
+    push @$new_dim_values, $dim_values->[$i - 1];
+  }
+  
+  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $new_elements_array = [];
+  for (my $i = 0; $i < $x1_length; $i++) {
+    my $index = Rstats::Util::pos_to_index($i, $dim_values);
+    my $e1 = $x1->value(@$index);
+    my $new_index = [];
+    for my $i (@$margin_values) {
+      push @$new_index, $index->[$i - 1];
+    }
+    my $new_pos = Rstats::Util::index_to_pos($new_index, $new_dim_values);
+    $new_elements_array->[$new_pos] ||= [];
+    push @{$new_elements_array->[$new_pos]}, $e1;
+  }
+  
+  my $new_elements = [];
+  for my $element_array (@$new_elements_array) {
+    push @$new_elements, $func->($r, Rstats::Func::c($r, @$element_array));
+  }
+
+  my $x2 = Rstats::Func::NULL($r);
+  $x2->vector(Rstats::Func::c($r, @$new_elements)->vector);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
+  
+  if ($x2->{dim}->length_value == 1) {
+    delete $x2->{dim};
+  }
+  
+  return $x2;
+
+}
+  
+sub mapply {
+  my $r = shift;
+  
+  my $func_name = splice(@_, 0, 1);
+  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
+
+  my @xs = @_;
+  @xs = map { Rstats::Func::c($r, $_) } @xs;
+  
+  # Fix length
+  my @xs_length = map { Rstats::Func::length_value($r, $_) } @xs;
+  my $max_length = List::Util::max @xs_length;
+  for my $x (@xs) {
+    if (Rstats::Func::length_value($r, $x) < $max_length) {
+      $x = Rstats::Func::array($r, $x, $max_length);
+    }
+  }
+  
+  # Apply
+  my $new_xs = [];
+  for (my $i = 0; $i < $max_length; $i++) {
+    my @args = map { $_->value($i + 1) } @xs;
+    my $x = $func->($r, @args);
+    push @$new_xs, $x;
+  }
+  
+  if (@$new_xs == 1) {
+    return $new_xs->[0];
+  }
+  else {
+    return Rstats::Func::list($r, @$new_xs);
+  }
+}
+  
+sub tapply {
+  my $r = shift;
+  
+  my $func_name = splice(@_, 2, 1);
+  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
+
+  my ($x1, $x2)
+    = Rstats::Func::args_array($r, ['x1', 'x2'], @_);
+  
+  my $new_values = [];
+  my $x1_values = $x1->values;
+  my $x2_values = $x2->values;
+  
+  # Group values
+  for (my $i = 0; $i < Rstats::Func::length_value($r, $x1); $i++) {
+    my $x1_value = $x1_values->[$i];
+    my $index = $x2_values->[$i];
+    $new_values->[$index] ||= [];
+    push @{$new_values->[$index]}, $x1_value;
+  }
+  
+  # Apply
+  my $new_values2 = [];
+  for (my $i = 1; $i < @$new_values; $i++) {
+    my $x = $func->($r, Rstats::Func::c($r, @{$new_values->[$i]}));
+    push @$new_values2, $x;
+  }
+  
+  my $x4_length = @$new_values2;
+  my $x4 = Rstats::Func::array($r, Rstats::Func::c($r, @$new_values2), $x4_length);
+  Rstats::Func::names($r, $x4, Rstats::Func::levels($r, $x2));
+  
+  return $x4;
+}
+
+sub lapply {
+  my $r = shift;
+  
+  my $func_name = splice(@_, 1, 1);
+  my $func = ref $func_name ? $func_name : $r->helpers->{$func_name};
+
+  my ($x1) = Rstats::Func::args_array($r, ['x1'], @_);
+  
+  my $new_elements = [];
+  for my $element (@{$x1->list}) {
+    push @$new_elements, $func->($r, $element);
+  }
+  
+  my $x2 = Rstats::Func::list($r, @$new_elements);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  
+  return $x2;
+}
+  
+sub sapply {
+  my $r = shift;
+  my $x1 = $r->lapply(@_);
+  
+  my $x2 = Rstats::Func::c($r, @{$x1->list});
+  
+  return $x2;
+}
+
+sub to_string {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::Func::to_string_array(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::Func::to_string_list(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::Func::to_string_dataframe(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
+sub get {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::Func::get_array(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::Func::get_list(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::Func::get_dataframe(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
+}
+
+sub getin {
+  my ($r, $x1) = @_;
+  
+  if (ref $x1 eq 'Rstats::Array') {
+    return Rstats::Func::getin_array(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::List') {
+    return Rstats::Func::getin_list(@_);
+  }
+  elsif (ref $x1 eq 'Rstats::DataFrame') {
+    return Rstats::Func::getin_dataframe(@_);
+  }
+  else {
+    croak "Not implemented";
+  }
 }
 
 1;

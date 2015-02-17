@@ -1,5 +1,14 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::pi (SV* sv_r) {
+  SV* sv_values = Rstats::pl_new_av_ref();
+  NV pi = Rstats::Util::pi();
+  SV* sv_pi = Rstats::pl_new_sv_nv(pi);
+  Rstats::pl_av_push(sv_values, sv_pi);
+  
+  return new_double(sv_r, sv_values);
+}
+
 SV* Rstats::Func::new_array(SV* sv_r) {
   
   SV* sv_array = Rstats::pl_new_hv_ref();

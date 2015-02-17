@@ -1321,6 +1321,15 @@ index_to_pos(...)
 
 MODULE = Rstats::Func PACKAGE = Rstats::Func
 
+SV* pi(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::Func::pi(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 SV* NULL(...)
   PPCODE:
 {

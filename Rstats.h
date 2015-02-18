@@ -785,15 +785,10 @@ namespace Rstats {
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
     SV* new_character(SV*, SV*);
-    SV* new_character(SV*);
     SV* new_double(SV*, SV*);
-    SV* new_double(SV*);
     SV* new_complex(SV*, SV*);
-    SV* new_complex(SV*);
     SV* new_integer(SV*, SV*);
-    SV* new_integer(SV*);
     SV* new_logical(SV*, SV*);
-    SV* new_logical(SV*);
     SV* pi(SV*);
     SV* is_vector(SV*, SV*);
     SV* length_value(SV*, SV*);

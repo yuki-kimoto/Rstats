@@ -137,15 +137,6 @@ SV* Rstats::Func::new_character(SV* sv_r, SV* sv_values) {
   }
   
   set_vector(sv_r, sv_x1, v1);
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("character"));
-  
-  return sv_x1;
-}
-
-SV* Rstats::Func::new_character(SV* sv_r) {
-  SV* sv_x1 = new_null(sv_r);
-  
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("character"));
   
   return sv_x1;
 }
@@ -171,15 +162,6 @@ SV* Rstats::Func::new_double(SV* sv_r, SV* sv_values) {
   }
   
   set_vector(sv_r, sv_x1, v1);
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("double"));
-  
-  return sv_x1;
-}
-
-SV* Rstats::Func::new_double(SV* sv_r) {
-  SV* sv_x1 = new_null(sv_r);
-
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("double"));
   
   return sv_x1;
 }
@@ -210,15 +192,6 @@ SV* Rstats::Func::new_complex(SV* sv_r, SV* sv_values) {
   }
   
   set_vector(sv_r, sv_x1, v1);
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("complex"));
-  
-  return sv_x1;
-}
-
-SV* Rstats::Func::new_complex(SV* sv_r) {
-  SV* sv_x1 = new_null(sv_r);
-  
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("complex"));
   
   return sv_x1;
 }
@@ -244,15 +217,6 @@ SV* Rstats::Func::new_integer(SV* sv_r, SV* sv_values) {
   }
   
   set_vector(sv_r, sv_x1, v1);
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("integer"));
-  
-  return sv_x1;
-}
-
-SV* Rstats::Func::new_integer(SV* sv_r) {
-  SV* sv_x1 = new_null(sv_r);
-
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("integer"));
   
   return sv_x1;
 }
@@ -278,15 +242,6 @@ SV* Rstats::Func::new_logical(SV* sv_r, SV* sv_values) {
   }
   
   set_vector(sv_r, sv_x1, v1);
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("logical"));
-  
-  return sv_x1;
-}
-
-SV* Rstats::Func::new_logical(SV* sv_r) {
-  SV* sv_x1 = new_array(sv_r);
-
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("logical"));
   
   return sv_x1;
 }
@@ -305,7 +260,6 @@ Rstats::Vector* Rstats::Func::get_vector(SV* sv_r, SV* sv_a1) {
 SV* Rstats::Func::new_null(SV* sv_r) {
   
   SV* sv_x1 = Rstats::Func::new_array(sv_r);;
-  Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("logical"));
   set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
   
   return sv_x1;
@@ -502,23 +456,7 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
   }
   
   // Array
-  SV* sv_x1;
-  if (type == Rstats::VectorType::CHARACTER) {
-    sv_x1 = Rstats::Func::new_character(sv_r);
-  }
-  else if (type == Rstats::VectorType::COMPLEX) {
-    sv_x1 = Rstats::Func::new_complex(sv_r);
-  }
-  else if (type == Rstats::VectorType::DOUBLE) {
-    sv_x1 = Rstats::Func::new_double(sv_r);
-  }
-  else if (type == Rstats::VectorType::INTEGER) {
-    sv_x1 = Rstats::Func::new_integer(sv_r);
-  }
-  else if (type == Rstats::VectorType::LOGICAL) {
-    sv_x1 = Rstats::Func::new_logical(sv_r);
-  }
-  
+  SV* sv_x1 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x1, v2);
 
   return sv_x1;

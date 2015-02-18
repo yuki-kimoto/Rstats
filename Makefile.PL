@@ -13,9 +13,13 @@ if ($Config{gccversion} =~ /clang/i) {
   $cc = 'clang++';
   $ld = 'clang++';
 }
-else {
+elsif ($Config{gccversion}) {
   $cc = 'g++';
   $ld = 'g++';
+}
+elsif ($Config{archname} =~ /solaris/i) {
+  $cc = 'CC';
+  $ld = 'CC';
 }
 
 WriteMakefile(

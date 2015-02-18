@@ -3219,8 +3219,6 @@ sub get_array {
     Rstats::Func::c($r, @$x2_dim)
   );
   
-  $DB::single = 1;
-  
   # Copy attributes
   Rstats::Func::copy_attrs_to($r, $x1, $x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
@@ -3807,7 +3805,7 @@ sub typeof {
   my $x1 = shift;
   
   if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
-    my $type = $x1->vector->type;
+    my $type = $x1->type;
     return Rstats::Func::new_character($r, $type);
   }
   elsif (is_list($r, $x1)) {
@@ -3822,7 +3820,7 @@ sub type {
   my $r = shift;
   my $x1 = shift;
   
-  return $x1->vector->type;
+  return $x1->{type};
 }
 
 sub is_factor {
@@ -3976,7 +3974,7 @@ sub as_complex {
   }
 
   my $x2;
-  $x2 = Rstats::Func::new_array($r);
+  $x2 = Rstats::Func::new_complex($r);
   $x2->vector($x_tmp->vector->as_complex);
   Rstats::Func::copy_attrs_to($r, $x_tmp, $x2);
 
@@ -3996,11 +3994,11 @@ sub as_double {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_double($r);
     $x2->vector($x1->vector->as_double);
   }
   else {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_double($r);
     $x2->vector($x1->vector->as_double);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
@@ -4015,11 +4013,11 @@ sub as_integer {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_integer($r);
     $x2->vector($x1->vector->as_integer);
   }
   else {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_integer($r);
     $x2->vector($x1->vector->as_integer);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
@@ -4034,11 +4032,11 @@ sub as_logical {
   
   my $x2;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_logical($r);
     $x2->vector($x1->vector->as_logical);
   }
   else {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_logical($r);
     $x2->vector($x1->vector->as_logical);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
@@ -4083,7 +4081,7 @@ sub as_character {
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
   else {
-    $x2 = Rstats::Func::new_array($r);
+    $x2 = Rstats::Func::new_character($r);
     $x2->vector($x1->vector->as_character);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
@@ -4253,7 +4251,6 @@ sub get_list {
     push @$list_elements, $elements->[$i - 1];
   }
   
-  $DB::single = 1;
   Rstats::Func::copy_attrs_to(
     $r, $x1, $list, {new_indexes => [Rstats::Func::c($r, @$index_values)]}
   );

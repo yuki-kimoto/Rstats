@@ -1,5 +1,16 @@
 #include "Rstats.h"
 
+SV* Rstats::Func::is_matrix(SV* sv_r, SV* sv_x1) {
+
+  bool is = sv_isobject(sv_x1)
+    && sv_derived_from(sv_x1, "Rstats::Array")
+    && SvIV(length_value(sv_r, get_dim(sv_r, sv_x1))) == 2;
+  
+  SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+  
+  return sv_is;
+}
+
 SV* Rstats::Func::set_dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
   sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
   

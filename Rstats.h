@@ -795,6 +795,7 @@ namespace Rstats {
     SV* values(SV*, SV*);
     SV* set_dim(SV*, SV*, SV*);
     SV* get_dim(SV*, SV*);
+    SV* is_matrix(SV*, SV*);
   }
 }
 

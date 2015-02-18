@@ -20,17 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub is_matrix {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  my $x_is = ref $x1 eq 'Rstats::Array' && Rstats::Func::length_value($r, Rstats::Func::dim($r, $x1)) == 2
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
 sub is_numeric {
   my $r = shift;
   

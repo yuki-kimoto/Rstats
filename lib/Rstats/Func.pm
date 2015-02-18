@@ -93,16 +93,6 @@ sub is_data_frame {
   return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
 }
 
-sub is_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $is = ref $x1 eq 'Rstats::Array' && exists $x1->{dim};
-  
-  return Rstats::Func::new_logical($r, $is);
-}
-
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 sub copy_attrs_to {

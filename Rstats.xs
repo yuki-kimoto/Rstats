@@ -199,8 +199,7 @@ SV* length(...)
   return_sv(sv_length_elements);
 }
 
-SV*
-is_na(...)
+SV* is_na(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -222,8 +221,7 @@ is_na(...)
   return_sv(sv_rets);
 }
 
-SV*
-compose(...)
+SV* compose(...)
   PPCODE:
 {
   SV* sv_mode = ST(1);
@@ -343,8 +341,7 @@ compose(...)
   return_sv(sv_compose_elements);
 }
 
-SV*
-decompose(...)
+SV* decompose(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -417,8 +414,7 @@ decompose(...)
   return_sv(sv_decompose_elements);
 }
 
-SV*
-is_finite(...)
+SV* is_finite(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -430,8 +426,7 @@ is_finite(...)
   return_sv(sv_rets);
 }
 
-SV*
-clone(...)
+SV* clone(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -443,8 +438,7 @@ clone(...)
   return_sv(sv_e2);
 }
 
-SV*
-is_infinite(...)
+SV* is_infinite(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -456,8 +450,7 @@ is_infinite(...)
   return_sv(sv_rets);
 }
 
-SV*
-is_nan(...)
+SV* is_nan(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -469,8 +462,7 @@ is_nan(...)
   return_sv(sv_rets);
 }
 
-SV*
-type(...)
+SV* type(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -496,8 +488,7 @@ type(...)
   return_sv(sv_type);
 }
 
-SV*
-flag(...)
+SV* flag(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -527,8 +518,7 @@ flag(...)
   return_sv(sv_flag);
 }
 
-SV*
-DESTROY(...)
+SV* DESTROY(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -538,8 +528,7 @@ DESTROY(...)
 
 MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
 
-SV*
-negation(...)
+SV* negation(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -548,8 +537,7 @@ negation(...)
   return_sv(sv_e2);
 }
 
-SV*
-remainder(...)
+SV* remainder(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -559,8 +547,7 @@ remainder(...)
   return_sv(sv_e3);
 }
 
-SV*
-and(...)
+SV* and(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -570,8 +557,7 @@ and(...)
   return_sv(sv_e3);
 }
 
-SV*
-or(...)
+SV* or(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -608,8 +594,7 @@ SV* Im(...)
   return_sv(sv_e2);
 }
 
-SV*
-less_than_or_equal(...)
+SV* less_than_or_equal(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -619,8 +604,7 @@ less_than_or_equal(...)
   return_sv(sv_e3);
 }
 
-SV*
-more_than_or_equal(...)
+SV* more_than_or_equal(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -630,8 +614,7 @@ more_than_or_equal(...)
   return_sv(sv_e3);
 }
 
-SV*
-less_than(...)
+SV* less_than(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -641,8 +624,7 @@ less_than(...)
   return_sv(sv_e3);
 }
 
-SV*
-more_than(...)
+SV* more_than(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -652,8 +634,7 @@ more_than(...)
   return_sv(sv_e3);
 }
 
-SV*
-not_equal(...)
+SV* not_equal(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -663,8 +644,7 @@ not_equal(...)
   return_sv(sv_e3);
 }
 
-SV*
-equal(...)
+SV* equal(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -674,8 +654,7 @@ equal(...)
   return_sv(sv_e3);
 }
 
-SV*
-sum(...)
+SV* sum(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -684,8 +663,7 @@ sum(...)
   return_sv(sv_e2);
 }
 
-SV*
-prod(...)
+SV* prod(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -694,8 +672,7 @@ prod(...)
   return_sv(sv_e2);
 }
 
-SV*
-cumsum(...)
+SV* cumsum(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -704,8 +681,7 @@ cumsum(...)
   return_sv(sv_e2);
 }
 
-SV*
-cumprod(...)
+SV* cumprod(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -714,8 +690,7 @@ cumprod(...)
   return_sv(sv_e2);
 }
 
-SV*
-add(...)
+SV* add(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -725,8 +700,7 @@ add(...)
   return_sv(sv_e3);
 }
 
-SV*
-atan2(...)
+SV* atan2(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -736,8 +710,7 @@ atan2(...)
   return_sv(sv_e3);
 }
 
-SV*
-subtract(...)
+SV* subtract(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -747,8 +720,7 @@ subtract(...)
   return_sv(sv_e3);
 }
 
-SV*
-multiply(...)
+SV* multiply(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -758,8 +730,7 @@ multiply(...)
   return_sv(sv_e3);
 }
 
-SV*
-divide(...)
+SV* divide(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -769,8 +740,7 @@ divide(...)
   return_sv(sv_e3);
 }
 
-SV*
-pow(...)
+SV* pow(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -780,8 +750,7 @@ pow(...)
   return_sv(sv_e3);
 }
 
-SV*
-sqrt(...)
+SV* sqrt(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -790,8 +759,7 @@ sqrt(...)
   return_sv(sv_e2);
 }
 
-SV*
-sin(...)
+SV* sin(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -800,8 +768,7 @@ sin(...)
   return_sv(sv_e2);
 }
 
-SV*
-asinh(...)
+SV* asinh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -810,8 +777,7 @@ asinh(...)
   return_sv(sv_e2);
 }
 
-SV*
-acosh(...)
+SV* acosh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -820,8 +786,7 @@ acosh(...)
   return_sv(sv_e2);
 }
 
-SV*
-atanh(...)
+SV* atanh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -830,8 +795,7 @@ atanh(...)
   return_sv(sv_e2);
 }
 
-SV*
-asin(...)
+SV* asin(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -840,8 +804,7 @@ asin(...)
   return_sv(sv_e2);
 }
 
-SV*
-acos(...)
+SV* acos(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -850,8 +813,7 @@ acos(...)
   return_sv(sv_e2);
 }
 
-SV*
-atan(...)
+SV* atan(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -860,8 +822,7 @@ atan(...)
   return_sv(sv_e2);
 }
 
-SV*
-cos(...)
+SV* cos(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -870,8 +831,7 @@ cos(...)
   return_sv(sv_e2);
 }
 
-SV*
-tan(...)
+SV* tan(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -880,8 +840,7 @@ tan(...)
   return_sv(sv_e2);
 }
 
-SV*
-sinh(...)
+SV* sinh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -890,8 +849,7 @@ sinh(...)
   return_sv(sv_e2);
 }
 
-SV*
-cosh(...)
+SV* cosh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -900,8 +858,7 @@ cosh(...)
   return_sv(sv_e2);
 }
 
-SV*
-tanh(...)
+SV* tanh(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -910,8 +867,7 @@ tanh(...)
   return_sv(sv_e2);
 }
 
-SV*
-abs(...)
+SV* abs(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -920,8 +876,7 @@ abs(...)
   return_sv(sv_e2);
 }
 
-SV*
-log(...)
+SV* log(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -930,8 +885,7 @@ log(...)
   return_sv(sv_e2);
 }
 
-SV*
-logb(...)
+SV* logb(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -940,8 +894,7 @@ logb(...)
   return_sv(sv_e2);
 }
 
-SV*
-log10(...)
+SV* log10(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -950,8 +903,7 @@ log10(...)
   return_sv(sv_e2);
 }
 
-SV*
-log2(...)
+SV* log2(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -960,8 +912,7 @@ log2(...)
   return_sv(sv_e2);
 }
 
-SV*
-Arg(...)
+SV* Arg(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -970,8 +921,7 @@ Arg(...)
   return_sv(sv_e2);
 }
 
-SV*
-Mod(...)
+SV* Mod(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -980,8 +930,7 @@ Mod(...)
   return_sv(sv_e2);
 }
 
-SV*
-exp(...)
+SV* exp(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -990,8 +939,7 @@ exp(...)
   return_sv(sv_e2);
 }
 
-SV*
-expm1(...)
+SV* expm1(...)
   PPCODE:
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -1000,8 +948,7 @@ expm1(...)
   return_sv(sv_e2);
 }
 
-SV*
-complex_double (...)
+SV* complex_double (...)
   PPCODE:
 {
   Rstats::Vector* re = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
@@ -1014,8 +961,7 @@ complex_double (...)
   return_sv(sv_z);
 }
 
-SV*
-new_negative_inf(...)
+SV* new_negative_inf(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_negative_inf();
@@ -1023,8 +969,7 @@ new_negative_inf(...)
   return_sv(sv_element);
 }
 
-SV*
-new_inf(...)
+SV* new_inf(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_inf();
@@ -1032,8 +977,7 @@ new_inf(...)
   return_sv(sv_element);
 }
 
-SV*
-new_nan(...)
+SV* new_nan(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_nan();
@@ -1041,8 +985,7 @@ new_nan(...)
   return_sv(sv_element);
 }
 
-SV*
-new_na(...)
+SV* new_na(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_na();
@@ -1050,8 +993,7 @@ new_na(...)
   return_sv(sv_element);
 }
 
-SV*
-new_null(...)
+SV* new_null(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_null();
@@ -1059,8 +1001,7 @@ new_null(...)
   return_sv(sv_element);
 }
 
-SV*
-new_character(...)
+SV* new_character(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_character(items);
@@ -1078,8 +1019,7 @@ new_character(...)
   return_sv(sv_element);
 }
 
-SV*
-new_complex(...)
+SV* new_complex(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_complex(items);
@@ -1141,8 +1081,7 @@ new_complex(...)
   return_sv(sv_element);
 }
 
-SV*
-new_logical(...)
+SV* new_logical(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_logical(items);
@@ -1160,8 +1099,7 @@ new_logical(...)
   return_sv(sv_element);
 }
 
-SV*
-new_true(...)
+SV* new_true(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_true();
@@ -1169,8 +1107,7 @@ new_true(...)
   return_sv(sv_element);
 }
 
-SV*
-new_false(...)
+SV* new_false(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_false();
@@ -1178,8 +1115,7 @@ new_false(...)
   return_sv(sv_element);
 }
 
-SV*
-new_double(...)
+SV* new_double(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_double(items);
@@ -1209,8 +1145,7 @@ new_double(...)
   return_sv(sv_element);
 }
 
-SV*
-new_integer(...)
+SV* new_integer(...)
   PPCODE:
 {
   Rstats::Vector* element = Rstats::VectorFunc::new_integer(items);
@@ -1230,8 +1165,7 @@ new_integer(...)
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
-SV*
-pi(...)
+SV* pi(...)
   PPCODE:
 {
   NV pi = Rstats::Util::pi();
@@ -1240,8 +1174,7 @@ pi(...)
   return_sv(sv_pi);
 }
 
-SV*
-is_perl_number(...)
+SV* is_perl_number(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1250,8 +1183,7 @@ is_perl_number(...)
   return_sv(sv_ret);
 }
 
-SV*
-looks_like_integer(...)
+SV* looks_like_integer(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1259,8 +1191,7 @@ looks_like_integer(...)
   return_sv(sv_ret);
 }
 
-SV*
-looks_like_double(...)
+SV* looks_like_double(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1268,8 +1199,7 @@ looks_like_double(...)
   return_sv(sv_ret);
 }
 
-SV*
-looks_like_na(...)
+SV* looks_like_na(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1277,8 +1207,7 @@ looks_like_na(...)
   return_sv(sv_ret);
 }
 
-SV*
-looks_like_logical(...)
+SV* looks_like_logical(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1286,8 +1215,7 @@ looks_like_logical(...)
   return_sv(sv_ret);
 }
 
-SV*
-looks_like_complex(...)
+SV* looks_like_complex(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
@@ -1295,24 +1223,21 @@ looks_like_complex(...)
   return_sv(sv_ret);
 }
 
-SV*
-cross_product(...)
+SV* cross_product(...)
   PPCODE:
 {
   SV* sv_ret = Rstats::Util::cross_product(ST(0));
   return_sv(sv_ret);
 }
 
-SV*
-pos_to_index(...)
+SV* pos_to_index(...)
   PPCODE:
 {
   SV* sv_ret = Rstats::Util::pos_to_index(ST(0), ST(1));
   return_sv(sv_ret);
 }
 
-SV*
-index_to_pos(...)
+SV* index_to_pos(...)
   PPCODE:
 {
   SV* sv_ret = Rstats::Util::index_to_pos(ST(0), ST(1));

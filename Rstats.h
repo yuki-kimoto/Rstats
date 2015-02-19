@@ -797,6 +797,9 @@ namespace Rstats {
     SV* get_dim(SV*, SV*);
     SV* is_matrix(SV*, SV*);
     SV* is_array(SV*, SV*);
+    SV* is_numeric(SV*, SV*);
+    SV* type(SV*, SV*);
+    IV to_bool(SV*, SV*);
   }
 }
 

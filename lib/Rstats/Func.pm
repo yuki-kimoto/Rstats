@@ -20,16 +20,7 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub is_numeric {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && (($x1->type || '') eq 'double' || ($x1->type || '') eq 'integer')
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
+
 
 sub is_double {
   my $r = shift;
@@ -91,6 +82,30 @@ sub is_data_frame {
   my $x1 = shift;
   
   return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+}
+
+sub is_factor {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $classes = $x1->class->values;
+  
+  my $is = grep { $_ eq 'factor' } @$classes;
+  
+  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+}
+
+sub is_ordered {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $classes = $x1->class->values;
+
+  my $is = grep { $_ eq 'ordered' } @$classes;
+  
+  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
 }
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
@@ -3816,37 +3831,6 @@ sub typeof {
   else {
     return Rstats::Func::NA($r);
   }
-}
-
-sub type {
-  my $r = shift;
-  my $x1 = shift;
-  
-  return $x1->vector->type;
-}
-
-sub is_factor {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $classes = $x1->class->values;
-  
-  my $is = grep { $_ eq 'factor' } @$classes;
-  
-  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
-sub is_ordered {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $classes = $x1->class->values;
-
-  my $is = grep { $_ eq 'ordered' } @$classes;
-  
-  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
 }
 
 sub as_factor {

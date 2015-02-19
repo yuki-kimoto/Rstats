@@ -1,16 +1,5 @@
 #include "Rstats.h"
 
-SV* Rstats::Func::is_array(SV* sv_r, SV* sv_x1) {
-
-  bool is = sv_isobject(sv_x1)
-    && sv_derived_from(sv_x1, "Rstats::Array")
-    && Rstats::pl_hv_exists(sv_x1, "dim");
-  
-  SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
-  
-  return sv_is;
-}
-
 SV* Rstats::Func::is_matrix(SV* sv_r, SV* sv_x1) {
 
   bool is = sv_isobject(sv_x1)
@@ -83,6 +72,43 @@ SV* Rstats::Func::length_value(SV* sv_r, SV* sv_x1) {
   return sv_length;
 }
 
+SV* Rstats::Func::type(SV* sv_r, SV* sv_x1) {
+  
+  Rstats::VectorType::Enum type = get_vector(sv_r, sv_x1)->type;
+  
+  SV* sv_type;
+  if (type == Rstats::VectorType::CHARACTER) {
+    sv_type = Rstats::pl_new_sv_pv("character");
+  }
+  else if (type == Rstats::VectorType::COMPLEX) {
+    sv_type = Rstats::pl_new_sv_pv("complex");
+  }
+  else if (type == Rstats::VectorType::DOUBLE) {
+    sv_type = Rstats::pl_new_sv_pv("double");
+  }
+  else if (type == Rstats::VectorType::INTEGER) {
+    sv_type = Rstats::pl_new_sv_pv("integer");
+  }
+  else if (type == Rstats::VectorType::LOGICAL) {
+    sv_type = Rstats::pl_new_sv_pv("logical");
+  }
+  else {
+    croak("Invalid type(Rstats::Func::type)"); 
+  }
+  
+  return sv_type;
+}
+
+SV* Rstats::Func::is_numeric(SV* sv_r, SV* sv_x1) {
+  
+  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
+    && (strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double") || strEQ(SvPV_nolen(type(sv_r, sv_x1)), "integer"));
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}
+
 SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
   
   bool is =
@@ -96,6 +122,29 @@ SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
   Rstats::pl_av_push(sv_values, sv_is);
   
   return Rstats::Func::new_logical(sv_r, sv_values);
+}
+
+IV Rstats::Func::to_bool (SV* sv_r, SV* sv_x1) {
+  
+  Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
+  if (v1->type == Rstats::VectorType::LOGICAL) {
+    IV is = Rstats::VectorFunc::get_integer_value(v1, 0);
+    return is;
+  }
+  else {
+    croak("to_bool receive logical array");
+  }
+}
+
+SV* Rstats::Func::is_array(SV* sv_r, SV* sv_x1) {
+
+  bool is = sv_isobject(sv_x1)
+    && sv_derived_from(sv_x1, "Rstats::Array")
+    && Rstats::pl_hv_exists(sv_x1, "dim");
+  
+  SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+  
+  return sv_is;
 }
 
 SV* Rstats::Func::pi (SV* sv_r) {

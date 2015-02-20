@@ -20,8 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-
-
 sub is_double {
   my $r = shift;
   

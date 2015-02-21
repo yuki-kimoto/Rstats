@@ -803,6 +803,7 @@ namespace Rstats {
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
     SV* is_complex(SV*, SV*);
+    SV* is_character(SV*, SV*);
   }
 }
 

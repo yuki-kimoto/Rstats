@@ -20,16 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub is_character {
-  my $r = shift;
-  
-  my $x1 = shift;
-  my $x_is = (is_array($r, $x1) || is_vector($r, $x1)) && ($x1->type || '') eq 'character'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
 sub is_logical {
   my $r = shift;
   

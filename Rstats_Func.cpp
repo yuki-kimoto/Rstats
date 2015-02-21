@@ -547,3 +547,13 @@ SV* Rstats::Func::is_integer(SV* sv_r, SV* sv_x1) {
   
   return sv_x_is;
 }
+
+SV* Rstats::Func::is_complex(SV* sv_r, SV* sv_x1) {
+  
+  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
+    && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "complex");
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}

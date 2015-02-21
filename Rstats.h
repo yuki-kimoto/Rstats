@@ -800,6 +800,7 @@ namespace Rstats {
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
     IV to_bool(SV*, SV*);
+    SV* is_double(SV*, SV*);
   }
 }
 

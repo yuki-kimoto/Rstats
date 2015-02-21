@@ -99,16 +99,6 @@ SV* Rstats::Func::type(SV* sv_r, SV* sv_x1) {
   return sv_type;
 }
 
-SV* Rstats::Func::is_numeric(SV* sv_r, SV* sv_x1) {
-  
-  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-    && (strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double") || strEQ(SvPV_nolen(type(sv_r, sv_x1)), "integer"));
-    
-  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
-  
-  return sv_x_is;
-}
-
 SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
   
   bool is =
@@ -528,3 +518,22 @@ SV* Rstats::Func::to_c(SV* sv_r, SV* sv_x) {
   return sv_x1;
 }
 
+SV* Rstats::Func::is_numeric(SV* sv_r, SV* sv_x1) {
+  
+  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
+    && (strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double") || strEQ(SvPV_nolen(type(sv_r, sv_x1)), "integer"));
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}
+
+SV* Rstats::Func::is_double(SV* sv_r, SV* sv_x1) {
+  
+  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
+    && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double");
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}

@@ -804,6 +804,8 @@ namespace Rstats {
     SV* is_integer(SV*, SV*);
     SV* is_complex(SV*, SV*);
     SV* is_character(SV*, SV*);
+    SV* is_logical(SV*, SV*);
+    SV* is_data_frame(SV*, SV*);
   }
 }
 

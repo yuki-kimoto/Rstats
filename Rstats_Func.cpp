@@ -567,3 +567,23 @@ SV* Rstats::Func::is_character(SV* sv_r, SV* sv_x1) {
   
   return sv_x_is;
 }
+
+SV* Rstats::Func::is_logical(SV* sv_r, SV* sv_x1) {
+  
+  bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
+    && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "logical");
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}
+
+SV* Rstats::Func::is_data_frame(SV* sv_r, SV* sv_x1) {
+  
+  bool is = sv_isobject(sv_x1)
+    && sv_derived_from(sv_x1, "Rstats::DataFrame");
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}

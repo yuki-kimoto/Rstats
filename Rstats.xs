@@ -1613,4 +1613,24 @@ SV* is_character(...)
   return_sv(sv_x2);
 }
 
+SV* is_logical(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_logical(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* is_data_frame(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_data_frame(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 MODULE = Rstats PACKAGE = Rstats

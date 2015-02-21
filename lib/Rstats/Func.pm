@@ -20,25 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub is_logical {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->type || '') eq 'logical'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
-sub is_data_frame {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  return ref $x1 eq 'Rstats::DataFrame' ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
 sub is_factor {
   my $r = shift;
   

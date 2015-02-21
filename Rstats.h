@@ -801,6 +801,7 @@ namespace Rstats {
     SV* type(SV*, SV*);
     IV to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
+    SV* is_integer(SV*, SV*);
   }
 }
 

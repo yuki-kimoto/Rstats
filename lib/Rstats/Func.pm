@@ -20,17 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub is_integer {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_is = (is_array($r, $x1) || Rstats::Func::is_vector($r, $x1)) && ($x1->type || '') eq 'integer'
-    ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
 sub is_complex {
   my $r = shift;
   

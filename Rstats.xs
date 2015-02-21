@@ -1583,4 +1583,14 @@ SV* is_double(...)
   return_sv(sv_x2);
 }
 
+SV* is_integer(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_integer(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 MODULE = Rstats PACKAGE = Rstats

@@ -587,3 +587,13 @@ SV* Rstats::Func::is_data_frame(SV* sv_r, SV* sv_x1) {
   
   return sv_x_is;
 }
+
+SV* Rstats::Func::is_list(SV* sv_r, SV* sv_x1) {
+  
+  bool is = sv_isobject(sv_x1)
+    && sv_derived_from(sv_x1, "Rstats::List");
+    
+  SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+  
+  return sv_x_is;
+}

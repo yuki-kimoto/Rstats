@@ -806,6 +806,7 @@ namespace Rstats {
     SV* is_character(SV*, SV*);
     SV* is_logical(SV*, SV*);
     SV* is_data_frame(SV*, SV*);
+    SV* is_list(SV*, SV*);
   }
 }
 

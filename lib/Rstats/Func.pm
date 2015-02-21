@@ -20,6 +20,43 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub class {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $x_class = Rstats::Func::to_c($r, $_[0]);
+    
+    $x1->{class} = $x_class->vector;
+    
+    return $x1;
+  }
+  else {
+    my $x_class = Rstats::Func::NULL($r);
+    if (exists $x1->{class}) {
+      $x_class->vector($x1->{class}->clone);
+    }
+    elsif (Rstats::Func::is_vector($r, $x1)) {
+      $x_class->vector(Rstats::Func::mode($r, $x1)->vector->clone);
+    }
+    elsif (is_matrix($r, $x1)) {
+      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
+    }
+    elsif (is_array($r, $x1)) {
+      $x_class->vector(Rstats::VectorFunc::new_character('array'));
+    }
+    elsif (Rstats::Func::is_data_frame($r, $x1)) {
+      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
+    }
+    elsif (is_list($r, $x1)) {
+      $x_class->vector(Rstats::VectorFunc::new_character('list'));
+    }
+    
+    return $x_class;
+  }
+}
+
 sub is_factor {
   my $r = shift;
   
@@ -105,6 +142,68 @@ sub copy_attrs_to {
     }
     $x2->{dimnames} = $new_dimnames;
   }
+}
+
+sub is_nan {
+  my $r = shift;
+  
+  my $x1 = Rstats::Func::to_c($r, shift);
+  
+  if (defined(my $vector = $x1->vector)) {
+    my $x2 = Rstats::Func::NULL($r);
+    $x2->vector($x1->vector->is_nan);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+    
+    return $x2;
+  }
+  else {
+    Carp::croak "Error : is_nan is not implemented except array";
+  }
+}
+
+sub is_infinite {
+  my $r = shift;
+  
+  my $x1 = Rstats::Func::to_c($r, shift);
+  
+  if (my $vector = $x1->vector) {
+    my $x2 = Rstats::Func::NULL($r);
+    $x2->vector($x1->vector->is_infinite);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+    
+    return $x2;
+  }
+  else {
+    Carp::croak "Error : is_infinite is not implemented except array";
+  }
+}
+
+sub is_finite {
+  my $r = shift;
+  
+  my $x1 = Rstats::Func::to_c($r, shift);
+  
+  if (my $vector = $x1->vector) {
+    my $x2 = Rstats::Func::NULL($r);
+    $x2->vector($x1->vector->is_finite);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+    
+    return $x2;
+  }
+  else {
+    Carp::croak "Error : is_finite is not implemented except array";
+  }
+}
+
+sub is_na {
+  my $r = shift;
+  
+  my $x1 = Rstats::Func::to_c($r, shift);
+  my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
+  my $x2 = Rstats::Func::NULL($r);
+  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
+  
+  return $x2;
 }
 
 sub I {
@@ -3195,57 +3294,6 @@ sub is_null {
   return $x_is;
 }
 
-sub is_nan {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  if (defined(my $vector = $x1->vector)) {
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->is_nan);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error : is_nan is not implemented except array";
-  }
-}
-
-sub is_infinite {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  if (my $vector = $x1->vector) {
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->is_infinite);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error : is_infinite is not implemented except array";
-  }
-}
-
-sub is_finite {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  if (my $vector = $x1->vector) {
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->is_finite);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error : is_finite is not implemented except array";
-  }
-}
-
 sub to_string_array {
   my $r = shift;
   
@@ -3631,17 +3679,6 @@ sub nlevels {
   return Rstats::Func::c($r, Rstats::Func::length_value($r, Rstats::Func::levels($r, $x1)));
 }
 
-sub is_na {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
-  my $x2 = Rstats::Func::NULL($r);
-  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
-  
-  return $x2;
-}
-
 sub as_list {
   my $r = shift;
   
@@ -3657,51 +3694,6 @@ sub as_list {
     $list->list([$x2]);
     
     return $list;
-  }
-}
-
-sub is_list {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  return exists $x1->{list} ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
-sub class {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_class = Rstats::Func::to_c($r, $_[0]);
-    
-    $x1->{class} = $x_class->vector;
-    
-    return $x1;
-  }
-  else {
-    my $x_class = Rstats::Func::NULL($r);
-    if (exists $x1->{class}) {
-      $x_class->vector($x1->{class}->clone);
-    }
-    elsif (Rstats::Func::is_vector($r, $x1)) {
-      $x_class->vector(Rstats::Func::mode($r, $x1)->vector->clone);
-    }
-    elsif (is_matrix($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
-    }
-    elsif (is_array($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('array'));
-    }
-    elsif (Rstats::Func::is_data_frame($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
-    }
-    elsif (is_list($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('list'));
-    }
-    
-    return $x_class;
   }
 }
 

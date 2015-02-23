@@ -28,29 +28,29 @@ sub class {
   if (@_) {
     my $x_class = Rstats::Func::to_c($r, $_[0]);
     
-    $x1->{class} = $x_class->vector;
+    $x1->{class} = Rstats::Func::to_vector($r, $x_class);
     
     return $x1;
   }
   else {
-    my $x_class = Rstats::Func::NULL($r);
+    my $x_class;
     if (exists $x1->{class}) {
-      $x_class->vector($x1->{class}->clone);
+      $x_class = Rstats::Func::to_vector($r, $x1->{class});
     }
     elsif (Rstats::Func::is_vector($r, $x1)) {
-      $x_class->vector(Rstats::Func::mode($r, $x1)->vector->clone);
+      $x_class = Rstats::Func::to_vector($r, Rstats::Func::mode($r, $x1));
     }
     elsif (is_matrix($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('matrix'));
+      $x_class = Rstats::VectorFunc::new_character('matrix');
     }
     elsif (is_array($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('array'));
+      $x_class = Rstats::VectorFunc::new_character('array');
     }
     elsif (Rstats::Func::is_data_frame($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('data.frame'));
+      $x_class = Rstats::VectorFunc::new_character('data.frame');
     }
     elsif (is_list($r, $x1)) {
-      $x_class->vector(Rstats::VectorFunc::new_character('list'));
+      $x_class = Rstats::VectorFunc::new_character('list');
     }
     
     return $x_class;
@@ -97,7 +97,7 @@ sub copy_attrs_to {
   $x2->{dim} = $x1->{dim}->clone if !$exclude_h{dim} && exists $x1->{dim};
   
   # class
-  $x2->{class} =  $x1->{class}->clone if !$exclude_h{class} && exists $x1->{class};
+  $x2->{class} =  Rstats::Func::to_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
   
   # levels
   $x2->{levels} = $x1->{levels}->clone if !$exclude_h{levels} && exists $x1->{levels};
@@ -653,10 +653,10 @@ sub factor {
   
   my $f1 = Rstats::Func::new_integer($r, @$f1_values);
   if ($x_ordered) {
-    $f1->{class} = Rstats::VectorFunc::new_character('factor', 'ordered');
+    $f1->{class} = Rstats::Func::new_character($r, 'factor', 'ordered');
   }
   else {
-    $f1->{class} = Rstats::VectorFunc::new_character('factor');
+    $f1->{class} = Rstats::Func::new_character($r, 'factor');
   }
   $f1->{levels} = $x_labels->vector->clone;
   
@@ -3231,7 +3231,9 @@ sub get_array {
   my $r = shift;
   
   my $x1 = shift;
-
+  
+  $DB::single = 1;
+  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
   my $level_drop;
@@ -3268,8 +3270,6 @@ sub get_array {
     Rstats::Func::new_vector($r, $x1->type, @a2_values),
     Rstats::Func::c($r, @$x2_dim)
   );
-  
-  $DB::single = 1;
   
   # Copy attributes
   Rstats::Func::copy_attrs_to($r, $x1, $x2, {new_indexes => $new_indexes, exclude => ['dim']});
@@ -4165,7 +4165,6 @@ sub get_list {
     push @$list_elements, $elements->[$i - 1];
   }
   
-  $DB::single = 1;
   Rstats::Func::copy_attrs_to(
     $r, $x1, $list, {new_indexes => [Rstats::Func::c($r, @$index_values)]}
   );

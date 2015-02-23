@@ -100,7 +100,7 @@ sub copy_attrs_to {
   $x2->{class} =  Rstats::Func::to_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
   
   # levels
-  $x2->{levels} = $x1->{levels}->clone if !$exclude_h{levels} && exists $x1->{levels};
+  $x2->{levels} = Rstats::Func::to_vector($r, $x1->{levels}) if !$exclude_h{levels} && exists $x1->{levels};
   
   # names
   if (!$exclude_h{names} && exists $x1->{names}) {
@@ -658,7 +658,7 @@ sub factor {
   else {
     $f1->{class} = Rstats::Func::new_character($r, 'factor');
   }
-  $f1->{levels} = $x_labels->vector->clone;
+  $f1->{levels} = Rstats::Func::to_vector($r, $x_labels);
   
   return $f1;
 }
@@ -3609,14 +3609,14 @@ sub levels {
     $x_levels = Rstats::Func::as_character($r, $x_levels)
       unless is_character($r, $x_levels);
     
-    $x1->{levels} = $x_levels->vector->clone;
+    $x1->{levels} = Rstats::Func::to_vector($r, $x_levels);
     
     return $x1;
   }
   else {
-    my $x_levels = Rstats::Func::NULL($r);
+    my $x_levels;
     if (exists $x1->{levels}) {
-      $x_levels->vector($x1->{levels}->clone);
+      $x_levels = Rstats::Func::to_vector($r, $x1->{levels});
     }
     
     return $x_levels;

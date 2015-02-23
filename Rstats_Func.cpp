@@ -597,3 +597,19 @@ SV* Rstats::Func::is_list(SV* sv_r, SV* sv_x1) {
   
   return sv_x_is;
 }
+
+SV* Rstats::Func::to_vector(SV* sv_r, SV* sv_x1) {
+  
+  SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");
+  
+  Rstats::Vector* v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_v1);
+  
+  Rstats::Vector* v2 = Rstats::VectorFunc::clone(v1);
+  
+  SV* sv_v2 = Rstats::pl_to_perl_obj<Rstats::Vector*>(v2, "Rstats::Vector");
+  
+  SV* sv_x2 = Rstats::Func::new_null(sv_r);
+  Rstats::pl_hv_store(sv_x2, "vector", sv_v2);
+  
+  return sv_x2;
+}

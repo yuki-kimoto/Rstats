@@ -94,7 +94,7 @@ sub copy_attrs_to {
   my %exclude_h = map { $_ => 1 } @$exclude;
   
   # dim
-  $x2->{dim} = $x1->{dim}->clone if !$exclude_h{dim} && exists $x1->{dim};
+  $x2->{dim} = Rstats::Func::to_vector($r, $x1->{dim}) if !$exclude_h{dim} && exists $x1->{dim};
   
   # class
   $x2->{class} =  Rstats::Func::to_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
@@ -4489,7 +4489,7 @@ sub apply {
   my $x2 = Rstats::Func::NULL($r);
   $x2->vector(Rstats::Func::c($r, @$new_elements)->vector);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  $x2->{dim} = Rstats::VectorFunc::new_integer(@$new_dim_values);
+  $x2->{dim} = Rstats::Func::new_integer($r, @$new_dim_values);
   
   if ($x2->{dim}->length_value == 1) {
     delete $x2->{dim};

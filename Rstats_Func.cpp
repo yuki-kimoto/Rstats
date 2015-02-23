@@ -31,18 +31,19 @@ SV* Rstats::Func::set_dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
     croak("dims [product %d] do not match the length of object [%d]", x1_length_by_dim, x1_length);
   }
   
-  Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_vector(sv_r, sv_x_dim));
-  set_dim_vector(sv_r, sv_x1, x_dim);
+  Rstats::pl_hv_store(sv_x1, "dim", Rstats::Func::to_vector(sv_r, sv_x_dim));
   
   return sv_r;
 }
 
 SV* Rstats::Func::get_dim(SV* sv_r, SV* sv_x1) {
-  SV* sv_x_dim = Rstats::Func::new_null(sv_r);
+  SV* sv_x_dim;
   
   if (Rstats::pl_hv_exists(sv_x1, "dim")) {
-    Rstats::Vector* x_dim = Rstats::VectorFunc::clone(get_dim_vector(sv_r, sv_x1));
-    set_vector(sv_r, sv_x_dim, x_dim);
+    sv_x_dim = Rstats::Func::to_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
+  }
+  else {
+    sv_x_dim = Rstats::Func::new_null(sv_r);
   }
   
   return sv_x_dim;
@@ -337,17 +338,6 @@ SV* Rstats::Func::new_true(SV* sv_r) {
   set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_true());
   
   return sv_x1;
-}
-
-void Rstats::Func::set_dim_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
-  SV* sv_dim = Rstats::pl_to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
-  Rstats::pl_hv_store(sv_a1, "dim", sv_dim);
-}
-
-Rstats::Vector* Rstats::Func::get_dim_vector(SV* sv_r, SV* sv_a1) {
-  SV* sv_dim = Rstats::pl_hv_fetch(sv_a1, "dim");
-  Rstats::Vector* dim = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_dim);
-  return dim;
 }
 
 SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {

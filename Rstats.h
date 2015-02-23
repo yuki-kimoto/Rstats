@@ -774,8 +774,6 @@ namespace Rstats {
     SV* new_array(SV*);
     void set_vector(SV*, SV*, Rstats::Vector*);
     Rstats::Vector* get_vector(SV*, SV*);
-    void set_dim_vector(SV*, SV*, Rstats::Vector*);
-    Rstats::Vector* get_dim_vector(SV*, SV*);
     SV* c(SV*, SV*);
     SV* to_c(SV*, SV*);
     SV* new_null(SV*); /* NULL */

@@ -3628,11 +3628,10 @@ sub clone {
   
   my $x1 = shift;;
   
-  my $clone = Rstats::Func::NULL($r);
-  $clone->vector($x1->vector->clone);
-  Rstats::Func::copy_attrs_to($r, $x1, $clone);
+  my $x_clone = Rstats::Func::to_vector($r, $x1);
+  Rstats::Func::copy_attrs_to($r, $x1, $x_clone);
   
-  return $clone;
+  return $x_clone;
 }
 
 sub at {
@@ -3689,8 +3688,7 @@ sub as_list {
   }
   else {
     my $list = Rstats::Func::new_list($r);;
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->clone);
+    my $x2 = Rstats::Func::to_vector($r, $x1);
     $list->list([$x2]);
     
     return $list;
@@ -3797,9 +3795,7 @@ sub as_matrix {
     $col = 1;
   }
   
-  my $x2 = Rstats::Func::NULL($r);
-  my $x2_vector = $x1->vector->clone;
-  $x2->vector($x2_vector);
+  my $x2 = Rstats::Func::to_vector($r, $x1);
   
   return Rstats::Func::matrix($r, $x2, $row, $col);
 }
@@ -3809,9 +3805,7 @@ sub as_array {
   
   my $x1 = shift;
 
-  my $x2 = Rstats::Func::NULL($r);
-  my $x2_vector = $x1->vector->clone;
-  $x2->vector($x2_vector);
+  my $x2 = Rstats::Func::to_vector($r, $x1);
 
   my $x1_dim_elements = [@{$x1->dim_as_array->values}];
   

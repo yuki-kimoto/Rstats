@@ -1643,12 +1643,12 @@ SV* is_list(...)
   return_sv(sv_x2);
 }
 
-SV* to_vector(...)
+SV* as_vector(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::to_vector(sv_r, sv_x1);
+  SV* sv_x2 = Rstats::Func::as_vector(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

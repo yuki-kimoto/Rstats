@@ -28,17 +28,17 @@ sub class {
   if (@_) {
     my $x_class = Rstats::Func::to_c($r, $_[0]);
     
-    $x1->{class} = Rstats::Func::to_vector($r, $x_class);
+    $x1->{class} = Rstats::Func::as_vector($r, $x_class);
     
     return $x1;
   }
   else {
     my $x_class;
     if (exists $x1->{class}) {
-      $x_class = Rstats::Func::to_vector($r, $x1->{class});
+      $x_class = Rstats::Func::as_vector($r, $x1->{class});
     }
     elsif (Rstats::Func::is_vector($r, $x1)) {
-      $x_class = Rstats::Func::to_vector($r, Rstats::Func::mode($r, $x1));
+      $x_class = Rstats::Func::as_vector($r, Rstats::Func::mode($r, $x1));
     }
     elsif (is_matrix($r, $x1)) {
       $x_class = Rstats::VectorFunc::new_character('matrix');
@@ -94,13 +94,13 @@ sub copy_attrs_to {
   my %exclude_h = map { $_ => 1 } @$exclude;
   
   # dim
-  $x2->{dim} = Rstats::Func::to_vector($r, $x1->{dim}) if !$exclude_h{dim} && exists $x1->{dim};
+  $x2->{dim} = Rstats::Func::as_vector($r, $x1->{dim}) if !$exclude_h{dim} && exists $x1->{dim};
   
   # class
-  $x2->{class} =  Rstats::Func::to_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
+  $x2->{class} =  Rstats::Func::as_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
   
   # levels
-  $x2->{levels} = Rstats::Func::to_vector($r, $x1->{levels}) if !$exclude_h{levels} && exists $x1->{levels};
+  $x2->{levels} = Rstats::Func::as_vector($r, $x1->{levels}) if !$exclude_h{levels} && exists $x1->{levels};
   
   # names
   if (!$exclude_h{names} && exists $x1->{names}) {
@@ -658,7 +658,7 @@ sub factor {
   else {
     $f1->{class} = Rstats::Func::new_character($r, 'factor');
   }
-  $f1->{levels} = Rstats::Func::to_vector($r, $x_labels);
+  $f1->{levels} = Rstats::Func::as_vector($r, $x_labels);
   
   return $f1;
 }
@@ -3609,14 +3609,14 @@ sub levels {
     $x_levels = Rstats::Func::as_character($r, $x_levels)
       unless is_character($r, $x_levels);
     
-    $x1->{levels} = Rstats::Func::to_vector($r, $x_levels);
+    $x1->{levels} = Rstats::Func::as_vector($r, $x_levels);
     
     return $x1;
   }
   else {
     my $x_levels;
     if (exists $x1->{levels}) {
-      $x_levels = Rstats::Func::to_vector($r, $x1->{levels});
+      $x_levels = Rstats::Func::as_vector($r, $x1->{levels});
     }
     
     return $x_levels;
@@ -3628,7 +3628,7 @@ sub clone {
   
   my $x1 = shift;;
   
-  my $x_clone = Rstats::Func::to_vector($r, $x1);
+  my $x_clone = Rstats::Func::as_vector($r, $x1);
   Rstats::Func::copy_attrs_to($r, $x1, $x_clone);
   
   return $x_clone;
@@ -3688,7 +3688,7 @@ sub as_list {
   }
   else {
     my $list = Rstats::Func::new_list($r);;
-    my $x2 = Rstats::Func::to_vector($r, $x1);
+    my $x2 = Rstats::Func::as_vector($r, $x1);
     $list->list([$x2]);
     
     return $list;
@@ -3795,7 +3795,7 @@ sub as_matrix {
     $col = 1;
   }
   
-  my $x2 = Rstats::Func::to_vector($r, $x1);
+  my $x2 = Rstats::Func::as_vector($r, $x1);
   
   return Rstats::Func::matrix($r, $x2, $row, $col);
 }
@@ -3805,23 +3805,11 @@ sub as_array {
   
   my $x1 = shift;
 
-  my $x2 = Rstats::Func::to_vector($r, $x1);
+  my $x2 = Rstats::Func::as_vector($r, $x1);
 
   my $x1_dim_elements = [@{$x1->dim_as_array->values}];
   
   return array($r, $x1, $x2, $x1_dim_elements);
-}
-
-sub as_vector {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2 = Rstats::Func::NULL($r);
-  my $x2_vector = $x1->vector->clone;
-  $x2->vector($x2_vector);
-  
-  return $x2;
 }
 
 sub as {
@@ -4007,10 +3995,10 @@ sub names {
     
     $x_names = Rstats::Func::as_character($r, $x_names)
       unless is_character($r, $x_names);
-    $x1->{names} = Rstats::Func::to_vector($r, $x_names);
+    $x1->{names} = Rstats::Func::as_vector($r, $x_names);
     
     if (Rstats::Func::is_data_frame($r, $x1)) {
-      $x1->{dimnames}[1] = Rstats::Func::to_vector($r, $x1->{names});
+      $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x1->{names});
     }
     
     return $x1;
@@ -4018,7 +4006,7 @@ sub names {
   else {
     my $x_names = Rstats::Func::NULL($r);
     if (exists $x1->{names}) {
-      $x_names = Rstats::Func::to_vector($r, $x1->{names});
+      $x_names = Rstats::Func::as_vector($r, $x1->{names});
     }
     return $x_names;
   }
@@ -4037,7 +4025,7 @@ sub dimnames {
       for (my $i = 0; $i < $length; $i++) {
         my $x_dimname = $dimnames_list->getin($i + 1);
         if (is_character($r, $x_dimname)) {
-          my $dimname = Rstats::Func::to_vector($r, $x_dimname);
+          my $dimname = Rstats::Func::as_vector($r, $x_dimname);
           push @$dimnames, $dimname;
         }
         else {
@@ -4047,7 +4035,7 @@ sub dimnames {
       $x1->{dimnames} = $dimnames;
       
       if (Rstats::Func::is_data_frame($r, $x1)) {
-        $x1->{names} = Rstats::Func::to_vector($r, $x1->{dimnames}[1]);
+        $x1->{names} = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
       }
     }
     else {
@@ -4077,12 +4065,12 @@ sub rownames {
       $x1->{dimnames} = [];
     }
     
-    $x1->{dimnames}[0] = Rstats::Func::to_vector($r, $x_rownames);
+    $x1->{dimnames}[0] = Rstats::Func::as_vector($r, $x_rownames);
   }
   else {
     my $x_rownames = Rstats::Func::NULL($r);
     if (defined $x1->{dimnames}[0]) {
-      $x_rownames = Rstats::Func::to_vector($r, $x1->{dimnames}[0]);
+      $x_rownames = Rstats::Func::as_vector($r, $x1->{dimnames}[0]);
     }
     return $x_rownames;
   }
@@ -4101,12 +4089,12 @@ sub colnames {
       $x1->{dimnames} = [];
     }
     
-    $x1->{dimnames}[1] = Rstats::Func::to_vector($r, $x_colnames);
+    $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x_colnames);
   }
   else {
     my $x_colnames = Rstats::Func::NULL($r);
     if (defined $x1->{dimnames}[1]) {
-      $x_colnames = Rstats::Func::to_vector($r, $x1->{dimnames}[1]);
+      $x_colnames = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
     }
     return $x_colnames;
   }

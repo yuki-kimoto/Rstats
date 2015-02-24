@@ -31,7 +31,7 @@ SV* Rstats::Func::set_dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
     croak("dims [product %d] do not match the length of object [%d]", x1_length_by_dim, x1_length);
   }
   
-  Rstats::pl_hv_store(sv_x1, "dim", Rstats::Func::to_vector(sv_r, sv_x_dim));
+  Rstats::pl_hv_store(sv_x1, "dim", Rstats::Func::as_vector(sv_r, sv_x_dim));
   
   return sv_r;
 }
@@ -40,7 +40,7 @@ SV* Rstats::Func::get_dim(SV* sv_r, SV* sv_x1) {
   SV* sv_x_dim;
   
   if (Rstats::pl_hv_exists(sv_x1, "dim")) {
-    sv_x_dim = Rstats::Func::to_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
+    sv_x_dim = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
   }
   else {
     sv_x_dim = Rstats::Func::new_null(sv_r);
@@ -588,7 +588,7 @@ SV* Rstats::Func::is_list(SV* sv_r, SV* sv_x1) {
   return sv_x_is;
 }
 
-SV* Rstats::Func::to_vector(SV* sv_r, SV* sv_x1) {
+SV* Rstats::Func::as_vector(SV* sv_r, SV* sv_x1) {
   
   SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");
   

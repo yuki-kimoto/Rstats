@@ -76,16 +76,9 @@ sub as_double {
   
   my $x1 = shift;
   
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_double);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_double);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
+  my $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x1->vector->as_double);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
 
   return $x2;
 }

@@ -20,14 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub new_list {
-  my $r = shift;
-  my $list = Rstats::List->new;
-  $list->r($r);
-  
-  return $list;
-}
-
 sub new_vector {
   my $r = shift;
   

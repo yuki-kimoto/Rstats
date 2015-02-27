@@ -808,6 +808,7 @@ namespace Rstats {
     SV* is_list(SV*, SV*);
     SV* as_vector(SV*, SV*);
     SV* new_data_frame(SV*);
+    SV* new_list(SV*);
   }
 }
 

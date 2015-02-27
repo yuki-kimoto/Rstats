@@ -1662,4 +1662,13 @@ SV* new_data_frame(...)
   return_sv(sv_x1);
 }
 
+SV* new_list(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::Func::new_list(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 MODULE = Rstats PACKAGE = Rstats

@@ -3573,7 +3573,7 @@ sub array {
   my $elements = Rstats::Func::decompose($r, $x1);
   my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL($r);
   my $x1_length = Rstats::Func::length_value($r, $x1);
-  unless ($x_dim->vector->length_value) {
+  unless ($x_dim->length_value) {
     $x_dim = Rstats::Func::c($r, $x1_length);
   }
   my $dim_product = 1;
@@ -3850,7 +3850,7 @@ sub mode {
     croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
       unless $types_h{$type};
     
-    $x1->vector($x1->vector->as($type));
+    $x1 = $x1->as($type);
     
     return $x1;
   }
@@ -4426,8 +4426,7 @@ sub apply {
     push @$new_elements, $func->($r, Rstats::Func::c($r, @$element_array));
   }
 
-  my $x2 = Rstats::Func::NULL($r);
-  $x2->vector(Rstats::Func::c($r, @$new_elements)->vector);
+  my $x2 = Rstats::Func::c($r, @$new_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   $x2->{dim} = Rstats::Func::new_integer($r, @$new_dim_values);
   

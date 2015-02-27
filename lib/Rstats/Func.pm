@@ -49,18 +49,9 @@ sub as_complex {
   
   my $x1 = shift;
 
-  my $x_tmp;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x_tmp = Rstats::Func::as_integer($r, $x1);
-  }
-  else {
-    $x_tmp = $x1;
-  }
-
-  my $x2;
-  $x2 = Rstats::Func::new_array($r);
-  $x2->vector($x_tmp->vector->as_complex);
-  Rstats::Func::copy_attrs_to($r, $x_tmp, $x2);
+  my $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x1->vector->as_complex);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
 
   return $x2;
 }

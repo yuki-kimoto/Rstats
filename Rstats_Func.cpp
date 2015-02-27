@@ -620,3 +620,26 @@ SV* Rstats::Func::new_list(SV* sv_r) {
   return sv_data_frame;
 }
 
+SV* Rstats::Func::new_vector(SV* sv_r, SV* sv_type, SV* sv_values) {
+  
+  char* type = SvPV_nolen(sv_type);
+  
+  if (strEQ(type, "character")) {
+    return new_character(sv_r, sv_values);
+  }
+  else if (strEQ(type, "complex")) {
+    return new_complex(sv_r, sv_values);
+  }
+  else if (strEQ(type, "double")) {
+    return new_double(sv_r, sv_values);
+  }
+  else if (strEQ(type, "integer")) {
+    return new_integer(sv_r, sv_values);
+  }
+  else if (strEQ(type, "logical")) {
+    return new_logical(sv_r, sv_values);
+  }
+  else {
+    croak("Invalid type %s is passed(new_vector)", type);
+  }
+}

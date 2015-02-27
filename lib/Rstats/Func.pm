@@ -20,31 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub new_vector {
-  my $r = shift;
-  
-  my $type = shift;
-  
-  if ($type eq 'character') {
-    return new_character($r, @_);
-  }
-  elsif ($type eq 'complex') {
-    return new_complex($r, @_);
-  }
-  elsif ($type eq 'double') {
-    return new_double($r, @_);
-  }
-  elsif ($type eq 'integer') {
-    return new_integer($r, @_);
-  }
-  elsif ($type eq 'logical') {
-    return new_logical(@_);
-  }
-  else {
-    Carp::croak("Invalid type $type is passed(new_vector)");
-  }
-}
-
 sub as_complex {
   my $r = shift;
   
@@ -2864,8 +2839,7 @@ sub matrix {
   
   my $dim = [$nrow, $ncol];
   my $matrix;
-  my $x_matrix = Rstats::Func::NULL($r);
-  $x_matrix->vector(Rstats::VectorFunc::new_vector($x1->type, @$x1_values));
+  my $x_matrix = Rstats::Func::new_vector($r, $x1->type, $x1_values);
   if ($byrow) {
     $matrix = Rstats::Func::array(
       $r,
@@ -3424,7 +3398,7 @@ sub get_array {
   # array
   my $x2 = Rstats::Func::array(
     $r,
-    Rstats::Func::new_vector($r, $x1->type, @a2_values),
+    Rstats::Func::new_vector($r, $x1->type, \@a2_values),
     Rstats::Func::c($r, @$x2_dim)
   );
   

@@ -20,6 +20,30 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub as_integer {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x1->vector->as_integer);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
+
+  return $x2;
+}
+
+sub as_logical {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x1->vector->as_logical);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
+
+  return $x2;
+}
+
 sub as_complex {
   my $r = shift;
   
@@ -66,43 +90,7 @@ sub as_double {
   return $x2;
 }
 
-sub as_integer {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_integer);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_integer);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
 
-  return $x2;
-}
-
-sub as_logical {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_logical);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_logical);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-
-  return $x2;
-}
 
 sub as_character {
   my $r = shift;

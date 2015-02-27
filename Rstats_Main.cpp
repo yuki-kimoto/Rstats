@@ -159,6 +159,10 @@ void Rstats::pl_av_unshift(SV* av_ref, SV* sv) {
   pl_av_store((AV*)pl_deref(av_ref), 0, SvREFCNT_inc(sv));
 }
 
+SV* Rstats::pl_sv_bless(SV* sv_data, const char* class_name) {
+  return sv_bless(sv_data, gv_stashpv(class_name, 1));
+}
+
 IV Rstats::pl_pregexec(SV* sv_str, REGEXP* sv_re) {
   char* str = SvPV_nolen(sv_str);
   

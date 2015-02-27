@@ -70,6 +70,7 @@ namespace Rstats {
   SV* pl_av_pop(SV*);
   void pl_av_unshift(AV*, SV*);
   void pl_av_unshift(SV*, SV*);
+  SV* pl_sv_bless(SV*, const char*);
   template <class X> X pl_to_c_obj(SV* perl_obj_ref) {
     SV* perl_obj = SvROK(perl_obj_ref) ? SvRV(perl_obj_ref) : perl_obj_ref;
     IV obj_addr = SvIV(perl_obj);
@@ -806,6 +807,7 @@ namespace Rstats {
     SV* is_data_frame(SV*, SV*);
     SV* is_list(SV*, SV*);
     SV* as_vector(SV*, SV*);
+    SV* new_data_frame(SV*);
   }
 }
 

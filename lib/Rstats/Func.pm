@@ -20,6 +20,196 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub new_list {
+  my $r = shift;
+  my $list = Rstats::List->new;
+  $list->r($r);
+  
+  return $list;
+}
+
+sub new_vector {
+  my $r = shift;
+  
+  my $type = shift;
+  
+  if ($type eq 'character') {
+    return new_character($r, @_);
+  }
+  elsif ($type eq 'complex') {
+    return new_complex($r, @_);
+  }
+  elsif ($type eq 'double') {
+    return new_double($r, @_);
+  }
+  elsif ($type eq 'integer') {
+    return new_integer($r, @_);
+  }
+  elsif ($type eq 'logical') {
+    return new_logical(@_);
+  }
+  else {
+    Carp::croak("Invalid type $type is passed(new_vector)");
+  }
+}
+
+sub as_complex {
+  my $r = shift;
+  
+  my $x1 = shift;
+
+  my $x_tmp;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    $x_tmp = Rstats::Func::as_integer($r, $x1);
+  }
+  else {
+    $x_tmp = $x1;
+  }
+
+  my $x2;
+  $x2 = Rstats::Func::new_array($r);
+  $x2->vector($x_tmp->vector->as_complex);
+  Rstats::Func::copy_attrs_to($r, $x_tmp, $x2);
+
+  return $x2;
+}
+
+sub as_numeric {
+  my $r = shift;
+  
+  as_double($r, @_);
+}
+
+sub as_double {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_double);
+  }
+  else {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_double);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  }
+
+  return $x2;
+}
+
+sub as_integer {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_integer);
+  }
+  else {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_integer);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  }
+
+  return $x2;
+}
+
+sub as_logical {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_logical);
+  }
+  else {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_logical);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  }
+
+  return $x2;
+}
+
+sub as_character {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x2;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    my $levels = {};
+    my $x_levels = Rstats::Func::levels($r, $x1);
+    my $x_levels_values = $x_levels->values;
+    my $levels_length = Rstats::Func::length_value($r, $x_levels);
+    for (my $i = 1; $i <= $levels_length; $i++) {
+      $levels->{$i} = $x_levels_values->[$i - 1];
+    }
+
+    my $x1_values = $x1->values;
+    my $x2_values = [];
+    for my $x1_value (@$x1_values) {
+      if (defined $x1_value) {
+        my $character = $levels->{$x1_value};
+        push @$x2_values, "$character";
+      }
+      else {
+        push @$x2_values, undef;
+      }
+    }
+    $x2 = Rstats::Func::NULL($r);
+    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
+    
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  }
+  else {
+    $x2 = Rstats::Func::new_array($r);
+    $x2->vector($x1->vector->as_character);
+    Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  }
+
+  return $x2;
+}
+
+sub as {
+  my $r = shift;
+  
+  my ($x1, $type) = @_;
+  
+  if ($type eq 'character') {
+    return as_character($r, $x1);
+  }
+  elsif ($type eq 'complex') {
+    return as_complex($r, $x1);
+  }
+  elsif ($type eq 'double') {
+    return as_double($r, $x1);
+  }
+  elsif ($type eq 'numeric') {
+    return as_numeric($r, $x1);
+  }
+  elsif ($type eq 'integer') {
+    return as_integer($r, $x1);
+  }
+  elsif ($type eq 'logical') {
+    return as_logical($r, $x1);
+  }
+  else {
+    croak "Invalid mode is passed";
+  }
+}
+
+sub labels {
+  my $r = shift;
+  return $r->as_character(@_);
+}
+
 sub class {
   my $r = shift;
   
@@ -2645,31 +2835,6 @@ sub which {
   return Rstats::Func::c($r, @x2_values);
 }
 
-sub new_vector {
-  my $r = shift;
-  
-  my $type = shift;
-  
-  if ($type eq 'character') {
-    return new_character($r, @_);
-  }
-  elsif ($type eq 'complex') {
-    return new_complex($r, @_);
-  }
-  elsif ($type eq 'double') {
-    return new_double($r, @_);
-  }
-  elsif ($type eq 'integer') {
-    return new_integer($r, @_);
-  }
-  elsif ($type eq 'logical') {
-    return new_logical(@_);
-  }
-  else {
-    Carp::croak("Invalid type $type is passed(new_vector)");
-  }
-}
-
 sub matrix {
   my $r = shift;
   
@@ -3810,179 +3975,6 @@ sub as_array {
   my $x1_dim_elements = [@{$x1->dim_as_array->values}];
   
   return array($r, $x1, $x2, $x1_dim_elements);
-}
-
-sub as {
-  my $r = shift;
-  
-  my ($x1, $type) = @_;
-  
-  if ($type eq 'character') {
-    return as_character($r, $x1);
-  }
-  elsif ($type eq 'complex') {
-    return as_complex($r, $x1);
-  }
-  elsif ($type eq 'double') {
-    return as_double($r, $x1);
-  }
-  elsif ($type eq 'numeric') {
-    return as_numeric($r, $x1);
-  }
-  elsif ($type eq 'integer') {
-    return as_integer($r, $x1);
-  }
-  elsif ($type eq 'logical') {
-    return as_logical($r, $x1);
-  }
-  else {
-    croak "Invalid mode is passed";
-  }
-}
-
-sub new_data_frame {
-  my $r = shift;
-  my $data_frame = Rstats::DataFrame->new;
-  $data_frame->r($r);
-  
-  return $data_frame;
-}
-
-sub new_list {
-  my $r = shift;
-  my $list = Rstats::List->new;
-  $list->r($r);
-  
-  return $list;
-}
-
-sub as_complex {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  my $x_tmp;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x_tmp = Rstats::Func::as_integer($r, $x1);
-  }
-  else {
-    $x_tmp = $x1;
-  }
-
-  my $x2;
-  $x2 = Rstats::Func::new_array($r);
-  $x2->vector($x_tmp->vector->as_complex);
-  Rstats::Func::copy_attrs_to($r, $x_tmp, $x2);
-
-  return $x2;
-}
-
-sub as_numeric {
-  my $r = shift;
-  
-  as_double($r, @_);
-}
-
-sub as_double {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_double);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_double);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-
-  return $x2;
-}
-
-sub as_integer {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_integer);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_integer);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-
-  return $x2;
-}
-
-sub as_logical {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_logical);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_logical);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-
-  return $x2;
-}
-
-sub labels {
-  my $r = shift;
-  return $r->as_character(@_);
-}
-
-sub as_character {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    my $levels = {};
-    my $x_levels = Rstats::Func::levels($r, $x1);
-    my $x_levels_values = $x_levels->values;
-    my $levels_length = Rstats::Func::length_value($r, $x_levels);
-    for (my $i = 1; $i <= $levels_length; $i++) {
-      $levels->{$i} = $x_levels_values->[$i - 1];
-    }
-
-    my $x1_values = $x1->values;
-    my $x2_values = [];
-    for my $x1_value (@$x1_values) {
-      if (defined $x1_value) {
-        my $character = $levels->{$x1_value};
-        push @$x2_values, "$character";
-      }
-      else {
-        push @$x2_values, undef;
-      }
-    }
-    $x2 = Rstats::Func::NULL($r);
-    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
-    
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_character);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  }
-
-  return $x2;
 }
 
 sub names {

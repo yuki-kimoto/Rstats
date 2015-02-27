@@ -603,3 +603,12 @@ SV* Rstats::Func::as_vector(SV* sv_r, SV* sv_x1) {
   
   return sv_x2;
 }
+
+SV* Rstats::Func::new_data_frame(SV* sv_r) {
+  SV* sv_data_frame = Rstats::pl_new_hv_ref();
+  Rstats::pl_sv_bless(sv_data_frame, "Rstats::DataFrame");
+  Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
+  
+  return sv_data_frame;
+}
+

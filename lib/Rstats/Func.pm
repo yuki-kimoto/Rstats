@@ -104,14 +104,13 @@ sub as_character {
     }
     $x2 = Rstats::Func::NULL($r);
     $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
-    
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
   else {
     $x2 = Rstats::Func::new_array($r);
     $x2->vector($x1->vector->as_character);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
   }
+  
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
 
   return $x2;
 }

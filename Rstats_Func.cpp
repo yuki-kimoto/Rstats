@@ -693,8 +693,9 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
       SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
       
       for (IV i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
-        SV* sv_index_value = Rstats::pl_av_fetch(sv_index_values, i);
-        Rstats::pl_av_push(sv_x2_names_values, sv_index_value);
+        IV idx = SvIV(Rstats::pl_av_fetch(sv_index_values, i));
+        SV* sv_x2_names_value = Rstats::pl_av_fetch(sv_x1_names_values, idx - 1);
+        Rstats::pl_av_push(sv_x2_names_values, sv_x2_names_value);
       }
     }
     else {

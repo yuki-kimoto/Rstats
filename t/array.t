@@ -7,6 +7,15 @@ use Rstats::Func;
 
 # get
 {
+  # get - have names
+  {
+    my $x1 = c(4, 5, 6);
+    r->names($x1, c("a", "b", "c"));
+    my $x2 = $x1->get(c(1, 3));
+    is_deeply($x2->values, [4, 6]);
+    is_deeply(r->names($x2)->values, ["a", "c"]);
+  }
+
   # get - have dimnames
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
@@ -15,8 +24,6 @@ use Rstats::Func;
     is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
-}
-  __END__
   
   # get - logical
   {
@@ -24,15 +31,6 @@ use Rstats::Func;
     my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
-  }
-
-  # get - have names
-  {
-    my $x1 = c(4, 5, 6);
-    r->names($x1, c("a", "b", "c"));
-    my $x2 = $x1->get(c(1, 3));
-    is_deeply($x2->values, [4, 6]);
-    is_deeply(r->names($x2)->values, ["a", "c"]);
   }
 
   # get - one value

@@ -5,29 +5,6 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
-# clone
-{
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = r->clone($x1);
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
-  }
-  # clone - matrix
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = r->clone($x1);
-    ok(r->is_matrix($x2));
-    is_deeply(r->dim($x2)->values, [3, 2]);
-    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-  }
-}
-
 # get
 {
   # get - have dimnames
@@ -38,6 +15,8 @@ use Rstats::Func;
     is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
+}
+  __END__
   
   # get - logical
   {
@@ -133,6 +112,30 @@ use Rstats::Func;
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+  }
+}
+
+# clone
+{
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = r->clone($x1);
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
+  
+  # clone - matrix
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->rownames($x1 => c('r1', 'r2', 'r3'));
+    r->colnames($x1 => c('c1', 'c2'));
+    my $x2 = r->clone($x1);
+    ok(r->is_matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
   }
 }
 

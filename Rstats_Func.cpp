@@ -719,7 +719,7 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
           SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
           for (IV i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
             SV* sv_k = Rstats::pl_av_fetch(sv_index_values, i);
-            Rstats::pl_av_push(sv_new_dimname_values, Rstats::pl_av_fetch(sv_dimname_values, SvIV(sv_k)));
+            Rstats::pl_av_push(sv_new_dimname_values, Rstats::pl_av_fetch(sv_dimname_values, SvIV(sv_k) - 1));
           }
         }
         else {

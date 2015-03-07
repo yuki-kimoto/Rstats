@@ -652,7 +652,6 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
   
   SV* sv_new_indexes = Rstats::pl_hv_fetch(sv_opt, "new_indexes");
   
-  sv_dump(sv_new_indexes);
   SV* sv_exclude = Rstats::pl_hv_fetch(sv_opt, "exclude");
   if (!SvOK(sv_exclude)) {
     sv_exclude = Rstats::pl_new_av_ref();
@@ -660,27 +659,25 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
   HV* hv_exclude_h = Rstats::pl_new_hv();
   for (IV i = 0; i < Rstats::pl_av_len(sv_exclude); i++) {
     SV* sv_exclude_element = Rstats::pl_av_fetch(sv_exclude, i);
-    Rstats::pl_av_store(sv_exclude_element, i, Rstats::pl_new_sv_iv(1));
+    Rstats::pl_hv_store(hv_exclude_h, SvPV_nolen(sv_exclude_element), Rstats::pl_new_sv_iv(1));
   }
-  
   // dim
-  if (!SvOK(Rstats::pl_hv_fetch(sv_exclude, "dim")) && Rstats::pl_hv_exists(sv_x1, "dim")) {
+  if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "dim")) && Rstats::pl_hv_exists(sv_x1, "dim")) {
     Rstats::pl_hv_store(sv_x2, "dim", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim")));
   }
   
   // class
-  if (!SvOK(Rstats::pl_hv_fetch(sv_exclude, "class")) && Rstats::pl_hv_exists(sv_x1, "class")) {
+  if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "class")) && Rstats::pl_hv_exists(sv_x1, "class")) {
     Rstats::pl_hv_store(sv_x2, "class", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class")));
   }
   
   // levels
-  if (!SvOK(Rstats::pl_hv_fetch(sv_exclude, "levels")) && Rstats::pl_hv_exists(sv_x1, "levels")) {
+  if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "levels")) && Rstats::pl_hv_exists(sv_x1, "levels")) {
     Rstats::pl_hv_store(sv_x2, "levels", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "levels")));
   }
   
   // names
-  if (!SvOK(Rstats::pl_hv_fetch(sv_exclude, "names")) && Rstats::pl_hv_exists(sv_x1, "names")) {
-    warn("aaaaaaaaaaa");
+  if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "names")) && Rstats::pl_hv_exists(sv_x1, "names")) {
     SV* sv_x2_names_values = Rstats::pl_new_av_ref();
     SV* sv_index = Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))
       ? Rstats::pl_av_fetch(sv_new_indexes, 1) : Rstats::pl_av_fetch(sv_new_indexes, 0);
@@ -700,15 +697,16 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
     Rstats::pl_hv_store(sv_x2, "names", Rstats::Func::new_character(sv_r, sv_x2_names_values));
   }
   
+  
   // dimnames
-  if (!SvOK(Rstats::pl_hv_fetch(sv_exclude, "dimnames")) && Rstats::pl_hv_exists(sv_x1, "dimnames")) {
+  if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "dimnames")) && Rstats::pl_hv_exists(sv_x1, "dimnames")) {
     SV* sv_new_dimnames = Rstats::pl_new_av_ref();
     SV* sv_dimnames = Rstats::pl_hv_fetch(sv_x1, "dimnames");
     IV length = Rstats::pl_av_len(sv_dimnames);
     for (IV i = 0; i < length; i++) {
       SV* sv_dimname = Rstats::pl_av_fetch(sv_dimnames, i);;
       if (SvOK(sv_dimname) && SvIV(Rstats::Func::length_value(sv_r, sv_dimname)) > 0) {
-        SV* sv_index = Rstats::pl_av_fetch(sv_new_indexes, i);
+        SV* sv_index = SvOK(sv_new_indexes) ? Rstats::pl_av_fetch(sv_new_indexes, i) : &PL_sv_undef;
         SV* sv_dimname_values = Rstats::Func::values(sv_r, sv_dimname);
         SV* sv_new_dimname_values = Rstats::pl_new_av_ref();
         if (SvOK(sv_index)) {

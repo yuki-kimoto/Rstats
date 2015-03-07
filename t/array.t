@@ -5,20 +5,31 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
-# TODO
-#   which
-#   get - logical, undef
+# clone
+{
+  # clone - matrix
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->rownames($x1 => c('r1', 'r2', 'r3'));
+    r->colnames($x1 => c('c1', 'c2'));
+    my $x2 = r->clone($x1);
+    ok(r->is_matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
+  }
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = r->clone($x1);
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
+}
 
 # get
 {
-  # get - logical
-  {
-    my $x1 = c(1, 3, 5, 7);
-    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
-    my $x2 = $x1->get($logical_v);
-    is_deeply($x2->values, [3, 7, undef]);
-  }
-
   # get - have dimnames
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
@@ -28,6 +39,14 @@ use Rstats::Func;
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
   
+  # get - logical
+  {
+    my $x1 = c(1, 3, 5, 7);
+    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $x2 = $x1->get($logical_v);
+    is_deeply($x2->values, [3, 7, undef]);
+  }
+
   # get - have names
   {
     my $x1 = c(4, 5, 6);
@@ -254,29 +273,6 @@ use Rstats::Func;
     my $x1 = array(se('1:24'), {dim => c(4, 3, 2)});
     is_deeply($x1->values, [1 .. 24]);
     is_deeply(r->dim($x1)->values, [4, 3, 2]);
-  }
-}
-
-# clone
-{
-  # clone - matrix
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
-    my $x2 = r->clone($x1);
-    ok(r->is_matrix($x2));
-    is_deeply(r->dim($x2)->values, [3, 2]);
-    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-  }
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = r->clone($x1);
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
 }
 

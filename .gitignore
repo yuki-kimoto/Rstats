@@ -16,3 +16,4 @@ xt/tmp/*
 Rstats.bs
 Rstats.c
 *.o
+core.*

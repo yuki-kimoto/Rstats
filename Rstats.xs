@@ -1688,14 +1688,8 @@ SV* copy_attrs_to(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x2 = ST(2);
-  SV* sv_opt;
-  if (items > 2) {
-    SV* sv_opt = ST(3);
-  }
-  else {
-    SV* sv_opt = &PL_sv_undef;
-  }
-
+  SV* sv_opt = items > 3 ? ST(3) : &PL_sv_undef;
+  
   Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, sv_opt);
   
   return_sv(sv_r);

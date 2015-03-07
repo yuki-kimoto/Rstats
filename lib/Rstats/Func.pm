@@ -3300,8 +3300,6 @@ sub get_array {
   
   my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($r, $x1, $dim_drop, @$_indexs);
   
-  $DB::single = 1;
-  
   my $x1_values = $x1->values;
   my @a2_values = map { $x1_values->[$_] } @$poss;
   
@@ -3667,7 +3665,7 @@ sub levels {
 sub clone {
   my $r = shift;
   
-  my $x1 = shift;;
+  my $x1 = shift;
   
   my $x_clone = Rstats::Func::as_vector($r, $x1);
   Rstats::Func::copy_attrs_to($r, $x1, $x_clone);

@@ -7,6 +7,14 @@ use Rstats::Func;
 
 # clone
 {
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(se('1:24'), 3, 2);
+    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x2 = r->clone($x1);
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
   # clone - matrix
   {
     my $x1 = r->matrix(se('1:24'), 3, 2);
@@ -17,14 +25,6 @@ use Rstats::Func;
     is_deeply(r->dim($x2)->values, [3, 2]);
     is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
     is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-  }
-  
-  # clone - vector
-  {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
-    my $x2 = r->clone($x1);
-    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
 }
 

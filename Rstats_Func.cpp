@@ -679,8 +679,14 @@ SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
   // names
   if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "names")) && Rstats::pl_hv_exists(sv_x1, "names")) {
     SV* sv_x2_names_values = Rstats::pl_new_av_ref();
-    SV* sv_index = Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))
-      ? Rstats::pl_av_fetch(sv_new_indexes, 1) : Rstats::pl_av_fetch(sv_new_indexes, 0);
+    SV* sv_index;
+    if (SvOK(sv_new_indexes)) {
+      sv_index = Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))
+        ? Rstats::pl_av_fetch(sv_new_indexes, 1) : Rstats::pl_av_fetch(sv_new_indexes, 0);
+    }
+    else {
+      sv_index = &PL_sv_undef;
+    }
     
     if (SvOK(sv_index)) {
       SV* sv_x1_names_values = Rstats::Func::values(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));

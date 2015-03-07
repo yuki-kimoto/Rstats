@@ -211,67 +211,6 @@ sub is_ordered {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
-sub copy_attrs_to {
-  my $r = shift;
-  
-  my ($x1, $x2, $opt) = @_;
-  
-  $opt ||= {};
-  my $new_indexes = $opt->{new_indexes};
-  my $exclude = $opt->{exclude} || [];
-  my %exclude_h = map { $_ => 1 } @$exclude;
-  
-  # dim
-  $x2->{dim} = Rstats::Func::as_vector($r, $x1->{dim}) if !$exclude_h{dim} && exists $x1->{dim};
-  
-  # class
-  $x2->{class} =  Rstats::Func::as_vector($r, $x1->{class}) if !$exclude_h{class} && exists $x1->{class};
-  
-  # levels
-  $x2->{levels} = Rstats::Func::as_vector($r, $x1->{levels}) if !$exclude_h{levels} && exists $x1->{levels};
-  
-  # names
-  if (!$exclude_h{names} && exists $x1->{names}) {
-    my $x2_names_values = [];
-    my $index = Rstats::Func::is_data_frame($r, $x1) ? $new_indexes->[1] : $new_indexes->[0];
-    if (defined $index) {
-      my $x1_names_values = $x1->{names}->values;
-      for my $i (@{Rstats::Func::values($r, $index)}) {
-        push @$x2_names_values, $x1_names_values->[$i - 1];
-      }
-    }
-    else {
-      $x2_names_values = $x1->{names}->values;
-    }
-    $x2->{names} = Rstats::Func::new_character($r, @$x2_names_values);
-  }
-  
-  # dimnames
-  if (!$exclude_h{dimnames} && exists $x1->{dimnames}) {
-    my $new_dimnames = [];
-    my $dimnames = $x1->{dimnames};
-    my $length = @$dimnames;
-    for (my $i = 0; $i < $length; $i++) {
-      my $dimname = $dimnames->[$i];
-      if (defined $dimname && $dimname->length_value) {
-        my $index = $new_indexes->[$i];
-        my $dimname_values = $dimname->values;
-        my $new_dimname_values = [];
-        if (defined $index) {
-          for my $k (@{$index->values}) {
-            push @$new_dimname_values, $dimname_values->[$k - 1];
-          }
-        }
-        else {
-          $new_dimname_values = $dimname_values;
-        }
-        push @$new_dimnames, Rstats::Func::new_character($r, @$new_dimname_values);
-      }
-    }
-    $x2->{dimnames} = $new_dimnames;
-  }
-}
-
 sub is_nan {
   my $r = shift;
   
@@ -3334,8 +3273,6 @@ sub get_array {
   
   my $x1 = shift;
   
-  $DB::single = 1;
-  
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
   my $level_drop;
@@ -3362,6 +3299,8 @@ sub get_array {
   $x1->at($_indexs);
   
   my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($r, $x1, $dim_drop, @$_indexs);
+  
+  $DB::single = 1;
   
   my $x1_values = $x1->values;
   my @a2_values = map { $x1_values->[$_] } @$poss;

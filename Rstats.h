@@ -810,6 +810,7 @@ namespace Rstats {
     SV* new_data_frame(SV*);
     SV* new_list(SV*);
     SV* new_vector(SV*, SV*, SV*);
+    SV* copy_attrs_to(SV*, SV*, SV*, SV*);
   }
 }
 

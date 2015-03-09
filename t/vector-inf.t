@@ -2,35 +2,35 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats::VectorFunc;
+use Rstats;
 
 # Inf
 {
   # Inf - negation repeat
   {
-    my $inf = Rstats::VectorFunc::new_double('Inf');
-    my $negative_inf = Rstats::VectorFunc::negation($inf);
-    my $inf2 = Rstats::VectorFunc::negation($negative_inf);
-    ok($inf2->value, 'Inf');
+    my $x_inf = r->new_double('Inf');
+    my $x_negative_inf = r->negation($x_inf);
+    my $x_inf2 = r->negation($x_negative_inf);
+    ok($x_inf2->value, 'Inf');
   }
   
   # Inf - to_string, plus
   {
-    my $inf = Rstats::VectorFunc::new_double('Inf');
-    is("$inf", 'Inf');
+    my $x_inf = r->new_double('Inf');
+    is("$x_inf", "[1] Inf\n");
   }
 
   # Inf - negation
   {
-    my $inf = Rstats::VectorFunc::new_double('Inf');
-    my $negative_inf = Rstats::VectorFunc::negation($inf);
-    is($negative_inf->value, '-Inf');
+    my $x_inf = r->new_double('Inf');
+    my $x_negative_inf = r->negation($x_inf);
+    is($x_negative_inf->value, '-Inf');
   }
 
   # Inf - to_string, minus
   {
-    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
-    is("$negative_inf", '-Inf');
+    my $x_negative_inf = r->new_double('-Inf');
+    is("$x_negative_inf", "[1] -Inf\n");
   }
 }
 
@@ -38,20 +38,20 @@ use Rstats::VectorFunc;
 {
   # is_infinite - Inf, true
   {
-    my $inf = Rstats::VectorFunc::new_double('Inf');
-    ok($inf->is_infinite->value);
+    my $x_inf = r->new_double('Inf');
+    ok($x_inf->is_infinite->value);
   }
   
   # is_infinite - -Inf, true
   {
-    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
-    ok($negative_inf->is_infinite->value);
+    my $x_negative_inf = r->new_double('-Inf');
+    ok($x_negative_inf->is_infinite->value);
   }
   
   # is_infinite - Double, false
   {
-    my $num = Rstats::VectorFunc::new_double(1);
-    ok(!$num->is_infinite->value);
+    my $x_num = r->new_double(1);
+    ok(!$x_num->is_infinite->value);
   }
 }
 
@@ -59,26 +59,26 @@ use Rstats::VectorFunc;
 {
   # is_finite - Inf, false
   {
-    my $inf = Rstats::VectorFunc::new_double('Inf');
-    ok(!$inf->is_finite->value);
+    my $x_inf = r->new_double('Inf');
+    ok(!$x_inf->is_finite->value);
   }
   
   # is_finite - -Inf, false
   {
-    my $negative_inf = Rstats::VectorFunc::new_double('-Inf');
-    ok(!$negative_inf->is_finite->value);
+    my $x_negative_inf = r->new_double('-Inf');
+    ok(!$x_negative_inf->is_finite->value);
   }
   
   # is_finite - Double, true
   {
-    my $num = Rstats::VectorFunc::new_double(1);
-    ok($num->is_finite->value);
+    my $x_num = r->new_double(1);
+    ok($x_num->is_finite->value);
   }
   
   # is_finite - Integer, true
   {
-    my $num = Rstats::VectorFunc::new_integer(1);
-    ok($num->is_finite->value);
+    my $x_num = r->new_integer(1);
+    ok($x_num->is_finite->value);
   }
 }
 

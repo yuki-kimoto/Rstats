@@ -816,6 +816,7 @@ namespace Rstats {
     SV* as_complex(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
+    SV* is_finite(SV*, SV*);
   }
 }
 

@@ -293,18 +293,6 @@ SV* decompose(...)
   return_sv(sv_decompose_elements);
 }
 
-SV* is_finite(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  Rstats::Vector* rets = Rstats::VectorFunc::is_finite(self);
-
-  SV* sv_rets = Rstats::pl_to_perl_obj(rets, "Rstats::Vector");
-  
-  return_sv(sv_rets);
-}
-
 SV* clone(...)
   PPCODE:
 {
@@ -1620,6 +1608,16 @@ SV* as_numeric(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x2 = Rstats::Func::as_numeric(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* is_finite(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_finite(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

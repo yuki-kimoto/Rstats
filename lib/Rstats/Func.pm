@@ -172,23 +172,6 @@ sub is_nan {
   }
 }
 
-sub is_infinite {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  if (my $vector = $x1->vector) {
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->is_infinite);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error : is_infinite is not implemented except array";
-  }
-}
-
 sub is_na {
   my $r = shift;
   

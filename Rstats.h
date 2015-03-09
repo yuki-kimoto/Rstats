@@ -817,6 +817,7 @@ namespace Rstats {
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
     SV* is_finite(SV*, SV*);
+    SV* is_infinite(SV*, SV*);
   }
 }
 

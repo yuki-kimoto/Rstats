@@ -793,3 +793,19 @@ SV* Rstats::Func::is_finite(SV* sv_r, SV* sv_x1) {
     croak("Error : is_finite is not implemented except array");
   }
 }
+
+SV* Rstats::Func::is_infinite(SV* sv_r, SV* sv_x1) {
+  
+  sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+  
+  if (Rstats::pl_hv_exists(sv_x1, "vector")) {
+    SV* sv_x2 = Rstats::Func::new_null(sv_r);
+    Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_infinite(Rstats::Func::get_vector(sv_r, sv_x1)));
+    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+    
+    return sv_x2;
+  }
+  else {
+    croak("Error : is_infinite is not implemented except array");
+  }
+}

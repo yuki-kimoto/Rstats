@@ -305,18 +305,6 @@ SV* clone(...)
   return_sv(sv_e2);
 }
 
-SV* is_infinite(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  Rstats::Vector* rets = Rstats::VectorFunc::is_infinite(self);
-  
-  SV* sv_rets = Rstats::pl_to_perl_obj(rets, "Rstats::Vector");
-  
-  return_sv(sv_rets);
-}
-
 SV* is_nan(...)
   PPCODE:
 {
@@ -1618,6 +1606,16 @@ SV* is_finite(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x2 = Rstats::Func::is_finite(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* is_infinite(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_infinite(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

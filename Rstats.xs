@@ -137,15 +137,6 @@ SV* as_complex(...)
   return_sv(sv_e2);
 }
 
-SV* as_logical(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_logical(self);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
 SV* as_numeric(...)
   PPCODE:
 {
@@ -160,15 +151,6 @@ SV* as_double(...)
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = Rstats::VectorFunc::as_double(self);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
-SV* as_integer(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_integer(self);
   SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
   return_sv(sv_e2);
 }
@@ -1701,6 +1683,16 @@ SV* as_integer(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x2 = Rstats::Func::as_integer(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* as_logical(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::as_logical(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

@@ -20,18 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub as_logical {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2 = Rstats::Func::new_array($r);
-  $x2->vector($x1->vector->as_logical);
-  Rstats::Func::copy_attrs_to($r, $x1, $x2);
-
-  return $x2;
-}
-
 sub as_complex {
   my $r = shift;
   

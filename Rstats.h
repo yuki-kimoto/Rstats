@@ -811,6 +811,7 @@ namespace Rstats {
     SV* new_list(SV*);
     SV* new_vector(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);
+    SV* as_integer(SV*, SV*);
   }
 }
 

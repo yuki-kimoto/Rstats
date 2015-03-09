@@ -155,23 +155,6 @@ sub is_ordered {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
-sub is_nan {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  if (defined(my $vector = $x1->vector)) {
-    my $x2 = Rstats::Func::NULL($r);
-    $x2->vector($x1->vector->is_nan);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error : is_nan is not implemented except array";
-  }
-}
-
 sub is_na {
   my $r = shift;
   

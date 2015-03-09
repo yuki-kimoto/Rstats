@@ -305,18 +305,6 @@ SV* clone(...)
   return_sv(sv_e2);
 }
 
-SV* is_nan(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-
-  Rstats::Vector* rets = Rstats::VectorFunc::is_nan(self);
-
-  SV* sv_rets = Rstats::pl_to_perl_obj(rets, "Rstats::Vector");
-  
-  return_sv(sv_rets);
-}
-
 SV* type(...)
   PPCODE:
 {
@@ -1619,5 +1607,16 @@ SV* is_infinite(...)
   
   return_sv(sv_x2);
 }
+
+SV* is_nan(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_nan(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 
 MODULE = Rstats PACKAGE = Rstats

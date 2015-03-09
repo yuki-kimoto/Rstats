@@ -825,3 +825,27 @@ SV* Rstats::Func::is_nan(SV* sv_r, SV* sv_x1) {
     croak("Error : is_nan is not implemented except array");
   }
 }
+
+SV* Rstats::Func::is_na(SV* sv_r, SV* sv_x1) {
+  
+  sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+  Rstats::Vector* x1 = Rstats::Func::get_vector(sv_r, sv_x1);
+  IV x1_length = Rstats::VectorFunc::get_length(x1);
+  Rstats::Vector* x2 = Rstats::VectorFunc::new_logical(x1_length);
+  
+  for (IV i = 0; i < Rstats::VectorFunc::get_length(x1); i++) {
+    if (Rstats::VectorFunc::exists_na_position(x1, i)) {
+      Rstats::VectorFunc::set_integer_value(x2, i, 1);
+    }
+    else {
+      Rstats::VectorFunc::set_integer_value(x2, i, 0);
+    }
+  }
+  
+  SV* sv_x2 = Rstats::Func::new_null(sv_r);
+  Rstats::Func::set_vector(sv_r, sv_x2, x2);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  
+  return sv_x2;
+}
+

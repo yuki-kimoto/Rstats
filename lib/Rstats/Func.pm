@@ -155,17 +155,6 @@ sub is_ordered {
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
-sub is_na {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  my $x2_values = [map { !defined $_ ? 1 : 0 } @{$x1->values}];
-  my $x2 = Rstats::Func::NULL($r);
-  $x2->vector(Rstats::VectorFunc::new_logical(@$x2_values));
-  
-  return $x2;
-}
-
 sub I {
   my $r = shift;
   

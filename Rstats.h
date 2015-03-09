@@ -819,6 +819,7 @@ namespace Rstats {
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
+    SV* is_na(SV*, SV*);
   }
 }
 

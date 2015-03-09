@@ -419,6 +419,28 @@ sub merge {
   my $sort = defined $x_sort ? $x_sort->value : 0;
 }
 
+my $type_level = {
+  character => 6,
+  complex => 5,
+  double => 4,
+  integer => 3,
+  logical => 2,
+  na => 1
+};
+
+sub higher_type {
+  my $r = shift;
+  
+  my ($type1, $type2) = @_;
+  
+  if ($type_level->{$type1} > $type_level->{$type2}) {
+    return $type1;
+  }
+  else {
+    return $type2;
+  }
+}
+
 # TODO
 #read.table(file, header = FALSE, sep = "", quote = "\"'",
 #           dec = ".", row.names, col.names,
@@ -496,7 +518,7 @@ sub read_table {
       else {
         $type = 'character';
       }
-      $type_columns->[$i] = Rstats::Util::higher_type($r, $type_columns->[$i], $type);
+      $type_columns->[$i] = Rstats::Func::higher_type($r, $type_columns->[$i], $type);
     }
   }
   

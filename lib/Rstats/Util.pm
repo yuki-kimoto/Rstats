@@ -19,28 +19,6 @@ sub monkey_patch {
   *{"${class}::$_"} = $NAME->("${class}::$_", $patch{$_}) for keys %patch;
 }
 
-my $type_level = {
-  character => 6,
-  complex => 5,
-  double => 4,
-  integer => 3,
-  logical => 2,
-  na => 1
-};
-
-sub higher_type {
-  my $r = shift;
-  
-  my ($type1, $type2) = @_;
-  
-  if ($type_level->{$type1} > $type_level->{$type2}) {
-    return $type1;
-  }
-  else {
-    return $type2;
-  }
-}
-
 sub parse_index {
   my $r = shift;
   

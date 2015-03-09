@@ -759,3 +759,12 @@ SV* Rstats::Func::as_complex(SV* sv_r, SV* sv_x1) {
 
   return sv_x2;
 }
+
+SV* Rstats::Func::as_double(SV* sv_r, SV* sv_x1) {
+  
+  SV* sv_x2 = Rstats::Func::new_array(sv_r);
+  Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_double(Rstats::Func::get_vector(sv_r, sv_x1)));
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+
+  return sv_x2;
+}

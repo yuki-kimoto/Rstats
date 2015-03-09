@@ -137,15 +137,6 @@ SV* as_numeric(...)
   return_sv(sv_e2);
 }
 
-SV* as_double(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_double(self);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
 SV* new_null(...)
   PPCODE:
 {
@@ -1694,6 +1685,16 @@ SV* as_complex(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x2 = Rstats::Func::as_complex(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* as_double(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::as_double(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

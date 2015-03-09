@@ -20,15 +20,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub as_numeric {
-  my $r = shift;
-  
-  as_double($r, @_);
-}
-
-
-
-
 sub as_character {
   my $r = shift;
   

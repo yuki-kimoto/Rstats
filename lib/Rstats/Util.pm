@@ -22,7 +22,8 @@ sub monkey_patch {
 sub parse_index {
   my $r = shift;
   
-  my ($x1, $drop, @_indexs) = @_;
+  my ($x1, $drop, $_indexs) = @_;
+  my @_indexs = @$_indexs;
   
   my $x1_dim = $x1->dim_as_array->values;
   my @indexs;
@@ -39,7 +40,7 @@ sub parse_index {
       push @$poss, $i;
     }
     
-    return ($poss, []);
+    return [$poss, []];
   }
   else {
     for (my $i = 0; $i < @$x1_dim; $i++) {
@@ -118,7 +119,7 @@ sub parse_index {
     my $ords = cross_product($index_values);
     my @poss = map { Rstats::Util::index_to_pos($_, $x1_dim) } @$ords;
   
-    return (\@poss, \@x2_dim, \@indexs);
+    return [\@poss, \@x2_dim, \@indexs];
   }
 }
 

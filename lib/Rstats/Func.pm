@@ -3227,7 +3227,7 @@ sub set_array {
   
   my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  my ($poss, $x2_dim) = Rstats::Util::parse_index($r, $x1, 0, @$_indexs);
+  my ($poss, $x2_dim) = @{Rstats::Util::parse_index($r, $x1, 0, $_indexs)};
   
   my $x1_elements;
   if (Rstats::Func::is_factor($r, $x1)) {
@@ -3320,7 +3320,7 @@ sub get_array {
   }
   $x1->at($_indexs);
   
-  my ($poss, $x2_dim, $new_indexes) = Rstats::Util::parse_index($r, $x1, $dim_drop, @$_indexs);
+  my ($poss, $x2_dim, $new_indexes) = @{Rstats::Util::parse_index($r, $x1, $dim_drop, $_indexs)};
   
   my $x1_values = $x1->values;
   my @a2_values = map { $x1_values->[$_] } @$poss;

@@ -2,29 +2,29 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
-use Rstats::VectorFunc;
+use Rstats;
 
 # reference
 {
-  my $na = Rstats::VectorFunc::new_logical(undef);
-  ok($na->is_na);
+  my $x_na = r->new_logical(undef);
+  ok($x_na->is_na);
 }
 
 # negation
 {
-  my $na1 = Rstats::VectorFunc::new_logical(undef);
-  my $na2 = Rstats::VectorFunc::negation($na1);
-  ok($na2->is_na);
+  my $x_na1 = r->new_logical(undef);
+  my $x_na2 = r->negation($x_na1);
+  ok(r->is_na($x_na2));
 }
 
 # to_string
 {
-  my $na = Rstats::VectorFunc::new_logical(undef);
-  is("$na", 'NA');
+  my $x_na = r->new_logical(undef);
+  is("$x_na", "[1] NA\n");
 }
 
 # is_na
 {
-  my $na = Rstats::VectorFunc::new_logical(undef);
-  ok($na->is_na);
+  my $x_na = r->new_logical(undef);
+  ok(r->is_na($x_na));
 }

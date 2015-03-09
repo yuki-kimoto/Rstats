@@ -100,28 +100,6 @@ SV* length(...)
   return_sv(sv_length_elements);
 }
 
-SV* is_na(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  IV length = Rstats::VectorFunc::get_length(self);
-  Rstats::Vector* rets = Rstats::VectorFunc::new_logical(length);
-  
-  for (IV i = 0; i < length; i++) {
-    if (Rstats::VectorFunc::exists_na_position(self, i)) {
-      Rstats::VectorFunc::set_integer_value(rets, i, 1);
-    }
-    else {
-      Rstats::VectorFunc::set_integer_value(rets, i, 0);
-    }
-  }
-  
-  SV* sv_rets = Rstats::pl_to_perl_obj(rets, "Rstats::Vector");
-  
-  return_sv(sv_rets);
-}
-
 SV* compose(...)
   PPCODE:
 {

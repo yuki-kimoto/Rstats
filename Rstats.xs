@@ -47,15 +47,6 @@ SV* is_character(...)
   return_sv(sv_is);
 }
 
-SV* is_complex(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  bool is = Rstats::VectorFunc::is_complex(self);
-  SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
-  return_sv(sv_is);
-}
-
 SV* as(...)
   PPCODE:
 {

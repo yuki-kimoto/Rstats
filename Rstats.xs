@@ -90,16 +90,6 @@ SV* length_value(...)
   return_sv(Rstats::pl_new_sv_iv(length));
 }
 
-SV* length(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  IV length = Rstats::VectorFunc::get_length(self);
-  Rstats::Vector* length_elements = Rstats::VectorFunc::new_double(1, length);
-  SV* sv_length_elements = Rstats::pl_to_perl_obj(length_elements, "Rstats::Vector");
-  return_sv(sv_length_elements);
-}
-
 SV* compose(...)
   PPCODE:
 {

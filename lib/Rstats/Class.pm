@@ -237,6 +237,7 @@ my @func_names = qw/
   new_double
   new_integer
   new_logical
+  negation
   dim
   Inf
   NaN

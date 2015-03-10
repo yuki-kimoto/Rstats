@@ -4,6 +4,34 @@ use warnings;
 
 use Rstats;
 
+# transform
+{
+  # transform - less elements
+  {
+    my $sex = c('F', 'M', 'F', 'M');
+    my $height = c(172, 163, 155, 222);
+    my $weight = c(5, 6, 7, 8);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->transform($x1, sex => c("P"));
+    is_deeply(r->names($x2)->values, [qw/sex height weight/]);
+    is_deeply($x2->getin(1)->values, ["P", "P", "P", "P"]);
+  }
+  
+  # transform - basic
+  {
+    my $sex = c('F', 'M', 'F', 'M');
+    my $height = c(172, 163, 155, 222);
+    my $weight = c(5, 6, 7, 8);
+    
+    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
+    my $x2 = r->transform($x1, sex => c("P", "Q", "P", "Q"), new1 => c(1, 2, 3, 4));
+    is_deeply(r->names($x2)->values, [qw/sex height weight new1/]);
+    is_deeply($x2->getin(1)->values, ["P", "Q", "P", "Q"]);
+    is_deeply($x2->getin(4)->values, [1, 2, 3, 4]);
+  }
+}
+
 # get
 {
   
@@ -213,34 +241,6 @@ use Rstats;
   my $x2 = r->typeof($x1);
   ok(r->is_character($x2));
   is_deeply($x2->values, ['list']);
-}
-
-# transform
-{
-  # transform - less elements
-  {
-    my $sex = c('F', 'M', 'F', 'M');
-    my $height = c(172, 163, 155, 222);
-    my $weight = c(5, 6, 7, 8);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = r->transform($x1, sex => c("P"));
-    is_deeply(r->names($x2)->values, [qw/sex height weight/]);
-    is_deeply($x2->getin(1)->values, ["P", "P", "P", "P"]);
-  }
-  
-  # transform - basic
-  {
-    my $sex = c('F', 'M', 'F', 'M');
-    my $height = c(172, 163, 155, 222);
-    my $weight = c(5, 6, 7, 8);
-    
-    my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = r->transform($x1, sex => c("P", "Q", "P", "Q"), new1 => c(1, 2, 3, 4));
-    is_deeply(r->names($x2)->values, [qw/sex height weight new1/]);
-    is_deeply($x2->getin(1)->values, ["P", "Q", "P", "Q"]);
-    is_deeply($x2->getin(4)->values, [1, 2, 3, 4]);
-  }
 }
 
 # subset

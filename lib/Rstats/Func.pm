@@ -92,43 +92,6 @@ sub labels {
   return $r->as_character(@_);
 }
 
-sub class {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_class = Rstats::Func::to_c($r, $_[0]);
-    
-    $x1->{class} = Rstats::Func::as_vector($r, $x_class);
-    
-    return $x1;
-  }
-  else {
-    my $x_class;
-    if (exists $x1->{class}) {
-      $x_class = Rstats::Func::as_vector($r, $x1->{class});
-    }
-    elsif (Rstats::Func::is_vector($r, $x1)) {
-      $x_class = Rstats::Func::as_vector($r, Rstats::Func::mode($r, $x1));
-    }
-    elsif (is_matrix($r, $x1)) {
-      $x_class = Rstats::VectorFunc::new_character('matrix');
-    }
-    elsif (is_array($r, $x1)) {
-      $x_class = Rstats::VectorFunc::new_character('array');
-    }
-    elsif (Rstats::Func::is_data_frame($r, $x1)) {
-      $x_class = Rstats::VectorFunc::new_character('data.frame');
-    }
-    elsif (is_list($r, $x1)) {
-      $x_class = Rstats::VectorFunc::new_character('list');
-    }
-    
-    return $x_class;
-  }
-}
-
 sub is_factor {
   my $r = shift;
   

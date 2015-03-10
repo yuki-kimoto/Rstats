@@ -849,3 +849,51 @@ SV* Rstats::Func::is_na(SV* sv_r, SV* sv_x1) {
   return sv_x2;
 }
 
+SV* Rstats::Func::set_class(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+  
+  sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+  
+  Rstats::pl_hv_store(sv_x1, "class", Rstats::Func::as_vector(sv_r, sv_x2));
+  
+  return sv_x1;
+}
+
+SV* Rstats::Func::get_class(SV* sv_r, SV* sv_x1) {
+  SV* sv_x2;
+  if (Rstats::pl_hv_exists(sv_x1, "class")) {
+    sv_x2 = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
+  }
+  else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_x1))) {
+    SV* sv_class_names = Rstats::pl_new_av_ref();
+    SV* sv_class_name = Rstats::Func::type(sv_r, sv_x1);
+    if (strEQ(SvPV_nolen(sv_class_name), "double") || strEQ(SvPV_nolen(sv_class_name), "integer")) {
+      sv_class_name = Rstats::pl_new_sv_pv("numeric");
+    }
+    
+    Rstats::pl_av_push(sv_class_names, sv_class_name);
+    sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+  }
+  else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_matrix(sv_r, sv_x1))) {
+    SV* sv_class_names = Rstats::pl_new_av_ref();
+    Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("matrix"));
+    sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+  }
+  else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_x1))) {
+    SV* sv_class_names = Rstats::pl_new_av_ref();
+    Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("array"));
+    sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+  }
+  else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
+    SV* sv_class_names = Rstats::pl_new_av_ref();
+    Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("data.frame"));
+    sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+  }
+  else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_list(sv_r, sv_x1))) {
+    SV* sv_class_names = Rstats::pl_new_av_ref();
+    Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("list"));
+    sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+  }
+  
+  return sv_x2;
+}
+

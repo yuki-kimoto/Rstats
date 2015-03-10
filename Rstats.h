@@ -823,6 +823,7 @@ namespace Rstats {
     SV* set_class(SV*, SV*, SV*);
     SV* get_class(SV*, SV*);
     SV* is_factor(SV*, SV*);
+    SV* is_ordered(SV*, SV*);
   }
 }
 

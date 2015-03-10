@@ -25,18 +25,6 @@ sub labels {
   return $r->as_character(@_);
 }
 
-sub is_ordered {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $classes = $x1->class->values;
-
-  my $is = grep { $_ eq 'ordered' } @$classes;
-  
-  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
 sub as_character {
   my $r = shift;
   

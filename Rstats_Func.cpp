@@ -914,3 +914,21 @@ SV* Rstats::Func::is_factor(SV* sv_r, SV* sv_x1) {
   
   return match ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
 }
+
+SV* Rstats::Func::is_ordered(SV* sv_r, SV* sv_x1) {
+  
+  SV* sv_classes = Rstats::Func::get_class(sv_r, sv_x1);
+  Rstats::Vector* v_classes = Rstats::Func::get_vector(sv_r, sv_classes);
+  IV v_classes_length = Rstats::VectorFunc::get_length(v_classes);
+  
+  IV match = 0;
+  for (IV i = 0; i < v_classes_length; i++) {
+    SV* sv_class = Rstats::VectorFunc::get_character_value(v_classes, i);
+    if (strEQ(SvPV_nolen(sv_class), "ordered")) {
+      match = 1;
+      break;
+    }
+  }
+  
+  return match ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+}

@@ -20,6 +20,23 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub labels {
+  my $r = shift;
+  return $r->as_character(@_);
+}
+
+sub is_ordered {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $classes = $x1->class->values;
+
+  my $is = grep { $_ eq 'ordered' } @$classes;
+  
+  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
+}
+
 sub as_character {
   my $r = shift;
   
@@ -46,8 +63,7 @@ sub as_character {
         push @$x2_values, undef;
       }
     }
-    $x2 = Rstats::Func::NULL($r);
-    $x2->vector(Rstats::VectorFunc::new_character(@$x2_values));
+    $x2 = Rstats::Func::new_character($r, @$x2_values);
   }
   else {
     $x2 = Rstats::Func::new_array($r);
@@ -85,35 +101,6 @@ sub as {
   else {
     croak "Invalid mode is passed";
   }
-}
-
-sub labels {
-  my $r = shift;
-  return $r->as_character(@_);
-}
-
-sub is_factor {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $classes = $x1->class->values;
-  
-  my $is = grep { $_ eq 'factor' } @$classes;
-  
-  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-}
-
-sub is_ordered {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $classes = $x1->class->values;
-
-  my $is = grep { $_ eq 'ordered' } @$classes;
-  
-  return $is ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
 }
 
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;

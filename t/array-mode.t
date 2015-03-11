@@ -705,33 +705,3 @@ use Rstats::VectorFunc;
   }
 }
 
-# as_* from Rstats object
-{
-  # as_* from Rstats object - as_vector
-  {
-    my $x = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_vector($x))->values, []);
-  }
-  
-  # as_* from Rstats object - as_matrix, from vector
-  {
-    my $x = se('1:24');
-    is_deeply(r->as_matrix($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
-  }
-
-  # as_* from Rstats object - as_matrix, from matrix
-  {
-    my $x = matrix(se('1:12'), 4, 3);
-    is_deeply(r->as_matrix($x)->values, [1 .. 12]);
-    is_deeply(r->dim(r->as_matrix($x))->values, [4, 3]);
-  }
-
-  # as_* from Rstats object - as_matrix, from array
-  {
-    my $x = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_matrix($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
-  }
-}

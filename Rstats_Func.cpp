@@ -158,10 +158,10 @@ SV* Rstats::Func::new_array(SV* sv_r) {
 
 SV* Rstats::Func::new_character(SV* sv_r, SV* sv_values) {
   SV* sv_x1 = new_null(sv_r);
-  I32 length = Rstats::pl_av_len(sv_values);
+  IV length = Rstats::pl_av_len(sv_values);
   
   Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
     if (SvOK(sv_value)) {
@@ -183,10 +183,17 @@ SV* Rstats::Func::new_character(SV* sv_r, SV* sv_values) {
 
 SV* Rstats::Func::new_double(SV* sv_r, SV* sv_values) {
   SV* sv_x1 = new_null(sv_r);
-  I32 length = Rstats::pl_av_len(sv_values);
+  
+  if (!sv_derived_from(sv_values, "ARRAY")) {
+    SV* sv_values_av_ref = Rstats::pl_new_av_ref();
+    Rstats::pl_av_push(sv_values_av_ref, sv_values);
+    sv_values = sv_values_av_ref;
+  }
+  
+  IV length = Rstats::pl_av_len(sv_values);
   
   Rstats::Vector* v1 = Rstats::VectorFunc::new_double(length);
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
     
     if (SvOK(sv_value)) {
@@ -208,10 +215,10 @@ SV* Rstats::Func::new_double(SV* sv_r, SV* sv_values) {
 
 SV* Rstats::Func::new_complex(SV* sv_r, SV* sv_values) {
   SV* sv_x1 = new_null(sv_r);
-  I32 length = Rstats::pl_av_len(sv_values);
+  IV length = Rstats::pl_av_len(sv_values);
   
   Rstats::Vector* v1 = Rstats::VectorFunc::new_complex(length);
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
     
     if (SvOK(sv_value)) {
@@ -238,10 +245,10 @@ SV* Rstats::Func::new_complex(SV* sv_r, SV* sv_values) {
 
 SV* Rstats::Func::new_integer(SV* sv_r, SV* sv_values) {
   SV* sv_x1 = new_null(sv_r);
-  I32 length = Rstats::pl_av_len(sv_values);
+  IV length = Rstats::pl_av_len(sv_values);
   
   Rstats::Vector* v1 = Rstats::VectorFunc::new_integer(length);
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
     
     if (SvOK(sv_value)) {
@@ -263,10 +270,10 @@ SV* Rstats::Func::new_integer(SV* sv_r, SV* sv_values) {
 
 SV* Rstats::Func::new_logical(SV* sv_r, SV* sv_values) {
   SV* sv_x1 = new_null(sv_r);
-  I32 length = Rstats::pl_av_len(sv_values);
+  IV length = Rstats::pl_av_len(sv_values);
   
   Rstats::Vector* v1 = Rstats::VectorFunc::new_logical(length);
-  for (I32 i = 0; i < length; i++) {
+  for (IV i = 0; i < length; i++) {
     SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
     
     if (SvOK(sv_value)) {
@@ -945,3 +952,13 @@ SV* Rstats::Func::clone(SV* sv_r, SV* sv_x1) {
   return sv_x2;
 }
 
+SV* Rstats::Func::dim_as_array(SV* sv_r, SV* sv_x1) {
+  
+  if (Rstats::pl_hv_exists(sv_x1, "dim")) {
+    return Rstats::Func::get_dim(sv_r, sv_x1);
+  }
+  else {
+    SV* sv_length = Rstats::Func::length_value(sv_r, sv_x1);
+    return Rstats::Func::new_double(sv_r, sv_length);
+  }
+}

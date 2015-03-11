@@ -826,6 +826,7 @@ namespace Rstats {
     SV* is_factor(SV*, SV*);
     SV* is_ordered(SV*, SV*);
     SV* clone(SV*, SV*);
+    SV* dim_as_array(SV*, SV*);
   }
 }
 

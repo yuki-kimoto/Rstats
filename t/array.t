@@ -5,6 +5,23 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
+# new_double
+{
+  # new_double - arguments is list
+  {
+    my $x1 = r->new_double(1.1, 1.2, 1.3);
+    ok($x1->is_double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+
+  # new_double - arguments is array reference
+  {
+    my $x1 = r->new_double([1.1, 1.2, 1.3]);
+    ok($x1->is_double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+}
+
 # get
 {
   # get - have names
@@ -134,23 +151,6 @@ use Rstats::Func;
     is_deeply(r->dim($x2)->values, [3, 2]);
     is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
     is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
-  }
-}
-
-# new_double
-{
-  # new_double - arguments is list
-  {
-    my $x1 = r->new_double(1.1, 1.2, 1.3);
-    ok($x1->is_double);
-    is_deeply($x1->values, [1.1, 1.2, 1.3]);
-  }
-
-  # new_double - arguments is array reference
-  {
-    my $x1 = r->new_double([1.1, 1.2, 1.3]);
-    ok($x1->is_double);
-    is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 }
 

@@ -96,20 +96,6 @@ sub as_list {
   }
 }
 
-sub dim_as_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (exists $x1->{dim}) {
-    return Rstats::Func::dim($r, $x1);
-  }
-  else {
-    my $length = Rstats::Func::length_value($r, $x1);
-    return Rstats::Func::new_double($r, $length);
-  }
-}
-
 sub as_factor {
   my $r = shift;
   
@@ -149,18 +135,6 @@ sub as_matrix {
   my $x2 = Rstats::Func::as_vector($r, $x1);
   
   return Rstats::Func::matrix($r, $x2, $row, $col);
-}
-
-sub as_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  my $x2 = Rstats::Func::as_vector($r, $x1);
-
-  my $x1_dim_elements = [@{$x1->dim_as_array->values}];
-  
-  return array($r, $x1, $x2, $x1_dim_elements);
 }
 
 sub names {

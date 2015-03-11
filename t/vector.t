@@ -19,9 +19,9 @@ use Rstats;
 
   # names - to_string
   {
-    my $v = c(1, 2, 3);
-    r->names($v => c('a', 'b', 'c'));
-    is("$v", "a b c\n[1] 1 2 3\n");
+    my $x1 = c(1, 2, 3);
+    r->names($x1 => c('a', 'b', 'c'));
+    is("$x1", "a b c\n[1] 1 2 3\n");
   }
 }
 

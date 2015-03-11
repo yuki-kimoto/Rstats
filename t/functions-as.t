@@ -8,16 +8,16 @@ use Rstats;
 {
   # as_array - from vector
   {
-    my $x = se('1:24');
-    is_deeply(r->as_array($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_array($x))->values, [24]);
+    my $x1 = se('1:24');
+    is_deeply(r->as_array($x1)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_array($x1))->values, [24]);
   }
 
   # as_array - from array
   {
-    my $x = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_array($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_array($x))->values, [4, 3, 2]);
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_array($x1)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_array($x1))->values, [4, 3, 2]);
   }
 }
 
@@ -114,9 +114,9 @@ use Rstats;
 {
   # as_vector - from array
   {
-    my $x = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_vector($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_vector($x))->values, []);
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_vector($x1)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_vector($x1))->values, []);
   }
 }
 
@@ -131,15 +131,15 @@ use Rstats;
 
   # as_matrix - from matrix
   {
-    my $x = matrix(se('1:12'), 4, 3);
-    is_deeply(r->as_matrix($x)->values, [1 .. 12]);
-    is_deeply(r->dim(r->as_matrix($x))->values, [4, 3]);
+    my $x1 = matrix(se('1:12'), 4, 3);
+    is_deeply(r->as_matrix($x1)->values, [1 .. 12]);
+    is_deeply(r->dim(r->as_matrix($x1))->values, [4, 3]);
   }
 
   # as_matrix - from array
   {
-    my $x = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_matrix($x)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_matrix($x1)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_matrix($x1))->values, [24, 1]);
   }
 }

@@ -21,15 +21,12 @@ use Math::Round ();
 use Encode ();
 
 sub as_array {
-  my $r = shift;
+  my ($r, $x1) = @_;
   
-  my $x1 = shift;
-
   my $x2 = Rstats::Func::as_vector($r, $x1);
-
-  my $x1_dim_elements = [@{$x1->dim_as_array->values}];
+  my $x2_dim = Rstats::Func::dim_as_array($r, $x1);
   
-  return array($r, $x1, $x2, $x1_dim_elements);
+  return array($r, $x2, $x2_dim);
 }
 
 sub levels {

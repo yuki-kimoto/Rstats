@@ -4,6 +4,23 @@ use warnings;
 
 use Rstats;
 
+# as_array
+{
+  # as_array - from vector
+  {
+    my $x = se('1:24');
+    is_deeply(r->as_array($x)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_array($x))->values, [24]);
+  }
+
+  # as_array - from array
+  {
+    my $x = array(se('1:24'), c(4, 3, 2));
+    is_deeply(r->as_array($x)->values, [1 .. 24]);
+    is_deeply(r->dim(r->as_array($x))->values, [4, 3, 2]);
+  }
+}
+
 # as_numeric
 {
   # as_numeric - from complex
@@ -95,7 +112,7 @@ use Rstats;
 }
 # as_vector
 {
-  # as_vector from Rstats object - as_vector
+  # as_vector - from array
   {
     my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_vector($x)->values, [1 .. 24]);
@@ -105,21 +122,21 @@ use Rstats;
 
 # as_matrix
 {
-  # as_matrix from Rstats object - as_matrix, from vector
+  # as_matrix - from vector
   {
     my $x = se('1:24');
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }
 
-  # as_matrix from Rstats object - as_matrix, from matrix
+  # as_matrix - from matrix
   {
     my $x = matrix(se('1:12'), 4, 3);
     is_deeply(r->as_matrix($x)->values, [1 .. 12]);
     is_deeply(r->dim(r->as_matrix($x))->values, [4, 3]);
   }
 
-  # as_matrix from Rstats object - as_matrix, from array
+  # as_matrix - from array
   {
     my $x = array(se('1:24'), c(4, 3, 2));
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);

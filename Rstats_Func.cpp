@@ -75,22 +75,22 @@ SV* Rstats::Func::length_value(SV* sv_r, SV* sv_x1) {
 
 SV* Rstats::Func::type(SV* sv_r, SV* sv_x1) {
   
-  Rstats::VectorType::Enum type = get_vector(sv_r, sv_x1)->type;
+  Rstats::Type::Enum type = get_vector(sv_r, sv_x1)->type;
   
   SV* sv_type;
-  if (type == Rstats::VectorType::CHARACTER) {
+  if (type == Rstats::Type::CHARACTER) {
     sv_type = Rstats::pl_new_sv_pv("character");
   }
-  else if (type == Rstats::VectorType::COMPLEX) {
+  else if (type == Rstats::Type::COMPLEX) {
     sv_type = Rstats::pl_new_sv_pv("complex");
   }
-  else if (type == Rstats::VectorType::DOUBLE) {
+  else if (type == Rstats::Type::DOUBLE) {
     sv_type = Rstats::pl_new_sv_pv("double");
   }
-  else if (type == Rstats::VectorType::INTEGER) {
+  else if (type == Rstats::Type::INTEGER) {
     sv_type = Rstats::pl_new_sv_pv("integer");
   }
-  else if (type == Rstats::VectorType::LOGICAL) {
+  else if (type == Rstats::Type::LOGICAL) {
     sv_type = Rstats::pl_new_sv_pv("logical");
   }
   else {
@@ -118,7 +118,7 @@ SV* Rstats::Func::is_vector (SV* sv_r, SV* sv_x1) {
 IV Rstats::Func::to_bool (SV* sv_r, SV* sv_x1) {
   
   Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
-  if (v1->type == Rstats::VectorType::LOGICAL) {
+  if (v1->type == Rstats::Type::LOGICAL) {
     IV is = Rstats::VectorFunc::get_integer_value(v1, 0);
     return is;
   }
@@ -351,10 +351,10 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
 
   IV element_length = Rstats::pl_av_len(sv_elements);
   // Check type and length
-  std::map<Rstats::VectorType::Enum, IV> type_h;
+  std::map<Rstats::Type::Enum, IV> type_h;
   IV length = 0;
   for (IV i = 0; i < element_length; i++) {
-    Rstats::VectorType::Enum type;
+    Rstats::Type::Enum type;
     SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
     if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Array")) {
       length += Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_element));
@@ -369,14 +369,14 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
     else {
       if (SvOK(sv_element)) {
         if (Rstats::Util::is_perl_number(sv_element)) {
-          type_h[Rstats::VectorType::DOUBLE] = 1;
+          type_h[Rstats::Type::DOUBLE] = 1;
         }
         else {
-          type_h[Rstats::VectorType::CHARACTER] = 1;
+          type_h[Rstats::Type::CHARACTER] = 1;
         }
       }
       else {
-        type_h[Rstats::VectorType::LOGICAL] = 1;
+        type_h[Rstats::Type::LOGICAL] = 1;
       }
       length += 1;
     }
@@ -384,23 +384,23 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
 
   // Decide type
   Rstats::Vector* v2;
-  if (type_h[Rstats::VectorType::CHARACTER]) {
+  if (type_h[Rstats::Type::CHARACTER]) {
     v2 = Rstats::VectorFunc::new_character(length);
   }
-  else if (type_h[Rstats::VectorType::COMPLEX]) {
+  else if (type_h[Rstats::Type::COMPLEX]) {
     v2 = Rstats::VectorFunc::new_complex(length);
   }
-  else if (type_h[Rstats::VectorType::DOUBLE]) {
+  else if (type_h[Rstats::Type::DOUBLE]) {
     v2 = Rstats::VectorFunc::new_double(length);
   }
-  else if (type_h[Rstats::VectorType::INTEGER]) {
+  else if (type_h[Rstats::Type::INTEGER]) {
     v2 = Rstats::VectorFunc::new_integer(length);
   }
   else {
     v2 = Rstats::VectorFunc::new_logical(length);
   }
   
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v2);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v2);
   
   IV pos = 0;
   for (IV i = 0; i < element_length; i++) {
@@ -420,16 +420,16 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
         v_tmp = v1;
       }
       else {
-        if (type == Rstats::VectorType::CHARACTER) {
+        if (type == Rstats::Type::CHARACTER) {
           v_tmp = Rstats::VectorFunc::as_character(v1);
         }
-        else if (type == Rstats::VectorType::COMPLEX) {
+        else if (type == Rstats::Type::COMPLEX) {
           v_tmp = Rstats::VectorFunc::as_complex(v1);
         }
-        else if (type == Rstats::VectorType::DOUBLE) {
+        else if (type == Rstats::Type::DOUBLE) {
           v_tmp = Rstats::VectorFunc::as_double(v1);
         }
-        else if (type == Rstats::VectorType::INTEGER) {
+        else if (type == Rstats::Type::INTEGER) {
           v_tmp = Rstats::VectorFunc::as_integer(v1);
         }
         else {
@@ -442,16 +442,16 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
           Rstats::VectorFunc::add_na_position(v2, pos);
         }
         else {
-          if (type == Rstats::VectorType::CHARACTER) {
+          if (type == Rstats::Type::CHARACTER) {
             Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_character_value(v_tmp, k));
           }
-          else if (type == Rstats::VectorType::COMPLEX) {
+          else if (type == Rstats::Type::COMPLEX) {
             Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_complex_value(v_tmp, k));
           }
-          else if (type == Rstats::VectorType::DOUBLE) {
+          else if (type == Rstats::Type::DOUBLE) {
             Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_double_value(v_tmp, k));
           }
-          else if (type == Rstats::VectorType::INTEGER) {
+          else if (type == Rstats::Type::INTEGER) {
             Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_integer_value(v_tmp, k));
           }
           else {
@@ -468,16 +468,16 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
     }
     else {
       if (SvOK(sv_element)) {
-        if (type == Rstats::VectorType::CHARACTER) {
+        if (type == Rstats::Type::CHARACTER) {
           Rstats::VectorFunc::set_character_value(v2, pos, sv_element);
         }
-        else if (type == Rstats::VectorType::COMPLEX) {
+        else if (type == Rstats::Type::COMPLEX) {
           Rstats::VectorFunc::set_complex_value(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
         }
-        else if (type == Rstats::VectorType::DOUBLE) {
+        else if (type == Rstats::Type::DOUBLE) {
           Rstats::VectorFunc::set_double_value(v2, pos, SvNV(sv_element));
         }
-        else if (type == Rstats::VectorType::INTEGER) {
+        else if (type == Rstats::Type::INTEGER) {
           Rstats::VectorFunc::set_integer_value(v2, pos, SvIV(sv_element));
         }
         else {

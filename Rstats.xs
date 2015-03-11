@@ -315,7 +315,7 @@ SV* flag(...)
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
   
   SV* sv_flag;
-  if (Rstats::VectorFunc::get_type(self) == Rstats::VectorType::DOUBLE) {
+  if (Rstats::VectorFunc::get_type(self) == Rstats::Type::DOUBLE) {
     if (Rstats::VectorFunc::is_infinite(self)) {
       NV value = Rstats::VectorFunc::get_double_value(self, 0);
       if (value > 0) {

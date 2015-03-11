@@ -80,27 +80,27 @@ SV* Rstats::VectorFunc::get_values(Rstats::Vector* v1) {
 }
 
 bool Rstats::VectorFunc::is_character (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::CHARACTER;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::CHARACTER;
 }
 
 bool Rstats::VectorFunc::is_complex (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::COMPLEX;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::COMPLEX;
 }
 
 bool Rstats::VectorFunc::is_double (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::DOUBLE;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::DOUBLE;
 }
 
 bool Rstats::VectorFunc::is_integer (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::INTEGER;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::INTEGER;
 }
 
 bool Rstats::VectorFunc::is_numeric (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::DOUBLE || Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::INTEGER;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::DOUBLE || Rstats::VectorFunc::get_type(v1) == Rstats::Type::INTEGER;
 }
 
 bool Rstats::VectorFunc::is_logical (Rstats::Vector* v1) {
-  return Rstats::VectorFunc::get_type(v1) == Rstats::VectorType::LOGICAL;
+  return Rstats::VectorFunc::get_type(v1) == Rstats::Type::LOGICAL;
 }
 
 std::vector<SV*>* Rstats::VectorFunc::get_character_values(Rstats::Vector* v1) {
@@ -119,7 +119,7 @@ std::vector<IV>* Rstats::VectorFunc::get_integer_values(Rstats::Vector* v1) {
   return (std::vector<IV>*)v1->values;
 }
 
-Rstats::VectorType::Enum Rstats::VectorFunc::get_type(Rstats::Vector* v1) {
+Rstats::Type::Enum Rstats::VectorFunc::get_type(Rstats::Vector* v1) {
   return v1->type;
 }
 
@@ -146,19 +146,19 @@ IV Rstats::VectorFunc::get_length (Rstats::Vector* v1) {
     return 0;
   }
   
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       return Rstats::VectorFunc::get_character_values(v1)->size();
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       return Rstats::VectorFunc::get_complex_values(v1)->size();
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       return Rstats::VectorFunc::get_double_values(v1)->size();
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       return Rstats::VectorFunc::get_integer_values(v1)->size();
       break;
   }
@@ -174,9 +174,9 @@ Rstats::Vector* Rstats::VectorFunc::new_vector() {
 void Rstats::VectorFunc::delete_vector (Rstats::Vector* v1) {
   IV length = Rstats::VectorFunc::get_length(v1);
   
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER : {
+    case Rstats::Type::CHARACTER : {
       std::vector<SV*>* values = Rstats::VectorFunc::get_character_values(v1);
       for (IV i = 0; i < length; i++) {
         if ((*values)[i] != NULL) {
@@ -186,18 +186,18 @@ void Rstats::VectorFunc::delete_vector (Rstats::Vector* v1) {
       delete values;
       break;
     }
-    case Rstats::VectorType::COMPLEX : {
+    case Rstats::Type::COMPLEX : {
       std::vector<std::complex<NV> >* values = Rstats::VectorFunc::get_complex_values(v1);
       delete values;
       break;
     }
-    case Rstats::VectorType::DOUBLE : {
+    case Rstats::Type::DOUBLE : {
       std::vector<NV>* values = Rstats::VectorFunc::get_double_values(v1);
       delete values;
       break;
     }
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL : {
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL : {
       std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(v1);
       delete values;
     }
@@ -209,7 +209,7 @@ Rstats::Vector* Rstats::VectorFunc::new_character(IV length) {
 
   Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<SV*>(length);
-  v1->type = Rstats::VectorType::CHARACTER;
+  v1->type = Rstats::Type::CHARACTER;
   
   return v1;
 }
@@ -247,7 +247,7 @@ Rstats::Vector* Rstats::VectorFunc::new_complex(IV length) {
   
   Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
-  v1->type = Rstats::VectorType::COMPLEX;
+  v1->type = Rstats::Type::COMPLEX;
   
   return v1;
 }
@@ -272,7 +272,7 @@ void Rstats::VectorFunc::set_complex_value(Rstats::Vector* v1, IV pos, std::comp
 Rstats::Vector* Rstats::VectorFunc::new_double(IV length) {
   Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<NV>(length);
-  v1->type = Rstats::VectorType::DOUBLE;
+  v1->type = Rstats::Type::DOUBLE;
   
   return v1;
 }
@@ -297,7 +297,7 @@ Rstats::Vector* Rstats::VectorFunc::new_integer(IV length) {
   
   Rstats::Vector* v1 = new_vector();
   v1->values = new std::vector<IV>(length);
-  v1->type = Rstats::VectorType::INTEGER;
+  v1->type = Rstats::Type::INTEGER;
   
   return v1;
 }
@@ -323,7 +323,7 @@ Rstats::Vector* Rstats::VectorFunc::new_logical(IV length) {
   Rstats::Vector* v1 = new_vector();
 
   v1->values = new std::vector<IV>(length);
-  v1->type = Rstats::VectorType::LOGICAL;
+  v1->type = Rstats::Type::LOGICAL;
   
   return v1;
 }
@@ -365,7 +365,7 @@ Rstats::Vector* Rstats::VectorFunc::new_na() {
 Rstats::Vector* Rstats::VectorFunc::new_null() {
   Rstats::Vector* v1 = new_vector();
   v1->values = NULL;
-  v1->type = Rstats::VectorType::LOGICAL;
+  v1->type = Rstats::Type::LOGICAL;
   return v1;
 }
 
@@ -403,17 +403,17 @@ Rstats::Vector* Rstats::VectorFunc::as (Rstats::Vector* v1, SV* sv_type) {
 }
 
 SV* Rstats::VectorFunc::to_string_pos(Rstats::Vector* v1, IV pos) {
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   SV* sv_str;
   if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
     sv_str = Rstats::pl_new_sv_pv("NA");
   }
   else {
     switch (type) {
-      case Rstats::VectorType::CHARACTER :
+      case Rstats::Type::CHARACTER :
         sv_str = Rstats::VectorFunc::get_character_value(v1, pos);
         break;
-      case Rstats::VectorType::COMPLEX : {
+      case Rstats::Type::COMPLEX : {
         std::complex<NV> z = Rstats::VectorFunc::get_complex_value(v1, pos);
         NV re = z.real();
         NV im = z.imag();
@@ -451,7 +451,7 @@ SV* Rstats::VectorFunc::to_string_pos(Rstats::Vector* v1, IV pos) {
         sv_catpv(sv_str, "i");
         break;
       }
-      case Rstats::VectorType::DOUBLE : {
+      case Rstats::Type::DOUBLE : {
         NV value = Rstats::VectorFunc::get_double_value(v1, pos);
         if (std::isinf(value) && value > 0) {
           sv_str = Rstats::pl_new_sv_pv("Inf");
@@ -468,11 +468,11 @@ SV* Rstats::VectorFunc::to_string_pos(Rstats::Vector* v1, IV pos) {
         }
         break;
       }
-      case Rstats::VectorType::INTEGER :
+      case Rstats::Type::INTEGER :
         sv_str = Rstats::pl_new_sv_iv(Rstats::VectorFunc::get_integer_value(v1, pos));
         sv_catpv(sv_str, "");
         break;
-      case Rstats::VectorType::LOGICAL :
+      case Rstats::Type::LOGICAL :
         sv_str = Rstats::VectorFunc::get_integer_value(v1, pos)
           ? Rstats::pl_new_sv_pv("TRUE") : Rstats::pl_new_sv_pv("FALSE");
         break;
@@ -508,15 +508,15 @@ SV* Rstats::VectorFunc::to_string(Rstats::Vector* v1) {
 Rstats::Vector* Rstats::VectorFunc::as_character (Rstats::Vector* v1) {
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2 = new_character(length);
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::VectorFunc::get_character_value(v1, i);
         Rstats::VectorFunc::set_character_value(v2, i, sv_value);
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       for (IV i = 0; i < length; i++) {
         std::complex<NV> z = Rstats::VectorFunc::get_complex_value(v1, i);
         NV re = z.real();
@@ -536,7 +536,7 @@ Rstats::Vector* Rstats::VectorFunc::as_character (Rstats::Vector* v1) {
         Rstats::VectorFunc::set_character_value(v2, i, sv_str);
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       for (IV i = 0; i < length; i++) {
         NV value = Rstats::VectorFunc::get_double_value(v1, i);
         SV* sv_str = Rstats::pl_new_sv_pv("");
@@ -555,7 +555,7 @@ Rstats::Vector* Rstats::VectorFunc::as_character (Rstats::Vector* v1) {
         Rstats::VectorFunc::set_character_value(v2, i, sv_str);
       }
       break;
-    case Rstats::VectorType::INTEGER :
+    case Rstats::Type::INTEGER :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_character_value(
           v2, 
@@ -564,7 +564,7 @@ Rstats::Vector* Rstats::VectorFunc::as_character (Rstats::Vector* v1) {
         );
       }
       break;
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::LOGICAL :
       for (IV i = 0; i < length; i++) {
         if (Rstats::VectorFunc::get_integer_value(v1, i)) {
           Rstats::VectorFunc::set_character_value(v2, i, Rstats::pl_new_sv_pv("TRUE"));
@@ -587,9 +587,9 @@ Rstats::Vector* Rstats::VectorFunc::as_double(Rstats::Vector* v1) {
 
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2 = new_double(length);
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::VectorFunc::get_character_value(v1, i);
         SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
@@ -603,19 +603,19 @@ Rstats::Vector* Rstats::VectorFunc::as_double(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       warn("imaginary parts discarded in coercion");
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i).real());
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_double_value(v1, i));
       }
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i));
       }
@@ -637,9 +637,9 @@ Rstats::Vector* Rstats::VectorFunc::as_integer(Rstats::Vector* v1) {
 
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2 = new_integer(length);
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::VectorFunc::get_character_value(v1, i);
         SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
@@ -653,13 +653,13 @@ Rstats::Vector* Rstats::VectorFunc::as_integer(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       warn("imaginary parts discarded in coercion");
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, (IV)Rstats::VectorFunc::get_complex_value(v1, i).real());
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       NV value;
       for (IV i = 0; i < length; i++) {
         value = Rstats::VectorFunc::get_double_value(v1, i);
@@ -671,8 +671,8 @@ Rstats::Vector* Rstats::VectorFunc::as_integer(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i));
       }
@@ -690,9 +690,9 @@ Rstats::Vector* Rstats::VectorFunc::as_complex(Rstats::Vector* v1) {
 
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2 = new_complex(length);
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::VectorFunc::get_character_value(v1, i);
         SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
@@ -710,12 +710,12 @@ Rstats::Vector* Rstats::VectorFunc::as_complex(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i));
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       for (IV i = 0; i < length; i++) {
         NV value = Rstats::VectorFunc::get_double_value(v1, i);
         if (std::isnan(value)) {
@@ -726,8 +726,8 @@ Rstats::Vector* Rstats::VectorFunc::as_complex(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_complex_value(v2, i, std::complex<NV>(Rstats::VectorFunc::get_integer_value(v1, i), 0));
       }
@@ -744,9 +744,9 @@ Rstats::Vector* Rstats::VectorFunc::as_complex(Rstats::Vector* v1) {
 Rstats::Vector* Rstats::VectorFunc::as_logical(Rstats::Vector* v1) {
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2 = new_logical(length);
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::VectorFunc::get_character_value(v1, i);
         SV* sv_logical = Rstats::Util::looks_like_logical(sv_value);
@@ -764,13 +764,13 @@ Rstats::Vector* Rstats::VectorFunc::as_logical(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       warn("imaginary parts discarded in coercion");
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i).real() ? 1 : 0);
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       for (IV i = 0; i < length; i++) {
         NV value = Rstats::VectorFunc::get_double_value(v1, i);
         if (std::isnan(value)) {
@@ -784,8 +784,8 @@ Rstats::Vector* Rstats::VectorFunc::as_logical(Rstats::Vector* v1) {
         }
       }
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i) ? 1 : 0);
       }
@@ -803,9 +803,9 @@ SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
 
   SV* sv_value;
   
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
         sv_value = &PL_sv_undef;
       }
@@ -813,7 +813,7 @@ SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
         sv_value = Rstats::VectorFunc::get_character_value(v1, pos);
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
         sv_value = &PL_sv_undef;
       }
@@ -855,7 +855,7 @@ SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
         Rstats::pl_hv_store(sv_value, "im", sv_im);
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
         sv_value = &PL_sv_undef;
       }
@@ -875,8 +875,8 @@ SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
         }
       }
       break;
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL :
       if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
         sv_value = &PL_sv_undef;
       }
@@ -895,12 +895,12 @@ SV* Rstats::VectorFunc::get_value(Rstats::Vector* v1, IV pos) {
 Rstats::Vector* Rstats::VectorFunc::cumprod(Rstats::Vector* v1) {
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2;
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       croak("Error in cumprod() : non-numeric argument to binary operator");
       break;
-    case Rstats::VectorType::COMPLEX : {
+    case Rstats::Type::COMPLEX : {
       v2 = Rstats::VectorFunc::new_complex(length);
       std::complex<NV> v2_total(1, 0);
       for (IV i = 0; i < length; i++) {
@@ -909,7 +909,7 @@ Rstats::Vector* Rstats::VectorFunc::cumprod(Rstats::Vector* v1) {
       }
       break;
     }
-    case Rstats::VectorType::DOUBLE : {
+    case Rstats::Type::DOUBLE : {
       v2 = Rstats::VectorFunc::new_double(length);
       NV v2_total(1);
       for (IV i = 0; i < length; i++) {
@@ -918,8 +918,8 @@ Rstats::Vector* Rstats::VectorFunc::cumprod(Rstats::Vector* v1) {
       }
       break;
     }
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL : {
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL : {
       v2 = Rstats::VectorFunc::new_integer(length);
       IV v2_total(1);
       for (IV i = 0; i < length; i++) {
@@ -941,12 +941,12 @@ Rstats::Vector* Rstats::VectorFunc::cumprod(Rstats::Vector* v1) {
 Rstats::Vector* Rstats::VectorFunc::cumsum(Rstats::Vector* v1) {
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2;
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       croak("Error in cumsum() : non-numeric argument to binary operator");
       break;
-    case Rstats::VectorType::COMPLEX : {
+    case Rstats::Type::COMPLEX : {
       v2 = Rstats::VectorFunc::new_complex(length);
       std::complex<NV> v2_total(0, 0);
       for (IV i = 0; i < length; i++) {
@@ -955,7 +955,7 @@ Rstats::Vector* Rstats::VectorFunc::cumsum(Rstats::Vector* v1) {
       }
       break;
     }
-    case Rstats::VectorType::DOUBLE : {
+    case Rstats::Type::DOUBLE : {
       v2 = Rstats::VectorFunc::new_double(length);
       NV v2_total(0);
       for (IV i = 0; i < length; i++) {
@@ -964,8 +964,8 @@ Rstats::Vector* Rstats::VectorFunc::cumsum(Rstats::Vector* v1) {
       }
       break;
     }
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL : {
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL : {
       v2 = Rstats::VectorFunc::new_integer(length);
       IV v2_total(0);
       for (IV i = 0; i < length; i++) {
@@ -987,12 +987,12 @@ Rstats::Vector* Rstats::VectorFunc::prod(Rstats::Vector* v1) {
   
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2;
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       croak("Error in prod() : non-numeric argument to prod()");
       break;
-    case Rstats::VectorType::COMPLEX : {
+    case Rstats::Type::COMPLEX : {
       v2 = Rstats::VectorFunc::new_complex(1);
       std::complex<NV> v2_total(1, 0);
       for (IV i = 0; i < length; i++) {
@@ -1001,7 +1001,7 @@ Rstats::Vector* Rstats::VectorFunc::prod(Rstats::Vector* v1) {
       Rstats::VectorFunc::set_complex_value(v2, 0, v2_total);
       break;
     }
-    case Rstats::VectorType::DOUBLE : {
+    case Rstats::Type::DOUBLE : {
       v2 = Rstats::VectorFunc::new_double(1);
       NV v2_total(1);
       for (IV i = 0; i < length; i++) {
@@ -1010,8 +1010,8 @@ Rstats::Vector* Rstats::VectorFunc::prod(Rstats::Vector* v1) {
       Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
       break;
     }
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL : {
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL : {
       v2 = Rstats::VectorFunc::new_integer(1);
       IV v2_total(1);
       for (IV i = 0; i < length; i++) {
@@ -1039,12 +1039,12 @@ Rstats::Vector* Rstats::VectorFunc::sum(Rstats::Vector* v1) {
   
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2;
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       croak("Error in a - b : non-numeric argument to binary operator");
       break;
-    case Rstats::VectorType::COMPLEX : {
+    case Rstats::Type::COMPLEX : {
       v2 = Rstats::VectorFunc::new_complex(1);
       std::complex<NV> v2_total(0, 0);
       for (IV i = 0; i < length; i++) {
@@ -1053,7 +1053,7 @@ Rstats::Vector* Rstats::VectorFunc::sum(Rstats::Vector* v1) {
       Rstats::VectorFunc::set_complex_value(v2, 0, v2_total);
       break;
     }
-    case Rstats::VectorType::DOUBLE : {
+    case Rstats::Type::DOUBLE : {
       v2 = Rstats::VectorFunc::new_double(1);
       NV v2_total(0);
       for (IV i = 0; i < length; i++) {
@@ -1062,8 +1062,8 @@ Rstats::Vector* Rstats::VectorFunc::sum(Rstats::Vector* v1) {
       Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
       break;
     }
-    case Rstats::VectorType::INTEGER :
-    case Rstats::VectorType::LOGICAL : {
+    case Rstats::Type::INTEGER :
+    case Rstats::Type::LOGICAL : {
       v2 = Rstats::VectorFunc::new_integer(1);
       IV v2_total(0);
       for (IV i = 0; i < length; i++) {
@@ -1091,33 +1091,33 @@ Rstats::Vector* Rstats::VectorFunc::clone(Rstats::Vector* v1) {
   
   IV length = Rstats::VectorFunc::get_length(v1);
   Rstats::Vector* v2;
-  Rstats::VectorType::Enum type = Rstats::VectorFunc::get_type(v1);
+  Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
   switch (type) {
-    case Rstats::VectorType::CHARACTER :
+    case Rstats::Type::CHARACTER :
       v2 = Rstats::VectorFunc::new_character(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_character_value(v2, i, Rstats::VectorFunc::get_character_value(v1, i));
       }
       break;
-    case Rstats::VectorType::COMPLEX :
+    case Rstats::Type::COMPLEX :
       v2 = Rstats::VectorFunc::new_complex(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i));
       }
       break;
-    case Rstats::VectorType::DOUBLE :
+    case Rstats::Type::DOUBLE :
       v2 = Rstats::VectorFunc::new_double(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_double_value(v1, i));
       }
       break;
-    case Rstats::VectorType::INTEGER :
+    case Rstats::Type::INTEGER :
       v2 = Rstats::VectorFunc::new_integer(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i));
       }
       break;
-    case Rstats::VectorType::LOGICAL :
+    case Rstats::Type::LOGICAL :
       v2 = Rstats::VectorFunc::new_logical(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i));

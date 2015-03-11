@@ -11,48 +11,48 @@ use Math::Complex ();
 {
   # add (vector)
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c($v1, 4, 5);
-    is_deeply($v2->values, [1, 2, 3, 4, 5]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = c($x1, 4, 5);
+    is_deeply($x2->values, [1, 2, 3, 4, 5]);
   }
 
   # var
   {
-    my $v1 = c(2, 3, 4, 7, 9);
-    my $var = r->var($v1);
+    my $x1 = c(2, 3, 4, 7, 9);
+    my $var = r->var($x1);
     is($var->value, 8.5);
   }
   
   # add (array)
   {
-    my $v1 = c(c(1, 2), 3, 4);
-    is_deeply($v1->values, [1, 2, 3, 4]);
+    my $x1 = c(c(1, 2), 3, 4);
+    is_deeply($x1->values, [1, 2, 3, 4]);
   }
   
   # add to original vector
   {
-    my $v1 = c(1, 2, 3);
-    $v1->at(r->length($v1)->value + 1)->set(6);
-    is_deeply($v1->values, [1, 2, 3, 6]);
+    my $x1 = c(1, 2, 3);
+    $x1->at(r->length($x1)->value + 1)->set(6);
+    is_deeply($x1->values, [1, 2, 3, 6]);
   }
   
   # numeric
   {
-    my $v1 = r->numeric(3);
-    is_deeply($v1->values, [0, 0, 0]);
+    my $x1 = r->numeric(3);
+    is_deeply($x1->values, [0, 0, 0]);
   }
 
   # length
   {
-    my $v1 = c(1, 2, 4);
-    my $length = r->length($v1);
+    my $x1 = c(1, 2, 4);
+    my $length = r->length($x1);
     is($length->value, 3);
   }
   
   # mean
   {
-    my $v1 = c(1, 2, 3);
-    my $mean = r->mean($v1);
+    my $x1 = c(1, 2, 3);
+    my $mean = r->mean($x1);
     is($mean->value, 2);
   }
 
@@ -60,23 +60,23 @@ use Math::Complex ();
   {
     # sort - acending
     {
-      my $v1 = c(2, 1, 5);
-      my $v1_sorted = r->sort($v1);
-      is_deeply($v1_sorted->values, [1, 2, 5]);
+      my $x1 = c(2, 1, 5);
+      my $x1_sorted = r->sort($x1);
+      is_deeply($x1_sorted->values, [1, 2, 5]);
     }
     
     # sort - decreasing
     {
-      my $v1 = c(2, 1, 5);
-      my $v1_sorted = r->sort($v1, {decreasing => 1});
-      is_deeply($v1_sorted->values, [5, 2, 1]);
+      my $x1 = c(2, 1, 5);
+      my $x1_sorted = r->sort($x1, {decreasing => 1});
+      is_deeply($x1_sorted->values, [5, 2, 1]);
     }
     
     # sort - contain NA or NaN
     {
-      my $v1 = c(2, 1, 5, NA, NaN);
-      my $v1_sorted = r->sort($v1);
-      is_deeply($v1_sorted->values, [1, 2, 5]);
+      my $x1 = c(2, 1, 5, NA, NaN);
+      my $x1_sorted = r->sort($x1);
+      is_deeply($x1_sorted->values, [1, 2, 5]);
     }
   }
 }
@@ -85,29 +85,29 @@ use Math::Complex ();
 {
   # prod - complex
   {
-    my $v1 = c(1+1*i, 2+3*i);
-    my $prod = r->prod($v1);
+    my $x1 = c(1+1*i, 2+3*i);
+    my $prod = r->prod($x1);
     is_deeply($prod->values, [{re => -1, im => 5}]);
   }
 
   # prod - double
   {
-    my $v1 = c(2, 3, 4);
-    my $prod = r->prod($v1);
+    my $x1 = c(2, 3, 4);
+    my $prod = r->prod($x1);
     is_deeply($prod->values, [24]);
   }
 
   # prod - integer
   {
-    my $v1 = r->as_integer(c(2, 3, 4));
-    my $prod = r->prod($v1);
+    my $x1 = r->as_integer(c(2, 3, 4));
+    my $prod = r->prod($x1);
     is_deeply($prod->values, [24]);
   }
 
   # prod - logical
   {
-    my $v1 = c(T, T, T);
-    my $prod = r->prod($v1);
+    my $x1 = c(T, T, T);
+    my $prod = r->prod($x1);
     is_deeply($prod->values, [1]);
   }
 }
@@ -671,50 +671,50 @@ use Math::Complex ();
 {
   # append - after option
   {
-    my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = r->append($v1, 1, {after => 3});
-    is_deeply($v2->values, [1, 2, 3, 1, 4, 5]);
+    my $x1 = c(1, 2, 3, 4, 5);
+    my $x2 = r->append($x1, 1, {after => 3});
+    is_deeply($x2->values, [1, 2, 3, 1, 4, 5]);
   }
 
   # append - no after option
   {
-    my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = r->append($v1, 1);
-    is_deeply($v2->values, [1, 2, 3, 4, 5, 1]);
+    my $x1 = c(1, 2, 3, 4, 5);
+    my $x2 = r->append($x1, 1);
+    is_deeply($x2->values, [1, 2, 3, 4, 5, 1]);
   }
 
   # append - vector
   {
-    my $v1 = c(1, 2, 3, 4, 5);
-    my $v2 = r->append($v1, c(6, 7));
-    is_deeply($v2->values, [1, 2, 3, 4, 5, 6, 7]);
+    my $x1 = c(1, 2, 3, 4, 5);
+    my $x2 = r->append($x1, c(6, 7));
+    is_deeply($x2->values, [1, 2, 3, 4, 5, 6, 7]);
   }
 }
 
 # replace
 {
   {
-    my $v1 = se('1:10');
-    my $v2 = c(2, 5, 10);
-    my $v3 = c(12, 15, 20);
-    my $v4 = r->replace($v1, $v2, $v3);
-    is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 20]);
+    my $x1 = se('1:10');
+    my $x2 = c(2, 5, 10);
+    my $x3 = c(12, 15, 20);
+    my $x4 = r->replace($x1, $x2, $x3);
+    is_deeply($x4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 20]);
   }
   
   # replace - single value
   {
-    my $v1 = se('1:10');
-    my $v2 = c(2, 5, 10);
-    my $v4 = r->replace($v1, $v2, 11);
-    is_deeply($v4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
+    my $x1 = se('1:10');
+    my $x2 = c(2, 5, 10);
+    my $x4 = r->replace($x1, $x2, 11);
+    is_deeply($x4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
   }
   
   # replace - few values
   {
-    my $v1 = se('1:10');
-    my $v2 = c(2, 5, 10);
-    my $v4 = r->replace($v1, $v2, c(12, 15));
-    is_deeply($v4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
+    my $x1 = se('1:10');
+    my $x2 = c(2, 5, 10);
+    my $x4 = r->replace($x1, $x2, c(12, 15));
+    is_deeply($x4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
   }
 }
 
@@ -722,18 +722,18 @@ use Math::Complex ();
 {
   # cumprod - numeric
   {
-    my $v1 = c(1, 2, 3, 4);
-    my $v2 = c(1, 2, 3);
-    my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, [1, 1, 1, 0]);
+    my $x1 = c(1, 2, 3, 4);
+    my $x2 = c(1, 2, 3);
+    my $x3 = r->is_element($x1, $x2);
+    is_deeply($x3->values, [1, 1, 1, 0]);
   }
   
   # cumprod - complex
   {
-    my $v1 = c(1*i, 2*i, 3*i, 4*i);
-    my $v2 = c(1*i, 2*i, 3*i);
-    my $v3 = r->is_element($v1, $v2);
-    is_deeply($v3->values, [1, 1, 1, 0])
+    my $x1 = c(1*i, 2*i, 3*i, 4*i);
+    my $x2 = c(1*i, 2*i, 3*i);
+    my $x3 = r->is_element($x1, $x2);
+    is_deeply($x3->values, [1, 1, 1, 0])
   }
 }
 
@@ -741,100 +741,100 @@ use Math::Complex ();
 {
   # setequal - equal
   {
-    my $v1 = c(2, 3, 1);
-    my $v2 = c(3, 2, 1);
-    my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, 1);
+    my $x1 = c(2, 3, 1);
+    my $x2 = c(3, 2, 1);
+    my $x3 = r->setequal($x1, $x2);
+    is_deeply($x3->value, 1);
   }
 
   # setequal - not equal
   {
-    my $v1 = c(2, 3, 1);
-    my $v2 = c(2, 3, 4);
-    my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, 0);
+    my $x1 = c(2, 3, 1);
+    my $x2 = c(2, 3, 4);
+    my $x3 = r->setequal($x1, $x2);
+    is_deeply($x3->value, 0);
   }
     
   # setequal - not equal, element count is diffrent
   {
-    my $v1 = c(2, 3, 1);
-    my $v2 = c(2, 3, 1, 5);
-    my $v3 = r->setequal($v1, $v2);
-    is_deeply($v3->value, 0);
+    my $x1 = c(2, 3, 1);
+    my $x2 = c(2, 3, 1, 5);
+    my $x3 = r->setequal($x1, $x2);
+    is_deeply($x3->value, 0);
   }
 }
 
 # setdiff
 {
-  my $v1 = c(1, 2, 3, 4);
-  my $v2 = c(3, 4);
-  my $v3 = r->setdiff($v1, $v2);
-  is_deeply($v3->values, [1, 2]);
+  my $x1 = c(1, 2, 3, 4);
+  my $x2 = c(3, 4);
+  my $x3 = r->setdiff($x1, $x2);
+  is_deeply($x3->values, [1, 2]);
 }
 
 # intersect
 {
-  my $v1 = c(1, 2, 3, 4);
-  my $v2 = c(3, 4, 5, 6);
-  my $v3 = r->intersect($v1, $v2);
-  is_deeply($v3->values, [3, 4]);
+  my $x1 = c(1, 2, 3, 4);
+  my $x2 = c(3, 4, 5, 6);
+  my $x3 = r->intersect($x1, $x2);
+  is_deeply($x3->values, [3, 4]);
 }
 
 # union
 {
-  my $v1 = c(1, 2, 3, 4);
-  my $v2 = c(3, 4, 5, 6);
-  my $v3 = r->union($v1, $v2);
-  is_deeply($v3->values, [1, 2, 3, 4, 5, 6]);
+  my $x1 = c(1, 2, 3, 4);
+  my $x2 = c(3, 4, 5, 6);
+  my $x3 = r->union($x1, $x2);
+  is_deeply($x3->values, [1, 2, 3, 4, 5, 6]);
 }
 
 # cummin
 {
-  my $v1 = c(7, 3, 5, 1);
-  my $v2 = r->cummin($v1);
-  is_deeply($v2->values, [7, 3, 3, 1]);
+  my $x1 = c(7, 3, 5, 1);
+  my $x2 = r->cummin($x1);
+  is_deeply($x2->values, [7, 3, 3, 1]);
 }
 
 # cummax
 {
-  my $v1 = c(1, 5, 3, 7);
-  my $v2 = r->cummax($v1);
-  is_deeply($v2->values, [1, 5, 5, 7]);
+  my $x1 = c(1, 5, 3, 7);
+  my $x2 = r->cummax($x1);
+  is_deeply($x2->values, [1, 5, 5, 7]);
 }
 
 # cumprod
 {
   # cumprod - logical
   {
-    my $v1 = r->new_logical(1, 1, 0);
-    my $v2 = r->cumprod($v1);
-    is_deeply($v2->values, [1, 1, 0]);
+    my $x1 = r->new_logical(1, 1, 0);
+    my $x2 = r->cumprod($x1);
+    is_deeply($x2->values, [1, 1, 0]);
   }
   
   # cumprod - integer
   {
-    my $v1 = r->new_integer(2, 3, 4);
-    my $v2 = r->cumprod($v1);
-    is_deeply($v2->values, [2, 6, 24]);
+    my $x1 = r->new_integer(2, 3, 4);
+    my $x2 = r->cumprod($x1);
+    is_deeply($x2->values, [2, 6, 24]);
   }
   
   # cumprod - double
   {
-    my $v1 = c(2, 3, 4);
-    my $v2 = r->cumprod($v1);
-    is_deeply($v2->values, [2, 6, 24]);
+    my $x1 = c(2, 3, 4);
+    my $x2 = r->cumprod($x1);
+    is_deeply($x2->values, [2, 6, 24]);
   }
   
   # cumprod - complex
   {
-    my $v1 = c(2*i, 3*i, 4*i);
-    my $v2 = r->cumprod($v1);
-    cmp_ok($v2->values->[0]->{re}, '==', 0);
-    cmp_ok($v2->values->[0]->{im}, '==', 2);
-    cmp_ok($v2->values->[1]->{re}, '==', -6);
-    cmp_ok($v2->values->[1]->{im}, '==', 0);
-    cmp_ok($v2->values->[2]->{re}, '==', 0);
-    cmp_ok($v2->values->[2]->{im}, '==', -24);
+    my $x1 = c(2*i, 3*i, 4*i);
+    my $x2 = r->cumprod($x1);
+    cmp_ok($x2->values->[0]->{re}, '==', 0);
+    cmp_ok($x2->values->[0]->{im}, '==', 2);
+    cmp_ok($x2->values->[1]->{re}, '==', -6);
+    cmp_ok($x2->values->[1]->{im}, '==', 0);
+    cmp_ok($x2->values->[2]->{re}, '==', 0);
+    cmp_ok($x2->values->[2]->{im}, '==', -24);
   }
 }
 
@@ -842,77 +842,77 @@ use Math::Complex ();
 {
   # cumsum - logical
   {
-    my $v1 = r->new_logical(1, 0, 1);
-    my $v2 = r->cumsum($v1);
-    is_deeply($v2->values, [1, 1, 2]);
+    my $x1 = r->new_logical(1, 0, 1);
+    my $x2 = r->cumsum($x1);
+    is_deeply($x2->values, [1, 1, 2]);
   }
 
   # cumsum - integer
   {
-    my $v1 = r->new_integer(1, 2, 3);
-    my $v2 = r->cumsum($v1);
-    is_deeply($v2->values, [1, 3, 6]);
+    my $x1 = r->new_integer(1, 2, 3);
+    my $x2 = r->cumsum($x1);
+    is_deeply($x2->values, [1, 3, 6]);
   }
 
   # cumsum - double
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = r->cumsum($v1);
-    is_deeply($v2->values, [1, 3, 6]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = r->cumsum($x1);
+    is_deeply($x2->values, [1, 3, 6]);
   }
   
   # cumsum - complex
   {
-    my $v1 = c(1*i, 2*i, 3*i);
-    my $v2 = r->cumsum($v1);
-    is_deeply($v2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
+    my $x1 = c(1*i, 2*i, 3*i);
+    my $x2 = r->cumsum($x1);
+    is_deeply($x2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
   }
 }
 
 # rank
 {
-  my $v1 = c(1, 5, 5, 5, 3, 3, 7);
-  my $v2 = r->rank($v1);
-  is_deeply($v2->values, [1, 5, 5, 5, 2.5, 2.5, 7]);
+  my $x1 = c(1, 5, 5, 5, 3, 3, 7);
+  my $x2 = r->rank($x1);
+  is_deeply($x2->values, [1, 5, 5, 5, 2.5, 2.5, 7]);
 }
 
 # order
 {
   # order - 2 condition,decreasing TRUE
   {
-    my $v1 = c(4, 3, 3, 3, 1, 5);
-    my $v2 = c(1, 2, 3, 1, 1, 1);
-    my $v3 = r->order($v1, $v2, {decreasing => TRUE});
-    is_deeply($v3->values, [6, 1, 3, 2, 4, 5]);
+    my $x1 = c(4, 3, 3, 3, 1, 5);
+    my $x2 = c(1, 2, 3, 1, 1, 1);
+    my $x3 = r->order($x1, $x2, {decreasing => TRUE});
+    is_deeply($x3->values, [6, 1, 3, 2, 4, 5]);
   }
   
   # order - 2 condition,decreasing FALSE
   {
-    my $v1 = c(4, 3, 3, 3, 1, 5);
-    my $v2 = c(1, 2, 3, 1, 1, 1);
-    my $v3 = r->order($v1, $v2);
-    is_deeply($v3->values, [5, 4, 2, 3, 1, 6]);
+    my $x1 = c(4, 3, 3, 3, 1, 5);
+    my $x2 = c(1, 2, 3, 1, 1, 1);
+    my $x3 = r->order($x1, $x2);
+    is_deeply($x3->values, [5, 4, 2, 3, 1, 6]);
   }
   
   # order - decreasing FALSE
   {
-    my $v1 = c(2, 4, 3, 1);
-    my $v2 = r->order($v1, {decreasing => FALSE});
-    is_deeply($v2->values, [4, 1, 3, 2]);
+    my $x1 = c(2, 4, 3, 1);
+    my $x2 = r->order($x1, {decreasing => FALSE});
+    is_deeply($x2->values, [4, 1, 3, 2]);
   }
   
   # order - decreasing TRUE
   {
-    my $v1 = c(2, 4, 3, 1);
-    my $v2 = r->order($v1, {decreasing => TRUE});
-    is_deeply($v2->values, [2, 3, 1, 4]);
+    my $x1 = c(2, 4, 3, 1);
+    my $x2 = r->order($x1, {decreasing => TRUE});
+    is_deeply($x2->values, [2, 3, 1, 4]);
   }
 
   # order - decreasing FALSE
   {
-    my $v1 = c(2, 4, 3, 1);
-    my $v2 = r->order($v1);
-    is_deeply($v2->values, [4, 1, 3, 2]);
+    my $x1 = c(2, 4, 3, 1);
+    my $x2 = r->order($x1);
+    is_deeply($x2->values, [4, 1, 3, 2]);
   }
 }
 
@@ -920,16 +920,16 @@ use Math::Complex ();
 {
   # diff - numeric
   {
-    my $v1 = c(1, 5, 10, NA);
-    my $v2 = r->diff($v1);
-    is_deeply($v2->values, [4, 5, undef]);
+    my $x1 = c(1, 5, 10, NA);
+    my $x2 = r->diff($x1);
+    is_deeply($x2->values, [4, 5, undef]);
   }
   
   # diff - complex
   {
-    my $v1 = c(1 + 2*i, 5 + 3*i, NA);
-    my $v2 = r->diff($v1);
-    is_deeply($v2->values, [{re => 4, im => 1}, undef]);
+    my $x1 = c(1 + 2*i, 5 + 3*i, NA);
+    my $x2 = r->diff($x1);
+    is_deeply($x2->values, [{re => 4, im => 1}, undef]);
   }
 }
 
@@ -937,79 +937,79 @@ use Math::Complex ();
 {
   # paste($str, $vector);
   {
-    my $v1 = r->paste('x', se('1:3'));
-    is_deeply($v1->values, ['x 1', 'x 2', 'x 3']);
+    my $x1 = r->paste('x', se('1:3'));
+    is_deeply($x1->values, ['x 1', 'x 2', 'x 3']);
   }
   # paste($str, $vector, {sep => ''});
   {
-    my $v1 = r->paste('x', se('1:3'), {sep => ''});
-    is_deeply($v1->values, ['x1', 'x2', 'x3']);
+    my $x1 = r->paste('x', se('1:3'), {sep => ''});
+    is_deeply($x1->values, ['x1', 'x2', 'x3']);
   }
 }
 
 # nchar
 {
-  my $v1 = c("AAA", "BB", NA);
-  my $v2 = r->nchar($v1);
-  is_deeply($v2->values, [3, 2, undef])
+  my $x1 = c("AAA", "BB", NA);
+  my $x2 = r->nchar($x1);
+  is_deeply($x2->values, [3, 2, undef])
 }
 
 # tolower
 {
-  my $v1 = c("AA", "BB", NA);
-  my $v2 = r->tolower($v1);
-  is_deeply($v2->values, ["aa", "bb", undef])
+  my $x1 = c("AA", "BB", NA);
+  my $x2 = r->tolower($x1);
+  is_deeply($x2->values, ["aa", "bb", undef])
 }
 
 # toupper
 {
-  my $v1 = c("aa", "bb", NA);
-  my $v2 = r->toupper($v1);
-  is_deeply($v2->values, ["AA", "BB", undef])
+  my $x1 = c("aa", "bb", NA);
+  my $x2 = r->toupper($x1);
+  is_deeply($x2->values, ["AA", "BB", undef])
 }
 
 # match
 {
-  my $v1 = c("ATG", "GC", "AT", "GCGC");
-  my $v2 = c("CGCA", "GC", "AT", "AT", "ATA");
-  my $v3 = r->match($v1, $v2);
-  is_deeply($v3->values, [undef, 2, 3, undef])
+  my $x1 = c("ATG", "GC", "AT", "GCGC");
+  my $x2 = c("CGCA", "GC", "AT", "AT", "ATA");
+  my $x3 = r->match($x1, $x2);
+  is_deeply($x3->values, [undef, 2, 3, undef])
 }
 
 # range
 {
-  my $v1 = c(1, 2, 3);
-  my $v2 = r->range($v1);
-  is_deeply($v2->values, [1, 3]);
+  my $x1 = c(1, 2, 3);
+  my $x2 = r->range($x1);
+  is_deeply($x2->values, [1, 3]);
 }
 
 # pmax
 {
-  my $v1 = c(1, 6, 3, 8);
-  my $v2 = c(5, 2, 7, 4);
-  my $pmax = r->pmax($v1, $v2);
+  my $x1 = c(1, 6, 3, 8);
+  my $x2 = c(5, 2, 7, 4);
+  my $pmax = r->pmax($x1, $x2);
   is_deeply($pmax->values, [5, 6, 7, 8]);
 }
 
 # pmin
 {
-  my $v1 = c(1, 6, 3, 8);
-  my $v2 = c(5, 2, 7, 4);
-  my $pmin = r->pmin($v1, $v2);
+  my $x1 = c(1, 6, 3, 8);
+  my $x2 = c(5, 2, 7, 4);
+  my $pmin = r->pmin($x1, $x2);
   is_deeply($pmin->values, [1, 2, 3, 4]);
 }
   
 # rev
 {
-  my $v1 = c(2, 4, 3, 1);
-  my $v2 = r->rev($v1);
-  is_deeply($v2->values, [1, 3, 4, 2]);
+  my $x1 = c(2, 4, 3, 1);
+  my $x2 = r->rev($x1);
+  is_deeply($x2->values, [1, 3, 4, 2]);
 }
 
 # T, F
 {
-  my $v1 = c(T, F);
-  is_deeply($v1->values, [1, 0]);
+  my $x1 = c(T, F);
+  is_deeply($x1->values, [1, 0]);
 }
 
 # sqrt
@@ -1054,35 +1054,35 @@ use Math::Complex ();
 {
   # min
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = r->min($v1);
-    is_deeply($v2->values, [1]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = r->min($x1);
+    is_deeply($x2->values, [1]);
   }
 
   # min - multiple arrays
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c(4, 5, 6);
-    my $v3 = r->min($v1, $v2);
-    is_deeply($v3->values, [1]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(4, 5, 6);
+    my $x3 = r->min($x1, $x2);
+    is_deeply($x3->values, [1]);
   }
   
   # min - no argument
   {
-    my $v1 = r->min(NULL);
-    is_deeply($v1->values, ['Inf']);
+    my $x1 = r->min(NULL);
+    is_deeply($x1->values, ['Inf']);
   }
   
   # min - contain NA
   {
-    my $v1 = r->min(c(1, 2, NaN, NA));
-    is_deeply($v1->values, [undef]);
+    my $x1 = r->min(c(1, 2, NaN, NA));
+    is_deeply($x1->values, [undef]);
   }
   
   # min - contain NaN
   {
-    my $v1 = r->min(c(1, 2, NaN));
-    is_deeply($v1->values, ['NaN']);
+    my $x1 = r->min(c(1, 2, NaN));
+    is_deeply($x1->values, ['NaN']);
   }
 }
 
@@ -1090,35 +1090,35 @@ use Math::Complex ();
 {
   # max
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = r->max($v1);
-    is_deeply($v2->values, [3]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = r->max($x1);
+    is_deeply($x2->values, [3]);
   }
 
   # max - multiple arrays
   {
-    my $v1 = c(1, 2, 3);
-    my $v2 = c(4, 5, 6);
-    my $v3 = r->max($v1, $v2);
-    is_deeply($v3->values, [6]);
+    my $x1 = c(1, 2, 3);
+    my $x2 = c(4, 5, 6);
+    my $x3 = r->max($x1, $x2);
+    is_deeply($x3->values, [6]);
   }
   
   # max - no argument
   {
-    my $v1 = r->max(NULL);
-    is_deeply($v1->values, ['-Inf']);
+    my $x1 = r->max(NULL);
+    is_deeply($x1->values, ['-Inf']);
   }
   
   # max - contain NA
   {
-    my $v1 = r->max(c(1, 2, NaN, NA));
-    is_deeply($v1->values, [undef]);
+    my $x1 = r->max(c(1, 2, NaN, NA));
+    is_deeply($x1->values, [undef]);
   }
   
   # max - contain NaN
   {
-    my $v1 = r->max(c(1, 2, NaN));
-    is_deeply($v1->values, ['NaN']);
+    my $x1 = r->max(c(1, 2, NaN));
+    is_deeply($x1->values, ['NaN']);
   }
 }
 
@@ -1126,15 +1126,15 @@ use Math::Complex ();
 {
   # median - odd number
   {
-    my $v1 = c(2, 3, 3, 4, 5, 1);
-    my $v2 = r->median($v1);
-    is_deeply($v2->values, [3]);
+    my $x1 = c(2, 3, 3, 4, 5, 1);
+    my $x2 = r->median($x1);
+    is_deeply($x2->values, [3]);
   }
   # median - even number
   {
-    my $v1 = c(2, 3, 3, 4, 5, 1, 6);
-    my $v2 = r->median($v1);
-    is_deeply($v2->values, [3.5]);
+    my $x1 = c(2, 3, 3, 4, 5, 1, 6);
+    my $x2 = r->median($x1);
+    is_deeply($x2->values, [3.5]);
   }
 }
 
@@ -1142,33 +1142,33 @@ use Math::Complex ();
 {
   # quantile - odd number
   {
-    my $v1 = se('0:100');
-    my $v2 = r->quantile($v1);
-    is_deeply($v2->values, [0, 25, 50, 75, 100]);
-    is_deeply(r->names($v2)->values, [qw/0%  25%  50%  75% 100% /]);
+    my $x1 = se('0:100');
+    my $x2 = r->quantile($x1);
+    is_deeply($x2->values, [0, 25, 50, 75, 100]);
+    is_deeply(r->names($x2)->values, [qw/0%  25%  50%  75% 100% /]);
   }
   
   # quantile - even number
   {
-    my $v1 = se('1:100');
-    my $v2 = r->quantile($v1);
-    is_deeply($v2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
+    my $x1 = se('1:100');
+    my $x2 = r->quantile($x1);
+    is_deeply($x2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
   }
 
   # quantile - one element
   {
-    my $v1 = c(1);
-    my $v2 = r->quantile($v1);
-    is_deeply($v2->values, [1, 1, 1, 1, 1]);
+    my $x1 = c(1);
+    my $x2 = r->quantile($x1);
+    is_deeply($x2->values, [1, 1, 1, 1, 1]);
   }
 }
 
 # unique
 {
   # uniqeu - numeric
-  my $v1 = c(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
-  my $v2 = r->unique($v1);
-  is_deeply($v2->values, [1, 2, 3, undef, 'Inf']);
+  my $x1 = c(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
+  my $x2 = r->unique($x1);
+  is_deeply($x2->values, [1, 2, 3, undef, 'Inf']);
 }
 
 # NA

@@ -20,6 +20,281 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub levels {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $x_levels = Rstats::Func::to_c($r, shift);
+    $x_levels = Rstats::Func::as_character($r, $x_levels)
+      unless is_character($r, $x_levels);
+    
+    $x1->{levels} = Rstats::Func::as_vector($r, $x_levels);
+    
+    return $x1;
+  }
+  else {
+    my $x_levels;
+    if (exists $x1->{levels}) {
+      $x_levels = Rstats::Func::as_vector($r, $x1->{levels});
+    }
+    
+    return $x_levels;
+  }
+}
+
+my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
+
+sub mode {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $type = $_[0];
+    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
+      unless $types_h{$type};
+    
+    $x1 = $x1->as($type);
+    
+    return $x1;
+  }
+  else {
+    my $type = $x1->type;
+    my $mode;
+    if (defined $type) {
+      if ($type eq 'integer' || $type eq 'double') {
+        $mode = 'numeric';
+      }
+      else {
+        $mode = $type;
+      }
+    }
+    else {
+      croak qq/could not find function "as_$type"/;
+    }
+
+    return Rstats::Func::c($r, $mode);
+  }
+}
+
+sub as_list {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (exists $x1->{list}) {
+    return $x1;
+  }
+  else {
+    my $list = Rstats::Func::new_list($r);;
+    my $x2 = Rstats::Func::as_vector($r, $x1);
+    $list->list([$x2]);
+    
+    return $list;
+  }
+}
+
+sub dim_as_array {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (exists $x1->{dim}) {
+    return Rstats::Func::dim($r, $x1);
+  }
+  else {
+    my $length = Rstats::Func::length_value($r, $x1);
+    return Rstats::Func::new_double($r, $length);
+  }
+}
+
+sub as_factor {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (Rstats::Func::is_factor($r, $x1)) {
+    return $x1;
+  }
+  else {
+    my $a = is_character($r, $x1) ? $x1 :  Rstats::Func::as_character($r, $x1);
+    my $f = Rstats::Func::factor($r, $a);
+    
+    return $f;
+  }
+}
+
+sub as_matrix {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $x1_dim_elements = $x1->dim_as_array->values;
+  my $x1_dim_count = @$x1_dim_elements;
+  my $x2_dim_elements = [];
+  my $row;
+  my $col;
+  if ($x1_dim_count == 2) {
+    $row = $x1_dim_elements->[0];
+    $col = $x1_dim_elements->[1];
+  }
+  else {
+    $row = 1;
+    $row *= $_ for @$x1_dim_elements;
+    $col = 1;
+  }
+  
+  my $x2 = Rstats::Func::as_vector($r, $x1);
+  
+  return Rstats::Func::matrix($r, $x2, $row, $col);
+}
+
+sub as_array {
+  my $r = shift;
+  
+  my $x1 = shift;
+
+  my $x2 = Rstats::Func::as_vector($r, $x1);
+
+  my $x1_dim_elements = [@{$x1->dim_as_array->values}];
+  
+  return array($r, $x1, $x2, $x1_dim_elements);
+}
+
+sub names {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $x_names = Rstats::Func::to_c($r, shift);
+    
+    $x_names = Rstats::Func::as_character($r, $x_names)
+      unless is_character($r, $x_names);
+    $x1->{names} = Rstats::Func::as_vector($r, $x_names);
+    
+    if (Rstats::Func::is_data_frame($r, $x1)) {
+      $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x1->{names});
+    }
+    
+    return $x1;
+  }
+  else {
+    my $x_names = Rstats::Func::NULL($r);
+    if (exists $x1->{names}) {
+      $x_names = Rstats::Func::as_vector($r, $x1->{names});
+    }
+    return $x_names;
+  }
+}
+
+sub dimnames {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $dimnames_list = shift;
+    if (ref $dimnames_list eq 'Rstats::List') {
+      my $length = Rstats::Func::length_value($r, $dimnames_list);
+      my $dimnames = [];
+      for (my $i = 0; $i < $length; $i++) {
+        my $x_dimname = $dimnames_list->getin($i + 1);
+        if (is_character($r, $x_dimname)) {
+          my $dimname = Rstats::Func::as_vector($r, $x_dimname);
+          push @$dimnames, $dimname;
+        }
+        else {
+          croak "dimnames must be character list";
+        }
+      }
+      $x1->{dimnames} = $dimnames;
+      
+      if (Rstats::Func::is_data_frame($r, $x1)) {
+        $x1->{names} = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
+      }
+    }
+    else {
+      croak "dimnames must be list";
+    }
+  }
+  else {
+    if (exists $x1->{dimnames}) {
+      my $x_dimnames = Rstats::Func::list($r);
+      $x_dimnames->list($x1->{dimnames});
+    }
+    else {
+      return Rstats::Func::NULL($r);
+    }
+  }
+}
+
+sub rownames {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $x_rownames = Rstats::Func::to_c($r, shift);
+    
+    unless (exists $x1->{dimnames}) {
+      $x1->{dimnames} = [];
+    }
+    
+    $x1->{dimnames}[0] = Rstats::Func::as_vector($r, $x_rownames);
+  }
+  else {
+    my $x_rownames = Rstats::Func::NULL($r);
+    if (defined $x1->{dimnames}[0]) {
+      $x_rownames = Rstats::Func::as_vector($r, $x1->{dimnames}[0]);
+    }
+    return $x_rownames;
+  }
+}
+
+
+sub colnames {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (@_) {
+    my $x_colnames = Rstats::Func::to_c($r, shift);
+    
+    unless (exists $x1->{dimnames}) {
+      $x1->{dimnames} = [];
+    }
+    
+    $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x_colnames);
+  }
+  else {
+    my $x_colnames = Rstats::Func::NULL($r);
+    if (defined $x1->{dimnames}[1]) {
+      $x_colnames = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
+    }
+    return $x_colnames;
+  }
+}
+
+sub typeof {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
+    my $type = $x1->type;
+    return Rstats::Func::new_character($r, $type);
+  }
+  elsif (is_list($r, $x1)) {
+    return Rstats::Func::new_character($r, 'list');
+  }
+  else {
+    return Rstats::Func::NA($r);
+  }
+}
+
 sub labels {
   my $r = shift;
   return $r->as_character(@_);
@@ -91,7 +366,6 @@ sub as {
   }
 }
 
-my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 sub I {
   my $r = shift;
@@ -3480,41 +3754,6 @@ sub str {
   return $str;
 }
 
-sub levels {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_levels = Rstats::Func::to_c($r, shift);
-    $x_levels = Rstats::Func::as_character($r, $x_levels)
-      unless is_character($r, $x_levels);
-    
-    $x1->{levels} = Rstats::Func::as_vector($r, $x_levels);
-    
-    return $x1;
-  }
-  else {
-    my $x_levels;
-    if (exists $x1->{levels}) {
-      $x_levels = Rstats::Func::as_vector($r, $x1->{levels});
-    }
-    
-    return $x_levels;
-  }
-}
-
-sub clone {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x_clone = Rstats::Func::as_vector($r, $x1);
-  Rstats::Func::copy_attrs_to($r, $x1, $x_clone);
-  
-  return $x_clone;
-}
-
 sub at {
   my $r = shift;
   
@@ -3557,255 +3796,6 @@ sub nlevels {
   my $x1 = shift;
   
   return Rstats::Func::c($r, Rstats::Func::length_value($r, Rstats::Func::levels($r, $x1)));
-}
-
-sub as_list {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (exists $x1->{list}) {
-    return $x1;
-  }
-  else {
-    my $list = Rstats::Func::new_list($r);;
-    my $x2 = Rstats::Func::as_vector($r, $x1);
-    $list->list([$x2]);
-    
-    return $list;
-  }
-}
-
-sub dim_as_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (exists $x1->{dim}) {
-    return Rstats::Func::dim($r, $x1);
-  }
-  else {
-    my $length = Rstats::Func::length_value($r, $x1);
-    return Rstats::Func::new_double($r, $length);
-  }
-}
-
-sub mode {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $type = $_[0];
-    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
-      unless $types_h{$type};
-    
-    $x1 = $x1->as($type);
-    
-    return $x1;
-  }
-  else {
-    my $type = $x1->type;
-    my $mode;
-    if (defined $type) {
-      if ($type eq 'integer' || $type eq 'double') {
-        $mode = 'numeric';
-      }
-      else {
-        $mode = $type;
-      }
-    }
-    else {
-      croak qq/could not find function "as_$type"/;
-    }
-
-    return Rstats::Func::c($r, $mode);
-  }
-}
-
-sub typeof {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
-    my $type = $x1->type;
-    return Rstats::Func::new_character($r, $type);
-  }
-  elsif (is_list($r, $x1)) {
-    return Rstats::Func::new_character($r, 'list');
-  }
-  else {
-    return Rstats::Func::NA($r);
-  }
-}
-
-sub as_factor {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (Rstats::Func::is_factor($r, $x1)) {
-    return $x1;
-  }
-  else {
-    my $a = is_character($r, $x1) ? $x1 :  Rstats::Func::as_character($r, $x1);
-    my $f = Rstats::Func::factor($r, $a);
-    
-    return $f;
-  }
-}
-
-sub as_matrix {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x1_dim_elements = $x1->dim_as_array->values;
-  my $x1_dim_count = @$x1_dim_elements;
-  my $x2_dim_elements = [];
-  my $row;
-  my $col;
-  if ($x1_dim_count == 2) {
-    $row = $x1_dim_elements->[0];
-    $col = $x1_dim_elements->[1];
-  }
-  else {
-    $row = 1;
-    $row *= $_ for @$x1_dim_elements;
-    $col = 1;
-  }
-  
-  my $x2 = Rstats::Func::as_vector($r, $x1);
-  
-  return Rstats::Func::matrix($r, $x2, $row, $col);
-}
-
-sub as_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-
-  my $x2 = Rstats::Func::as_vector($r, $x1);
-
-  my $x1_dim_elements = [@{$x1->dim_as_array->values}];
-  
-  return array($r, $x1, $x2, $x1_dim_elements);
-}
-
-sub names {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_names = Rstats::Func::to_c($r, shift);
-    
-    $x_names = Rstats::Func::as_character($r, $x_names)
-      unless is_character($r, $x_names);
-    $x1->{names} = Rstats::Func::as_vector($r, $x_names);
-    
-    if (Rstats::Func::is_data_frame($r, $x1)) {
-      $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x1->{names});
-    }
-    
-    return $x1;
-  }
-  else {
-    my $x_names = Rstats::Func::NULL($r);
-    if (exists $x1->{names}) {
-      $x_names = Rstats::Func::as_vector($r, $x1->{names});
-    }
-    return $x_names;
-  }
-}
-
-sub dimnames {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $dimnames_list = shift;
-    if (ref $dimnames_list eq 'Rstats::List') {
-      my $length = Rstats::Func::length_value($r, $dimnames_list);
-      my $dimnames = [];
-      for (my $i = 0; $i < $length; $i++) {
-        my $x_dimname = $dimnames_list->getin($i + 1);
-        if (is_character($r, $x_dimname)) {
-          my $dimname = Rstats::Func::as_vector($r, $x_dimname);
-          push @$dimnames, $dimname;
-        }
-        else {
-          croak "dimnames must be character list";
-        }
-      }
-      $x1->{dimnames} = $dimnames;
-      
-      if (Rstats::Func::is_data_frame($r, $x1)) {
-        $x1->{names} = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
-      }
-    }
-    else {
-      croak "dimnames must be list";
-    }
-  }
-  else {
-    if (exists $x1->{dimnames}) {
-      my $x_dimnames = Rstats::Func::list($r);
-      $x_dimnames->list($x1->{dimnames});
-    }
-    else {
-      return Rstats::Func::NULL($r);
-    }
-  }
-}
-
-sub rownames {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_rownames = Rstats::Func::to_c($r, shift);
-    
-    unless (exists $x1->{dimnames}) {
-      $x1->{dimnames} = [];
-    }
-    
-    $x1->{dimnames}[0] = Rstats::Func::as_vector($r, $x_rownames);
-  }
-  else {
-    my $x_rownames = Rstats::Func::NULL($r);
-    if (defined $x1->{dimnames}[0]) {
-      $x_rownames = Rstats::Func::as_vector($r, $x1->{dimnames}[0]);
-    }
-    return $x_rownames;
-  }
-}
-
-
-sub colnames {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_colnames = Rstats::Func::to_c($r, shift);
-    
-    unless (exists $x1->{dimnames}) {
-      $x1->{dimnames} = [];
-    }
-    
-    $x1->{dimnames}[1] = Rstats::Func::as_vector($r, $x_colnames);
-  }
-  else {
-    my $x_colnames = Rstats::Func::NULL($r);
-    if (defined $x1->{dimnames}[1]) {
-      $x_colnames = Rstats::Func::as_vector($r, $x1->{dimnames}[1]);
-    }
-    return $x_colnames;
-  }
 }
 
 sub getin_list {

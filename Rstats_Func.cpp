@@ -644,6 +644,10 @@ SV* Rstats::Func::new_vector(SV* sv_r, SV* sv_type, SV* sv_values) {
   }
 }
 
+SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+}
+
 SV* Rstats::Func::copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
   
   if (!SvOK(sv_opt)) {
@@ -737,7 +741,7 @@ SV* Rstats::Func::as_integer(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_integer(Rstats::Func::get_vector(sv_r, sv_x1)));
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
   return sv_x2;
 }
@@ -746,7 +750,7 @@ SV* Rstats::Func::as_logical(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_logical(Rstats::Func::get_vector(sv_r, sv_x1)));
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
   return sv_x2;
 }
@@ -755,7 +759,7 @@ SV* Rstats::Func::as_complex(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_complex(Rstats::Func::get_vector(sv_r, sv_x1)));
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
   return sv_x2;
 }
@@ -764,7 +768,7 @@ SV* Rstats::Func::as_double(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_double(Rstats::Func::get_vector(sv_r, sv_x1)));
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
   return sv_x2;
 }
@@ -773,7 +777,7 @@ SV* Rstats::Func::as_numeric(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_array(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_numeric(Rstats::Func::get_vector(sv_r, sv_x1)));
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
   return sv_x2;
 }
@@ -785,7 +789,7 @@ SV* Rstats::Func::is_finite(SV* sv_r, SV* sv_x1) {
   if (Rstats::pl_hv_exists(sv_x1, "vector")) {
     SV* sv_x2 = Rstats::Func::new_null(sv_r);
     Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_finite(Rstats::Func::get_vector(sv_r, sv_x1)));
-    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
     
     return sv_x2;
   }
@@ -801,7 +805,7 @@ SV* Rstats::Func::is_infinite(SV* sv_r, SV* sv_x1) {
   if (Rstats::pl_hv_exists(sv_x1, "vector")) {
     SV* sv_x2 = Rstats::Func::new_null(sv_r);
     Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_infinite(Rstats::Func::get_vector(sv_r, sv_x1)));
-    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
     
     return sv_x2;
   }
@@ -817,7 +821,7 @@ SV* Rstats::Func::is_nan(SV* sv_r, SV* sv_x1) {
   if (Rstats::pl_hv_exists(sv_x1, "vector")) {
     SV* sv_x2 = Rstats::Func::new_null(sv_r);
     Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_nan(Rstats::Func::get_vector(sv_r, sv_x1)));
-    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+    Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
     
     return sv_x2;
   }
@@ -844,7 +848,7 @@ SV* Rstats::Func::is_na(SV* sv_r, SV* sv_x1) {
   
   SV* sv_x2 = Rstats::Func::new_null(sv_r);
   Rstats::Func::set_vector(sv_r, sv_x2, x2);
-  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
   
   return sv_x2;
 }
@@ -932,3 +936,12 @@ SV* Rstats::Func::is_ordered(SV* sv_r, SV* sv_x1) {
   
   return match ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
 }
+
+SV* Rstats::Func::clone(SV* sv_r, SV* sv_x1) {
+  
+  SV* sv_x2 = Rstats::Func::as_vector(sv_r, sv_x1);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+  
+  return sv_x2;
+}
+

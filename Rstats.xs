@@ -1642,4 +1642,14 @@ SV* is_ordered(...)
   return_sv(sv_x2);
 }
 
+SV* clone(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::clone(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 MODULE = Rstats PACKAGE = Rstats

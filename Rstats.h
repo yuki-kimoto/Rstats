@@ -810,6 +810,7 @@ namespace Rstats {
     SV* new_data_frame(SV*);
     SV* new_list(SV*);
     SV* new_vector(SV*, SV*, SV*);
+    SV* copy_attrs_to(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);
     SV* as_integer(SV*, SV*);
     SV* as_logical(SV*, SV*);
@@ -824,6 +825,7 @@ namespace Rstats {
     SV* get_class(SV*, SV*);
     SV* is_factor(SV*, SV*);
     SV* is_ordered(SV*, SV*);
+    SV* clone(SV*, SV*);
   }
 }
 

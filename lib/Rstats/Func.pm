@@ -835,7 +835,7 @@ sub length {
   my $container = shift;
   
   if (ref $container eq 'Rstats::Array') {
-    return c($r, $container->vector->length_value);
+    return c($r, Rstats::VectorFunc::length_value($container->vector));
   }
   else {
     return c($r, Rstats::Func::length_value($r, $container));

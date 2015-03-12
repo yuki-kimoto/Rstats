@@ -6,15 +6,6 @@
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
-SV* as_character(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_character(self);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
 SV* value(...)
   PPCODE:
 {
@@ -340,6 +331,16 @@ SV* DESTROY(...)
 }
 
 MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
+
+SV* as_character(...)
+  PPCODE:
+{
+  Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* e2 = Rstats::VectorFunc::as_character(e1);
+  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
+  return_sv(sv_e2);
+}
+
 
 SV* negation(...)
   PPCODE:

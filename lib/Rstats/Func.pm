@@ -313,7 +313,7 @@ sub as_character {
   }
   else {
     $x2 = Rstats::Func::new_array($r);
-    $x2->vector($x1->vector->as_character);
+    $x2->vector(Rstats::VectorFunc::as_character($x1->vector));
   }
   
   Rstats::Func::copy_attrs_to($r, $x1, $x2);

@@ -6,12 +6,13 @@
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
-SV* values(...)
+SV* as_character(...)
   PPCODE:
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  SV* sv_values = Rstats::VectorFunc::get_values(self);
-  return_sv(sv_values);
+  Rstats::Vector* e2 = Rstats::VectorFunc::as_character(self);
+  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
+  return_sv(sv_e2);
 }
 
 SV* value(...)
@@ -63,15 +64,6 @@ SV* to_string(...)
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
   SV* sv_str = Rstats::VectorFunc::to_string(self);
   return_sv(sv_str);
-}
-
-SV* as_character(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_character(self);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
 }
 
 SV* new_null(...)

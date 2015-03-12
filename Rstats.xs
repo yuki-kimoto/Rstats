@@ -6,11 +6,94 @@
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
+SV* decompose(...)
+  PPCODE:
+{
+  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+  
+  SV* sv_decompose_elements = Rstats::pl_new_av_ref();
+  
+  IV length = Rstats::VectorFunc::get_length(self);
+  
+  if (length > 0) {
+    av_extend(Rstats::pl_av_deref(sv_decompose_elements), length);
+
+    if (Rstats::VectorFunc::is_character(self)) {
+      for (IV i = 0; i < length; i++) {
+        Rstats::Vector* elements
+          = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_character_value(self, i));
+        if (Rstats::VectorFunc::exists_na_position(self, i)) {
+          Rstats::VectorFunc::add_na_position(elements, 0);
+        }
+        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
+        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
+      }
+    }
+    else if (Rstats::VectorFunc::is_complex(self)) {
+      for (IV i = 0; i < length; i++) {
+        Rstats::Vector* elements
+          = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_complex_value(self, i));
+        if (Rstats::VectorFunc::exists_na_position(self, i)) {
+          Rstats::VectorFunc::add_na_position(elements, 0);
+        }
+        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
+        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
+      }
+    }
+    else if (Rstats::VectorFunc::is_double(self)) {
+
+      for (IV i = 0; i < length; i++) {
+        Rstats::Vector* elements
+          = Rstats::VectorFunc::new_double(1, Rstats::VectorFunc::get_double_value(self, i));
+        if (Rstats::VectorFunc::exists_na_position(self, i)) {
+          Rstats::VectorFunc::add_na_position(elements, 0);
+        }
+       SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
+        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
+      }
+    }
+    else if (Rstats::VectorFunc::is_integer(self)) {
+      for (IV i = 0; i < length; i++) {
+        Rstats::Vector* elements
+          = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_integer_value(self, i));
+        if (Rstats::VectorFunc::exists_na_position(self, i)) {
+          Rstats::VectorFunc::add_na_position(elements, 0);
+        }
+        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
+        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
+      }
+    }
+    else if (Rstats::VectorFunc::is_logical(self)) {
+      for (IV i = 0; i < length; i++) {
+        Rstats::Vector* elements
+          = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_integer_value(self, i));
+        if (Rstats::VectorFunc::exists_na_position(self, i)) {
+          Rstats::VectorFunc::add_na_position(elements, 0);
+        }
+        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
+        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
+      }
+    }
+  }
+  
+  return_sv(sv_decompose_elements);
+}
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+
+  Rstats::VectorFunc::delete_vector(self);
+}
+
+MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
+
 SV* compose(...)
   PPCODE:
 {
-  SV* sv_mode = ST(1);
-  SV* sv_elements = ST(2);
+  SV* sv_mode = ST(0);
+  SV* sv_elements = ST(1);
   IV len = Rstats::pl_av_len(sv_elements);
   
   Rstats::Vector* compose_elements;
@@ -125,89 +208,6 @@ SV* compose(...)
   
   return_sv(sv_compose_elements);
 }
-
-SV* decompose(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  SV* sv_decompose_elements = Rstats::pl_new_av_ref();
-  
-  IV length = Rstats::VectorFunc::get_length(self);
-  
-  if (length > 0) {
-    av_extend(Rstats::pl_av_deref(sv_decompose_elements), length);
-
-    if (Rstats::VectorFunc::is_character(self)) {
-      for (IV i = 0; i < length; i++) {
-        Rstats::Vector* elements
-          = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_character_value(self, i));
-        if (Rstats::VectorFunc::exists_na_position(self, i)) {
-          Rstats::VectorFunc::add_na_position(elements, 0);
-        }
-        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
-      }
-    }
-    else if (Rstats::VectorFunc::is_complex(self)) {
-      for (IV i = 0; i < length; i++) {
-        Rstats::Vector* elements
-          = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_complex_value(self, i));
-        if (Rstats::VectorFunc::exists_na_position(self, i)) {
-          Rstats::VectorFunc::add_na_position(elements, 0);
-        }
-        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
-      }
-    }
-    else if (Rstats::VectorFunc::is_double(self)) {
-
-      for (IV i = 0; i < length; i++) {
-        Rstats::Vector* elements
-          = Rstats::VectorFunc::new_double(1, Rstats::VectorFunc::get_double_value(self, i));
-        if (Rstats::VectorFunc::exists_na_position(self, i)) {
-          Rstats::VectorFunc::add_na_position(elements, 0);
-        }
-       SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
-      }
-    }
-    else if (Rstats::VectorFunc::is_integer(self)) {
-      for (IV i = 0; i < length; i++) {
-        Rstats::Vector* elements
-          = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_integer_value(self, i));
-        if (Rstats::VectorFunc::exists_na_position(self, i)) {
-          Rstats::VectorFunc::add_na_position(elements, 0);
-        }
-        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
-      }
-    }
-    else if (Rstats::VectorFunc::is_logical(self)) {
-      for (IV i = 0; i < length; i++) {
-        Rstats::Vector* elements
-          = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_integer_value(self, i));
-        if (Rstats::VectorFunc::exists_na_position(self, i)) {
-          Rstats::VectorFunc::add_na_position(elements, 0);
-        }
-        SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-        Rstats::pl_av_push(sv_decompose_elements, sv_elements);
-      }
-    }
-  }
-  
-  return_sv(sv_decompose_elements);
-}
-
-SV* DESTROY(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-
-  Rstats::VectorFunc::delete_vector(self);
-}
-
-MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
 
 SV* value(...)
   PPCODE:

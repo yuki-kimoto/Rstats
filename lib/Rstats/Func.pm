@@ -3354,7 +3354,7 @@ sub set_array {
     }
   }
   
-  $x1->vector(Rstats::Vector->compose($x1->type, $x1_elements));
+  $x1->vector(Rstats::VectorFunc::compose($x1->type, $x1_elements));
   
   return $x1;
 }

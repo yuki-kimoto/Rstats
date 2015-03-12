@@ -30,14 +30,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* new_null(...)
-  PPCODE:
-{
-  Rstats::Vector* elements = Rstats::VectorFunc::new_null();
-  SV* sv_elements = Rstats::pl_to_perl_obj(elements, "Rstats::Vector");
-  return_sv(sv_elements);
-}
-
 SV* length_value(...)
   PPCODE:
 {

@@ -30,15 +30,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* to_string_pos(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  IV pos = SvIV(ST(1));
-  SV* sv_str = Rstats::VectorFunc::to_string_pos(self, pos);
-  return_sv(sv_str);
-}
-
 SV* to_string(...)
   PPCODE:
 {

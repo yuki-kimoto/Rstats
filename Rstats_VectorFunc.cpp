@@ -419,7 +419,7 @@ SV* Rstats::VectorFunc::to_string_pos(Rstats::Vector* v1, IV pos) {
         NV im = z.imag();
         
         sv_str = Rstats::pl_new_sv_pv("");
-       if (std::isinf(re) && re > 0) {
+        if (std::isinf(re) && re > 0) {
           sv_catpv(sv_str, "Inf");
         }
         else if (std::isinf(re) && re < 0) {

@@ -2,10 +2,33 @@ use Test::More 'no_plan';
 use strict;
 use warnings;
 
+use Rstats;
+
 use Rstats::Class;
 use Rstats::VectorFunc;
 
 my $r = Rstats::Class->new;
+
+# to_string
+{
+  # to_string - image number is 0
+  {
+    my $z1 = r->new_complex({re => 1, im => 0});
+    is("$z1", "[1] 1+0i\n");
+  }
+  
+  # to_string - basic
+  {
+    my $z1 = r->new_complex({re => 1, im => 2});
+    is("$z1", "[1] 1+2i\n");
+  }
+  
+  # to_string - image number is minus
+  {
+    my $z1 = r->new_complex({re => 1, im => -1});
+    is("$z1", "[1] 1-1i\n");
+  }
+}
 
 # comparison operator
 {
@@ -68,27 +91,6 @@ my $r = Rstats::Class->new;
     my $z2 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
     eval { my $result = Rstats::VectorFunc::more_than_or_equal($z1, $z2) };
     like($@, qr/invalid/);
-  }
-}
-
-# to_string
-{
-  # to_string - basic
-  {
-    my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 2});
-    is("$z1", "1+2i");
-  }
-  
-  # to_string - image number is 0
-  {
-    my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => 0});
-    is("$z1", "1+0i");
-  }
-  
-  # to_string - image number is minus
-  {
-    my $z1 = Rstats::VectorFunc::new_complex({re => 1, im => -1});
-    is("$z1", "1-1i");
   }
 }
 

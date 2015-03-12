@@ -1932,7 +1932,7 @@ sub args_array {
 
 sub complex {
   my $r = shift;
-  
+
   my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array($r, ['re', 'im', 'mod', 'arg'], @_);
   
   $x1_mod = Rstats::Func::NULL($r) unless defined $x1_mod;
@@ -1949,9 +1949,9 @@ sub complex {
     my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
     for (my $i = 0; $i < $longer_length; $i++) {
       my $mod = $x1_mod_elements->[$i];
-      $mod = Rstats::VectorFunc::new_double(1) unless $mod;
+      $mod = Rstats::VectorFunc::new_double(1) unless defined $mod;
       my $arg = $x1_arg_elements->[$i];
-      $arg = Rstats::VectorFunc::new_double(0) unless $arg;
+      $arg = Rstats::VectorFunc::new_double(0) unless defined $arg;
       
       my $re = Rstats::VectorFunc::multiply(
         $mod,
@@ -1974,7 +1974,13 @@ sub complex {
     my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
     my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
     for (my $i = 0; $i <  Rstats::Func::length_value($r, $x1_im); $i++) {
-      my $re = $x1_re_elements->[$i] || Rstats::VectorFunc::new_double(0);
+      my $re;
+      if (defined $x1_re_elements->[$i]) {
+        $re = $x1_re_elements->[$i];
+      }
+      else {
+        $re = Rstats::VectorFunc::new_double(0);
+      }
       my $im = $x1_im_elements->[$i];
       my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
       push @$x2_elements, $x2_element;
@@ -2389,7 +2395,7 @@ sub replace {
   my $x2_elements = Rstats::Func::decompose($r, $x2);
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
-    my $x2_element_hash = $x2_element->to_string;
+    my $x2_element_hash = Rstats::VectorFunc::to_string($x2_element);
     
     $x2_elements_h->{$x2_element_hash}++;
     Carp::croak "replace second argument can't have duplicate number"
@@ -2401,7 +2407,7 @@ sub replace {
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::VectorFunc::new_double($i + 1)->to_string;
+    my $hash = Rstats::VectorFunc::to_string(Rstats::VectorFunc::new_double($i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;
@@ -2674,7 +2680,7 @@ sub unique {
         $na_count++;
       }
       else {
-        my $str = $x1_element->to_string;
+        my $str = Rstats::VectorFunc::to_string($x1_element);
         unless ($elements_count->{$str}) {
           push @$x2_elements, $x1_element;
         }
@@ -3319,7 +3325,7 @@ sub set_array {
         $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
       }
       else {
-        my $value = $element->to_string;
+        my $value = Rstats::VectorFunc::to_string($element);
         if ($levels_h->{$value}) {
           $x1_elements->[$pos] = $levels_h->{$value};
         }
@@ -3635,10 +3641,11 @@ sub _value_to_string {
       $string = 'NA';
     }
     elsif ($type eq 'complex') {
+      $DB::single = 1;
       my $re = $value->{re} || 0;
       my $im = $value->{im} || 0;
       $string = "$re";
-      $string .= $im > 0 ? "+$im" : $im;
+      $string .= $im >= 0 ? "+$im" : $im;
       $string .= 'i';
     }
     elsif ($type eq 'character') {
@@ -4271,7 +4278,8 @@ sub to_string {
     return Rstats::Func::to_string_dataframe(@_);
   }
   else {
-    croak "Not implemented";
+    my $class = ref $x1;
+    croak "$class not implemented(Rstats::Func::to_string)";
   }
 }
 

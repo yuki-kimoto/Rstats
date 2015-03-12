@@ -30,14 +30,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* to_string(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  SV* sv_str = Rstats::VectorFunc::to_string(self);
-  return_sv(sv_str);
-}
-
 SV* new_null(...)
   PPCODE:
 {
@@ -322,6 +314,13 @@ SV* as_character(...)
   return_sv(sv_e2);
 }
 
+SV* to_string(...)
+  PPCODE:
+{
+  Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+  SV* sv_str = Rstats::VectorFunc::to_string(e1);
+  return_sv(sv_str);
+}
 
 SV* negation(...)
   PPCODE:

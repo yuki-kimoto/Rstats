@@ -6,6 +6,16 @@
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
+SV* DESTROY(...)
+  PPCODE:
+{
+  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+
+  Rstats::VectorFunc::delete_vector(self);
+}
+
+MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
+
 SV* decompose(...)
   PPCODE:
 {
@@ -78,16 +88,6 @@ SV* decompose(...)
   
   return_sv(sv_decompose_elements);
 }
-
-SV* DESTROY(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-
-  Rstats::VectorFunc::delete_vector(self);
-}
-
-MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
 
 SV* compose(...)
   PPCODE:

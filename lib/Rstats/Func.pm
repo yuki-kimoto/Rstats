@@ -3615,7 +3615,7 @@ sub decompose {
   my $x1 = shift;
   
   if (exists $x1->{vector}) {
-    return $x1->vector->decompose;
+    return Rstats::VectorFunc::decompose($x1->vector);
   }
   else {
     croak "Can't call decompose_elements methods from list";

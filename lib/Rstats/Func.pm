@@ -3608,20 +3608,6 @@ sub array {
   return $x2;
 }
 
-
-sub decompose {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (exists $x1->{vector}) {
-    return Rstats::VectorFunc::decompose($x1->vector);
-  }
-  else {
-    croak "Can't call decompose_elements methods from list";
-  }
-}
-
 sub _value_to_string {
   my $r = shift;
   

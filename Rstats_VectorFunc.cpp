@@ -1132,3 +1132,4 @@ Rstats::Vector* Rstats::VectorFunc::clone(Rstats::Vector* v1) {
   
   return v2;
 }
+

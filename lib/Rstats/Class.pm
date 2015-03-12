@@ -232,6 +232,17 @@ my @func_names = qw/
   length
   c
   clone
+  equal
+  not_equal
+  less_than
+  less_than_or_equal
+  more_than
+  more_than_or_equal
+  add
+  subtract
+  multiply
+  divide
+  pow
   new_character
   new_complex
   new_double

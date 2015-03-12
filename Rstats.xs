@@ -6,30 +6,6 @@
 
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
-SV* value(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  IV pos;
-  if (items < 2) {
-    pos = 0;
-  }
-  else {
-    pos = SvIV(ST(1));
-  }
-  
-  SV* sv_value;
-  if (pos >= 0 && pos < Rstats::VectorFunc::get_length(self)) {
-    sv_value = Rstats::VectorFunc::get_value(self, pos);
-  }
-  else {
-    sv_value = &PL_sv_undef;
-  }
-  
-  return_sv(sv_value);
-}
-
 SV* compose(...)
   PPCODE:
 {
@@ -288,6 +264,30 @@ SV* DESTROY(...)
 }
 
 MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
+
+SV* value(...)
+  PPCODE:
+{
+  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+  
+  IV pos;
+  if (items < 2) {
+    pos = 0;
+  }
+  else {
+    pos = SvIV(ST(1));
+  }
+  
+  SV* sv_value;
+  if (pos >= 0 && pos < Rstats::VectorFunc::get_length(self)) {
+    sv_value = Rstats::VectorFunc::get_value(self, pos);
+  }
+  else {
+    sv_value = &PL_sv_undef;
+  }
+  
+  return_sv(sv_value);
+}
 
 SV* as_character(...)
   PPCODE:

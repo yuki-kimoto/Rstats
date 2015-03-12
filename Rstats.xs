@@ -30,16 +30,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* as(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  SV* sv_type = ST(1);
-  Rstats::Vector* e2 = Rstats::VectorFunc::as(self, sv_type);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
 SV* to_string_pos(...)
   PPCODE:
 {

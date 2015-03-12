@@ -199,62 +199,6 @@ SV* decompose(...)
   return_sv(sv_decompose_elements);
 }
 
-SV* type(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  SV* sv_type;
-
-  if (Rstats::VectorFunc::is_logical(self)) {
-    sv_type = Rstats::pl_new_sv_pv("logical");
-  }
-  else if (Rstats::VectorFunc::is_integer(self)) {
-    sv_type = Rstats::pl_new_sv_pv("integer");
-  }
-  else if (Rstats::VectorFunc::is_double(self)) {
-    sv_type = Rstats::pl_new_sv_pv("double");
-  }
-  else if (Rstats::VectorFunc::is_complex(self)) {
-    sv_type = Rstats::pl_new_sv_pv("complex");
-  }
-  else if (Rstats::VectorFunc::is_character(self)) {
-    sv_type = Rstats::pl_new_sv_pv("character");
-  }
-  
-  return_sv(sv_type);
-}
-
-SV* flag(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  SV* sv_flag;
-  if (Rstats::VectorFunc::get_type(self) == Rstats::Type::DOUBLE) {
-    if (Rstats::VectorFunc::is_infinite(self)) {
-      NV value = Rstats::VectorFunc::get_double_value(self, 0);
-      if (value > 0) {
-        sv_flag = Rstats::pl_new_sv_pv("inf");
-      }
-      else {
-        sv_flag = Rstats::pl_new_sv_pv("-inf");
-      }
-    }
-    else if(Rstats::VectorFunc::is_nan(self)) {
-      sv_flag = Rstats::pl_new_sv_pv("nan");
-    }
-    else {
-      sv_flag = Rstats::pl_new_sv_pv("normal");
-    }
-  }
-  else {
-    sv_flag = Rstats::pl_new_sv_pv("normal");
-  }
-  
-  return_sv(sv_flag);
-}
-
 SV* DESTROY(...)
   PPCODE:
 {

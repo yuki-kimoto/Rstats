@@ -1545,7 +1545,6 @@ sub nchar {
   if ($x1->type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
-      $DB::single = 1;
       if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
@@ -1571,12 +1570,13 @@ sub tolower {
   
   if ($x1->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)->value) {
+    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+      if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::new_character(lc Rstats::VectorFunc::value($x1_element));
+        $DB::single = 1;
+        my $x2_element = Rstats::Func::new_character($r, lc Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
     }

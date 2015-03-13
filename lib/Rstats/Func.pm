@@ -2004,7 +2004,9 @@ sub floor {
   
   my $x1 = to_c($r, $_x1);
   
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::floor Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
+  my @a2_elements
+    = map { Rstats::Func::new_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
+    @{Rstats::Func::decompose_array($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, @a2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2029,7 +2031,7 @@ sub head {
     return $x2;
   }
   else {
-    my $x1_elements = Rstats::Func::decompose($r, $x1);
+    my $x1_elements = Rstats::Func::decompose_array($r, $x1);
     my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
     my @x2_elements;
     for (my $i = 0; $i < $max; $i++) {
@@ -2102,17 +2104,17 @@ sub max {
     return -(Rstats::Func::Inf($r));
   }
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)->value) {
+    if (Rstats::Func::is_na($r, $element)) {
       return Rstats::Func::NA($r);
     }
-    elsif (Rstats::Func::is_nan($r, $element)->value) {
+    elsif (Rstats::Func::is_nan($r, $element)) {
       $max = $element;
     }
-    if (!Rstats::Func::is_nan($r, $max) && Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($element, $max))) {
+    if (!Rstats::Func::is_nan($r, $max) && Rstats::Func::value($r, $element > $max)) {
       $max = $element;
     }
   }

@@ -2377,7 +2377,7 @@ sub rep {
   my $times = defined $x_times ? $x_times->value : 1;
   
   my $elements = [];
-  push @$elements, @{Rstats::Func::decompose($r, $x1)} for 1 .. $times;
+  push @$elements, @{Rstats::Func::decompose_array($r, $x1)} for 1 .. $times;
   my $x2 = Rstats::Func::c($r, @$elements);
   
   return $x2;
@@ -2390,23 +2390,23 @@ sub replace {
   my $x2 = to_c($r, shift);
   my $v3 = to_c($r, shift);
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
-    my $x2_element_hash = Rstats::VectorFunc::to_string($x2_element);
+    my $x2_element_hash = Rstats::Func::to_string($r, $x2_element);
     
     $x2_elements_h->{$x2_element_hash}++;
     Carp::croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
-  my $v3_elements = Rstats::Func::decompose($r, $v3);
+  my $v3_elements = Rstats::Func::decompose_array($r, $v3);
   my $v3_length = @{$v3_elements};
   
   my $v4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::VectorFunc::to_string(Rstats::VectorFunc::new_double($i + 1));
+    my $hash = Rstats::Func::to_string($r, Rstats::Func::new_double($r, $i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
       $replace_count++;

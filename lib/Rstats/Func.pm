@@ -1945,24 +1945,18 @@ sub complex {
     my $x1_arg_length = Rstats::Func::length_value($r, $x1_arg);
     my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
     
-    my $x1_mod_elements = Rstats::Func::decompose($r, $x1_mod);
-    my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
+    my $x1_mod_elements = Rstats::Func::decompose_array($r, $x1_mod);
+    my $x1_arg_elements = Rstats::Func::decompose_array($r, $x1_arg);
     for (my $i = 0; $i < $longer_length; $i++) {
-      my $mod = $x1_mod_elements->[$i];
-      $mod = Rstats::VectorFunc::new_double(1) unless defined $mod;
-      my $arg = $x1_arg_elements->[$i];
-      $arg = Rstats::VectorFunc::new_double(0) unless defined $arg;
+      my $x_mod = $x1_mod_elements->[$i];
+      $x_mod = Rstats::Func::new_double($r, 1) unless defined $x_mod;
+      my $x_arg = $x1_arg_elements->[$i];
+      $x_arg = Rstats::Func::new_double($r, 0) unless defined $x_arg;
       
-      my $re = Rstats::VectorFunc::multiply(
-        $mod,
-        Rstats::VectorFunc::cos($arg)
-      );
-      my $im = Rstats::VectorFunc::multiply(
-        $mod,
-        Rstats::VectorFunc::sin($arg)
-      );
+      my $x_re = $x_mod * Rstats::Func::cos($r, $x_arg);
+      my $x_im = $x_mod * Rstats::Func::sin($r, $x_arg);
       
-      my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
+      my $x2_element = Rstats::Func::complex($r, $x_re, $x_im);
       push @$x2_elements, $x2_element;
     }
   }
@@ -1971,18 +1965,21 @@ sub complex {
     Carp::croak "mode should be numeric"
       unless Rstats::Func::is_numeric($r, $x1_re) && Rstats::Func::is_numeric($r, $x1_im);
     
-    my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
-    my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
+    my $x1_re_elements = Rstats::Func::decompose_array($r, $x1_re);
+    my $x1_im_elements = Rstats::Func::decompose_array($r, $x1_im);
     for (my $i = 0; $i <  Rstats::Func::length_value($r, $x1_im); $i++) {
-      my $re;
+      my $x_re;
       if (defined $x1_re_elements->[$i]) {
-        $re = $x1_re_elements->[$i];
+        $x_re = $x1_re_elements->[$i];
       }
       else {
-        $re = Rstats::VectorFunc::new_double(0);
+        $x_re = Rstats::Func::new_double($r, 0);
       }
-      my $im = $x1_im_elements->[$i];
-      my $x2_element = Rstats::VectorFunc::complex_double($re, $im);
+      my $x_im = $x1_im_elements->[$i];
+      my $x2_element = Rstats::Func::new_complex(
+        $r,
+        {re => Rstats::Func::value($r, $x_re), im => Rstats::Func::value($r, $x_im)}
+      );
       push @$x2_elements, $x2_element;
     }
   }

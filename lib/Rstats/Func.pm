@@ -1449,7 +1449,6 @@ sub setequal {
   return Rstats::Func::FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
   
   my $not_equal;
-  $DB::single = 1;
   my $x3_elements = Rstats::Func::decompose_array($r, $x3);
   my $x4_elements = Rstats::Func::decompose_array($r, $x4);
   for (my $i = 0; $i < Rstats::Func::length_value($r, $x3); $i++) {
@@ -1469,13 +1468,13 @@ sub setdiff {
   
   Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::value(Rstats::VectorFunc::equal($x1_element, $x2_element))) {
+      if ($x1_element == $x2_element) {
         $match = 1;
         last;
       }
@@ -1493,12 +1492,12 @@ sub intersect {
   
   Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::value(Rstats::VectorFunc::equal($x1_element, $x2_element))) {
+      if ($x1_element == $x2_element) {
         push @$x3_elements, $x1_element;
       }
     }
@@ -1526,11 +1525,11 @@ sub diff {
   my $x1 = to_c($r, shift);
   
   my $x2_elements = [];
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   for (my $i = 0; $i < Rstats::Func::length_value($r, $x1) - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
-    my $x2_element = Rstats::VectorFunc::subtract($x1_element2, $x1_element1);
+    my $x2_element = $x1_element2 - $x1_element1;
     push @$x2_elements, $x2_element;
   }
   my $x2 = Rstats::Func::c($r, @$x2_elements);

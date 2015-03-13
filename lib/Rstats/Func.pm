@@ -1878,17 +1878,17 @@ sub cummin {
   }
   
   my @a2_elements;
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $min = shift @$x1_elements;
   push @a2_elements, $min;
   for my $element (@$x1_elements) {
-    if (Rstats::Func::is_na($r, $element)->value) {
+    if (Rstats::Func::is_na($r, $element)) {
       return Rstats::Func::NA($r);
     }
-    elsif (Rstats::Func::is_nan($r, $element)->value) {
+    elsif (Rstats::Func::is_nan($r, $element)) {
       $min = $element;
     }
-    if (Rstats::VectorFunc::value(Rstats::VectorFunc::less_than($element, $min)) && !Rstats::Func::is_nan($r, $min)) {
+    if ($element < $min && !Rstats::Func::is_nan($r, $min)) {
       $min = $element;
     }
     push @a2_elements, $min;

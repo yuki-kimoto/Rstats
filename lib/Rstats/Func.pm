@@ -1575,7 +1575,6 @@ sub tolower {
         push @$x2_elements, $x1_element;
       }
       else {
-        $DB::single = 1;
         my $x2_element = Rstats::Func::new_character($r, lc Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
@@ -1597,12 +1596,12 @@ sub toupper {
   
   if ($x1->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)->value) {
+    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+      if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::VectorFunc::new_character(uc Rstats::VectorFunc::value($x1_element));
+        my $x2_element = Rstats::Func::new_character($r, uc Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
     }
@@ -1621,14 +1620,14 @@ sub match {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
   my @matches;
   for my $x1_element (@$x1_elements) {
     my $i = 1;
     my $match;
     for my $x2_element (@$x2_elements) {
-      if (Rstats::VectorFunc::value(Rstats::VectorFunc::equal($x1_element, $x2_element))) {
+      if ($x1_element == $x2_element) {
         $match = 1;
         last;
       }

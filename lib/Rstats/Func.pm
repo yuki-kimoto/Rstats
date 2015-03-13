@@ -2388,7 +2388,7 @@ sub replace {
   
   my $x1 = to_c($r, shift);
   my $x2 = to_c($r, shift);
-  my $v3 = to_c($r, shift);
+  my $x3 = to_c($r, shift);
   
   my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $x2_elements = Rstats::Func::decompose_array($r, $x2);
@@ -2400,23 +2400,23 @@ sub replace {
     Carp::croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
-  my $v3_elements = Rstats::Func::decompose_array($r, $v3);
-  my $v3_length = @{$v3_elements};
+  my $x3_elements = Rstats::Func::decompose_array($r, $x3);
+  my $x3_length = @{$x3_elements};
   
-  my $v4_elements = [];
+  my $x4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
     my $hash = Rstats::Func::to_string($r, Rstats::Func::new_double($r, $i + 1));
     if ($x2_elements_h->{$hash}) {
-      push @$v4_elements, $v3_elements->[$replace_count % $v3_length];
+      push @$x4_elements, $x3_elements->[$replace_count % $x3_length];
       $replace_count++;
     }
     else {
-      push @$v4_elements, $x1_elements->[$i];
+      push @$x4_elements, $x1_elements->[$i];
     }
   }
   
-  return Rstats::Func::array($r, c($r, @$v4_elements));
+  return Rstats::Func::array($r, c($r, @$x4_elements));
 }
 
 sub rev {

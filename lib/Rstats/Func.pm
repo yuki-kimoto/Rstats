@@ -2142,17 +2142,17 @@ sub min {
     return Rstats::Func::Inf($r);
   }
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)->value) {
+    if (Rstats::Func::is_na($r, $element)) {
       return Rstats::Func::NA($r);
     }
-    elsif (Rstats::Func::is_nan($r, $element)->value) {
+    elsif (Rstats::Func::is_nan($r, $element)) {
       $min = $element;
     }
-    if (!Rstats::Func::is_nan($r, $min) && Rstats::VectorFunc::value(Rstats::VectorFunc::less_than($element, $min))) {
+    if (!Rstats::Func::is_nan($r, $min) && Rstats::Func::value($r, $element < $min)) {
       $min = $element;
     }
   }

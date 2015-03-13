@@ -3582,7 +3582,6 @@ sub array {
   my $x1 = $opt->{x};
   
   # Dimention
-  my $elements = Rstats::Func::decompose($r, $x1);
   my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL($r);
   my $x1_length = Rstats::Func::length_value($r, $x1);
   unless ($x_dim->length_value) {
@@ -3592,6 +3591,7 @@ sub array {
   $dim_product *= $_ for @{$x_dim->values};
   
   # Fix elements
+  my $elements = Rstats::Func::decompose_array($r, $x1);
   if ($x1_length > $dim_product) {
     @$elements = splice @$elements, 0, $dim_product;
   }

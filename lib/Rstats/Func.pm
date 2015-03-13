@@ -2580,22 +2580,6 @@ sub sqrt {
   return operate_unary($r, \&Rstats::VectorFunc::sqrt, @_);
 }
 
-sub sort {
-  my $r = shift;
-  
-  my ($x1, $x_decreasing) = Rstats::Func::args_array($r, ['x1', 'decreasing', 'na.last'], @_);
-  
-  my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
-  
-  my @x2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
-  
-  my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements]
-    : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements];
-
-  return Rstats::Func::c($r, @$x3_elements);
-}
-
 sub tail {
   my $r = shift;
   
@@ -2603,7 +2587,7 @@ sub tail {
   
   my $n = defined $x_n ? $x_n->value : 6;
   
-  my $e1 = Rstats::Func::decompose($r, $x1);
+  my $e1 = Rstats::Func::decompose_array($r, $x1);
   my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
   my @e2;
   for (my $i = 0; $i < $max; $i++) {
@@ -2653,7 +2637,7 @@ sub trunc {
   my $x1 = to_c($r, $_x1);
   
   my @x2_elements
-    = map { Rstats::VectorFunc::new_double(int Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
+    = map { Rstats::Func::new_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose_array($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2671,15 +2655,15 @@ sub unique {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)->value) {
+    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+      if (Rstats::Func::is_na($r, $x1_element)) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;
         }
         $na_count++;
       }
       else {
-        my $str = Rstats::VectorFunc::to_string($x1_element);
+        my $str = Rstats::Func::to_string($r, $x1_element);
         unless ($elements_count->{$str}) {
           push @$x2_elements, $x1_element;
         }
@@ -3299,63 +3283,6 @@ sub set {
   else {
     croak "Not implemented";
   }
-}
-
-sub set_array {
-  my $r = shift;
-  
-  my $x1 = shift;
-  my $x2 = Rstats::Func::to_c($r, shift);
-  
-  my $at = $x1->at;
-  my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
-  my ($poss, $x2_dim) = @{Rstats::Util::parse_index($r, $x1, 0, $_indexs)};
-  
-  my $x1_elements;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x1_elements = Rstats::Func::decompose($r, $x1);
-    $x2 = Rstats::Func::as_character($r, $x2) unless Rstats::Func::is_character($r, $x2);
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
-    my $levels_h = Rstats::Func::_levels_h($r, $x1);
-    for (my $i = 0; $i < @$poss; $i++) {
-      my $pos = $poss->[$i];
-      my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
-      if (Rstats::Func::is_na($r, $element)->value) {
-        $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
-      }
-      else {
-        my $value = Rstats::VectorFunc::to_string($element);
-        if ($levels_h->{$value}) {
-          $x1_elements->[$pos] = $levels_h->{$value};
-        }
-        else {
-          Carp::carp "invalid factor level, NA generated";
-          $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
-        }
-      }
-    }
-  }
-  else {
-    # Upgrade mode if type is different
-    if ($x1->type ne $x2->type) {
-      my $x1_tmp;
-      ($x1_tmp, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2);
-      Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
-      $x1->vector($x1_tmp->vector);
-    }
-
-    $x1_elements = Rstats::Func::decompose($r, $x1);
-
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
-    for (my $i = 0; $i < @$poss; $i++) {
-      my $pos = $poss->[$i];
-      $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
-    }
-  }
-  
-  $x1->vector(Rstats::VectorFunc::compose($x1->type, $x1_elements));
-  
-  return $x1;
 }
 
 sub _levels_h {
@@ -4299,6 +4226,79 @@ sub getin {
   else {
     croak "Not implemented";
   }
+}
+
+sub set_array {
+  my $r = shift;
+  
+  my $x1 = shift;
+  my $x2 = Rstats::Func::to_c($r, shift);
+  
+  my $at = $x1->at;
+  my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
+  my ($poss, $x2_dim) = @{Rstats::Util::parse_index($r, $x1, 0, $_indexs)};
+  
+  my $x1_elements;
+  if (Rstats::Func::is_factor($r, $x1)) {
+    $x1_elements = Rstats::Func::decompose($r, $x1);
+    $x2 = Rstats::Func::as_character($r, $x2) unless Rstats::Func::is_character($r, $x2);
+    my $x2_elements = Rstats::Func::decompose($r, $x2);
+    my $levels_h = Rstats::Func::_levels_h($r, $x1);
+    for (my $i = 0; $i < @$poss; $i++) {
+      my $pos = $poss->[$i];
+      my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
+      if (Rstats::Func::is_na($r, $element)->value) {
+        $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+      }
+      else {
+        my $value = Rstats::VectorFunc::to_string($element);
+        if ($levels_h->{$value}) {
+          $x1_elements->[$pos] = $levels_h->{$value};
+        }
+        else {
+          Carp::carp "invalid factor level, NA generated";
+          $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+        }
+      }
+    }
+  }
+  else {
+    # Upgrade mode if type is different
+    if ($x1->type ne $x2->type) {
+      my $x1_tmp;
+      ($x1_tmp, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2);
+      Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
+      $x1->vector($x1_tmp->vector);
+    }
+
+    $x1_elements = Rstats::Func::decompose($r, $x1);
+
+    my $x2_elements = Rstats::Func::decompose($r, $x2);
+    for (my $i = 0; $i < @$poss; $i++) {
+      my $pos = $poss->[$i];
+      $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
+    }
+  }
+  
+  $x1->vector(Rstats::VectorFunc::compose($x1->type, $x1_elements));
+  
+  return $x1;
+}
+
+sub sort {
+  my $r = shift;
+  
+  my ($x1, $x_decreasing) = Rstats::Func::args_array($r, ['x1', 'decreasing', 'na.last'], @_);
+  
+  my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
+  
+  my @x2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
+  
+  my $x3_elements = $decreasing
+    ? [reverse sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements]
+    : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements];
+
+  return Rstats::Func::c($r, @$x3_elements);
 }
 
 1;

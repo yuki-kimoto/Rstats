@@ -1671,8 +1671,8 @@ sub append {
   $x_after = Rstats::Func::c($r, $x1_length) if Rstats::Func::is_null($r, $x_after);
   my $after = $x_after->value;
   
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
   my @x3_elements = @$x1_elements;
   splice @x3_elements, $after, 0, @$x2_elements;
   
@@ -1742,7 +1742,7 @@ sub cbind {
     for my $_x (@xs) {
       
       my $x1 = to_c($r, $_x);
-      my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
+      my $x1_dim_elements = Rstats::Func::decompose_array($r, Rstats::Func::dim($r, $x1));
       
       my $row_count;
       if (Rstats::Func::is_matrix($r, $x1)) {
@@ -1760,7 +1760,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       Carp::croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, @{Rstats::Func::decompose($r, $x1)};
+      push @$x2_elements, @{Rstats::Func::decompose_array($r, $x1)};
     }
     my $matrix = matrix($r, c($r, @$x2_elements), $row_count_needed, $col_count_total);
     
@@ -1847,18 +1847,18 @@ sub cummax {
   }
   
   my @a2_elements;
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $max = shift @$x1_elements;
   push @a2_elements, $max;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)->value) {
+    if (Rstats::Func::is_na($r, $element)) {
       return Rstats::Func::NA($r);
     }
-    elsif (Rstats::Func::is_nan($r, $element)->value) {
+    elsif (Rstats::Func::is_nan($r, $element)) {
       $max = $element;
     }
-    if (Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($element, $max)) && !Rstats::Func::is_nan($r, $max)) {
+    if ($element > $max && !Rstats::Func::is_nan($r, $max)) {
       $max = $element;
     }
     push @a2_elements, $max;

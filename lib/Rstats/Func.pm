@@ -1773,9 +1773,9 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($r, $_x1);
-  my @a2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
   
-  my $x2 = Rstats::Func::c($r, @a2_elements);
+  my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   Rstats::Func::mode($r, $x2, 'double');
@@ -1846,10 +1846,10 @@ sub cummax {
     return -(Rstats::Func::Inf($r));
   }
   
-  my @a2_elements;
+  my @x2_elements;
   my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $max = shift @$x1_elements;
-  push @a2_elements, $max;
+  push @x2_elements, $max;
   for my $element (@$x1_elements) {
     
     if (Rstats::Func::is_na($r, $element)) {
@@ -1861,10 +1861,10 @@ sub cummax {
     if ($element > $max && !Rstats::Func::is_nan($r, $max)) {
       $max = $element;
     }
-    push @a2_elements, $max;
+    push @x2_elements, $max;
   }
   
-  return Rstats::Func::c($r, @a2_elements);
+  return Rstats::Func::c($r, @x2_elements);
 }
 
 sub cummin {
@@ -1877,10 +1877,10 @@ sub cummin {
     return -(Rstats::Func::Inf($r));
   }
   
-  my @a2_elements;
+  my @x2_elements;
   my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   my $min = shift @$x1_elements;
-  push @a2_elements, $min;
+  push @x2_elements, $min;
   for my $element (@$x1_elements) {
     if (Rstats::Func::is_na($r, $element)) {
       return Rstats::Func::NA($r);
@@ -1891,10 +1891,10 @@ sub cummin {
     if ($element < $min && !Rstats::Func::is_nan($r, $min)) {
       $min = $element;
     }
-    push @a2_elements, $min;
+    push @x2_elements, $min;
   }
   
-  return Rstats::Func::c($r, @a2_elements);
+  return Rstats::Func::c($r, @x2_elements);
 }
 
 sub cumsum {
@@ -2004,11 +2004,11 @@ sub floor {
   
   my $x1 = to_c($r, $_x1);
   
-  my @a2_elements
+  my @x2_elements
     = map { Rstats::Func::new_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose_array($r, $x1)};
 
-  my $x2 = Rstats::Func::c($r, @a2_elements);
+  my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
   
@@ -2425,8 +2425,8 @@ sub rev {
   my $x1 = shift;
   
   # Reverse elements
-  my @a2_elements = reverse @{Rstats::Func::decompose($r, $x1)};
-  my $x2 = Rstats::Func::c($r, @a2_elements);
+  my @x2_elements = reverse @{Rstats::Func::decompose_array($r, $x1)};
+  my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -2476,8 +2476,8 @@ sub round {
   my $x1 = to_c($r, $_x1);
 
   my $ro = 10 ** $digits;
-  my @a2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even(Rstats::VectorFunc::value($_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
-  my $x2 = Rstats::Func::c($r, @a2_elements);
+  my @x2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even(Rstats::VectorFunc::value($_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
+  my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
   
@@ -2587,11 +2587,11 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @a2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @a2_elements]
-    : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @a2_elements];
+    ? [reverse sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements]
+    : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements];
 
   return Rstats::Func::c($r, @$x3_elements);
 }
@@ -2652,10 +2652,10 @@ sub trunc {
   
   my $x1 = to_c($r, $_x1);
   
-  my @a2_elements
+  my @x2_elements
     = map { Rstats::VectorFunc::new_double(int Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
 
-  my $x2 = Rstats::Func::c($r, @a2_elements);
+  my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
   
@@ -3152,22 +3152,22 @@ sub negation {
 sub _fix_pos {
   my $r = shift;
   
-  my ($data1, $data2, $reverse) = @_;
+  my ($data1, $datx2, $reverse) = @_;
   
   my $x1;
   my $x2;
-  if (ref $data2 eq 'Rstats::Array') {
+  if (ref $datx2 eq 'Rstats::Array') {
     $x1 = $data1;
-    $x2 = $data2;
+    $x2 = $datx2;
   }
   else {
     if ($reverse) {
-      $x1 = Rstats::Func::c($r, $data2);
+      $x1 = Rstats::Func::c($r, $datx2);
       $x2 = $data1;
     }
     else {
       $x1 = $data1;
-      $x2 = Rstats::Func::c($r, $data2);
+      $x2 = Rstats::Func::c($r, $datx2);
     }
   }
   
@@ -3405,12 +3405,12 @@ sub get_array {
   my ($poss, $x2_dim, $new_indexes) = @{Rstats::Util::parse_index($r, $x1, $dim_drop, $_indexs)};
   
   my $x1_values = $x1->values;
-  my @a2_values = map { $x1_values->[$_] } @$poss;
+  my @x2_values = map { $x1_values->[$_] } @$poss;
   
   # array
   my $x2 = Rstats::Func::array(
     $r,
-    Rstats::Func::new_vector($r, $x1->type, \@a2_values),
+    Rstats::Func::new_vector($r, $x1->type, \@x2_values),
     Rstats::Func::c($r, @$x2_dim)
   );
   

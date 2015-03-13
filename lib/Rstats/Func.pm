@@ -3197,32 +3197,6 @@ sub operate_binary {
   return $x3;
 }
 
-sub value {
-  my $r = shift;
-  my $x1 = shift;
-  
-  my $e1;
-  my $dim_values = $x1->dim_as_array->values;
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
-  if (@_) {
-    if (@$dim_values == 1) {
-      $e1 = $x1_elements->[$_[0] - 1];
-    }
-    elsif (@$dim_values == 2) {
-      $e1 = $x1_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
-    }
-    else {
-      $e1 = Rstats::Func::decompose($r, $x1->get(@_))->[0];
-    }
-    
-  }
-  else {
-    $e1 = $x1_elements->[0];
-  }
-  
-  return defined $e1 ? Rstats::VectorFunc::value($e1) : undef;
-}
-
 sub bool {
   my $r = shift;
   
@@ -4299,6 +4273,32 @@ sub sort {
     : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements];
 
   return Rstats::Func::c($r, @$x3_elements);
+}
+
+sub value {
+  my $r = shift;
+  my $x1 = shift;
+  
+  my $e1;
+  my $dim_values = $x1->dim_as_array->values;
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  if (@_) {
+    if (@$dim_values == 1) {
+      $e1 = $x1_elements->[$_[0] - 1];
+    }
+    elsif (@$dim_values == 2) {
+      $e1 = $x1_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
+    }
+    else {
+      $e1 = Rstats::Func::decompose($r, $x1->get(@_))->[0];
+    }
+    
+  }
+  else {
+    $e1 = $x1_elements->[0];
+  }
+  
+  return defined $e1 ? Rstats::VectorFunc::value($e1) : undef;
 }
 
 1;

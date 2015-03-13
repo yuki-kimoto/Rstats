@@ -2267,10 +2267,10 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $elements = Rstats::Func::decompose($r, $v);
+    my $elements = Rstats::Func::decompose_array($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($elements->[$i], $maxs[$i]))
+        if !defined $maxs[$i] || $elements->[$i] > $maxs[$i]
     }
   }
   
@@ -2284,10 +2284,10 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $elements = Rstats::Func::decompose($r, $v);
+    my $elements = Rstats::Func::decompose_array($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || Rstats::VectorFunc::value(Rstats::VectorFunc::less_than($elements->[$i], $mins[$i]));
+        if !defined $mins[$i] || $elements->[$i] < $mins[$i];
     }
   }
   

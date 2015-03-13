@@ -1048,63 +1048,62 @@ SV* Rstats::Func::decompose_array(SV* sv_r, SV* sv_x1) {
 
     if (Rstats::VectorFunc::is_character(v1)) {
       for (IV i = 0; i < length; i++) {
-        Rstats::Vector* v1
+        Rstats::Vector* v2
           = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_character_value(v1, i));
         if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v1, 0);
+          Rstats::VectorFunc::add_na_position(v2, 0);
         }
-        SV* sv_x1 = Rstats::Func::new_null(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x1, v1);
-        Rstats::pl_av_push(sv_decomposed_xs, sv_x1);
+        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        Rstats::Func::set_vector(sv_r, sv_x2, v2);
+        Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
       }
     }
     else if (Rstats::VectorFunc::is_complex(v1)) {
       for (IV i = 0; i < length; i++) {
-        Rstats::Vector* v1
+        Rstats::Vector* v2
           = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_complex_value(v1, i));
         if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v1, 0);
+          Rstats::VectorFunc::add_na_position(v2, 0);
         }
-        SV* sv_x1 = Rstats::Func::new_null(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x1, v1);
-        Rstats::pl_av_push(sv_decomposed_xs, sv_x1);
+        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        Rstats::Func::set_vector(sv_r, sv_x2, v2);
+        Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
       }
     }
     else if (Rstats::VectorFunc::is_double(v1)) {
-
       for (IV i = 0; i < length; i++) {
-        Rstats::Vector* v1
+        Rstats::Vector* v2
           = Rstats::VectorFunc::new_double(1, Rstats::VectorFunc::get_double_value(v1, i));
         if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v1, 0);
+          Rstats::VectorFunc::add_na_position(v2, 0);
         }
-        SV* sv_x1 = Rstats::Func::new_null(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x1, v1);
-        Rstats::pl_av_push(sv_decomposed_xs, sv_x1);
+        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        Rstats::Func::set_vector(sv_r, sv_x2, v2);
+        Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
       }
     }
     else if (Rstats::VectorFunc::is_integer(v1)) {
       for (IV i = 0; i < length; i++) {
-        Rstats::Vector* v1
+        Rstats::Vector* v2
           = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_integer_value(v1, i));
         if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v1, 0);
+          Rstats::VectorFunc::add_na_position(v2, 0);
         }
-        SV* sv_x1 = Rstats::Func::new_null(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x1, v1);
-        Rstats::pl_av_push(sv_decomposed_xs, sv_x1);
+        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        Rstats::Func::set_vector(sv_r, sv_x2, v2);
+        Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
       }
     }
     else if (Rstats::VectorFunc::is_logical(v1)) {
       for (IV i = 0; i < length; i++) {
-        Rstats::Vector* v1
+        Rstats::Vector* v2
           = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_integer_value(v1, i));
         if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v1, 0);
+          Rstats::VectorFunc::add_na_position(v2, 0);
         }
-        SV* sv_x1 = Rstats::Func::new_null(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x1, v1);
-        Rstats::pl_av_push(sv_decomposed_xs, sv_x1);
+        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        Rstats::Func::set_vector(sv_r, sv_x2, v2);
+        Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
       }
     }
   }

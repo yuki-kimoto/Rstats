@@ -1449,10 +1449,11 @@ sub setequal {
   return Rstats::Func::FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
   
   my $not_equal;
-  my $x3_elements = Rstats::Func::decompose($r, $x3);
-  my $x4_elements = Rstats::Func::decompose($r, $x4);
+  $DB::single = 1;
+  my $x3_elements = Rstats::Func::decompose_array($r, $x3);
+  my $x4_elements = Rstats::Func::decompose_array($r, $x4);
   for (my $i = 0; $i < Rstats::Func::length_value($r, $x3); $i++) {
-    unless (Rstats::VectorFunc::value(Rstats::VectorFunc::equal($x3_elements->[$i], $x4_elements->[$i]))) {
+    unless ($x3_elements->[$i] == $x4_elements->[$i]) {
       $not_equal = 1;
       last;
     }

@@ -2476,7 +2476,7 @@ sub round {
   my $x1 = to_c($r, $_x1);
 
   my $ro = 10 ** $digits;
-  my @x2_elements = map { Rstats::VectorFunc::new_double(Math::Round::round_even(Rstats::VectorFunc::value($_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = map { Rstats::Func::new_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose_array($r, $x1)};
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
@@ -2543,7 +2543,7 @@ sub sample {
     if $length > $x1_length && !$replace;
   
   my @x2_elements;
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand @$x1_elements);
     my $rand_element = splice @$x1_elements, $rand_num, 1;

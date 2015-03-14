@@ -6,7 +6,6 @@ use warnings;
 require Rstats;
 
 use Carp 'croak';
-use Rstats::Vector;
 use Rstats::Func;
 use Rstats::Array;
 use Rstats::List;

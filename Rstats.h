@@ -829,7 +829,7 @@ namespace Rstats {
     SV* dim_as_array(SV*, SV*);
     SV* decompose(SV*, SV*);
     SV* decompose_array(SV*, SV*);
-    SV* compose_array(SV*, SV*, SV*);
+    SV* compose(SV*, SV*, SV*);
   }
 }
 

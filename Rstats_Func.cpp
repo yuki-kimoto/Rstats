@@ -1111,7 +1111,7 @@ SV* Rstats::Func::decompose_array(SV* sv_r, SV* sv_x1) {
   return sv_decomposed_xs;
 }
 
-SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
+SV* Rstats::Func::compose(SV* sv_r, SV* sv_mode, SV* sv_elements)
 {
   IV len = Rstats::pl_av_len(sv_elements);
   

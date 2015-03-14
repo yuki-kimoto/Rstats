@@ -1773,7 +1773,9 @@ sub ceiling {
   my $_x1 = shift;
   
   my $x1 = to_c($r, $_x1);
-  my @x2_elements = map { Rstats::VectorFunc::new_double(POSIX::ceil Rstats::VectorFunc::value($_)) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements
+    = map { Rstats::Func::new_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
+    @{Rstats::Func::decompose_array($r, $x1)};
   
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);

@@ -4284,7 +4284,7 @@ sub value {
   
   my $e1;
   my $dim_values = $x1->dim_as_array->values;
-  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
   if (@_) {
     if (@$dim_values == 1) {
       $e1 = $x1_elements->[$_[0] - 1];
@@ -4293,7 +4293,7 @@ sub value {
       $e1 = $x1_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      $e1 = Rstats::Func::decompose($r, $x1->get(@_))->[0];
+      $e1 = Rstats::Func::decompose_array($r, $x1->get(@_))->[0];
     }
     
   }
@@ -4301,7 +4301,7 @@ sub value {
     $e1 = $x1_elements->[0];
   }
   
-  return defined $e1 ? Rstats::VectorFunc::value($e1) : undef;
+  return defined $e1 ? Rstats::VectorFunc::value($e1->vector) : undef;
 }
 
 1;

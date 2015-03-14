@@ -400,7 +400,7 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
   IV pos = 0;
   for (IV i = 0; i < element_length; i++) {
     SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
-    if (sv_derived_from(sv_element, "Rstats::Array") || sv_derived_from(sv_element, "Rstats::Vector")) {
+    if (sv_derived_from(sv_element, "Rstats::Array")) {
       
       Rstats::Vector* v1;
       if (sv_derived_from(sv_element, "Rstats::Array")) {

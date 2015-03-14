@@ -3259,19 +3259,7 @@ sub set {
   }
 }
 
-sub _levels_h {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $levels_h = {};
-  my $levels = Rstats::Func::levels($r, $x1)->values;
-  for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::VectorFunc::new_integer($i);
-  }
-  
-  return $levels_h;
-}
+
 
 sub get_array {
   my $r = shift;
@@ -4202,6 +4190,20 @@ sub getin {
   }
 }
 
+sub _levels_h {
+  my $r = shift;
+  
+  my $x1 = shift;
+  
+  my $levels_h = {};
+  my $levels = Rstats::Func::levels($r, $x1)->values;
+  for (my $i = 1; $i <= @$levels; $i++) {
+    $levels_h->{$levels->[$i - 1]} = Rstats::Func::new_integer($r, $i);
+  }
+  
+  return $levels_h;
+}
+
 sub set_array {
   my $r = shift;
   
@@ -4214,24 +4216,24 @@ sub set_array {
   
   my $x1_elements;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x1_elements = Rstats::Func::decompose($r, $x1);
+    $x1_elements = Rstats::Func::decompose_array($r, $x1);
     $x2 = Rstats::Func::as_character($r, $x2) unless Rstats::Func::is_character($r, $x2);
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
+    my $x2_elements = Rstats::Func::decompose_array($r, $x2);
     my $levels_h = Rstats::Func::_levels_h($r, $x1);
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
-      if (Rstats::Func::is_na($r, $element)->value) {
-        $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+      if (Rstats::Func::is_na($r, $element)) {
+        $x1_elements->[$pos] = Rstats::Func::new_logical($r, undef);
       }
       else {
-        my $value = Rstats::VectorFunc::to_string($element);
+        my $value = Rstats::Func::value($r, $element);
         if ($levels_h->{$value}) {
           $x1_elements->[$pos] = $levels_h->{$value};
         }
         else {
           Carp::carp "invalid factor level, NA generated";
-          $x1_elements->[$pos] = Rstats::VectorFunc::new_logical(undef);
+          $x1_elements->[$pos] = Rstats::Func::new_logical($r, undef);
         }
       }
     }
@@ -4245,16 +4247,17 @@ sub set_array {
       $x1->vector($x1_tmp->vector);
     }
 
-    $x1_elements = Rstats::Func::decompose($r, $x1);
+    $x1_elements = Rstats::Func::decompose_array($r, $x1);
 
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
+    my $x2_elements = Rstats::Func::decompose_array($r, $x2);
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
+    $DB::single = 1;
   
-  $x1->vector(Rstats::Func::compose($x1->type, $x1_elements));
+  $x1->vector(Rstats::Func::compose_array($r, $x1->type, $x1_elements));
   
   return $x1;
 }

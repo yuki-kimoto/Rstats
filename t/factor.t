@@ -4,6 +4,17 @@ use warnings;
 
 use Rstats;
 
+# set
+{
+  # set - basic
+  {
+    my $x1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
+    $x1->at(c(3, 6))->set(c("a2", "a1"));
+    is_deeply($x1->values, [1, 2, 2, 1, 2, 1]);
+    is_deeply(r->levels($x1)->values, ["a1", "a2", "a3"]);
+  }
+}
+
 # get
 {
   # get - drop
@@ -32,17 +43,6 @@ use Rstats;
     ok(r->is_ordered($x2));
     is_deeply($x2->values, [1, 3]);
     is_deeply(r->levels($x2)->values, ["a1", "a2", "a3"]);
-  }
-}
-
-# set
-{
-  # set - basic
-  {
-    my $x1 = factor(c("a1", "a2", "a3", "a1", "a2", "a3"));
-    $x1->at(c(3, 6))->set(c("a2", "a1"));
-    is_deeply($x1->values, [1, 2, 2, 1, 2, 1]);
-    is_deeply(r->levels($x1)->values, ["a1", "a2", "a3"]);
   }
 }
 

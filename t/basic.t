@@ -5,6 +5,15 @@ use warnings;
 use Rstats;
 use Math::Trig ();
 
+# NULL
+{
+  my $x1 = r->NULL;
+  is_deeply($x1->values, []);
+  is("$x1", 'NULL');
+  $x1->at(3)->set(5);
+  is_deeply($x1->values, [undef, undef, 5]);
+}
+
 # class
 {
   # class - data frame
@@ -92,16 +101,6 @@ use Math::Trig ();
     is_deeply($x1->values, [1, 1.5, 2, 2.5, 3]);
   }
 }
-
-# NULL
-{
-  my $x1 = r->NULL;
-  is_deeply($x1->values, []);
-  is("$x1", 'NULL');
-  $x1->at(3)->set(5);
-  is_deeply($x1->values, [undef, undef, 5]);
-}
-
 
 # tail
 {

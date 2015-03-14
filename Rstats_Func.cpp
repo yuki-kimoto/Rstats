@@ -1239,6 +1239,9 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     compose_elements = Rstats::VectorFunc::new_character(len);
     for (IV i = 0; i < len; i++) {
       SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
+      if (!SvOK(sv_x1)) {
+        sv_x1 = Rstats::Func::new_na(sv_r);
+      }
       Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
       
       if (Rstats::VectorFunc::exists_na_position(element, 0)) {
@@ -1253,6 +1256,9 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     compose_elements = Rstats::VectorFunc::new_complex(len);
     for (IV i = 0; i < len; i++) {
       SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
+      if (!SvOK(sv_x1)) {
+        sv_x1 = Rstats::Func::new_na(sv_r);
+      }
       Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
       if (Rstats::VectorFunc::exists_na_position(element, 0)) {
@@ -1267,6 +1273,9 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     compose_elements = Rstats::VectorFunc::new_double(len);
     for (IV i = 0; i < len; i++) {
       SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
+      if (!SvOK(sv_x1)) {
+        sv_x1 = Rstats::Func::new_na(sv_r);
+      }
       Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
       if (Rstats::VectorFunc::exists_na_position(element, 0)) {
@@ -1282,6 +1291,9 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(compose_elements);
     for (IV i = 0; i < len; i++) {
       SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
+      if (!SvOK(sv_x1)) {
+        sv_x1 = Rstats::Func::new_na(sv_r);
+      }
       Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
       if (Rstats::VectorFunc::exists_na_position(element, 0)) {
@@ -1297,6 +1309,9 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(compose_elements);
     for (IV i = 0; i < len; i++) {
       SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
+      if (!SvOK(sv_x1)) {
+        sv_x1 = Rstats::Func::new_na(sv_r);
+      }
       Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
       if (Rstats::VectorFunc::exists_na_position(element, 0)) {

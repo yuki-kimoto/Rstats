@@ -5,6 +5,37 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
+# set 3-dimention
+{
+  # set 3-dimention
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x2 = $x1->at(4, 3, 2)->set(25);
+    is_deeply($x2->values, [1 .. 23, 25]);
+  }
+
+  # set 3-dimention - one and tow dimention
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x2 = $x1->at(4, 3)->set(25);
+    is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 25]);
+  }
+
+  # set 3-dimention - one and tow dimention, value is two
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x2 = $x1->at(4, 3)->set(c(25, 26));
+    is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 26]);
+  }
+  
+  # set 3-dimention - one and three dimention, value is three
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x2 = $x1->at(2, c(), 1)->set(c(31, 32, 33));
+    is_deeply($x2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
+  }
+}
+
 # new_double
 {
   # new_double - arguments is list
@@ -787,41 +818,6 @@ EOS
   }
 }
 
-# set_diag
-{
-  # set_diag - 3 x 3
-  {
-    my $x1 = matrix(4, 3, 3);
-    my $x2 = r->set_diag($x1, c(1, 2, 3));
-    is_deeply($x1->values, [1, 4, 4, 4, 2, 4, 4, 4, 3]);
-    is_deeply(r->dim($x1)->values, [3, 3]);
-  }  
-
-  # set_diag - repeat
-  {
-    my $x1 = matrix(4, 3, 3);
-    my $x2 = r->set_diag($x1, 1);
-    is_deeply($x1->values, [1, 4, 4, 4, 1, 4, 4, 4, 1]);
-    is_deeply(r->dim($x1)->values, [3, 3]);
-  }
-  
-  # set_diag - 2 x 3
-  {
-    my $x1 = matrix(4, 2, 3);
-    my $x2 = r->set_diag($x1, c(1, 2));
-    is_deeply($x1->values, [1, 4, 4, 2, 4, 4]);
-    is_deeply(r->dim($x1)->values, [2, 3]);
-  }  
-
-  # set_diag - 3 x 2
-  {
-    my $x1 = matrix(4, 3, 2);
-    my $x2 = r->set_diag($x1, c(1, 2));
-    is_deeply($x1->values, [1, 4, 4, 4, 2, 4]);
-    is_deeply(r->dim($x1)->values, [3, 2]);
-  } 
-}
-
 # diag
 {
   # diag - unit matrix
@@ -1177,37 +1173,6 @@ EOS
   {
     my $x1 = array(se('1:24'), c(4, 3, 1));
     is($x1->value(3, 2, 1), 7);
-  }
-}
-
-# set 3-dimention
-{
-  # set 3-dimention
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(4, 3, 2)->set(25);
-    is_deeply($x2->values, [1 .. 23, 25]);
-  }
-
-  # set 3-dimention - one and tow dimention
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(4, 3)->set(25);
-    is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 25]);
-  }
-
-  # set 3-dimention - one and tow dimention, value is two
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(4, 3)->set(c(25, 26));
-    is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 26]);
-  }
-  
-  # set 3-dimention - one and three dimention, value is three
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(2, c(), 1)->set(c(31, 32, 33));
-    is_deeply($x2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
   }
 }
 

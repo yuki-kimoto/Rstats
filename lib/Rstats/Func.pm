@@ -1449,8 +1449,8 @@ sub setequal {
   return Rstats::Func::FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
   
   my $not_equal;
-  my $x3_elements = Rstats::Func::decompose_array($r, $x3);
-  my $x4_elements = Rstats::Func::decompose_array($r, $x4);
+  my $x3_elements = Rstats::Func::decompose($r, $x3);
+  my $x4_elements = Rstats::Func::decompose($r, $x4);
   for (my $i = 0; $i < Rstats::Func::length_value($r, $x3); $i++) {
     unless ($x3_elements->[$i] == $x4_elements->[$i]) {
       $not_equal = 1;
@@ -1468,8 +1468,8 @@ sub setdiff {
   
   Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
-  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     my $match;
@@ -1492,8 +1492,8 @@ sub intersect {
   
   Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
-  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
@@ -1525,7 +1525,7 @@ sub diff {
   my $x1 = to_c($r, shift);
   
   my $x2_elements = [];
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   for (my $i = 0; $i < Rstats::Func::length_value($r, $x1) - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
@@ -1544,7 +1544,7 @@ sub nchar {
   
   if ($x1->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
@@ -1570,7 +1570,7 @@ sub tolower {
   
   if ($x1->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
@@ -1596,7 +1596,7 @@ sub toupper {
   
   if ($x1->type eq 'character') {
     my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
         push @$x2_elements, $x1_element;
       }
@@ -1620,8 +1620,8 @@ sub match {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
-  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
   my @matches;
   for my $x1_element (@$x1_elements) {
     my $i = 1;
@@ -1671,8 +1671,8 @@ sub append {
   $x_after = Rstats::Func::c($r, $x1_length) if Rstats::Func::is_null($r, $x_after);
   my $after = $x_after->value;
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
-  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
   my @x3_elements = @$x1_elements;
   splice @x3_elements, $after, 0, @$x2_elements;
   
@@ -1742,7 +1742,7 @@ sub cbind {
     for my $_x (@xs) {
       
       my $x1 = to_c($r, $_x);
-      my $x1_dim_elements = Rstats::Func::decompose_array($r, Rstats::Func::dim($r, $x1));
+      my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
       
       my $row_count;
       if (Rstats::Func::is_matrix($r, $x1)) {
@@ -1760,7 +1760,7 @@ sub cbind {
       $row_count_needed = $row_count unless defined $row_count_needed;
       Carp::croak "Row count is different" if $row_count_needed ne $row_count;
       
-      push @$x2_elements, @{Rstats::Func::decompose_array($r, $x1)};
+      push @$x2_elements, @{Rstats::Func::decompose($r, $x1)};
     }
     my $matrix = matrix($r, c($r, @$x2_elements), $row_count_needed, $col_count_total);
     
@@ -1775,7 +1775,7 @@ sub ceiling {
   my $x1 = to_c($r, $_x1);
   my @x2_elements
     = map { Rstats::Func::new_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
-    @{Rstats::Func::decompose_array($r, $x1)};
+    @{Rstats::Func::decompose($r, $x1)};
   
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -1849,7 +1849,7 @@ sub cummax {
   }
   
   my @x2_elements;
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $max = shift @$x1_elements;
   push @x2_elements, $max;
   for my $element (@$x1_elements) {
@@ -1880,7 +1880,7 @@ sub cummin {
   }
   
   my @x2_elements;
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $min = shift @$x1_elements;
   push @x2_elements, $min;
   for my $element (@$x1_elements) {
@@ -1947,8 +1947,8 @@ sub complex {
     my $x1_arg_length = Rstats::Func::length_value($r, $x1_arg);
     my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
     
-    my $x1_mod_elements = Rstats::Func::decompose_array($r, $x1_mod);
-    my $x1_arg_elements = Rstats::Func::decompose_array($r, $x1_arg);
+    my $x1_mod_elements = Rstats::Func::decompose($r, $x1_mod);
+    my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
     for (my $i = 0; $i < $longer_length; $i++) {
       my $x_mod = $x1_mod_elements->[$i];
       $x_mod = Rstats::Func::new_double($r, 1) unless defined $x_mod;
@@ -1967,8 +1967,8 @@ sub complex {
     Carp::croak "mode should be numeric"
       unless Rstats::Func::is_numeric($r, $x1_re) && Rstats::Func::is_numeric($r, $x1_im);
     
-    my $x1_re_elements = Rstats::Func::decompose_array($r, $x1_re);
-    my $x1_im_elements = Rstats::Func::decompose_array($r, $x1_im);
+    my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
+    my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
     for (my $i = 0; $i <  Rstats::Func::length_value($r, $x1_im); $i++) {
       my $x_re;
       if (defined $x1_re_elements->[$i]) {
@@ -2008,7 +2008,7 @@ sub floor {
   
   my @x2_elements
     = map { Rstats::Func::new_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
-    @{Rstats::Func::decompose_array($r, $x1)};
+    @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2033,7 +2033,7 @@ sub head {
     return $x2;
   }
   else {
-    my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+    my $x1_elements = Rstats::Func::decompose($r, $x1);
     my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
     my @x2_elements;
     for (my $i = 0; $i < $max; $i++) {
@@ -2106,7 +2106,7 @@ sub max {
     return -(Rstats::Func::Inf($r));
   }
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -2144,7 +2144,7 @@ sub min {
     return Rstats::Func::Inf($r);
   }
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
@@ -2269,7 +2269,7 @@ sub pmax {
   
   my @maxs;
   for my $v (@vs) {
-    my $elements = Rstats::Func::decompose_array($r, $v);
+    my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
         if !defined $maxs[$i] || $elements->[$i] > $maxs[$i]
@@ -2286,7 +2286,7 @@ sub pmin {
   
   my @mins;
   for my $v (@vs) {
-    my $elements = Rstats::Func::decompose_array($r, $v);
+    my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
         if !defined $mins[$i] || $elements->[$i] < $mins[$i];
@@ -2379,7 +2379,7 @@ sub rep {
   my $times = defined $x_times ? $x_times->value : 1;
   
   my $elements = [];
-  push @$elements, @{Rstats::Func::decompose_array($r, $x1)} for 1 .. $times;
+  push @$elements, @{Rstats::Func::decompose($r, $x1)} for 1 .. $times;
   my $x2 = Rstats::Func::c($r, @$elements);
   
   return $x2;
@@ -2392,8 +2392,8 @@ sub replace {
   my $x2 = to_c($r, shift);
   my $x3 = to_c($r, shift);
   
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
-  my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
   my $x2_elements_h = {};
   for my $x2_element (@$x2_elements) {
     my $x2_element_hash = Rstats::Func::to_string($r, $x2_element);
@@ -2402,7 +2402,7 @@ sub replace {
     Carp::croak "replace second argument can't have duplicate number"
       if $x2_elements_h->{$x2_element_hash} > 1;
   }
-  my $x3_elements = Rstats::Func::decompose_array($r, $x3);
+  my $x3_elements = Rstats::Func::decompose($r, $x3);
   my $x3_length = @{$x3_elements};
   
   my $x4_elements = [];
@@ -2427,7 +2427,7 @@ sub rev {
   my $x1 = shift;
   
   # Reverse elements
-  my @x2_elements = reverse @{Rstats::Func::decompose_array($r, $x1)};
+  my @x2_elements = reverse @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
@@ -2478,7 +2478,7 @@ sub round {
   my $x1 = to_c($r, $_x1);
 
   my $ro = 10 ** $digits;
-  my @x2_elements = map { Rstats::Func::new_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose_array($r, $x1)};
+  my @x2_elements = map { Rstats::Func::new_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
@@ -2545,7 +2545,7 @@ sub sample {
     if $length > $x1_length && !$replace;
   
   my @x2_elements;
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   for my $i (0 .. $length - 1) {
     my $rand_num = int(rand @$x1_elements);
     my $rand_element = splice @$x1_elements, $rand_num, 1;
@@ -2589,7 +2589,7 @@ sub tail {
   
   my $n = defined $x_n ? $x_n->value : 6;
   
-  my $e1 = Rstats::Func::decompose_array($r, $x1);
+  my $e1 = Rstats::Func::decompose($r, $x1);
   my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
   my @e2;
   for (my $i = 0; $i < $max; $i++) {
@@ -2639,7 +2639,7 @@ sub trunc {
   my $x1 = to_c($r, $_x1);
   
   my @x2_elements
-    = map { Rstats::Func::new_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose_array($r, $x1)};
+    = map { Rstats::Func::new_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2657,7 +2657,7 @@ sub unique {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
-    for my $x1_element (@{Rstats::Func::decompose_array($r, $x1)}) {
+    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
         unless ($na_count) {
           push @$x2_elements, $x1_element;
@@ -3482,7 +3482,7 @@ sub array {
   $dim_product *= $_ for @{$x_dim->values};
   
   # Fix elements
-  my $elements = Rstats::Func::decompose_array($r, $x1);
+  my $elements = Rstats::Func::decompose($r, $x1);
   if ($x1_length > $dim_product) {
     @$elements = splice @$elements, 0, $dim_product;
   }
@@ -4218,9 +4218,9 @@ sub set_array {
   
   my $x1_elements;
   if (Rstats::Func::is_factor($r, $x1)) {
-    $x1_elements = Rstats::Func::decompose_array($r, $x1);
+    $x1_elements = Rstats::Func::decompose($r, $x1);
     $x2 = Rstats::Func::as_character($r, $x2) unless Rstats::Func::is_character($r, $x2);
-    my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+    my $x2_elements = Rstats::Func::decompose($r, $x2);
     my $levels_h = Rstats::Func::_levels_h($r, $x1);
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
@@ -4249,9 +4249,9 @@ sub set_array {
       $x1->vector($x1_tmp->vector);
     }
 
-    $x1_elements = Rstats::Func::decompose_array($r, $x1);
+    $x1_elements = Rstats::Func::decompose($r, $x1);
 
-    my $x2_elements = Rstats::Func::decompose_array($r, $x2);
+    my $x2_elements = Rstats::Func::decompose($r, $x2);
     for (my $i = 0; $i < @$poss; $i++) {
       my $pos = $poss->[$i];
       $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
@@ -4271,7 +4271,7 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @x2_elements = grep { !Rstats::Func::is_na($r, $_) && !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose_array($r, $x1)};
+  my @x2_elements = grep { !Rstats::Func::is_na($r, $_) && !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
     ? [reverse sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements]
@@ -4286,7 +4286,7 @@ sub value {
   
   my $e1;
   my $dim_values = $x1->dim_as_array->values;
-  my $x1_elements = Rstats::Func::decompose_array($r, $x1);
+  my $x1_elements = Rstats::Func::decompose($r, $x1);
   if (@_) {
     if (@$dim_values == 1) {
       $e1 = $x1_elements->[$_[0] - 1];
@@ -4295,7 +4295,7 @@ sub value {
       $e1 = $x1_elements->[($_[0] + $dim_values->[0] * ($_[1] - 1)) - 1];
     }
     else {
-      $e1 = Rstats::Func::decompose_array($r, $x1->get(@_))->[0];
+      $e1 = Rstats::Func::decompose($r, $x1->get(@_))->[0];
     }
     
   }

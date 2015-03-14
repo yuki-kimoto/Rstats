@@ -1405,4 +1405,13 @@ SV* compose(...)
   return_sv(sv_decomposed);
 }
 
+SV* compose_array(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* x1 = ST(1);
+  SV* sv_decomposed = Rstats::Func::compose(sv_r, x1);
+  return_sv(sv_decomposed);
+}
+
 MODULE = Rstats PACKAGE = Rstats

@@ -1396,15 +1396,6 @@ SV* decompose_array(...)
   return_sv(sv_decomposed);
 }
 
-SV* compose(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* x1 = ST(1);
-  SV* sv_composed = Rstats::Func::compose(sv_r, x1);
-  return_sv(sv_composed);
-}
-
 SV* compose_array(...)
   PPCODE:
 {

@@ -1110,3 +1110,120 @@ SV* Rstats::Func::decompose_array(SV* sv_r, SV* sv_x1) {
   
   return sv_decomposed_xs;
 }
+
+SV* Rstats::Func::compose(SV* sv_mode, SV* sv_elements)
+{
+  IV len = Rstats::pl_av_len(sv_elements);
+  
+  Rstats::Vector* compose_elements;
+  std::vector<IV> na_positions;
+  char* mode = SvPV_nolen(sv_mode);
+  if (strEQ(mode, "character")) {
+    compose_elements = Rstats::VectorFunc::new_character(len);
+    for (IV i = 0; i < len; i++) {
+      Rstats::Vector* element;
+      SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+      if (SvOK(sv_element)) {
+        element = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
+      }
+      else {
+        element = Rstats::VectorFunc::new_na();
+      }
+      if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+        na_positions.push_back(i);
+      }
+      else {
+        Rstats::VectorFunc::set_character_value(compose_elements, i, Rstats::VectorFunc::get_character_value(element, 0));
+      }
+    }
+  }
+  else if (strEQ(mode, "complex")) {
+    compose_elements = Rstats::VectorFunc::new_complex(len);
+    for (IV i = 0; i < len; i++) {
+      Rstats::Vector* element;
+      SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+      if (SvOK(sv_element)) {
+        element = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
+      }
+      else {
+        element = Rstats::VectorFunc::new_na();
+      }
+      if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+        na_positions.push_back(i);
+      }
+      else {
+       Rstats::VectorFunc::set_complex_value(compose_elements, i, Rstats::VectorFunc::get_complex_value(element, 0));
+      }
+    }
+  }
+  else if (strEQ(mode, "double")) {
+    compose_elements = Rstats::VectorFunc::new_double(len);
+    for (IV i = 0; i < len; i++) {
+      Rstats::Vector* element;
+      SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+      if (SvOK(sv_element)) {
+        element = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
+      }
+      else {
+        element = Rstats::VectorFunc::new_na();
+      }
+      if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+        na_positions.push_back(i);
+      }
+      else {
+        Rstats::VectorFunc::set_double_value(compose_elements, i, Rstats::VectorFunc::get_double_value(element, 0));
+      }
+    }
+  }
+  else if (strEQ(mode, "integer")) {
+    compose_elements = Rstats::VectorFunc::new_integer(len);
+    std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(compose_elements);
+    for (IV i = 0; i < len; i++) {
+      Rstats::Vector* element;
+      SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+      if (SvOK(sv_element)) {
+        element = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
+      }
+      else {
+        element = Rstats::VectorFunc::new_na();
+      }
+      if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+        na_positions.push_back(i);
+      }
+      else {
+        Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_integer_value(element, 0));
+      }
+    }
+  }
+  else if (strEQ(mode, "logical")) {
+    compose_elements = Rstats::VectorFunc::new_logical(len);
+    std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(compose_elements);
+    for (IV i = 0; i < len; i++) {
+      Rstats::Vector* element;
+      SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+      if (SvOK(sv_element)) {
+        element = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
+      }
+      else {
+        element = Rstats::VectorFunc::new_na();
+      }
+      if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+        na_positions.push_back(i);
+      }
+      else {
+        Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_integer_value(element, 0));
+      }
+    }
+  }
+  else {
+    croak("Unknown type(Rstats::VectorFunc::compose)");
+  }
+  
+  for (IV i = 0; i < na_positions.size(); i++) {
+    Rstats::VectorFunc::add_na_position(compose_elements, na_positions[i]);
+  }
+  
+  SV* sv_compose_elements = Rstats::pl_to_perl_obj(compose_elements, "Rstats::Vector");
+  
+  return sv_compose_elements;
+}

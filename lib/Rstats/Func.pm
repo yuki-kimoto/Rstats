@@ -4257,7 +4257,8 @@ sub set_array {
   }
     $DB::single = 1;
   
-  $x1->vector(Rstats::Func::compose_array($r, $x1->type, $x1_elements));
+  my $x1_tmp = Rstats::Func::compose_array($r, $x1->type, $x1_elements);
+  $x1->vector($x1_tmp->vector);
   
   return $x1;
 }

@@ -1213,7 +1213,8 @@ SV* Rstats::Func::compose_array(SV* sv_r, SV* sv_mode, SV* sv_elements)
     Rstats::VectorFunc::add_na_position(compose_elements, na_positions[i]);
   }
   
-  SV* sv_compose_elements = Rstats::pl_to_perl_obj(compose_elements, "Rstats::Vector");
+  SV* sv_x2 = Rstats::Func::new_null(sv_r);
+  Rstats::Func::set_vector(sv_r, sv_x2, compose_elements);
   
-  return sv_compose_elements;
+  return sv_x2;
 }

@@ -361,11 +361,6 @@ SV* Rstats::Func::c(SV* sv_r, SV* sv_elements) {
       type = Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_element));
       type_h[type] = 1;
     }
-    else if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Vector")) {
-      length += Rstats::VectorFunc::get_length(Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element));
-      type = Rstats::VectorFunc::get_type(Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element));
-      type_h[type] = 1;
-    }
     else {
       if (SvOK(sv_element)) {
         if (Rstats::Util::is_perl_number(sv_element)) {

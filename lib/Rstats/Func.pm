@@ -2050,7 +2050,7 @@ sub head {
 sub i {
   my $r = shift;
   
-  my $i = Rstats::VectorFunc::new_complex({re => 0, im => 1});
+  my $i = Rstats::Func::new_complex($r, {re => 0, im => 1});
   
   return Rstats::Func::c($r, $i);
 }

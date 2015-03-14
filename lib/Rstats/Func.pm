@@ -4255,7 +4255,6 @@ sub set_array {
       $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
     }
   }
-    $DB::single = 1;
   
   my $x1_tmp = Rstats::Func::compose($r, $x1->type, $x1_elements);
   $x1->vector($x1_tmp->vector);
@@ -4270,11 +4269,11 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @x2_elements = grep { !Rstats::Func::is_na($r, $_)->value && !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = grep { !Rstats::Func::is_na($r, $_) && !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose_array($r, $x1)};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements]
-    : [sort { Rstats::VectorFunc::value(Rstats::VectorFunc::more_than($a, $b)) ? 1 : Rstats::VectorFunc::value(Rstats::VectorFunc::equal($a, $b)) ? 0 : -1 } @x2_elements];
+    ? [reverse sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements]
+    : [sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements];
 
   return Rstats::Func::c($r, @$x3_elements);
 }

@@ -1,5 +1,6 @@
 #include "Rstats.h"
 
+// Rstats
 namespace Rstats {
 
   REGEXP* pl_pregcomp (SV* sv_re, IV flag) {

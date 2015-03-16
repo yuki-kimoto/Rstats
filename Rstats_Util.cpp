@@ -1,5 +1,6 @@
 #include "Rstats.h"
 
+// Rstats::Util
 namespace Rstats {
   namespace Util {
 

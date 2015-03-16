@@ -19,15 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub as_array {
-  my ($r, $x1) = @_;
-  
-  my $x2 = Rstats::Func::as_vector($r, $x1);
-  my $x2_dim = Rstats::Func::dim_as_array($r, $x1);
-  
-  return array($r, $x2, $x2_dim);
-}
-
 sub levels {
   my $r = shift;
   

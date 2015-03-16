@@ -9,15 +9,17 @@ use Rstats;
   # as_array - from vector
   {
     my $x1 = se('1:24');
-    is_deeply(r->as_array($x1)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_array($x1))->values, [24]);
+    my $x2 = r->as_array($x1);
+    is_deeply($x2->values, [1 .. 24]);
+    is_deeply(r->dim($x2)->values, [24]);
   }
 
   # as_array - from array
   {
     my $x1 = array(se('1:24'), c(4, 3, 2));
-    is_deeply(r->as_array($x1)->values, [1 .. 24]);
-    is_deeply(r->dim(r->as_array($x1))->values, [4, 3, 2]);
+    my $x2 = r->as_array($x1);
+    is_deeply($x2->values, [1 .. 24]);
+    is_deeply(r->dim($x2)->values, [4, 3, 2]);
   }
 }
 

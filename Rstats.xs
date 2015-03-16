@@ -1402,13 +1402,29 @@ SV* array(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
+  
+  // Args
   SV* sv_args = Rstats::pl_new_av_ref();
   for (IV i = 1; i < items; i++) {
     Rstats::pl_av_push(sv_args, ST(i));
   }
+  SV* sv_names = Rstats::pl_new_av_ref();
+  Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("x"));
+  Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("dim"));
+  SV* sv_args_h = Rstats::Func::args_h(sv_r, sv_names, sv_args);
   
-  SV* sv_result = Rstats::Func::array(sv_r, sv_args);
+  SV* sv_result = Rstats::Func::array_with_opt(sv_r, sv_args_h);
   return_sv(sv_result);
+}
+
+SV* as_array(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  
+  SV* sv_x2 = Rstats::Func::as_array(sv_r, sv_x1);
+  return_sv(sv_x2);
 }
 
 MODULE = Rstats PACKAGE = Rstats

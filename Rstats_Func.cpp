@@ -1217,17 +1217,24 @@ namespace Rstats {
       
       return sv_new_opt;
     }
+    
+    SV* array(SV* sv_r, SV* sv_x1) {
+      SV* sv_args_h = Rstats::pl_new_hv_ref();
+      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
+      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
+    }
+    
+    SV* array(SV* sv_r, SV* sv_x1, SV* sv_dim) {
+      SV* sv_args_h = Rstats::pl_new_hv_ref();
+      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
+      Rstats::pl_hv_store(sv_args_h, "dim", sv_dim);
+      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
+    }
+    
+    SV* array_with_opt(SV* sv_r, SV* sv_args_h) {
 
-    SV* array(SV* sv_r, SV* sv_args) {
-
-      // Args
-      SV* sv_names = Rstats::pl_new_av_ref();
-      Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("x"));
-      Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("dim"));
-      SV* sv_args_h = Rstats::Func::args_h(sv_r, sv_names, sv_args);
-      
       SV* sv_x1 = Rstats::pl_hv_fetch(sv_args_h, "x");
-      
+     
       // Dimention
       SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
         ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_null(sv_r);
@@ -1276,6 +1283,14 @@ namespace Rstats {
       Rstats::Func::set_dim(sv_r, sv_x2, sv_x_dim);
       
       return sv_x2;
+    }
+
+    SV* as_array(SV* sv_r, SV* sv_x1) {
+      
+      SV* sv_x2 = Rstats::Func::as_vector(sv_r, sv_x1);
+      SV* sv_x2_dim = Rstats::Func::dim_as_array(sv_r, sv_x1);
+      
+      return Rstats::Func::array(sv_r, sv_x2, sv_x2_dim);
     }
   }
 }

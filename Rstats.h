@@ -100,7 +100,6 @@ namespace Rstats {
   }
 
   namespace Util {
-    SV* args(SV*, SV*, SV*);
     IV is_perl_number(SV*);
     SV* cross_product(SV*);
     SV* pos_to_index(SV*, SV*);
@@ -829,6 +828,8 @@ namespace Rstats {
     SV* dim_as_array(SV*, SV*);
     SV* decompose(SV*, SV*);
     SV* compose(SV*, SV*, SV*);
+    SV* array(SV*, SV*);
+    SV* args_h(SV*, SV*, SV*);
   }
 }
 

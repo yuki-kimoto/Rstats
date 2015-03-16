@@ -951,18 +951,18 @@ SV* T(...)
   return_sv(sv_x1);
 }
 
-SV* args(...)
+SV* args_h(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   SV* sv_names = ST(1);
-  SV* sv_args = Rstats::pl_new_av_ref();
+  SV* sv_args_h = Rstats::pl_new_av_ref();
   
   for (IV i = 2; i < items; i++) {
-    Rstats::pl_av_push(sv_args, ST(i));
+    Rstats::pl_av_push(sv_args_h, ST(i));
   }
   
-  SV* sv_opt = Rstats::Util::args(sv_r, sv_names, sv_args);
+  SV* sv_opt = Rstats::Func::args_h(sv_r, sv_names, sv_args_h);
   
   return_sv(sv_opt);
 }
@@ -1396,6 +1396,19 @@ SV* compose(...)
 
   SV* sv_composed = Rstats::Func::compose(sv_r, sv_type, sv_x1);
   return_sv(sv_composed);
+}
+
+SV* array(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_args = Rstats::pl_new_av_ref();
+  for (IV i = 1; i < items; i++) {
+    Rstats::pl_av_push(sv_args, ST(i));
+  }
+  
+  SV* sv_result = Rstats::Func::array(sv_r, sv_args);
+  return_sv(sv_result);
 }
 
 MODULE = Rstats PACKAGE = Rstats

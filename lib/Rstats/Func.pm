@@ -3465,38 +3465,6 @@ sub to_string_array {
   return $str;
 }
 
-sub array {
-  my $r = shift;
-  
-  my $opt = args($r, ['x', 'dim'], @_);
-  my $x1 = $opt->{x};
-  
-  # Dimention
-  my $x_dim = exists $opt->{dim} ? $opt->{dim} : NULL($r);
-  my $x1_length = Rstats::Func::length_value($r, $x1);
-  unless ($x_dim->length_value) {
-    $x_dim = Rstats::Func::c($r, $x1_length);
-  }
-  my $dim_product = 1;
-  $dim_product *= $_ for @{$x_dim->values};
-  
-  # Fix elements
-  my $elements = Rstats::Func::decompose($r, $x1);
-  if ($x1_length > $dim_product) {
-    @$elements = splice @$elements, 0, $dim_product;
-  }
-  elsif ($x1_length < $dim_product) {
-    my $repeat_count = int($dim_product / @$elements) + 1;
-    @$elements = (@$elements) x $repeat_count;
-    @$elements = splice @$elements, 0, $dim_product;
-  }
-  
-  my $x2 = Rstats::Func::c($r, $elements);
-  Rstats::Func::dim($r, $x2, $x_dim);
-  
-  return $x2;
-}
-
 sub _value_to_string {
   my $r = shift;
   

@@ -9,50 +9,6 @@ static REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)
 
 NV Rstats::Util::pi () { return M_PI; }
 
-SV* Rstats::Util::args(SV* sv_r, SV* sv_names, SV* sv_args) {
-  
-  IV args_length = Rstats::pl_av_len(sv_args);
-  SV* sv_opt;
-  SV* sv_arg_last = Rstats::pl_av_fetch(sv_args, args_length - 1);
-  if (!sv_isobject(sv_arg_last) && sv_derived_from(sv_arg_last, "HASH")) {
-    sv_opt = Rstats::pl_av_pop(sv_args);
-  }
-  else {
-    sv_opt = Rstats::pl_new_hv_ref();
-  }
-  
-  SV* sv_new_opt = Rstats::pl_new_hv_ref();
-  IV names_length = Rstats::pl_av_len(sv_names);
-  for (IV i = 0; i < names_length; i++) {
-    SV* sv_name = Rstats::pl_av_fetch(sv_names, i);
-    if (Rstats::pl_hv_exists(sv_opt, SvPV_nolen(sv_name))) {
-      Rstats::pl_hv_store(
-        sv_new_opt,
-        SvPV_nolen(sv_name),
-        Rstats::Func::to_c(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
-      );
-    }
-    else if (i < names_length) {
-      SV* sv_name = Rstats::pl_av_fetch(sv_names, i);
-      SV* sv_arg = Rstats::pl_av_fetch(sv_args, i);
-      if (SvOK(sv_arg)) {
-        Rstats::pl_hv_store(
-          sv_new_opt,
-          SvPV_nolen(sv_name),
-          Rstats::Func::to_c(sv_r, sv_arg)
-        );
-      }
-    }
-  }
-
-  // SV* sv_key;
-  // while ((sv_key = hv_iterkeysv(hv_iternext(Rstats::pl_hv_deref(sv_opt)))) != NULL) {
-    // croak("unused argument (%s)", SvPV_nolen(sv_key));
-  // }
-  
-  return sv_new_opt;
-}
-
 IV Rstats::Util::is_perl_number(SV* sv_str) {
   if (!SvOK(sv_str)) {
     return 0;

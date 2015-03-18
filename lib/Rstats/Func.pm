@@ -19,30 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub levels {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $x_levels = Rstats::Func::to_c($r, shift);
-    $x_levels = Rstats::Func::as_character($r, $x_levels)
-      unless is_character($r, $x_levels);
-    
-    $x1->{levels} = Rstats::Func::as_vector($r, $x_levels);
-    
-    return $x1;
-  }
-  else {
-    my $x_levels;
-    if (exists $x1->{levels}) {
-      $x_levels = Rstats::Func::as_vector($r, $x1->{levels});
-    }
-    
-    return $x_levels;
-  }
-}
-
 my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
 
 sub mode {
@@ -271,44 +247,6 @@ sub typeof {
 sub labels {
   my $r = shift;
   return $r->as_character(@_);
-}
-
-sub as_character {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x2;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    my $levels = {};
-    my $x_levels = Rstats::Func::levels($r, $x1);
-    my $x_levels_values = $x_levels->values;
-    my $levels_length = Rstats::Func::length_value($r, $x_levels);
-    for (my $i = 1; $i <= $levels_length; $i++) {
-      $levels->{$i} = $x_levels_values->[$i - 1];
-    }
-
-    my $x1_values = $x1->values;
-    my $x2_values = [];
-    for my $x1_value (@$x1_values) {
-      if (defined $x1_value) {
-        my $character = $levels->{$x1_value};
-        push @$x2_values, "$character";
-      }
-      else {
-        push @$x2_values, undef;
-      }
-    }
-    $x2 = Rstats::Func::new_character($r, @$x2_values);
-  }
-  else {
-    $x2 = Rstats::Func::new_array($r);
-    $x2->vector(Rstats::VectorFunc::as_character($x1->vector));
-  }
-  
-  Rstats::Func::copy_attrs_to($r, $x1, $x2);
-
-  return $x2;
 }
 
 sub as {

@@ -834,6 +834,10 @@ namespace Rstats {
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);
     SV* as_array(SV*, SV*);
+    // levels
+    SV* set_levels(SV*, SV*, SV*);
+    SV* get_levels(SV*, SV*);
+    SV* as_character(SV*, SV*);
   }
 }
 

@@ -1427,4 +1427,30 @@ SV* as_array(...)
   return_sv(sv_x2);
 }
 
+SV* levels(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  if (items > 2) {
+    SV* sv_x2 = ST(2);
+    Rstats::Func::set_levels(sv_r, sv_x1, sv_x2);
+    return_sv(sv_r);
+  }
+  else {
+    SV* sv_x2 = Rstats::Func::get_levels(sv_r, sv_x1);
+    return_sv(sv_x2);
+  }
+}
+
+SV* as_character(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  
+  SV* sv_x2 = Rstats::Func::as_character(sv_r, sv_x1);
+  return_sv(sv_x2);
+}
+
 MODULE = Rstats PACKAGE = Rstats

@@ -19,41 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-my %types_h = map { $_ => 1 } qw/character complex numeric double integer logical/;
-
-sub mode {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  if (@_) {
-    my $type = $_[0];
-    croak qq/Error in eval(expr, envir, enclos) : could not find function "as_$type"/
-      unless $types_h{$type};
-    
-    $x1 = $x1->as($type);
-    
-    return $x1;
-  }
-  else {
-    my $type = $x1->type;
-    my $mode;
-    if (defined $type) {
-      if ($type eq 'integer' || $type eq 'double') {
-        $mode = 'numeric';
-      }
-      else {
-        $mode = $type;
-      }
-    }
-    else {
-      croak qq/could not find function "as_$type"/;
-    }
-
-    return Rstats::Func::c($r, $mode);
-  }
-}
-
 sub as_list {
   my $r = shift;
   
@@ -248,35 +213,6 @@ sub labels {
   my $r = shift;
   return $r->as_character(@_);
 }
-
-sub as {
-  my $r = shift;
-  
-  my ($x1, $type) = @_;
-  
-  if ($type eq 'character') {
-    return as_character($r, $x1);
-  }
-  elsif ($type eq 'complex') {
-    return as_complex($r, $x1);
-  }
-  elsif ($type eq 'double') {
-    return as_double($r, $x1);
-  }
-  elsif ($type eq 'numeric') {
-    return as_numeric($r, $x1);
-  }
-  elsif ($type eq 'integer') {
-    return as_integer($r, $x1);
-  }
-  elsif ($type eq 'logical') {
-    return as_logical($r, $x1);
-  }
-  else {
-    croak "Invalid mode is passed";
-  }
-}
-
 
 sub I {
   my $r = shift;
@@ -2995,7 +2931,10 @@ sub upgrade_type {
     elsif ($type_h->{logical}) {
       $to_type = 'logical';
     }
-    $_ = Rstats::Func::as($r, $_, $to_type) for @xs;
+    $DB::single = 1;
+    for my $x (@xs) {
+      $x = Rstats::Func::as($r, $to_type, $x);
+    }
   }
   
   return @xs;

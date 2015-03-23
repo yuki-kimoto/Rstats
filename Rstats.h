@@ -777,6 +777,7 @@ namespace Rstats {
     Rstats::Vector* get_vector(SV*, SV*);
     SV* c(SV*, SV*);
     SV* to_c(SV*, SV*);
+
     SV* new_null(SV*); /* NULL */
     SV* new_na(SV*); /* NA */
     SV* new_nan(SV*); /* NaN */
@@ -788,12 +789,11 @@ namespace Rstats {
     SV* new_complex(SV*, SV*);
     SV* new_integer(SV*, SV*);
     SV* new_logical(SV*, SV*);
+
     SV* pi(SV*);
     SV* is_vector(SV*, SV*);
     SV* length_value(SV*, SV*);
     SV* values(SV*, SV*);
-    SV* set_dim(SV*, SV*, SV*);
-    SV* get_dim(SV*, SV*);
     SV* is_matrix(SV*, SV*);
     SV* is_array(SV*, SV*);
     SV* is_numeric(SV*, SV*);
@@ -812,17 +812,19 @@ namespace Rstats {
     SV* new_vector(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);
+
     SV* as_integer(SV*, SV*);
     SV* as_logical(SV*, SV*);
     SV* as_complex(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
+    SV* as_character(SV*, SV*);
+    SV* as(SV*, SV*, SV*);
+
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
     SV* is_na(SV*, SV*);
-    SV* set_class(SV*, SV*, SV*);
-    SV* get_class(SV*, SV*);
     SV* is_factor(SV*, SV*);
     SV* is_ordered(SV*, SV*);
     SV* clone(SV*, SV*);
@@ -834,10 +836,23 @@ namespace Rstats {
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);
     SV* as_array(SV*, SV*);
+    
+    // class
+    SV* get_class(SV*, SV*);
+    SV* set_class(SV*, SV*, SV*);
+
     // levels
-    SV* set_levels(SV*, SV*, SV*);
     SV* get_levels(SV*, SV*);
-    SV* as_character(SV*, SV*);
+    SV* set_levels(SV*, SV*, SV*);
+
+    // mode
+    SV* get_mode(SV*, SV*);
+    SV* set_mode(SV*, SV*, SV*);
+    
+    // dim
+    SV* set_dim(SV*, SV*, SV*);
+    SV* get_dim(SV*, SV*);
+    
   }
 }
 

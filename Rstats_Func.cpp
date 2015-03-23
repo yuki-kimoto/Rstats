@@ -794,7 +794,7 @@ namespace Rstats {
       SV* sv_x2 = Rstats::Func::new_array(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_complex(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-
+      
       return sv_x2;
     }
 
@@ -1293,14 +1293,14 @@ namespace Rstats {
       return Rstats::Func::array(sv_r, sv_x2, sv_x2_dim);
     }
 
-    SV* set_levels(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+    SV* set_levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {
       
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
-      if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x2))) {
-        sv_x2 = Rstats::Func::as_character(sv_r, sv_x2);
+      sv_x_class = Rstats::Func::to_c(sv_r, sv_x_class);
+      if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_class))) {
+        sv_x_class = Rstats::Func::as_character(sv_r, sv_x_class);
       }
       
-      Rstats::pl_hv_store(sv_x1, "levels", Rstats::Func::as_vector(sv_r, sv_x2));
+      Rstats::pl_hv_store(sv_x1, "levels", Rstats::Func::as_vector(sv_r, sv_x_class));
       
       return sv_x1;
     }
@@ -1362,6 +1362,72 @@ namespace Rstats {
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
       return sv_x2;
+    }
+
+    SV* set_mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {
+      
+      sv_x_type = Rstats::Func::to_c(sv_r, sv_x_type);
+      
+      SV* sv_type = Rstats::pl_av_fetch(Rstats::Func::values(sv_r, sv_x_type), 0);
+      char* type = SvPV_nolen(sv_type);
+      
+      if (!strEQ(type, "character")
+        && !strEQ(type, "complex")
+        && !strEQ(type, "numeric")
+        && !strEQ(type, "double")
+        && !strEQ(type, "integer")
+        && !strEQ(type, "logical")
+      )
+      {
+        croak("Error in eval(expr, envir, enclos) : could not find function \"as_%s\"", type);
+      }
+      
+      SV* sv_x1_tmp = Rstats::Func::as(sv_r, sv_type, sv_x1);
+      Rstats::pl_hv_store(sv_x1, "vector", Rstats::pl_hv_fetch(sv_x1_tmp, "vector"));
+      
+      return sv_r;
+    }
+    
+    SV* get_mode(SV* sv_r, SV* sv_x1) {
+      
+      SV* sv_type = Rstats::Func::type(sv_r, sv_x1);
+      
+      SV* sv_mode;
+      if (strEQ(SvPV_nolen(sv_type), "integer") || strEQ(SvPV_nolen(sv_type), "double")) {
+        sv_mode = Rstats::pl_new_sv_pv("numeric");
+      }
+      else {
+        sv_mode = sv_type;
+      }
+      
+      return Rstats::Func::new_character(sv_r, sv_mode);
+    }
+    
+    SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {
+      
+      char* type = SvPV_nolen(sv_type);
+      if (strEQ(type, "character")) {
+        return Rstats::Func::as_character(sv_r, sv_x1);
+      }
+      else if (strEQ(type, "complex")) {
+
+        return Rstats::Func::as_complex(sv_r, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        return Rstats::Func::as_double(sv_r, sv_x1);
+      }
+      else if (strEQ(type, "numeric")) {
+        return Rstats::Func::as_numeric(sv_r, sv_x1);
+      }
+      else if (strEQ(type, "integer")) {
+        return Rstats::Func::as_integer(sv_r, sv_x1);
+      }
+      else if (strEQ(type, "logical")) {
+        return Rstats::Func::as_logical(sv_r, sv_x1);
+      }
+      else {
+        croak("Invalid mode %s is passed", type);
+      }
     }
   }
 }

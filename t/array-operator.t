@@ -6,21 +6,21 @@ use Rstats;
 
 # numeric operator
 {
+  # numeric operator - -Inf + 2i
+  {
+    my $x2 = c(2*i);
+    my $x1 = c(-Inf);
+    my $x3 = $x1 + $x2;
+    is($x3->value->{re}, '-Inf');
+    is($x3->value->{im}, 2);
+  }
+
   # numeric operator - -0.2 * -Inf
   {
     my $x1 = c(-0.2);
     my $x2 = c(-Inf);
     my $x3 = $x1 * $x2;
     is_deeply($x3->values, ['Inf']);
-  }
-
-  # numeric operator - -Inf + 2i
-  {
-    my $x1 = c(-Inf);
-    my $x2 = c(2*i);
-    my $x3 = $x1 + $x2;
-    is($x3->value->{re}, '-Inf');
-    is($x3->value->{im}, 2);
   }
 }
 

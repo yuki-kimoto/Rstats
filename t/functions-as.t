@@ -4,25 +4,6 @@ use warnings;
 
 use Rstats;
 
-# as_array
-{
-  # as_array - from vector
-  {
-    my $x1 = se('1:24');
-    my $x2 = r->as_array($x1);
-    is_deeply($x2->values, [1 .. 24]);
-    is_deeply(r->dim($x2)->values, [24]);
-  }
-
-  # as_array - from array
-  {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = r->as_array($x1);
-    is_deeply($x2->values, [1 .. 24]);
-    is_deeply(r->dim($x2)->values, [4, 3, 2]);
-  }
-}
-
 # as_numeric
 {
   # as_numeric - from complex
@@ -67,6 +48,25 @@ use Rstats;
     my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
+  }
+}
+
+# as_array
+{
+  # as_array - from vector
+  {
+    my $x1 = se('1:24');
+    my $x2 = r->as_array($x1);
+    is_deeply($x2->values, [1 .. 24]);
+    is_deeply(r->dim($x2)->values, [24]);
+  }
+
+  # as_array - from array
+  {
+    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x2 = r->as_array($x1);
+    is_deeply($x2->values, [1 .. 24]);
+    is_deeply(r->dim($x2)->values, [4, 3, 2]);
   }
 }
 

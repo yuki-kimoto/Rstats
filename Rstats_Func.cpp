@@ -1299,7 +1299,7 @@ namespace Rstats {
       return Rstats::Func::array(sv_r, sv_x2, sv_x2_dim);
     }
 
-    SV* set_levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {
+    SV* levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {
       
       sv_x_class = Rstats::Func::to_c(sv_r, sv_x_class);
       if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_class))) {
@@ -1311,7 +1311,7 @@ namespace Rstats {
       return sv_x1;
     }
     
-    SV* get_levels(SV* sv_r, SV* sv_x1) {
+    SV* levels(SV* sv_r, SV* sv_x1) {
       SV* sv_x_levels;
       
       if (Rstats::pl_hv_exists(sv_x1, "levels")) {
@@ -1329,7 +1329,7 @@ namespace Rstats {
       SV* sv_x2;
       if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_factor(sv_r, sv_x1))) {
         SV* sv_levels = Rstats::pl_new_hv_ref();
-        SV* sv_x_levels = Rstats::Func::get_levels(sv_r, sv_x1);
+        SV* sv_x_levels = Rstats::Func::levels(sv_r, sv_x1);
         SV* sv_x_levels_values = Rstats::Func::values(sv_r, sv_x_levels);
         SV* sv_levels_length = Rstats::Func::length_value(sv_r, sv_x_levels);
         for (IV i = 1; i <= SvIV(sv_levels_length); i++) {

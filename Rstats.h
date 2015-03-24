@@ -836,14 +836,11 @@ namespace Rstats {
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);
     SV* as_array(SV*, SV*);
-    
     // class
     SV* Class(SV*, SV*);
     SV* Class(SV*, SV*, SV*);
-
-    // levels
-    SV* get_levels(SV*, SV*);
-    SV* set_levels(SV*, SV*, SV*);
+    SV* levels(SV*, SV*);
+    SV* levels(SV*, SV*, SV*);
 
     // mode
     SV* get_mode(SV*, SV*);

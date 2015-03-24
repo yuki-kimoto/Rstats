@@ -831,11 +831,11 @@ SV* dim(...)
   
   if (items > 2) {
     SV* sv_x_dim = ST(2);
-    Rstats::Func::set_dim(sv_r, sv_x1, sv_x_dim);
+    Rstats::Func::dim(sv_r, sv_x1, sv_x_dim);
     return_sv(sv_r);
   }
   else {
-    SV* sv_x_dim = Rstats::Func::get_dim(sv_r, sv_x1);
+    SV* sv_x_dim = Rstats::Func::dim(sv_r, sv_x1);
     return_sv(sv_x_dim);
   }
 }

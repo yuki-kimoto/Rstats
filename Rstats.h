@@ -845,8 +845,8 @@ namespace Rstats {
     SV* mode(SV*, SV*, SV*);
     
     // dim
-    SV* set_dim(SV*, SV*, SV*);
-    SV* get_dim(SV*, SV*);
+    SV* dim(SV*, SV*, SV*);
+    SV* dim(SV*, SV*);
     
     SV* length(SV*, SV*);
     

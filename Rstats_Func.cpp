@@ -8,14 +8,14 @@ namespace Rstats {
 
       bool is = sv_isobject(sv_x1)
         && sv_derived_from(sv_x1, "Rstats::Array")
-        && SvIV(length_value(sv_r, get_dim(sv_r, sv_x1))) == 2;
+        && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
       
       SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_is;
     }
 
-    SV* set_dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
+    SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
       
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
@@ -40,7 +40,7 @@ namespace Rstats {
       return sv_r;
     }
 
-    SV* get_dim(SV* sv_r, SV* sv_x1) {
+    SV* dim(SV* sv_r, SV* sv_x1) {
       SV* sv_x_dim;
       
       if (Rstats::pl_hv_exists(sv_x1, "dim")) {
@@ -988,7 +988,7 @@ namespace Rstats {
     SV* dim_as_array(SV* sv_r, SV* sv_x1) {
       
       if (Rstats::pl_hv_exists(sv_x1, "dim")) {
-        return Rstats::Func::get_dim(sv_r, sv_x1);
+        return Rstats::Func::dim(sv_r, sv_x1);
       }
       else {
         SV* sv_length = Rstats::Func::length_value(sv_r, sv_x1);
@@ -1286,7 +1286,7 @@ namespace Rstats {
       }
       
       SV* sv_x2 = Rstats::Func::c(sv_r, sv_elements);
-      Rstats::Func::set_dim(sv_r, sv_x2, sv_x_dim);
+      Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
       
       return sv_x2;
     }

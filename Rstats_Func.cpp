@@ -891,16 +891,18 @@ namespace Rstats {
       return sv_x2;
     }
 
-    SV* set_class(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+    SV* Class(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
+      // Set class
       sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
-      
       Rstats::pl_hv_store(sv_x1, "class", Rstats::Func::as_vector(sv_r, sv_x2));
       
       return sv_x1;
     }
 
-    SV* get_class(SV* sv_r, SV* sv_x1) {
+    SV* Class(SV* sv_r, SV* sv_x1) {
+      
+      // Get class
       SV* sv_x2;
       if (Rstats::pl_hv_exists(sv_x1, "class")) {
         sv_x2 = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
@@ -941,7 +943,7 @@ namespace Rstats {
 
     SV* is_factor(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_classes = Rstats::Func::get_class(sv_r, sv_x1);
+      SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
       Rstats::Vector* v_classes = Rstats::Func::get_vector(sv_r, sv_classes);
       IV v_classes_length = Rstats::VectorFunc::get_length(v_classes);
       
@@ -959,7 +961,7 @@ namespace Rstats {
 
     SV* is_ordered(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_classes = Rstats::Func::get_class(sv_r, sv_x1);
+      SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
       Rstats::Vector* v_classes = Rstats::Func::get_vector(sv_r, sv_classes);
       IV v_classes_length = Rstats::VectorFunc::get_length(v_classes);
       

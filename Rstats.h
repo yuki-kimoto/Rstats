@@ -838,8 +838,8 @@ namespace Rstats {
     SV* as_array(SV*, SV*);
     
     // class
-    SV* get_class(SV*, SV*);
-    SV* set_class(SV*, SV*, SV*);
+    SV* Class(SV*, SV*);
+    SV* Class(SV*, SV*, SV*);
 
     // levels
     SV* get_levels(SV*, SV*);

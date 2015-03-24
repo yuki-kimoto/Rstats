@@ -841,10 +841,8 @@ namespace Rstats {
     SV* Class(SV*, SV*, SV*);
     SV* levels(SV*, SV*);
     SV* levels(SV*, SV*, SV*);
-
-    // mode
-    SV* get_mode(SV*, SV*);
-    SV* set_mode(SV*, SV*, SV*);
+    SV* mode(SV*, SV*);
+    SV* mode(SV*, SV*, SV*);
     
     // dim
     SV* set_dim(SV*, SV*, SV*);

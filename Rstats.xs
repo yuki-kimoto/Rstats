@@ -1460,12 +1460,12 @@ SV* mode(...)
   SV* sv_x1 = ST(1);
   if (items > 2) {
     SV* sv_x_mode = ST(2);
-    Rstats::Func::set_mode(sv_r, sv_x1, sv_x_mode);
+    Rstats::Func::mode(sv_r, sv_x1, sv_x_mode);
       
     return_sv(sv_r);
   }
   else {
-    SV* sv_x_mode = Rstats::Func::get_mode(sv_r, sv_x1);
+    SV* sv_x_mode = Rstats::Func::mode(sv_r, sv_x1);
     return_sv(sv_x_mode);
   }
 }

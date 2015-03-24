@@ -1370,7 +1370,7 @@ namespace Rstats {
       return sv_x2;
     }
 
-    SV* set_mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {
+    SV* mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {
       
       sv_x_type = Rstats::Func::to_c(sv_r, sv_x_type);
       
@@ -1394,7 +1394,7 @@ namespace Rstats {
       return sv_r;
     }
     
-    SV* get_mode(SV* sv_r, SV* sv_x1) {
+    SV* mode(SV* sv_r, SV* sv_x1) {
       
       SV* sv_type = Rstats::Func::type(sv_r, sv_x1);
       

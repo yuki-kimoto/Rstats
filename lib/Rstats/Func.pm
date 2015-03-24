@@ -118,19 +118,6 @@ sub ordered {
   factor($r, @_, $opt);
 }
 
-sub length {
-  my $r = shift;
-  
-  my $container = shift;
-  
-  if (ref $container eq 'Rstats::Array') {
-    return c($r, Rstats::VectorFunc::length_value($container->vector));
-  }
-  else {
-    return c($r, Rstats::Func::length_value($r, $container));
-  }
-}
-
 sub list {
   my $r = shift;
   

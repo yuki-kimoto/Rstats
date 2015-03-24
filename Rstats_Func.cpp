@@ -293,6 +293,10 @@ namespace Rstats {
       return sv_x1;
     }
 
+    SV* new_integer(SV* sv_r, IV value) {
+      return Rstats::Func::new_integer(sv_r, Rstats::pl_new_sv_iv(value));
+    }
+
     SV* new_logical(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_null(sv_r);
       
@@ -1429,5 +1433,19 @@ namespace Rstats {
         croak("Invalid mode %s is passed", type);
       }
     }
+
+    SV* length(SV* sv_r, SV* sv_container) {
+      if (sv_isobject(sv_container) && sv_derived_from(sv_container, "Rstats::Array")) {
+        return Rstats::Func::new_integer(
+          sv_r,
+          Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_container))
+        );
+      }
+      else {
+        return Rstats::Func::new_integer(sv_r, Rstats::Func::length_value(sv_r, sv_container));
+      }
+    }
+
+
   }
 }

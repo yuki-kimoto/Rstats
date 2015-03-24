@@ -853,6 +853,8 @@ namespace Rstats {
     SV* set_dim(SV*, SV*, SV*);
     SV* get_dim(SV*, SV*);
     
+    SV* length(SV*, SV*);
+    
   }
 }
 

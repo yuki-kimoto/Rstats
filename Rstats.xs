@@ -1493,4 +1493,21 @@ SV* length(...)
   return_sv(sv_x2);
 }
 
+SV* names(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  if (items > 2) {
+    SV* sv_x_names = ST(2);
+    Rstats::Func::names(sv_r, sv_x1, sv_x_names);
+      
+    return_sv(sv_r);
+  }
+  else {
+    SV* sv_x_names = Rstats::Func::names(sv_r, sv_x1);
+    return_sv(sv_x_names);
+  }
+}
+
 MODULE = Rstats PACKAGE = Rstats

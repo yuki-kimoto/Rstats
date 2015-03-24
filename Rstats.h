@@ -849,6 +849,8 @@ namespace Rstats {
     SV* dim(SV*, SV*);
     
     SV* length(SV*, SV*);
+    SV* names(SV*, SV*, SV*);
+    SV* names(SV*, SV*);
     
   }
 }

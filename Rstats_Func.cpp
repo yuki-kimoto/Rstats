@@ -1448,6 +1448,32 @@ namespace Rstats {
       }
     }
 
-
+    SV* names(SV* sv_r, SV* sv_x1, SV* sv_x_names) {
+      sv_x_names = Rstats::Func::to_c(sv_r, sv_x_names);
+      
+      if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_names))) {
+        sv_x_names = Rstats::Func::as_character(sv_r, sv_x_names);
+      }
+      Rstats::pl_hv_store(sv_x1, "names", Rstats::Func::as_vector(sv_r, sv_x_names));
+      
+      if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
+        SV* sv_x1_dimnames = Rstats::pl_hv_fetch(sv_x1, "dimnames");
+        Rstats::pl_av_store(
+          sv_x1_dimnames,
+          1,
+          Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"))
+        );
+      }
+      
+      return sv_r;
+    }
+    
+    SV* names(SV* sv_r, SV* sv_x1) {
+      SV* sv_x_names = Rstats::Func::new_null(sv_r);
+      if (Rstats::pl_hv_exists(sv_x1, "names")) {
+        sv_x_names = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
+      }
+      return sv_x_names;
+    }
   }
 }

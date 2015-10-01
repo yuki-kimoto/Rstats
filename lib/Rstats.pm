@@ -2,7 +2,7 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.0138';
+our $VERSION = '0.0139';
 
 use Rstats::Class;
 
@@ -68,8 +68,8 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   my $a1 = array(C_("1:24"), c_(4, 3, 2));
 
   # Complex
-  my $z1 = 1 + 2 * i;
-  my $z2 = 3 + 4 * i;
+  my $z1 = 1 + 2 * i_;
+  my $z2 = 3 + 4 * i_;
   my $z3 = $z1 * $z2;
   
   # Special value

@@ -933,6 +933,15 @@ SV* F(...)
   return_sv(sv_x1);
 }
 
+SV* F_(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::Func::new_false(sv_r);
+  
+  return_sv(sv_x1);
+}
+
 SV* TRUE(...)
   PPCODE:
 {
@@ -943,6 +952,15 @@ SV* TRUE(...)
 }
 
 SV* T(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = Rstats::Func::new_true(sv_r);
+  
+  return_sv(sv_x1);
+}
+
+SV* T_(...)
   PPCODE:
 {
   SV* sv_r = ST(0);

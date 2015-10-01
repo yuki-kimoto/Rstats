@@ -113,7 +113,6 @@ my @func_names = qw/
   i_
   ifelse
   interaction
-  is_element
   I
   Im
   Re
@@ -190,24 +189,6 @@ my @func_names = qw/
   var
   which
   as_array
-  is_array
-  is_character
-  is_complex
-  is_finite
-  is_infinite
-  is_list
-  is_matrix
-  is_na
-  is_nan
-  is_null
-  is_numeric
-  is_double
-  is_integer
-  is_logical
-  is_vector
-  is_factor
-  is_ordered
-  is_data_frame
   as_character
   as_complex
   as_integer
@@ -217,7 +198,6 @@ my @func_names = qw/
   as_matrix
   as_numeric
   as_vector
-  as
   labels
   levels
   names
@@ -295,6 +275,7 @@ sub new {
   $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
   $self->helper('is.data_frame' => \&Rstats::Func::is_data_frame);
   $self->helper('is.logical' => \&Rstats::Func::is_logical);
+  $self->helper('is.element' => \&Rstats::Func::is_element);
 
   return $self;
 }

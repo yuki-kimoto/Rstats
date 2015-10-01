@@ -131,7 +131,7 @@ use Math::Trig ();
     my $mat = matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply(r->dim($mat)->values, [2, 5]);
-    ok(r->is_matrix($mat));
+    ok(r->is->matrix($mat));
   }
   
   # matrix - repeat values
@@ -139,7 +139,7 @@ use Math::Trig ();
     my $mat = matrix(c_(1,2), 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply(r->dim($mat)->values, [2, 5]);
-    ok(r->is_matrix($mat));
+    ok(r->is->matrix($mat));
   }
 }
 

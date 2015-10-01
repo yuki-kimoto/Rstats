@@ -21,7 +21,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a1", "a2", "a3", "a1", "a2", "a3"));
     my $x2 = $x1->get(c_(4, 6), {drop => TRUE});
-    ok(r->is_factor($x2));
+    ok(r->is->factor($x2));
     is_deeply($x2->values, [1, 2]);
     is_deeply(r->levels($x2)->values, ["a1", "a3"]);
   }
@@ -30,7 +30,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a1", "a2", "a3", "a1", "a2", "a3"));
     my $x2 = $x1->get(c_(4, 6));
-    ok(r->is_factor($x2));
+    ok(r->is->factor($x2));
     is_deeply($x2->values, [1, 3]);
     is_deeply(r->levels($x2)->values, ["a1", "a2", "a3"]);
   }
@@ -39,8 +39,8 @@ use Rstats;
   {
     my $x1 = ordered(c_("a1", "a2", "a3", "a1", "a2", "a3"));
     my $x2 = $x1->get(c_(4, 6));
-    ok(r->is_factor($x2));
-    ok(r->is_ordered($x2));
+    ok(r->is->factor($x2));
+    ok(r->is->ordered($x2));
     is_deeply($x2->values, [1, 3]);
     is_deeply(r->levels($x2)->values, ["a1", "a2", "a3"]);
   }
@@ -85,7 +85,7 @@ use Rstats;
     my $x1 = factor(c_("a1", "a2", "a1", "a2"));
     my $x2 = factor(c_("b1", "b2"));
     my $x3 = r->interaction($x1, $x2, {drop => TRUE});
-    ok(r->is_factor($x3));
+    ok(r->is->factor($x3));
     is_deeply($x3->values, [1, 2, 1, 2]);
     is_deeply(r->levels($x3)->values, ["a1.b1", "a2.b2"]);
   }
@@ -95,7 +95,7 @@ use Rstats;
     my $x1 = factor(c_("a1", "a2", "a1", "a2"));
     my $x2 = factor(c_("b1", "b2"));
     my $x3 = r->interaction($x1, $x2, {sep => ":"});
-    ok(r->is_factor($x3));
+    ok(r->is->factor($x3));
     is_deeply($x3->values, [1, 4, 1, 4]);
     is_deeply(r->levels($x3)->values, ["a1:b1", "a1:b2", "a2:b1", "a2:b2"]);
   }
@@ -106,7 +106,7 @@ use Rstats;
     my $x2 = factor(c_("b1", "b2"));
     my $x3 = factor(c_("c1"));
     my $x4 = r->interaction($x1, $x2, $x3);
-    ok(r->is_factor($x4));
+    ok(r->is->factor($x4));
     is_deeply($x4->values, [1, 4, 5]);
     is_deeply(r->levels($x4)->values, [
       "a1.b1.c1",
@@ -123,7 +123,7 @@ use Rstats;
     my $x1 = factor(c_("a1", "a2", "a3"));
     my $x2 = factor(c_("b1", "b2"));
     my $x3 = r->interaction($x1, $x2);
-    ok(r->is_factor($x3));
+    ok(r->is->factor($x3));
     is_deeply($x3->values, [1, 4, 5]);
     is_deeply(r->levels($x3)->values, ["a1.b1", "a1.b2", "a2.b1", "a2.b2", "a3.b1", "a3.b2"]);
   }
@@ -133,7 +133,7 @@ use Rstats;
     my $x1 = factor(c_("a1", "a2", "a1", "a2"));
     my $x2 = factor(c_("b1", "b2"));
     my $x3 = r->interaction($x1, $x2);
-    ok(r->is_factor($x3));
+    ok(r->is->factor($x3));
     is_deeply($x3->values, [1, 4, 1, 4]);
     is_deeply(r->levels($x3)->values, ["a1.b1", "a1.b2", "a2.b1", "a2.b2"]);
   }
@@ -144,21 +144,21 @@ use Rstats;
   # gl - n, k, length
   {
     my $x1 = r->gl(2, 2, 10);
-    ok(r->is_factor($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 1, 2, 2, 1, 1, 2, 2, 1, 1]);
   }
   
   # gl - n, k ,length, no fit length
   {
     my $x1 = r->gl(3, 3, 10);
-    ok(r->is_factor($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3, 1]);
   }
 
   # gl - n, k
   {
     my $x1 = r->gl(3, 3);
-    ok(r->is_factor($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
     is_deeply(r->levels($x1)->values, ["1", "2", "3"]);
   }
@@ -166,7 +166,7 @@ use Rstats;
   # gl - labels
   {
     my $x1 = r->gl(3, 3, {labels => c_("a", "b", "c")});
-    ok(r->is_factor($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
     is_deeply(r->levels($x1)->values, ["a", "b", "c"]);
   }
@@ -174,8 +174,8 @@ use Rstats;
   # gl - ordered
   {
     my $x1 = r->gl(3, 3, {ordered => TRUE});
-    ok(r->is_factor($x1));
-    ok(r->is_ordered($x1));
+    ok(r->is->factor($x1));
+    ok(r->is->ordered($x1));
     is_deeply($x1->values, [1, 1, 1, 2, 2, 2, 3, 3, 3]);
     is_deeply(r->levels($x1)->values, ["1", "2", "3"]);
   }
@@ -186,18 +186,18 @@ use Rstats;
   # ordered - basic
   {
     my $x1 = ordered(c_("a", "b", "c", "a", "b", "c"));
-    ok(r->is_ordered($x1));
-    ok(r->is_integer($x1));
-    ok(r->is_factor($x1));
+    ok(r->is->ordered($x1));
+    ok(r->is->integer($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply(r->levels($x1)->values, ["a", "b", "c"]);
   }
   # ordered - option
   {
     my $x1 = ordered(c_("a", "b", "c", "a", "b", "c"), {levels => c_("a", "b", "c")});
-    ok(r->is_ordered($x1));
-    ok(r->is_integer($x1));
-    ok(r->is_factor($x1));
+    ok(r->is->ordered($x1));
+    ok(r->is->integer($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply(r->levels($x1)->values, ["a", "b", "c"]);
   }
@@ -218,7 +218,7 @@ use Rstats;
     my $x1_levels = r->levels($x1);
     my $x2_levels = r->as_numeric($x1_levels);
     my $x3 = $x2_levels->get($x1);
-    ok(r->is_numeric($x3));
+    ok(r->is->numeric($x3));
     is_deeply($x3->values, [2, 3, 4, 2, 3, 4]);
   }
   
@@ -226,7 +226,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c", "a", "b", "c"));
     my $x2 = r->labels($x1);
-    ok(r->is_character($x2));
+    ok(r->is->character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
@@ -234,7 +234,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c", "a", "b", "c"));
     my $x2 = r->as_character($x1);
-    ok(r->is_character($x2));
+    ok(r->is->character($x2));
     is_deeply($x2->values, ["a", "b", "c", "a", "b", "c"]);
   }
   
@@ -242,7 +242,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c"));
     my $x2 = r->as_logical($x1);
-    ok(r->is_logical($x2));
+    ok(r->is->logical($x2));
     is_deeply($x2->values, [1, 1, 1]);
   }
   
@@ -250,7 +250,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c"));
     my $x2 = r->as_complex($x1);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 1, im =>  0}, {re => 2, im => 0}, {re => 3, im => 0}]);
   }
   
@@ -258,7 +258,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c"));
     my $x2 = r->as_double($x1);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
     is_deeply($x2->values, [1, 2, 3]);
   }
   
@@ -266,7 +266,7 @@ use Rstats;
   {
     my $x1 = factor(c_("a", "b", "c"));
     my $x2 = r->as_integer($x1);
-    ok(r->is_integer($x2));
+    ok(r->is->integer($x2));
     is_deeply($x2->values, [1, 2, 3]);
   }
 
@@ -274,7 +274,7 @@ use Rstats;
   {
     my $x1 = c_(2, 3, 4);
     my $x2 = factor($x1);
-    ok(r->is_factor($x2));
+    ok(r->is->factor($x2));
     is_deeply($x2->values, [1, 2, 3]);
     is_deeply(r->levels($x2)->values, ["2", "3", "4"]);
   }
@@ -283,7 +283,7 @@ use Rstats;
   {
     my $x1 = c_("a", "b", "c");
     my $x2 = factor($x1);
-    ok(r->is_factor($x2));
+    ok(r->is->factor($x2));
     is_deeply($x2->values, [1, 2, 3]);
     is_deeply(r->levels($x2)->values, ["a", "b", "c"]);
   }
@@ -291,13 +291,13 @@ use Rstats;
   # factor - ordered
   {
     my $x1 = factor(c_("a", "b", "c", "a", "b", "c"), {ordered => TRUE});
-    ok(r->is_ordered($x1));
+    ok(r->is->ordered($x1));
   }
 
   # factor - ordered, default, FALSE
   {
     my $x1 = factor(c_("a", "b", "c", "a", "b", "c"));
-    ok(!r->is_ordered($x1));
+    ok(!r->is->ordered($x1));
   }
 
   # factor - exclude
@@ -356,8 +356,8 @@ EOS
   # factor - basic
   {
     my $x1 = factor(c_("a", "b", "c", "a", "b", "c"));
-    ok(r->is_integer($x1));
-    ok(r->is_factor($x1));
+    ok(r->is->integer($x1));
+    ok(r->is->factor($x1));
     is_deeply($x1->values, [1, 2, 3, 1, 2 ,3]);
     is_deeply(r->levels($x1)->values, ["a", "b", "c"]);
   }

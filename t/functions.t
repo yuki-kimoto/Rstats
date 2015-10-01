@@ -295,7 +295,7 @@ use Math::Complex ();
     my $x2 = r->exp($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-1.131204');
     is(sprintf("%.6f", $x2->value->{im}), '2.471727');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # exp - double,array
@@ -305,7 +305,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[0]), '2.718282');
     is(sprintf("%.6f", $x2->values->[1]), '7.389056');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # exp - Inf
@@ -349,7 +349,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re);
     is($x2->value->{im}, $exp_im);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # log10 - double,array
@@ -358,7 +358,7 @@ use Math::Complex ();
     my $x2 = r->log10($x1);
     is($x2->value, 1);
     is_deeply(r->dim($x2)->values, [1]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 }
 
@@ -374,7 +374,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re / log(2));
     is($x2->value->{im}, $exp_im / log(2));
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # log2 - double,array
@@ -383,7 +383,7 @@ use Math::Complex ();
     my $x2 = r->log2($x1);
     is($x2->values->[0], 1);
     is_deeply(r->dim($x2)->values, [1]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 }
 
@@ -399,7 +399,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re);
     is($x2->value->{im}, $exp_im);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # logb - double,array
@@ -411,7 +411,7 @@ use Math::Complex ();
     is($x2->values->[2], 'NaN');
     ok($x2->values->[3], '-Inf');
     is_deeply(r->dim($x2)->values, [4]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 }
 
@@ -427,7 +427,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re);
     is($x2->value->{im}, $exp_im);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # log - double,array
@@ -439,14 +439,14 @@ use Math::Complex ();
     ok($x2->values->[2], 'NaN');
     ok($x2->values->[3], '-Inf');
     is_deeply(r->dim($x2)->values, [4]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # log - Inf
   {
     my $x1 = c_(Inf);
     my $x2 = r->log($x1);
-    ok(r->is_infinite($x2)->values, [1]);
+    ok(r->is->infinite($x2)->values, [1]);
   }
   
   # log - Inf()
@@ -724,7 +724,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1, 2, 3, 4);
     my $x2 = c_(1, 2, 3);
-    my $x3 = r->is_element($x1, $x2);
+    my $x3 = r->is->element($x1, $x2);
     is_deeply($x3->values, [1, 1, 1, 0]);
   }
   
@@ -732,7 +732,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1*i_, 2*i_, 3*i_, 4*i_);
     my $x2 = c_(1*i_, 2*i_, 3*i_);
-    my $x3 = r->is_element($x1, $x2);
+    my $x3 = r->is->element($x1, $x2);
     is_deeply($x3->values, [1, 1, 1, 0])
   }
 }

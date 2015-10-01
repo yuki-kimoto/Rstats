@@ -8,7 +8,7 @@ use Rstats;
 {
   my $x1 = list(c_(1, 2), c_(3, 4));
   my $x2 = r->lapply($x1, 'sum');
-  ok(r->is_list($x2));
+  ok(r->is->list($x2));
   is_deeply($x2->getin(1)->values, [3]);
   is_deeply($x2->getin(2)->values, [7]);
 }
@@ -94,7 +94,7 @@ use Rstats;
     my $x1 = c_(1, 2, 3);
     my $x2 = c_(3, 2, 1);
     my $x3 = r->mapply('rep', $x1, $x2);
-    ok(r->is_list($x3));
+    ok(r->is->list($x3));
     is_deeply($x3->getin(1)->values, [1, 1, 1]);
     is_deeply($x3->getin(2)->values, [2, 2]);
     is_deeply($x3->getin(3)->values, [3]);
@@ -105,7 +105,7 @@ use Rstats;
     my $x1 = c_(1, 2, 3);
     my $x2 = c_(6, 5, 4, 3, 2, 1);
     my $x3 = r->mapply('rep', $x1, $x2);
-    ok(r->is_list($x3));
+    ok(r->is->list($x3));
     is_deeply($x3->getin(1)->values, [1, 1, 1, 1, 1, 1]);
     is_deeply($x3->getin(6)->values, [3]);
   }
@@ -133,7 +133,7 @@ use Rstats;
 {
   my $x1 = list(c_(1, 2), c_(3.2, 4.2));
   my $x2 = r->sapply($x1, 'sum');
-  ok(r->is_vector($x2));
+  ok(r->is->vector($x2));
   is_deeply($x2->values, [3, 7.4]);
 }
 

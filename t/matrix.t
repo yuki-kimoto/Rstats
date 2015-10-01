@@ -16,7 +16,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'), 3, 4, {byrow => 1});
     is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
 
   # matrix - omit col
@@ -24,7 +24,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'), undef, 4);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
   
   # matrix - basic
@@ -32,7 +32,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'), 3, 4);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
   
   # matrix - omit row
@@ -40,7 +40,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'), 3);
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
   
   # matrix - omit col
@@ -48,7 +48,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'));
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [12, 1]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
 
   # matrix - nrow and ncol option
@@ -56,7 +56,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:12'), {nrow => 4, ncol => 3});
     is_deeply($m1->values, [1 .. 12]);
     is_deeply(r->dim($m1)->values, [4, 3]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
   
   # matrix - repeat
@@ -64,7 +64,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:3'), 3, 4);
     is_deeply($m1->values, [(1 .. 3) x 4]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
 
   # matrix - repeat 2
@@ -72,7 +72,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(C_('1:10'), 3, 4);
     is_deeply($m1->values, [1 .. 10, 1, 2]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
   
   # matrix - repeat 3
@@ -80,7 +80,7 @@ use Rstats::VectorFunc;
     my $m1 = matrix(0, 3, 4);
     is_deeply($m1->values, [(0) x 12]);
     is_deeply(r->dim($m1)->values, [3, 4]);
-    ok(r->is_matrix($m1));
+    ok(r->is->matrix($m1));
   }
 }
 

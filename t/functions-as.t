@@ -75,7 +75,7 @@ use Rstats;
   # is_integer, as_integer, typeof - integer
   {
     my $c = c_(0, 1, 2);
-    ok(r->is_integer(r->as_integer($c)));
+    ok(r->is->integer(r->as_integer($c)));
     is(r->mode(r->as_integer($c))->value, 'numeric');
     is(r->typeof(r->as_integer($c))->value, 'integer');
   }
@@ -83,7 +83,7 @@ use Rstats;
   # is_character, as_character, typeof - character
   {
     my $c = c_(0, 1, 2);
-    ok(r->is_character(r->as_character($c)));
+    ok(r->is->character(r->as_character($c)));
     is(r->mode(r->as_character($c))->value, 'character');
     is(r->typeof(r->as_character($c))->value, 'character');
   }
@@ -91,7 +91,7 @@ use Rstats;
   # is_complex, as_complex, typeof - complex
   {
     my $c = c_(0, 1, 2);
-    ok(r->is_complex(r->as_complex($c)));
+    ok(r->is->complex(r->as_complex($c)));
     is(r->mode(r->as_complex($c))->value, 'complex');
     is(r->typeof(r->as_complex($c))->value, 'complex');
   }
@@ -100,7 +100,7 @@ use Rstats;
   {
     my $x1 = c_(0, 1, 2);
     my $x2 = r->as_logical($x1);
-    ok(r->is_logical($x2));
+    ok(r->is->logical($x2));
     is(r->mode($x2)->value, 'logical');
     is(r->typeof($x2)->value, 'logical');
   }

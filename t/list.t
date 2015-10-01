@@ -8,7 +8,7 @@ use Rstats;
 {
   my $x1 = list(1, 2);
   my $x2 = r->typeof($x1);
-  ok(r->is_character($x2));
+  ok(r->is->character($x2));
   is_deeply($x2->values, ['list']);
 }
 
@@ -19,7 +19,7 @@ use Rstats;
     my $x1 = list(1, 2, 3);
     r->names($x1, c_("n1", "n2", "n3"));
     my $l2 = $x1->get(c_("n1", "n3"));
-    ok(r->is_list($l2));
+    ok(r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
@@ -28,7 +28,7 @@ use Rstats;
   {
     my $x1 = list(1, 2, 3);
     my $l2 = $x1->get(1);
-    ok(r->is_list($l2));
+    ok(r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
   }
   
@@ -36,7 +36,7 @@ use Rstats;
   {
     my $x1 = c_("a", "b");
     my $x2 = r->as_list($x1);
-    ok(r->is_list($x2));
+    ok(r->is->list($x2));
     is_deeply($x2->getin(1)->values, ["a", "b"]);
   }
 
@@ -119,7 +119,7 @@ EOS
   {
     my $x1 = list(1, 2, 3);
     my $l2 = $x1->get(c_(1, 3));
-    ok(r->is_list($l2));
+    ok(r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
@@ -129,14 +129,14 @@ EOS
 {
   my $x1 = list(1, 2, 3);
   my $x2 = r->ncol($x1);
-  ok(r->is_null($x2));
+  ok(r->is->null($x2));
 }
 
 # nrow
 {
   my $x1 = list(1, 2, 3);
   my $x2 = r->nrow($x1);
-  ok(r->is_null($x2));
+  ok(r->is->null($x2));
 }
 
 # set

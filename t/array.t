@@ -41,14 +41,14 @@ use Rstats::Func;
   # new_double - arguments is list
   {
     my $x1 = r->new_double(1.1, 1.2, 1.3);
-    ok($x1->is_double);
+    ok($x1->is->double);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 
   # new_double - arguments is array reference
   {
     my $x1 = r->new_double([1.1, 1.2, 1.3]);
-    ok($x1->is_double);
+    ok($x1->is->double);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 }
@@ -178,7 +178,7 @@ use Rstats::Func;
     r->rownames($x1 => c_('r1', 'r2', 'r3'));
     r->colnames($x1 => c_('c1', 'c2'));
     my $x2 = r->clone($x1);
-    ok(r->is_matrix($x2));
+    ok(r->is->matrix($x2));
     is_deeply(r->dim($x2)->values, [3, 2]);
     is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
     is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
@@ -190,14 +190,14 @@ use Rstats::Func;
   # new_character - arguments is list
   {
     my $x1 = r->new_character("a", "b", "c");
-    ok($x1->is_character);
+    ok($x1->is->character);
     is_deeply($x1->values, [qw/a b c/]);
   }
 
   # new_character - arguments is array reference
   {
     my $x1 = r->new_character(["a", "b", "c"]);
-    ok($x1->is_character);
+    ok($x1->is->character);
     is_deeply($x1->values, [qw/a b c/]);
   }
 }
@@ -207,14 +207,14 @@ use Rstats::Func;
   # new_complex - arguments is list
   {
     my $x1 = r->new_complex({re => 1, im => 2}, {re => 3, im => 4});
-    ok($x1->is_complex);
+    ok($x1->is->complex);
     is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }
 
   # new_complex - arguments is array reference
   {
     my $x1 = r->new_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
-    ok($x1->is_complex);
+    ok($x1->is->complex);
     is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }
 }
@@ -231,7 +231,7 @@ use Rstats::Func;
     ok($x3->is->logical);
     ok(r->is->logical($x3));
     ok($x3->is->logical);
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 0 0/]);
   }
   
@@ -240,7 +240,7 @@ use Rstats::Func;
     my $x1 = c_(TRUE, FALSE, TRUE, FALSE);
     my $x2 = c_(TRUE, TRUE, FALSE, FALSE);
     my $x3 = $x1 | $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 1 0/]);
   }
 }
@@ -337,7 +337,7 @@ use Rstats::Func;
     my $x1 = array(c_(r->complex(1,2), r->complex(3,4)));
     my $x2 = array(c_(1, 2));
     my $x3 = $x1 + $x2;
-    ok(r->is_complex($x3));
+    ok(r->is->complex($x3));
     is($x3->values->[0]->{re}, 2);
     is($x3->values->[0]->{im}, 2);
     is($x3->values->[1]->{re}, 5);
@@ -349,7 +349,7 @@ use Rstats::Func;
     my $x1 = r->as_integer(c_(3, 5));
     my $x2 = c_(TRUE, FALSE);
     my $x3 = $x1 + $x2;
-    ok(r->is_integer($x3));
+    ok(r->is->integer($x3));
     is_deeply($x3->values, [4, 5])
   }
     
@@ -358,7 +358,7 @@ use Rstats::Func;
     my $x1 = array(c_(1.1, 1.2));
     my $x2 = r->as_integer(array(c_(1, 2)));
     my $x3 = $x1 + $x2;
-    ok(r->is_numeric($x3));
+    ok(r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
   }
 
@@ -433,7 +433,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 > $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 0 1/]);
   }
 
@@ -442,7 +442,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 >= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 1/]);
   }
 
@@ -451,7 +451,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 < $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 0/]);
   }
 
@@ -460,7 +460,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 <= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 0/]);
   }
 
@@ -469,7 +469,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 == $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 0/]);
   }
 
@@ -478,7 +478,7 @@ use Rstats::Func;
     my $x1 = array(c_(0, 1, 2));
     my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 != $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 1/]);
   }
 }
@@ -894,7 +894,7 @@ EOS
     my $x1 = array(c_(1, 2, 3));
     my $x2 = array(c_(2,1,3));
     my $x3 = $x1 < $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -903,7 +903,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2));
     my $x3 = $x1 < $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -912,7 +912,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2,1,3));
     my $x3 = $x1 <= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
   }
 
@@ -921,7 +921,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2));
     my $x3 = $x1 <= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
   }
 
@@ -930,7 +930,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2,1,3));
     my $x3 = $x1 > $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
   }
 
@@ -939,7 +939,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2));
     my $x3 = $x1 > $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
   }
 
@@ -948,7 +948,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2,1,3));
     my $x3 = $x1 >= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -957,7 +957,7 @@ EOS
     my $x1 = array(c_(1,2,3));
     my $x2 = array(c_(2));
     my $x3 = $x1 >= $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -966,7 +966,7 @@ EOS
     my $x1 = array(c_(1,2));
     my $x2 = array(c_(2,2));
     my $x3 = $x1 == $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -975,7 +975,7 @@ EOS
     my $x1 = array(c_(1,2));
     my $x2 = array(c_(2));
     my $x3 = $x1 == $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -984,7 +984,7 @@ EOS
     my $x1 = array(c_(1,2));
     my $x2 = array(c_(2,2));
     my $x3 = $x1 != $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 
@@ -993,7 +993,7 @@ EOS
     my $x1 = array(c_(1,2));
     my $x2 = array(c_(2));
     my $x3 = $x1 != $x2;
-    ok(r->is_logical($x3));
+    ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 }
@@ -1080,7 +1080,7 @@ EOS
     my $x2 = r->as_integer(c_(2, 3, 4));
     my $x3 = $x1 / $x2;
     is_deeply($x3->values, [3, 1, 3]);
-    ok(r->is_double($x3));
+    ok(r->is->double($x3));
   }
   
   # operator - divide
@@ -1138,7 +1138,7 @@ EOS
     my $x1 = r->as_integer(c_(1, 2, 3));
     my $x2 = r->as_integer(c_(2, 2, 0));
     my $x3 = $x1 % $x2;
-    ok(r->is_integer($x3));
+    ok(r->is->integer($x3));
     is_deeply($x3->values, [1, 0, undef]);
   }
 }

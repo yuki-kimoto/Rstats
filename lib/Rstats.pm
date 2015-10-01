@@ -656,77 +656,77 @@ Aliaus of FALSE
 =head2 is_array
 
   # is.array(x1)
-  r->is_array($x1)
+  r->is->array($x1)
 
 =head2 is_character
 
   # is.character(x1)
-  r->is_character($x1)
+  r->is->character($x1)
 
 =head2 is_complex
 
   # is.complex(x1)
-  r->is_complex($x1)
+  r->is->complex($x1)
 
 =head2 is_finite
 
   # is.finite(x1)
-  r->is_finite($x1)
+  r->is->finite($x1)
 
 =head2 is_infinite
 
   # is.infinite(x1)
-  r->is_infinite($x1)
+  r->is->infinite($x1)
 
 =head2 is_list
 
   # is.list(x1)
-  r->is_list($x1)
+  r->is->list($x1)
 
 =head2 is_matrix
 
   # is.matrix(x1)
-  r->is_matrix($x1)
+  r->is->matrix($x1)
 
 =head2 is_na
 
   # is.na(x1)
-  r->is_na($x1)
+  r->is->na($x1)
 
 =head2 is_nan
 
   # is.nan(x1)
-  r->is_nan($x1)
+  r->is->nan($x1)
 
 =head2 is_null
 
   # is.null(x1)
-  r->is_null($x1)
+  r->is->null($x1)
 
 =head2 is_numeric
 
   # is.numeric(x1)
-  r->is_numeric($x1)
+  r->is->numeric($x1)
 
 =head2 is_double
 
   # is.double(x1)
-  r->is_double($x1)
+  r->is->double($x1)
 
 =head2 is_integer
 
   # is.integer(x1)
-  r->is_integer($x1)
+  r->is->integer($x1)
 
 =head2 is_logical
 
   # is.logical(x1)
-  r->is_logical($x1)
+  r->is->logical($x1)
 
 =head2 is_vector
 
   # is.vector(x1)
-  r->is_vector($x1)
+  r->is->vector($x1)
 
 =head2 labels
 

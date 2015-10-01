@@ -22,7 +22,7 @@ use Rstats;
   {
     my $x_true = r->new_logical(1);
     my $x_num = r->negation($x_true);
-    ok(r->is_integer($x_num));
+    ok(r->is->integer($x_num));
     is($x_num->value, -1);
   }
 
@@ -30,7 +30,7 @@ use Rstats;
   {
     my $x_false = r->new_logical(0);
     my $x_num = r->negation($x_false);
-    ok(r->is_integer($x_num));
+    ok(r->is->integer($x_num));
     is($x_num->value, 0);
   }
   

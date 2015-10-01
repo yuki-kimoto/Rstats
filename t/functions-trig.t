@@ -15,7 +15,7 @@ use Math::Complex ();
     my $x2 = r->atanh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.173287');
     is(sprintf("%.6f", $x2->value->{im}), '1.178097');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # atanh - complex, 1 + 0i
@@ -24,7 +24,7 @@ use Math::Complex ();
     my $x2 = r->atanh($x1);
     is($x2->value->{re}, 'Inf');
     is($x2->value->{im}, 'NaN');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # atanh - complex, -1 + 0i
@@ -33,7 +33,7 @@ use Math::Complex ();
     my $x2 = r->atanh($x1);
     is($x2->value->{re}, '-Inf');
     is($x2->value->{im}, 'NaN');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
         
   # atanh - double,array
@@ -48,7 +48,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[5]), '-0.549306');
     is($x2->values->[6], 'NaN');
     is_deeply(r->dim($x2)->values, [7]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # atanh - integer
@@ -61,7 +61,7 @@ use Math::Complex ();
     is($x2->values->[3], '-Inf');
     is($x2->values->[4], 'NaN');
     is_deeply(r->dim($x2)->values, [5]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # atanh - Inf
@@ -102,7 +102,7 @@ use Math::Complex ();
     cmp_ok($x2->value->{re}, '==', 0);
     #is($x2->value->{re}, -0);
     is(sprintf("%.6f", $x2->value->{im}), '3.141593');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acosh - complex, -2 + 0i
@@ -111,7 +111,7 @@ use Math::Complex ();
     my $x2 = r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.316958');
     is(sprintf("%.6f", $x2->value->{im}), '3.141593');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acosh - complex, 0 + 1i
@@ -120,7 +120,7 @@ use Math::Complex ();
     my $x2 = r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.881374');
     is(sprintf("%.6f", $x2->value->{im}), '1.570796');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acosh - complex, 1 + 1i
@@ -129,7 +129,7 @@ use Math::Complex ();
     my $x2 = r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.061275');
     is(sprintf("%.6f", $x2->value->{im}), '0.904557');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acosh - complex, -1 + 1i
@@ -138,7 +138,7 @@ use Math::Complex ();
     my $x2 = r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.061275');
     is(sprintf("%.6f", $x2->value->{im}), '2.237036');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
         
   # acosh - double,array
@@ -149,7 +149,7 @@ use Math::Complex ();
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
     is_deeply(r->dim($x2)->values, [3]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # acosh - integer
@@ -160,7 +160,7 @@ use Math::Complex ();
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
     is_deeply(r->dim($x2)->values, [3]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # acosh - Inf
@@ -200,7 +200,7 @@ use Math::Complex ();
     my $x2 = r->asinh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.469352');
     is(sprintf("%.6f", $x2->value->{im}), '1.063440');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # asinh - double
@@ -210,7 +210,7 @@ use Math::Complex ();
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # asinh - integer
@@ -220,7 +220,7 @@ use Math::Complex ();
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # asinh - Inf
@@ -260,7 +260,7 @@ use Math::Complex ();
     my $x2 = r->tanh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.166736');
     is(sprintf("%.6f", $x2->value->{im}), '-0.243458');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # tanh - complex, 1 + Inf
@@ -294,7 +294,7 @@ use Math::Complex ();
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.964028');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # tanh - Inf
@@ -334,7 +334,7 @@ use Math::Complex ();
     my $x2 = r->cosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.642148');
     is(sprintf("%.6f", $x2->value->{im}), '1.068607');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # cosh - complex, -Inf - 2i
@@ -362,7 +362,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[2]), '3.762196');
     is($x2->values->[3], 'Inf');
     is_deeply(r->dim($x2)->values, [4]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # cosh - Inf
@@ -402,7 +402,7 @@ use Math::Complex ();
     my $x2 = r->sinh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.489056');
     is(sprintf("%.6f", $x2->value->{im}), '1.403119');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # sinh - complex, -Inf - 2i
@@ -430,7 +430,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[2]), '3.626860');
     is($x2->values->[3], '-Inf');
     is_deeply(r->dim($x2)->values, [4]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # sinh - Inf
@@ -470,7 +470,7 @@ use Math::Complex ();
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # atan - complex, 1i
@@ -479,7 +479,7 @@ use Math::Complex ();
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]->{im}, 'Inf');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # atan - complex, -1
@@ -488,7 +488,7 @@ use Math::Complex ();
     my $x2 = r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]->{im}, '-Inf');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # atan - complex, 1 + 2i
@@ -506,7 +506,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[0]), '0.463648');
     is(sprintf("%.6f", $x2->values->[1]), '0.540420');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # atan - Inf
@@ -596,7 +596,7 @@ use Math::Complex ();
     my $x2 = r->acos($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), 1.570796);
     is($x2->values->[0]{im}, 0);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acos - complex, 1
@@ -605,7 +605,7 @@ use Math::Complex ();
     my $x2 = r->acos($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
       
   # acos - complex, -1.5
@@ -614,7 +614,7 @@ use Math::Complex ();
     my $x2 = r->acos($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '3.141593');
     is(sprintf("%.6f", $x2->values->[0]{im}), '-0.962424');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # acos - double,array
@@ -625,7 +625,7 @@ use Math::Complex ();
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
     is_deeply(r->dim($x2)->values, [3]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # acos - Inf
@@ -713,7 +713,7 @@ use Math::Complex ();
     my $x2 = r->asin($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
     
   # asin - complex, 0.5,
@@ -722,7 +722,7 @@ use Math::Complex ();
     my $x2 = r->asin($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '-1.570796');
     is(sprintf("%.6f", $x2->values->[0]{im}), '0.962424');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
 
   # asin - double,array
@@ -733,7 +733,7 @@ use Math::Complex ();
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
     is_deeply(r->dim($x2)->values, [3]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # asin - Inf
@@ -777,7 +777,7 @@ use Math::Complex ();
     is($x2->values->[1]{im}, 'Inf');
     is($x2->values->[2]{re}, 0);
     is($x2->values->[2]{im}, '-Inf');
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # atan - double,array
@@ -787,7 +787,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[0]), '0.785398');
     is(sprintf("%.6f", $x2->values->[1]), '1.107149');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # atan - Inf
@@ -828,7 +828,7 @@ use Math::Complex ();
     my $x3 = r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value->{re}), 0.416491);
     is(sprintf("%.6f", $x3->value->{im}), 0.067066);
-    ok(r->is_complex($x3));
+    ok(r->is->complex($x3));
   }
   
   # atan2 - double,array
@@ -839,7 +839,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     is_deeply(r->dim($x3)->values, [2]);
-    ok(r->is_double($x3));
+    ok(r->is->double($x3));
   }
 
   # atan2 - y is -Inf, x is Inf
@@ -952,7 +952,7 @@ use Math::Complex ();
     
     is(sprintf("%.6f", $x2->value->{re}), 0.033813);
     is(sprintf("%.6f", $x2->value->{im}), 1.014794);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # tan - double, array
@@ -967,7 +967,7 @@ use Math::Complex ();
       ]
     );
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 }
 
@@ -983,7 +983,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re);
     is($x2->value->{im}, $exp_im);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # cos - double,array
@@ -993,7 +993,7 @@ use Math::Complex ();
     cmp_ok(abs($x2->values->[0]), '<', 1e-15);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # cos - Inf
@@ -1037,7 +1037,7 @@ use Math::Complex ();
     
     is($x2->value->{re}, $exp_re);
     is($x2->value->{im}, $exp_im);
-    ok(r->is_complex($x2));
+    ok(r->is->complex($x2));
   }
   
   # sin - double,array
@@ -1047,7 +1047,7 @@ use Math::Complex ();
     is(sprintf("%.5f", $x2->values->[0]), '1.00000');
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # sin - Inf

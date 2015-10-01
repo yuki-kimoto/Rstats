@@ -164,13 +164,13 @@ Aliaus of FALSE
 =head2 matrix
 
   # matrix(1:12, 4, 3)
-  matrix(se("1:12"), 4, 3)
+  matrix(C_("1:12"), 4, 3)
   
   # matrix(1:12, nrow=4, ncol=3)
-  matrix(se("1:12"), {nrow => 4, ncol => 3});
+  matrix(C_("1:12"), {nrow => 4, ncol => 3});
   
   # matrix(1:12, 4, 3, byrow=TRUE)
-  matrix(se("1:12"), 4, 3, {byrow => TRUE});
+  matrix(C_("1:12"), 4, 3, {byrow => TRUE});
 
 =head1 VECTOR ACCESS
 

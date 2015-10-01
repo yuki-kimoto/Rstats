@@ -52,20 +52,20 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   use Rstats;
   
   # Vector
-  my $v1 = c(1, 2, 3);
-  my $v2 = c(3, 4, 5);
+  my $v1 = c_(1, 2, 3);
+  my $v2 = c_(3, 4, 5);
   
   my $v3 = $v1 + v2;
   print $v3;
   
   # Sequence m:n
-  my $v1 = se("1:3");
+  my $v1 = C_("1:3");
 
   # Matrix
-  my $m1 = matrix(se("1:12"), 4, 3);
+  my $m1 = matrix(C_("1:12"), 4, 3);
   
   # Array
-  my $a1 = array(se("1:24"), c(4, 3, 2));
+  my $a1 = array(C_("1:24"), c_(4, 3, 2));
 
   # Complex
   my $z1 = 1 + 2 * i;
@@ -81,59 +81,65 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   my $null = NULL;
   
   # all methods is called from r
-  my $x1 = r->sum(c(1, 2, 3));
+  my $x1 = r->sum(c_(1, 2, 3));
   
   # Register helper
   r->helper(my_sum => sub {
     my ($r, $x1) = @_;
     
     my $total = 0;
-    for my $value ($x1->values) {
+    for my $value (@{$x1->values}) {
       $total += $value;
     }
     
-    return c($total);
+    return c_($total);
   });
-  my $x2 = r->my_sum(c(1, 2, 3));
+  my $x2 = r->my_sum(c_(1, 2, 3));
 
 =head1 FUNCTIONS
 
-=head2 c
+=head2 c_
 
   # c(1, 2, 3)
-  c(1, 2, 3)
+  c_(1, 2, 3)
 
-=head2 vec
+Create vector. C<c_> function is equal to C<c> of R.
+
+=head2 C_
 
   # 1:24
-  se("1:24")
+  C_("1:24")
 
-vec function is equal to C<m:n> of R.
+C_ function is equal to C<m:n> of R.
 
 =head2 array
 
   # array(1:24, c(4, 3, 2))
-  array(se("1:24"), c(4, 3, 2))
+  array(C_("1:24"), c_(4, 3, 2))
 
 =head2 TRUE
 
   # TRUE
   TRUE
 
-=head2 T
+=head2 T_
 
   # T
-  T
+  T_
+
+Alias of TRUE
 
 =head2 FALSE
   
   # FALSE
   FALSE
 
-=head2 F
+=head2 F_
   
   # F
-  F
+  F_
+
+Aliaus of FALSE
 
 =head2 NA
 
@@ -177,7 +183,7 @@ vec function is equal to C<m:n> of R.
   $x1->get(1, 2)
   
   # x1[c(1,2), c(3,4)]
-  $x1->get(c(1,2), c(3,4))
+  $x1->get(c_(1,2), c_(3,4))
   
   # x1[,2]
   $x1->get(NULL, 2)
@@ -189,7 +195,7 @@ vec function is equal to C<m:n> of R.
   $x1->get(TRUE, FALSE)
   
   # x1[c("id", "title")]
-  $x1->get(c("id", "title"))
+  $x1->get(c_("id", "title"))
 
 =head2 Setter
 
@@ -200,7 +206,7 @@ vec function is equal to C<m:n> of R.
   $x1->at(1, 2)->set($x2)
   
   # x1[c(1,2), c(3,4)] <- x2
-  $x1->at(c(1,2), c(3,4))->set($x2)
+  $x1->at(c_(1,2), c_(3,4))->set($x2)
   
   # x1[,2] <- x2
   $x1->at(NULL, 2)->set($x2)
@@ -212,7 +218,7 @@ vec function is equal to C<m:n> of R.
   $x1->at(TRUE, FALSE)->set($x2);
   
   # x1[c("id", "title")] <- x2
-  $x1->at(c("id", "title"))->set($x2);
+  $x1->at(c_("id", "title"))->set($x2);
 
 =head1 OPERATORS
 
@@ -298,7 +304,7 @@ vec function is equal to C<m:n> of R.
 =head2 cbind
 
   # cbind(c(1, 2), c(3, 4), c(5, 6))
-  r->cbind(c(1, 2), c(3, 4), c(5, 6));
+  r->cbind(c_(1, 2), c_(3, 4), c_(5, 6));
 
 =head2 ceiling
 
@@ -479,7 +485,7 @@ vec function is equal to C<m:n> of R.
 =head2 rbind
 
   # rbind(c(1, 2), c(3, 4), c(5, 6))
-  r->rbind(c(1, 2), c(3, 4), c(5, 6))
+  r->rbind(c_(1, 2), c_(3, 4), c_(5, 6))
 
 =head2 Re
 
@@ -733,7 +739,7 @@ vec function is equal to C<m:n> of R.
   r->levels($x1)
   
   # levels(x1) <- c("F", "M")
-  r->levels($x1 => c("F", "M"))
+  r->levels($x1 => c_("F", "M"))
 
 =head2 dim
 
@@ -741,7 +747,7 @@ vec function is equal to C<m:n> of R.
   r->dim($x1)
   
   # dim(x1) <- c(1, 2)
-  r->dim($x1 => c(1, 2))
+  r->dim($x1 => c_(1, 2))
 
 =head2 names
 
@@ -749,7 +755,7 @@ vec function is equal to C<m:n> of R.
   r->names($x1)
 
   # names(x1) <- c("n1", "n2")
-  r->names($x1 =>  c("n1", "n2"))
+  r->names($x1 =>  c_("n1", "n2"))
 
 =head2 nlevels
 
@@ -762,7 +768,7 @@ vec function is equal to C<m:n> of R.
   r->dimnames($x1)
   
   # dimnames(x1) <- list(c("r1", "r2"), c("c1", "c2"))
-  r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
+  r->dimnames($x1 => list(c_("r1", "r2"), c_("c1", "c2")))
 
 =head2 colnames
 
@@ -770,7 +776,7 @@ vec function is equal to C<m:n> of R.
   r->colnames($x1)
   
   # colnames(x1) <- c("r1", "r2")
-  r->colnames($x1 => c("r1", "r2"))
+  r->colnames($x1 => c_("r1", "r2"))
 
 =head2 rownames
 
@@ -778,7 +784,7 @@ vec function is equal to C<m:n> of R.
   r->rownames($x1)
   
   # rownames(x1) <- c("r1", "r2")
-  r->rownames($x1 => c("r1", "r2"))
+  r->rownames($x1 => c_("r1", "r2"))
 
 =head2 mode
 
@@ -786,7 +792,7 @@ vec function is equal to C<m:n> of R.
   r->mode($x1)
   
   # mode(x1) <- c("r1", "r2")
-  r->mode($x1 => c("r1", "r2"))
+  r->mode($x1 => c_("r1", "r2"))
 
 =head2 str
 

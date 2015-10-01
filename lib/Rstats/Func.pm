@@ -1937,6 +1937,14 @@ sub i {
   return Rstats::Func::c($r, $i);
 }
 
+sub i_ {
+  my $r = shift;
+  
+  my $i = Rstats::Func::new_complex($r, {re => 0, im => 1});
+  
+  return Rstats::Func::c($r, $i);
+}
+
 sub ifelse {
   my $r = shift;
   

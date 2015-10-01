@@ -237,7 +237,7 @@ use Math::Complex ();
     is(sprintf("%.6f", $x2->values->[0]), '1.718282');
     is(sprintf("%.6f", $x2->values->[1]), '6.389056');
     is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # expm1 - double,less than 1e-5
@@ -247,7 +247,7 @@ use Math::Complex ();
     my $x2_value_str = sprintf("%.13e", $x2->value);
     $x2_value_str =~ s/e-0+/e-/;
     is($x2_value_str, '1.2340000761378e-7');
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
 
   # expm1 - integer
@@ -255,7 +255,7 @@ use Math::Complex ();
     my $x1 = r->as_integer(array(c_(2)));
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->value), '6.389056');
-    ok(r->is_double($x2));
+    ok(r->is->double($x2));
   }
     
   # expm1 - Inf

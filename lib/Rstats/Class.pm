@@ -277,8 +277,25 @@ sub new {
   }
 
   no strict 'refs';
+  $self->helper('is.array' => \&Rstats::Func::is_array);
+  $self->helper('is.character' => \&Rstats::Func::is_character);
+  $self->helper('is.complex' => \&Rstats::Func::is_complex);
+  $self->helper('is.finite' => \&Rstats::Func::is_finite);
+  $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
+  $self->helper('is.list' => \&Rstats::Func::is_list);
+  $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
+  $self->helper('is.na' => \&Rstats::Func::is_na);
+  $self->helper('is.nan' => \&Rstats::Func::is_nan);
+  $self->helper('is.null' => \&Rstats::Func::is_null);
+  $self->helper('is.numeric' => \&Rstats::Func::is_numeric);
+  $self->helper('is.double' => \&Rstats::Func::is_double);
+  $self->helper('is.integer' => \&Rstats::Func::is_integer);
+  $self->helper('is.vector' => \&Rstats::Func::is_vector);
+  $self->helper('is.factor' => \&Rstats::Func::is_factor);
+  $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
+  $self->helper('is.data_frame' => \&Rstats::Func::is_data_frame);
   $self->helper('is.logical' => \&Rstats::Func::is_logical);
-  
+
   return $self;
 }
 

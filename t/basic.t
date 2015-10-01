@@ -18,13 +18,13 @@ use Math::Trig ();
 {
   # class - data frame
   {
-    my $x1 = data_frame(sex => c(1, 2));
+    my $x1 = data_frame(sex => c_(1, 2));
     is_deeply($x1->class->values, ['data.frame']);
   }
 
   # class - vector, numeric
   {
-    my $x1 = c(1, 2);
+    my $x1 = c_(1, 2);
     is_deeply($x1->class->values, ['numeric']);
   }
   
@@ -36,19 +36,19 @@ use Math::Trig ();
 
   # class - array
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply($x1->class->values, ['array']);
   }
   
   # class - factor
   {
-    my $x1 = factor(c(1, 2, 3));
+    my $x1 = factor(c_(1, 2, 3));
     is_deeply($x1->class->values, ['factor']);
   }
   
   # class - factor, ordered
   {
-    my $x1 = ordered(c(1, 2, 3));
+    my $x1 = ordered(c_(1, 2, 3));
     is_deeply($x1->class->values, ['factor', 'ordered']);
   }
   
@@ -61,43 +61,43 @@ use Math::Trig ();
 
 # c
 {
-  # c("a", "b")
+  # c_("a", "b")
   {
-    my $x1 = c("a", "b");
+    my $x1 = c_("a", "b");
     is_deeply($x1->values, ["a", "b"]);
   }
 
-  # c([1, 2, 3])
+  # c_([1, 2, 3])
   {
-    my $x1 = c([1, 2, 3]);
+    my $x1 = c_([1, 2, 3]);
     is(r->typeof($x1)->value, 'double');
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # c(c(1, 2, 3))
+  # c_(c_(1, 2, 3))
   {
-    my $x1 = c(c(1, 2, 3));
+    my $x1 = c_(c_(1, 2, 3));
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # c(1, 2, c(3, 4, 5))
+  # c_(1, 2, c_(3, 4, 5))
   {
-    my $x1 = c(1, 2, c(3, 4, 5));
+    my $x1 = c_(1, 2, c_(3, 4, 5));
     is_deeply($x1->values, [1, 2, 3, 4, 5]);
   }
 }
 
-# se
+# C_
 {
-  # se('1:3')
+  # C_('1:3')
   {
-    my $x1 = se('1:3');
+    my $x1 = C_('1:3');
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # se('0.5*1:3')
+  # C_('0.5*1:3')
   {
-    my $x1 = se('0.5*1:3');
+    my $x1 = C_('0.5*1:3');
     is_deeply($x1->values, [1, 1.5, 2, 2.5, 3]);
   }
 }
@@ -105,21 +105,21 @@ use Math::Trig ();
 # tail
 {
   {
-    my $x1 = c(1, 2, 3, 4, 5, 6, 7);
+    my $x1 = c_(1, 2, 3, 4, 5, 6, 7);
     my $tail = r->tail($x1);
     is_deeply($tail->values, [2, 3, 4, 5, 6, 7]);
   }
   
   # tail - values is low than 6
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $tail = r->tail($x1);
     is_deeply($tail->values, [1, 2, 3]);
   }
   
   # tail - n option
   {
-    my $x1 = c(1, 2, 3, 4);
+    my $x1 = c_(1, 2, 3, 4);
     my $tail = r->tail($x1, {n => 3});
     is_deeply($tail->values, [2, 3, 4]);
   }
@@ -136,7 +136,7 @@ use Math::Trig ();
   
   # matrix - repeat values
   {
-    my $mat = matrix(c(1,2), 2, 5);
+    my $mat = matrix(c_(1,2), 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply(r->dim($mat)->values, [2, 5]);
     ok(r->is_matrix($mat));
@@ -151,7 +151,7 @@ use Math::Trig ();
 
 # sequence
 {
-  my $x1 = c(1, 2, 3);
+  my $x1 = c_(1, 2, 3);
   my $x2 = r->sequence($x1);
   is_deeply($x2->values, [1, 1, 2, 1, 2, 3])
 }
@@ -159,7 +159,7 @@ use Math::Trig ();
 # sample
 {
   {
-    my $x1 = se('1:100');
+    my $x1 = C_('1:100');
     my $x2 = r->sample($x1, 50);
     is(r->length($x2)->value, 50);
     my $duplicate_h = {};
@@ -178,7 +178,7 @@ use Math::Trig ();
   
   # sample - replace => 0
   {
-    my $x1 = se('1:100');
+    my $x1 = C_('1:100');
     my $x2 = r->sample($x1, 50, {replace => 0});
     is(r->length($x2)->value, 50);
     my $duplicate_h = {};
@@ -197,7 +197,7 @@ use Math::Trig ();
 
   # sample - replace => 0
   {
-    my $x1 = se('1:100');
+    my $x1 = C_('1:100');
     my $x2 = r->sample($x1, 50, {replace => 1});
     is(r->length($x2)->value, 50);
     my $duplicate_h = {};
@@ -213,7 +213,7 @@ use Math::Trig ();
   
   # sample - replace => 0, (strict check)
   {
-    my $x1 = c(1);
+    my $x1 = c_(1);
     my $x2 = r->sample($x1, 5, {replace => 1});
     is(r->length($x2)->value, 5);
     is_deeply($x2->values, [1, 1, 1, 1, 1]);
@@ -262,14 +262,14 @@ use Math::Trig ();
 
 # which
 {
-  my $x1 = c('a', 'b', 'a');
+  my $x1 = c_('a', 'b', 'a');
   my $x2 = r->which($x1, sub { $_ eq 'a' });
   is_deeply($x2->values, [1, 3]);
 }
 
 # elseif
 {
-  my $x1 = c(1, 0, 1);
+  my $x1 = c_(1, 0, 1);
   my $x2 = r->ifelse($x1, 'a', 'b');
   is_deeply($x2->values, ['a', 'b', 'a']);
 }
@@ -277,21 +277,21 @@ use Math::Trig ();
 # head
 {
   {
-    my $x1 = c(1, 2, 3, 4, 5, 6, 7);
+    my $x1 = c_(1, 2, 3, 4, 5, 6, 7);
     my $head = r->head($x1);
     is_deeply($head->values, [1, 2, 3, 4, 5, 6]);
   }
   
   # head - values is low than 6
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $head = r->head($x1);
     is_deeply($head->values, [1, 2, 3]);
   }
   
   # head - n option
   {
-    my $x1 = c(1, 2, 3, 4);
+    my $x1 = c_(1, 2, 3, 4);
     my $head = r->head($x1, {n => 3});
     is_deeply($head->values, [1, 2, 3]);
   }
@@ -299,7 +299,7 @@ use Math::Trig ();
 
 # length
 {
-  my $x = array(c(1, 2, 3));
+  my $x = array(c_(1, 2, 3));
   is(r->length($x)->value, 3);
 }
 
@@ -310,14 +310,14 @@ use Math::Trig ();
     is_deeply($x->values, [25]);
   }
   {
-    my $x = array(c(1, 2, 3));
+    my $x = array(c_(1, 2, 3));
     is_deeply(r->dim($x)->values, [3]);
   }
 }
 
 # Array get and set
 {
-  my $x = array(c(1, 2, 3));
+  my $x = array(c_(1, 2, 3));
   is_deeply($x->get(1)->values, [1]);
   is_deeply($x->get(3)->values, [3]);
   $x->at(1)->set(5);;
@@ -328,7 +328,7 @@ use Math::Trig ();
 {
   # req($v, {times => $times});
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = r->rep($x1, {times => 3});
     is_deeply($x2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
   }
@@ -379,7 +379,7 @@ use Math::Trig ();
   }
   
   # seq(along => $v);
-  my $x1 = c(3, 4, 5);
+  my $x1 = c_(3, 4, 5);
   my $x2 = r->seq({along => $x1});
   is_deeply($x2->values, [1, 2, 3]);
 }

@@ -10,7 +10,7 @@ use Rstats;
   {
     my $x1 = c_(r->complex(1, 1), r->complex(2, 2));
     r->mode($x1 => 'complex');
-    my $x2 = r->as_numeric_($x1);
+    my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 2]);
   }
@@ -19,7 +19,7 @@ use Rstats;
   {
     my $x1 = c_(0.1, 1.1, 2.2);
     r->mode($x1 => 'numeric');
-    my $x2 = r->as_numeric_($x1);
+    my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
@@ -28,7 +28,7 @@ use Rstats;
   {
     my $x1 = c_(0, 1, 2);
     r->mode($x1 => 'integer');
-    my $x2 = r->as_numeric_($x1);
+    my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }
@@ -37,7 +37,7 @@ use Rstats;
   {
     my $x1 = c_(r->TRUE, r->FALSE);
     r->mode($x1 => 'logical');
-    my $x2 = r->as_numeric_($x1);
+    my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 0]);
   }
@@ -45,7 +45,7 @@ use Rstats;
   # as_numeric - from character
   {
     my $x1 = r->as_integer(c_(0, 1, 2));
-    my $x2 = r->as_numeric_($x1);
+    my $x2 = r->as_numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }

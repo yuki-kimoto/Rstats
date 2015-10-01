@@ -277,6 +277,17 @@ sub new {
   $self->helper('is.logical' => \&Rstats::Func::is_logical);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
+  $self->helper('as.array' => \&Rstats::Func::as_array);
+  $self->helper('as.character' => \&Rstats::Func::as_character);
+  $self->helper('as.complex' => \&Rstats::Func::as_complex);
+  $self->helper('as.integer' => \&Rstats::Func::as_integer);
+  $self->helper('as.double' => \&Rstats::Func::as_double);
+  $self->helper('as.list' => \&Rstats::Func::as_list);
+  $self->helper('as.logical' => \&Rstats::Func::as_logical);
+  $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
+  $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
+  $self->helper('as.vector' => \&Rstats::Func::as_vector);
+
   return $self;
 }
 

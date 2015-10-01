@@ -7,7 +7,7 @@ use Rstats;
 # reference
 {
   my $x_na = r->new_logical(undef);
-  ok($x_na->is_na);
+  ok(r->is_na($x_na));
 }
 
 # negation

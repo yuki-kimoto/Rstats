@@ -154,7 +154,7 @@ use Math::Complex ();
 
   # acosh - integer
   {
-    my $x1 = r->as_integer(array(c_(0, 1, 2)));
+    my $x1 = r->as->integer(array(c_(0, 1, 2)));
     my $x2 = r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
@@ -215,7 +215,7 @@ use Math::Complex ();
 
   # asinh - integer
   {
-    my $x1 = r->as_integer(array(c_(0, 1)));
+    my $x1 = r->as->integer(array(c_(0, 1)));
     my $x2 = r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');

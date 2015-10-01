@@ -35,7 +35,7 @@ use Rstats;
   # list - as_list, input is array
   {
     my $x1 = c_("a", "b");
-    my $x2 = r->as_list($x1);
+    my $x2 = r->as->list($x1);
     ok(r->is->list($x2));
     is_deeply($x2->getin(1)->values, ["a", "b"]);
   }
@@ -87,7 +87,7 @@ EOS
   # list - as_list, input is list
   {
     my $x1 = list("a", "b");
-    my $l2 = r->as_list($x1);
+    my $l2 = r->as->list($x1);
     is($x1, $l2);
   }
 

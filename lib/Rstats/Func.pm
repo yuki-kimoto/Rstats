@@ -395,7 +395,7 @@ sub typeof {
 
 sub labels {
   my $r = shift;
-  return $r->as_character(@_);
+  return $r->as->character(@_);
 }
 
 sub as_list {

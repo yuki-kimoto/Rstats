@@ -188,16 +188,6 @@ my @func_names = qw/
   upper_tri
   var
   which
-  as_array
-  as_character
-  as_complex
-  as_integer
-  as_double
-  as_list
-  as_logical
-  as_matrix
-  as_numeric
-  as_vector
   labels
   levels
   names
@@ -287,6 +277,7 @@ sub new {
   $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
   $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
   $self->helper('as.vector' => \&Rstats::Func::as_vector);
+
 
   return $self;
 }

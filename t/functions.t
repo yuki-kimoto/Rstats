@@ -99,7 +99,7 @@ use Math::Complex ();
 
   # prod - integer
   {
-    my $x1 = r->as_integer(c_(2, 3, 4));
+    my $x1 = r->as->integer(c_(2, 3, 4));
     my $prod = r->prod($x1);
     is_deeply($prod->values, [24]);
   }
@@ -130,7 +130,7 @@ use Math::Complex ();
   
   # sum - integer
   {
-    my $x1 = r->as_integer(c_(1, 2, 3));
+    my $x1 = r->as->integer(c_(1, 2, 3));
     my $x2 = r->sum($x1);
     is_deeply($x2->values, [6]);
   }
@@ -190,7 +190,7 @@ use Math::Complex ();
 
   # str - vector, integer
   {
-    my $x1 = r->as_integer(c_(1, 2));
+    my $x1 = r->as->integer(c_(1, 2));
     is(r->str($x1), 'int [1:2] 1 2');
   }
 
@@ -252,7 +252,7 @@ use Math::Complex ();
 
   # expm1 - integer
   {
-    my $x1 = r->as_integer(array(c_(2)));
+    my $x1 = r->as->integer(array(c_(2)));
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->value), '6.389056');
     ok(r->is->double($x2));

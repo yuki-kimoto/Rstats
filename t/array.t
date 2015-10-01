@@ -143,7 +143,7 @@ use Rstats::Func;
   # get - as_logical
   {
     my $x1 = c_(1, 3, 5, 7);
-    my $logical_v = r->as_logical(c_(0, 1, 0, 1, 1));
+    my $logical_v = r->as->logical(c_(0, 1, 0, 1, 1));
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
   }
@@ -151,13 +151,13 @@ use Rstats::Func;
   # get - as_vector
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    is_deeply(r->as_vector($x1)->get(5)->values, [5]);
+    is_deeply(r->as->vector($x1)->get(5)->values, [5]);
   }
 
   # get - as_matrix
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
+    is_deeply(r->as->vector($x1)->get(5, 1)->values, [5]);
   }
 }
 
@@ -346,7 +346,7 @@ use Rstats::Func;
 
   # numeric operator auto upgrade - integer
   {
-    my $x1 = r->as_integer(c_(3, 5));
+    my $x1 = r->as->integer(c_(3, 5));
     my $x2 = c_(TRUE, FALSE);
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
@@ -356,7 +356,7 @@ use Rstats::Func;
   # numeric operator auto upgrade - numeric
   {
     my $x1 = array(c_(1.1, 1.2));
-    my $x2 = r->as_integer(array(c_(1, 2)));
+    my $x2 = r->as->integer(array(c_(1, 2)));
     my $x3 = $x1 + $x2;
     ok(r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
@@ -497,7 +497,7 @@ use Rstats::Func;
   # to_string - character, 2 dimention
   {
     my $x1 = array(C_('1:4'), c_(4, 1));
-    my $x2 = r->as_character($x1);
+    my $x2 = r->as->character($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -516,7 +516,7 @@ EOS
   # to_string - character,3 dimention
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    $x1 = r->as_character($x1);
+    $x1 = r->as->character($x1);
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -583,7 +583,7 @@ EOS
   # to_string - 1-dimention, as_vector
   {
     my $x1 = array(C_('1:4'));
-    my $x2 = r->as_vector($x1);
+    my $x2 = r->as->vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -598,7 +598,7 @@ EOS
   # to_string - 1-dimention, as_matrix
   {
     my $x1 = array(C_('1:4'));
-    my $x2 = r->as_matrix($x1);
+    my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -632,7 +632,7 @@ EOS
   # to_string - 2-dimention
   {
     my $x1 = array(C_('1:12'), c_(4, 3));
-    my $x2 = r->as_matrix($x1);
+    my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -651,7 +651,7 @@ EOS
   # to_string - 2-dimention, as_vector
   {
     my $x1 = array(C_('1:12'), c_(4, 3));
-    my $x2 = r->as_vector($x1);
+    my $x2 = r->as->vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -666,7 +666,7 @@ EOS
   # to_string - 2-dimention, as_matrix
   {
     my $x1 = array(C_('1:12'), c_(4, 3));
-    my $x2 = r->as_matrix($x1);
+    my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -710,7 +710,7 @@ EOS
   # to_string - 3-dimention, as_vector
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    my $x2 = r->as_vector($x1);
+    my $x2 = r->as->vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
 
@@ -725,7 +725,7 @@ EOS
   # to_string - 3-dimention, as_matrix
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    my $x2 = r->as_matrix($x1);
+    my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
     my $expected = <<'EOS';
@@ -1076,8 +1076,8 @@ EOS
 
   # operator - divide
   {
-    my $x1 = r->as_integer(c_(6, 3, 12));
-    my $x2 = r->as_integer(c_(2, 3, 4));
+    my $x1 = r->as->integer(c_(6, 3, 12));
+    my $x2 = r->as->integer(c_(2, 3, 4));
     my $x3 = $x1 / $x2;
     is_deeply($x3->values, [3, 1, 3]);
     ok(r->is->double($x3));
@@ -1135,8 +1135,8 @@ EOS
   
   # operator - remainder, integer
   {
-    my $x1 = r->as_integer(c_(1, 2, 3));
-    my $x2 = r->as_integer(c_(2, 2, 0));
+    my $x1 = r->as->integer(c_(1, 2, 3));
+    my $x2 = r->as->integer(c_(2, 2, 0));
     my $x3 = $x1 % $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [1, 0, undef]);
@@ -1166,7 +1166,7 @@ EOS
   # value - two-dimention, as_vector
   {
     my $x1 = array(C_('1:12'), c_(4, 3));
-    is(r->as_vector($x1)->value(5), 5);
+    is(r->as->vector($x1)->value(5), 5);
   }
   
   # value - three-dimention

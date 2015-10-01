@@ -8,44 +8,44 @@ use Rstats;
 {
   # as_numeric - from complex
   {
-    my $x1 = c(r->complex(1, 1), r->complex(2, 2));
+    my $x1 = c_(r->complex(1, 1), r->complex(2, 2));
     r->mode($x1 => 'complex');
-    my $x2 = r->as_numeric($x1);
+    my $x2 = r->as_numeric_($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 2]);
   }
 
   # as_numeric - from numeric
   {
-    my $x1 = c(0.1, 1.1, 2.2);
+    my $x1 = c_(0.1, 1.1, 2.2);
     r->mode($x1 => 'numeric');
-    my $x2 = r->as_numeric($x1);
+    my $x2 = r->as_numeric_($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
-    
+  
   # as_numeric - from integer
   {
-    my $x1 = c(0, 1, 2);
+    my $x1 = c_(0, 1, 2);
     r->mode($x1 => 'integer');
-    my $x2 = r->as_numeric($x1);
+    my $x2 = r->as_numeric_($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }
   
   # as_numeric - from logical
   {
-    my $x1 = c(r->TRUE, r->FALSE);
+    my $x1 = c_(r->TRUE, r->FALSE);
     r->mode($x1 => 'logical');
-    my $x2 = r->as_numeric($x1);
+    my $x2 = r->as_numeric_($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 0]);
   }
 
   # as_numeric - from character
   {
-    my $x1 = r->as_integer(c(0, 1, 2));
-    my $x2 = r->as_numeric($x1);
+    my $x1 = r->as_integer(c_(0, 1, 2));
+    my $x2 = r->as_numeric_($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }
@@ -63,7 +63,7 @@ use Rstats;
 
   # as_array - from array
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(se('1:24'), c_(4, 3, 2));
     my $x2 = r->as_array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);
@@ -74,7 +74,7 @@ use Rstats;
 {
   # is_integer, as_integer, typeof - integer
   {
-    my $c = c(0, 1, 2);
+    my $c = c_(0, 1, 2);
     ok(r->is_integer(r->as_integer($c)));
     is(r->mode(r->as_integer($c))->value, 'numeric');
     is(r->typeof(r->as_integer($c))->value, 'integer');
@@ -82,7 +82,7 @@ use Rstats;
   
   # is_character, as_character, typeof - character
   {
-    my $c = c(0, 1, 2);
+    my $c = c_(0, 1, 2);
     ok(r->is_character(r->as_character($c)));
     is(r->mode(r->as_character($c))->value, 'character');
     is(r->typeof(r->as_character($c))->value, 'character');
@@ -90,7 +90,7 @@ use Rstats;
   
   # is_complex, as_complex, typeof - complex
   {
-    my $c = c(0, 1, 2);
+    my $c = c_(0, 1, 2);
     ok(r->is_complex(r->as_complex($c)));
     is(r->mode(r->as_complex($c))->value, 'complex');
     is(r->typeof(r->as_complex($c))->value, 'complex');
@@ -98,7 +98,7 @@ use Rstats;
   
   # is_logical, as_logical, typeof - logical
   {
-    my $x1 = c(0, 1, 2);
+    my $x1 = c_(0, 1, 2);
     my $x2 = r->as_logical($x1);
     ok(r->is_logical($x2));
     is(r->mode($x2)->value, 'logical');
@@ -116,7 +116,7 @@ use Rstats;
 {
   # as_vector - from array
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(se('1:24'), c_(4, 3, 2));
     is_deeply(r->as_vector($x1)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_vector($x1))->values, []);
   }
@@ -140,7 +140,7 @@ use Rstats;
 
   # as_matrix - from array
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(se('1:24'), c_(4, 3, 2));
     is_deeply(r->as_matrix($x1)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x1))->values, [24, 1]);
   }

@@ -110,6 +110,7 @@ my @func_names = qw/
   grep
   gsub
   head
+  i_
   ifelse
   interaction
   is_element
@@ -229,8 +230,6 @@ my @func_names = qw/
   typeof
   pi
   complex
-  i
-  i_
   array
   length
   clone

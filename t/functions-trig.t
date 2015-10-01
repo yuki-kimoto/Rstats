@@ -769,7 +769,7 @@ use Math::Complex ();
 {
   # atan - complex
   {
-    my $x1 = c_(1 + 2*i_, i, -i);
+    my $x1 = c_(1 + 2*i_, i_, -i_);
     my $x2 = r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '1.338973');
     is(sprintf("%.6f", $x2->values->[0]{im}), '0.402359');

@@ -55,7 +55,7 @@ use Rstats;
 {
   # as_array - from vector
   {
-    my $x1 = se('1:24');
+    my $x1 = C_('1:24');
     my $x2 = r->as_array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [24]);
@@ -63,7 +63,7 @@ use Rstats;
 
   # as_array - from array
   {
-    my $x1 = array(se('1:24'), c_(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = r->as_array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);
@@ -116,7 +116,7 @@ use Rstats;
 {
   # as_vector - from array
   {
-    my $x1 = array(se('1:24'), c_(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply(r->as_vector($x1)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_vector($x1))->values, []);
   }
@@ -126,21 +126,21 @@ use Rstats;
 {
   # as_matrix - from vector
   {
-    my $x = se('1:24');
+    my $x = C_('1:24');
     is_deeply(r->as_matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x))->values, [24, 1]);
   }
 
   # as_matrix - from matrix
   {
-    my $x1 = matrix(se('1:12'), 4, 3);
+    my $x1 = matrix(C_('1:12'), 4, 3);
     is_deeply(r->as_matrix($x1)->values, [1 .. 12]);
     is_deeply(r->dim(r->as_matrix($x1))->values, [4, 3]);
   }
 
   # as_matrix - from array
   {
-    my $x1 = array(se('1:24'), c_(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply(r->as_matrix($x1)->values, [1 .. 24]);
     is_deeply(r->dim(r->as_matrix($x1))->values, [24, 1]);
   }

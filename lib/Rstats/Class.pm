@@ -80,7 +80,8 @@ my @func_names = qw/
   atan
   atanh
   atan2
-  se
+  c_
+  C_
   charmatch
   chartr
   cbind
@@ -232,7 +233,6 @@ my @func_names = qw/
   i_
   array
   length
-  c_
   clone
   equal
   not_equal

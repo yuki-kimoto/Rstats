@@ -153,7 +153,7 @@ use Rstats::Util;
     ['c1', 'c2']
   ];
   
-  my $x1 = array(se('1:3'));
+  my $x1 = array(C_('1:3'));
   my $result =  Rstats::Util::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],

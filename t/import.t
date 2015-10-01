@@ -5,15 +5,15 @@ use warnings;
 use Rstats;
 use Rstats::VectorFunc;
 
-# c
+# c_
 {
-  my $v1 = c(1, 2, 3);
+  my $v1 = c_(1, 2, 3);
   is_deeply($v1->values, [1, 2, 3]);
 }
 
-# C
+# C_
 {
-  my $v1 = se('1:3');
+  my $v1 = C_('1:3');
   is_deeply($v1->values, [1, 2, 3]);
 }
 
@@ -33,7 +33,7 @@ use Rstats::VectorFunc;
 
 # i
 {
-  my $v1 = i;
+  my $v1 = i_;
   is_deeply($v1->values, [{re => 0, im => 1}]);
 }
 

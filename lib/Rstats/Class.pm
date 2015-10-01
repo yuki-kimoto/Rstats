@@ -102,6 +102,7 @@ my @func_names = qw/
   expm1
   factor
   F
+  F_
   FALSE
   floor
   gl
@@ -228,9 +229,10 @@ my @func_names = qw/
   pi
   complex
   i
+  i_
   array
   length
-  c
+  c_
   clone
   equal
   not_equal
@@ -255,8 +257,7 @@ my @func_names = qw/
   NA
   TRUE
   T
-  FALSE
-  F
+  T_
   to_string
   get
   set

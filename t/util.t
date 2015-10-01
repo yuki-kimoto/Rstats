@@ -194,7 +194,7 @@ use Rstats::Util;
 
 # index_to_pos
 {
-  my $x1 = array(se('1:24'), c(4, 3, 2));
+  my $x1 = array(C_('1:24'), c_(4, 3, 2));
   my $dim = [4, 3, 2];
   
   {

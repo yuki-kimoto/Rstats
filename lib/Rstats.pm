@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c_ C_ c se array matrix list data_frame factor ordered/;
+  my @methods = qw/c_ C_ se array matrix list data_frame factor ordered/;
   for my $method (@methods) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};

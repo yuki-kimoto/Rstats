@@ -89,17 +89,17 @@ use Rstats::VectorFunc;
   # rownames and colnames - accessor
   {
     my $m1 = matrix(C_('1:6'), 2, 3);
-    r->colnames($m1,c(qw/c1 c2 c3/));
+    r->colnames($m1,c_(qw/c1 c2 c3/));
     is_deeply(r->colnames($m1)->values, [qw/c1 c2 c3/]);
-    r->rownames($m1, c(qw/r1 r2 r3/));
+    r->rownames($m1, c_(qw/r1 r2 r3/));
     is_deeply(r->rownames($m1)->values, [qw/r1 r2 r3/]);
   }
 
   # rownames and colnames - to_string
   {
     my $m1 = matrix(C_('1:6'), 2, 3);
-    r->colnames($m1, c(qw/c1 c2 c3/));
-    r->rownames($m1, c(qw/r1 r2 r3/));
+    r->colnames($m1, c_(qw/c1 c2 c3/));
+    r->rownames($m1, c_(qw/r1 r2 r3/));
     my $m1_str = "$m1";
     $m1_str =~ s/[ \t]+/ /;
 
@@ -218,9 +218,9 @@ EOS
 # cbind
 {
   my $m1 = r->cbind(
-    c(1, 2, 3, 4),
-    c(5, 6, 7, 8),
-    c(9, 10, 11, 12)
+    c_(1, 2, 3, 4),
+    c_(5, 6, 7, 8),
+    c_(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1 .. 12]);
   is_deeply(r->dim($m1)->values, [4, 3]);
@@ -229,9 +229,9 @@ EOS
 # rbind
 {
   my $m1 = r->rbind(
-    c(1, 2, 3, 4),
-    c(5, 6, 7, 8),
-    c(9, 10, 11, 12)
+    c_(1, 2, 3, 4),
+    c_(5, 6, 7, 8),
+    c_(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12]);
   is_deeply(r->dim($m1)->values, [3, 4]);

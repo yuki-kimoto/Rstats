@@ -386,7 +386,7 @@ Aliaus of FALSE
 
 =head2 interaction
 
-=head2 is_element
+=head2 is->element
 
 =head2 I
 
@@ -608,122 +608,122 @@ Aliaus of FALSE
 
 =head2 which
 
-=head2 as_array
+=head2 as->array
 
   # as.array(x1)
-  r->as_array($x1)
+  r->as->array($x1)
 
-=head2 as_character
+=head2 as->character
 
   # as.character(x1)
-  r->as_character($x1)
+  r->as->character($x1)
 
-=head2 as_complex
+=head2 as->complex
 
   # as.complex(x1)
-  r->as_complex($x1)
+  r->as->complex($x1)
 
-=head2 as_integer
+=head2 as->integer
 
   # as.integer(x1)
-  r->as_integer($x1)
+  r->as->integer($x1)
 
-=head2 as_list
+=head2 as->list
 
   # as.list
-  r->as_list($x1)
+  r->as->list($x1)
 
-=head2 as_logical
+=head2 as->logical
 
   # as.logical
-  r->as_logical($x1)
+  r->as->logical($x1)
 
-=head2 as_matrix
+=head2 as->matrix
 
   # as.matrix(x1)
-  r->as_matrix($x1)
+  r->as->matrix($x1)
 
-=head2 as_numeric
+=head2 as->numeric
 
   # as.numeric(x1)
-  r->as_numeric($x1)
+  r->as->numeric($x1)
 
-=head2 as_vector
+=head2 as->vector
 
   # as.vector(x1)
-  r->as_vector($x1)
+  r->as->vector($x1)
 
-=head2 is_array
+=head2 is->array
 
   # is.array(x1)
   r->is->array($x1)
 
-=head2 is_character
+=head2 is->character
 
   # is.character(x1)
   r->is->character($x1)
 
-=head2 is_complex
+=head2 is->complex
 
   # is.complex(x1)
   r->is->complex($x1)
 
-=head2 is_finite
+=head2 is->finite
 
   # is.finite(x1)
   r->is->finite($x1)
 
-=head2 is_infinite
+=head2 is->infinite
 
   # is.infinite(x1)
   r->is->infinite($x1)
 
-=head2 is_list
+=head2 is->list
 
   # is.list(x1)
   r->is->list($x1)
 
-=head2 is_matrix
+=head2 is->matrix
 
   # is.matrix(x1)
   r->is->matrix($x1)
 
-=head2 is_na
+=head2 is->na
 
   # is.na(x1)
   r->is->na($x1)
 
-=head2 is_nan
+=head2 is->nan
 
   # is.nan(x1)
   r->is->nan($x1)
 
-=head2 is_null
+=head2 is->null
 
   # is.null(x1)
   r->is->null($x1)
 
-=head2 is_numeric
+=head2 is->numeric
 
   # is.numeric(x1)
   r->is->numeric($x1)
 
-=head2 is_double
+=head2 is->double
 
   # is.double(x1)
   r->is->double($x1)
 
-=head2 is_integer
+=head2 is->integer
 
   # is.integer(x1)
   r->is->integer($x1)
 
-=head2 is_logical
+=head2 is->logical
 
   # is.logical(x1)
   r->is->logical($x1)
 
-=head2 is_vector
+=head2 is->vector
 
   # is.vector(x1)
   r->is->vector($x1)

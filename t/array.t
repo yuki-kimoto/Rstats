@@ -9,29 +9,29 @@ use Rstats::Func;
 {
   # set 3-dimention
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->at(4, 3, 2)->set(25);
     is_deeply($x2->values, [1 .. 23, 25]);
   }
 
   # set 3-dimention - one and tow dimention
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->at(4, 3)->set(25);
     is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 25]);
   }
 
   # set 3-dimention - one and tow dimention, value is two
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(4, 3)->set(c(25, 26));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->at(4, 3)->set(c_(25, 26));
     is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 26]);
   }
   
   # set 3-dimention - one and three dimention, value is three
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->at(2, c(), 1)->set(c(31, 32, 33));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->at(2, c_(), 1)->set(c_(31, 32, 33));
     is_deeply($x2->values, [1, 31, 3, 4, 5, 32, 7, 8, 9, 33, 11 .. 24]);
   }
 }
@@ -57,33 +57,33 @@ use Rstats::Func;
 {
   # get - have names
   {
-    my $x1 = c(4, 5, 6);
-    r->names($x1, c("a", "b", "c"));
-    my $x2 = $x1->get(c(1, 3));
+    my $x1 = c_(4, 5, 6);
+    r->names($x1, c_("a", "b", "c"));
+    my $x2 = $x1->get(c_(1, 3));
     is_deeply($x2->values, [4, 6]);
     is_deeply(r->names($x2)->values, ["a", "c"]);
   }
 
   # get - have dimnames
   {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->dimnames($x1 => list(c('r1', 'r2', 'r3'), c('c1', 'c2')));
-    my $x2 = $x1->get(c(1, 3), c(2));
+    my $x1 = r->matrix(C_('1:24'), 3, 2);
+    r->dimnames($x1 => list(c_('r1', 'r2', 'r3'), c_('c1', 'c2')));
+    my $x2 = $x1->get(c_(1, 3), c_(2));
     is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
   }
   
   # get - logical
   {
-    my $x1 = c(1, 3, 5, 7);
-    my $logical_v = c(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $x1 = c_(1, 3, 5, 7);
+    my $logical_v = c_(FALSE, TRUE, FALSE, TRUE, TRUE);
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
   }
 
   # get - one value
   {
-    my $x1 = c(1);
+    my $x1 = c_(1);
     my $x2 = $x1->get(1);
     is_deeply($x2->values, [1]);
     is_deeply(r->dim($x2)->values, [1]);
@@ -91,50 +91,50 @@ use Rstats::Func;
 
   # get - single index
   {
-    my $x1 = c(1, 2, 3, 4);
+    my $x1 = c_(1, 2, 3, 4);
     my $x2 = $x1->get(1);
     is_deeply($x2->values, [1]);
   }
   
   # get - array
   {
-    my $x1 = c(1, 3, 5, 7);
-    my $x2 = $x1->get(c(1, 2));
+    my $x1 = c_(1, 3, 5, 7);
+    my $x2 = $x1->get(c_(1, 2));
     is_deeply($x2->values, [1, 3]);
   }
   
   # get - vector
   {
-    my $x1 = c(1, 3, 5, 7);
-    my $x2 = $x1->get(c(1, 2));
+    my $x1 = c_(1, 3, 5, 7);
+    my $x2 = $x1->get(c_(1, 2));
     is_deeply($x2->values, [1, 3]);
   }
   
   # get - minus number
   {
-    my $x1 = c(1, 3, 5, 7);
+    my $x1 = c_(1, 3, 5, 7);
     my $x2 = $x1->get(-1);
     is_deeply($x2->values, [3, 5, 7]);
   }
 
   # get - minus number + array
   {
-    my $x1 = c(1, 3, 5, 7);
-    my $x2 = $x1->get(c(-1, -2));
+    my $x1 = c_(1, 3, 5, 7);
+    my $x2 = $x1->get(c_(-1, -2));
     is_deeply($x2->values, [5, 7]);
   }
   
   # get - character
   {
-    my $x1 = c(1, 2, 3, 4);
-    r->names($x1 => c('a', 'b', 'c', 'd'));
-    my $x2 = $x1->get(c('b', 'd'));
+    my $x1 = c_(1, 2, 3, 4);
+    r->names($x1 => c_('a', 'b', 'c', 'd'));
+    my $x2 = $x1->get(c_('b', 'd'));
     is_deeply($x2->values, [2, 4]);
   }
 
   # get - grep
   {
-    my $x1 = c(1, 2, 3, 4, 5);
+    my $x1 = c_(1, 2, 3, 4, 5);
     my $x2 = $x1 > 3;
     my $x3 = $x1->get($x2);
     is_deeply($x3->values, [4, 5]);
@@ -142,21 +142,21 @@ use Rstats::Func;
   
   # get - as_logical
   {
-    my $x1 = c(1, 3, 5, 7);
-    my $logical_v = r->as_logical(c(0, 1, 0, 1, 1));
+    my $x1 = c_(1, 3, 5, 7);
+    my $logical_v = r->as_logical(c_(0, 1, 0, 1, 1));
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
   }
 
   # get - as_vector
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5)->values, [5]);
   }
 
   # get - as_matrix
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply(r->as_vector($x1)->get(5, 1)->values, [5]);
   }
 }
@@ -166,17 +166,17 @@ use Rstats::Func;
   
   # clone - vector
   {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->names($x1 => c('r1', 'r2', 'r3'));
+    my $x1 = r->matrix(C_('1:24'), 3, 2);
+    r->names($x1 => c_('r1', 'r2', 'r3'));
     my $x2 = r->clone($x1);
     is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
   
   # clone - matrix
   {
-    my $x1 = r->matrix(se('1:24'), 3, 2);
-    r->rownames($x1 => c('r1', 'r2', 'r3'));
-    r->colnames($x1 => c('c1', 'c2'));
+    my $x1 = r->matrix(C_('1:24'), 3, 2);
+    r->rownames($x1 => c_('r1', 'r2', 'r3'));
+    r->colnames($x1 => c_('c1', 'c2'));
     my $x2 = r->clone($x1);
     ok(r->is_matrix($x2));
     is_deeply(r->dim($x2)->values, [3, 2]);
@@ -223,8 +223,8 @@ use Rstats::Func;
 {
   # logical operator - &
   {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x1 = c_(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c_(TRUE, TRUE, FALSE, FALSE);
     my $x3 = $x1 & $x2;
     my $proxy = r->is;
     ok(r->is->logical($x3));
@@ -237,8 +237,8 @@ use Rstats::Func;
   
   # logical operator - |
   {
-    my $x1 = c(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c(TRUE, TRUE, FALSE, FALSE);
+    my $x1 = c_(TRUE, FALSE, TRUE, FALSE);
+    my $x2 = c_(TRUE, TRUE, FALSE, FALSE);
     my $x3 = $x1 | $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/1 1 1 0/]);
@@ -295,14 +295,14 @@ use Rstats::Func;
 {
   # array - basic
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     is_deeply($x1->values, [1 .. 24]);
     is_deeply(r->dim($x1)->values, [4, 3, 2]);
   }
   
   # array - dim option
   {
-    my $x1 = array(se('1:24'), {dim => c(4, 3, 2)});
+    my $x1 = array(C_('1:24'), {dim => c_(4, 3, 2)});
     is_deeply($x1->values, [1 .. 24]);
     is_deeply(r->dim($x1)->values, [4, 3, 2]);
   }
@@ -311,8 +311,8 @@ use Rstats::Func;
 # outer
 {
   # outer - basic
-  my $x1 = array(se('1:2'), c(1, 2));
-  my $x2 = array(se('1:24'), c(3, 4));
+  my $x1 = array(C_('1:2'), c_(1, 2));
+  my $x2 = array(C_('1:24'), c_(3, 4));
   my $x3 = r->outer($x1, $x2);
   is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
   is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
@@ -322,8 +322,8 @@ use Rstats::Func;
 {
   # get logical array - basic
   {
-    my $x1 = matrix(se('1:9'), 3, 3);
-    my $x2 = matrix(c(T, F, F, F, T, F, F, F, T), 3, 3);
+    my $x1 = matrix(C_('1:9'), 3, 3);
+    my $x2 = matrix(c_(T_, F_, F_, F_, T_, F_, F_, F_, T_), 3, 3);
     my $x3 = $x1->get($x2);
     is_deeply($x3->values, [1, 5, 9]);
     is_deeply(r->dim($x3)->values, [3]);
@@ -334,8 +334,8 @@ use Rstats::Func;
 {
   # numeric operator auto upgrade - complex
   {
-    my $x1 = array(c(r->complex(1,2), r->complex(3,4)));
-    my $x2 = array(c(1, 2));
+    my $x1 = array(c_(r->complex(1,2), r->complex(3,4)));
+    my $x2 = array(c_(1, 2));
     my $x3 = $x1 + $x2;
     ok(r->is_complex($x3));
     is($x3->values->[0]->{re}, 2);
@@ -346,8 +346,8 @@ use Rstats::Func;
 
   # numeric operator auto upgrade - integer
   {
-    my $x1 = r->as_integer(c(3, 5));
-    my $x2 = c(TRUE, FALSE);
+    my $x1 = r->as_integer(c_(3, 5));
+    my $x2 = c_(TRUE, FALSE);
     my $x3 = $x1 + $x2;
     ok(r->is_integer($x3));
     is_deeply($x3->values, [4, 5])
@@ -355,8 +355,8 @@ use Rstats::Func;
     
   # numeric operator auto upgrade - numeric
   {
-    my $x1 = array(c(1.1, 1.2));
-    my $x2 = r->as_integer(array(c(1, 2)));
+    my $x1 = array(c_(1.1, 1.2));
+    my $x2 = r->as_integer(array(c_(1, 2)));
     my $x3 = $x1 + $x2;
     ok(r->is_numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
@@ -364,48 +364,48 @@ use Rstats::Func;
 
   # numeric operator auto upgrade - character, +
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 + $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, -
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 - $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, *
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 * $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, /
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 / $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, ^
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 ** $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, %
   {
-    my $x1 = array(c("1", "2", "3"));
-    my $x2 = array(c(1, 2, 3));
+    my $x1 = array(c_("1", "2", "3"));
+    my $x2 = array(c_(1, 2, 3));
     eval { my $ret = $x1 % $x2 };
     like($@, qr/non-numeric argument/);
   }
@@ -415,13 +415,13 @@ use Rstats::Func;
 {
   # create element - double
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     1;
   }
   
   # create element - character
   {
-    my $x1 = c("a", "b", "c");
+    my $x1 = c_("a", "b", "c");
     1;
   }
 }
@@ -430,8 +430,8 @@ use Rstats::Func;
 {
   # comparison operator - >
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 > $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/0 0 1/]);
@@ -439,8 +439,8 @@ use Rstats::Func;
 
   # comparison operator - >=
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 >= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/0 1 1/]);
@@ -448,8 +448,8 @@ use Rstats::Func;
 
   # comparison operator - <
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 < $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/1 0 0/]);
@@ -457,8 +457,8 @@ use Rstats::Func;
 
   # comparison operator - <=
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 <= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/1 1 0/]);
@@ -466,8 +466,8 @@ use Rstats::Func;
 
   # comparison operator - ==
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 == $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/0 1 0/]);
@@ -475,8 +475,8 @@ use Rstats::Func;
 
   # comparison operator - !=
   {
-    my $x1 = array(c(0, 1, 2));
-    my $x2 = array(c(1, 1, 1));
+    my $x1 = array(c_(0, 1, 2));
+    my $x2 = array(c_(1, 1, 1));
     my $x3 = $x1 != $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [qw/1 0 1/]);
@@ -487,7 +487,7 @@ use Rstats::Func;
 {
   # to_string - character, 1 dimention
   {
-    my $x1 = array(c("a", "b"));
+    my $x1 = array(c_("a", "b"));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
     my $expected = qq/[1] "a" "b"\n/;
@@ -496,7 +496,7 @@ use Rstats::Func;
 
   # to_string - character, 2 dimention
   {
-    my $x1 = array(se('1:4'), c(4, 1));
+    my $x1 = array(C_('1:4'), c_(4, 1));
     my $x2 = r->as_character($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -515,7 +515,7 @@ EOS
 
   # to_string - character,3 dimention
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     $x1 = r->as_character($x1);
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
@@ -550,7 +550,7 @@ EOS
 
   # to_string - 2-dimention
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -568,7 +568,7 @@ EOS
 
   # to_string - 1-dimention
   {
-    my $x1 = array(se('1:4'));
+    my $x1 = array(C_('1:4'));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -582,7 +582,7 @@ EOS
 
   # to_string - 1-dimention, as_vector
   {
-    my $x1 = array(se('1:4'));
+    my $x1 = array(C_('1:4'));
     my $x2 = r->as_vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -597,7 +597,7 @@ EOS
 
   # to_string - 1-dimention, as_matrix
   {
-    my $x1 = array(se('1:4'));
+    my $x1 = array(C_('1:4'));
     my $x2 = r->as_matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -617,7 +617,7 @@ EOS
 
   # to_string - 1-dimention, TRUE, FALSE
   {
-    my $x1 = array(c(r->TRUE, r->FALSE));
+    my $x1 = array(c_(r->TRUE, r->FALSE));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -631,7 +631,7 @@ EOS
 
   # to_string - 2-dimention
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     my $x2 = r->as_matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -650,7 +650,7 @@ EOS
 
   # to_string - 2-dimention, as_vector
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     my $x2 = r->as_vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -665,7 +665,7 @@ EOS
 
   # to_string - 2-dimention, as_matrix
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     my $x2 = r->as_matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -684,7 +684,7 @@ EOS
   
   # to_string - 3-dimention
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -709,7 +709,7 @@ EOS
 
   # to_string - 3-dimention, as_vector
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = r->as_vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -724,7 +724,7 @@ EOS
 
   # to_string - 3-dimention, as_matrix
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = r->as_matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -762,7 +762,7 @@ EOS
   
   # to_string - 4 dimention
   {
-    my $x1 = array(se('1:120'), c(5, 4, 3, 2));
+    my $x1 = array(C_('1:120'), c_(5, 4, 3, 2));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -829,7 +829,7 @@ EOS
 
   # diag - basic
   {
-    my $x1 = r->diag(c(1, 2, 3));
+    my $x1 = r->diag(c_(1, 2, 3));
     is_deeply($x1->values, [1, 0, 0, 0, 2, 0, 0, 0, 3]);
     is_deeply(r->dim($x1)->values, [3, 3]);
   }  
@@ -839,8 +839,8 @@ EOS
 {
   # kronecker - basic
   {
-    my $x1 = array(se('1:12'), c(3, 4));
-    my $x2 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:12'), c_(3, 4));
+    my $x2 = array(C_('1:24'), c_(4, 3, 2));
     my $x3 = r->kronecker($x1, $x2);
     is_deeply($x3->values, [
       qw/
@@ -863,8 +863,8 @@ EOS
 
   # kronecker - reverse
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = array(se('1:12'), c(3, 4));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = array(C_('1:12'), c_(3, 4));
     my $x3 = r->kronecker($x1, $x2);
     is_deeply($x3->values, [
       qw/
@@ -891,8 +891,8 @@ EOS
 
   # comparison operator numeric - <
   {
-    my $x1 = array(c(1, 2, 3));
-    my $x2 = array(c(2,1,3));
+    my $x1 = array(c_(1, 2, 3));
+    my $x2 = array(c_(2,1,3));
     my $x3 = $x1 < $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -900,8 +900,8 @@ EOS
 
   # comparison operator numeric - <, arguments count is different
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2));
     my $x3 = $x1 < $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -909,8 +909,8 @@ EOS
 
   # comparison operator numeric - <=
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2,1,3));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2,1,3));
     my $x3 = $x1 <= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
@@ -918,8 +918,8 @@ EOS
 
   # comparison operator numeric - <=, arguments count is different
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2));
     my $x3 = $x1 <= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
@@ -927,8 +927,8 @@ EOS
 
   # comparison operator numeric - >
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2,1,3));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2,1,3));
     my $x3 = $x1 > $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
@@ -936,8 +936,8 @@ EOS
 
   # comparison operator numeric - >, arguments count is different
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2));
     my $x3 = $x1 > $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
@@ -945,8 +945,8 @@ EOS
 
   # comparison operator numeric - >=
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2,1,3));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2,1,3));
     my $x3 = $x1 >= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -954,8 +954,8 @@ EOS
 
   # comparison operator numeric - >=, arguments count is different
   {
-    my $x1 = array(c(1,2,3));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2,3));
+    my $x2 = array(c_(2));
     my $x3 = $x1 >= $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -963,8 +963,8 @@ EOS
 
   # comparison operator numeric - ==
   {
-    my $x1 = array(c(1,2));
-    my $x2 = array(c(2,2));
+    my $x1 = array(c_(1,2));
+    my $x2 = array(c_(2,2));
     my $x3 = $x1 == $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -972,8 +972,8 @@ EOS
 
   # comparison operator numeric - ==, arguments count is different
   {
-    my $x1 = array(c(1,2));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2));
+    my $x2 = array(c_(2));
     my $x3 = $x1 == $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -981,8 +981,8 @@ EOS
 
   # comparison operator numeric - !=
   {
-    my $x1 = array(c(1,2));
-    my $x2 = array(c(2,2));
+    my $x1 = array(c_(1,2));
+    my $x2 = array(c_(2,2));
     my $x3 = $x1 != $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0]);
@@ -990,8 +990,8 @@ EOS
 
   # comparison operator numeric - !=, arguments count is different
   {
-    my $x1 = array(c(1,2));
-    my $x2 = array(c(2));
+    my $x1 = array(c_(1,2));
+    my $x2 = array(c_(2));
     my $x3 = $x1 != $x2;
     ok(r->is_logical($x3));
     is_deeply($x3->values, [1, 0]);
@@ -1002,82 +1002,82 @@ EOS
 {
   # operator - add to original vector
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     $x1->at(r->length($x1) + 1)->set(6);
     is_deeply($x1->values, [1, 2, 3, 6]);
   }
   
   # operator - negation
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = -$x1;
     is_deeply($x2->values, [-1, -2, -3]);
   }
   
   # operator - add
   {
-    my $x1 = c(1, 2, 3);
-    my $x2 = c(2, 3, 4);
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(2, 3, 4);
     my $x3 = $x1 + $x2;
     is_deeply($x3->values, [3, 5, 7]);
   }
 
   # operator - add(different element number)
   {
-    my $x1 = c(1, 2);
-    my $x2 = c(3, 4, 5, 6);
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 5, 6);
     my $x3 = $x1 + $x2;
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
   
   # operator - add(real number)
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = $x1 + 1;
     is_deeply($x2->values, [2, 3, 4]);
   }
   
   # operator - subtract
   {
-    my $x1 = c(1, 2, 3);
-    my $x2 = c(3, 3, 3);
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(3, 3, 3);
     my $x3 = $x1 - $x2;
     is_deeply($x3->values, [-2, -1, 0]);
   }
 
   # operator - subtract(real number)
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = $x1 - 1;
     is_deeply($x2->values, [0, 1, 2]);
   }
 
   # operator - subtract(real number, reverse)
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = 1 - $x1;
     is_deeply($x2->values, [0, -1, -2]);
   }
     
   # operator - mutiply
   {
-    my $x1 = c(1, 2, 3);
-    my $x2 = c(2, 3, 4);
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(2, 3, 4);
     my $x3 = $x1 * $x2;
     is_deeply($x3->values, [2, 6, 12]);
   }
 
   # operator - mutiply(real number)
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = $x1 * 2;
     is_deeply($x2->values, [2, 4, 6]);
   }
 
   # operator - divide
   {
-    my $x1 = r->as_integer(c(6, 3, 12));
-    my $x2 = r->as_integer(c(2, 3, 4));
+    my $x1 = r->as_integer(c_(6, 3, 12));
+    my $x2 = r->as_integer(c_(2, 3, 4));
     my $x3 = $x1 / $x2;
     is_deeply($x3->values, [3, 1, 3]);
     ok(r->is_double($x3));
@@ -1085,58 +1085,58 @@ EOS
   
   # operator - divide
   {
-    my $x1 = c(6, 3, 12);
-    my $x2 = c(2, 3, 4);
+    my $x1 = c_(6, 3, 12);
+    my $x2 = c_(2, 3, 4);
     my $x3 = $x1 / $x2;
     is_deeply($x3->values, [3, 1, 3]);
   }
 
   # operator - divide(real number)
   {
-    my $x1 = c(2, 4, 6);
+    my $x1 = c_(2, 4, 6);
     my $x2 = $x1 / 2;
     is_deeply($x2->values, [1, 2, 3]);
   }
 
   # operator - divide(real number, reverse)
   {
-    my $x1 = c(2, 4, 6);
+    my $x1 = c_(2, 4, 6);
     my $x2 = 2 / $x1;
     is_deeply($x2->values, [1, 1/2, 1/3]);
   }
   
   # operator - pow
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = $x1 ** 2;
     is_deeply($x2->values, [1, 4, 9]);
   }
 
   # operator - pow, reverse
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = 2 ** $x1;
     is_deeply($x2->values, [2, 4, 8]);
   }
 
   # operator - remainder
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = $x1 % 3;
     is_deeply($x2->values, [1, 2, 0]);
   }
 
   # operator - remainder, reverse
   {
-    my $x1 = c(1, 2, 3);
+    my $x1 = c_(1, 2, 3);
     my $x2 = 2 % $x1;
     is_deeply($x2->values, [0, 0, 2]);
   }
   
   # operator - remainder, integer
   {
-    my $x1 = r->as_integer(c(1, 2, 3));
-    my $x2 = r->as_integer(c(2, 2, 0));
+    my $x1 = r->as_integer(c_(1, 2, 3));
+    my $x2 = r->as_integer(c_(2, 2, 0));
     my $x3 = $x1 % $x2;
     ok(r->is_integer($x3));
     is_deeply($x3->values, [1, 0, undef]);
@@ -1147,31 +1147,31 @@ EOS
 {
   # value - none argument
   {
-    my $x1 = array(se('1:4'));
+    my $x1 = array(C_('1:4'));
     is($x1->value, 1);
   }
 
   # value - one-dimetion
   {
-    my $x1 = array(se('1:4'));
+    my $x1 = array(C_('1:4'));
     is($x1->value(2), 2);
   }
   
   # value - two-dimention
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     is($x1->value(3, 2), 7);
   }
 
   # value - two-dimention, as_vector
   {
-    my $x1 = array(se('1:12'), c(4, 3));
+    my $x1 = array(C_('1:12'), c_(4, 3));
     is(r->as_vector($x1)->value(5), 5);
   }
   
   # value - three-dimention
   {
-    my $x1 = array(se('1:24'), c(4, 3, 1));
+    my $x1 = array(C_('1:24'), c_(4, 3, 1));
     is($x1->value(3, 2, 1), 7);
   }
 }
@@ -1180,15 +1180,15 @@ EOS
 {
   # get 3-dimention - minus
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(-1, -2), c(-1, -2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(-1, -2), c_(-1, -2));
     is_deeply($x2->values, [11, 12, 23, 24]);
     is_deeply(r->dim($x2)->values, [2, 2]);
   }
   
   # get 3-dimention - dimention one
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->get(2);
     is_deeply($x2->values, [2, 6, 10, 14, 18 ,22]);
     is_deeply(r->dim($x2)->values, [3, 2]);
@@ -1196,23 +1196,23 @@ EOS
 
   # get 3-dimention - dimention two
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(), 2);
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(), 2);
     is_deeply($x2->values, [5, 6, 7, 8, 17, 18, 19, 20]);
     is_deeply(r->dim($x2)->values, [4, 2]);
   }
 
   # get 3-dimention - dimention three
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(), c(), 2);
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(), c_(), 2);
     is_deeply($x2->values, [13 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3]);
   }
   
   # get 3-dimention - one value
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->get(3, 2, 1);
     is_deeply($x2->values, [7]);
     is_deeply(r->dim($x2)->values, [1]);
@@ -1220,7 +1220,7 @@ EOS
 
   # get 3-dimention - one value, drop => 0
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->get(3, 2, 1, {drop => 0});
     is_deeply($x2->values, [7]);
     is_deeply(r->dim($x2)->values, [1, 1, 1]);
@@ -1228,47 +1228,47 @@ EOS
   
   # get 3-dimention - dimention one and two
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
     my $x2 = $x1->get(1, 2);
     is_deeply($x2->values, [5, 17]);
     is_deeply(r->dim($x2)->values, [2]);
   }
   # get 3-dimention - dimention one and three
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(3, c(), 2);
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(3, c_(), 2);
     is_deeply($x2->values, [15, 19, 23]);
     is_deeply(r->dim($x2)->values, [3]);
   }
 
   # get 3-dimention - dimention two and three
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(), 1, 2);
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(), 1, 2);
     is_deeply($x2->values, [13, 14, 15, 16]);
     is_deeply(r->dim($x2)->values, [4]);
   }
   
   # get 3-dimention - all values
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(1, 2, 3, 4), c(1, 2, 3), c(1, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(1, 2, 3, 4), c_(1, 2, 3), c_(1, 2));
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);
   }
 
   # get 3-dimention - all values 2
   {
-    my $x1 = array(c(map { $_ * 2 } (1 .. 24)), c(4, 3, 2));
-    my $x2 = $x1->get(c(1, 2, 3, 4), c(1, 2, 3), c(1, 2));
+    my $x1 = array(c_(map { $_ * 2 } (1 .. 24)), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(1, 2, 3, 4), c_(1, 2, 3), c_(1, 2));
     is_deeply($x2->values, [map { $_ * 2 } (1 .. 24)]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);
   }
   
   # get 3-dimention - some values
   {
-    my $x1 = array(se('1:24'), c(4, 3, 2));
-    my $x2 = $x1->get(c(2, 3), c(1, 3), c(1, 2));
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = $x1->get(c_(2, 3), c_(1, 3), c_(1, 2));
     is_deeply($x2->values, [2, 3, 10, 11, 14, 15, 22, 23]);
     is_deeply(r->dim($x2)->values, [2, 2, 2]);
   }

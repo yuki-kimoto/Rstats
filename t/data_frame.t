@@ -8,24 +8,24 @@ use Rstats;
 {
   # transform - less elements
   {
-    my $sex = c('F', 'M', 'F', 'M');
-    my $height = c(172, 163, 155, 222);
-    my $weight = c(5, 6, 7, 8);
+    my $sex = c_('F', 'M', 'F', 'M');
+    my $height = c_(172, 163, 155, 222);
+    my $weight = c_(5, 6, 7, 8);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = r->transform($x1, sex => c("P"));
+    my $x2 = r->transform($x1, sex => c_("P"));
     is_deeply(r->names($x2)->values, [qw/sex height weight/]);
     is_deeply($x2->getin(1)->values, ["P", "P", "P", "P"]);
   }
   
   # transform - basic
   {
-    my $sex = c('F', 'M', 'F', 'M');
-    my $height = c(172, 163, 155, 222);
-    my $weight = c(5, 6, 7, 8);
+    my $sex = c_('F', 'M', 'F', 'M');
+    my $height = c_(172, 163, 155, 222);
+    my $weight = c_(5, 6, 7, 8);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = r->transform($x1, sex => c("P", "Q", "P", "Q"), new1 => c(1, 2, 3, 4));
+    my $x2 = r->transform($x1, sex => c_("P", "Q", "P", "Q"), new1 => c_(1, 2, 3, 4));
     is_deeply(r->names($x2)->values, [qw/sex height weight new1/]);
     is_deeply($x2->getin(1)->values, ["P", "Q", "P", "Q"]);
     is_deeply($x2->getin(4)->values, [1, 2, 3, 4]);
@@ -37,12 +37,12 @@ use Rstats;
   
   # get - multiple elements
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(1,3));
+    my $x2 = $x1->get(c_(1,3));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -52,11 +52,11 @@ use Rstats;
 
   # get - minus row index
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(-1, -3), NULL);
+    my $x2 = $x1->get(c_(-1, -3), NULL);
     ok(r->is_data_frame($x2));
     is_deeply($x2->getin(1)->values, [qw/2/]);
     is_deeply($x2->getin(2)->values, [qw/168/]);
@@ -65,12 +65,12 @@ use Rstats;
   
   # get - minus collum index
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(NULL, c(-1, -3));
+    my $x2 = $x1->get(NULL, c_(-1, -3));
     ok(r->is_data_frame($x2));
     is_deeply(r->names($x2)->values, ['height']);
     is_deeply($x2->getin(1)->values, [qw/172 168 155/]);
@@ -78,12 +78,12 @@ use Rstats;
   
   # get - row index and column index is null
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), NULL);
+    my $x2 = $x1->get(c_(3, 2), NULL);
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'height', 'weight']);
@@ -95,12 +95,12 @@ use Rstats;
   
   # get - row index and column index is null
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), NULL);
+    my $x2 = $x1->get(c_(3, 2), NULL);
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'height', 'weight']);
@@ -112,12 +112,12 @@ use Rstats;
   
   # get - row index and column index
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(3, 2), c(1, 3));
+    my $x2 = $x1->get(c_(3, 2), c_(1, 3));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -129,11 +129,11 @@ use Rstats;
   
   # get - logical, logical
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(T, F, T), c(T, F, T));
+    my $x2 = $x1->get(c_(T, F, T), c_(T, F, T));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -145,12 +145,12 @@ use Rstats;
   
   # get - logical
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(T, F, T));
+    my $x2 = $x1->get(c_(T, F, T));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -162,12 +162,12 @@ use Rstats;
   
   # get - row index and name
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c(2, 3), c(1, 3));
+    my $x2 = $x1->get(c_(2, 3), c_(1, 3));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -179,12 +179,12 @@ use Rstats;
   
   # get - row index
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(NULL, c(1, 3));
+    my $x2 = $x1->get(NULL, c_(1, 3));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -196,9 +196,9 @@ use Rstats;
   
   # get - name
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     my $x2 = $x1->get("weight");
@@ -212,9 +212,9 @@ use Rstats;
 {
   # set - NULL
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     $x1->at(2)->set(NULL);
     is_deeply(r->as_character($x1->getin(1))->values, ['F', 'M', 'F']);
@@ -225,19 +225,19 @@ use Rstats;
   
   # set - index
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    $x1->at(2)->set(c(1, 2, 3));
+    $x1->at(2)->set(c_(1, 2, 3));
     is_deeply($x1->getin('height')->values, [1, 2, 3]);
   }
 }
 
 # typeof
 {
-  my $x1 = data_frame(sex => c(1, 2, 1));
+  my $x1 = data_frame(sex => c_(1, 2, 1));
   my $x2 = r->typeof($x1);
   ok(r->is_character($x2));
   is_deeply($x2->values, ['list']);
@@ -247,9 +247,9 @@ use Rstats;
 {
   # subset - row condition
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     my $x2 = r->subset($x1, $x1->getin('height') > 160);
@@ -262,12 +262,12 @@ use Rstats;
   
   # subset - row condition and column names
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = r->subset($x1, $x1->getin('height') > 160, c('sex', 'weight'));
+    my $x2 = r->subset($x1, $x1->getin('height') > 160, c_('sex', 'weight'));
     ok(r->is_data_frame($x2));
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
     is_deeply(r->as_character($x2->getin(1))->values, [qw/F M/]);
@@ -279,8 +279,8 @@ use Rstats;
 {
   # data_frame - with I
   {
-    my $sex = r->I(c('F', 'M', 'F'));
-    my $height = c(172, 168, 155);
+    my $sex = r->I(c_('F', 'M', 'F'));
+    my $height = c_(172, 168, 155);
     
     my $x1 = data_frame(sex => $sex, height => $height);
     ok(r->is_character($x1->getin(1)));
@@ -290,8 +290,8 @@ use Rstats;
   
   # data_frame - basic
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
     
     my $x1 = data_frame(sex => $sex, height => $height);
     ok(r->is_factor($x1->getin(1)));
@@ -303,9 +303,9 @@ use Rstats;
   
   # data_frame - alias for cbind
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height);
     my $x2 = data_frame(weight => $weight);
@@ -322,8 +322,8 @@ use Rstats;
   
   # data_frame - basic
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
     
     my $x1 = data_frame(sex => $sex, height => $height);
     ok(r->is_factor($x1->getin(1)));
@@ -335,9 +335,9 @@ use Rstats;
 
   # data_frame - name duplicate
   {
-    my $sex = c('a', 'b', 'c');
-    my $sex1 = c('a1', 'b1', 'c1');
-    my $sex2 = c('a2', 'b2', 'c2');
+    my $sex = c_('a', 'b', 'c');
+    my $sex1 = c_('a1', 'b1', 'c1');
+    my $sex2 = c_('a2', 'b2', 'c2');
     
     my $x1 = data_frame(sex => $sex, sex => $sex1, sex => $sex2);
     is_deeply($x1->getin('sex')->values, [1, 2, 3]);
@@ -353,9 +353,9 @@ use Rstats;
 {
   # na_omit - minus row index
   {
-    my $sex = c(NA, 'M', 'F');
-    my $height = c(172, NA, 155);
-    my $weight = c(5, 6, 7);
+    my $sex = c_(NA, 'M', 'F');
+    my $height = c_(172, NA, 155);
+    my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
     my $x2 = r->na_omit($x1);
@@ -370,8 +370,8 @@ use Rstats;
 {
   # head - default
   {
-    my $v1 = c(1, 2, 3, 4, 5, 6, 7);
-    my $v2 = c(1, 2, 3, 4, 5, 10, 11);
+    my $v1 = c_(1, 2, 3, 4, 5, 6, 7);
+    my $v2 = c_(1, 2, 3, 4, 5, 10, 11);
     
     my $x1 = data_frame(v1 => $v1, v2 => $v2);
     my $x2 = r->head($x1);
@@ -382,8 +382,8 @@ use Rstats;
   
   # head - n
   {
-    my $v1 = c(1, 2, 3, 4);
-    my $v2 = c(1, 2, 5, 6);
+    my $v1 = c_(1, 2, 3, 4);
+    my $v2 = c_(1, 2, 5, 6);
     
     my $x1 = data_frame(v1 => $v1, v2 => $v2);
     my $x2 = r->head($x1, {n => 3});
@@ -395,9 +395,9 @@ use Rstats;
 
 # cbind
 {
-  my $sex = c('F', 'M', 'F');
-  my $height = c(172, 168, 155);
-  my $weight = c(5, 6, 7);
+  my $sex = c_('F', 'M', 'F');
+  my $height = c_(172, 168, 155);
+  my $weight = c_(5, 6, 7);
   
   my $x1 = data_frame(sex => $sex, height => $height);
   my $x2 = data_frame(weight => $weight);
@@ -414,12 +414,12 @@ use Rstats;
 
 # rbind
 {
-  my $sex1 = c('F', 'M');
-  my $height1 = c(172, 168);
+  my $sex1 = c_('F', 'M');
+  my $height1 = c_(172, 168);
   my $x1 = data_frame(sex => $sex1, height => $height1);
 
-  my $sex2 = c('M', 'F');
-  my $height2 = c(5, 6);
+  my $sex2 = c_('M', 'F');
+  my $height2 = c_(5, 6);
   my $x2 = data_frame(sex => $sex2, height => $height2);
  
   my $x3 = r->rbind($x1, $x2);
@@ -431,9 +431,9 @@ use Rstats;
 
 # ncol
 {
-  my $sex = c('F', 'M');
-  my $height = c(172, 168);
-  my $weight = c(5, 6);
+  my $sex = c_('F', 'M');
+  my $height = c_(172, 168);
+  my $weight = c_(5, 6);
   my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
   my $x2 = r->ncol($x1);
   ok($x2->values, [3]);
@@ -441,9 +441,9 @@ use Rstats;
 
 # nrow
 {
-  my $sex = c('F', 'M');
-  my $height = c(172, 168);
-  my $weight = c(5, 6);
+  my $sex = c_('F', 'M');
+  my $height = c_(172, 168);
+  my $weight = c_(5, 6);
   my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
   my $x2 = r->nrow($x1);
   ok($x2->values, [2]);
@@ -453,8 +453,8 @@ use Rstats;
 {
   # data_frame - to_string
   {
-    my $sex = c('F', 'M', 'F');
-    my $height = c(172, 168, 155);
+    my $sex = c_('F', 'M', 'F');
+    my $height = c_(172, 168, 155);
     my $x1 = data_frame(sex => $sex, height => $height);
     my $got = "$x1";
     $got =~ s/\s+/ /g;

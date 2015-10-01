@@ -106,7 +106,7 @@ use Math::Complex ();
 
   # prod - logical
   {
-    my $x1 = c_(T, T, T);
+    my $x1 = c_(T_, T_, T_);
     my $prod = r->prod($x1);
     is_deeply($prod->values, [1]);
   }
@@ -137,7 +137,7 @@ use Math::Complex ();
   
   # sum - logical
   {
-    my $x1 = c_(T, T, F);
+    my $x1 = c_(T_, T_, F_);
     my $x2 = r->sum($x1);
     is_deeply($x2->values, [2]);
   }
@@ -184,7 +184,7 @@ use Math::Complex ();
 
   # str - vector, logical
   {
-    my $x1 = c_(T, F);
+    my $x1 = c_(T_, F_);
     is(r->str($x1), 'logi [1:2] TRUE FALSE');
   }
 
@@ -1008,7 +1008,7 @@ use Math::Complex ();
 
 # T, F
 {
-  my $x1 = c_(T, F);
+  my $x1 = c_(T_, F_);
   is_deeply($x1->values, [1, 0]);
 }
 

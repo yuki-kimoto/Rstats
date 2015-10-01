@@ -25,7 +25,7 @@ sub import {
   *{"${class}::r"} = sub { $r };
   
   # Export none argument methods
-  my @methods_no_args = qw/i_ T_ F_ i T TRUE F FALSE NA NaN Inf NULL pi/;
+  my @methods_no_args = qw/i_ T_ F_ i TRUE FALSE NA NaN Inf NULL pi/;
   for my $method (@methods_no_args) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};

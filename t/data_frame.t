@@ -133,7 +133,7 @@ use Rstats;
     my $height = c_(172, 168, 155);
     my $weight = c_(5, 6, 7);
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c_(T, F, T), c_(T, F, T));
+    my $x2 = $x1->get(c_(T_, F_, T_), c_(T_, F_, T_));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);
@@ -150,7 +150,7 @@ use Rstats;
     my $weight = c_(5, 6, 7);
     
     my $x1 = data_frame(sex => $sex, height => $height, weight => $weight);
-    my $x2 = $x1->get(c_(T, F, T));
+    my $x2 = $x1->get(c_(T_, F_, T_));
     ok(r->is_data_frame($x2));
     is_deeply($x2->class->values, ['data.frame']);
     is_deeply(r->names($x2)->values, ['sex', 'weight']);

@@ -26,7 +26,7 @@ use FindBin;
   
   # read_table - header
   {
-    my $d1 = r->read_table("$FindBin::Bin/data/read.t/header.txt",{header => T});
+    my $d1 = r->read_table("$FindBin::Bin/data/read.t/header.txt",{header => T_});
     is_deeply(r->names($d1)->values, [qw/a b/]);
     is_deeply($d1->getin(1)->values, [qw/1 2/]);
     is_deeply($d1->getin(2)->values, [qw/1.1 1.2/]);

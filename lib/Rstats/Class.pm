@@ -179,7 +179,7 @@ my @func_names = qw/
   tanh
   tolower
   toupper
-  T
+  T_
   TRUE
   transform
   trunc
@@ -255,9 +255,6 @@ my @func_names = qw/
   Inf
   NaN
   NA
-  TRUE
-  T
-  T_
   to_string
   get
   set

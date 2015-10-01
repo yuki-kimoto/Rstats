@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c se array matrix list data_frame factor ordered/;
+  my @methods = qw/c_ C_ c se array matrix list data_frame factor ordered/;
   for my $method (@methods) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};
@@ -25,7 +25,7 @@ sub import {
   *{"${class}::r"} = sub { $r };
   
   # Export none argument methods
-  my @methods_no_args = qw/i T TRUE F FALSE NA NaN Inf NULL pi/;
+  my @methods_no_args = qw/i_ T_ F_ i T TRUE F FALSE NA NaN Inf NULL pi/;
   for my $method (@methods_no_args) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};

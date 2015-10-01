@@ -491,7 +491,10 @@ Aliaus of FALSE
 
 =head2 quantile
 
-=head2 read_table
+=head2 read->table
+
+  # read.table(...)
+  r->read->table(...)
 
 =head2 rep
 

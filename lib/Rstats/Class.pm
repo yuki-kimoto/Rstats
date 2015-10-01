@@ -152,7 +152,6 @@ my @func_names = qw/
   rank
   rbind
   quantile
-  read_table
   rep
   replace
   rev
@@ -278,6 +277,7 @@ sub new {
   $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
   $self->helper('as.vector' => \&Rstats::Func::as_vector);
 
+  $self->helper('read.table' => \&Rstats::Func::read_table);
 
   return $self;
 }

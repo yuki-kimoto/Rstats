@@ -45,7 +45,7 @@ XSLoader::load('Rstats', $VERSION);
 
 Rstats - R language build on Perl
 
-B<Rstats is yet experimental release. Uncompatible change will occur without warnings.>
+B<Rstats is yet experimental release. Incompatible change will occur without warning.>
 
 =head1 SYNOPSYS
   
@@ -80,7 +80,7 @@ B<Rstats is yet experimental release. Uncompatible change will occur without war
   my $inf = Inf;
   my $null = NULL;
   
-  # all methods is called from r
+  # all methods are called from r
   my $x1 = r->sum(c_(1, 2, 3));
   
   # Register helper
@@ -139,7 +139,7 @@ Alias of TRUE
   # F
   F_
 
-Aliaus of FALSE
+Alias of FALSE
 
 =head2 NA
 

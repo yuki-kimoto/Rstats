@@ -2926,7 +2926,6 @@ sub upgrade_type {
     elsif ($type_h->{logical}) {
       $to_type = 'logical';
     }
-    $DB::single = 1;
     for my $x (@xs) {
       $x = Rstats::Func::as($r, $to_type, $x);
     }

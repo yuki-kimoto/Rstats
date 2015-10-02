@@ -206,13 +206,22 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::VectorFunc::new_double(length);
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
-        
+
         if (SvOK(sv_value)) {
-          Rstats::VectorFunc::set_double_value(
-            v1,
-            i,
-            SvNV(sv_value)
-          );
+          char* sv_value_str = SvPV_nolen(sv_value);
+          if (strEQ(sv_value_str, "NaN")) {
+            Rstats::VectorFunc::set_double_value(v1, i, NAN);
+          }
+          else if (strEQ(sv_value_str, "Inf")) {
+            Rstats::VectorFunc::set_double_value(v1, i, INFINITY);
+          }
+          else if (strEQ(sv_value_str, "-Inf")) {
+            Rstats::VectorFunc::set_double_value(v1, i, -(INFINITY));
+          }
+          else {
+            NV value = SvNV(sv_value);
+            Rstats::VectorFunc::set_double_value(v1, i, value);
+          }
         }
         else {
           Rstats::VectorFunc::add_na_position(v1, i);

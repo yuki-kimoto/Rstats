@@ -251,8 +251,47 @@ namespace Rstats {
         if (SvOK(sv_value)) {
           SV* sv_value_re = Rstats::pl_hv_fetch(sv_value, "re");
           SV* sv_value_im = Rstats::pl_hv_fetch(sv_value, "im");
-          NV re = SvNV(sv_value_re);
-          NV im = SvNV(sv_value_im);
+
+          NV re;
+          if (SvOK(sv_value_re)) {
+            char* sv_value_re_str = SvPV_nolen(sv_value_re);
+            if (strEQ(sv_value_re_str, "NaN")) {
+              re = NAN;
+            }
+            else if (strEQ(sv_value_re_str, "Inf")) {
+              re = INFINITY;
+            }
+            else if (strEQ(sv_value_re_str, "-Inf")) {
+              re = -(INFINITY);
+            }
+            else {
+              re = SvNV(sv_value_re);
+            }
+          }
+          else {
+            re = 0;
+          }
+          
+
+          NV im;
+          if (SvOK(sv_value_im)) {
+            char* sv_value_im_str = SvPV_nolen(sv_value_im);
+            if (strEQ(sv_value_im_str, "NaN")) {
+              im = NAN;
+            }
+            else if (strEQ(sv_value_im_str, "Inf")) {
+              im = INFINITY;
+            }
+            else if (strEQ(sv_value_im_str, "-Inf")) {
+              im = -(INFINITY);
+            }
+            else {
+              im = SvNV(sv_value_im);
+            }
+          }
+          else {
+            im = 0;
+          }
           
           Rstats::VectorFunc::set_complex_value(
             v1,

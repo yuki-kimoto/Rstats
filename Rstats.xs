@@ -827,6 +827,62 @@ SV* Conj(...)
   return_sv(sv_x2);
 }
 
+SV* acosh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::acosh, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* Re(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Re, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* Im(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Im, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* abs(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::abs, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* acos(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::acos, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+
 SV* type(...)
   PPCODE:
 {

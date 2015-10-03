@@ -856,6 +856,11 @@ namespace Rstats {
     SV* Mod(SV*, SV*);
     SV* Arg(SV*, SV*);
     SV* Conj(SV*, SV*);
+    SV* Re(SV*, SV*);
+    SV* Im(SV*, SV*);
+    SV* abs(SV*, SV*);
+    SV* acos(SV*, SV*);
+    SV* acosh(SV*, SV*);
     SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
   }
 }

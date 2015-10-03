@@ -19,30 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub Re {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Re, @_);
-}
-
-sub Im {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Im, @_);
-}
-
-sub abs {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::abs, @_);
-}
-
-sub acos {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::acos, @_);
-}
-sub acosh {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::acosh, @_);
-}
-
 sub asin {
   my $r = shift;
   return operate_unary($r, \&Rstats::VectorFunc::asin, @_);

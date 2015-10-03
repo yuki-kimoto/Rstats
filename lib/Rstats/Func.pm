@@ -19,10 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub and {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::and, @_);
-}
 sub operate_binary {
   my $r = shift;
   

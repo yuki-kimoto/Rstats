@@ -412,6 +412,19 @@ SV* not_equal(...)
   return_sv(sv_x3);
 }
 
+SV* and(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::And, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
 SV* first_value(...)
   PPCODE:
 {

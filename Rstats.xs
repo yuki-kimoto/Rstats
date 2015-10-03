@@ -799,6 +799,8 @@ SV* tanh(...)
   return_sv(sv_x2);
 }
 
+
+
 SV* type(...)
   PPCODE:
 {

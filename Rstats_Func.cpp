@@ -3,7 +3,17 @@
 // Rstats::Func
 namespace Rstats {
   namespace Func {
-
+    
+    SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
+      
+      Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));
+      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      set_vector(sv_r, sv_x2, x2_elements);
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+      
+      return sv_x2;
+    }
+    
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
       bool is = sv_isobject(sv_x1)

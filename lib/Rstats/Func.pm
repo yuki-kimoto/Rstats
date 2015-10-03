@@ -19,11 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub Conj {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Conj, @_);
-}
-
 sub Re {
   my $r = shift;
   return operate_unary($r, \&Rstats::VectorFunc::Re, @_);

@@ -90,7 +90,7 @@ sub operate_binary {
   $x2 = to_c($r, $x2);
   
   # Upgrade mode if type is different
-  ($x1, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2)
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])}
     if $x1->type ne $x2->type;
   
   # Upgrade length if length is defferent
@@ -1061,7 +1061,7 @@ sub kronecker {
   my $x1 = to_c($r, shift);
   my $x2 = to_c($r, shift);
   
-  ($x1, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->type ne $x2->type;
   
   my $x1_dim = Rstats::Func::dim($r, $x1);
   my $x2_dim = Rstats::Func::dim($r, $x2);
@@ -1114,7 +1114,7 @@ sub outer {
   my $x1 = to_c($r, shift);
   my $x2 = to_c($r, shift);
   
-  ($x1, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2) if $x1->type ne $x2->type;
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->type ne $x2->type;
   
   my $x1_dim = Rstats::Func::dim($r, $x1);
   my $x2_dim = Rstats::Func::dim($r, $x2);
@@ -2809,11 +2809,11 @@ sub numeric {
 sub upgrade_type {
   my $r = shift;
   
-  my (@xs) = @_;
+  my $xs = shift;
   
   # Check elements
   my $type_h = {};
-  for my $x1 (@xs) {
+  for my $x1 (@$xs) {
     my $type = $x1->type || '';
     if ($type eq 'character') {
       $type_h->{character}++;
@@ -2836,6 +2836,7 @@ sub upgrade_type {
   }
 
   # Upgrade elements and type if type is different
+  my $new_xs = [];
   my @types = keys %$type_h;
   if (@types > 1) {
     my $to_type;
@@ -2854,12 +2855,12 @@ sub upgrade_type {
     elsif ($type_h->{logical}) {
       $to_type = 'logical';
     }
-    for my $x (@xs) {
-      $x = Rstats::Func::as($r, $to_type, $x);
+    for my $x (@$xs) {
+      push @$new_xs, Rstats::Func::as($r, $to_type, $x);
     }
   }
   
-  return @xs;
+  return $new_xs;
 }
 
 
@@ -3902,7 +3903,7 @@ sub set_array {
     # Upgrade mode if type is different
     if ($x1->type ne $x2->type) {
       my $x1_tmp;
-      ($x1_tmp, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2);
+      ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};
       Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
       $x1->vector($x1_tmp->vector);
     }

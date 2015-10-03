@@ -19,11 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub Mod {
-  my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::Mod, @_);
-}
-
 sub Arg {
   my $r = shift;
   return operate_unary($r, \&Rstats::VectorFunc::Arg, @_);

@@ -794,6 +794,17 @@ SV* tanh(...)
   return_sv(sv_x2);
 }
 
+SV* Mod(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Mod, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 SV* type(...)
   PPCODE:
 {

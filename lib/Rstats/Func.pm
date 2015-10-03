@@ -1239,29 +1239,6 @@ sub grep {
   return Rstats::Func::new_double($r, @$x2_values);
 }
 
-sub se {
-  my $r = shift;
-  my $seq_str = shift;
-
-  my $by;
-  my $mode;
-  if ($seq_str =~ s/^(.+)\*//) {
-    $by = $1;
-  }
-  
-  my $from;
-  my $to;
-  if ($seq_str =~ /([^\:]+)(?:\:(.+))?/) {
-    $from = $1;
-    $to = $2;
-    $to = $from unless defined $to;
-  }
-  
-  my $vector = seq($r,{from => $from, to => $to, by => $by});
-  
-  return $vector;
-}
-
 sub C_ {
   my $r = shift;
   my $seq_str = shift;

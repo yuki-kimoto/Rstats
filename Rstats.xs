@@ -251,6 +251,7 @@ SV* index_to_pos(...)
 
 MODULE = Rstats::Func PACKAGE = Rstats::Func
 
+
 SV* first_value(...)
   PPCODE:
 {

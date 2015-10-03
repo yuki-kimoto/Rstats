@@ -77,8 +77,40 @@ sub and {
   operate_binary($r, \&Rstats::VectorFunc::and, @_);
 }
 sub or {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::or, @_);
+  my ($r, $x1, $x2) = @_;
+  
+  $x1 = to_c($r, $x1);
+  $x2 = to_c($r, $x2);
+  
+  # Upgrade mode if type is different
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])}
+    if $x1->type ne $x2->type;
+  
+  # Upgrade length if length is defferent
+  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x2_length = Rstats::Func::length_value($r, $x2);
+  my $length;
+  if ($x1_length > $x2_length) {
+    $x2 = Rstats::Func::array($r, $x2, $x1_length);
+    $length = $x1_length;
+  }
+  elsif ($x1_length < $x2_length) {
+    $x1 = Rstats::Func::array($r, $x1, $x2_length);
+    $length = $x2_length;
+  }
+  else {
+    $length = $x1_length;
+  }
+  
+  my $x3;
+  my $x3_elements = Rstats::VectorFunc::or($x1->vector, $x2->vector);
+  
+  $x3 = Rstats::Func::NULL($r);
+  $x3->vector($x3_elements);
+  
+  Rstats::Func::copy_attrs_to($r, $x1, $x3);
+
+  return $x3;
 }
 
 sub operate_binary {

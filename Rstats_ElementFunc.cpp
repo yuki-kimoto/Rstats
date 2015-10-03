@@ -29,11 +29,11 @@ namespace Rstats {
     NV pow(NV e1, NV e2) { return ::pow(e1, e2); }
     NV pow(IV e1, IV e2) { return pow((NV)e1, (NV)e2); }
 
-    // reminder
-    std::complex<NV> reminder(std::complex<NV> e1, std::complex<NV> e2) {
-      croak("unimplemented complex operation(Rstats::VectorFunc::reminder())");
+    // remainder
+    std::complex<NV> remainder(std::complex<NV> e1, std::complex<NV> e2) {
+      croak("unimplemented complex operation(Rstats::VectorFunc::remainder())");
     }
-    NV reminder(NV e1, NV e2) {
+    NV remainder(NV e1, NV e2) {
       if (std::isnan(e1) || std::isnan(e2) || e2 == 0) {
         return std::numeric_limits<NV>::signaling_NaN();
       }
@@ -41,7 +41,7 @@ namespace Rstats {
         return e1 - std::floor(e1 / e2) * e2;
       }
     }
-    IV reminder(IV e1, IV e2) {
+    IV remainder(IV e1, IV e2) {
       if (e2 == 0) {
         throw "0 divide exception\n";
       }

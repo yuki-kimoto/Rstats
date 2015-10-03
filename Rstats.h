@@ -134,9 +134,9 @@ namespace Rstats {
     NV pow(NV, NV);
     NV pow(IV, IV);
 
-    std::complex<NV> reminder(std::complex<NV>, std::complex<NV>);
-    NV reminder(NV, NV);
-    IV reminder(IV, IV);
+    std::complex<NV> remainder(std::complex<NV>, std::complex<NV>);
+    NV remainder(NV, NV);
+    IV remainder(IV, IV);
 
     NV Re(std::complex<NV>);
     NV Re(NV);
@@ -757,7 +757,7 @@ namespace Rstats {
     Rstats::Vector* add(Rstats::Vector*, Rstats::Vector*);
     Rstats::Vector* subtract(Rstats::Vector*, Rstats::Vector*);
     Rstats::Vector* multiply(Rstats::Vector*, Rstats::Vector*);
-    Rstats::Vector* reminder(Rstats::Vector*, Rstats::Vector*);
+    Rstats::Vector* remainder(Rstats::Vector*, Rstats::Vector*);
 
     Rstats::Vector* divide(Rstats::Vector*, Rstats::Vector*);
     Rstats::Vector* atan2(Rstats::Vector*, Rstats::Vector*);

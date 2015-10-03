@@ -19,23 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-
-sub subtract {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::subtract, @_);
-}
-sub multiply {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::multiply, @_);
-}
-sub divide {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::divide, @_);
-}
-sub remainder {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::remainder, @_);
-}
 sub pow {
   my $r = shift;
   operate_binary($r, \&Rstats::VectorFunc::pow, @_);

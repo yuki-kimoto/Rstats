@@ -21,7 +21,7 @@ SV* remainder(...)
 {
   Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
   Rstats::Vector* e2 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(1));
-  Rstats::Vector* e3 = Rstats::VectorFunc::reminder(e1, e2);
+  Rstats::Vector* e3 = Rstats::VectorFunc::remainder(e1, e2);
   SV* sv_e3 = Rstats::pl_to_perl_obj(e3, "Rstats::Vector");
   return_sv(sv_e3);
 }
@@ -265,6 +265,58 @@ SV* add(...)
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
   SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::add, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* subtract(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::subtract, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* multiply(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::multiply, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* divide(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::divide, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* remainder(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::remainder, sv_x1, sv_x2);
   
   return_sv(sv_x3);
 }

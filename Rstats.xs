@@ -40,15 +40,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* as_character(...)
-  PPCODE:
-{
-  Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* e2 = Rstats::VectorFunc::as_character(e1);
-  SV* sv_e2 = Rstats::pl_to_perl_obj(e2, "Rstats::Vector");
-  return_sv(sv_e2);
-}
-
 SV* length_value(...)
   PPCODE:
 {

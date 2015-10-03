@@ -2806,65 +2806,6 @@ sub numeric {
   return Rstats::Func::c_($r, (0) x $num);
 }
 
-sub upgrade_type {
-  my $r = shift;
-  
-  my $xs = shift;
-  
-  # Check elements
-  my $type_h = {};
-  for my $x1 (@$xs) {
-    my $type = $x1->type || '';
-    if ($type eq 'character') {
-      $type_h->{character}++;
-    }
-    elsif ($type eq 'complex') {
-      $type_h->{complex}++;
-    }
-    elsif ($type eq 'double') {
-      $type_h->{double}++;
-    }
-    elsif ($type eq 'integer') {
-      $type_h->{integer}++;
-    }
-    elsif ($type eq 'logical') {
-      $type_h->{logical}++;
-    }
-    else {
-      Carp::croak "Invalid type";
-    }
-  }
-
-  # Upgrade elements and type if type is different
-  my $new_xs = [];
-  my @types = keys %$type_h;
-  if (@types > 1) {
-    my $to_type;
-    if ($type_h->{character}) {
-      $to_type = 'character';
-    }
-    elsif ($type_h->{complex}) {
-      $to_type = 'complex';
-    }
-    elsif ($type_h->{double}) {
-      $to_type = 'double';
-    }
-    elsif ($type_h->{integer}) {
-      $to_type = 'integer';
-    }
-    elsif ($type_h->{logical}) {
-      $to_type = 'logical';
-    }
-    for my $x (@$xs) {
-      push @$new_xs, Rstats::Func::as($r, $to_type, $x);
-    }
-  }
-  
-  return $new_xs;
-}
-
-
-
 sub _fix_pos {
   my $r = shift;
   

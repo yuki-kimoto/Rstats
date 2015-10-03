@@ -19,34 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub pow {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::pow, @_);
-}
-sub less_than {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than, @_);
-}
-sub less_than_or_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than_or_equal, @_);
-}
-sub more_than {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than, @_);
-}
-sub more_than_or_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than_or_equal, @_);
-}
-sub equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::equal, @_);
-}
-sub not_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::not_equal, @_);
-}
 sub and {
   my $r = shift;
   operate_binary($r, \&Rstats::VectorFunc::and, @_);

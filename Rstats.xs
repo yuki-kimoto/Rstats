@@ -321,6 +321,97 @@ SV* remainder(...)
   return_sv(sv_x3);
 }
 
+SV* pow(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::pow, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* less_than(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::less_than, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* less_than_or_equal(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::less_than_or_equal, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* more_than(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::more_than, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* more_than_or_equal(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::more_than_or_equal, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* equal(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::equal, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
+SV* not_equal(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  
+  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::not_equal, sv_x1, sv_x2);
+  
+  return_sv(sv_x3);
+}
+
 SV* first_value(...)
   PPCODE:
 {

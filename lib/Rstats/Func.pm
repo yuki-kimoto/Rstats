@@ -3906,4 +3906,3 @@ sub value {
 
 Rstats::Func - Functions
 
-

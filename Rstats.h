@@ -883,6 +883,7 @@ namespace Rstats {
     SV* sum(SV*, SV*);
     SV* negation(SV*, SV*);
     SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
+    SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type(SV*, SV*);
   }
 }

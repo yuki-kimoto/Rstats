@@ -3,6 +3,52 @@
 // Rstats::Func
 namespace Rstats {
   namespace Func {
+
+    SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      // Upgrade mode if type is different
+      SV* upgrade_type_args = Rstats::pl_new_av_ref();
+      Rstats::pl_av_push(upgrade_type_args, sv_x1);
+      Rstats::pl_av_push(upgrade_type_args, sv_x2);
+      
+      SV* upgrade_type_result = Rstats::Func::upgrade_type(sv_r, upgrade_type_args);
+      
+      if (Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x1))
+        != Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x2)))
+      {
+        sv_x1 = Rstats::pl_av_fetch(upgrade_type_result, 0);
+        sv_x2 = Rstats::pl_av_fetch(upgrade_type_result, 1);
+      }
+      
+      // Upgrade length if length is defferent
+      SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+      SV* sv_x2_length = Rstats::Func::length_value(sv_r, sv_x2);
+      SV* sv_length;
+      if (SvIV(sv_x1_length) > SvIV(sv_x2_length)) {
+        sv_x2 = Rstats::Func::array(sv_r, sv_x2, sv_x1_length);
+        sv_length = sv_x1_length;
+      }
+      else if (SvIV(sv_x1_length) < SvIV(sv_x2_length)) {
+        sv_x1 = Rstats::Func::array(sv_r, sv_x1, sv_x2_length);
+        sv_length = sv_x2_length;
+      }
+      else {
+        sv_length = sv_x1_length;
+      }
+      
+      Rstats::Vector* x3_elements
+        = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
+      
+      SV* sv_x3 = Rstats::Func::new_null(sv_r);
+      Rstats::Func::set_vector(sv_r, sv_x3, x3_elements);
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
+      
+      return sv_x3;
+    }
     
     SV* upgrade_type(SV* sv_r, SV* sv_xs) {
       // Check elements

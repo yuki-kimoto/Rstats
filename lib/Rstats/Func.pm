@@ -2541,7 +2541,15 @@ sub operate_unary {
 
 sub tanh {
   my $r = shift;
-  return operate_unary($r, \&Rstats::VectorFunc::tanh, @_);
+  
+  my $x1 = to_c($r, shift);
+  
+  my $x2_elements = Rstats::VectorFunc::tanh($x1->vector, $x1);
+  my $x2 = Rstats::Func::NULL($r);
+  $x2->vector($x2_elements);
+  Rstats::Func::copy_attrs_to($r, $x1, $x2);
+  
+  return $x2;
 }
 
 sub trunc {

@@ -783,6 +783,22 @@ SV* index_to_pos(...)
 
 MODULE = Rstats::Func PACKAGE = Rstats::Func
 
+SV* tanh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  
+  Rstats::Vector* x2_elements = Rstats::VectorFunc::tanh(Rstats::Func::get_vector(sv_r, sv_x1));
+  SV* sv_x2 = Rstats::Func::new_null(sv_r);
+  
+  Rstats::Func::set_vector(sv_r, sv_x2, x2_elements);
+  Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+  
+  return_sv(sv_x2);
+}
+
 SV* type(...)
   PPCODE:
 {

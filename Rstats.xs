@@ -40,14 +40,6 @@ SV* value(...)
   return_sv(sv_value);
 }
 
-SV* length_value(...)
-  PPCODE:
-{
-  Rstats::Vector* e1 = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  IV length = Rstats::VectorFunc::get_length(e1);
-  return_sv(Rstats::pl_new_sv_iv(length));
-}
-
 SV* to_string(...)
   PPCODE:
 {

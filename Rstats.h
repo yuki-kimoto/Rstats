@@ -885,6 +885,22 @@ namespace Rstats {
     SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
     SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type(SV*, SV*);
+
+    SV* atan2(SV*, SV*, SV*);
+    SV* add(SV*, SV*, SV*);
+    SV* subtract(SV*, SV*, SV*);
+    SV* multiply(SV*, SV*, SV*);
+    SV* divide(SV*, SV*, SV*);
+    SV* remainder(SV*, SV*, SV*);
+    SV* pow(SV*, SV*, SV*);
+    SV* less_than(SV*, SV*, SV*);
+    SV* less_than_or_equal(SV*, SV*, SV*);
+    SV* more_than(SV*, SV*, SV*);
+    SV* more_than_or_equal(SV*, SV*, SV*);
+    SV* equal(SV*, SV*, SV*);
+    SV* not_equal(SV*, SV*, SV*);
+    SV* And(SV*, SV*, SV*);
+    SV* Or(SV*, SV*, SV*);
   }
 }
 

@@ -854,6 +854,7 @@ namespace Rstats {
     
     SV* tanh(SV*, SV*);
     SV* Mod(SV*, SV*);
+    SV* Arg(SV*, SV*);
     SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
   }
 }

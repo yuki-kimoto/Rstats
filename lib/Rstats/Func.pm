@@ -19,11 +19,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub atan2 {
-  my $r = shift;
-  return operate_binary($r, \&Rstats::VectorFunc::atan2, @_);
-}
-
 sub add {
   my $r = shift;
   operate_binary($r, \&Rstats::VectorFunc::add, @_);

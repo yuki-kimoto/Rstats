@@ -19,6 +19,107 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+sub atan2 {
+  my $r = shift;
+  return operate_binary($r, \&Rstats::VectorFunc::atan2, @_);
+}
+
+sub add {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::add, @_);
+}
+sub subtract {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::subtract, @_);
+}
+sub multiply {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::multiply, @_);
+}
+sub divide {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::divide, @_);
+}
+sub remainder {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::remainder, @_);
+}
+sub pow {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::pow, @_);
+}
+sub less_than {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::less_than, @_);
+}
+sub less_than_or_equal {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::less_than_or_equal, @_);
+}
+sub more_than {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::more_than, @_);
+}
+sub more_than_or_equal {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::more_than_or_equal, @_);
+}
+sub equal {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::equal, @_);
+}
+sub not_equal {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::not_equal, @_);
+}
+sub and {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::and, @_);
+}
+sub or {
+  my $r = shift;
+  operate_binary($r, \&Rstats::VectorFunc::or, @_);
+}
+
+sub operate_binary {
+  my $r = shift;
+  
+  my ($func, $x1, $x2) = @_;
+  
+  $x1 = to_c($r, $x1);
+  $x2 = to_c($r, $x2);
+  
+  # Upgrade mode if type is different
+  ($x1, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2)
+    if $x1->type ne $x2->type;
+  
+  # Upgrade length if length is defferent
+  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x2_length = Rstats::Func::length_value($r, $x2);
+  my $length;
+  if ($x1_length > $x2_length) {
+    $x2 = Rstats::Func::array($r, $x2, $x1_length);
+    $length = $x1_length;
+  }
+  elsif ($x1_length < $x2_length) {
+    $x1 = Rstats::Func::array($r, $x1, $x2_length);
+    $length = $x2_length;
+  }
+  else {
+    $length = $x1_length;
+  }
+  
+  no strict 'refs';
+  my $x3;
+  my $x3_elements = $func->($x1->vector, $x2->vector);
+  $x3 = Rstats::Func::NULL($r);
+  $x3->vector($x3_elements);
+  
+  Rstats::Func::copy_attrs_to($r, $x1, $x3);
+
+  return $x3;
+}
+
 sub factor {
   my $r = shift;
   
@@ -1678,10 +1779,6 @@ sub colSums {
 
 
 
-sub atan2 {
-  my $r = shift;
-  return operate_binary($r, \&Rstats::VectorFunc::atan2, @_);
-}
 
 
 sub cummax {
@@ -2796,62 +2893,7 @@ sub upgrade_type {
   return @xs;
 }
 
-sub add {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::add, @_);
-}
-sub subtract {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::subtract, @_);
-}
-sub multiply {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::multiply, @_);
-}
-sub divide {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::divide, @_);
-}
-sub remainder {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::remainder, @_);
-}
-sub pow {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::pow, @_);
-}
-sub less_than {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than, @_);
-}
-sub less_than_or_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::less_than_or_equal, @_);
-}
-sub more_than {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than, @_);
-}
-sub more_than_or_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::more_than_or_equal, @_);
-}
-sub equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::equal, @_);
-}
-sub not_equal {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::not_equal, @_);
-}
-sub and {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::and, @_);
-}
-sub or {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::or, @_);
-}
+
 
 sub _fix_pos {
   my $r = shift;
@@ -2876,45 +2918,6 @@ sub _fix_pos {
   }
   
   return ($x1, $x2);
-}
-
-sub operate_binary {
-  my $r = shift;
-  
-  my ($func, $x1, $x2) = @_;
-  
-  $x1 = to_c($r, $x1);
-  $x2 = to_c($r, $x2);
-  
-  # Upgrade mode if type is different
-  ($x1, $x2) = Rstats::Func::upgrade_type($r, $x1, $x2)
-    if $x1->type ne $x2->type;
-  
-  # Upgrade length if length is defferent
-  my $x1_length = Rstats::Func::length_value($r, $x1);
-  my $x2_length = Rstats::Func::length_value($r, $x2);
-  my $length;
-  if ($x1_length > $x2_length) {
-    $x2 = Rstats::Func::array($r, $x2, $x1_length);
-    $length = $x1_length;
-  }
-  elsif ($x1_length < $x2_length) {
-    $x1 = Rstats::Func::array($r, $x1, $x2_length);
-    $length = $x2_length;
-  }
-  else {
-    $length = $x1_length;
-  }
-  
-  no strict 'refs';
-  my $x3;
-  my $x3_elements = $func->($x1->vector, $x2->vector);
-  $x3 = Rstats::Func::NULL($r);
-  $x3->vector($x3_elements);
-  
-  Rstats::Func::copy_attrs_to($r, $x1, $x3);
-
-  return $x3;
 }
 
 sub bool {

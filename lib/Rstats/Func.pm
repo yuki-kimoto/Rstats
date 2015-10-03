@@ -3971,7 +3971,7 @@ sub value {
   my $x1 = shift;
   
   my $e1;
-  my $dim_values = $x1->dim_as_array->values;
+  my $dim_values = Rstats::Func::values($r, $x1->dim_as_array);
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   if (@_) {
     if (@$dim_values == 1) {

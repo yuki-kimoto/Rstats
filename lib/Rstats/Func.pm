@@ -19,10 +19,7 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub add {
-  my $r = shift;
-  operate_binary($r, \&Rstats::VectorFunc::add, @_);
-}
+
 sub subtract {
   my $r = shift;
   operate_binary($r, \&Rstats::VectorFunc::subtract, @_);

@@ -5,6 +5,153 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
+# operator
+{
+  # operator - add(different element number)
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 5, 6);
+    
+    my $x3 = $x1 + $x2;
+    is_deeply($x3->values, [4, 6, 6, 8]);
+  }
+  
+
+  # operator - add to original vector
+  {
+    my $x1 = c_(1, 2, 3);
+    $x1->at(r->length($x1) + 1)->set(6);
+    is_deeply($x1->values, [1, 2, 3, 6]);
+  }
+  
+  # operator - negation
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = -$x1;
+    is_deeply($x2->values, [-1, -2, -3]);
+  }
+  
+  # operator - add
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(2, 3, 4);
+    my $x3 = $x1 + $x2;
+    is_deeply($x3->values, [3, 5, 7]);
+  }
+
+  # operator - add(real number)
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 + 1;
+    is_deeply($x2->values, [2, 3, 4]);
+  }
+  
+  # operator - subtract
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(3, 3, 3);
+    my $x3 = $x1 - $x2;
+    is_deeply($x3->values, [-2, -1, 0]);
+  }
+
+  # operator - subtract(real number)
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 - 1;
+    is_deeply($x2->values, [0, 1, 2]);
+  }
+
+  # operator - subtract(real number, reverse)
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 1 - $x1;
+    is_deeply($x2->values, [0, -1, -2]);
+  }
+    
+  # operator - mutiply
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(2, 3, 4);
+    my $x3 = $x1 * $x2;
+    is_deeply($x3->values, [2, 6, 12]);
+  }
+
+  # operator - mutiply(real number)
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 * 2;
+    is_deeply($x2->values, [2, 4, 6]);
+  }
+
+  # operator - divide
+  {
+    my $x1 = r->as->integer(c_(6, 3, 12));
+    my $x2 = r->as->integer(c_(2, 3, 4));
+    my $x3 = $x1 / $x2;
+    is_deeply($x3->values, [3, 1, 3]);
+    ok(r->is->double($x3));
+  }
+  
+  # operator - divide
+  {
+    my $x1 = c_(6, 3, 12);
+    my $x2 = c_(2, 3, 4);
+    my $x3 = $x1 / $x2;
+    is_deeply($x3->values, [3, 1, 3]);
+  }
+
+  # operator - divide(real number)
+  {
+    my $x1 = c_(2, 4, 6);
+    my $x2 = $x1 / 2;
+    is_deeply($x2->values, [1, 2, 3]);
+  }
+
+  # operator - divide(real number, reverse)
+  {
+    my $x1 = c_(2, 4, 6);
+    my $x2 = 2 / $x1;
+    is_deeply($x2->values, [1, 1/2, 1/3]);
+  }
+  
+  # operator - pow
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 ** 2;
+    is_deeply($x2->values, [1, 4, 9]);
+  }
+
+  # operator - pow, reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 ** $x1;
+    is_deeply($x2->values, [2, 4, 8]);
+  }
+
+  # operator - remainder
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 % 3;
+    is_deeply($x2->values, [1, 2, 0]);
+  }
+
+  # operator - remainder, reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 % $x1;
+    is_deeply($x2->values, [0, 0, 2]);
+  }
+  
+  # operator - remainder, integer
+  {
+    my $x1 = r->as->integer(c_(1, 2, 3));
+    my $x2 = r->as->integer(c_(2, 2, 0));
+    my $x3 = $x1 % $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [1, 0, undef]);
+  }
+}
+
 # set 3-dimention
 {
   # set 3-dimention
@@ -998,150 +1145,7 @@ EOS
   }
 }
 
-# operator
-{
-  # operator - add to original vector
-  {
-    my $x1 = c_(1, 2, 3);
-    $x1->at(r->length($x1) + 1)->set(6);
-    is_deeply($x1->values, [1, 2, 3, 6]);
-  }
-  
-  # operator - negation
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = -$x1;
-    is_deeply($x2->values, [-1, -2, -3]);
-  }
-  
-  # operator - add
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(2, 3, 4);
-    my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [3, 5, 7]);
-  }
 
-  # operator - add(different element number)
-  {
-    my $x1 = c_(1, 2);
-    my $x2 = c_(3, 4, 5, 6);
-    my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [4, 6, 6, 8]);
-  }
-  
-  # operator - add(real number)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 + 1;
-    is_deeply($x2->values, [2, 3, 4]);
-  }
-  
-  # operator - subtract
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(3, 3, 3);
-    my $x3 = $x1 - $x2;
-    is_deeply($x3->values, [-2, -1, 0]);
-  }
-
-  # operator - subtract(real number)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 - 1;
-    is_deeply($x2->values, [0, 1, 2]);
-  }
-
-  # operator - subtract(real number, reverse)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 1 - $x1;
-    is_deeply($x2->values, [0, -1, -2]);
-  }
-    
-  # operator - mutiply
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(2, 3, 4);
-    my $x3 = $x1 * $x2;
-    is_deeply($x3->values, [2, 6, 12]);
-  }
-
-  # operator - mutiply(real number)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 * 2;
-    is_deeply($x2->values, [2, 4, 6]);
-  }
-
-  # operator - divide
-  {
-    my $x1 = r->as->integer(c_(6, 3, 12));
-    my $x2 = r->as->integer(c_(2, 3, 4));
-    my $x3 = $x1 / $x2;
-    is_deeply($x3->values, [3, 1, 3]);
-    ok(r->is->double($x3));
-  }
-  
-  # operator - divide
-  {
-    my $x1 = c_(6, 3, 12);
-    my $x2 = c_(2, 3, 4);
-    my $x3 = $x1 / $x2;
-    is_deeply($x3->values, [3, 1, 3]);
-  }
-
-  # operator - divide(real number)
-  {
-    my $x1 = c_(2, 4, 6);
-    my $x2 = $x1 / 2;
-    is_deeply($x2->values, [1, 2, 3]);
-  }
-
-  # operator - divide(real number, reverse)
-  {
-    my $x1 = c_(2, 4, 6);
-    my $x2 = 2 / $x1;
-    is_deeply($x2->values, [1, 1/2, 1/3]);
-  }
-  
-  # operator - pow
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 ** 2;
-    is_deeply($x2->values, [1, 4, 9]);
-  }
-
-  # operator - pow, reverse
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 2 ** $x1;
-    is_deeply($x2->values, [2, 4, 8]);
-  }
-
-  # operator - remainder
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 % 3;
-    is_deeply($x2->values, [1, 2, 0]);
-  }
-
-  # operator - remainder, reverse
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 2 % $x1;
-    is_deeply($x2->values, [0, 0, 2]);
-  }
-  
-  # operator - remainder, integer
-  {
-    my $x1 = r->as->integer(c_(1, 2, 3));
-    my $x2 = r->as->integer(c_(2, 2, 0));
-    my $x3 = $x1 % $x2;
-    ok(r->is->integer($x3));
-    is_deeply($x3->values, [1, 0, undef]);
-  }
-}
 
 # value
 {

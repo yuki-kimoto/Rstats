@@ -4,6 +4,70 @@
 namespace Rstats {
   namespace Func {
     
+    SV* upgrade_type(SV* sv_r, SV* sv_xs) {
+      // Check elements
+      std::map<Rstats::Type::Enum, IV> type_h;
+      
+      IV xs_length = Rstats::pl_av_len(sv_xs);
+      for (IV i = 0; i < xs_length; i++) {
+        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
+        Rstats::Vector* x1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Type::Enum type = Rstats::VectorFunc::get_type(x1);
+        
+        if (type == Rstats::Type::CHARACTER) {
+          type_h[Rstats::Type::CHARACTER] = 1;
+        }
+        else if (type == Rstats::Type::COMPLEX) {
+          type_h[Rstats::Type::COMPLEX] = 1;
+        }
+        else if (type == Rstats::Type::DOUBLE) {
+          type_h[Rstats::Type::DOUBLE] = 1;
+        }
+        else if (type == Rstats::Type::INTEGER) {
+          type_h[Rstats::Type::INTEGER] = 1;
+        }
+        else if (type == Rstats::Type::LOGICAL) {
+          type_h[Rstats::Type::LOGICAL] = 1;
+        }
+        else {
+          croak("Invalid type(Rstats::Func::upgrade_type()");
+        }
+      }
+
+      // Upgrade elements and type if type is different
+      SV* sv_new_xs = Rstats::pl_new_av_ref();;
+      IV type_length = type_h.size();
+
+      if (type_length > 1) {
+        SV* sv_to_type;
+        if (type_h.count(Rstats::Type::CHARACTER)) {
+          sv_to_type = Rstats::pl_new_sv_pv("character");
+        }
+        else if (type_h.count(Rstats::Type::COMPLEX)) {
+          sv_to_type = Rstats::pl_new_sv_pv("complex");
+        }
+        else if (type_h.count(Rstats::Type::DOUBLE)) {
+          sv_to_type = Rstats::pl_new_sv_pv("double");
+        }
+        else if (type_h.count(Rstats::Type::INTEGER)) {
+          sv_to_type = Rstats::pl_new_sv_pv("integer");
+        }
+        else if (type_h.count(Rstats::Type::LOGICAL)) {
+          sv_to_type = Rstats::pl_new_sv_pv("logical");
+        }
+        
+        for (IV i = 0; i < xs_length; i++) {
+          SV* sv_x = Rstats::pl_av_fetch(sv_xs, i);
+          Rstats::pl_av_push(sv_new_xs, Rstats::Func::as(sv_r, sv_to_type, sv_x));
+        }
+      }
+      else {
+        sv_new_xs = sv_xs;
+      }
+      
+      return sv_new_xs;
+    }
+    
     SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
       
       Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));

@@ -109,7 +109,6 @@ sub operate_binary {
     $length = $x1_length;
   }
   
-  no strict 'refs';
   my $x3;
   my $x3_elements = $func->($x1->vector, $x2->vector);
   $x3 = Rstats::Func::NULL($r);

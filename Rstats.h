@@ -861,6 +861,27 @@ namespace Rstats {
     SV* abs(SV*, SV*);
     SV* acos(SV*, SV*);
     SV* acosh(SV*, SV*);
+    SV* asin(SV*, SV*);
+    SV* asinh(SV*, SV*);
+    SV* atan(SV*, SV*);
+    SV* atanh(SV*, SV*);
+    SV* cos(SV*, SV*);
+    SV* cosh(SV*, SV*);
+    SV* cumsum(SV*, SV*);
+    SV* cumprod(SV*, SV*);
+    SV* exp(SV*, SV*);
+    SV* expm1(SV*, SV*);
+    SV* log(SV*, SV*);
+    SV* logb(SV*, SV*);
+    SV* log2(SV*, SV*);
+    SV* log10(SV*, SV*);
+    SV* prod(SV*, SV*);
+    SV* sinh(SV*, SV*);
+    SV* sqrt(SV*, SV*);
+    SV* tan(SV*, SV*);
+    SV* sin(SV*, SV*);
+    SV* sum(SV*, SV*);
+    SV* negation(SV*, SV*);
     SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
   }
 }

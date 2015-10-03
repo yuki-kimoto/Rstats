@@ -882,6 +882,237 @@ SV* acos(...)
   return_sv(sv_x2);
 }
 
+SV* asin(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::asin, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* asinh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::asinh, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* atan(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::atan, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* atanh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::atanh, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* cos(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::cos, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* cosh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::cosh, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* cumsum(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::cumsum, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* cumprod(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::cumprod, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* exp(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::exp, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* expm1(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::expm1, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* log(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::log, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* logb(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::logb, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* log2(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::log2, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* log10(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::log10, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* prod(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::prod, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* sinh(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sinh, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* sqrt(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sqrt, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* tan(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::tan, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* sin(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* sum(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sum, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
+SV* negation(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::negation, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 
 SV* type(...)
   PPCODE:

@@ -16,30 +16,6 @@ SV* DESTROY(...)
 
 MODULE = Rstats::VectorFunc PACKAGE = Rstats::VectorFunc
 
-SV* value(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  
-  IV pos;
-  if (items < 2) {
-    pos = 0;
-  }
-  else {
-    pos = SvIV(ST(1));
-  }
-  
-  SV* sv_value;
-  if (pos >= 0 && pos < Rstats::VectorFunc::get_length(self)) {
-    sv_value = Rstats::VectorFunc::get_value(self, pos);
-  }
-  else {
-    sv_value = &PL_sv_undef;
-  }
-  
-  return_sv(sv_value);
-}
-
 SV* remainder(...)
   PPCODE:
 {
@@ -191,18 +167,6 @@ SV* pow(...)
   return_sv(sv_e3);
 }
 
-SV* complex_double (...)
-  PPCODE:
-{
-  Rstats::Vector* re = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-  Rstats::Vector* im = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(1));
-  Rstats::Vector* z = Rstats::VectorFunc::new_complex(
-    1,
-    std::complex<NV>(Rstats::VectorFunc::get_double_value(re, 0), Rstats::VectorFunc::get_double_value(im, 0))
-  );
-  SV* sv_z = Rstats::pl_to_perl_obj(z, "Rstats::Vector");
-  return_sv(sv_z);
-}
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 

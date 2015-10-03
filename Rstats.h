@@ -853,7 +853,7 @@ namespace Rstats {
     SV* names(SV*, SV*);
     
     SV* tanh(SV*, SV*);
-    SV* operate_unary(SV*, Rstats::Vector (*func)(Rstats::Vector*), SV*);
+    SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
   }
 }
 

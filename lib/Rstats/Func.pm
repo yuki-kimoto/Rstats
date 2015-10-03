@@ -3989,7 +3989,7 @@ sub value {
     $e1 = $x1_elements->[0];
   }
   
-  return defined $e1 ? Rstats::VectorFunc::value($e1->vector) : undef;
+  return defined $e1 ? Rstats::Func::first_value($r, $e1) : undef;
 }
 
 1;

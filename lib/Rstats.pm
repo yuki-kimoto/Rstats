@@ -2,7 +2,7 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.0139';
+our $VERSION = '0.0141';
 
 use Rstats::Class;
 

@@ -120,7 +120,7 @@ has 'vector';
 
 sub AUTOLOAD {
   my $self = shift;
-
+  
   my ($package, $method) = split /::(\w+)$/, our $AUTOLOAD;
   Carp::croak "Undefined subroutine &${package}::$method called"
     unless Scalar::Util::blessed $self && $self->isa(__PACKAGE__);

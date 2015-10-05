@@ -7,9 +7,6 @@ require Rstats;
 
 use Carp 'croak';
 use Rstats::Func;
-use Rstats::Array;
-use Rstats::List;
-use Rstats::DataFrame;
 use Rstats::Util;
 use Text::UnicodeTable::Simple;
 
@@ -122,7 +119,7 @@ sub list {
   
   my @elements = @_;
   
-  @elements = map { ref $_ ne 'Rstats::List' ? Rstats::Func::to_c($r, $_) : $_ } @elements;
+  @elements = map { !Rstats::Func::is_list($r, $_) ? Rstats::Func::to_c($r, $_) : $_ } @elements;
   
   my $list = Rstats::Func::new_list($r);
   $list->list(\@elements);
@@ -294,7 +291,7 @@ sub dimnames {
   
   if (@_) {
     my $dimnames_list = shift;
-    if (ref $dimnames_list eq 'Rstats::List') {
+    if ($dimnames_list->{object_type} eq 'list') {
       my $length = Rstats::Func::length_value($r, $dimnames_list);
       my $dimnames = [];
       for (my $i = 0; $i < $length; $i++) {
@@ -384,7 +381,7 @@ sub typeof {
     my $type = $x1->type;
     return Rstats::Func::new_character($r, $type);
   }
-  elsif (is_list($r, $x1)) {
+  elsif (Rstats::Func::is_list($r, $x1) || Rstats::Func::is_data_frame($r, $x1)) {
     return Rstats::Func::new_character($r, 'list');
   }
   else {
@@ -2711,7 +2708,7 @@ sub _fix_pos {
   
   my $x1;
   my $x2;
-  if (ref $datx2 eq 'Rstats::Array') {
+  if (ref $datx2) {
     $x1 = $data1;
     $x2 = $datx2;
   }
@@ -2777,13 +2774,13 @@ sub bool {
 sub set {
   my ($r, $x1) = @_;
   
-  if (ref $x1 eq 'Rstats::Array') {
+  if ($x1->{object_type} eq 'array') {
     return Rstats::Func::set_array(@_);
   }
-  elsif (ref $x1 eq 'Rstats::List') {
+  elsif ($x1->{object_type} eq 'list') {
     return Rstats::Func::set_list(@_);
   }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
+  elsif ($x1->{object_type} eq 'data.frame') {
     return Rstats::Func::set_dataframe(@_);
   }
   else {
@@ -3279,7 +3276,7 @@ sub _to_string_list {
     $$str_ref .= join('', map { "[[$_]]" } @$poses) . "\n";
     
     my $element = $elements->[$i];
-    if (ref $element eq 'Rstats::List') {
+    if ($element->{object_type} eq 'list') {
       _to_string_list($r, $element, $poses, $str_ref);
     }
     else {
@@ -3641,13 +3638,13 @@ sub sapply {
 sub to_string {
   my ($r, $x1) = @_;
   
-  if (ref $x1 eq 'Rstats::Array') {
+  if ($x1->{object_type} eq 'array') {
     return Rstats::Func::to_string_array(@_);
   }
-  elsif (ref $x1 eq 'Rstats::List') {
+  elsif ($x1->{object_type} eq 'list') {
     return Rstats::Func::to_string_list(@_);
   }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
+  elsif ($x1->{object_type} eq 'data.frame') {
     return Rstats::Func::to_string_dataframe(@_);
   }
   else {
@@ -3659,13 +3656,13 @@ sub to_string {
 sub get {
   my ($r, $x1) = @_;
   
-  if (ref $x1 eq 'Rstats::Array') {
+  if ($x1->{object_type} eq 'array') {
     return Rstats::Func::get_array(@_);
   }
-  elsif (ref $x1 eq 'Rstats::List') {
+  elsif ($x1->{object_type} eq 'list') {
     return Rstats::Func::get_list(@_);
   }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
+  elsif ($x1->{object_type} eq 'data.frame') {
     return Rstats::Func::get_dataframe(@_);
   }
   else {
@@ -3676,13 +3673,13 @@ sub get {
 sub getin {
   my ($r, $x1) = @_;
   
-  if (ref $x1 eq 'Rstats::Array') {
+  if ($x1->{object_type} eq 'array') {
     return Rstats::Func::getin_array(@_);
   }
-  elsif (ref $x1 eq 'Rstats::List') {
+  elsif ($x1->{object_type} eq 'list') {
     return Rstats::Func::getin_list(@_);
   }
-  elsif (ref $x1 eq 'Rstats::DataFrame') {
+  elsif ($x1->{object_type} eq 'data.frame') {
     return Rstats::Func::getin_dataframe(@_);
   }
   else {
@@ -3709,6 +3706,7 @@ sub set_array {
   
   my $x1 = shift;
   my $x2 = Rstats::Func::to_c($r, shift);
+  
   
   my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];

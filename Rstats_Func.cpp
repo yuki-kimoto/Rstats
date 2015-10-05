@@ -61,7 +61,8 @@ namespace Rstats {
       for (IV i = 0; i < element_length; i++) {
         Rstats::Type::Enum type;
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
-        if (sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Array")) {
+        
+        if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           length += Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_element));
           type = Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_element));
           type_h[type] = 1;
@@ -105,10 +106,10 @@ namespace Rstats {
       IV pos = 0;
       for (IV i = 0; i < element_length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
-        if (sv_derived_from(sv_element, "Rstats::Array")) {
+        if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           
           Rstats::Vector* v1;
-          if (sv_derived_from(sv_element, "Rstats::Array")) {
+          if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
             v1 = Rstats::Func::get_vector(sv_r, sv_element);
           }
           else {
@@ -347,7 +348,7 @@ namespace Rstats {
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
       bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Array")
+        && sv_derived_from(sv_x1, "Rstats::Object")
         && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
       
       SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
@@ -450,7 +451,8 @@ namespace Rstats {
       
       bool is =
         sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Array")
+        && sv_derived_from(sv_x1, "Rstats::Object")
+        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "array")
         && !Rstats::pl_hv_exists(sv_x1, "dim");
       
       SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
@@ -476,7 +478,8 @@ namespace Rstats {
     SV* is_array(SV* sv_r, SV* sv_x1) {
 
       bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Array")
+        && sv_derived_from(sv_x1, "Rstats::Object")
+        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "array")
         && Rstats::pl_hv_exists(sv_x1, "dim");
       
       SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
@@ -496,8 +499,9 @@ namespace Rstats {
     SV* new_array(SV* sv_r) {
       
       SV* sv_array = Rstats::pl_new_hv_ref();
-      sv_bless(sv_array, gv_stashpv("Rstats::Array", 1));
+      sv_bless(sv_array, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_array, "r", sv_r);
+      Rstats::pl_hv_store(sv_array, "object_type", Rstats::pl_new_sv_pv("array"));
       
       return sv_array;
     }
@@ -853,7 +857,8 @@ namespace Rstats {
     SV* is_data_frame(SV* sv_r, SV* sv_x1) {
       
       bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::DataFrame");
+        && sv_derived_from(sv_x1, "Rstats::Object")
+        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "data.frame");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -863,7 +868,8 @@ namespace Rstats {
     SV* is_list(SV* sv_r, SV* sv_x1) {
       
       bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::List");
+        && sv_derived_from(sv_x1, "Rstats::Object")
+        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "list");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -888,18 +894,20 @@ namespace Rstats {
 
     SV* new_data_frame(SV* sv_r) {
       SV* sv_data_frame = Rstats::pl_new_hv_ref();
-      Rstats::pl_sv_bless(sv_data_frame, "Rstats::DataFrame");
+      Rstats::pl_sv_bless(sv_data_frame, "Rstats::Object");
       Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
+      Rstats::pl_hv_store(sv_data_frame, "object_type", Rstats::pl_new_sv_pv("data.frame"));
       
       return sv_data_frame;
     }
 
     SV* new_list(SV* sv_r) {
-      SV* sv_data_frame = Rstats::pl_new_hv_ref();
-      Rstats::pl_sv_bless(sv_data_frame, "Rstats::List");
-      Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
+      SV* sv_list = Rstats::pl_new_hv_ref();
+      Rstats::pl_sv_bless(sv_list, "Rstats::Object");
+      Rstats::pl_hv_store(sv_list, "r", sv_r);
+      Rstats::pl_hv_store(sv_list, "object_type", Rstats::pl_new_sv_pv("list"));
       
-      return sv_data_frame;
+      return sv_list;
     }
 
     SV* new_vector(SV* sv_r, SV* sv_type, SV* sv_values) {
@@ -1614,7 +1622,7 @@ namespace Rstats {
     }
 
     SV* length(SV* sv_r, SV* sv_container) {
-      if (sv_isobject(sv_container) && sv_derived_from(sv_container, "Rstats::Array")) {
+      if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_container)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_container))) {
         return Rstats::Func::new_integer(
           sv_r,
           Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_container))

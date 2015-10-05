@@ -10,7 +10,8 @@ use Math::Trig ();
   my $x1 = r->NULL;
   is_deeply($x1->values, []);
   is("$x1", 'NULL');
-  $x1->at(3)->set(5);
+  $x1->at(3);
+  $x1->set(5);
   is_deeply($x1->values, [undef, undef, 5]);
 }
 

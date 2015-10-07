@@ -4,98 +4,18 @@
 /* Shortcut of return sv */
 #define return_sv(x) XPUSHs(x); XSRETURN(1);
 
-MODULE = Rstats::Vector PACKAGE = Rstats::Vector
-
-SV* DESTROY(...)
-  PPCODE:
-{
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
-
-  Rstats::VectorFunc::delete_vector(self);
-}
-
-MODULE = Rstats::Util PACKAGE = Rstats::Util
-
-SV* pi(...)
-  PPCODE:
-{
-  NV pi = Rstats::Util::pi();
-  SV* sv_pi = Rstats::pl_new_sv_nv(pi);
-  
-  return_sv(sv_pi);
-}
-
-SV* is_perl_number(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  IV ret = Rstats::Util::is_perl_number(sv_str);
-  SV* sv_ret = ret ? Rstats::pl_new_sv_iv(1) : &PL_sv_undef;
-  return_sv(sv_ret);
-}
-
-SV* looks_like_integer(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_integer(sv_str);
-  return_sv(sv_ret);
-}
-
-SV* looks_like_double(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_double(sv_str);
-  return_sv(sv_ret);
-}
-
-SV* looks_like_na(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_na(sv_str);
-  return_sv(sv_ret);
-}
-
-SV* looks_like_logical(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_logical(sv_str);
-  return_sv(sv_ret);
-}
-
-SV* looks_like_complex(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_complex(sv_str);
-  return_sv(sv_ret);
-}
-
-SV* cross_product(...)
-  PPCODE:
-{
-  SV* sv_ret = Rstats::Util::cross_product(ST(0));
-  return_sv(sv_ret);
-}
-
-SV* pos_to_index(...)
-  PPCODE:
-{
-  SV* sv_ret = Rstats::Util::pos_to_index(ST(0), ST(1));
-  return_sv(sv_ret);
-}
-
-SV* index_to_pos(...)
-  PPCODE:
-{
-  SV* sv_ret = Rstats::Util::index_to_pos(ST(0), ST(1));
-  return_sv(sv_ret);
-}
-
 MODULE = Rstats::Func PACKAGE = Rstats::Func
+
+SV* sin(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  
+  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
+  
+  return_sv(sv_x2);
+}
 
 SV* atan2(...)
   PPCODE:
@@ -595,17 +515,6 @@ SV* tan(...)
   
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::tan, sv_x1);
-  
-  return_sv(sv_x2);
-}
-
-SV* sin(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
   
   return_sv(sv_x2);
 }
@@ -1387,6 +1296,97 @@ SV* upgrade_type(...)
   SV* sv_new_xs = Rstats::Func::upgrade_type(sv_r, sv_xs);
   
   return_sv(sv_new_xs);
+}
+
+MODULE = Rstats::Vector PACKAGE = Rstats::Vector
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+
+  Rstats::VectorFunc::delete_vector(self);
+}
+
+MODULE = Rstats::Util PACKAGE = Rstats::Util
+
+SV* pi(...)
+  PPCODE:
+{
+  NV pi = Rstats::Util::pi();
+  SV* sv_pi = Rstats::pl_new_sv_nv(pi);
+  
+  return_sv(sv_pi);
+}
+
+SV* is_perl_number(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  IV ret = Rstats::Util::is_perl_number(sv_str);
+  SV* sv_ret = ret ? Rstats::pl_new_sv_iv(1) : &PL_sv_undef;
+  return_sv(sv_ret);
+}
+
+SV* looks_like_integer(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::looks_like_integer(sv_str);
+  return_sv(sv_ret);
+}
+
+SV* looks_like_double(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::looks_like_double(sv_str);
+  return_sv(sv_ret);
+}
+
+SV* looks_like_na(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::looks_like_na(sv_str);
+  return_sv(sv_ret);
+}
+
+SV* looks_like_logical(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::looks_like_logical(sv_str);
+  return_sv(sv_ret);
+}
+
+SV* looks_like_complex(...)
+  PPCODE:
+{
+  SV* sv_str = ST(0);
+  SV* sv_ret = Rstats::Util::looks_like_complex(sv_str);
+  return_sv(sv_ret);
+}
+
+SV* cross_product(...)
+  PPCODE:
+{
+  SV* sv_ret = Rstats::Util::cross_product(ST(0));
+  return_sv(sv_ret);
+}
+
+SV* pos_to_index(...)
+  PPCODE:
+{
+  SV* sv_ret = Rstats::Util::pos_to_index(ST(0), ST(1));
+  return_sv(sv_ret);
+}
+
+SV* index_to_pos(...)
+  PPCODE:
+{
+  SV* sv_ret = Rstats::Util::index_to_pos(ST(0), ST(1));
+  return_sv(sv_ret);
 }
 
 MODULE = Rstats PACKAGE = Rstats

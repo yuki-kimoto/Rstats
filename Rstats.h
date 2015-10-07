@@ -901,6 +901,8 @@ namespace Rstats {
     SV* not_equal(SV*, SV*, SV*);
     SV* And(SV*, SV*, SV*);
     SV* Or(SV*, SV*, SV*);
+
+    SV* sin(SV*, SV*);
   }
 }
 

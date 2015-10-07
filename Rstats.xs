@@ -11,8 +11,7 @@ SV* sin(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
+  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, ST(1));
   
   return_sv(sv_x2);
 }

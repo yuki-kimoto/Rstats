@@ -3,7 +3,21 @@
 // Rstats::Func
 namespace Rstats {
   namespace Func {
-    
+
+    SV* sin(SV* sv_r, SV* sv_x1) {
+
+      std::map<Rstats::Type::Enum, Rstats::Type::Enum> type_map;
+      type_map[Rstats::Type::COMPLEX] = Rstats::Type::COMPLEX;
+      type_map[Rstats::Type::DOUBLE] = Rstats::Type::DOUBLE;
+      type_map[Rstats::Type::INTEGER] = Rstats::Type::DOUBLE;
+      type_map[Rstats::Type::LOGICAL] = Rstats::Type::DOUBLE;
+
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
+      
+      return sv_x2;
+    }
+
     SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);

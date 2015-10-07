@@ -10,22 +10,6 @@ namespace Rstats {
 
     RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
 
-    // sin2
-    void sin2(Rstats::Vector2<SV*>* v1) {
-      croak("Error in sin() : invalid argument to sin()");
-    }
-    Rstats::Vector2<std::complex<NV> >* sin2(Rstats::Vector2<std::complex<NV> >* v1) {
-      return Rstats::VectorFunc::operate_un_math<
-          std::complex<NV>  (*)(std::complex<NV> ), std::complex<NV> , std::complex<NV>
-        >(&Rstats::ElementFunc::sin, v1);
-    }
-    Rstats::Vector2<NV>* sin2(Rstats::Vector2<NV>* v1) {
-      return Rstats::VectorFunc::operate_un_math<NV (*)(NV), NV, NV>(&Rstats::ElementFunc::sin, v1);
-    }
-    Rstats::Vector2<NV>* sin2(Rstats::Vector2<IV>* v1) {
-      return Rstats::VectorFunc::operate_un_math<NV (*)(IV), NV, IV>(&Rstats::ElementFunc::sin, v1);
-    }
-
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(sin, Rstats::ElementFunc::sin)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(cos, Rstats::ElementFunc::cos)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(tan, Rstats::ElementFunc::tan)

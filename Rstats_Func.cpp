@@ -3,6 +3,15 @@
 // Rstats::Func
 namespace Rstats {
   namespace Func {
+    
+    SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::atan2, sv_x1, sv_x2);
+      
+      return sv_x3;
+    }
 
     SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
       

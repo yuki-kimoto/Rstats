@@ -5,19 +5,22 @@ namespace Rstats {
   namespace Func {
 
     SV* sin(SV* sv_r, SV* sv_x1) {
-
-      std::map<Rstats::Type::Enum, Rstats::Type::Enum> type_map;
-      type_map[Rstats::Type::COMPLEX] = Rstats::Type::COMPLEX;
-      type_map[Rstats::Type::DOUBLE] = Rstats::Type::DOUBLE;
-      type_map[Rstats::Type::INTEGER] = Rstats::Type::DOUBLE;
-      type_map[Rstats::Type::LOGICAL] = Rstats::Type::DOUBLE;
-
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
       
       return sv_x2;
     }
 
+    SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
+      
+      Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));
+      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      set_vector(sv_r, sv_x2, x2_elements);
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+      
+      return sv_x2;
+    }
+    
     SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
@@ -356,16 +359,6 @@ namespace Rstats {
       }
       
       return sv_new_xs;
-    }
-    
-    SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
-      
-      Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));
-      SV* sv_x2 = Rstats::Func::new_null(sv_r);
-      set_vector(sv_r, sv_x2, x2_elements);
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-      
-      return sv_x2;
     }
     
     SV* is_matrix(SV* sv_r, SV* sv_x1) {

@@ -99,10 +99,6 @@ namespace Rstats {
       return (std::vector<std::complex<NV> >*)v1->values;
     }
 
-    std::vector<NV>* get_double_values(Rstats::Vector* v1) {
-      return (std::vector<NV>*)v1->values;
-    }
-
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }
@@ -139,7 +135,7 @@ namespace Rstats {
           return Rstats::VectorFunc::get_complex_values(v1)->size();
           break;
         case Rstats::Type::DOUBLE :
-          return Rstats::VectorFunc::get_double_values(v1)->size();
+          return Rstats::VectorFunc::get_values<std::vector<NV>* >(v1)->size();
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
@@ -178,7 +174,7 @@ namespace Rstats {
             break;
           }
           case Rstats::Type::DOUBLE : {
-            std::vector<NV>* values = Rstats::VectorFunc::get_double_values(v1);
+            std::vector<NV>* values = Rstats::VectorFunc::get_values<std::vector<NV>* >(v1);
             delete values;
             break;
           }
@@ -274,11 +270,11 @@ namespace Rstats {
     }
 
     NV get_double_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_double_values(v1))[pos];
+      return (*Rstats::VectorFunc::get_values<std::vector<NV>* >(v1))[pos];
     }
 
     void set_double_value(Rstats::Vector* v1, IV pos, NV value) {
-      (*Rstats::VectorFunc::get_double_values(v1))[pos] = value;
+      (*Rstats::VectorFunc::get_values<std::vector<NV>* >(v1))[pos] = value;
     }
 
     Rstats::Vector* new_integer(IV length) {

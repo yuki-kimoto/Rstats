@@ -601,7 +601,6 @@ namespace Rstats {
     bool is_logical (Rstats::Vector*);
     
     std::vector<SV*>* get_character_values(Rstats::Vector*);
-    std::vector<std::complex<NV> >* get_complex_values(Rstats::Vector*);
     
     Rstats::Type::Enum get_type(Rstats::Vector*);
     void add_na_position(Rstats::Vector*, IV);

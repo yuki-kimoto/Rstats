@@ -603,7 +603,6 @@ namespace Rstats {
     std::vector<SV*>* get_character_values(Rstats::Vector*);
     std::vector<std::complex<NV> >* get_complex_values(Rstats::Vector*);
     std::vector<NV>* get_double_values(Rstats::Vector*);
-    std::vector<IV>* get_integer_values(Rstats::Vector*);
     
     Rstats::Type::Enum get_type(Rstats::Vector*);
     void add_na_position(Rstats::Vector*, IV);
@@ -707,6 +706,12 @@ namespace Rstats {
     Rstats::Vector* prod(Rstats::Vector*);
     Rstats::Vector* sum(Rstats::Vector*);
     Rstats::Vector* clone(Rstats::Vector*);
+    
+    // T is std::vector<xxx>*
+    template<class T>
+    T get_values(Rstats::Vector* v1) {
+      return (T)v1->values;
+    }
   }
   
   // Rstats::Func

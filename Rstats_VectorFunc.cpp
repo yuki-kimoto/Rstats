@@ -103,10 +103,6 @@ namespace Rstats {
       return (std::vector<NV>*)v1->values;
     }
 
-    std::vector<IV>* get_integer_values(Rstats::Vector* v1) {
-      return (std::vector<IV>*)v1->values;
-    }
-
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }
@@ -147,7 +143,7 @@ namespace Rstats {
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
-          return Rstats::VectorFunc::get_integer_values(v1)->size();
+          return Rstats::VectorFunc::get_values<std::vector<IV>* >(v1)->size();
           break;
       }
     }
@@ -188,7 +184,7 @@ namespace Rstats {
           }
           case Rstats::Type::INTEGER :
           case Rstats::Type::LOGICAL : {
-            std::vector<IV>* values = Rstats::VectorFunc::get_integer_values(v1);
+            std::vector<IV>* values = Rstats::VectorFunc::get_values<std::vector<IV>* >(v1);
             delete values;
           }
         }
@@ -304,11 +300,11 @@ namespace Rstats {
     }
 
     IV get_integer_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_integer_values(v1))[pos];
+      return (*Rstats::VectorFunc::get_values<std::vector<IV>* >(v1))[pos];
     }
 
     void set_integer_value(Rstats::Vector* v1, IV pos, IV value) {
-      (*Rstats::VectorFunc::get_integer_values(v1))[pos] = value;
+      (*Rstats::VectorFunc::get_values<std::vector<IV>* >(v1))[pos] = value;
     }
 
     Rstats::Vector* new_logical(IV length) {

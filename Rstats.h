@@ -591,7 +591,7 @@ namespace Rstats {
     Rstats::Vector* new_vector();
     void delete_vector(Rstats::Vector*);
     SV* get_value(Rstats::Vector*, IV);
-    SV* get_values(Rstats::Vector*);
+    SV* create_sv_values(Rstats::Vector*);
     
     bool is_character (Rstats::Vector*);
     bool is_complex (Rstats::Vector*);

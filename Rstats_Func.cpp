@@ -412,9 +412,9 @@ namespace Rstats {
     }
 
     SV* values(SV* sv_r, SV* sv_x1) {
-      Rstats::Vector* x1 = get_vector(sv_r, sv_x1);
+      Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
       
-      SV* sv_values = Rstats::VectorFunc::get_values(x1);
+      SV* sv_values = Rstats::VectorFunc::create_sv_values(v1);
       
       return sv_values;
     }

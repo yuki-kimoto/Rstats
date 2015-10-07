@@ -56,7 +56,7 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
 
 
-    SV* get_values(Rstats::Vector* v1) {
+    SV* create_sv_values(Rstats::Vector* v1) {
       
       IV length = Rstats::VectorFunc::get_length(v1);
       SV* sv_values = Rstats::pl_new_av_ref();

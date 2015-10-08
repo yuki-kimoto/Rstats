@@ -886,16 +886,6 @@ SV* new_logical(...)
   return_sv(sv_x1);
 }
 
-SV* new_array(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_array = Rstats::Func::new_array(sv_r);
-  
-  return_sv(sv_array);
-}
-
 SV* is_double(...)
   PPCODE:
 {

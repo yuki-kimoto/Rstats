@@ -54,8 +54,18 @@ namespace Rstats {
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(divide, Rstats::ElementFunc::divide)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(atan2, Rstats::ElementFunc::atan2)
     RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
-
-
+    
+    template <>
+    Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, IV pos) {
+      Rstats::Character value = (*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos];
+      if (value == NULL) {
+        return NULL;
+      }
+      else {
+        return Rstats::pl_new_sv_sv(value);
+      }
+    }
+    
     SV* create_sv_values(Rstats::Vector* v1) {
       
       IV length = Rstats::VectorFunc::get_length(v1);
@@ -237,10 +247,6 @@ namespace Rstats {
       return v1;
     }
 
-    std::complex<NV> get_complex_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<Rstats::Complex>(v1))[pos];
-    }
-
     void set_complex_value(Rstats::Vector* v1, IV pos, std::complex<NV> value) {
       (*Rstats::VectorFunc::get_values<Rstats::Complex>(v1))[pos] = value;
     }
@@ -382,7 +388,7 @@ namespace Rstats {
             sv_str = Rstats::VectorFunc::get_character_value(v1, pos);
             break;
           case Rstats::Type::COMPLEX : {
-            std::complex<NV> z = Rstats::VectorFunc::get_complex_value(v1, pos);
+            std::complex<NV> z = Rstats::VectorFunc::get_value<Rstats::Complex>(v1, pos);
             NV re = z.real();
             NV im = z.imag();
             
@@ -486,7 +492,7 @@ namespace Rstats {
           break;
         case Rstats::Type::COMPLEX :
           for (IV i = 0; i < length; i++) {
-            std::complex<NV> z = Rstats::VectorFunc::get_complex_value(v1, i);
+            std::complex<NV> z = Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
             NV re = z.real();
             NV im = z.imag();
             
@@ -574,7 +580,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i).real());
+            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -624,7 +630,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, (IV)Rstats::VectorFunc::get_complex_value(v1, i).real());
+            Rstats::VectorFunc::set_integer_value(v2, i, (IV)Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -680,7 +686,7 @@ namespace Rstats {
           break;
         case Rstats::Type::COMPLEX :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i));
+            Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -735,7 +741,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i).real() ? 1 : 0);
+            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real() ? 1 : 0);
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -786,7 +792,7 @@ namespace Rstats {
             sv_value = &PL_sv_undef;
           }
           else {
-            std::complex<NV> z = Rstats::VectorFunc::get_complex_value(v1, pos);
+            std::complex<NV> z = Rstats::VectorFunc::get_value<Rstats::Complex>(v1, pos);
             
             NV re = z.real();
             SV* sv_re;
@@ -872,7 +878,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_complex(length);
           std::complex<NV> v2_total(1, 0);
           for (IV i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_complex_value(v1, i);
+            v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
             Rstats::VectorFunc::set_complex_value(v2, i, v2_total);
           }
           break;
@@ -918,7 +924,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_complex(length);
           std::complex<NV> v2_total(0, 0);
           for (IV i = 0; i < length; i++) {
-            v2_total += Rstats::VectorFunc::get_complex_value(v1, i);
+            v2_total += Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
             Rstats::VectorFunc::set_complex_value(v2, i, v2_total);
           }
           break;
@@ -964,7 +970,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_complex(1);
           std::complex<NV> v2_total(1, 0);
           for (IV i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_complex_value(v1, i);
+            v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
           }
           Rstats::VectorFunc::set_complex_value(v2, 0, v2_total);
           break;
@@ -1016,7 +1022,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_complex(1);
           std::complex<NV> v2_total(0, 0);
           for (IV i = 0; i < length; i++) {
-            v2_total += Rstats::VectorFunc::get_complex_value(v1, i);
+            v2_total += Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
           }
           Rstats::VectorFunc::set_complex_value(v2, 0, v2_total);
           break;
@@ -1070,7 +1076,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           v2 = Rstats::VectorFunc::new_complex(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_complex_value(v1, i));
+            Rstats::VectorFunc::set_complex_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
           }
           break;
         case Rstats::Type::DOUBLE :

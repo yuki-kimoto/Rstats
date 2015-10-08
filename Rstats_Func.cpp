@@ -174,7 +174,7 @@ namespace Rstats {
                 Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_character_value(v_tmp, k));
               }
               else if (type == Rstats::Type::COMPLEX) {
-                Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_complex_value(v_tmp, k));
+                Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
               }
               else if (type == Rstats::Type::DOUBLE) {
                 Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
@@ -1291,7 +1291,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_complex(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_complex_value(v1, i));
+              = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1378,7 +1378,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-           Rstats::VectorFunc::set_complex_value(compose_elements, i, Rstats::VectorFunc::get_complex_value(element, 0));
+           Rstats::VectorFunc::set_complex_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Complex>(element, 0));
           }
         }
       }

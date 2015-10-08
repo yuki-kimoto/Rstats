@@ -98,6 +98,10 @@ namespace Rstats {
       CHARACTER = 4
     };
   }
+  typedef std::vector<SV* > Character;
+  typedef std::vector<std::complex<NV> > Complex;
+  typedef std::vector<NV> Double;
+  typedef std::vector<IV> Integer;
 
   namespace Util {
     IV is_perl_number(SV*);

@@ -61,7 +61,7 @@ namespace Rstats {
       IV length = Rstats::VectorFunc::get_length(v1);
       SV* sv_values = Rstats::pl_new_av_ref();
       for (IV i = 0; i < length; i++) {
-        Rstats::pl_av_push(sv_values, Rstats::VectorFunc::get_value(v1, i));
+        Rstats::pl_av_push(sv_values, Rstats::VectorFunc::create_sv_value(v1, i));
       }
       
       return sv_values;
@@ -775,7 +775,7 @@ namespace Rstats {
       return v2;
     }
 
-    SV* get_value(Rstats::Vector* v1, IV pos) {
+    SV* create_sv_value(Rstats::Vector* v1, IV pos) {
 
       SV* sv_value;
       

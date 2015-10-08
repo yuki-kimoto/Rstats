@@ -216,7 +216,7 @@ SV* first_value(...)
   
   IV pos = 0;
   
-  SV* sv_value = Rstats::VectorFunc::get_value(self, 0);
+  SV* sv_value = Rstats::VectorFunc::create_sv_value(self, 0);
   
   return_sv(sv_value);
 }

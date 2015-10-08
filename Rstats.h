@@ -594,7 +594,7 @@ namespace Rstats {
   namespace VectorFunc {
     Rstats::Vector* new_vector();
     void delete_vector(Rstats::Vector*);
-    SV* get_value(Rstats::Vector*, IV);
+    SV* create_sv_value(Rstats::Vector*, IV);
     SV* create_sv_values(Rstats::Vector*);
     
     bool is_character (Rstats::Vector*);

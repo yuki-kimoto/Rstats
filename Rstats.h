@@ -613,7 +613,6 @@ namespace Rstats {
     
     Rstats::Vector* new_character(IV, SV*);
     Rstats::Vector* new_character(IV);
-    void set_character_value(Rstats::Vector*, IV, SV*);
     Rstats::Vector* new_complex(IV);
     Rstats::Vector* new_complex(IV, std::complex<NV>);
     Rstats::Vector* new_double(IV);
@@ -715,6 +714,8 @@ namespace Rstats {
     void set_value(Rstats::Vector* v1, IV pos, T value) {
       (*Rstats::VectorFunc::get_values<T>(v1))[pos] = value;
     }
+    template <>
+    void set_value<Rstats::Character>(Rstats::Vector* v1, IV pos, Rstats::Character value);
   }
   
   // Rstats::Func

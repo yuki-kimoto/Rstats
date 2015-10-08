@@ -204,13 +204,14 @@ namespace Rstats {
 
       Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
       for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_character_value(v1, i, sv_str);
+        Rstats::VectorFunc::set_value<Rstats::Character>(v1, i, sv_str);
       }
       
       return v1;
     }
-
-    void set_character_value(Rstats::Vector* v1, IV pos, SV* value) {
+    
+    template <>
+    void set_value<Rstats::Character>(Rstats::Vector* v1, IV pos, Rstats::Character value) {
       if (value != NULL) {
         SvREFCNT_dec((*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos]);
       }
@@ -465,7 +466,7 @@ namespace Rstats {
         case Rstats::Type::CHARACTER :
           for (IV i = 0; i < length; i++) {
             SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
-            Rstats::VectorFunc::set_character_value(v2, i, sv_value);
+            Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, sv_value);
           }
           break;
         case Rstats::Type::COMPLEX :
@@ -485,7 +486,7 @@ namespace Rstats {
             sv_catpv(sv_str, SvPV_nolen(sv_im));
             sv_catpv(sv_str, "i");
 
-            Rstats::VectorFunc::set_character_value(v2, i, sv_str);
+            Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, sv_str);
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -504,12 +505,12 @@ namespace Rstats {
             else {
               sv_catpv(sv_str, SvPV_nolen(Rstats::pl_new_sv_nv(value)));
             }
-            Rstats::VectorFunc::set_character_value(v2, i, sv_str);
+            Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, sv_str);
           }
           break;
         case Rstats::Type::INTEGER :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_character_value(
+            Rstats::VectorFunc::set_value<Rstats::Character>(
               v2, 
               i,
               Rstats::pl_new_sv_iv(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))
@@ -519,10 +520,10 @@ namespace Rstats {
         case Rstats::Type::LOGICAL :
           for (IV i = 0; i < length; i++) {
             if (Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i)) {
-              Rstats::VectorFunc::set_character_value(v2, i, Rstats::pl_new_sv_pv("TRUE"));
+              Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, Rstats::pl_new_sv_pv("TRUE"));
             }
             else {
-              Rstats::VectorFunc::set_character_value(v2, i, Rstats::pl_new_sv_pv("FALSE"));
+              Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, Rstats::pl_new_sv_pv("FALSE"));
             }
           }
           break;
@@ -1048,7 +1049,7 @@ namespace Rstats {
         case Rstats::Type::CHARACTER :
           v2 = Rstats::VectorFunc::new_character(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_character_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
           }
           break;
         case Rstats::Type::COMPLEX :

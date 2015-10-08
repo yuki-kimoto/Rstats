@@ -171,7 +171,7 @@ namespace Rstats {
             }
             else {
               if (type == Rstats::Type::CHARACTER) {
-                Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Character>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
               }
               else if (type == Rstats::Type::COMPLEX) {
                 Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
@@ -197,7 +197,7 @@ namespace Rstats {
         else {
           if (SvOK(sv_element)) {
             if (type == Rstats::Type::CHARACTER) {
-              Rstats::VectorFunc::set_character_value(v2, pos, sv_element);
+              Rstats::VectorFunc::set_value<Rstats::Character>(v2, pos, sv_element);
             }
             else if (type == Rstats::Type::COMPLEX) {
               Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
@@ -539,7 +539,7 @@ namespace Rstats {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
         if (SvOK(sv_value)) {
-          Rstats::VectorFunc::set_character_value(
+          Rstats::VectorFunc::set_value<Rstats::Character>(
             v1,
             i,
             sv_value
@@ -1361,7 +1361,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_character_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Character>(element, 0));
+            Rstats::VectorFunc::set_value<Rstats::Character>(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Character>(element, 0));
           }
         }
       }

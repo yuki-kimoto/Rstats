@@ -177,7 +177,7 @@ namespace Rstats {
                 Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_complex_value(v_tmp, k));
               }
               else if (type == Rstats::Type::DOUBLE) {
-                Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_double_value(v_tmp, k));
+                Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
               }
               else if (type == Rstats::Type::INTEGER) {
                 Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
@@ -1303,7 +1303,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_double(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_double(1, Rstats::VectorFunc::get_double_value(v1, i));
+              = Rstats::VectorFunc::new_double(1, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1395,7 +1395,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_double_value(compose_elements, i, Rstats::VectorFunc::get_double_value(element, 0));
+            Rstats::VectorFunc::set_double_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Double>(element, 0));
           }
         }
       }

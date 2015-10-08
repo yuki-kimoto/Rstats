@@ -337,7 +337,7 @@ namespace Rstats {
           break; \
         case Rstats::Type::DOUBLE : \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i))); \
+            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -373,7 +373,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           v2 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i))); \
+            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -406,7 +406,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           v2 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i))); \
+            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -439,7 +439,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           v2 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i))); \
+            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -482,7 +482,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           for (IV i = 0; i < length; i++) { \
             try {\
-              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i), Rstats::VectorFunc::get_double_value(v2, i)) ? 1 : 0); \
+              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i)) ? 1 : 0); \
             } catch (const char* e) {\
               Rstats::VectorFunc::add_na_position(v3, i);\
             }\
@@ -528,7 +528,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           v3 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i), Rstats::VectorFunc::get_double_value(v2, i))); \
+            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -572,7 +572,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE : \
           v3 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_double_value(v1, i), Rstats::VectorFunc::get_double_value(v2, i))); \
+            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i))); \
           } \
           break; \
         case Rstats::Type::INTEGER : \
@@ -621,7 +621,6 @@ namespace Rstats {
     void set_complex_value(Rstats::Vector*, IV, std::complex<NV>);
     Rstats::Vector* new_double(IV);
     Rstats::Vector* new_double(IV, NV);
-    NV get_double_value(Rstats::Vector*, IV);
     void set_double_value(Rstats::Vector*, IV, NV);
 
     Rstats::Vector* new_integer(IV);

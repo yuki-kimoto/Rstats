@@ -261,10 +261,6 @@ namespace Rstats {
       return v1;
     }
 
-    NV get_double_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<Rstats::Double>(v1))[pos];
-    }
-
     void set_double_value(Rstats::Vector* v1, IV pos, NV value) {
       (*Rstats::VectorFunc::get_values<Rstats::Double>(v1))[pos] = value;
     }
@@ -424,7 +420,7 @@ namespace Rstats {
             break;
           }
           case Rstats::Type::DOUBLE : {
-            NV value = Rstats::VectorFunc::get_double_value(v1, pos);
+            NV value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, pos);
             if (std::isinf(value) && value > 0) {
               sv_str = Rstats::pl_new_sv_pv("Inf");
             }
@@ -510,7 +506,7 @@ namespace Rstats {
           break;
         case Rstats::Type::DOUBLE :
           for (IV i = 0; i < length; i++) {
-            NV value = Rstats::VectorFunc::get_double_value(v1, i);
+            NV value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             SV* sv_str = Rstats::pl_new_sv_pv("");
             if (std::isinf(value) && value > 0) {
               sv_catpv(sv_str, "Inf");
@@ -583,7 +579,7 @@ namespace Rstats {
           break;
         case Rstats::Type::DOUBLE :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_double_value(v1, i));
+            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
           }
           break;
         case Rstats::Type::INTEGER :
@@ -634,7 +630,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE :
           NV value;
           for (IV i = 0; i < length; i++) {
-            value = Rstats::VectorFunc::get_double_value(v1, i);
+            value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             if (std::isnan(value) || std::isinf(value)) {
               Rstats::VectorFunc::add_na_position(v2, i);
             }
@@ -689,12 +685,12 @@ namespace Rstats {
           break;
         case Rstats::Type::DOUBLE :
           for (IV i = 0; i < length; i++) {
-            NV value = Rstats::VectorFunc::get_double_value(v1, i);
+            NV value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             if (std::isnan(value)) {
               Rstats::VectorFunc::add_na_position(v2, i);
             }
             else {
-              Rstats::VectorFunc::set_complex_value(v2, i, std::complex<NV>(Rstats::VectorFunc::get_double_value(v1, i), 0));
+              Rstats::VectorFunc::set_complex_value(v2, i, std::complex<NV>(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), 0));
             }
           }
           break;
@@ -744,7 +740,7 @@ namespace Rstats {
           break;
         case Rstats::Type::DOUBLE :
           for (IV i = 0; i < length; i++) {
-            NV value = Rstats::VectorFunc::get_double_value(v1, i);
+            NV value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             if (std::isnan(value)) {
               Rstats::VectorFunc::add_na_position(v2, i);
             }
@@ -832,7 +828,7 @@ namespace Rstats {
             sv_value = &PL_sv_undef;
           }
           else {
-            NV value = Rstats::VectorFunc::get_double_value(v1, pos);
+            NV value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, pos);
             if (std::isnan(value)) {
               sv_value = Rstats::pl_new_sv_pv("NaN");
             }
@@ -885,7 +881,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_double(length);
           NV v2_total(1);
           for (IV i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_double_value(v1, i);
+            v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             Rstats::VectorFunc::set_double_value(v2, i, v2_total);
           }
           break;
@@ -931,7 +927,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_double(length);
           NV v2_total(0);
           for (IV i = 0; i < length; i++) {
-            v2_total += Rstats::VectorFunc::get_double_value(v1, i);
+            v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
             Rstats::VectorFunc::set_double_value(v2, i, v2_total);
           }
           break;
@@ -977,7 +973,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_double(1);
           NV v2_total(1);
           for (IV i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_double_value(v1, i);
+            v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
           }
           Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
           break;
@@ -1029,7 +1025,7 @@ namespace Rstats {
           v2 = Rstats::VectorFunc::new_double(1);
           NV v2_total(0);
           for (IV i = 0; i < length; i++) {
-            v2_total += Rstats::VectorFunc::get_double_value(v1, i);
+            v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
           }
           Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
           break;
@@ -1080,7 +1076,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE :
           v2 = Rstats::VectorFunc::new_double(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_double_value(v1, i));
+            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
           }
           break;
         case Rstats::Type::INTEGER :

@@ -311,12 +311,6 @@ namespace Rstats {
     std::map<IV, IV>* na_positions;
     void* values;
   };
-  
-  template <typename T>
-  struct Vector2 {
-    std::vector<T>* values;
-    std::map<IV, IV>* na_positions;
-  };
 
   // Macro for Rstats::Vector
 # define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \

@@ -11,6 +11,7 @@ use Math::Complex ();
   # expm1 - double,array
   {
     my $x0 = c_(1, 2);
+    $DB::single = 1;
     my $x1 = array($x0);
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.718282');

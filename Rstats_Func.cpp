@@ -464,6 +464,21 @@ namespace Rstats {
       return sv_type;
     }
 
+    SV* is_null (SV* sv_r, SV* sv_x1) {
+      
+      bool is =
+        sv_isobject(sv_x1)
+        && sv_derived_from(sv_x1, "Rstats::Object")
+        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "NULL");
+      
+      SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
+      
+      SV* sv_values = Rstats::pl_new_av_ref();
+      Rstats::pl_av_push(sv_values, sv_is);
+      
+      return Rstats::Func::new_logical(sv_r, sv_values);
+    }
+    
     SV* is_vector (SV* sv_r, SV* sv_x1) {
       
       bool is =
@@ -755,6 +770,7 @@ namespace Rstats {
       
       SV* sv_x1 = Rstats::Func::new_array(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+      // Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL");
       
       return sv_x1;
     }

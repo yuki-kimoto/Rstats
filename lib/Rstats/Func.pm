@@ -1901,8 +1901,10 @@ sub ifelse {
 
 sub max {
   my $r = shift;
+
+  my @args = grep { !Rstats::Func::is_null($r, $_) } @_;
   
-  my $x1 = Rstats::Func::c_($r, @_);
+  my $x1 = Rstats::Func::c_($r, @args);
   
   unless (Rstats::Func::length_value($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -1940,10 +1942,12 @@ sub mean {
 sub min {
   my $r = shift;
   
-  my $x1 = Rstats::Func::c_($r, @_);
+  my @args = grep { !Rstats::Func::is_null($r, $_) } @_;
+  
+  my $x1 = Rstats::Func::c_($r, @args);
   
   unless (Rstats::Func::length_value($r, $x1)) {
-    Carp::carp 'no non-missing arguments to min; returning -Inf';
+    Carp::carp 'no non-missing arguments to min; returning Inf';
     return Rstats::Func::Inf($r);
   }
   

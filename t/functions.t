@@ -6,12 +6,46 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# min
+{
+  # min - no argument
+  {
+    my $x1 = r->min(NULL);
+    is_deeply($x1->values, ['Inf']);
+  }
+  # min
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = r->min($x1);
+    is_deeply($x2->values, [1]);
+  }
+
+  # min - multiple arrays
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_(4, 5, 6);
+    my $x3 = r->min($x1, $x2);
+    is_deeply($x3->values, [1]);
+  }
+  
+  # min - contain NA
+  {
+    my $x1 = r->min(c_(1, 2, NaN, NA));
+    is_deeply($x1->values, [undef]);
+  }
+  
+  # min - contain NaN
+  {
+    my $x1 = r->min(c_(1, 2, NaN));
+    is_deeply($x1->values, ['NaN']);
+  }
+}
+
 # expm1
 {
   # expm1 - double,array
   {
     my $x0 = c_(1, 2);
-    $DB::single = 1;
     my $x1 = array($x0);
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.718282');
@@ -1048,42 +1082,6 @@ use Math::Complex ();
     my $e1 = c_(-4 + 0*i_);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 0, im => 2});
-  }
-}
-
-# min
-{
-  # min
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = r->min($x1);
-    is_deeply($x2->values, [1]);
-  }
-
-  # min - multiple arrays
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(4, 5, 6);
-    my $x3 = r->min($x1, $x2);
-    is_deeply($x3->values, [1]);
-  }
-  
-  # min - no argument
-  {
-    my $x1 = r->min(NULL);
-    is_deeply($x1->values, ['Inf']);
-  }
-  
-  # min - contain NA
-  {
-    my $x1 = r->min(c_(1, 2, NaN, NA));
-    is_deeply($x1->values, [undef]);
-  }
-  
-  # min - contain NaN
-  {
-    my $x1 = r->min(c_(1, 2, NaN));
-    is_deeply($x1->values, ['NaN']);
   }
 }
 

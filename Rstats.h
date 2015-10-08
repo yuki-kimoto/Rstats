@@ -698,7 +698,11 @@ namespace Rstats {
     Rstats::Vector* sum(Rstats::Vector*);
     Rstats::Vector* clone(Rstats::Vector*);
     
-    // T is std::vector<xxx>*
+    template<class T>
+    Rstats::Vector* new_vector(IV);
+    template<>
+    Rstats::Vector* new_vector<Rstats::Double>(IV);
+    
     template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {
       return (std::vector<T>*)v1->values;

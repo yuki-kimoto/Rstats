@@ -238,6 +238,15 @@ namespace Rstats {
       return v1;
     }
 
+    template<>
+    Rstats::Vector* new_vector<Rstats::Double>(IV length) {
+      Rstats::Vector* v1 = new_empty_vector();
+      v1->values = new std::vector<Rstats::Double>(length);
+      v1->type = Rstats::Type::DOUBLE;
+      
+      return v1;
+    };
+    
     Rstats::Vector* new_double(IV length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<NV>(length);

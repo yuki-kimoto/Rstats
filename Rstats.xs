@@ -984,17 +984,6 @@ SV* new_list(...)
   return_sv(sv_x1);
 }
 
-SV* new_vector(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_type = ST(1);
-  SV* sv_values = ST(2);
-  SV* sv_x1 = Rstats::Func::new_vector(sv_r, sv_type, sv_values);
-  
-  return_sv(sv_x1);
-}
-
 SV* copy_attrs_to(...)
   PPCODE:
 {

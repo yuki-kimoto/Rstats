@@ -2846,9 +2846,29 @@ sub get_array {
   my @x2_values = map { $x1_values->[$_] } @$poss;
   
   # array
+  my $x_matrix;
+  if ($x1->type eq "character") {
+    $x_matrix = new_character($r, \@x2_values);
+  }
+  elsif ($x1->type eq "complex") {
+    $x_matrix = new_complex($r, \@x2_values);
+  }
+  elsif ($x1->type eq "double") {
+    $x_matrix = new_double($r, \@x2_values);
+  }
+  elsif ($x1->type eq "integer") {
+    $x_matrix = new_integer($r, \@x2_values);
+  }
+  elsif ($x1->type eq "logical") {
+    $x_matrix = new_logical($r, \@x2_values);
+  }
+  else {
+    croak("Invalid type " . $x1->type . " is passed");
+  }
+  
   my $x2 = Rstats::Func::array(
     $r,
-    Rstats::Func::new_vector($r, $x1->type, \@x2_values),
+    $x_matrix,
     Rstats::Func::c_($r, @$x2_dim)
   );
   

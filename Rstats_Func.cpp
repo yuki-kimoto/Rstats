@@ -927,30 +927,6 @@ namespace Rstats {
       return sv_list;
     }
 
-    SV* new_vector(SV* sv_r, SV* sv_type, SV* sv_values) {
-      
-      char* type = SvPV_nolen(sv_type);
-      
-      if (strEQ(type, "character")) {
-        return new_character(sv_r, sv_values);
-      }
-      else if (strEQ(type, "complex")) {
-        return new_complex(sv_r, sv_values);
-      }
-      else if (strEQ(type, "double")) {
-        return new_double(sv_r, sv_values);
-      }
-      else if (strEQ(type, "integer")) {
-        return new_integer(sv_r, sv_values);
-      }
-      else if (strEQ(type, "logical")) {
-        return new_logical(sv_r, sv_values);
-      }
-      else {
-        croak("Invalid type %s is passed(new_vector)", type);
-      }
-    }
-
     SV* copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2, &PL_sv_undef);
     }

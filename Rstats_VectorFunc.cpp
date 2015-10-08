@@ -146,7 +146,7 @@ namespace Rstats {
       }
     }
 
-    Rstats::Vector* new_vector() {
+    Rstats::Vector* new_empty_vector() {
       Rstats::Vector* v1 = new Rstats::Vector;
       v1->na_positions = new std::map<IV, IV>;
       
@@ -193,7 +193,7 @@ namespace Rstats {
 
     Rstats::Vector* new_character(IV length) {
 
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<SV*>(length);
       v1->type = Rstats::Type::CHARACTER;
       
@@ -222,7 +222,7 @@ namespace Rstats {
 
     Rstats::Vector* new_complex(IV length) {
       
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
       v1->type = Rstats::Type::COMPLEX;
       
@@ -239,7 +239,7 @@ namespace Rstats {
     }
 
     Rstats::Vector* new_double(IV length) {
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<NV>(length);
       v1->type = Rstats::Type::DOUBLE;
       
@@ -256,7 +256,7 @@ namespace Rstats {
 
     Rstats::Vector* new_integer(IV length) {
       
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<IV>(length);
       v1->type = Rstats::Type::INTEGER;
       
@@ -273,7 +273,7 @@ namespace Rstats {
     }
 
     Rstats::Vector* new_logical(IV length) {
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
 
       v1->values = new std::vector<IV>(length);
       v1->type = Rstats::Type::LOGICAL;
@@ -316,7 +316,7 @@ namespace Rstats {
     }
 
     Rstats::Vector* new_null() {
-      Rstats::Vector* v1 = new_vector();
+      Rstats::Vector* v1 = new_empty_vector();
       v1->values = NULL;
       v1->type = Rstats::Type::LOGICAL;
       return v1;

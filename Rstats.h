@@ -592,7 +592,7 @@ namespace Rstats {
 
   // Rstats::VectorFunc
   namespace VectorFunc {
-    Rstats::Vector* new_vector();
+    Rstats::Vector* new_empty_vector();
     void delete_vector(Rstats::Vector*);
     SV* create_sv_value(Rstats::Vector*, IV);
     SV* create_sv_values(Rstats::Vector*);

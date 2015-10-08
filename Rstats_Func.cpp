@@ -1631,7 +1631,10 @@ namespace Rstats {
     }
 
     SV* length(SV* sv_r, SV* sv_container) {
-      if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_container)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_container))) {
+      if (to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_container))) {
+        return Rstats::Func::new_integer(sv_r, (Rstats::Integer)0);
+      }
+      else if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_container)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_container))) {
         return Rstats::Func::new_integer(
           sv_r,
           Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_container))

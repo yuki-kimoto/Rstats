@@ -174,7 +174,7 @@ namespace Rstats {
                 Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
               }
               else if (type == Rstats::Type::COMPLEX) {
-                Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
               }
               else if (type == Rstats::Type::DOUBLE) {
                 Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
@@ -200,7 +200,7 @@ namespace Rstats {
               Rstats::VectorFunc::set_character_value(v2, pos, sv_element);
             }
             else if (type == Rstats::Type::COMPLEX) {
-              Rstats::VectorFunc::set_complex_value(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
+              Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
             }
             else if (type == Rstats::Type::DOUBLE) {
               Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, SvNV(sv_element));
@@ -656,7 +656,7 @@ namespace Rstats {
             im = 0;
           }
           
-          Rstats::VectorFunc::set_complex_value(
+          Rstats::VectorFunc::set_value<Rstats::Complex>(
             v1,
             i,
             std::complex<NV>(re, im)
@@ -1378,7 +1378,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-           Rstats::VectorFunc::set_complex_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Complex>(element, 0));
+           Rstats::VectorFunc::set_value<Rstats::Complex>(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Complex>(element, 0));
           }
         }
       }

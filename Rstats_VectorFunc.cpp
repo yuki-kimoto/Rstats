@@ -274,13 +274,9 @@ namespace Rstats {
       
       Rstats::Vector* v1 = new_integer(length);;
       for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_integer_value(v1, i, value);
+        Rstats::VectorFunc::set_value<Rstats::Integer>(v1, i, value);
       }
       return v1;
-    }
-
-    void set_integer_value(Rstats::Vector* v1, IV pos, IV value) {
-      (*Rstats::VectorFunc::get_values<Rstats::Integer>(v1))[pos] = value;
     }
 
     Rstats::Vector* new_logical(IV length) {
@@ -295,7 +291,7 @@ namespace Rstats {
     Rstats::Vector* new_logical(IV length, IV value) {
       Rstats::Vector* v1 = new_logical(length);
       for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_integer_value(v1, i, value);
+        Rstats::VectorFunc::set_value<Rstats::Integer>(v1, i, value);
       }
       return v1;
     }
@@ -609,7 +605,7 @@ namespace Rstats {
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
             if (SvOK(sv_value_fix)) {
               IV value = SvIV(sv_value_fix);
-              Rstats::VectorFunc::set_integer_value(v2, i, value);
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, value);
             }
             else {
               warn("NAs introduced by coercion");
@@ -620,7 +616,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, (IV)Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (IV)Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -631,14 +627,14 @@ namespace Rstats {
               Rstats::VectorFunc::add_na_position(v2, i);
             }
             else {
-              Rstats::VectorFunc::set_integer_value(v2, i, (IV)value);
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (IV)value);
             }
           }
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }
           break;
         default:
@@ -716,10 +712,10 @@ namespace Rstats {
             SV* sv_logical = Rstats::Util::looks_like_logical(sv_value);
             if (SvOK(sv_logical)) {
               if (SvTRUE(sv_logical)) {
-                Rstats::VectorFunc::set_integer_value(v2, i, 1);
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, 1);
               }
               else {
-                Rstats::VectorFunc::set_integer_value(v2, i, 0);
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, 0);
               }
             }
             else {
@@ -731,7 +727,7 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real() ? 1 : 0);
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real() ? 1 : 0);
           }
           break;
         case Rstats::Type::DOUBLE :
@@ -741,17 +737,17 @@ namespace Rstats {
               Rstats::VectorFunc::add_na_position(v2, i);
             }
             else if (std::isinf(value)) {
-              Rstats::VectorFunc::set_integer_value(v2, i, 1);
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, 1);
             }
             else {
-              Rstats::VectorFunc::set_integer_value(v2, i, value ? 1 : 0);
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, value ? 1 : 0);
             }
           }
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i) ? 1 : 0);
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i) ? 1 : 0);
           }
           break;
         default:
@@ -888,7 +884,7 @@ namespace Rstats {
           IV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
-            Rstats::VectorFunc::set_integer_value(v2, i, v2_total);
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, v2_total);
           }
           break;
         }
@@ -934,7 +930,7 @@ namespace Rstats {
           IV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
-            Rstats::VectorFunc::set_integer_value(v2, i, v2_total);
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, v2_total);
           }
           break;
         }
@@ -981,7 +977,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
           }
-          Rstats::VectorFunc::set_integer_value(v2, 0, v2_total);
+          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, 0, v2_total);
           break;
         }
         default:
@@ -1033,7 +1029,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
           }
-          Rstats::VectorFunc::set_integer_value(v2, 0, v2_total);
+          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, 0, v2_total);
           break;
         }
         default:
@@ -1078,13 +1074,13 @@ namespace Rstats {
         case Rstats::Type::INTEGER :
           v2 = Rstats::VectorFunc::new_integer(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }
           break;
         case Rstats::Type::LOGICAL :
           v2 = Rstats::VectorFunc::new_logical(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }
           break;
         default:

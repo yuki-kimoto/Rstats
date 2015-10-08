@@ -180,10 +180,10 @@ namespace Rstats {
                 Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
               }
               else if (type == Rstats::Type::INTEGER) {
-                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
               else {
-                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
             }
             
@@ -206,10 +206,10 @@ namespace Rstats {
               Rstats::VectorFunc::set_double_value(v2, pos, SvNV(sv_element));
             }
             else if (type == Rstats::Type::INTEGER) {
-              Rstats::VectorFunc::set_integer_value(v2, pos, SvIV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, SvIV(sv_element));
             }
             else {
-              Rstats::VectorFunc::set_integer_value(v2, pos, SvIV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, SvIV(sv_element));
             }
           }
           else {
@@ -688,7 +688,7 @@ namespace Rstats {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
         if (SvOK(sv_value)) {
-          Rstats::VectorFunc::set_integer_value(
+          Rstats::VectorFunc::set_value<Rstats::Integer>(
             v1,
             i,
             SvIV(sv_value)
@@ -724,7 +724,7 @@ namespace Rstats {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
         if (SvOK(sv_value)) {
-          Rstats::VectorFunc::set_integer_value(
+          Rstats::VectorFunc::set_value<Rstats::Integer>(
             v1,
             i,
             SvIV(sv_value)
@@ -1146,10 +1146,10 @@ namespace Rstats {
       
       for (IV i = 0; i < Rstats::VectorFunc::get_length(x1); i++) {
         if (Rstats::VectorFunc::exists_na_position(x1, i)) {
-          Rstats::VectorFunc::set_integer_value(x2, i, 1);
+          Rstats::VectorFunc::set_value<Rstats::Integer>(x2, i, 1);
         }
         else {
-          Rstats::VectorFunc::set_integer_value(x2, i, 0);
+          Rstats::VectorFunc::set_value<Rstats::Integer>(x2, i, 0);
         }
       }
       
@@ -1413,7 +1413,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
+            Rstats::VectorFunc::set_value<Rstats::Integer>(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
           }
         }
       }
@@ -1431,7 +1431,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
+            Rstats::VectorFunc::set_value<Rstats::Integer>(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
           }
         }
       }

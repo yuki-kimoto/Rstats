@@ -108,8 +108,8 @@ use Rstats;
   # is_logical, as_logical, typeof - NULL
   {
     my $x1 = r->NULL;
-    is(r->mode($x1)->value, 'logical');
-    is(r->typeof($x1)->value, 'logical');
+    is(r->mode($x1)->value, 'NULL');
+    is(r->typeof($x1)->value, 'NULL');
   }
 }
 # as_vector

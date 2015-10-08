@@ -1096,7 +1096,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL :
           v2 = Rstats::VectorFunc::new_logical(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_integer_value(v1, i));
+            Rstats::VectorFunc::set_integer_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }
           break;
         default:

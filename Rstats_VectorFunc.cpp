@@ -247,6 +247,15 @@ namespace Rstats {
       return v1;
     };
     
+    template <class T>
+    Rstats::Vector* new_vector(IV length, T value) {
+      Rstats::Vector* v1 = new_vector<T>(length);
+      for (IV i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<T>(v1, i, value);
+      }
+      return v1;
+    };
+    
     Rstats::Vector* new_double(IV length, NV value) {
       Rstats::Vector* v1 = new_vector<Rstats::Double>(length);
       for (IV i = 0; i < length; i++) {

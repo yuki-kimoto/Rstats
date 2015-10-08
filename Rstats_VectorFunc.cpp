@@ -247,16 +247,8 @@ namespace Rstats {
       return v1;
     };
     
-    Rstats::Vector* new_double(IV length) {
-      Rstats::Vector* v1 = new_empty_vector();
-      v1->values = new std::vector<NV>(length);
-      v1->type = Rstats::Type::DOUBLE;
-      
-      return v1;
-    }
-
     Rstats::Vector* new_double(IV length, NV value) {
-      Rstats::Vector* v1 = new_double(length);
+      Rstats::Vector* v1 = new_vector<Rstats::Double>(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, value);
       }
@@ -548,7 +540,7 @@ namespace Rstats {
     Rstats::Vector* as_double(Rstats::Vector* v1) {
 
       IV length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_double(length);
+      Rstats::Vector* v2 = new_vector<Rstats::Double>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
@@ -872,7 +864,7 @@ namespace Rstats {
           break;
         }
         case Rstats::Type::DOUBLE : {
-          v2 = Rstats::VectorFunc::new_double(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
           NV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
@@ -918,7 +910,7 @@ namespace Rstats {
           break;
         }
         case Rstats::Type::DOUBLE : {
-          v2 = Rstats::VectorFunc::new_double(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
           NV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
@@ -964,7 +956,7 @@ namespace Rstats {
           break;
         }
         case Rstats::Type::DOUBLE : {
-          v2 = Rstats::VectorFunc::new_double(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
           NV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
@@ -1016,7 +1008,7 @@ namespace Rstats {
           break;
         }
         case Rstats::Type::DOUBLE : {
-          v2 = Rstats::VectorFunc::new_double(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
           NV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
@@ -1068,7 +1060,7 @@ namespace Rstats {
           }
           break;
         case Rstats::Type::DOUBLE :
-          v2 = Rstats::VectorFunc::new_double(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
           for (IV i = 0; i < length; i++) {
             Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
           }

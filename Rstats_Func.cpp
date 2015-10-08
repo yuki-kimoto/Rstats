@@ -1602,7 +1602,7 @@ namespace Rstats {
       SV* sv_type = Rstats::Func::type(sv_r, sv_x1);
       
       SV* sv_mode;
-      if (Rstats::Func::is_null(sv_r, sv_x1)) {
+      if (to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_x1))) {
         sv_mode = Rstats::pl_new_sv_pv("NULL");
       }
       else if (strEQ(SvPV_nolen(sv_type), "integer") || strEQ(SvPV_nolen(sv_type), "double")) {

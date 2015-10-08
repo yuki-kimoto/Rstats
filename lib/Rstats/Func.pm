@@ -2801,7 +2801,7 @@ sub bool {
 sub set {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'array') {
+  if ($x1->{object_type} eq 'NULL' || $x1->{object_type} eq 'array') {
     return Rstats::Func::set_array(@_);
   }
   elsif ($x1->{object_type} eq 'list') {

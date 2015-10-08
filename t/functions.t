@@ -6,6 +6,75 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# expm1
+{
+  # expm1 - double,array
+  {
+    my $x0 = c_(1, 2);
+    my $x1 = array($x0);
+    my $x2 = r->expm1($x1);
+    is(sprintf("%.6f", $x2->values->[0]), '1.718282');
+    is(sprintf("%.6f", $x2->values->[1]), '6.389056');
+    is_deeply(r->dim($x2)->values, [2]);
+    ok(r->is->double($x2));
+  }
+
+  # expm1 - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    eval {
+      my $x2 = r->expm1($x1);
+    };
+    like($@, qr/unimplemented/);
+  }
+  
+  # expm1 - double,less than 1e-5
+  {
+    my $x1 = array(c_(0.0000001234));
+    my $x2 = r->expm1($x1);
+    my $x2_value_str = sprintf("%.13e", $x2->value);
+    $x2_value_str =~ s/e-0+/e-/;
+    is($x2_value_str, '1.2340000761378e-7');
+    ok(r->is->double($x2));
+  }
+
+  # expm1 - integer
+  {
+    my $x1 = r->as->integer(array(c_(2)));
+    my $x2 = r->expm1($x1);
+    is(sprintf("%.6f", $x2->value), '6.389056');
+    ok(r->is->double($x2));
+  }
+    
+  # expm1 - Inf
+  {
+    my $x1 = c_(Inf);
+    my $x2 = r->expm1($x1);
+    is($x2->value, 'Inf');
+  }
+  
+  # expm1 - -Inf
+  {
+    my $x1 = c_(-Inf);
+    my $x2 = r->expm1($x1);
+    is($x2->value, -1);
+  }
+
+  # expm1 - NA
+  {
+    my $x1 = c_(NA);
+    my $x2 = r->expm1($x1);
+    ok(!defined $x2->value);
+  }
+
+  # expm1 - NaN
+  {
+    my $x1 = c_(NaN);
+    my $x2 = r->expm1($x1);
+    is($x2->value, 'NaN');
+  }
+}
+
 # Method
 {
   # add (vector)
@@ -215,74 +284,6 @@ use Math::Complex ();
   {
     my $x1 = c_(1, 2, 3);
     is(r->str($x1), 'num [1:3] 1 2 3');
-  }
-}
-
-# expm1
-{
-  # expm1 - complex
-  {
-    my $x1 = c_(1 + 2*i_);
-    eval {
-      my $x2 = r->expm1($x1);
-    };
-    like($@, qr/unimplemented/);
-  }
-  
-  # expm1 - double,array
-  {
-    my $x1 = array(c_(1, 2));
-    my $x2 = r->expm1($x1);
-    is(sprintf("%.6f", $x2->values->[0]), '1.718282');
-    is(sprintf("%.6f", $x2->values->[1]), '6.389056');
-    is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is->double($x2));
-  }
-
-  # expm1 - double,less than 1e-5
-  {
-    my $x1 = array(c_(0.0000001234));
-    my $x2 = r->expm1($x1);
-    my $x2_value_str = sprintf("%.13e", $x2->value);
-    $x2_value_str =~ s/e-0+/e-/;
-    is($x2_value_str, '1.2340000761378e-7');
-    ok(r->is->double($x2));
-  }
-
-  # expm1 - integer
-  {
-    my $x1 = r->as->integer(array(c_(2)));
-    my $x2 = r->expm1($x1);
-    is(sprintf("%.6f", $x2->value), '6.389056');
-    ok(r->is->double($x2));
-  }
-    
-  # expm1 - Inf
-  {
-    my $x1 = c_(Inf);
-    my $x2 = r->expm1($x1);
-    is($x2->value, 'Inf');
-  }
-  
-  # expm1 - -Inf
-  {
-    my $x1 = c_(-Inf);
-    my $x2 = r->expm1($x1);
-    is($x2->value, -1);
-  }
-
-  # expm1 - NA
-  {
-    my $x1 = c_(NA);
-    my $x2 = r->expm1($x1);
-    ok(!defined $x2->value);
-  }
-
-  # expm1 - NaN
-  {
-    my $x1 = c_(NaN);
-    my $x2 = r->expm1($x1);
-    is($x2->value, 'NaN');
   }
 }
 

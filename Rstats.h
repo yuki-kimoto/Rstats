@@ -709,11 +709,7 @@ namespace Rstats {
     
     // T is std::vector<xxx>*
     template<class T>
-    T get_values(Rstats::Vector* v1) {
-      return (T)v1->values;
-    }
-    template<class T>
-    std::vector<T>* get_values2(Rstats::Vector* v1) {
+    std::vector<T>* get_values(Rstats::Vector* v1) {
       return (std::vector<T>*)v1->values;
     }
     template <class T1, class T2>

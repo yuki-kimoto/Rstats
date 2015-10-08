@@ -1401,7 +1401,7 @@ namespace Rstats {
       }
       else if (strEQ(mode, "integer")) {
         compose_elements = Rstats::VectorFunc::new_integer(len);
-        std::vector<IV>* values = Rstats::VectorFunc::get_values2<Rstats::Integer>(compose_elements);
+        std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
@@ -1419,7 +1419,7 @@ namespace Rstats {
       }
       else if (strEQ(mode, "logical")) {
         compose_elements = Rstats::VectorFunc::new_logical(len);
-        std::vector<IV>* values = Rstats::VectorFunc::get_values2<Rstats::Integer>(compose_elements);
+        std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {

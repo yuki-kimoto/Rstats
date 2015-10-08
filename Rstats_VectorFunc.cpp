@@ -131,7 +131,7 @@ namespace Rstats {
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
-          return Rstats::VectorFunc::get_values<Rstats::IntegerVector*>(v1)->size();
+          return Rstats::VectorFunc::get_values2<Rstats::Integer>(v1)->size();
           break;
       }
     }

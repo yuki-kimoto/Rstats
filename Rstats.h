@@ -712,6 +712,14 @@ namespace Rstats {
     T get_values(Rstats::Vector* v1) {
       return (T)v1->values;
     }
+    template<class T>
+    std::vector<T>* get_values2(Rstats::Vector* v1) {
+      return (std::vector<T>*)v1->values;
+    }
+    template <class T1, class T2>
+    T2 get_value(Rstats::Vector* v1, IV pos) {
+      return (*Rstats::VectorFunc::get_values<T1*>(v1))[pos];
+    }
   }
   
   // Rstats::Func

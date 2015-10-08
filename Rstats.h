@@ -327,7 +327,7 @@ namespace Rstats {
       switch (type) { \
         case Rstats::Type::CHARACTER : \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_character_value(v1, i))); \
+            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i))); \
           } \
           break; \
         case Rstats::Type::COMPLEX : \
@@ -471,7 +471,7 @@ namespace Rstats {
       switch (type) { \
         case Rstats::Type::CHARACTER : \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_character_value(v1, i), Rstats::VectorFunc::get_character_value(v2, i)) ? 1 : 0); \
+            Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i), Rstats::VectorFunc::get_value<Rstats::Character>(v2, i)) ? 1 : 0); \
           } \
           break; \
         case Rstats::Type::COMPLEX : \
@@ -613,7 +613,6 @@ namespace Rstats {
     
     Rstats::Vector* new_character(IV, SV*);
     Rstats::Vector* new_character(IV);
-    SV* get_character_value(Rstats::Vector*, IV);
     void set_character_value(Rstats::Vector*, IV, SV*);
     Rstats::Vector* new_complex(IV);
     Rstats::Vector* new_complex(IV, std::complex<NV>);

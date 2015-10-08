@@ -171,7 +171,7 @@ namespace Rstats {
             }
             else {
               if (type == Rstats::Type::CHARACTER) {
-                Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_character_value(v_tmp, k));
+                Rstats::VectorFunc::set_character_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
               }
               else if (type == Rstats::Type::COMPLEX) {
                 Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
@@ -1218,7 +1218,7 @@ namespace Rstats {
       
       IV match = 0;
       for (IV i = 0; i < v_classes_length; i++) {
-        SV* sv_class = Rstats::VectorFunc::get_character_value(v_classes, i);
+        SV* sv_class = Rstats::VectorFunc::get_value<Rstats::Character>(v_classes, i);
         if (strEQ(SvPV_nolen(sv_class), "factor")) {
           match = 1;
           break;
@@ -1236,7 +1236,7 @@ namespace Rstats {
       
       IV match = 0;
       for (IV i = 0; i < v_classes_length; i++) {
-        SV* sv_class = Rstats::VectorFunc::get_character_value(v_classes, i);
+        SV* sv_class = Rstats::VectorFunc::get_value<Rstats::Character>(v_classes, i);
         if (strEQ(SvPV_nolen(sv_class), "ordered")) {
           match = 1;
           break;
@@ -1279,7 +1279,7 @@ namespace Rstats {
         if (Rstats::VectorFunc::is_character(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_character_value(v1, i));
+              = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1361,7 +1361,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_character_value(compose_elements, i, Rstats::VectorFunc::get_character_value(element, 0));
+            Rstats::VectorFunc::set_character_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Character>(element, 0));
           }
         }
       }

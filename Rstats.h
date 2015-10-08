@@ -343,7 +343,7 @@ namespace Rstats {
         case Rstats::Type::INTEGER : \
         case Rstats::Type::LOGICAL : \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i))); \
+            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
           } \
           break; \
         default: \
@@ -380,7 +380,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL : \
           v2 = Rstats::VectorFunc::new_integer(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i))); \
+            Rstats::VectorFunc::set_integer_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
           } \
           break; \
         default: \
@@ -413,7 +413,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL : \
           v2 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i))); \
+            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
           } \
           break; \
         default: \
@@ -446,7 +446,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL : \
           v2 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i))); \
+            Rstats::VectorFunc::set_double_value(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
           } \
           break; \
         default: \
@@ -492,7 +492,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL : \
           for (IV i = 0; i < length; i++) { \
             try {\
-              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i), Rstats::VectorFunc::get_integer_value(v2, i)) ? 1 : 0); \
+              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i)) ? 1 : 0); \
             }\
             catch (const char* e) {\
               Rstats::VectorFunc::add_na_position(v3, i);\
@@ -536,7 +536,7 @@ namespace Rstats {
           v3 = Rstats::VectorFunc::new_integer(length); \
           for (IV i = 0; i < length; i++) { \
             try {\
-              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i), Rstats::VectorFunc::get_integer_value(v2, i))); \
+              Rstats::VectorFunc::set_integer_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i))); \
             }\
             catch (const char* e) {\
               Rstats::VectorFunc::add_na_position(v3, i);\
@@ -579,7 +579,7 @@ namespace Rstats {
         case Rstats::Type::LOGICAL : \
           v3 = Rstats::VectorFunc::new_double(length); \
           for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_integer_value(v1, i), Rstats::VectorFunc::get_integer_value(v2, i))); \
+            Rstats::VectorFunc::set_double_value(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i))); \
           } \
           break; \
         default: \
@@ -627,7 +627,6 @@ namespace Rstats {
     Rstats::Vector* new_integer(IV);
     Rstats::Vector* new_integer(IV, IV);
     
-    IV get_integer_value(Rstats::Vector*, IV);
     void set_integer_value(Rstats::Vector*, IV, IV);
     
     Rstats::Vector* new_logical(IV);

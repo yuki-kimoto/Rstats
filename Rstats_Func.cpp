@@ -180,10 +180,10 @@ namespace Rstats {
                 Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_double_value(v_tmp, k));
               }
               else if (type == Rstats::Type::INTEGER) {
-                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_integer_value(v_tmp, k));
+                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
               else {
-                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_integer_value(v_tmp, k));
+                Rstats::VectorFunc::set_integer_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
             }
             
@@ -484,7 +484,7 @@ namespace Rstats {
       
       Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
       if (v1->type == Rstats::Type::LOGICAL) {
-        IV is = Rstats::VectorFunc::get_integer_value(v1, 0);
+        IV is = Rstats::VectorFunc::get_value<Rstats::Integer>(v1, 0);
         return is;
       }
       else {
@@ -1315,7 +1315,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_integer(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_integer_value(v1, i));
+              = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1327,7 +1327,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_logical(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_integer_value(v1, i));
+              = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1413,7 +1413,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_integer_value(element, 0));
+            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
           }
         }
       }
@@ -1431,7 +1431,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_integer_value(element, 0));
+            Rstats::VectorFunc::set_integer_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Integer>(element, 0));
           }
         }
       }

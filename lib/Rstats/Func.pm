@@ -397,7 +397,10 @@ sub typeof {
   
   my $x1 = shift;
   
-  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
+  if (Rstats::Func::is_null($r, $x1)) {
+    return Rstats::Func::new_character($r, "NULL");
+  }
+  elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
     my $type = $x1->type;
     return Rstats::Func::new_character($r, $type);
   }
@@ -2885,16 +2888,6 @@ sub get_array {
 
 sub getin_array { get(@_) }
 
-sub is_null {
-  my $r = shift;
-  
-  my $x1 = Rstats::Func::to_c($r, shift);
-  
-  my $x_is = Rstats::Func::length_value($r, $x1) == 0 ? Rstats::Func::TRUE($r) : Rstats::Func::FALSE($r);
-  
-  return $x_is;
-}
-
 sub to_string_array {
   my $r = shift;
   
@@ -3079,7 +3072,10 @@ sub str {
   
   my @str;
   
-  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
+  if (Rstats::Func::is_null($r, $x1)) {
+    push @str, "NULL";
+  }
+  elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
     # Short type
     my $type = $x1->type;
     my $short_type;
@@ -3678,7 +3674,10 @@ sub sapply {
 sub to_string {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'array') {
+  if ($x1->{object_type} eq 'NULL') {
+    return "NULL";
+  }
+  elsif ($x1->{object_type} eq 'array') {
     return Rstats::Func::to_string_array(@_);
   }
   elsif ($x1->{object_type} eq 'list') {

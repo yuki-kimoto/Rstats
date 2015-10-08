@@ -628,6 +628,16 @@ SV* is_vector(...)
   return_sv(sv_x2);
 }
 
+SV* is_null(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  SV* sv_x2 = Rstats::Func::is_null(sv_r, sv_x1);
+  
+  return_sv(sv_x2);
+}
+
 SV* pi(...)
   PPCODE:
 {

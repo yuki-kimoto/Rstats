@@ -15,7 +15,7 @@ namespace Rstats {
     SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
       
       Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));
-      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
       set_vector(sv_r, sv_x2, x2_elements);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
@@ -65,7 +65,7 @@ namespace Rstats {
       Rstats::Vector* x3_elements
         = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
       
-      SV* sv_x3 = Rstats::Func::new_null(sv_r);
+      SV* sv_x3 = Rstats::Func::new_vector(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x3, x3_elements);
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
@@ -246,7 +246,7 @@ namespace Rstats {
      
       // Dimention
       SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_null(sv_r);
+        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_vector(sv_r);
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
 
       
@@ -539,7 +539,7 @@ namespace Rstats {
     }
 
     SV* new_character(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_null(sv_r);
+      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -571,7 +571,7 @@ namespace Rstats {
     }
 
     SV* new_double(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_null(sv_r);
+      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -612,7 +612,7 @@ namespace Rstats {
     }
 
     SV* new_complex(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_null(sv_r);
+      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -688,7 +688,7 @@ namespace Rstats {
     }
 
     SV* new_integer(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_null(sv_r);
+      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -724,7 +724,7 @@ namespace Rstats {
     }
 
     SV* new_logical(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_null(sv_r);
+      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -770,11 +770,20 @@ namespace Rstats {
       
       SV* sv_x1 = Rstats::Func::new_array(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
-      // Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL");
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
       
       return sv_x1;
     }
 
+    SV* new_vector(SV* sv_r) {
+      
+      SV* sv_x1 = Rstats::Func::new_array(sv_r);;
+      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
+      
+      return sv_x1;
+    }
+    
     SV* new_na(SV* sv_r) {
       SV* sv_x1 = Rstats::Func::new_array(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_na());
@@ -919,7 +928,7 @@ namespace Rstats {
       
       SV* sv_v2 = Rstats::pl_to_perl_obj<Rstats::Vector*>(v2, "Rstats::Vector");
       
-      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
       Rstats::pl_hv_store(sv_x2, "vector", sv_v2);
       
       return sv_x2;
@@ -1086,7 +1095,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_finite(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1102,7 +1111,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_infinite(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1118,7 +1127,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_null(sv_r);
+        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_nan(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1145,7 +1154,7 @@ namespace Rstats {
         }
       }
       
-      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, x2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
@@ -1280,7 +1289,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_null(sv_r);
+            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1292,7 +1301,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_null(sv_r);
+            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1304,7 +1313,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_null(sv_r);
+            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1316,7 +1325,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_null(sv_r);
+            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1328,7 +1337,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_null(sv_r);
+            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1440,7 +1449,7 @@ namespace Rstats {
         Rstats::VectorFunc::add_na_position(compose_elements, na_positions[i]);
       }
       
-      SV* sv_x2 = Rstats::Func::new_null(sv_r);
+      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, compose_elements);
       
       return sv_x2;
@@ -1671,9 +1680,12 @@ namespace Rstats {
     }
     
     SV* names(SV* sv_r, SV* sv_x1) {
-      SV* sv_x_names = Rstats::Func::new_null(sv_r);
+      SV* sv_x_names;
       if (Rstats::pl_hv_exists(sv_x1, "names")) {
         sv_x_names = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
+      }
+      else {
+        sv_x_names = Rstats::Func::new_null(sv_r);
       }
       return sv_x_names;
     }

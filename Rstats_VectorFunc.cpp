@@ -91,10 +91,6 @@ namespace Rstats {
       return Rstats::VectorFunc::get_type(v1) == Rstats::Type::LOGICAL;
     }
 
-    std::vector<SV*>* get_character_values(Rstats::Vector* v1) {
-      return (std::vector<SV*>*)v1->values;
-    }
-
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }
@@ -125,7 +121,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
-          return Rstats::VectorFunc::get_character_values(v1)->size();
+          return Rstats::VectorFunc::get_values<Rstats::Character*>(v1)->size();
           break;
         case Rstats::Type::COMPLEX :
           return Rstats::VectorFunc::get_values<Rstats::Complex*>(v1)->size();
@@ -155,7 +151,7 @@ namespace Rstats {
       if (v1->values != NULL){ 
         switch (type) {
           case Rstats::Type::CHARACTER : {
-            std::vector<SV*>* values = Rstats::VectorFunc::get_character_values(v1);
+            std::vector<SV*>* values = Rstats::VectorFunc::get_values<Rstats::Character*>(v1);
             for (IV i = 0; i < length; i++) {
               if ((*values)[i] != NULL) {
                 SvREFCNT_dec((*values)[i]);
@@ -205,7 +201,7 @@ namespace Rstats {
     }
 
     SV* get_character_value(Rstats::Vector* v1, IV pos) {
-      SV* value = (*Rstats::VectorFunc::get_character_values(v1))[pos];
+      SV* value = (*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos];
       if (value == NULL) {
         return NULL;
       }
@@ -216,11 +212,11 @@ namespace Rstats {
 
     void set_character_value(Rstats::Vector* v1, IV pos, SV* value) {
       if (value != NULL) {
-        SvREFCNT_dec((*Rstats::VectorFunc::get_character_values(v1))[pos]);
+        SvREFCNT_dec((*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos]);
       }
       
       SV* new_value = Rstats::pl_new_sv_sv(value);
-      (*Rstats::VectorFunc::get_character_values(v1))[pos] = SvREFCNT_inc(new_value);
+      (*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos] = SvREFCNT_inc(new_value);
     }
 
     Rstats::Vector* new_complex(IV length) {

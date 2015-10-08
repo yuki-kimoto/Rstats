@@ -714,7 +714,7 @@ namespace Rstats {
     Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, IV pos);
     
     template<class T>
-    void set_value(Rstats::Vector* v1, IV pos, IV value) {
+    void set_value(Rstats::Vector* v1, IV pos, T value) {
       (*Rstats::VectorFunc::get_values<T>(v1))[pos] = value;
     }
   }

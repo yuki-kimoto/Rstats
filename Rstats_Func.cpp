@@ -177,7 +177,7 @@ namespace Rstats {
                 Rstats::VectorFunc::set_complex_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
               }
               else if (type == Rstats::Type::DOUBLE) {
-                Rstats::VectorFunc::set_double_value(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
               }
               else if (type == Rstats::Type::INTEGER) {
                 Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
@@ -203,7 +203,7 @@ namespace Rstats {
               Rstats::VectorFunc::set_complex_value(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
             }
             else if (type == Rstats::Type::DOUBLE) {
-              Rstats::VectorFunc::set_double_value(v2, pos, SvNV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, SvNV(sv_element));
             }
             else if (type == Rstats::Type::INTEGER) {
               Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, SvIV(sv_element));
@@ -573,17 +573,17 @@ namespace Rstats {
         if (SvOK(sv_value)) {
           char* sv_value_str = SvPV_nolen(sv_value);
           if (strEQ(sv_value_str, "NaN")) {
-            Rstats::VectorFunc::set_double_value(v1, i, NAN);
+            Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, NAN);
           }
           else if (strEQ(sv_value_str, "Inf")) {
-            Rstats::VectorFunc::set_double_value(v1, i, INFINITY);
+            Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, INFINITY);
           }
           else if (strEQ(sv_value_str, "-Inf")) {
-            Rstats::VectorFunc::set_double_value(v1, i, -(INFINITY));
+            Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, -(INFINITY));
           }
           else {
             NV value = SvNV(sv_value);
-            Rstats::VectorFunc::set_double_value(v1, i, value);
+            Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, value);
           }
         }
         else {
@@ -1395,7 +1395,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            Rstats::VectorFunc::set_double_value(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Double>(element, 0));
+            Rstats::VectorFunc::set_value<Rstats::Double>(compose_elements, i, Rstats::VectorFunc::get_value<Rstats::Double>(element, 0));
           }
         }
       }

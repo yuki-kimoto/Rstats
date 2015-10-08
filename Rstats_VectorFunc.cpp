@@ -252,13 +252,9 @@ namespace Rstats {
     Rstats::Vector* new_double(IV length, NV value) {
       Rstats::Vector* v1 = new_double(length);
       for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_double_value(v1, i, value);
+        Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, value);
       }
       return v1;
-    }
-
-    void set_double_value(Rstats::Vector* v1, IV pos, NV value) {
-      (*Rstats::VectorFunc::get_values<Rstats::Double>(v1))[pos] = value;
     }
 
     Rstats::Vector* new_integer(IV length) {
@@ -555,7 +551,7 @@ namespace Rstats {
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
             if (SvOK(sv_value_fix)) {
               NV value = SvNV(sv_value_fix);
-              Rstats::VectorFunc::set_double_value(v2, i, value);
+              Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, value);
             }
             else {
               warn("NAs introduced by coercion");
@@ -566,18 +562,18 @@ namespace Rstats {
         case Rstats::Type::COMPLEX :
           warn("imaginary parts discarded in coercion");
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
           }
           break;
         case Rstats::Type::DOUBLE :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
           }
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }
           break;
         default:
@@ -874,7 +870,7 @@ namespace Rstats {
           NV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
-            Rstats::VectorFunc::set_double_value(v2, i, v2_total);
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, v2_total);
           }
           break;
         }
@@ -920,7 +916,7 @@ namespace Rstats {
           NV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
-            Rstats::VectorFunc::set_double_value(v2, i, v2_total);
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, v2_total);
           }
           break;
         }
@@ -967,7 +963,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
           }
-          Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
+          Rstats::VectorFunc::set_value<Rstats::Double>(v2, 0, v2_total);
           break;
         }
         case Rstats::Type::INTEGER :
@@ -1019,7 +1015,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
           }
-          Rstats::VectorFunc::set_double_value(v2, 0, v2_total);
+          Rstats::VectorFunc::set_value<Rstats::Double>(v2, 0, v2_total);
           break;
         }
         case Rstats::Type::INTEGER :
@@ -1068,7 +1064,7 @@ namespace Rstats {
         case Rstats::Type::DOUBLE :
           v2 = Rstats::VectorFunc::new_double(length);
           for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_double_value(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
+            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
           }
           break;
         case Rstats::Type::INTEGER :

@@ -5,7 +5,6 @@ use warnings;
 use Rstats;
 
 use Rstats::Class;
-use Rstats::VectorFunc;
 
 my $r = Rstats::Class->new;
 

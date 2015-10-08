@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::VectorFunc;
 
 # array upgrade mode
 {

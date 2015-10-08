@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::VectorFunc;
 
 # TODO
 # arr.ind=TRUE

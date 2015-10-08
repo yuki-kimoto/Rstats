@@ -1168,6 +1168,11 @@ namespace Rstats {
       if (Rstats::pl_hv_exists(sv_x1, "class")) {
         sv_x2 = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
       }
+      else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_x1))) {
+        SV* sv_class_names = Rstats::pl_new_av_ref();
+        Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("NULL"));
+        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+      }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         SV* sv_class_name = Rstats::Func::type(sv_r, sv_x1);

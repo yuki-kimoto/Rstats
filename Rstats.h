@@ -615,7 +615,6 @@ namespace Rstats {
     Rstats::Vector* new_character(IV);
     Rstats::Vector* new_complex(IV);
     Rstats::Vector* new_complex(IV, std::complex<NV>);
-    Rstats::Vector* new_double(IV, NV);
 
     Rstats::Vector* new_integer(IV);
     Rstats::Vector* new_integer(IV, IV);
@@ -698,11 +697,6 @@ namespace Rstats {
     Rstats::Vector* clone(Rstats::Vector*);
     
     template<class T>
-    Rstats::Vector* new_vector(IV);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Double>(IV);
-    
-    template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {
       return (std::vector<T>*)v1->values;
     }
@@ -719,6 +713,20 @@ namespace Rstats {
     }
     template <>
     void set_value<Rstats::Character>(Rstats::Vector* v1, IV pos, Rstats::Character value);
+
+    template<class T>
+    Rstats::Vector* new_vector(IV);
+    template<>
+    Rstats::Vector* new_vector<Rstats::Double>(IV);
+    
+    template <class T>
+    Rstats::Vector* new_vector(IV length, T value) {
+      Rstats::Vector* v1 = new_vector<T>(length);
+      for (IV i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<T>(v1, i, value);
+      }
+      return v1;
+    };
   }
   
   // Rstats::Func

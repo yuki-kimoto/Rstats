@@ -247,23 +247,6 @@ namespace Rstats {
       return v1;
     };
     
-    template <class T>
-    Rstats::Vector* new_vector(IV length, T value) {
-      Rstats::Vector* v1 = new_vector<T>(length);
-      for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<T>(v1, i, value);
-      }
-      return v1;
-    };
-    
-    Rstats::Vector* new_double(IV length, NV value) {
-      Rstats::Vector* v1 = new_vector<Rstats::Double>(length);
-      for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<Rstats::Double>(v1, i, value);
-      }
-      return v1;
-    }
-
     Rstats::Vector* new_integer(IV length) {
       
       Rstats::Vector* v1 = new_empty_vector();
@@ -308,15 +291,15 @@ namespace Rstats {
     }
 
     Rstats::Vector* new_nan() {
-      return  Rstats::VectorFunc::new_double(1, NAN);
+      return  Rstats::VectorFunc::new_vector<Rstats::Double>(1, NAN);
     }
 
     Rstats::Vector* new_negative_inf() {
-      return Rstats::VectorFunc::new_double(1, -(INFINITY));
+      return Rstats::VectorFunc::new_vector<Rstats::Double>(1, -(INFINITY));
     }
 
     Rstats::Vector* new_inf() {
-      return Rstats::VectorFunc::new_double(1, INFINITY);
+      return Rstats::VectorFunc::new_vector<Rstats::Double>(1, INFINITY);
     }
 
     Rstats::Vector* new_na() {

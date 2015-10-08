@@ -121,17 +121,17 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
-          return Rstats::VectorFunc::get_values<Rstats::Character*>(v1)->size();
+          return Rstats::VectorFunc::get_values<Rstats::CharacterVector*>(v1)->size();
           break;
         case Rstats::Type::COMPLEX :
-          return Rstats::VectorFunc::get_values<Rstats::Complex*>(v1)->size();
+          return Rstats::VectorFunc::get_values<Rstats::ComplexVector*>(v1)->size();
           break;
         case Rstats::Type::DOUBLE :
-          return Rstats::VectorFunc::get_values<Rstats::Double*>(v1)->size();
+          return Rstats::VectorFunc::get_values<Rstats::DoubleVector*>(v1)->size();
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
-          return Rstats::VectorFunc::get_values<Rstats::Integer*>(v1)->size();
+          return Rstats::VectorFunc::get_values<Rstats::IntegerVector*>(v1)->size();
           break;
       }
     }
@@ -151,7 +151,7 @@ namespace Rstats {
       if (v1->values != NULL){ 
         switch (type) {
           case Rstats::Type::CHARACTER : {
-            std::vector<SV*>* values = Rstats::VectorFunc::get_values<Rstats::Character*>(v1);
+            std::vector<SV*>* values = Rstats::VectorFunc::get_values<Rstats::CharacterVector*>(v1);
             for (IV i = 0; i < length; i++) {
               if ((*values)[i] != NULL) {
                 SvREFCNT_dec((*values)[i]);
@@ -161,18 +161,18 @@ namespace Rstats {
             break;
           }
           case Rstats::Type::COMPLEX : {
-            std::vector<std::complex<NV> >* values = Rstats::VectorFunc::get_values<Rstats::Complex*>(v1);
+            std::vector<std::complex<NV> >* values = Rstats::VectorFunc::get_values<Rstats::ComplexVector*>(v1);
             delete values;
             break;
           }
           case Rstats::Type::DOUBLE : {
-            std::vector<NV>* values = Rstats::VectorFunc::get_values<Rstats::Double*>(v1);
+            std::vector<NV>* values = Rstats::VectorFunc::get_values<Rstats::DoubleVector*>(v1);
             delete values;
             break;
           }
           case Rstats::Type::INTEGER :
           case Rstats::Type::LOGICAL : {
-            std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer*>(v1);
+            std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::IntegerVector*>(v1);
             delete values;
           }
         }
@@ -201,7 +201,7 @@ namespace Rstats {
     }
 
     SV* get_character_value(Rstats::Vector* v1, IV pos) {
-      SV* value = (*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos];
+      SV* value = (*Rstats::VectorFunc::get_values<Rstats::CharacterVector*>(v1))[pos];
       if (value == NULL) {
         return NULL;
       }
@@ -212,11 +212,11 @@ namespace Rstats {
 
     void set_character_value(Rstats::Vector* v1, IV pos, SV* value) {
       if (value != NULL) {
-        SvREFCNT_dec((*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos]);
+        SvREFCNT_dec((*Rstats::VectorFunc::get_values<Rstats::CharacterVector*>(v1))[pos]);
       }
       
       SV* new_value = Rstats::pl_new_sv_sv(value);
-      (*Rstats::VectorFunc::get_values<Rstats::Character*>(v1))[pos] = SvREFCNT_inc(new_value);
+      (*Rstats::VectorFunc::get_values<Rstats::CharacterVector*>(v1))[pos] = SvREFCNT_inc(new_value);
     }
 
     Rstats::Vector* new_complex(IV length) {
@@ -238,11 +238,11 @@ namespace Rstats {
     }
 
     std::complex<NV> get_complex_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<Rstats::Complex*>(v1))[pos];
+      return (*Rstats::VectorFunc::get_values<Rstats::ComplexVector*>(v1))[pos];
     }
 
     void set_complex_value(Rstats::Vector* v1, IV pos, std::complex<NV> value) {
-      (*Rstats::VectorFunc::get_values<Rstats::Complex*>(v1))[pos] = value;
+      (*Rstats::VectorFunc::get_values<Rstats::ComplexVector*>(v1))[pos] = value;
     }
 
     Rstats::Vector* new_double(IV length) {
@@ -262,11 +262,11 @@ namespace Rstats {
     }
 
     NV get_double_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<Rstats::Double*>(v1))[pos];
+      return (*Rstats::VectorFunc::get_values<Rstats::DoubleVector*>(v1))[pos];
     }
 
     void set_double_value(Rstats::Vector* v1, IV pos, NV value) {
-      (*Rstats::VectorFunc::get_values<Rstats::Double*>(v1))[pos] = value;
+      (*Rstats::VectorFunc::get_values<Rstats::DoubleVector*>(v1))[pos] = value;
     }
 
     Rstats::Vector* new_integer(IV length) {
@@ -288,11 +288,11 @@ namespace Rstats {
     }
 
     IV get_integer_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<Rstats::Integer*>(v1))[pos];
+      return (*Rstats::VectorFunc::get_values<Rstats::IntegerVector*>(v1))[pos];
     }
 
     void set_integer_value(Rstats::Vector* v1, IV pos, IV value) {
-      (*Rstats::VectorFunc::get_values<Rstats::Integer*>(v1))[pos] = value;
+      (*Rstats::VectorFunc::get_values<Rstats::IntegerVector*>(v1))[pos] = value;
     }
 
     Rstats::Vector* new_logical(IV length) {

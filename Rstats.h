@@ -98,11 +98,11 @@ namespace Rstats {
       CHARACTER = 4
     };
   }
-  typedef std::vector<SV* > Character;
-  typedef std::vector<std::complex<NV> > Complex;
-  typedef std::vector<NV> Double;
-  typedef std::vector<IV> Integer;
-
+  typedef std::vector<SV* > CharacterVector;
+  typedef std::vector<std::complex<NV> > ComplexVector;
+  typedef std::vector<NV> DoubleVector;
+  typedef std::vector<IV> IntegerVector;
+  
   namespace Util {
     IV is_perl_number(SV*);
     SV* cross_product(SV*);
@@ -306,11 +306,11 @@ namespace Rstats {
     IV is_nan(IV);
   }
 
-  struct Vector {
+  typedef struct {
     Rstats::Type::Enum type;
     std::map<IV, IV>* na_positions;
     void* values;
-  };
+  } Vector;
 
   // Macro for Rstats::Vector
 # define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \

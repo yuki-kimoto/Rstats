@@ -835,35 +835,35 @@ namespace Rstats {
     }
     
     SV* new_na(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_na());
       
       return sv_x1;
     }
 
     SV* new_nan(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_nan());
       
       return sv_x1;
     }
 
     SV* new_inf(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_inf());
       
       return sv_x1;
     }
 
     SV* new_false(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_false());
       
       return sv_x1;
     }
 
     SV* new_true(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_true());
       
       return sv_x1;

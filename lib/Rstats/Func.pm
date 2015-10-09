@@ -270,7 +270,7 @@ sub matrix {
     $x_matrix = c_character($r, $x1_values);
   }
   elsif ($x1->type eq "complex") {
-    $x_matrix = new_complex($r, $x1_values);
+    $x_matrix = c_complex($r, $x1_values);
   }
   elsif ($x1->type eq "double") {
     $x_matrix = c_double($r, $x1_values);
@@ -1808,7 +1808,7 @@ sub complex {
         $x_re = Rstats::Func::c_double($r, 0);
       }
       my $x_im = $x1_im_elements->[$i];
-      my $x2_element = Rstats::Func::new_complex(
+      my $x2_element = Rstats::Func::c_complex(
         $r,
         {re => Rstats::Func::value($r, $x_re), im => Rstats::Func::value($r, $x_im)}
       );
@@ -1871,7 +1871,7 @@ sub head {
 sub i_ {
   my $r = shift;
   
-  my $i = Rstats::Func::new_complex($r, {re => 0, im => 1});
+  my $i = Rstats::Func::c_complex($r, {re => 0, im => 1});
   
   return Rstats::Func::c_($r, $i);
 }
@@ -2858,7 +2858,7 @@ sub get_array {
     $x_matrix = c_character($r, \@x2_values);
   }
   elsif ($x1->type eq "complex") {
-    $x_matrix = new_complex($r, \@x2_values);
+    $x_matrix = c_complex($r, \@x2_values);
   }
   elsif ($x1->type eq "double") {
     $x_matrix = c_double($r, \@x2_values);

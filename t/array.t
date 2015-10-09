@@ -349,18 +349,18 @@ use Rstats::Func;
   }
 }
 
-# new_complex
+# c_complex
 {
-  # new_complex - arguments is list
+  # c_complex - arguments is list
   {
-    my $x1 = r->new_complex({re => 1, im => 2}, {re => 3, im => 4});
+    my $x1 = r->c_complex({re => 1, im => 2}, {re => 3, im => 4});
     ok($x1->is->complex);
     is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }
 
-  # new_complex - arguments is array reference
+  # c_complex - arguments is array reference
   {
-    my $x1 = r->new_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
+    my $x1 = r->c_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
     ok($x1->is->complex);
     is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }

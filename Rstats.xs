@@ -823,7 +823,7 @@ SV* c_double(...)
   return_sv(sv_x1);
 }
 
-SV* new_complex(...)
+SV* c_complex(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -839,7 +839,7 @@ SV* new_complex(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::new_complex(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::c_complex(sv_r, sv_values);
   
   return_sv(sv_x1);
 }

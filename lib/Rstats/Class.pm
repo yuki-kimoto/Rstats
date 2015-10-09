@@ -84,6 +84,9 @@ my @func_names = qw/
   c_
   c_double
   c_character
+  c_complex
+  c_integer
+  c_logical
   C_
   charmatch
   chartr
@@ -216,9 +219,6 @@ my @func_names = qw/
   multiply
   divide
   pow
-  new_complex
-  c_integer
-  c_logical
   negation
   dim
   Inf

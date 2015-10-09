@@ -739,6 +739,7 @@ namespace Rstats {
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);
     SV* c_logical(SV*, SV*);
+    SV* c_complex(SV*, SV*);
     SV* to_c(SV*, SV*);
 
     SV* new_null(SV*); /* NULL */
@@ -748,7 +749,6 @@ namespace Rstats {
     SV* new_inf(SV*); /* Inf */
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
-    SV* new_complex(SV*, SV*);
 
     SV* pi(SV*);
     SV* is_null (SV*, SV*);

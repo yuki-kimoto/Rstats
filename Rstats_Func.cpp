@@ -613,7 +613,7 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_complex(SV* sv_r, SV* sv_values) {
+    SV* c_complex(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {

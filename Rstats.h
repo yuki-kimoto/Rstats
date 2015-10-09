@@ -37,7 +37,7 @@
 namespace Rstats {
 
   REGEXP* pl_pregcomp (SV*, IV);
-  SV* pl_new_ref(SV*);
+  SV* pl_new_rv(SV*);
   SV* pl_new_sv_sv(SV*);
   SV* pl_new_sv_pv(const char*);
   SV* pl_new_sv_iv(IV);
@@ -82,7 +82,7 @@ namespace Rstats {
   template <class X> SV* pl_to_perl_obj(X c_obj, const char* class_name) {
     IV obj_addr = PTR2IV(c_obj);
     SV* sv_obj_addr = pl_new_sv_iv(obj_addr);
-    SV* sv_obj_addr_ref = pl_new_ref(sv_obj_addr);
+    SV* sv_obj_addr_ref = pl_new_rv(sv_obj_addr);
     SV* perl_obj = sv_bless(sv_obj_addr_ref, gv_stashpv(class_name, 1));
     
     return perl_obj;

@@ -7,7 +7,7 @@ namespace Rstats {
     return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
   }
 
-  SV* pl_new_ref(SV* sv) {
+  SV* pl_new_rv(SV* sv) {
     return sv_2mortal(newRV_inc(sv));
   }
 

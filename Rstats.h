@@ -612,7 +612,6 @@ namespace Rstats {
     IV get_length (Rstats::Vector*);
     
     Rstats::Vector* new_character(IV, SV*);
-    Rstats::Vector* new_character(IV);
     
     Rstats::Vector* new_logical(IV);
     Rstats::Vector* new_logical(IV, IV);

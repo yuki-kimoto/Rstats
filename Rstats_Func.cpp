@@ -113,7 +113,7 @@ namespace Rstats {
       // Decide type
       Rstats::Vector* v2;
       if (type_h[Rstats::Type::CHARACTER]) {
-        v2 = Rstats::VectorFunc::new_character(length);
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
       }
       else if (type_h[Rstats::Type::COMPLEX]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
@@ -551,7 +551,7 @@ namespace Rstats {
       
       IV length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
@@ -1350,7 +1350,7 @@ namespace Rstats {
       std::vector<IV> na_positions;
       char* mode = SvPV_nolen(sv_mode);
       if (strEQ(mode, "character")) {
-        compose_elements = Rstats::VectorFunc::new_character(len);
+        compose_elements = Rstats::VectorFunc::new_vector<Rstats::Character>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {

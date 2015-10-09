@@ -191,18 +191,9 @@ namespace Rstats {
       delete v1->na_positions;
     }
 
-    Rstats::Vector* new_character(IV length) {
-
-      Rstats::Vector* v1 = new_empty_vector();
-      v1->values = new std::vector<SV*>(length);
-      v1->type = Rstats::Type::CHARACTER;
-      
-      return v1;
-    }
-
     Rstats::Vector* new_character(IV length, SV* sv_str) {
 
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_character(length);
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_value<Rstats::Character>(v1, i, sv_str);
       }
@@ -444,7 +435,7 @@ namespace Rstats {
 
     Rstats::Vector* as_character (Rstats::Vector* v1) {
       IV length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_character(length);
+      Rstats::Vector* v2 = new_vector<Rstats::Character>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
@@ -1031,7 +1022,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
-          v2 = Rstats::VectorFunc::new_character(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
           for (IV i = 0; i < length; i++) {
             Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
           }

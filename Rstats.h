@@ -740,7 +740,6 @@ namespace Rstats {
     SV* c_integer(SV*, SV*);
     SV* c_logical(SV*, SV*);
     SV* c_complex(SV*, SV*);
-    SV* to_c(SV*, SV*);
 
     SV* new_null(SV*); /* NULL */
     SV* new_vector(SV*);
@@ -750,6 +749,7 @@ namespace Rstats {
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
 
+    SV* to_c(SV*, SV*);
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
     SV* is_vector(SV*, SV*);
@@ -863,6 +863,9 @@ namespace Rstats {
     SV* Or(SV*, SV*, SV*);
 
     SV* sin(SV*, SV*);
+    
+    template <class T>
+    SV* new_empty_vector(SV* sv_r);
   }
 }
 

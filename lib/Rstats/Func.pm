@@ -92,7 +92,7 @@ sub factor {
     }
   }
   
-  my $f1 = Rstats::Func::new_integer($r, @$f1_values);
+  my $f1 = Rstats::Func::c_integer($r, @$f1_values);
   if ($x_ordered) {
     $f1->{class} = Rstats::Func::c_character($r, 'factor', 'ordered');
   }
@@ -276,7 +276,7 @@ sub matrix {
     $x_matrix = c_double($r, $x1_values);
   }
   elsif ($x1->type eq "integer") {
-    $x_matrix = new_integer($r, $x1_values);
+    $x_matrix = c_integer($r, $x1_values);
   }
   elsif ($x1->type eq "logical") {
     $x_matrix = new_logical($r, $x1_values);
@@ -1429,7 +1429,7 @@ sub nchar {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::Func::new_integer($r, CORE::length Rstats::Func::value($r, $x1_element));
+        my $x2_element = Rstats::Func::c_integer($r, CORE::length Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
     }
@@ -2864,7 +2864,7 @@ sub get_array {
     $x_matrix = c_double($r, \@x2_values);
   }
   elsif ($x1->type eq "integer") {
-    $x_matrix = new_integer($r, \@x2_values);
+    $x_matrix = c_integer($r, \@x2_values);
   }
   elsif ($x1->type eq "logical") {
     $x_matrix = new_logical($r, \@x2_values);
@@ -3568,7 +3568,7 @@ sub apply {
 
   my $x2 = Rstats::Func::c_($r, @$new_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  $x2->{dim} = Rstats::Func::new_integer($r, @$new_dim_values);
+  $x2->{dim} = Rstats::Func::c_integer($r, @$new_dim_values);
   
   if ($x2->{dim}->length_value == 1) {
     delete $x2->{dim};
@@ -3738,7 +3738,7 @@ sub _levels_h {
   my $levels_h = {};
   my $levels = Rstats::Func::levels($r, $x1)->values;
   for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::Func::new_integer($r, $i);
+    $levels_h->{$levels->[$i - 1]} = Rstats::Func::c_integer($r, $i);
   }
   
   return $levels_h;

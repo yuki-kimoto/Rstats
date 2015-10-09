@@ -253,7 +253,7 @@ namespace Rstats {
       Rstats::Func::length_value(sv_r, sv_x_dim);
       
       if (!SvIV(Rstats::Func::length_value(sv_r, sv_x_dim))) {
-        sv_x_dim = Rstats::Func::new_integer(sv_r, sv_x1_length);
+        sv_x_dim = Rstats::Func::c_integer(sv_r, sv_x1_length);
       }
       IV dim_product = 1;
       IV x_dim_length = SvIV(Rstats::Func::length_value(sv_r, sv_x_dim));
@@ -689,7 +689,7 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_integer(SV* sv_r, SV* sv_values) {
+    SV* c_integer(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
@@ -721,8 +721,8 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_integer(SV* sv_r, IV value) {
-      return Rstats::Func::new_integer(sv_r, Rstats::pl_new_sv_iv(value));
+    SV* c_integer(SV* sv_r, IV value) {
+      return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(value));
     }
 
     SV* new_logical(SV* sv_r, SV* sv_values) {
@@ -1644,16 +1644,16 @@ namespace Rstats {
 
     SV* length(SV* sv_r, SV* sv_container) {
       if (to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_container))) {
-        return Rstats::Func::new_integer(sv_r, (Rstats::Integer)0);
+        return Rstats::Func::c_integer(sv_r, (Rstats::Integer)0);
       }
       else if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_container)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_container))) {
-        return Rstats::Func::new_integer(
+        return Rstats::Func::c_integer(
           sv_r,
           Rstats::VectorFunc::get_length(Rstats::Func::get_vector(sv_r, sv_container))
         );
       }
       else {
-        return Rstats::Func::new_integer(sv_r, Rstats::Func::length_value(sv_r, sv_container));
+        return Rstats::Func::c_integer(sv_r, Rstats::Func::length_value(sv_r, sv_container));
       }
     }
 

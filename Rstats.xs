@@ -844,7 +844,7 @@ SV* new_complex(...)
   return_sv(sv_x1);
 }
 
-SV* new_integer(...)
+SV* c_integer(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -860,7 +860,7 @@ SV* new_integer(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::new_integer(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::c_integer(sv_r, sv_values);
   
   return_sv(sv_x1);
 }

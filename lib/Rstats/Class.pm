@@ -217,7 +217,7 @@ my @func_names = qw/
   divide
   pow
   new_complex
-  new_integer
+  c_integer
   new_logical
   negation
   dim

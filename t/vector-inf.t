@@ -77,7 +77,7 @@ use Rstats;
   
   # is_finite - Integer, true
   {
-    my $x_num = r->new_integer(1);
+    my $x_num = r->c_integer(1);
     ok(r->is->finite($x_num)->value);
   }
 }

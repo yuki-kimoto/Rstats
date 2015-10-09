@@ -848,7 +848,7 @@ use Math::Complex ();
   
   # cumprod - integer
   {
-    my $x1 = r->new_integer(2, 3, 4);
+    my $x1 = r->c_integer(2, 3, 4);
     my $x2 = r->cumprod($x1);
     is_deeply($x2->values, [2, 6, 24]);
   }
@@ -884,7 +884,7 @@ use Math::Complex ();
 
   # cumsum - integer
   {
-    my $x1 = r->new_integer(1, 2, 3);
+    my $x1 = r->c_integer(1, 2, 3);
     my $x2 = r->cumsum($x1);
     is_deeply($x2->values, [1, 3, 6]);
   }

@@ -64,7 +64,7 @@ sub parse_index {
       
       if (!@{$index->values}) {
         my $index_values_new = [1 .. $x1_dim->[$i]];
-        $index = Rstats::Func::new_integer($r, @$index_values_new);
+        $index = Rstats::Func::c_integer($r, @$index_values_new);
       }
       elsif (Rstats::Func::is_character($r, $index)) {
         if (Rstats::Func::is_vector($r, $x1)) {
@@ -82,7 +82,7 @@ sub parse_index {
             croak "Can't find name" unless defined $value;
             push @$index_new_values, $value;
           }
-          $indexs[$i] = Rstats::Func::new_integer($r, @$index_new_values);
+          $indexs[$i] = Rstats::Func::c_integer($r, @$index_new_values);
         }
         elsif (Rstats::Func::is_matrix($r, $x1)) {
           
@@ -96,7 +96,7 @@ sub parse_index {
         for (my $i = 0; $i < @{$index->values}; $i++) {
           push @$index_values_new, $i + 1 if $index_values->[$i];
         }
-        $index = Rstats::Func::new_integer($r, @$index_values_new);
+        $index = Rstats::Func::c_integer($r, @$index_values_new);
       }
       elsif ($index->{_minus}) {
         my $index_value_new = [];
@@ -104,7 +104,7 @@ sub parse_index {
         for my $k (1 .. $x1_dim->[$i]) {
           push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
         }
-        $index = Rstats::Func::new_integer($r, @$index_value_new);
+        $index = Rstats::Func::c_integer($r, @$index_value_new);
       }
 
       push @indexs, $index;

@@ -747,7 +747,7 @@ namespace Rstats {
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
     SV* new_complex(SV*, SV*);
-    SV* new_integer(SV*, SV*);
+    SV* c_integer(SV*, SV*);
     SV* new_logical(SV*, SV*);
 
     SV* pi(SV*);

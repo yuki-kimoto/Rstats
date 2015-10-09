@@ -94,10 +94,10 @@ sub factor {
   
   my $f1 = Rstats::Func::new_integer($r, @$f1_values);
   if ($x_ordered) {
-    $f1->{class} = Rstats::Func::new_character($r, 'factor', 'ordered');
+    $f1->{class} = Rstats::Func::c_character($r, 'factor', 'ordered');
   }
   else {
-    $f1->{class} = Rstats::Func::new_character($r, 'factor');
+    $f1->{class} = Rstats::Func::c_character($r, 'factor');
   }
   $f1->{levels} = Rstats::Func::as_vector($r, $x_labels);
   
@@ -267,7 +267,7 @@ sub matrix {
   my $x_matrix;
 
   if ($x1->type eq "character") {
-    $x_matrix = new_character($r, $x1_values);
+    $x_matrix = c_character($r, $x1_values);
   }
   elsif ($x1->type eq "complex") {
     $x_matrix = new_complex($r, $x1_values);
@@ -398,14 +398,14 @@ sub typeof {
   my $x1 = shift;
   
   if (Rstats::Func::is_null($r, $x1)) {
-    return Rstats::Func::new_character($r, "NULL");
+    return Rstats::Func::c_character($r, "NULL");
   }
   elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
     my $type = $x1->type;
-    return Rstats::Func::new_character($r, $type);
+    return Rstats::Func::c_character($r, $type);
   }
   elsif (Rstats::Func::is_list($r, $x1) || Rstats::Func::is_data_frame($r, $x1)) {
-    return Rstats::Func::new_character($r, 'list');
+    return Rstats::Func::c_character($r, 'list');
   }
   else {
     return Rstats::Func::NA($r);
@@ -1089,7 +1089,7 @@ sub sub {
     }
   }
   
-  my $x2 = Rstats::Func::new_character($r, @$x2_values);
+  my $x2 = Rstats::Func::c_character($r, @$x2_values);
   Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
   
   return $x2;
@@ -1121,7 +1121,7 @@ sub gsub {
     }
   }
   
-  my $x2 = Rstats::Func::new_character($r, @$x2_values);
+  my $x2 = Rstats::Func::c_character($r, @$x2_values);
   Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
   
   return $x2;
@@ -1217,7 +1217,7 @@ sub chartr {
     }
   }
   
-  my $x2 = Rstats::Func::new_character($r, @$x2_values);
+  my $x2 = Rstats::Func::c_character($r, @$x2_values);
   Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
   
   return $x2;
@@ -1455,7 +1455,7 @@ sub tolower {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::Func::new_character($r, lc Rstats::Func::value($r, $x1_element));
+        my $x2_element = Rstats::Func::c_character($r, lc Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
     }
@@ -1481,7 +1481,7 @@ sub toupper {
         push @$x2_elements, $x1_element;
       }
       else {
-        my $x2_element = Rstats::Func::new_character($r, uc Rstats::Func::value($r, $x1_element));
+        my $x2_element = Rstats::Func::c_character($r, uc Rstats::Func::value($r, $x1_element));
         push @$x2_elements, $x2_element;
       }
     }
@@ -2855,7 +2855,7 @@ sub get_array {
   # array
   my $x_matrix;
   if ($x1->type eq "character") {
-    $x_matrix = new_character($r, \@x2_values);
+    $x_matrix = c_character($r, \@x2_values);
   }
   elsif ($x1->type eq "complex") {
     $x_matrix = new_complex($r, \@x2_values);
@@ -3272,13 +3272,13 @@ sub set_list {
     if (exists $x1->{names}) {
       my $new_names_values = $x1->{names}->values;
       splice @$new_names_values, $index - 1, 1;
-      $x1->{names} = Rstats::Func::new_character($r, @$new_names_values);
+      $x1->{names} = Rstats::Func::c_character($r, @$new_names_values);
     }
     
     if (exists $x1->{dimnames}) {
       my $new_dimname_values = $x1->{dimnames}[1]->values;
       splice @$new_dimname_values, $index - 1, 1;
-      $x1->{dimnames}[1] = Rstats::Func::new_character($r, @$new_dimname_values);
+      $x1->{dimnames}[1] = Rstats::Func::c_character($r, @$new_dimname_values);
     }
   }
   else {
@@ -3404,7 +3404,7 @@ sub get_dataframe {
     $data_frame,
     {new_indexes => [$row_index, Rstats::Func::c_($r, @$col_index_values)]}
   );
-  $data_frame->{dimnames}[0] = Rstats::Func::new_character($r,
+  $data_frame->{dimnames}[0] = Rstats::Func::c_character($r,
     1 .. Rstats::Func::getin_dataframe($r, $data_frame, 1)->length_value
   );
   

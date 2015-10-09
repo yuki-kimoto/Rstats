@@ -332,18 +332,18 @@ use Rstats::Func;
   }
 }
 
-# new_character
+# c_character
 {
-  # new_character - arguments is list
+  # c_character - arguments is list
   {
-    my $x1 = r->new_character("a", "b", "c");
+    my $x1 = r->c_character("a", "b", "c");
     ok($x1->is->character);
     is_deeply($x1->values, [qw/a b c/]);
   }
 
-  # new_character - arguments is array reference
+  # c_character - arguments is array reference
   {
-    my $x1 = r->new_character(["a", "b", "c"]);
+    my $x1 = r->c_character(["a", "b", "c"]);
     ok($x1->is->character);
     is_deeply($x1->values, [qw/a b c/]);
   }

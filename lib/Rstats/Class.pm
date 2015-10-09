@@ -83,6 +83,7 @@ my @func_names = qw/
   atan2
   c_
   c_double
+  c_character
   C_
   charmatch
   chartr
@@ -215,7 +216,6 @@ my @func_names = qw/
   multiply
   divide
   pow
-  new_character
   new_complex
   new_integer
   new_logical

@@ -540,7 +540,7 @@ namespace Rstats {
       
       return sv_x1;
     }
-    SV* new_character(SV* sv_r, SV* sv_values) {
+    SV* c_character(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
@@ -1008,7 +1008,7 @@ namespace Rstats {
         else {
           sv_x2_names_values = Rstats::Func::values(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
         }
-        Rstats::pl_hv_store(sv_x2, "names", Rstats::Func::new_character(sv_r, sv_x2_names_values));
+        Rstats::pl_hv_store(sv_x2, "names", Rstats::Func::c_character(sv_r, sv_x2_names_values));
       }
       
       
@@ -1033,7 +1033,7 @@ namespace Rstats {
             else {
               sv_new_dimname_values = sv_dimname_values;
             }
-            Rstats::pl_av_push(sv_new_dimnames, Rstats::Func::new_character(sv_r, sv_new_dimname_values));
+            Rstats::pl_av_push(sv_new_dimnames, Rstats::Func::c_character(sv_r, sv_new_dimname_values));
           }
         }
         Rstats::pl_hv_store(sv_x2, "dimnames", sv_new_dimnames);
@@ -1175,7 +1175,7 @@ namespace Rstats {
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("NULL"));
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
@@ -1185,27 +1185,27 @@ namespace Rstats {
         }
         
         Rstats::pl_av_push(sv_class_names, sv_class_name);
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_matrix(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("matrix"));
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("array"));
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("data.frame"));
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_list(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("list"));
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_class_names);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       
       return sv_x2;
@@ -1557,7 +1557,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_x2_values, &PL_sv_undef);
           }
         }
-        sv_x2 = Rstats::Func::new_character(sv_r, sv_x2_values);
+        sv_x2 = Rstats::Func::c_character(sv_r, sv_x2_values);
       }
       else {
         sv_x2 = Rstats::Func::new_vector(sv_r);
@@ -1612,7 +1612,7 @@ namespace Rstats {
         sv_mode = sv_type;
       }
       
-      return Rstats::Func::new_character(sv_r, sv_mode);
+      return Rstats::Func::c_character(sv_r, sv_mode);
     }
     
     SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {

@@ -781,7 +781,7 @@ SV* c_(...)
   return_sv(sv_x1);
 }
 
-SV* new_character(...)
+SV* c_character(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -797,7 +797,7 @@ SV* new_character(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::new_character(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::c_character(sv_r, sv_values);
   
   return_sv(sv_x1);
 }

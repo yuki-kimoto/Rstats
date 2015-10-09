@@ -736,6 +736,7 @@ namespace Rstats {
     Rstats::Vector* get_vector(SV*, SV*);
     SV* c(SV*, SV*);
     SV* c_double(SV*, SV*);
+    SV* c_character(SV*, SV*);
     SV* to_c(SV*, SV*);
 
     SV* new_null(SV*); /* NULL */
@@ -745,7 +746,6 @@ namespace Rstats {
     SV* new_inf(SV*); /* Inf */
     SV* new_false(SV*); /* FALSE */
     SV* new_true(SV*); /* TRUE */
-    SV* new_character(SV*, SV*);
     SV* new_complex(SV*, SV*);
     SV* new_integer(SV*, SV*);
     SV* new_logical(SV*, SV*);

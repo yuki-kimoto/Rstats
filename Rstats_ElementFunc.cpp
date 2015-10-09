@@ -462,7 +462,7 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Integer e1, Rstats::Integer e2) { return atan2((Rstats::Double)e1, (Rstats::Double)e2); }
 
     // And
-    Rstats::Integer And(SV* e1, SV* e2) { croak("operations are possible only for numeric, logical or complex types"); }
+    Rstats::Integer And(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
     Rstats::Integer And(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) && e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }
@@ -474,7 +474,7 @@ namespace Rstats {
     Rstats::Integer And(Rstats::Integer e1, Rstats::Integer e2) { return e1 && e2 ? 1 : 0; }
 
     // Or
-    Rstats::Integer Or(SV* e1, SV* e2) { croak("operations are possible only for numeric, logical or complex types"); }
+    Rstats::Integer Or(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
     Rstats::Integer Or(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) || e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }
@@ -486,7 +486,7 @@ namespace Rstats {
     Rstats::Integer Or(Rstats::Integer e1, Rstats::Integer e2) { return e1 || e2 ? 1 : 0; }
 
     // equal
-    Rstats::Integer equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
+    Rstats::Integer equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
     Rstats::Integer equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 == e2 ? 1 : 0; }
     Rstats::Integer equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
@@ -495,7 +495,7 @@ namespace Rstats {
     Rstats::Integer equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 == e2 ? 1 : 0; }
 
     // not equal
-    Rstats::Integer not_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
+    Rstats::Integer not_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
     Rstats::Integer not_equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 != e2 ? 1 : 0; }
     Rstats::Integer not_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
@@ -504,7 +504,7 @@ namespace Rstats {
     Rstats::Integer not_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 != e2 ? 1 : 0; }
 
     // more_than
-    Rstats::Integer more_than(SV* e1, SV* e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
+    Rstats::Integer more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
     Rstats::Integer more_than(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(more_than())");
     }
@@ -515,7 +515,7 @@ namespace Rstats {
     Rstats::Integer more_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 > e2 ? 1 : 0; }
 
     // less_than
-    Rstats::Integer less_than(SV* e1, SV* e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
+    Rstats::Integer less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
     Rstats::Integer less_than(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(less_than())");
     }
@@ -526,7 +526,7 @@ namespace Rstats {
     Rstats::Integer less_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 < e2 ? 1 : 0; }
 
     // more_than_or_equal
-    Rstats::Integer more_than_or_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
+    Rstats::Integer more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
     Rstats::Integer more_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(more_than_or_equal())");
     }
@@ -537,7 +537,7 @@ namespace Rstats {
     Rstats::Integer more_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 >= e2 ? 1 : 0; }
 
     // less_than_or_equal
-    Rstats::Integer less_than_or_equal(SV* e1, SV* e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
+    Rstats::Integer less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
     Rstats::Integer less_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(less_than_or_equal())");
     }
@@ -548,7 +548,7 @@ namespace Rstats {
     Rstats::Integer less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
 
     // is_infinite
-    Rstats::Integer is_infinite(SV* e1) { return 0; }
+    Rstats::Integer is_infinite(Rstats::Character e1) { return 0; }
     Rstats::Integer is_infinite(Rstats::Complex e1) {
       if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
         return 0;
@@ -564,7 +564,7 @@ namespace Rstats {
     Rstats::Integer is_infinite(Rstats::Integer e1) { return 0; }
 
     // is_finite
-    Rstats::Integer is_finite(SV* e1) { return 0; }
+    Rstats::Integer is_finite(Rstats::Character e1) { return 0; }
     Rstats::Integer is_finite(Rstats::Complex e1) {
       if (std::isfinite(e1.real()) && std::isfinite(e1.imag())) {
         return 1;
@@ -577,7 +577,7 @@ namespace Rstats {
     Rstats::Integer is_finite(Rstats::Integer e1) { return 1; }
 
     // is_nan
-    Rstats::Integer is_nan(SV* e1) { return 0; }
+    Rstats::Integer is_nan(Rstats::Character e1) { return 0; }
     Rstats::Integer is_nan(Rstats::Complex e1) {
       if (std::isnan(e1.real()) && std::isnan(e1.imag())) {
         return 1;

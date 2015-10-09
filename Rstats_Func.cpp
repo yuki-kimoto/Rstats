@@ -1404,7 +1404,9 @@ namespace Rstats {
       Rstats::Vector* compose_elements;
       std::vector<IV> na_positions;
       char* mode = SvPV_nolen(sv_mode);
+      SV* sv_x2;
       if (strEQ(mode, "character")) {
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Character>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -1422,6 +1424,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "complex")) {
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Complex>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -1439,6 +1442,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "double")) {
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Double>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -1456,6 +1460,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "integer")) {
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Integer>(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
@@ -1474,6 +1479,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "logical")) {
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         compose_elements = Rstats::VectorFunc::new_logical(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
@@ -1499,7 +1505,6 @@ namespace Rstats {
         Rstats::VectorFunc::add_na_position(compose_elements, na_positions[i]);
       }
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, compose_elements);
       
       return sv_x2;
@@ -1615,7 +1620,7 @@ namespace Rstats {
         sv_x2 = Rstats::Func::c_character(sv_r, sv_x2_values);
       }
       else {
-        sv_x2 = Rstats::Func::new_vector(sv_r);
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
         Rstats::Func::set_vector(
           sv_r,
           sv_x2,

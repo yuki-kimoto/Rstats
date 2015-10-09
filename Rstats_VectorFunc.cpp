@@ -191,16 +191,6 @@ namespace Rstats {
       delete v1->na_positions;
     }
 
-    Rstats::Vector* new_character(IV length, SV* sv_str) {
-
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
-      for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<Rstats::Character>(v1, i, sv_str);
-      }
-      
-      return v1;
-    }
-    
     template <>
     void set_value<Rstats::Character>(Rstats::Vector* v1, IV pos, Rstats::Character value) {
       if (value != NULL) {

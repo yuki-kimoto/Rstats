@@ -1280,7 +1280,7 @@ namespace Rstats {
         if (Rstats::VectorFunc::is_character(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_character(1, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
+              = Rstats::VectorFunc::new_vector<Rstats::Character>(1, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }

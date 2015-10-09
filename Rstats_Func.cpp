@@ -562,8 +562,20 @@ namespace Rstats {
       return sv_x1;
     }
 
+
+    template <>
+    SV* new_empty_vector<Rstats::Double>(SV* sv_r) {
+      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      
+      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
+      Rstats::pl_hv_store(sv_x1, "r", sv_r);
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
+      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("double"));
+      
+      return sv_x1;
+    }
+    
     SV* c_double(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
@@ -598,6 +610,7 @@ namespace Rstats {
         }
       }
       
+      SV* sv_x1 = new_empty_vector<Rstats::Double>(sv_r);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
@@ -774,18 +787,6 @@ namespace Rstats {
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
-      
-      return sv_x1;
-    }
-
-    template <>
-    SV* new_empty_vector<Rstats::Double>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
-      
-      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
-      Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
-      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("double"));
       
       return sv_x1;
     }

@@ -865,7 +865,7 @@ namespace Rstats {
     SV* sin(SV*, SV*);
     
     template <class T>
-    SV* new_empty_vector(SV* sv_r);
+    SV* new_empty_vector(SV*);
   }
 }
 

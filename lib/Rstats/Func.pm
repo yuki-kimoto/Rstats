@@ -273,7 +273,7 @@ sub matrix {
     $x_matrix = new_complex($r, $x1_values);
   }
   elsif ($x1->type eq "double") {
-    $x_matrix = new_double($r, $x1_values);
+    $x_matrix = c_double($r, $x1_values);
   }
   elsif ($x1->type eq "integer") {
     $x_matrix = new_integer($r, $x1_values);
@@ -1154,7 +1154,7 @@ sub grep {
     }
   }
   
-  return Rstats::Func::new_double($r, @$x2_values);
+  return Rstats::Func::c_double($r, @$x2_values);
 }
 
 sub C_ {
@@ -1256,7 +1256,7 @@ sub charmatch {
     }
   }
   
-  return Rstats::Func::new_double($r, @$x2_values);
+  return Rstats::Func::c_double($r, @$x2_values);
 }
 
 
@@ -1521,7 +1521,7 @@ sub match {
     }
   }
   
-  return Rstats::Func::new_double($r, @matches);
+  return Rstats::Func::c_double($r, @matches);
 }
 
 
@@ -1623,7 +1623,7 @@ sub ceiling {
   
   my $x1 = to_c($r, $_x1);
   my @x2_elements
-    = map { Rstats::Func::new_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
+    = map { Rstats::Func::c_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
   
   my $x2 = Rstats::Func::c_($r, @x2_elements);
@@ -1781,9 +1781,9 @@ sub complex {
     my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
     for (my $i = 0; $i < $longer_length; $i++) {
       my $x_mod = $x1_mod_elements->[$i];
-      $x_mod = Rstats::Func::new_double($r, 1) unless defined $x_mod;
+      $x_mod = Rstats::Func::c_double($r, 1) unless defined $x_mod;
       my $x_arg = $x1_arg_elements->[$i];
-      $x_arg = Rstats::Func::new_double($r, 0) unless defined $x_arg;
+      $x_arg = Rstats::Func::c_double($r, 0) unless defined $x_arg;
       
       my $x_re = $x_mod * Rstats::Func::cos($r, $x_arg);
       my $x_im = $x_mod * Rstats::Func::sin($r, $x_arg);
@@ -1805,7 +1805,7 @@ sub complex {
         $x_re = $x1_re_elements->[$i];
       }
       else {
-        $x_re = Rstats::Func::new_double($r, 0);
+        $x_re = Rstats::Func::c_double($r, 0);
       }
       my $x_im = $x1_im_elements->[$i];
       my $x2_element = Rstats::Func::new_complex(
@@ -1828,7 +1828,7 @@ sub floor {
   my $x1 = to_c($r, $_x1);
   
   my @x2_elements
-    = map { Rstats::Func::new_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
+    = map { Rstats::Func::c_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c_($r, @x2_elements);
@@ -2212,7 +2212,7 @@ sub replace {
   my $x4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::Func::to_string($r, Rstats::Func::new_double($r, $i + 1));
+    my $hash = Rstats::Func::to_string($r, Rstats::Func::c_double($r, $i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$x4_elements, $x3_elements->[$replace_count % $x3_length];
       $replace_count++;
@@ -2282,7 +2282,7 @@ sub round {
   my $x1 = to_c($r, $_x1);
 
   my $ro = 10 ** $digits;
-  my @x2_elements = map { Rstats::Func::new_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::c_($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   Rstats::Func::mode($r, $x2, 'double');
@@ -2405,7 +2405,7 @@ sub trunc {
   my $x1 = to_c($r, $_x1);
   
   my @x2_elements
-    = map { Rstats::Func::new_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
+    = map { Rstats::Func::c_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c_($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -2861,7 +2861,7 @@ sub get_array {
     $x_matrix = new_complex($r, \@x2_values);
   }
   elsif ($x1->type eq "double") {
-    $x_matrix = new_double($r, \@x2_values);
+    $x_matrix = c_double($r, \@x2_values);
   }
   elsif ($x1->type eq "integer") {
     $x_matrix = new_integer($r, \@x2_values);

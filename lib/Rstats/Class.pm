@@ -82,6 +82,7 @@ my @func_names = qw/
   atanh
   atan2
   c_
+  c_double
   C_
   charmatch
   chartr
@@ -216,7 +217,6 @@ my @func_names = qw/
   pow
   new_character
   new_complex
-  new_double
   new_integer
   new_logical
   negation

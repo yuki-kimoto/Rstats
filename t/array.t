@@ -183,18 +183,18 @@ use Rstats::Func;
   }
 }
 
-# new_double
+# c_double
 {
-  # new_double - arguments is list
+  # c_double - arguments is list
   {
-    my $x1 = r->new_double(1.1, 1.2, 1.3);
+    my $x1 = r->c_double(1.1, 1.2, 1.3);
     ok($x1->is->double);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 
-  # new_double - arguments is array reference
+  # c_double - arguments is array reference
   {
-    my $x1 = r->new_double([1.1, 1.2, 1.3]);
+    my $x1 = r->c_double([1.1, 1.2, 1.3]);
     ok($x1->is->double);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }

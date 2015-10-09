@@ -5,7 +5,7 @@ namespace Rstats {
   namespace Func {
 
     SV* sin(SV* sv_r, SV* sv_x1) {
-
+      
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::sin, sv_x1);
       
@@ -527,7 +527,7 @@ namespace Rstats {
       SV* sv_pi = Rstats::pl_new_sv_nv(pi);
       Rstats::pl_av_push(sv_values, sv_pi);
       
-      return new_double(sv_r, sv_values);
+      return c_double(sv_r, sv_values);
     }
 
     SV* new_vector(SV* sv_r) {
@@ -572,7 +572,7 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_double(SV* sv_r, SV* sv_values) {
+    SV* c_double(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
@@ -1262,7 +1262,7 @@ namespace Rstats {
       }
       else {
         SV* sv_length = Rstats::Func::length_value(sv_r, sv_x1);
-        return Rstats::Func::new_double(sv_r, sv_length);
+        return Rstats::Func::c_double(sv_r, sv_length);
       }
     }
 

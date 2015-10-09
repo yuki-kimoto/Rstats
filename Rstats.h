@@ -717,6 +717,8 @@ namespace Rstats {
     Rstats::Vector* new_vector<Rstats::Double>(IV);
     template<>
     Rstats::Vector* new_vector<Rstats::Integer>(IV);
+    template<>
+    Rstats::Vector* new_vector<Rstats::Complex>(IV);
     
     template <class T>
     Rstats::Vector* new_vector(IV length, T value) {

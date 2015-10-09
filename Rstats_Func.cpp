@@ -32,7 +32,7 @@ namespace Rstats {
       Rstats::pl_av_push(upgrade_type_args, sv_x1);
       Rstats::pl_av_push(upgrade_type_args, sv_x2);
       
-      SV* upgrade_type_result = Rstats::Func::upgrade_type(sv_r, upgrade_type_args);
+      SV* upgrade_type_result = Rstats::Func::upgrade_type_avrv(sv_r, upgrade_type_args);
       
       if (Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x1))
         != Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x2)))
@@ -349,7 +349,7 @@ namespace Rstats {
       return sv_x2;
     }
     
-    SV* upgrade_type(SV* sv_r, SV* sv_xs) {
+    SV* upgrade_type_avrv(SV* sv_r, SV* sv_xs) {
       // Check elements
       std::map<Rstats::Type::Enum, IV> type_h;
       
@@ -375,7 +375,7 @@ namespace Rstats {
           type_h[Rstats::Type::LOGICAL] = 1;
         }
         else {
-          croak("Invalid type(Rstats::Func::upgrade_type()");
+          croak("Invalid type(Rstats::Func::upgrade_type_avrv()");
         }
       }
 

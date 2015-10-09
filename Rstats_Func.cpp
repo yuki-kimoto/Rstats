@@ -816,9 +816,12 @@ namespace Rstats {
 
     SV* new_null(SV* sv_r) {
       
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);;
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
+      Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
+      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("NULL"));
+      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
       
       return sv_x1;
     }

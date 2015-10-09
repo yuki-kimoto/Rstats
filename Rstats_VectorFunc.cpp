@@ -220,15 +220,6 @@ namespace Rstats {
       (*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos] = SvREFCNT_inc(new_value);
     }
 
-    Rstats::Vector* new_complex(IV length) {
-      
-      Rstats::Vector* v1 = new_empty_vector();
-      v1->values = new std::vector<std::complex<NV> >(length, std::complex<NV>(0, 0));
-      v1->type = Rstats::Type::COMPLEX;
-      
-      return v1;
-    }
-        
     Rstats::Vector* new_complex(IV length, std::complex<NV> z) {
       
       Rstats::Vector* v1 = new_vector<Rstats::Complex>(length);

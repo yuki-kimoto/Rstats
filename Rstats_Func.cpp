@@ -562,7 +562,30 @@ namespace Rstats {
       return sv_x1;
     }
 
+    template <>
+    SV* new_empty_vector<Rstats::Character>(SV* sv_r) {
+      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      
+      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
+      Rstats::pl_hv_store(sv_x1, "r", sv_r);
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
+      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("character"));
+      
+      return sv_x1;
+    }
 
+    template <>
+    SV* new_empty_vector<Rstats::Complex>(SV* sv_r) {
+      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      
+      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
+      Rstats::pl_hv_store(sv_x1, "r", sv_r);
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
+      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("complex"));
+      
+      return sv_x1;
+    }
+    
     template <>
     SV* new_empty_vector<Rstats::Double>(SV* sv_r) {
       SV* sv_x1 = Rstats::pl_new_hv_ref();

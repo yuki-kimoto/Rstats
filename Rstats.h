@@ -868,6 +868,10 @@ namespace Rstats {
     template <class T>
     SV* new_empty_vector(SV*);
     template <>
+    SV* new_empty_vector<Rstats::Character>(SV*);
+    template <>
+    SV* new_empty_vector<Rstats::Complex>(SV*);
+    template <>
     SV* new_empty_vector<Rstats::Double>(SV*);
     template <>
     SV* new_empty_vector<Rstats::Integer>(SV*);

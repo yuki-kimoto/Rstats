@@ -1339,7 +1339,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1351,7 +1351,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1363,7 +1363,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1375,7 +1375,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
@@ -1387,7 +1387,7 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
             Rstats::Func::set_vector(sv_r, sv_x2, v2);
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }

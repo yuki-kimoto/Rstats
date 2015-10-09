@@ -478,7 +478,7 @@ namespace Rstats {
       SV* sv_values = Rstats::pl_new_av_ref();
       Rstats::pl_av_push(sv_values, sv_is);
       
-      return Rstats::Func::new_logical(sv_r, sv_values);
+      return Rstats::Func::c_logical(sv_r, sv_values);
     }
     
     SV* is_vector (SV* sv_r, SV* sv_x1) {
@@ -494,7 +494,7 @@ namespace Rstats {
       SV* sv_values = Rstats::pl_new_av_ref();
       Rstats::pl_av_push(sv_values, sv_is);
       
-      return Rstats::Func::new_logical(sv_r, sv_values);
+      return Rstats::Func::c_logical(sv_r, sv_values);
     }
 
     IV to_bool (SV* sv_r, SV* sv_x1) {
@@ -725,7 +725,7 @@ namespace Rstats {
       return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(value));
     }
 
-    SV* new_logical(SV* sv_r, SV* sv_values) {
+    SV* c_logical(SV* sv_r, SV* sv_values) {
       SV* sv_x1 = new_vector(sv_r);
       
       if (!sv_derived_from(sv_values, "ARRAY")) {

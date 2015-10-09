@@ -865,7 +865,7 @@ SV* c_integer(...)
   return_sv(sv_x1);
 }
 
-SV* new_logical(...)
+SV* c_logical(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -881,7 +881,7 @@ SV* new_logical(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::new_logical(sv_r, sv_values);
+  SV* sv_x1 = Rstats::Func::c_logical(sv_r, sv_values);
   
   return_sv(sv_x1);
 }

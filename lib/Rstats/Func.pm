@@ -279,7 +279,7 @@ sub matrix {
     $x_matrix = c_integer($r, $x1_values);
   }
   elsif ($x1->type eq "logical") {
-    $x_matrix = new_logical($r, $x1_values);
+    $x_matrix = c_logical($r, $x1_values);
   }
   else {
     croak("Invalid type " . $x1->type . " is passed");
@@ -882,7 +882,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::new_logical($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix($r, Rstats::Func::c_logical($r, @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -917,7 +917,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::new_logical($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix($r, Rstats::Func::c_logical($r, @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -1313,7 +1313,7 @@ sub is_element {
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::Func::new_logical($r, @$x3_values);
+  return Rstats::Func::c_logical($r, @$x3_values);
 }
 
 sub setequal {
@@ -2867,7 +2867,7 @@ sub get_array {
     $x_matrix = c_integer($r, \@x2_values);
   }
   elsif ($x1->type eq "logical") {
-    $x_matrix = new_logical($r, \@x2_values);
+    $x_matrix = c_logical($r, \@x2_values);
   }
   else {
     croak("Invalid type " . $x1->type . " is passed");
@@ -3765,7 +3765,7 @@ sub set_array {
       my $pos = $poss->[$i];
       my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
       if (Rstats::Func::is_na($r, $element)) {
-        $x1_elements->[$pos] = Rstats::Func::new_logical($r, undef);
+        $x1_elements->[$pos] = Rstats::Func::c_logical($r, undef);
       }
       else {
         my $value = Rstats::Func::value($r, $element);
@@ -3774,7 +3774,7 @@ sub set_array {
         }
         else {
           Carp::carp "invalid factor level, NA generated";
-          $x1_elements->[$pos] = Rstats::Func::new_logical($r, undef);
+          $x1_elements->[$pos] = Rstats::Func::c_logical($r, undef);
         }
       }
     }

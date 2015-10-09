@@ -841,7 +841,7 @@ use Math::Complex ();
 {
   # cumprod - logical
   {
-    my $x1 = r->new_logical(1, 1, 0);
+    my $x1 = r->c_logical(1, 1, 0);
     my $x2 = r->cumprod($x1);
     is_deeply($x2->values, [1, 1, 0]);
   }
@@ -877,7 +877,7 @@ use Math::Complex ();
 {
   # cumsum - logical
   {
-    my $x1 = r->new_logical(1, 0, 1);
+    my $x1 = r->c_logical(1, 0, 1);
     my $x2 = r->cumsum($x1);
     is_deeply($x2->values, [1, 1, 2]);
   }

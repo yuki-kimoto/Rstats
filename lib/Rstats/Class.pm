@@ -218,7 +218,7 @@ my @func_names = qw/
   pow
   new_complex
   c_integer
-  new_logical
+  c_logical
   negation
   dim
   Inf

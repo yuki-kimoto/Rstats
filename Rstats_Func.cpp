@@ -122,7 +122,7 @@ namespace Rstats {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
       }
       else if (type_h[Rstats::Type::INTEGER]) {
-        v2 = Rstats::VectorFunc::new_integer(length);
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
       }
       else {
         v2 = Rstats::VectorFunc::new_logical(length);
@@ -700,7 +700,7 @@ namespace Rstats {
       
       IV length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_integer(length);
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
@@ -1316,7 +1316,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_integer(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_integer(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+              = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -1401,7 +1401,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "integer")) {
-        compose_elements = Rstats::VectorFunc::new_integer(len);
+        compose_elements = Rstats::VectorFunc::new_vector<Rstats::Integer>(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);

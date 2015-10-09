@@ -246,25 +246,16 @@ namespace Rstats {
       
       return v1;
     };
-    
-    Rstats::Vector* new_integer(IV length) {
-      
+
+    template<>
+    Rstats::Vector* new_vector<Rstats::Integer>(IV length) {
       Rstats::Vector* v1 = new_empty_vector();
-      v1->values = new std::vector<IV>(length);
+      v1->values = new std::vector<Rstats::Integer>(length);
       v1->type = Rstats::Type::INTEGER;
       
       return v1;
     }
-
-    Rstats::Vector* new_integer(IV length, IV value) {
-      
-      Rstats::Vector* v1 = new_integer(length);;
-      for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<Rstats::Integer>(v1, i, value);
-      }
-      return v1;
-    }
-
+        
     Rstats::Vector* new_logical(IV length) {
       Rstats::Vector* v1 = new_empty_vector();
 
@@ -582,7 +573,7 @@ namespace Rstats {
     Rstats::Vector* as_integer(Rstats::Vector* v1) {
 
       IV length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_integer(length);
+      Rstats::Vector* v2 = new_vector<Rstats::Integer>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
@@ -866,7 +857,7 @@ namespace Rstats {
         }
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL : {
-          v2 = Rstats::VectorFunc::new_integer(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
           IV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
@@ -912,7 +903,7 @@ namespace Rstats {
         }
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL : {
-          v2 = Rstats::VectorFunc::new_integer(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
           IV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
@@ -958,7 +949,7 @@ namespace Rstats {
         }
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL : {
-          v2 = Rstats::VectorFunc::new_integer(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
           IV v2_total(1);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
@@ -1010,7 +1001,7 @@ namespace Rstats {
         }
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL : {
-          v2 = Rstats::VectorFunc::new_integer(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
           IV v2_total(0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
@@ -1058,7 +1049,7 @@ namespace Rstats {
           }
           break;
         case Rstats::Type::INTEGER :
-          v2 = Rstats::VectorFunc::new_integer(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
           for (IV i = 0; i < length; i++) {
             Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }

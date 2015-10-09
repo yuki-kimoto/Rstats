@@ -378,7 +378,7 @@ namespace Rstats {
           break; \
         case Rstats::Type::INTEGER : \
         case Rstats::Type::LOGICAL : \
-          v2 = Rstats::VectorFunc::new_integer(length); \
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length); \
           for (IV i = 0; i < length; i++) { \
             Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
           } \
@@ -533,7 +533,7 @@ namespace Rstats {
           break; \
         case Rstats::Type::INTEGER : \
         case Rstats::Type::LOGICAL : \
-          v3 = Rstats::VectorFunc::new_integer(length); \
+          v3 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length); \
           for (IV i = 0; i < length; i++) { \
             try {\
               Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i))); \
@@ -615,9 +615,6 @@ namespace Rstats {
     Rstats::Vector* new_character(IV);
     Rstats::Vector* new_complex(IV);
     Rstats::Vector* new_complex(IV, std::complex<NV>);
-
-    Rstats::Vector* new_integer(IV);
-    Rstats::Vector* new_integer(IV, IV);
     
     Rstats::Vector* new_logical(IV);
     Rstats::Vector* new_logical(IV, IV);
@@ -718,6 +715,8 @@ namespace Rstats {
     Rstats::Vector* new_vector(IV);
     template<>
     Rstats::Vector* new_vector<Rstats::Double>(IV);
+    template<>
+    Rstats::Vector* new_vector<Rstats::Integer>(IV);
     
     template <class T>
     Rstats::Vector* new_vector(IV length, T value) {

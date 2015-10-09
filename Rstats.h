@@ -45,7 +45,7 @@ namespace Rstats {
   AV* pl_new_av();
   SV* pl_new_avrv();
   HV* pl_new_hv();
-  SV* pl_new_hv_ref();
+  SV* pl_new_hvrv();
   SV* pl_deref(SV*);
   AV* pl_av_deref(SV*);
   HV* pl_hv_deref(SV*);

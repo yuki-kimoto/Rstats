@@ -799,7 +799,7 @@ namespace Rstats {
               sv_im = Rstats::pl_new_sv_nv(im);
             }
 
-            sv_value = Rstats::pl_new_hv_ref();
+            sv_value = Rstats::pl_new_hvrv();
             Rstats::pl_hv_store(sv_value, "re", sv_re);
             Rstats::pl_hv_store(sv_value, "im", sv_im);
           }

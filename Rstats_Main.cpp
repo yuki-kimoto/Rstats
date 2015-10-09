@@ -39,7 +39,7 @@ namespace Rstats {
     return (HV*)sv_2mortal((SV*)newHV());
   }
 
-  SV* pl_new_hv_ref() {
+  SV* pl_new_hvrv() {
     return sv_2mortal(newRV_inc((SV*)pl_new_hv()));
   }
 

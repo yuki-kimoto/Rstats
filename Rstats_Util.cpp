@@ -139,7 +139,7 @@ namespace Rstats {
           Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_IMAGE_ONLY_RE, 1, sv_im_str);
           sv_im = Rstats::pl_new_sv_nv(SvNV(sv_im_str));
           
-          sv_ret = Rstats::pl_new_hv_ref();
+          sv_ret = Rstats::pl_new_hvrv();
           Rstats::pl_hv_store(sv_ret, "re", sv_re);
           Rstats::pl_hv_store(sv_ret, "im", sv_im);
         }
@@ -157,7 +157,7 @@ namespace Rstats {
             sv_im = Rstats::pl_new_sv_nv(0);
           }
 
-          sv_ret = Rstats::pl_new_hv_ref();
+          sv_ret = Rstats::pl_new_hvrv();
           Rstats::pl_hv_store(sv_ret, "re", sv_re);
           Rstats::pl_hv_store(sv_ret, "im", sv_im);
         }

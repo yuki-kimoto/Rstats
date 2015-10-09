@@ -259,7 +259,7 @@ namespace Rstats {
 
     SV* new_vector(SV* sv_r) {
       
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
@@ -278,14 +278,14 @@ namespace Rstats {
     }
     
     SV* array(SV* sv_r, SV* sv_x1) {
-      SV* sv_args_h = Rstats::pl_new_hv_ref();
+      SV* sv_args_h = Rstats::pl_new_hvrv();
       Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
       return Rstats::Func::array_with_opt(sv_r, sv_args_h);
     }
     
     SV* array(SV* sv_r, SV* sv_x1, SV* sv_dim) {
       
-      SV* sv_args_h = Rstats::pl_new_hv_ref();
+      SV* sv_args_h = Rstats::pl_new_hvrv();
       Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
       Rstats::pl_hv_store(sv_args_h, "dim", sv_dim);
       return Rstats::Func::array_with_opt(sv_r, sv_args_h);
@@ -614,7 +614,7 @@ namespace Rstats {
 
     template <>
     SV* new_empty_vector<Rstats::Character>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
@@ -626,7 +626,7 @@ namespace Rstats {
 
     template <>
     SV* new_empty_vector<Rstats::Complex>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
@@ -638,7 +638,7 @@ namespace Rstats {
     
     template <>
     SV* new_empty_vector<Rstats::Double>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
@@ -650,7 +650,7 @@ namespace Rstats {
 
     template <>
     SV* new_empty_vector<Rstats::Integer>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
@@ -662,7 +662,7 @@ namespace Rstats {
 
     template <>
     SV* new_empty_vector<Rstats::Logical>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
@@ -867,7 +867,7 @@ namespace Rstats {
 
     SV* new_null(SV* sv_r) {
       
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      SV* sv_x1 = Rstats::pl_new_hvrv();
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
@@ -1012,7 +1012,7 @@ namespace Rstats {
     }
 
     SV* new_data_frame(SV* sv_r) {
-      SV* sv_data_frame = Rstats::pl_new_hv_ref();
+      SV* sv_data_frame = Rstats::pl_new_hvrv();
       Rstats::pl_sv_bless(sv_data_frame, "Rstats::Object");
       Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
       Rstats::pl_hv_store(sv_data_frame, "object_type", Rstats::pl_new_sv_pv("data.frame"));
@@ -1021,7 +1021,7 @@ namespace Rstats {
     }
 
     SV* new_list(SV* sv_r) {
-      SV* sv_list = Rstats::pl_new_hv_ref();
+      SV* sv_list = Rstats::pl_new_hvrv();
       Rstats::pl_sv_bless(sv_list, "Rstats::Object");
       Rstats::pl_hv_store(sv_list, "r", sv_r);
       Rstats::pl_hv_store(sv_list, "object_type", Rstats::pl_new_sv_pv("list"));
@@ -1036,7 +1036,7 @@ namespace Rstats {
     SV* copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2, SV* sv_opt) {
       
       if (!SvOK(sv_opt)) {
-        sv_opt = Rstats::pl_new_hv_ref();
+        sv_opt = Rstats::pl_new_hvrv();
       }
       
       SV* sv_new_indexes = Rstats::pl_hv_fetch(sv_opt, "new_indexes");
@@ -1546,10 +1546,10 @@ namespace Rstats {
         sv_opt = Rstats::pl_av_pop(sv_args);
       }
       else {
-        sv_opt = Rstats::pl_new_hv_ref();
+        sv_opt = Rstats::pl_new_hvrv();
       }
       
-      SV* sv_new_opt = Rstats::pl_new_hv_ref();
+      SV* sv_new_opt = Rstats::pl_new_hvrv();
       IV names_length = Rstats::pl_av_len(sv_names);
       for (IV i = 0; i < names_length; i++) {
         SV* sv_name = Rstats::pl_av_fetch(sv_names, i);
@@ -1618,7 +1618,7 @@ namespace Rstats {
       
       SV* sv_x2;
       if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_factor(sv_r, sv_x1))) {
-        SV* sv_levels = Rstats::pl_new_hv_ref();
+        SV* sv_levels = Rstats::pl_new_hvrv();
         SV* sv_x_levels = Rstats::Func::levels(sv_r, sv_x1);
         SV* sv_x_levels_values = Rstats::Func::values(sv_r, sv_x_levels);
         SV* sv_levels_length = Rstats::Func::length_value(sv_r, sv_x_levels);

@@ -725,8 +725,10 @@ namespace Rstats {
       }
       return v1;
     };
+
+    Rstats::Vector* sin(Rstats::Vector*);
+    
   }
-  
   // Rstats::Func
   namespace Func {
     SV* new_array(SV*);

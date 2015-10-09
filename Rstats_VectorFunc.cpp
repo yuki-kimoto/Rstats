@@ -246,6 +246,15 @@ namespace Rstats {
       
       return v1;
     }
+
+    template<>
+    Rstats::Vector* new_vector<Rstats::Character>(IV length) {
+      Rstats::Vector* v1 = new_empty_vector();
+      v1->values = new std::vector<Rstats::Character>(length);
+      v1->type = Rstats::Type::CHARACTER;
+      
+      return v1;
+    }
     
     Rstats::Vector* new_logical(IV length) {
       Rstats::Vector* v1 = new_empty_vector();

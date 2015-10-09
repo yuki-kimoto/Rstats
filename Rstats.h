@@ -103,6 +103,7 @@ namespace Rstats {
   typedef std::complex<NV> Complex;
   typedef NV Double;
   typedef IV Integer;
+  typedef bool Logical;
 
   typedef std::vector<Rstats::Character> CharacterVector;
   typedef std::vector<Rstats::Complex> ComplexVector;

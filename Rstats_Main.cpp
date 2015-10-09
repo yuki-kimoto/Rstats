@@ -31,7 +31,7 @@ namespace Rstats {
     return (AV*)sv_2mortal((SV*)newAV());
   }
 
-  SV* pl_new_av_ref() {
+  SV* pl_new_avrv() {
     return sv_2mortal(newRV_inc((SV*)pl_new_av()));
   }
 
@@ -118,7 +118,7 @@ namespace Rstats {
   }
 
   SV* pl_av_copy(SV* sv_av_ref) {
-    SV* sv_new_av_ref = pl_new_av_ref();
+    SV* sv_new_av_ref = pl_new_avrv();
     
     for (IV i = 0; i < pl_av_len(sv_av_ref); i++) {
       pl_av_store(sv_new_av_ref, i, pl_new_sv_sv(pl_av_fetch(sv_av_ref, i)));

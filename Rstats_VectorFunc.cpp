@@ -100,7 +100,7 @@ namespace Rstats {
     SV* create_sv_values(Rstats::Vector* v1) {
       
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      SV* sv_values = Rstats::pl_new_av_ref();
+      SV* sv_values = Rstats::pl_new_avrv();
       for (Rstats::Integer i = 0; i < length; i++) {
         Rstats::pl_av_push(sv_values, Rstats::VectorFunc::create_sv_value(v1, i));
       }
@@ -435,7 +435,7 @@ namespace Rstats {
 
     SV* to_string(Rstats::Vector* v1) {
       
-      SV* sv_strs = Rstats::pl_new_av_ref();
+      SV* sv_strs = Rstats::pl_new_avrv();
       for (Rstats::Integer i = 0; i < Rstats::VectorFunc::get_length(v1); i++) {
         SV* sv_str = Rstats::VectorFunc::to_string_pos(v1, i);
         Rstats::pl_av_push(sv_strs, sv_str);

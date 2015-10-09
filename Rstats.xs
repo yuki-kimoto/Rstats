@@ -742,7 +742,7 @@ SV* args_h(...)
 {
   SV* sv_r = ST(0);
   SV* sv_names = ST(1);
-  SV* sv_args_h = Rstats::pl_new_av_ref();
+  SV* sv_args_h = Rstats::pl_new_avrv();
   
   for (IV i = 2; i < items; i++) {
     Rstats::pl_av_push(sv_args_h, ST(i));
@@ -770,7 +770,7 @@ SV* c_(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }
@@ -790,7 +790,7 @@ SV* c_character(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
   
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
@@ -811,7 +811,7 @@ SV* c_double(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
   
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
@@ -832,7 +832,7 @@ SV* c_complex(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
   
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
@@ -853,7 +853,7 @@ SV* c_integer(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
   
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
@@ -874,7 +874,7 @@ SV* c_logical(...)
     sv_values = ST(1);
   }
   else {
-    sv_values = Rstats::pl_new_av_ref();
+    sv_values = Rstats::pl_new_avrv();
   
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
@@ -1169,11 +1169,11 @@ SV* array(...)
   SV* sv_r = ST(0);
   
   // Args
-  SV* sv_args = Rstats::pl_new_av_ref();
+  SV* sv_args = Rstats::pl_new_avrv();
   for (IV i = 1; i < items; i++) {
     Rstats::pl_av_push(sv_args, ST(i));
   }
-  SV* sv_names = Rstats::pl_new_av_ref();
+  SV* sv_names = Rstats::pl_new_avrv();
   Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("x"));
   Rstats::pl_av_push(sv_names, Rstats::pl_new_sv_pv("dim"));
   SV* sv_args_h = Rstats::Func::args_h(sv_r, sv_names, sv_args);

@@ -29,23 +29,23 @@ namespace Rstats {
     SV* cross_product(SV* sv_values) {
       
       IV values_length = Rstats::pl_av_len(sv_values);
-      SV* sv_idxs = Rstats::pl_new_av_ref();
+      SV* sv_idxs = Rstats::pl_new_avrv();
       for (IV i = 0; i < values_length; i++) {
         Rstats::pl_av_push(sv_idxs, Rstats::pl_new_sv_iv(0)); 
       }
       
-      SV* sv_idx_idx = Rstats::pl_new_av_ref();
+      SV* sv_idx_idx = Rstats::pl_new_avrv();
       for (IV i = 0; i < values_length; i++) {
         Rstats::pl_av_push(sv_idx_idx, Rstats::pl_new_sv_iv(i));
       }
       
-      SV* sv_x1 = Rstats::pl_new_av_ref();
+      SV* sv_x1 = Rstats::pl_new_avrv();
       for (IV i = 0; i < values_length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         Rstats::pl_av_push(sv_x1, Rstats::pl_av_fetch(sv_value, 0));
       }
 
-      SV* sv_result = Rstats::pl_new_av_ref();
+      SV* sv_result = Rstats::pl_new_avrv();
       Rstats::pl_av_push(sv_result, Rstats::pl_av_copy(sv_x1));
       IV end_loop = 0;
       while (1) {
@@ -80,7 +80,7 @@ namespace Rstats {
 
     SV* pos_to_index(SV* sv_pos, SV* sv_dim) {
       
-      SV* sv_index = Rstats::pl_new_av_ref();
+      SV* sv_index = Rstats::pl_new_avrv();
       IV pos = SvIV(sv_pos);
       IV before_dim_product = 1;
       for (IV i = 0; i < Rstats::pl_av_len(sv_dim); i++) {

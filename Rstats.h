@@ -43,7 +43,7 @@ namespace Rstats {
   SV* pl_new_sv_iv(IV);
   SV* pl_new_sv_nv(NV);
   AV* pl_new_av();
-  SV* pl_new_av_ref();
+  SV* pl_new_avrv();
   HV* pl_new_hv();
   SV* pl_new_hv_ref();
   SV* pl_deref(SV*);
@@ -732,6 +732,9 @@ namespace Rstats {
   }
   // Rstats::Func
   namespace Func {
+    SV* fix_length(SV*, SV*, SV*);
+    SV* fix_type(SV*, SV*, SV*);
+    
     SV* new_array(SV*);
     void set_vector(SV*, SV*, Rstats::Vector*);
     Rstats::Vector* get_vector(SV*, SV*);

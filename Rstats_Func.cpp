@@ -117,22 +117,29 @@ namespace Rstats {
         }
       }
 
+      SV* sv_x1;
+
       // Decide type
       Rstats::Vector* v2;
       if (type_h[Rstats::Type::CHARACTER]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
+        sv_x1 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
       }
       else if (type_h[Rstats::Type::COMPLEX]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
+        sv_x1 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
       }
       else if (type_h[Rstats::Type::DOUBLE]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
+        sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       }
       else if (type_h[Rstats::Type::INTEGER]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
+        sv_x1 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
       }
       else {
         v2 = Rstats::VectorFunc::new_logical(length);
+        sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       }
       
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v2);
@@ -227,7 +234,6 @@ namespace Rstats {
       }
       
       // Array
-      SV* sv_x1 = Rstats::Func::new_vector(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x1, v2);
 
       return sv_x1;

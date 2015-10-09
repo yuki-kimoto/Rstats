@@ -192,7 +192,7 @@ namespace Rstats {
       if (v1->values != NULL){ 
         switch (type) {
           case Rstats::Type::CHARACTER : {
-            std::vector<SV*>* values = Rstats::VectorFunc::get_values<Rstats::Character>(v1);
+            std::vector<Rstats::Character>* values = Rstats::VectorFunc::get_values<Rstats::Character>(v1);
             for (Rstats::Integer i = 0; i < length; i++) {
               if ((*values)[i] != NULL) {
                 SvREFCNT_dec((*values)[i]);
@@ -461,7 +461,7 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           for (Rstats::Integer i = 0; i < length; i++) {
-            SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
             Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, sv_value);
           }
           break;
@@ -540,7 +540,7 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           for (Rstats::Integer i = 0; i < length; i++) {
-            SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
             if (SvOK(sv_value_fix)) {
               Rstats::Double value = SvNV(sv_value_fix);
@@ -590,7 +590,7 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           for (Rstats::Integer i = 0; i < length; i++) {
-            SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
             SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
             if (SvOK(sv_value_fix)) {
               Rstats::Integer value = SvIV(sv_value_fix);
@@ -643,7 +643,7 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           for (Rstats::Integer i = 0; i < length; i++) {
-            SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
             SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
             
             if (SvOK(sv_z)) {
@@ -697,7 +697,7 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           for (Rstats::Integer i = 0; i < length; i++) {
-            SV* sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
             SV* sv_logical = Rstats::Util::looks_like_logical(sv_value);
             if (SvOK(sv_logical)) {
               if (SvTRUE(sv_logical)) {

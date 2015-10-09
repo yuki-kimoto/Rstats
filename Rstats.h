@@ -613,7 +613,6 @@ namespace Rstats {
     
     Rstats::Vector* new_character(IV, SV*);
     Rstats::Vector* new_character(IV);
-    Rstats::Vector* new_complex(IV, std::complex<NV>);
     
     Rstats::Vector* new_logical(IV);
     Rstats::Vector* new_logical(IV, IV);

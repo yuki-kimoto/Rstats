@@ -1292,7 +1292,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_complex(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_complex(1, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
+              = Rstats::VectorFunc::new_vector<Rstats::Complex>(1, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }

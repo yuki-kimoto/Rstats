@@ -21,14 +21,21 @@ namespace Rstats {
       
       return sv_x2;
     }
-    
-    SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+
+    SV* as_vector(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::atan2, sv_x1, sv_x2);
+      SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");
       
-      return sv_x3;
+      Rstats::Vector* v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_v1);
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::clone(v1);
+      
+      SV* sv_v2 = Rstats::pl_to_perl_obj<Rstats::Vector*>(v2, "Rstats::Vector");
+      
+      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      Rstats::pl_hv_store(sv_x2, "vector", sv_v2);
+      
+      return sv_x2;
     }
 
     SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
@@ -225,6 +232,26 @@ namespace Rstats {
 
       return sv_x1;
     }
+
+    SV* new_vector(SV* sv_r) {
+      
+      SV* sv_x1 = Rstats::pl_new_hv_ref();
+      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
+      Rstats::pl_hv_store(sv_x1, "r", sv_r);
+      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
+      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+      
+      return sv_x1;
+    }
+    
+    SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::atan2, sv_x1, sv_x2);
+      
+      return sv_x3;
+    }
     
     SV* array(SV* sv_r, SV* sv_x1) {
       SV* sv_args_h = Rstats::pl_new_hv_ref();
@@ -246,7 +273,7 @@ namespace Rstats {
      
       // Dimention
       SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_vector(sv_r);
+        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_null(sv_r);
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
 
       
@@ -826,17 +853,6 @@ namespace Rstats {
       return sv_x1;
     }
     
-    SV* new_vector(SV* sv_r) {
-      
-      SV* sv_x1 = Rstats::pl_new_hv_ref();
-      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
-      Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
-      
-      return sv_x1;
-    }
-    
     SV* new_na(SV* sv_r) {
       SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_na());
@@ -969,22 +985,6 @@ namespace Rstats {
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
       return sv_x_is;
-    }
-
-    SV* as_vector(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");
-      
-      Rstats::Vector* v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_v1);
-      
-      Rstats::Vector* v2 = Rstats::VectorFunc::clone(v1);
-      
-      SV* sv_v2 = Rstats::pl_to_perl_obj<Rstats::Vector*>(v2, "Rstats::Vector");
-      
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
-      Rstats::pl_hv_store(sv_x2, "vector", sv_v2);
-      
-      return sv_x2;
     }
 
     SV* new_data_frame(SV* sv_r) {

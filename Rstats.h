@@ -365,7 +365,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::COMPLEX : \
-          v2 = Rstats::VectorFunc::new_complex(length); \
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length); \
           for (IV i = 0; i < length; i++) { \
             Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i))); \
           } \
@@ -398,7 +398,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::COMPLEX : \
-          v2 = Rstats::VectorFunc::new_complex(length); \
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length); \
           for (IV i = 0; i < length; i++) { \
             Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i))); \
           } \
@@ -520,7 +520,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::COMPLEX : \
-          v3 = Rstats::VectorFunc::new_complex(length); \
+          v3 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length); \
           for (IV i = 0; i < length; i++) { \
             Rstats::VectorFunc::set_value<Rstats::Complex>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i), Rstats::VectorFunc::get_value<Rstats::Complex>(v2, i))); \
           } \
@@ -564,7 +564,7 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::COMPLEX : \
-          v3 = Rstats::VectorFunc::new_complex(length); \
+          v3 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length); \
           for (IV i = 0; i < length; i++) { \
             Rstats::VectorFunc::set_value<Rstats::Complex>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i), Rstats::VectorFunc::get_value<Rstats::Complex>(v2, i))); \
           } \
@@ -613,7 +613,6 @@ namespace Rstats {
     
     Rstats::Vector* new_character(IV, SV*);
     Rstats::Vector* new_character(IV);
-    Rstats::Vector* new_complex(IV);
     Rstats::Vector* new_complex(IV, std::complex<NV>);
     
     Rstats::Vector* new_logical(IV);

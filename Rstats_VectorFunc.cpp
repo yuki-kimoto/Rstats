@@ -231,7 +231,7 @@ namespace Rstats {
         
     Rstats::Vector* new_complex(IV length, std::complex<NV> z) {
       
-      Rstats::Vector* v1 = new_complex(length);
+      Rstats::Vector* v1 = new_vector<Rstats::Complex>(length);
       for (IV i = 0; i < length; i++) {
         Rstats::VectorFunc::set_value<Rstats::Complex>(v1, i, z);
       }
@@ -635,7 +635,7 @@ namespace Rstats {
     Rstats::Vector* as_complex(Rstats::Vector* v1) {
 
       IV length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_complex(length);
+      Rstats::Vector* v2 = new_vector<Rstats::Complex>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
@@ -847,7 +847,7 @@ namespace Rstats {
           croak("Error in cumprod() : non-numeric argument to binary operator");
           break;
         case Rstats::Type::COMPLEX : {
-          v2 = Rstats::VectorFunc::new_complex(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
           std::complex<NV> v2_total(1, 0);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
@@ -893,7 +893,7 @@ namespace Rstats {
           croak("Error in cumsum() : non-numeric argument to binary operator");
           break;
         case Rstats::Type::COMPLEX : {
-          v2 = Rstats::VectorFunc::new_complex(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
           std::complex<NV> v2_total(0, 0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
@@ -939,7 +939,7 @@ namespace Rstats {
           croak("Error in prod() : non-numeric argument to prod()");
           break;
         case Rstats::Type::COMPLEX : {
-          v2 = Rstats::VectorFunc::new_complex(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
           std::complex<NV> v2_total(1, 0);
           for (IV i = 0; i < length; i++) {
             v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
@@ -991,7 +991,7 @@ namespace Rstats {
           croak("Error in a - b : non-numeric argument to binary operator");
           break;
         case Rstats::Type::COMPLEX : {
-          v2 = Rstats::VectorFunc::new_complex(1);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
           std::complex<NV> v2_total(0, 0);
           for (IV i = 0; i < length; i++) {
             v2_total += Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
@@ -1046,7 +1046,7 @@ namespace Rstats {
           }
           break;
         case Rstats::Type::COMPLEX :
-          v2 = Rstats::VectorFunc::new_complex(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
           for (IV i = 0; i < length; i++) {
             Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
           }

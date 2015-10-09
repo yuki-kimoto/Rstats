@@ -116,7 +116,7 @@ namespace Rstats {
         v2 = Rstats::VectorFunc::new_character(length);
       }
       else if (type_h[Rstats::Type::COMPLEX]) {
-        v2 = Rstats::VectorFunc::new_complex(length);
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
       }
       else if (type_h[Rstats::Type::DOUBLE]) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
@@ -624,7 +624,7 @@ namespace Rstats {
       
       IV length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_complex(length);
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
@@ -1367,7 +1367,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "complex")) {
-        compose_elements = Rstats::VectorFunc::new_complex(len);
+        compose_elements = Rstats::VectorFunc::new_vector<Rstats::Complex>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {

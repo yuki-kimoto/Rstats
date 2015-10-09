@@ -1097,7 +1097,7 @@ namespace Rstats {
 
     SV* as_integer(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_integer(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
@@ -1106,7 +1106,7 @@ namespace Rstats {
 
     SV* as_logical(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_logical(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
@@ -1115,7 +1115,7 @@ namespace Rstats {
 
     SV* as_complex(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_complex(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
@@ -1124,7 +1124,7 @@ namespace Rstats {
 
     SV* as_double(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_double(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
@@ -1133,7 +1133,7 @@ namespace Rstats {
 
     SV* as_numeric(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_numeric(Rstats::Func::get_vector(sv_r, sv_x1)));
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
 
@@ -1145,7 +1145,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+        SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_finite(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1161,7 +1161,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+        SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_infinite(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1177,7 +1177,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+        SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_nan(Rstats::Func::get_vector(sv_r, sv_x1)));
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
         
@@ -1204,7 +1204,7 @@ namespace Rstats {
         }
       }
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x2, x2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       

@@ -531,8 +531,6 @@ namespace Rstats {
     }
 
     SV* c_character(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_vector(sv_r);
-      
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_values_av_ref, sv_values);
@@ -557,6 +555,7 @@ namespace Rstats {
         }
       }
       
+      SV* sv_x1 = new_empty_vector<Rstats::Character>(sv_r);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
@@ -664,8 +663,6 @@ namespace Rstats {
     }
 
     SV* c_complex(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_vector(sv_r);
-      
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_values_av_ref, sv_values);
@@ -734,14 +731,13 @@ namespace Rstats {
         }
       }
       
+      SV* sv_x1 = new_empty_vector<Rstats::Complex>(sv_r);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }
 
     SV* c_integer(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_vector(sv_r);
-      
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_values_av_ref, sv_values);
@@ -766,6 +762,7 @@ namespace Rstats {
         }
       }
       
+      SV* sv_x1 = new_empty_vector<Rstats::Integer>(sv_r);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
@@ -776,8 +773,6 @@ namespace Rstats {
     }
 
     SV* c_logical(SV* sv_r, SV* sv_values) {
-      SV* sv_x1 = new_vector(sv_r);
-      
       if (!sv_derived_from(sv_values, "ARRAY")) {
         SV* sv_values_av_ref = Rstats::pl_new_av_ref();
         Rstats::pl_av_push(sv_values_av_ref, sv_values);
@@ -802,6 +797,7 @@ namespace Rstats {
         }
       }
       
+      SV* sv_x1 = new_empty_vector<Rstats::Logical>(sv_r);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;

@@ -877,7 +877,6 @@ namespace Rstats {
     SV* new_empty_vector<Rstats::Integer>(SV*);
     template <>
     SV* new_empty_vector<Rstats::Logical>(SV*);
-
   }
 }
 

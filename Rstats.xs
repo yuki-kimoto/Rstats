@@ -258,8 +258,7 @@ SV* Conj(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Conj, sv_x1);
+  SV* sv_x2 = Rstats::Func::Conj(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -269,8 +268,7 @@ SV* acosh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::acosh, sv_x1);
+  SV* sv_x2 = Rstats::Func::acosh(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -313,8 +311,7 @@ SV* acos(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::acos, sv_x1);
+  SV* sv_x2 = Rstats::Func::acos(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -334,8 +331,7 @@ SV* asinh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::asinh, sv_x1);
+  SV* sv_x2 = Rstats::Func::asinh(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -355,8 +351,7 @@ SV* atanh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::atanh, sv_x1);
+  SV* sv_x2 = Rstats::Func::atanh(sv_r, ST(1));
   
   return_sv(sv_x2);
 }

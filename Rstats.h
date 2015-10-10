@@ -315,45 +315,6 @@ namespace Rstats {
   } Vector;
 
   // Macro for Rstats::Vector
-# define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
-      IV length = Rstats::VectorFunc::get_length(v1); \
-      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length); \
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
-      switch (type) { \
-        case Rstats::Type::CHARACTER : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i))); \
-          } \
-          break; \
-        case Rstats::Type::COMPLEX : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i))); \
-          } \
-          break; \
-        case Rstats::Type::DOUBLE : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
-          } \
-          break; \
-        case Rstats::Type::INTEGER : \
-        case Rstats::Type::LOGICAL : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
-          } \
-          break; \
-        default: \
-          croak("Error in %s() : invalid argument to %s()", #FUNC_NAME, #FUNC_NAME); \
-          break; \
-      } \
-      for (IV i = 0; i < length; i++) { \
-        if (Rstats::VectorFunc::exists_na_position(v1, i)) { \
-          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, 0); \
-        } \
-      } \
-      return v2; \
-    }
-
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \

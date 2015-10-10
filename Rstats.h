@@ -252,55 +252,55 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Double, Rstats::Double);
     Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
 
-    IV And(SV*, SV*);
-    IV And(Rstats::Complex, Rstats::Complex);
-    IV And(Rstats::Double, Rstats::Double);
-    IV And(IV, IV);
+    Rstats::Logical And(SV*, SV*);
+    Rstats::Logical And(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical And(Rstats::Double, Rstats::Double);
+    Rstats::Logical And(Rstats::Integer, Rstats::Integer);
 
-    IV Or(SV*, SV*);
-    IV Or(Rstats::Complex, Rstats::Complex);
-    IV Or(Rstats::Double, Rstats::Double);
-    IV Or(IV, IV);
+    Rstats::Logical Or(SV*, SV*);
+    Rstats::Logical Or(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical Or(Rstats::Double, Rstats::Double);
+    Rstats::Logical Or(Rstats::Integer, Rstats::Integer);
     
-    IV equal(SV*, SV*);
-    IV equal(Rstats::Complex, Rstats::Complex);
-    IV equal(Rstats::Double, Rstats::Double);
-    IV equal(IV, IV);
+    Rstats::Logical equal(SV*, SV*);
+    Rstats::Logical equal(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical equal(Rstats::Double, Rstats::Double);
+    Rstats::Logical equal(Rstats::Integer, Rstats::Integer);
 
-    IV not_equal(SV*, SV*);
-    IV not_equal(Rstats::Complex, Rstats::Complex);
-    IV not_equal(Rstats::Double, Rstats::Double);
-    IV not_equal(IV, IV);
+    Rstats::Logical not_equal(SV*, SV*);
+    Rstats::Logical not_equal(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical not_equal(Rstats::Double, Rstats::Double);
+    Rstats::Logical not_equal(Rstats::Integer, Rstats::Integer);
 
-    IV more_than(SV*, SV*);
-    IV more_than(Rstats::Complex, Rstats::Complex);
-    IV more_than(Rstats::Double, Rstats::Double);
-    IV more_than(IV, IV);
+    Rstats::Logical more_than(SV*, SV*);
+    Rstats::Logical more_than(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical more_than(Rstats::Double, Rstats::Double);
+    Rstats::Logical more_than(Rstats::Integer, Rstats::Integer);
 
-    IV less_than(SV*, SV*);
-    IV less_than(Rstats::Complex, Rstats::Complex);
-    IV less_than(Rstats::Double, Rstats::Double);
-    IV less_than(IV, IV);
+    Rstats::Logical less_than(SV*, SV*);
+    Rstats::Logical less_than(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical less_than(Rstats::Double, Rstats::Double);
+    Rstats::Logical less_than(Rstats::Integer, Rstats::Integer);
 
-    IV more_than_or_equal(SV*, SV*);
-    IV more_than_or_equal(Rstats::Complex, Rstats::Complex);
-    IV more_than_or_equal(Rstats::Double, Rstats::Double);
-    IV more_than_or_equal(IV, IV);
+    Rstats::Logical more_than_or_equal(SV*, SV*);
+    Rstats::Logical more_than_or_equal(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical more_than_or_equal(Rstats::Double, Rstats::Double);
+    Rstats::Logical more_than_or_equal(Rstats::Integer, Rstats::Integer);
 
-    IV less_than_or_equal(SV*, SV*);
-    IV less_than_or_equal(Rstats::Complex, Rstats::Complex);
-    IV less_than_or_equal(Rstats::Double, Rstats::Double);
-    IV less_than_or_equal(IV, IV);
+    Rstats::Logical less_than_or_equal(SV*, SV*);
+    Rstats::Logical less_than_or_equal(Rstats::Complex, Rstats::Complex);
+    Rstats::Logical less_than_or_equal(Rstats::Double, Rstats::Double);
+    Rstats::Logical less_than_or_equal(Rstats::Integer, Rstats::Integer);
 
     Rstats::Logical is_infinite(SV*);
     Rstats::Logical is_infinite(Rstats::Complex);
     Rstats::Logical is_infinite(Rstats::Double);
-    Rstats::Logical is_infinite(IV);
+    Rstats::Logical is_infinite(Rstats::Integer);
 
     Rstats::Logical is_finite(SV*);
     Rstats::Logical is_finite(Rstats::Complex);
     Rstats::Logical is_finite(Rstats::Double);
-    Rstats::Logical is_finite(IV);
+    Rstats::Logical is_finite(Rstats::Integer);
 
     Rstats::Logical is_nan(SV*);
     Rstats::Logical is_nan(Rstats::Complex);

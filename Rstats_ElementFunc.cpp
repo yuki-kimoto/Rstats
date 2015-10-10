@@ -462,90 +462,90 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Integer e1, Rstats::Integer e2) { return atan2((Rstats::Double)e1, (Rstats::Double)e2); }
 
     // And
-    Rstats::Integer And(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
-    Rstats::Integer And(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical And(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
+    Rstats::Logical And(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) && e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }
     }
-    Rstats::Integer And(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical And(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Na exception"; }
       else { return e1 && e2 ? 1 : 0; }
     }
-    Rstats::Integer And(Rstats::Integer e1, Rstats::Integer e2) { return e1 && e2 ? 1 : 0; }
+    Rstats::Logical And(Rstats::Integer e1, Rstats::Integer e2) { return e1 && e2 ? 1 : 0; }
 
     // Or
-    Rstats::Integer Or(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
-    Rstats::Integer Or(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical Or(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
+    Rstats::Logical Or(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) || e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }
     }
-    Rstats::Integer Or(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical Or(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Na exception"; }
       else { return e1 || e2 ? 1 : 0; }
     }
-    Rstats::Integer Or(Rstats::Integer e1, Rstats::Integer e2) { return e1 || e2 ? 1 : 0; }
+    Rstats::Logical Or(Rstats::Integer e1, Rstats::Integer e2) { return e1 || e2 ? 1 : 0; }
 
     // equal
-    Rstats::Integer equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
-    Rstats::Integer equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 == e2 ? 1 : 0; }
-    Rstats::Integer equal(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
+    Rstats::Logical equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 == e2 ? 1 : 0; }
+    Rstats::Logical equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 == e2 ? 1 : 0; }
     }
-    Rstats::Integer equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 == e2 ? 1 : 0; }
+    Rstats::Logical equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 == e2 ? 1 : 0; }
 
     // not equal
-    Rstats::Integer not_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
-    Rstats::Integer not_equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 != e2 ? 1 : 0; }
-    Rstats::Integer not_equal(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical not_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
+    Rstats::Logical not_equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 != e2 ? 1 : 0; }
+    Rstats::Logical not_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 != e2 ? 1 : 0; }
     }
-    Rstats::Integer not_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 != e2 ? 1 : 0; }
+    Rstats::Logical not_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 != e2 ? 1 : 0; }
 
     // more_than
-    Rstats::Integer more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
-    Rstats::Integer more_than(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
+    Rstats::Logical more_than(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(more_than())");
     }
-    Rstats::Integer more_than(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical more_than(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 > e2 ? 1 : 0; }
     }
-    Rstats::Integer more_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 > e2 ? 1 : 0; }
+    Rstats::Logical more_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 > e2 ? 1 : 0; }
 
     // less_than
-    Rstats::Integer less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
-    Rstats::Integer less_than(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
+    Rstats::Logical less_than(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(less_than())");
     }
-    Rstats::Integer less_than(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical less_than(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 < e2 ? 1 : 0; }
     }
-    Rstats::Integer less_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 < e2 ? 1 : 0; }
+    Rstats::Logical less_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 < e2 ? 1 : 0; }
 
     // more_than_or_equal
-    Rstats::Integer more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
-    Rstats::Integer more_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
+    Rstats::Logical more_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(more_than_or_equal())");
     }
-    Rstats::Integer more_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical more_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 >= e2 ? 1 : 0; }
     }
-    Rstats::Integer more_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 >= e2 ? 1 : 0; }
+    Rstats::Logical more_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 >= e2 ? 1 : 0; }
 
     // less_than_or_equal
-    Rstats::Integer less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
-    Rstats::Integer less_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
+    Rstats::Logical less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
+    Rstats::Logical less_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
       croak("invalid comparison with complex values(less_than_or_equal())");
     }
-    Rstats::Integer less_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
+    Rstats::Logical less_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 <= e2 ? 1 : 0; }
     }
-    Rstats::Integer less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
+    Rstats::Logical less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
 
     // is_infinite
     Rstats::Logical is_infinite(Rstats::Character e1) { return 0; }

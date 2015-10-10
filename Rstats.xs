@@ -410,8 +410,7 @@ SV* exp(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::exp, sv_x1);
+  SV* sv_x2 = Rstats::Func::exp(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -421,8 +420,7 @@ SV* expm1(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::expm1, sv_x1);
+  SV* sv_x2 = Rstats::Func::expm1(sv_r, ST(1));
   
   return_sv(sv_x2);
 }

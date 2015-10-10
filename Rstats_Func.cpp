@@ -253,7 +253,57 @@ namespace Rstats {
       
       return sv_x2;
     }
-                    
+
+    SV* expm1(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x2;
+      if (strEQ(type, "complex")) {
+        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::expm1;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::expm1;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::expm1;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else {
+        croak("Error in expm1() : non-numeric argument to expm1()");
+      }
+      
+      return sv_x2;
+    }
+
+    SV* exp(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x2;
+      if (strEQ(type, "complex")) {
+        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::exp;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::exp;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::exp;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else {
+        croak("Error in exp() : non-numeric argument to exp()");
+      }
+      
+      return sv_x2;
+    }
+                      
     SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
       
       Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));

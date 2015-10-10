@@ -16,14 +16,6 @@ use Rstats::Func;
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
   
-
-  # operator - add to original vector
-  {
-    my $x1 = c_(1, 2, 3);
-    $x1->at(r->length($x1) + 1)->set(6);
-    is_deeply($x1->values, [1, 2, 3, 6]);
-  }
-  
   # operator - negation
   {
     my $x1 = c_(1, 2, 3);

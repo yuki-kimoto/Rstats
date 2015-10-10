@@ -10,6 +10,7 @@ use Math::Complex ();
 {
   # atanh - complex, 1 + 2i
   {
+    2*i_;
     my $x1 = c_(1 + 2*i_);
     my $x2 = r->atanh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.173287');

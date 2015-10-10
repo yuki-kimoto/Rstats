@@ -29,16 +29,20 @@ namespace Rstats {
 
       va_start(args, num);
       for (IV i = 0; i < num; i++) {
-        Rstats::pl_av_push(upgrade_type_args, va_arg(args, SV*));
+        SV** arg = va_arg(args, SV**);
+        SV* x = *arg;
+        Rstats::pl_av_push(upgrade_type_args, x);
       }
       va_end(args);
-
+      
+      
       SV* upgrade_type_result = Rstats::Func::upgrade_type_avrv(sv_r, upgrade_type_args);
       
       va_start(args, num);
       for (IV i = 0; i < num; i++) {
-        SV* arg = va_arg(args, SV*);
-        arg = Rstats::pl_av_fetch(upgrade_type_result, i);
+        SV** arg = va_arg(args, SV**);
+        SV* x = Rstats::pl_av_fetch(upgrade_type_result, i);
+        *arg = x;
       }
       va_end(args);
     }
@@ -48,19 +52,8 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
       
-      // Upgrade mode if type is different
-      SV* upgrade_type_args = Rstats::pl_new_avrv();
-      Rstats::pl_av_push(upgrade_type_args, sv_x1);
-      Rstats::pl_av_push(upgrade_type_args, sv_x2);
-      
-      SV* upgrade_type_result = Rstats::Func::upgrade_type_avrv(sv_r, upgrade_type_args);
-      
-      if (Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x1))
-        != Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_x2)))
-      {
-        sv_x1 = Rstats::pl_av_fetch(upgrade_type_result, 0);
-        sv_x2 = Rstats::pl_av_fetch(upgrade_type_result, 1);
-      }
+      // Upgrade type
+      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
       
       // Upgrade length if length is defferent
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
@@ -72,7 +65,8 @@ namespace Rstats {
       else if (SvIV(sv_x1_length) < SvIV(sv_x2_length)) {
         sv_x1 = Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c(sv_r, sv_x2_length));
       }
-
+      
+      
       Rstats::Vector* x3_elements
         = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
       

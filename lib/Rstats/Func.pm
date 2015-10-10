@@ -397,19 +397,7 @@ sub typeof {
   
   my $x1 = shift;
   
-  if (Rstats::Func::is_null($r, $x1)) {
-    return Rstats::Func::c_character($r, "NULL");
-  }
-  elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
-    my $type = $x1->type;
-    return Rstats::Func::c_character($r, $type);
-  }
-  elsif (Rstats::Func::is_list($r, $x1) || Rstats::Func::is_data_frame($r, $x1)) {
-    return Rstats::Func::c_character($r, 'list');
-  }
-  else {
-    return Rstats::Func::NA($r);
-  }
+  return Rstats::Func::c_character($r, $x1->{type});
 }
 
 sub labels {

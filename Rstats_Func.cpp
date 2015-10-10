@@ -1031,6 +1031,7 @@ namespace Rstats {
       Rstats::pl_sv_bless(sv_data_frame, "Rstats::Object");
       Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
       Rstats::pl_hv_store(sv_data_frame, "object_type", Rstats::pl_new_sv_pv("data.frame"));
+      Rstats::pl_hv_store(sv_data_frame, "type", Rstats::pl_new_sv_pv("list"));
       
       return sv_data_frame;
     }
@@ -1040,6 +1041,7 @@ namespace Rstats {
       Rstats::pl_sv_bless(sv_list, "Rstats::Object");
       Rstats::pl_hv_store(sv_list, "r", sv_r);
       Rstats::pl_hv_store(sv_list, "object_type", Rstats::pl_new_sv_pv("list"));
+      Rstats::pl_hv_store(sv_list, "type", Rstats::pl_new_sv_pv("list"));
       
       return sv_list;
     }

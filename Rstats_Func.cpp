@@ -273,7 +273,7 @@ namespace Rstats {
         sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
       }
       else {
-        croak("Error in is_infinite() : non-numeric argument to is_infinite()");
+        croak("Error in is_infinite() : default method not implemented for type '%s'", type);
       }
       
       return sv_x2;
@@ -298,7 +298,7 @@ namespace Rstats {
         sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
       }
       else {
-        croak("Error in is_finite() : non-numeric argument to is_finite()");
+        croak("Error in is_finite() : default method not implemented for type '%s'", type);
       }
       
       return sv_x2;

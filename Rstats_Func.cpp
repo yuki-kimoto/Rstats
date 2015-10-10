@@ -22,6 +22,40 @@ namespace Rstats {
       return sv_x2;
     }
 
+    SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
+      
+      IV xs_length = Rstats::pl_av_len(sv_xs);
+      IV max_length = 0;
+      for (IV i = 0; i < xs_length; i++) {
+        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
+        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+        IV x1_length = SvIV(sv_x1_length);
+        
+        if (x1_length > max_length) {
+          max_length = x1_length;
+        }
+      }
+      
+      SV* sv_new_xs = Rstats::pl_new_avrv();;
+      for (IV i = 0; i < xs_length; i++) {
+        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
+        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+        IV x1_length = SvIV(sv_x1_length);
+        
+        if (x1_length != max_length) {
+          Rstats::pl_av_push(
+            sv_new_xs,
+            Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c_double(sv_r, Rstats::pl_new_sv_iv(max_length)))
+          );
+        }
+        else {
+          Rstats::pl_av_push(sv_new_xs, sv_x1);
+        }
+      }
+      
+      return sv_new_xs;
+    }
+    
     void upgrade_length(SV* sv_r, IV num, ...) {
       va_list args;
       
@@ -55,6 +89,7 @@ namespace Rstats {
       for (IV i = 0; i < num; i++) {
         SV** arg = va_arg(args, SV**);
         SV* sv_x = Rstats::pl_av_fetch(sv_result, i);
+
         *arg = sv_x;
       }
       va_end(args);
@@ -106,19 +141,9 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
       
-      // Upgrade type
+      // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      
-      // Upgrade length if length is defferent
-      SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-      SV* sv_x2_length = Rstats::Func::length_value(sv_r, sv_x2);
-      SV* sv_length;
-      if (SvIV(sv_x1_length) > SvIV(sv_x2_length)) {
-        sv_x2 = Rstats::Func::array(sv_r, sv_x2, Rstats::Func::c(sv_r, sv_x1_length));
-      }
-      else if (SvIV(sv_x1_length) < SvIV(sv_x2_length)) {
-        sv_x1 = Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c(sv_r, sv_x2_length));
-      }
+      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       Rstats::Vector* x3_elements
         = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
@@ -417,37 +442,6 @@ namespace Rstats {
       return sv_x2;
     }
 
-    SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
-      
-      IV xs_length = Rstats::pl_av_len(sv_xs);
-      IV max_length = 0;
-      for (IV i = 0; i < xs_length; i++) {
-        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        IV x1_length = SvIV(sv_x1_length);
-        
-        if (x1_length > max_length) {
-          max_length = x1_length;
-        }
-      }
-
-      SV* sv_new_xs = Rstats::pl_new_avrv();;
-      for (IV i = 0; i < xs_length; i++) {
-        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        IV x1_length = SvIV(sv_x1_length);
-        
-        if (x1_length != max_length) {
-          Rstats::pl_av_push(sv_new_xs, Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c(sv_r, sv_x1_length)));
-        }
-        else {
-          Rstats::pl_av_push(sv_new_xs, sv_x1);
-        }
-      }
-      
-      return sv_new_xs;
-    }
-    
     SV* upgrade_type_avrv(SV* sv_r, SV* sv_xs) {
       // Check elements
       std::map<Rstats::Type::Enum, IV> type_h;

@@ -302,10 +302,10 @@ namespace Rstats {
     Rstats::Logical is_infinite(NV);
     Rstats::Logical is_infinite(IV);
 
-    IV is_finite(SV*);
-    IV is_finite(std::complex<NV>);
-    IV is_finite(NV);
-    IV is_finite(IV);
+    Rstats::Logical is_finite(SV*);
+    Rstats::Logical is_finite(std::complex<NV>);
+    Rstats::Logical is_finite(NV);
+    Rstats::Logical is_finite(IV);
 
     IV is_nan(SV*);
     IV is_nan(std::complex<NV>);

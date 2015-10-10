@@ -560,14 +560,12 @@ namespace Rstats {
         return 0;
       }
     }
-    Rstats::Logical is_infinite(Rstats::Double e1) {
-      return std::isinf(e1);
-    }
+    Rstats::Logical is_infinite(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_infinite(Rstats::Integer e1) { return 0; }
 
     // is_finite
-    Rstats::Integer is_finite(Rstats::Character e1) { return 0; }
-    Rstats::Integer is_finite(Rstats::Complex e1) {
+    Rstats::Logical is_finite(Rstats::Character e1) { return 0; }
+    Rstats::Logical is_finite(Rstats::Complex e1) {
       if (std::isfinite(e1.real()) && std::isfinite(e1.imag())) {
         return 1;
       }
@@ -575,8 +573,8 @@ namespace Rstats {
         return 0;
       }
     }
-    Rstats::Integer is_finite(Rstats::Double e1) { return std::isfinite(e1) ? 1 : 0; }
-    Rstats::Integer is_finite(Rstats::Integer e1) { return 1; }
+    Rstats::Logical is_finite(Rstats::Double e1) { return std::isfinite(e1) ? 1 : 0; }
+    Rstats::Logical is_finite(Rstats::Integer e1) { return 1; }
 
     // is_nan
     Rstats::Integer is_nan(Rstats::Character e1) { return 0; }

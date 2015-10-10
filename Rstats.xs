@@ -1032,8 +1032,8 @@ SV* is_finite(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_finite(sv_r, sv_x1);
+
+  SV* sv_x2 = Rstats::Func::is_finite(sv_r, ST(1));
   
   return_sv(sv_x2);
 }

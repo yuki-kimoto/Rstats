@@ -737,6 +737,7 @@ namespace Rstats {
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       return v2;
     }
+
   }
   // Rstats::Func
   namespace Func {
@@ -892,6 +893,29 @@ namespace Rstats {
     SV* new_empty_vector<Rstats::Integer>(SV*);
     template <>
     SV* new_empty_vector<Rstats::Logical>(SV*);
+
+/*
+    Rstats::Vector* operate_unary2(SV* sv_r, Rstats::Complex (*func)(Rstats::Complex), Rstats::Vector* v1) {
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, (*func)(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i)));
+      }
+      Rstats::VectorFunc::merge_na_positions(v2, v1);
+      return v2;
+    }
+*/
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* operate_unary2(SV* sv_r, T_OUT (*func)(T_IN), Rstats::Vector* v1) {
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+      }
+      Rstats::VectorFunc::merge_na_positions(v2, v1);
+      return v2;
+    }
   }
 }
 

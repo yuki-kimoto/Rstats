@@ -254,6 +254,56 @@ namespace Rstats {
       return sv_x2;
     }
 
+    SV* atan(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x2;
+      if (strEQ(type, "complex")) {
+        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::atan;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::atan;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::atan;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else {
+        croak("Error in atan() : non-numeric argument to atan()");
+      }
+      
+      return sv_x2;
+    }
+    
+    SV* sqrt(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x2;
+      if (strEQ(type, "complex")) {
+        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sqrt;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sqrt;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sqrt;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else {
+        croak("Error in sqrt() : non-numeric argument to sqrt()");
+      }
+      
+      return sv_x2;
+    }
+    
     SV* expm1(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

@@ -88,7 +88,7 @@ namespace Rstats {
     return perl_obj;
   }
   IV pl_pregexec(SV*, REGEXP*);
-
+  
   namespace Type {
     enum Enum {
       LOGICAL = 0,
@@ -726,6 +726,9 @@ namespace Rstats {
       }
       return v1;
     };
+
+    template <class T>
+    Rstats::Vector* sin2(Rstats::Vector* v1);
 
     Rstats::Vector* sin(Rstats::Vector*);
     

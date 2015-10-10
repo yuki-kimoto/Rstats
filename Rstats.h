@@ -520,39 +520,6 @@ namespace Rstats {
     Rstats::Vector* as_complex(Rstats::Vector*);
     Rstats::Vector* as_logical(Rstats::Vector*);
 
-    Rstats::Vector* is_infinite(Rstats::Vector*);
-    Rstats::Vector* is_finite(Rstats::Vector*);
-    Rstats::Vector* is_nan(Rstats::Vector*);
-    
-    Rstats::Vector* negation(Rstats::Vector*);
-
-    Rstats::Vector* sin(Rstats::Vector*);
-    Rstats::Vector* cos(Rstats::Vector*);
-    Rstats::Vector* tan(Rstats::Vector*);
-    Rstats::Vector* sinh(Rstats::Vector*);
-    Rstats::Vector* cosh(Rstats::Vector*);
-    Rstats::Vector* tanh(Rstats::Vector*);
-    Rstats::Vector* log(Rstats::Vector*);
-    Rstats::Vector* logb(Rstats::Vector*);
-    Rstats::Vector* log10(Rstats::Vector*);
-    Rstats::Vector* log2(Rstats::Vector*);
-    Rstats::Vector* expm1(Rstats::Vector*);
-    Rstats::Vector* exp(Rstats::Vector*);
-    Rstats::Vector* sqrt(Rstats::Vector*);
-    Rstats::Vector* atan(Rstats::Vector*);
-    Rstats::Vector* asin(Rstats::Vector*);
-    Rstats::Vector* acos(Rstats::Vector*);
-    Rstats::Vector* asinh(Rstats::Vector*);
-    Rstats::Vector* acosh(Rstats::Vector*);
-    Rstats::Vector* atanh(Rstats::Vector*);
-    Rstats::Vector* Conj(Rstats::Vector*);
-
-    Rstats::Vector* Arg(Rstats::Vector*);
-    Rstats::Vector* abs(Rstats::Vector*);
-    Rstats::Vector* Mod(Rstats::Vector*);
-    Rstats::Vector* Re(Rstats::Vector*);
-    Rstats::Vector* Im(Rstats::Vector*);
-
     Rstats::Vector* equal(Rstats::Vector*, Rstats::Vector*);
     Rstats::Vector* not_equal(Rstats::Vector*, Rstats::Vector*);
     Rstats::Vector* more_than(Rstats::Vector*, Rstats::Vector*);
@@ -616,19 +583,6 @@ namespace Rstats {
       }
       return v1;
     };
-
-    template <class T_IN, class T_OUT>
-    Rstats::Vector* sin(Rstats::Vector* v1) {
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<T_OUT>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
-      }
-      Rstats::VectorFunc::merge_na_positions(v2, v1);
-      return v2;
-    }
-
-
   }
   // Rstats::Func
   namespace Func {

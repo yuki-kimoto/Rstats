@@ -6,6 +6,82 @@ use Rstats;
 use Math::Trig ();
 use Math::Complex ();
 
+# tanh
+{
+  # tanh - complex, -Inf - 2i
+  {
+    my $x0 = -Inf;
+    
+    my $x1 = c_(-Inf - 2*i_);
+    my $x2 = r->tanh($x1);
+    is($x2->value->{re}, '-1');
+    cmp_ok($x2->value->{im}, '==', 0);
+  }
+  
+  # tanh - complex, 1 + 2i
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = r->tanh($x1);
+    is(sprintf("%.6f", $x2->value->{re}), '1.166736');
+    is(sprintf("%.6f", $x2->value->{im}), '-0.243458');
+    ok(r->is->complex($x2));
+  }
+  
+  # tanh - complex, 1 + Inf
+  {
+    my $x1 = r->complex({re => 1, im => Inf});
+    my $x2 = r->tanh($x1);
+    is($x2->value->{re}, 'NaN');
+    is($x2->value->{im}, 'NaN');
+  }
+
+  # tanh - complex, -Inf + 2i
+  {
+    my $x1 = c_(-Inf + 2*i_);
+    my $x2 = r->tanh($x1);
+    is($x2->value->{re}, '-1');
+    is($x2->value->{im}, '0');
+  }
+  
+  # tanh - double,array
+  {
+    my $x1 = array(c_(0, 2));
+    my $x2 = r->tanh($x1);
+    is($x2->values->[0], '0');
+    is(sprintf("%.6f", $x2->values->[1]), '0.964028');
+    is_deeply(r->dim($x2)->values, [2]);
+    ok(r->is->double($x2));
+  }
+
+  # tanh - Inf
+  {
+    my $x1 = c_(Inf);
+    my $x2 = r->tanh($x1);
+    is($x2->value, '1');
+  }
+  
+  # tanh - -Inf
+  {
+    my $x1 = c_(-Inf);
+    my $x2 = r->tanh($x1);
+    is($x2->value, '-1');
+  }
+
+  # tanh - NA
+  {
+    my $x1 = c_(NA);
+    my $x2 = r->tanh($x1);
+    ok(!defined $x2->value);
+  }  
+
+  # tanh - NaN
+  {
+    my $x1 = c_(NaN);
+    my $x2 = r->tanh($x1);
+    is($x2->value, 'NaN');
+  }
+}
+
 # atanh
 {
   # atanh - complex, 1 + 2i
@@ -247,80 +323,6 @@ use Math::Complex ();
   {
     my $x1 = c_(NaN);
     my $x2 = r->asinh($x1);
-    is($x2->value, 'NaN');
-  }
-}
-
-# tanh
-{
-  # tanh - complex, 1 + 2i
-  {
-    my $x1 = c_(1 + 2*i_);
-    my $x2 = r->tanh($x1);
-    is(sprintf("%.6f", $x2->value->{re}), '1.166736');
-    is(sprintf("%.6f", $x2->value->{im}), '-0.243458');
-    ok(r->is->complex($x2));
-  }
-  
-  # tanh - complex, 1 + Inf
-  {
-    my $x1 = r->complex({re => 1, im => Inf});
-    my $x2 = r->tanh($x1);
-    is($x2->value->{re}, 'NaN');
-    is($x2->value->{im}, 'NaN');
-  }
-
-  # tanh - complex, -Inf - 2i
-  {
-    my $x1 = c_(-Inf - 2*i_);
-    my $x2 = r->tanh($x1);
-    is($x2->value->{re}, '-1');
-    cmp_ok($x2->value->{im}, '==', 0);
-  }
-  
-  # tanh - complex, -Inf + 2i
-  {
-    my $x1 = c_(-Inf + 2*i_);
-    my $x2 = r->tanh($x1);
-    is($x2->value->{re}, '-1');
-    is($x2->value->{im}, '0');
-  }
-  
-  # tanh - double,array
-  {
-    my $x1 = array(c_(0, 2));
-    my $x2 = r->tanh($x1);
-    is($x2->values->[0], '0');
-    is(sprintf("%.6f", $x2->values->[1]), '0.964028');
-    is_deeply(r->dim($x2)->values, [2]);
-    ok(r->is->double($x2));
-  }
-
-  # tanh - Inf
-  {
-    my $x1 = c_(Inf);
-    my $x2 = r->tanh($x1);
-    is($x2->value, '1');
-  }
-  
-  # tanh - -Inf
-  {
-    my $x1 = c_(-Inf);
-    my $x2 = r->tanh($x1);
-    is($x2->value, '-1');
-  }
-
-  # tanh - NA
-  {
-    my $x1 = c_(NA);
-    my $x2 = r->tanh($x1);
-    ok(!defined $x2->value);
-  }  
-
-  # tanh - NaN
-  {
-    my $x1 = c_(NaN);
-    my $x2 = r->tanh($x1);
     is($x2->value, 'NaN');
   }
 }

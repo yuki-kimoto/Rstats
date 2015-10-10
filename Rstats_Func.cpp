@@ -24,9 +24,26 @@ namespace Rstats {
     
     void upgrade_type(SV* sv_r, IV num, ...) {
       va_list args;
-
+      
+      // Optimization if args count is 2
+      va_start(args, num);
+      if (num == 2) {
+        SV* x1 = *va_arg(args, SV**);
+        SV* x2 = *va_arg(args, SV**);
+        
+        if (
+            strEQ(
+              SvPV_nolen(Rstats::pl_hv_fetch(x1, "type")),
+              SvPV_nolen(Rstats::pl_hv_fetch(x2, "type"))
+            )
+          )
+        {
+          return;
+        }
+      }
+      va_end(args);
+      
       SV* upgrade_type_args = Rstats::pl_new_avrv();
-
       va_start(args, num);
       for (IV i = 0; i < num; i++) {
         SV** arg = va_arg(args, SV**);
@@ -34,7 +51,6 @@ namespace Rstats {
         Rstats::pl_av_push(upgrade_type_args, x);
       }
       va_end(args);
-      
       
       SV* upgrade_type_result = Rstats::Func::upgrade_type_avrv(sv_r, upgrade_type_args);
       
@@ -1067,11 +1083,22 @@ namespace Rstats {
         SV* sv_exclude_element = Rstats::pl_av_fetch(sv_exclude, i);
         Rstats::pl_hv_store(hv_exclude_h, SvPV_nolen(sv_exclude_element), Rstats::pl_new_sv_iv(1));
       }
+
+      // type
+      if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "type")) && Rstats::pl_hv_exists(sv_x1, "type")) {
+        Rstats::pl_hv_store(sv_x2, "type", Rstats::pl_hv_fetch(sv_x1, "type"));
+      }
+
+      // object_type
+      if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "object_type")) && Rstats::pl_hv_exists(sv_x1, "object_type")) {
+        Rstats::pl_hv_store(sv_x2, "object_type", Rstats::pl_hv_fetch(sv_x1, "object_type"));
+      }
+
       // dim
       if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "dim")) && Rstats::pl_hv_exists(sv_x1, "dim")) {
         Rstats::pl_hv_store(sv_x2, "dim", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim")));
       }
-      
+
       // class
       if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "class")) && Rstats::pl_hv_exists(sv_x1, "class")) {
         Rstats::pl_hv_store(sv_x2, "class", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class")));
@@ -1109,7 +1136,6 @@ namespace Rstats {
         }
         Rstats::pl_hv_store(sv_x2, "names", Rstats::Func::c_character(sv_r, sv_x2_names_values));
       }
-      
       
       // dimnames
       if (!SvOK(Rstats::pl_hv_fetch(hv_exclude_h, "dimnames")) && Rstats::pl_hv_exists(sv_x1, "dimnames")) {

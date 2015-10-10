@@ -121,190 +121,190 @@ namespace Rstats {
   namespace ElementFunc {
 
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
-    NV add(NV, NV);
+    Rstats::Double add(Rstats::Double, Rstats::Double);
     IV add(IV, IV);
 
     Rstats::Complex subtract(Rstats::Complex, Rstats::Complex);
-    NV subtract(NV, NV);
+    Rstats::Double subtract(Rstats::Double, Rstats::Double);
     IV subtract(IV, IV);
 
     Rstats::Complex multiply(Rstats::Complex, Rstats::Complex);
-    NV multiply(NV, NV);
+    Rstats::Double multiply(Rstats::Double, Rstats::Double);
     IV multiply(IV, IV);
 
     Rstats::Complex divide(Rstats::Complex, Rstats::Complex);
-    NV divide(NV, NV);
-    NV divide(IV, IV);
+    Rstats::Double divide(Rstats::Double, Rstats::Double);
+    Rstats::Double divide(IV, IV);
 
     Rstats::Complex pow(Rstats::Complex, Rstats::Complex);
-    NV pow(NV, NV);
-    NV pow(IV, IV);
+    Rstats::Double pow(Rstats::Double, Rstats::Double);
+    Rstats::Double pow(IV, IV);
 
     Rstats::Complex remainder(Rstats::Complex, Rstats::Complex);
-    NV remainder(NV, NV);
+    Rstats::Double remainder(Rstats::Double, Rstats::Double);
     IV remainder(IV, IV);
 
-    NV Re(Rstats::Complex);
-    NV Re(NV);
-    NV Re(IV);
+    Rstats::Double Re(Rstats::Complex);
+    Rstats::Double Re(Rstats::Double);
+    Rstats::Double Re(IV);
 
-    NV Im(Rstats::Complex);
-    NV Im(NV);
-    NV Im(IV);
+    Rstats::Double Im(Rstats::Complex);
+    Rstats::Double Im(Rstats::Double);
+    Rstats::Double Im(IV);
 
     Rstats::Complex Conj(Rstats::Complex);
-    NV Conj(NV);
-    NV Conj(IV);
+    Rstats::Double Conj(Rstats::Double);
+    Rstats::Double Conj(IV);
 
     Rstats::Complex sin(Rstats::Complex);
-    NV sin(NV);
-    NV sin(IV);
+    Rstats::Double sin(Rstats::Double);
+    Rstats::Double sin(IV);
     
     Rstats::Complex cos(Rstats::Complex);
-    NV cos(NV);
-    NV cos(IV);
+    Rstats::Double cos(Rstats::Double);
+    Rstats::Double cos(IV);
 
     Rstats::Complex tan(Rstats::Complex);
-    NV tan(NV);
-    NV tan(IV);
+    Rstats::Double tan(Rstats::Double);
+    Rstats::Double tan(IV);
 
     Rstats::Complex sinh(Rstats::Complex);
-    NV sinh(NV);
-    NV sinh(IV);
+    Rstats::Double sinh(Rstats::Double);
+    Rstats::Double sinh(IV);
 
     Rstats::Complex cosh(Rstats::Complex);
-    NV cosh(NV);
-    NV cosh(IV);
+    Rstats::Double cosh(Rstats::Double);
+    Rstats::Double cosh(IV);
 
     Rstats::Complex tanh (Rstats::Complex z);
-    NV tanh(NV);
-    NV tanh(IV);
+    Rstats::Double tanh(Rstats::Double);
+    Rstats::Double tanh(IV);
 
-    NV abs(Rstats::Complex);
-    NV abs(NV);
-    NV abs(IV);
+    Rstats::Double abs(Rstats::Complex);
+    Rstats::Double abs(Rstats::Double);
+    Rstats::Double abs(IV);
 
-    NV Mod(Rstats::Complex);
-    NV Mod(NV);
-    NV Mod(IV);
+    Rstats::Double Mod(Rstats::Complex);
+    Rstats::Double Mod(Rstats::Double);
+    Rstats::Double Mod(IV);
 
     Rstats::Complex log(Rstats::Complex);
-    NV log(NV);
-    NV log(IV);
+    Rstats::Double log(Rstats::Double);
+    Rstats::Double log(IV);
 
     Rstats::Complex logb(Rstats::Complex);
-    NV logb(NV);
-    NV logb(IV);
+    Rstats::Double logb(Rstats::Double);
+    Rstats::Double logb(IV);
 
     Rstats::Complex log10(Rstats::Complex);
-    NV log10(NV);
-    NV log10(IV);
+    Rstats::Double log10(Rstats::Double);
+    Rstats::Double log10(IV);
 
     Rstats::Complex log2(Rstats::Complex);
-    NV log2(NV);
-    NV log2(IV);
+    Rstats::Double log2(Rstats::Double);
+    Rstats::Double log2(IV);
     
     Rstats::Complex expm1(Rstats::Complex);
-    NV expm1(NV);
-    NV expm1(IV);
+    Rstats::Double expm1(Rstats::Double);
+    Rstats::Double expm1(IV);
 
-    NV Arg(Rstats::Complex);
-    NV Arg(NV);
-    NV Arg(IV);
+    Rstats::Double Arg(Rstats::Complex);
+    Rstats::Double Arg(Rstats::Double);
+    Rstats::Double Arg(IV);
 
     Rstats::Complex exp(Rstats::Complex);
-    NV exp(NV);
-    NV exp(IV);
+    Rstats::Double exp(Rstats::Double);
+    Rstats::Double exp(IV);
 
     Rstats::Complex sqrt(Rstats::Complex);
-    NV sqrt(NV);
-    NV sqrt(IV);
+    Rstats::Double sqrt(Rstats::Double);
+    Rstats::Double sqrt(IV);
 
     Rstats::Complex atan(Rstats::Complex);
-    NV atan(NV);
-    NV atan(IV);
+    Rstats::Double atan(Rstats::Double);
+    Rstats::Double atan(IV);
 
     Rstats::Complex asin(Rstats::Complex);
-    NV asin(NV);
-    NV asin(IV);
+    Rstats::Double asin(Rstats::Double);
+    Rstats::Double asin(IV);
 
     Rstats::Complex acos(Rstats::Complex);
-    NV acos(NV);
-    NV acos(IV);
+    Rstats::Double acos(Rstats::Double);
+    Rstats::Double acos(IV);
 
     Rstats::Complex asinh(Rstats::Complex);
-    NV asinh(NV);
-    NV asinh(IV);
+    Rstats::Double asinh(Rstats::Double);
+    Rstats::Double asinh(IV);
 
     Rstats::Complex acosh(Rstats::Complex);
-    NV acosh(NV);
-    NV acosh(IV);
+    Rstats::Double acosh(Rstats::Double);
+    Rstats::Double acosh(IV);
 
     Rstats::Complex atanh(Rstats::Complex);
-    NV atanh(NV);
-    NV atanh(IV);
+    Rstats::Double atanh(Rstats::Double);
+    Rstats::Double atanh(IV);
     
     Rstats::Complex negation(Rstats::Complex);
-    NV negation(NV);
+    Rstats::Double negation(Rstats::Double);
     IV negation(IV);
 
     Rstats::Complex atan2(Rstats::Complex, Rstats::Complex);
-    NV atan2(NV, NV);
-    NV atan2(IV, IV);
+    Rstats::Double atan2(Rstats::Double, Rstats::Double);
+    Rstats::Double atan2(IV, IV);
 
     IV And(SV*, SV*);
     IV And(Rstats::Complex, Rstats::Complex);
-    IV And(NV, NV);
+    IV And(Rstats::Double, Rstats::Double);
     IV And(IV, IV);
 
     IV Or(SV*, SV*);
     IV Or(Rstats::Complex, Rstats::Complex);
-    IV Or(NV, NV);
+    IV Or(Rstats::Double, Rstats::Double);
     IV Or(IV, IV);
     
     IV equal(SV*, SV*);
     IV equal(Rstats::Complex, Rstats::Complex);
-    IV equal(NV, NV);
+    IV equal(Rstats::Double, Rstats::Double);
     IV equal(IV, IV);
 
     IV not_equal(SV*, SV*);
     IV not_equal(Rstats::Complex, Rstats::Complex);
-    IV not_equal(NV, NV);
+    IV not_equal(Rstats::Double, Rstats::Double);
     IV not_equal(IV, IV);
 
     IV more_than(SV*, SV*);
     IV more_than(Rstats::Complex, Rstats::Complex);
-    IV more_than(NV, NV);
+    IV more_than(Rstats::Double, Rstats::Double);
     IV more_than(IV, IV);
 
     IV less_than(SV*, SV*);
     IV less_than(Rstats::Complex, Rstats::Complex);
-    IV less_than(NV, NV);
+    IV less_than(Rstats::Double, Rstats::Double);
     IV less_than(IV, IV);
 
     IV more_than_or_equal(SV*, SV*);
     IV more_than_or_equal(Rstats::Complex, Rstats::Complex);
-    IV more_than_or_equal(NV, NV);
+    IV more_than_or_equal(Rstats::Double, Rstats::Double);
     IV more_than_or_equal(IV, IV);
 
     IV less_than_or_equal(SV*, SV*);
     IV less_than_or_equal(Rstats::Complex, Rstats::Complex);
-    IV less_than_or_equal(NV, NV);
+    IV less_than_or_equal(Rstats::Double, Rstats::Double);
     IV less_than_or_equal(IV, IV);
 
     Rstats::Logical is_infinite(SV*);
     Rstats::Logical is_infinite(Rstats::Complex);
-    Rstats::Logical is_infinite(NV);
+    Rstats::Logical is_infinite(Rstats::Double);
     Rstats::Logical is_infinite(IV);
 
     Rstats::Logical is_finite(SV*);
     Rstats::Logical is_finite(Rstats::Complex);
-    Rstats::Logical is_finite(NV);
+    Rstats::Logical is_finite(Rstats::Double);
     Rstats::Logical is_finite(IV);
 
     IV is_nan(SV*);
     IV is_nan(Rstats::Complex);
-    IV is_nan(NV);
+    IV is_nan(Rstats::Double);
     IV is_nan(IV);
   }
 

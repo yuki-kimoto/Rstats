@@ -795,7 +795,7 @@ namespace Rstats {
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
       }
       else {
-        v2 = Rstats::VectorFunc::new_logical(length);
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       }
       
@@ -1471,7 +1471,7 @@ namespace Rstats {
       
       IV length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_logical(length);
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
       for (IV i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
@@ -1829,7 +1829,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       Rstats::Vector* x1 = Rstats::Func::get_vector(sv_r, sv_x1);
       IV x1_length = Rstats::VectorFunc::get_length(x1);
-      Rstats::Vector* x2 = Rstats::VectorFunc::new_logical(x1_length);
+      Rstats::Vector* x2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(x1_length);
       
       for (IV i = 0; i < Rstats::VectorFunc::get_length(x1); i++) {
         if (Rstats::VectorFunc::exists_na_position(x1, i)) {
@@ -2019,7 +2019,7 @@ namespace Rstats {
         else if (Rstats::VectorFunc::is_logical(v1)) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::VectorFunc::new_logical(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+              = Rstats::VectorFunc::new_vector<Rstats::Logical>(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
@@ -2116,7 +2116,7 @@ namespace Rstats {
       }
       else if (strEQ(mode, "logical")) {
         sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
-        compose_elements = Rstats::VectorFunc::new_logical(len);
+        compose_elements = Rstats::VectorFunc::new_vector<Rstats::Logical>(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);

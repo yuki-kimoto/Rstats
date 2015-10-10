@@ -177,7 +177,7 @@ namespace Rstats {
       (*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos] = SvREFCNT_inc(new_value);
     }
 
-    template<>
+    template <>
     Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Double>(length);
@@ -186,7 +186,7 @@ namespace Rstats {
       return v1;
     };
 
-    template<>
+    template <>
     Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Integer>(length);
@@ -195,7 +195,7 @@ namespace Rstats {
       return v1;
     }
 
-    template<>
+    template <>
     Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Complex>(length);
@@ -204,7 +204,7 @@ namespace Rstats {
       return v1;
     }
 
-    template<>
+    template <>
     Rstats::Vector* new_vector<Rstats::Character>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Character>(length);
@@ -213,7 +213,7 @@ namespace Rstats {
       return v1;
     }
 
-    template<>
+    template <>
     Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Logical>(length);
@@ -222,29 +222,12 @@ namespace Rstats {
       return v1;
     }
         
-    Rstats::Vector* new_logical(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
-
-      v1->values = new std::vector<Rstats::Integer>(length);
-      v1->type = Rstats::Type::LOGICAL;
-      
-      return v1;
-    }
-
-    Rstats::Vector* new_logical(Rstats::Integer length, Rstats::Integer value) {
-      Rstats::Vector* v1 = new_logical(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<Rstats::Integer>(v1, i, value);
-      }
-      return v1;
-    }
-
     Rstats::Vector* new_true() {
-      return new_logical(1, 1);
+      return new_vector<Rstats::Logical>(1, 1);
     }
 
     Rstats::Vector* new_false() {
-      return new_logical(1, 0);
+      return new_vector<Rstats::Logical>(1, 0);
     }
 
     Rstats::Vector* new_nan() {
@@ -260,7 +243,7 @@ namespace Rstats {
     }
 
     Rstats::Vector* new_na() {
-      Rstats::Vector* v1 = new_logical(1);
+      Rstats::Vector* v1 = new_vector<Rstats::Logical>(1);
       Rstats::VectorFunc::add_na_position(v1, 0);
       return v1;
     }
@@ -646,7 +629,7 @@ namespace Rstats {
 
     Rstats::Vector* as_logical(Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_logical(length);
+      Rstats::Vector* v2 =new_vector<Rstats::Logical>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
@@ -1021,7 +1004,7 @@ namespace Rstats {
           }
           break;
         case Rstats::Type::LOGICAL :
-          v2 = Rstats::VectorFunc::new_logical(length);
+          v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
           }

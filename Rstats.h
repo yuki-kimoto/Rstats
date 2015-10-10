@@ -318,7 +318,7 @@ namespace Rstats {
 # define RSTATS_DEF_VECTOR_FUNC_UN_IS(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \
-      Rstats::Vector* v2 = Rstats::VectorFunc::new_logical(length); \
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length); \
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::CHARACTER : \
@@ -429,7 +429,7 @@ namespace Rstats {
         croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
       } \
       IV length = Rstats::VectorFunc::get_length(v1); \
-      Rstats::Vector* v3 = Rstats::VectorFunc::new_logical(length); \
+      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length); \
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
       switch (type) { \
         case Rstats::Type::CHARACTER : \
@@ -574,8 +574,6 @@ namespace Rstats {
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
     IV get_length (Rstats::Vector*);
     
-    Rstats::Vector* new_logical(IV);
-    Rstats::Vector* new_logical(IV, IV);
     Rstats::Vector* new_true();
     Rstats::Vector* new_false();
     Rstats::Vector* new_nan();
@@ -679,6 +677,8 @@ namespace Rstats {
     Rstats::Vector* new_vector<Rstats::Complex>(IV);
     template<>
     Rstats::Vector* new_vector<Rstats::Character>(IV);
+    template<>
+    Rstats::Vector* new_vector<Rstats::Logical>(IV);
     
     template <class T>
     Rstats::Vector* new_vector(IV length, T value) {

@@ -1297,6 +1297,17 @@ SV* upgrade_type(...)
   return_sv(sv_new_xs);
 }
 
+SV* upgrade_length(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_xs = ST(1);
+  
+  SV* sv_new_xs = Rstats::Func::upgrade_length_avrv(sv_r, sv_xs);
+  
+  return_sv(sv_new_xs);
+}
+
 MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 
 SV* DESTROY(...)

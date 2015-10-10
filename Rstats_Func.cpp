@@ -82,7 +82,6 @@ namespace Rstats {
         sv_x1 = Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c(sv_r, sv_x2_length));
       }
       
-      
       Rstats::Vector* x3_elements
         = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
       
@@ -378,6 +377,37 @@ namespace Rstats {
       Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
       
       return sv_x2;
+    }
+
+    SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
+      
+      IV xs_length = Rstats::pl_av_len(sv_xs);
+      IV max_length = 0;
+      for (IV i = 0; i < xs_length; i++) {
+        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
+        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+        IV x1_length = SvIV(sv_x1_length);
+        
+        if (x1_length > max_length) {
+          max_length = x1_length;
+        }
+      }
+
+      SV* sv_new_xs = Rstats::pl_new_avrv();;
+      for (IV i = 0; i < xs_length; i++) {
+        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
+        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+        IV x1_length = SvIV(sv_x1_length);
+        
+        if (x1_length != max_length) {
+          Rstats::pl_av_push(sv_new_xs, Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c(sv_r, sv_x1_length)));
+        }
+        else {
+          Rstats::pl_av_push(sv_new_xs, sv_x1);
+        }
+      }
+      
+      return sv_new_xs;
     }
     
     SV* upgrade_type_avrv(SV* sv_r, SV* sv_xs) {

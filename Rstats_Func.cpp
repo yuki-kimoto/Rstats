@@ -254,6 +254,31 @@ namespace Rstats {
       return sv_x2;
     }
 
+    SV* is_infinite(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x2;
+      if (strEQ(type, "complex")) {
+        Rstats::Logical (*func)(Rstats::Complex) = &Rstats::ElementFunc::is_infinite;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Logical (*func)(Rstats::Double) = &Rstats::ElementFunc::is_infinite;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Logical (*func)(Rstats::Integer) = &Rstats::ElementFunc::is_infinite;
+        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+      }
+      else {
+        croak("Error in is_infinite() : non-numeric argument to is_infinite()");
+      }
+      
+      return sv_x2;
+    }
+    
     SV* acos(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
@@ -1771,22 +1796,6 @@ namespace Rstats {
       }
       else {
         croak("Error : is_finite is not implemented except array");
-      }
-    }
-
-    SV* is_infinite(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      
-      if (Rstats::pl_hv_exists(sv_x1, "vector")) {
-        SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
-        Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::is_infinite(Rstats::Func::get_vector(sv_r, sv_x1)));
-        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-        
-        return sv_x2;
-      }
-      else {
-        croak("Error : is_infinite is not implemented except array");
       }
     }
 

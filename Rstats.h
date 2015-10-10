@@ -103,7 +103,7 @@ namespace Rstats {
   typedef std::complex<NV> Complex;
   typedef NV Double;
   typedef IV Integer;
-  typedef bool Logical;
+  typedef UV Logical;// 0 or 1
 
   typedef std::vector<Rstats::Character> CharacterVector;
   typedef std::vector<Rstats::Complex> ComplexVector;
@@ -297,10 +297,10 @@ namespace Rstats {
     IV less_than_or_equal(NV, NV);
     IV less_than_or_equal(IV, IV);
 
-    IV is_infinite(SV*);
-    IV is_infinite(std::complex<NV>);
-    IV is_infinite(NV);
-    IV is_infinite(IV);
+    Rstats::Logical is_infinite(SV*);
+    Rstats::Logical is_infinite(std::complex<NV>);
+    Rstats::Logical is_infinite(NV);
+    Rstats::Logical is_infinite(IV);
 
     IV is_finite(SV*);
     IV is_finite(std::complex<NV>);

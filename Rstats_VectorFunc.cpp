@@ -4,7 +4,6 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    RSTATS_DEF_VECTOR_FUNC_UN_IS(is_infinite, Rstats::ElementFunc::is_infinite)
     RSTATS_DEF_VECTOR_FUNC_UN_IS(is_finite, Rstats::ElementFunc::is_finite)
     RSTATS_DEF_VECTOR_FUNC_UN_IS(is_nan, Rstats::ElementFunc::is_nan)
     RSTATS_DEF_VECTOR_FUNC_UN_MATH(negation, Rstats::ElementFunc::negation)
@@ -214,7 +213,16 @@ namespace Rstats {
       
       return v1;
     }
-    
+
+    template<>
+    Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Integer length) {
+      Rstats::Vector* v1 = new_empty_vector();
+      v1->values = new std::vector<Rstats::Logical>(length);
+      v1->type = Rstats::Type::LOGICAL;
+      
+      return v1;
+    }
+        
     Rstats::Vector* new_logical(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
 

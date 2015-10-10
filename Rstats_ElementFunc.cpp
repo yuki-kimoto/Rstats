@@ -548,8 +548,8 @@ namespace Rstats {
     Rstats::Integer less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
 
     // is_infinite
-    Rstats::Integer is_infinite(Rstats::Character e1) { return 0; }
-    Rstats::Integer is_infinite(Rstats::Complex e1) {
+    Rstats::Logical is_infinite(Rstats::Character e1) { return 0; }
+    Rstats::Logical is_infinite(Rstats::Complex e1) {
       if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
         return 0;
       }
@@ -560,8 +560,10 @@ namespace Rstats {
         return 0;
       }
     }
-    Rstats::Integer is_infinite(Rstats::Double e1) { return std::isinf(e1); }
-    Rstats::Integer is_infinite(Rstats::Integer e1) { return 0; }
+    Rstats::Logical is_infinite(Rstats::Double e1) {
+      return std::isinf(e1);
+    }
+    Rstats::Logical is_infinite(Rstats::Integer e1) { return 0; }
 
     // is_finite
     Rstats::Integer is_finite(Rstats::Character e1) { return 0; }

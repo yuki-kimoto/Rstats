@@ -4,6 +4,27 @@ use warnings;
 
 use Rstats;
 
+# is_infinite
+{
+  # is_infinite - Double, false
+  {
+    my $x_num = r->c_double(1);
+    ok(!r->is->infinite($x_num)->value);
+  }
+
+  # is_infinite - Inf, true
+  {
+    my $x_inf = r->c_double('Inf');
+    ok(r->is->infinite($x_inf)->value);
+  }
+  
+  # is_infinite - -Inf, true
+  {
+    my $x_negative_inf = r->c_double('-Inf');
+    ok(r->is->infinite($x_negative_inf)->value);
+  }
+}
+
 # Inf
 {
   # Inf - negation repeat
@@ -31,27 +52,6 @@ use Rstats;
   {
     my $x_negative_inf = r->c_double('-Inf');
     is("$x_negative_inf", "[1] -Inf\n");
-  }
-}
-
-# is_infinite
-{
-  # is_infinite - Inf, true
-  {
-    my $x_inf = r->c_double('Inf');
-    ok(r->is->infinite($x_inf)->value);
-  }
-  
-  # is_infinite - -Inf, true
-  {
-    my $x_negative_inf = r->c_double('-Inf');
-    ok(r->is->infinite($x_negative_inf)->value);
-  }
-  
-  # is_infinite - Double, false
-  {
-    my $x_num = r->c_double(1);
-    ok(!r->is->infinite($x_num)->value);
   }
 }
 

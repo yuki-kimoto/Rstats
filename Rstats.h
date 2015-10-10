@@ -728,7 +728,7 @@ namespace Rstats {
     };
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* sin2(Rstats::Vector* v1) {
+    Rstats::Vector* sin(Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -737,8 +737,6 @@ namespace Rstats {
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       return v2;
     }
-    
-    Rstats::Vector* sin(Rstats::Vector*);
   }
   // Rstats::Func
   namespace Func {

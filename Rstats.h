@@ -302,10 +302,10 @@ namespace Rstats {
     Rstats::Logical is_finite(Rstats::Double);
     Rstats::Logical is_finite(IV);
 
-    IV is_nan(SV*);
-    IV is_nan(Rstats::Complex);
-    IV is_nan(Rstats::Double);
-    IV is_nan(IV);
+    Rstats::Logical is_nan(SV*);
+    Rstats::Logical is_nan(Rstats::Complex);
+    Rstats::Logical is_nan(Rstats::Double);
+    Rstats::Logical is_nan(Rstats::Integer);
   }
 
   typedef struct {

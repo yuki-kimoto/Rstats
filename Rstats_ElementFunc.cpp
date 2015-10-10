@@ -577,8 +577,8 @@ namespace Rstats {
     Rstats::Logical is_finite(Rstats::Integer e1) { return 1; }
 
     // is_nan
-    Rstats::Integer is_nan(Rstats::Character e1) { return 0; }
-    Rstats::Integer is_nan(Rstats::Complex e1) {
+    Rstats::Logical is_nan(Rstats::Character e1) { return 0; }
+    Rstats::Logical is_nan(Rstats::Complex e1) {
       if (std::isnan(e1.real()) && std::isnan(e1.imag())) {
         return 1;
       }
@@ -586,7 +586,7 @@ namespace Rstats {
         return 0;
       }
     }
-    Rstats::Integer is_nan(Rstats::Double e1) { return std::isnan(e1) ? 1 : 0; }
-    Rstats::Integer is_nan(Rstats::Integer e1) { return 1; }
+    Rstats::Logical is_nan(Rstats::Double e1) { return std::isnan(e1) ? 1 : 0; }
+    Rstats::Logical is_nan(Rstats::Integer e1) { return 1; }
   }
 }

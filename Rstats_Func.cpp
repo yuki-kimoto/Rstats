@@ -22,6 +22,27 @@ namespace Rstats {
       return sv_x2;
     }
     
+    void upgrade_type(SV* sv_r, IV num, ...) {
+      va_list args;
+
+      SV* upgrade_type_args = Rstats::pl_new_avrv();
+
+      va_start(args, num);
+      for (IV i = 0; i < num; i++) {
+        Rstats::pl_av_push(upgrade_type_args, va_arg(args, SV*));
+      }
+      va_end(args);
+
+      SV* upgrade_type_result = Rstats::Func::upgrade_type_avrv(sv_r, upgrade_type_args);
+      
+      va_start(args, num);
+      for (IV i = 0; i < num; i++) {
+        SV* arg = va_arg(args, SV*);
+        arg = Rstats::pl_av_fetch(upgrade_type_result, i);
+      }
+      va_end(args);
+    }
+    
     SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

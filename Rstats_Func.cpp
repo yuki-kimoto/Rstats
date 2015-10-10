@@ -21,7 +21,45 @@ namespace Rstats {
       
       return sv_x2;
     }
-    
+
+    void upgrade_length(SV* sv_r, IV num, ...) {
+      va_list args;
+      
+      // Optimization if args count is 2
+      va_start(args, num);
+      if (num == 2) {
+        SV* sv_x1 = *va_arg(args, SV**);
+        SV* sv_x2 = *va_arg(args, SV**);
+
+        SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
+        SV* sv_x2_length = Rstats::Func::length_value(sv_r, sv_x2);
+        
+        if (SvIV(sv_x1_length) == SvIV(sv_x2_length)) {
+          return;
+        }
+      }
+      va_end(args);
+      
+      SV* sv_args = Rstats::pl_new_avrv();
+      va_start(args, num);
+      for (IV i = 0; i < num; i++) {
+        SV** arg = va_arg(args, SV**);
+        SV* x = *arg;
+        Rstats::pl_av_push(sv_args, x);
+      }
+      va_end(args);
+      
+      SV* sv_result = Rstats::Func::upgrade_length_avrv(sv_r, sv_args);
+      
+      va_start(args, num);
+      for (IV i = 0; i < num; i++) {
+        SV** arg = va_arg(args, SV**);
+        SV* sv_x = Rstats::pl_av_fetch(sv_result, i);
+        *arg = sv_x;
+      }
+      va_end(args);
+    }
+        
     void upgrade_type(SV* sv_r, IV num, ...) {
       va_list args;
       

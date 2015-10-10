@@ -57,31 +57,9 @@ namespace Rstats {
     template <>
     Rstats::Vector* sin2<Rstats::Complex>(Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2;
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::COMPLEX :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i)));
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i)));
-          }
-          break; \
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i)));
-          }
-          break;
-        default:
-          croak("Error in sin() : non-numeric argument to Rstats::VectorFunc::sin");
-          break;
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i)));
       }
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       return v2;
@@ -90,31 +68,9 @@ namespace Rstats {
     template <>
     Rstats::Vector* sin2<Rstats::Double>(Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2;
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::COMPLEX :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i)));
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i)));
-          }
-          break; \
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i)));
-          }
-          break;
-        default:
-          croak("Error in sin() : non-numeric argument to Rstats::VectorFunc::sin");
-          break;
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i)));
       }
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       return v2;
@@ -123,31 +79,9 @@ namespace Rstats {
     template <>
     Rstats::Vector* sin2<Rstats::Integer>(Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2;
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::COMPLEX :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i)));
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i)));
-          }
-          break; \
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i)));
-          }
-          break;
-        default:
-          croak("Error in sin() : non-numeric argument to Rstats::VectorFunc::sin");
-          break;
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i)));
       }
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       return v2;

@@ -395,6 +395,24 @@ use Math::Complex ();
     is_deeply(r->dim($x2)->values, [1]);
     ok(r->is->double($x2));
   }
+
+  # log10 - integer
+  {
+    my $x1 = array(r->c_integer(10));
+    my $x2 = r->log10($x1);
+    is($x2->value, 1);
+    is_deeply(r->dim($x2)->values, [1]);
+    ok(r->is->double($x2));
+  }
+
+  # log10 - logical
+  {
+    my $x1 = array(r->c_logical(10));
+    my $x2 = r->log10($x1);
+    is($x2->value, 1);
+    is_deeply(r->dim($x2)->values, [1]);
+    ok(r->is->double($x2));
+  }
 }
 
 # log2

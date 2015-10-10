@@ -120,190 +120,190 @@ namespace Rstats {
 
   namespace ElementFunc {
 
-    std::complex<NV> add(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex add(Rstats::Complex, Rstats::Complex);
     NV add(NV, NV);
     IV add(IV, IV);
 
-    std::complex<NV> subtract(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex subtract(Rstats::Complex, Rstats::Complex);
     NV subtract(NV, NV);
     IV subtract(IV, IV);
 
-    std::complex<NV> multiply(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex multiply(Rstats::Complex, Rstats::Complex);
     NV multiply(NV, NV);
     IV multiply(IV, IV);
 
-    std::complex<NV> divide(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex divide(Rstats::Complex, Rstats::Complex);
     NV divide(NV, NV);
     NV divide(IV, IV);
 
-    std::complex<NV> pow(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex pow(Rstats::Complex, Rstats::Complex);
     NV pow(NV, NV);
     NV pow(IV, IV);
 
-    std::complex<NV> remainder(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex remainder(Rstats::Complex, Rstats::Complex);
     NV remainder(NV, NV);
     IV remainder(IV, IV);
 
-    NV Re(std::complex<NV>);
+    NV Re(Rstats::Complex);
     NV Re(NV);
     NV Re(IV);
 
-    NV Im(std::complex<NV>);
+    NV Im(Rstats::Complex);
     NV Im(NV);
     NV Im(IV);
 
-    std::complex<NV> Conj(std::complex<NV>);
+    Rstats::Complex Conj(Rstats::Complex);
     NV Conj(NV);
     NV Conj(IV);
 
-    std::complex<NV> sin(std::complex<NV>);
+    Rstats::Complex sin(Rstats::Complex);
     NV sin(NV);
     NV sin(IV);
     
-    std::complex<NV> cos(std::complex<NV>);
+    Rstats::Complex cos(Rstats::Complex);
     NV cos(NV);
     NV cos(IV);
 
-    std::complex<NV> tan(std::complex<NV>);
+    Rstats::Complex tan(Rstats::Complex);
     NV tan(NV);
     NV tan(IV);
 
-    std::complex<NV> sinh(std::complex<NV>);
+    Rstats::Complex sinh(Rstats::Complex);
     NV sinh(NV);
     NV sinh(IV);
 
-    std::complex<NV> cosh(std::complex<NV>);
+    Rstats::Complex cosh(Rstats::Complex);
     NV cosh(NV);
     NV cosh(IV);
 
-    std::complex<NV> tanh (std::complex<NV> z);
+    Rstats::Complex tanh (Rstats::Complex z);
     NV tanh(NV);
     NV tanh(IV);
 
-    NV abs(std::complex<NV>);
+    NV abs(Rstats::Complex);
     NV abs(NV);
     NV abs(IV);
 
-    NV Mod(std::complex<NV>);
+    NV Mod(Rstats::Complex);
     NV Mod(NV);
     NV Mod(IV);
 
-    std::complex<NV> log(std::complex<NV>);
+    Rstats::Complex log(Rstats::Complex);
     NV log(NV);
     NV log(IV);
 
-    std::complex<NV> logb(std::complex<NV>);
+    Rstats::Complex logb(Rstats::Complex);
     NV logb(NV);
     NV logb(IV);
 
-    std::complex<NV> log10(std::complex<NV>);
+    Rstats::Complex log10(Rstats::Complex);
     NV log10(NV);
     NV log10(IV);
 
-    std::complex<NV> log2(std::complex<NV>);
+    Rstats::Complex log2(Rstats::Complex);
     NV log2(NV);
     NV log2(IV);
     
-    std::complex<NV> expm1(std::complex<NV>);
+    Rstats::Complex expm1(Rstats::Complex);
     NV expm1(NV);
     NV expm1(IV);
 
-    NV Arg(std::complex<NV>);
+    NV Arg(Rstats::Complex);
     NV Arg(NV);
     NV Arg(IV);
 
-    std::complex<NV> exp(std::complex<NV>);
+    Rstats::Complex exp(Rstats::Complex);
     NV exp(NV);
     NV exp(IV);
 
-    std::complex<NV> sqrt(std::complex<NV>);
+    Rstats::Complex sqrt(Rstats::Complex);
     NV sqrt(NV);
     NV sqrt(IV);
 
-    std::complex<NV> atan(std::complex<NV>);
+    Rstats::Complex atan(Rstats::Complex);
     NV atan(NV);
     NV atan(IV);
 
-    std::complex<NV> asin(std::complex<NV>);
+    Rstats::Complex asin(Rstats::Complex);
     NV asin(NV);
     NV asin(IV);
 
-    std::complex<NV> acos(std::complex<NV>);
+    Rstats::Complex acos(Rstats::Complex);
     NV acos(NV);
     NV acos(IV);
 
-    std::complex<NV> asinh(std::complex<NV>);
+    Rstats::Complex asinh(Rstats::Complex);
     NV asinh(NV);
     NV asinh(IV);
 
-    std::complex<NV> acosh(std::complex<NV>);
+    Rstats::Complex acosh(Rstats::Complex);
     NV acosh(NV);
     NV acosh(IV);
 
-    std::complex<NV> atanh(std::complex<NV>);
+    Rstats::Complex atanh(Rstats::Complex);
     NV atanh(NV);
     NV atanh(IV);
     
-    std::complex<NV> negation(std::complex<NV>);
+    Rstats::Complex negation(Rstats::Complex);
     NV negation(NV);
     IV negation(IV);
 
-    std::complex<NV> atan2(std::complex<NV>, std::complex<NV>);
+    Rstats::Complex atan2(Rstats::Complex, Rstats::Complex);
     NV atan2(NV, NV);
     NV atan2(IV, IV);
 
     IV And(SV*, SV*);
-    IV And(std::complex<NV>, std::complex<NV>);
+    IV And(Rstats::Complex, Rstats::Complex);
     IV And(NV, NV);
     IV And(IV, IV);
 
     IV Or(SV*, SV*);
-    IV Or(std::complex<NV>, std::complex<NV>);
+    IV Or(Rstats::Complex, Rstats::Complex);
     IV Or(NV, NV);
     IV Or(IV, IV);
     
     IV equal(SV*, SV*);
-    IV equal(std::complex<NV>, std::complex<NV>);
+    IV equal(Rstats::Complex, Rstats::Complex);
     IV equal(NV, NV);
     IV equal(IV, IV);
 
     IV not_equal(SV*, SV*);
-    IV not_equal(std::complex<NV>, std::complex<NV>);
+    IV not_equal(Rstats::Complex, Rstats::Complex);
     IV not_equal(NV, NV);
     IV not_equal(IV, IV);
 
     IV more_than(SV*, SV*);
-    IV more_than(std::complex<NV>, std::complex<NV>);
+    IV more_than(Rstats::Complex, Rstats::Complex);
     IV more_than(NV, NV);
     IV more_than(IV, IV);
 
     IV less_than(SV*, SV*);
-    IV less_than(std::complex<NV>, std::complex<NV>);
+    IV less_than(Rstats::Complex, Rstats::Complex);
     IV less_than(NV, NV);
     IV less_than(IV, IV);
 
     IV more_than_or_equal(SV*, SV*);
-    IV more_than_or_equal(std::complex<NV>, std::complex<NV>);
+    IV more_than_or_equal(Rstats::Complex, Rstats::Complex);
     IV more_than_or_equal(NV, NV);
     IV more_than_or_equal(IV, IV);
 
     IV less_than_or_equal(SV*, SV*);
-    IV less_than_or_equal(std::complex<NV>, std::complex<NV>);
+    IV less_than_or_equal(Rstats::Complex, Rstats::Complex);
     IV less_than_or_equal(NV, NV);
     IV less_than_or_equal(IV, IV);
 
     Rstats::Logical is_infinite(SV*);
-    Rstats::Logical is_infinite(std::complex<NV>);
+    Rstats::Logical is_infinite(Rstats::Complex);
     Rstats::Logical is_infinite(NV);
     Rstats::Logical is_infinite(IV);
 
     Rstats::Logical is_finite(SV*);
-    Rstats::Logical is_finite(std::complex<NV>);
+    Rstats::Logical is_finite(Rstats::Complex);
     Rstats::Logical is_finite(NV);
     Rstats::Logical is_finite(IV);
 
     IV is_nan(SV*);
-    IV is_nan(std::complex<NV>);
+    IV is_nan(Rstats::Complex);
     IV is_nan(NV);
     IV is_nan(IV);
   }

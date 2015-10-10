@@ -122,135 +122,135 @@ namespace Rstats {
 
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
     Rstats::Double add(Rstats::Double, Rstats::Double);
-    IV add(IV, IV);
+    IV add(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex subtract(Rstats::Complex, Rstats::Complex);
     Rstats::Double subtract(Rstats::Double, Rstats::Double);
-    IV subtract(IV, IV);
+    Rstats::Integer subtract(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex multiply(Rstats::Complex, Rstats::Complex);
     Rstats::Double multiply(Rstats::Double, Rstats::Double);
-    IV multiply(IV, IV);
+    Rstats::Integer multiply(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex divide(Rstats::Complex, Rstats::Complex);
     Rstats::Double divide(Rstats::Double, Rstats::Double);
-    Rstats::Double divide(IV, IV);
+    Rstats::Double divide(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex pow(Rstats::Complex, Rstats::Complex);
     Rstats::Double pow(Rstats::Double, Rstats::Double);
-    Rstats::Double pow(IV, IV);
+    Rstats::Double pow(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex remainder(Rstats::Complex, Rstats::Complex);
     Rstats::Double remainder(Rstats::Double, Rstats::Double);
-    IV remainder(IV, IV);
+    Rstats::Integer remainder(Rstats::Integer, Rstats::Integer);
 
     Rstats::Double Re(Rstats::Complex);
     Rstats::Double Re(Rstats::Double);
-    Rstats::Double Re(IV);
+    Rstats::Double Re(Rstats::Integer);
 
     Rstats::Double Im(Rstats::Complex);
     Rstats::Double Im(Rstats::Double);
-    Rstats::Double Im(IV);
+    Rstats::Double Im(Rstats::Integer);
 
     Rstats::Complex Conj(Rstats::Complex);
     Rstats::Double Conj(Rstats::Double);
-    Rstats::Double Conj(IV);
+    Rstats::Double Conj(Rstats::Integer);
 
     Rstats::Complex sin(Rstats::Complex);
     Rstats::Double sin(Rstats::Double);
-    Rstats::Double sin(IV);
+    Rstats::Double sin(Rstats::Integer);
     
     Rstats::Complex cos(Rstats::Complex);
     Rstats::Double cos(Rstats::Double);
-    Rstats::Double cos(IV);
+    Rstats::Double cos(Rstats::Integer);
 
     Rstats::Complex tan(Rstats::Complex);
     Rstats::Double tan(Rstats::Double);
-    Rstats::Double tan(IV);
+    Rstats::Double tan(Rstats::Integer);
 
     Rstats::Complex sinh(Rstats::Complex);
     Rstats::Double sinh(Rstats::Double);
-    Rstats::Double sinh(IV);
+    Rstats::Double sinh(Rstats::Integer);
 
     Rstats::Complex cosh(Rstats::Complex);
     Rstats::Double cosh(Rstats::Double);
-    Rstats::Double cosh(IV);
+    Rstats::Double cosh(Rstats::Integer);
 
     Rstats::Complex tanh (Rstats::Complex z);
     Rstats::Double tanh(Rstats::Double);
-    Rstats::Double tanh(IV);
+    Rstats::Double tanh(Rstats::Integer);
 
     Rstats::Double abs(Rstats::Complex);
     Rstats::Double abs(Rstats::Double);
-    Rstats::Double abs(IV);
+    Rstats::Double abs(Rstats::Integer);
 
     Rstats::Double Mod(Rstats::Complex);
     Rstats::Double Mod(Rstats::Double);
-    Rstats::Double Mod(IV);
+    Rstats::Double Mod(Rstats::Integer);
 
     Rstats::Complex log(Rstats::Complex);
     Rstats::Double log(Rstats::Double);
-    Rstats::Double log(IV);
+    Rstats::Double log(Rstats::Integer);
 
     Rstats::Complex logb(Rstats::Complex);
     Rstats::Double logb(Rstats::Double);
-    Rstats::Double logb(IV);
+    Rstats::Double logb(Rstats::Integer);
 
     Rstats::Complex log10(Rstats::Complex);
     Rstats::Double log10(Rstats::Double);
-    Rstats::Double log10(IV);
+    Rstats::Double log10(Rstats::Integer);
 
     Rstats::Complex log2(Rstats::Complex);
     Rstats::Double log2(Rstats::Double);
-    Rstats::Double log2(IV);
+    Rstats::Double log2(Rstats::Integer);
     
     Rstats::Complex expm1(Rstats::Complex);
     Rstats::Double expm1(Rstats::Double);
-    Rstats::Double expm1(IV);
+    Rstats::Double expm1(Rstats::Integer);
 
     Rstats::Double Arg(Rstats::Complex);
     Rstats::Double Arg(Rstats::Double);
-    Rstats::Double Arg(IV);
+    Rstats::Double Arg(Rstats::Integer);
 
     Rstats::Complex exp(Rstats::Complex);
     Rstats::Double exp(Rstats::Double);
-    Rstats::Double exp(IV);
+    Rstats::Double exp(Rstats::Integer);
 
     Rstats::Complex sqrt(Rstats::Complex);
     Rstats::Double sqrt(Rstats::Double);
-    Rstats::Double sqrt(IV);
+    Rstats::Double sqrt(Rstats::Integer);
 
     Rstats::Complex atan(Rstats::Complex);
     Rstats::Double atan(Rstats::Double);
-    Rstats::Double atan(IV);
+    Rstats::Double atan(Rstats::Integer);
 
     Rstats::Complex asin(Rstats::Complex);
     Rstats::Double asin(Rstats::Double);
-    Rstats::Double asin(IV);
+    Rstats::Double asin(Rstats::Integer);
 
     Rstats::Complex acos(Rstats::Complex);
     Rstats::Double acos(Rstats::Double);
-    Rstats::Double acos(IV);
+    Rstats::Double acos(Rstats::Integer);
 
     Rstats::Complex asinh(Rstats::Complex);
     Rstats::Double asinh(Rstats::Double);
-    Rstats::Double asinh(IV);
+    Rstats::Double asinh(Rstats::Integer);
 
     Rstats::Complex acosh(Rstats::Complex);
     Rstats::Double acosh(Rstats::Double);
-    Rstats::Double acosh(IV);
+    Rstats::Double acosh(Rstats::Integer);
 
     Rstats::Complex atanh(Rstats::Complex);
     Rstats::Double atanh(Rstats::Double);
-    Rstats::Double atanh(IV);
+    Rstats::Double atanh(Rstats::Integer);
     
     Rstats::Complex negation(Rstats::Complex);
     Rstats::Double negation(Rstats::Double);
-    IV negation(IV);
+    Rstats::Integer negation(Rstats::Integer);
 
     Rstats::Complex atan2(Rstats::Complex, Rstats::Complex);
     Rstats::Double atan2(Rstats::Double, Rstats::Double);
-    Rstats::Double atan2(IV, IV);
+    Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
 
     IV And(SV*, SV*);
     IV And(Rstats::Complex, Rstats::Complex);

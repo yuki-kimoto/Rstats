@@ -236,8 +236,7 @@ SV* Mod(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Mod, sv_x1);
+  SV* sv_x2 = Rstats::Func::Mod(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -277,8 +276,7 @@ SV* Re(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Re, sv_x1);
+  SV* sv_x2 = Rstats::Func::Re(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -288,8 +286,7 @@ SV* Im(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::Im, sv_x1);
+  SV* sv_x2 = Rstats::Func::Im(sv_r, ST(1));
   
   return_sv(sv_x2);
 }
@@ -299,8 +296,7 @@ SV* abs(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::operate_unary(sv_r, &Rstats::VectorFunc::abs, sv_x1);
+  SV* sv_x2 = Rstats::Func::abs(sv_r, ST(1));
   
   return_sv(sv_x2);
 }

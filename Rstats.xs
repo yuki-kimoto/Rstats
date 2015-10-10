@@ -1275,6 +1275,17 @@ SV* names(...)
   }
 }
 
+SV* typeof(...)
+  PPCODE:
+{
+  SV* sv_r = ST(0);
+  SV* sv_x1 = ST(1);
+  
+  SV* sv_x2 = Rstats::Func::c_character(sv_r, Rstats::pl_hv_fetch(sv_x1, "type"));
+  
+  return_sv(sv_x2);
+}
+
 SV* upgrade_type(...)
   PPCODE:
 {

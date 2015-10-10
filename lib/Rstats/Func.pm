@@ -392,14 +392,6 @@ sub colnames {
   }
 }
 
-sub typeof {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  return Rstats::Func::c_character($r, $x1->{type});
-}
-
 sub labels {
   my $r = shift;
   return $r->as->character(@_);

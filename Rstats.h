@@ -852,7 +852,8 @@ namespace Rstats {
     void upgrade_type(SV*, IV, ...);
     SV* upgrade_length_avrv(SV*, SV*);
     void upgrade_length(SV*, IV, ...);
-
+    char* get_type(SV*, SV*);
+    
     SV* atan2(SV*, SV*, SV*);
     SV* add(SV*, SV*, SV*);
     SV* subtract(SV*, SV*, SV*);

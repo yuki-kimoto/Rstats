@@ -22,6 +22,26 @@ namespace Rstats {
       return sv_x2;
     }
 
+    SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      // Upgrade type and length
+      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
+      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+      
+      Rstats::Vector* x3_elements
+        = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
+      
+      SV* sv_x3 = Rstats::Func::new_vector(sv_r);
+      Rstats::Func::set_vector(sv_r, sv_x3, x3_elements);
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
+      
+      return sv_x3;
+    }
+
     SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
       
       IV xs_length = Rstats::pl_av_len(sv_xs);
@@ -136,26 +156,10 @@ namespace Rstats {
       va_end(args);
     }
     
-    SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
-      
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
-      
-      // Upgrade type and length
-      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
-      
-      Rstats::Vector* x3_elements
-        = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
-      
-      SV* sv_x3 = Rstats::Func::new_vector(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x3, x3_elements);
-      
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
-      
-      return sv_x3;
+    char* get_type(SV* sv_r, SV* sv_x1) {
+      return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "type"));
     }
-
+    
     SV* as_vector(SV* sv_r, SV* sv_x1) {
       
       SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");

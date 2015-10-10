@@ -104,11 +104,6 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-
-  typedef std::vector<Rstats::Character> CharacterVector;
-  typedef std::vector<Rstats::Complex> ComplexVector;
-  typedef std::vector<Rstats::Double> DoubleVector;
-  typedef std::vector<Rstats::Integer> IntegerVector;
   
   namespace Util {
     IV is_perl_number(SV*);

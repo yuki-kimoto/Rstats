@@ -392,39 +392,6 @@ namespace Rstats {
       return v2; \
     }
     
-# define RSTATS_DEF_VECTOR_FUNC_UN_MATH_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
-      IV length = Rstats::VectorFunc::get_length(v1); \
-      Rstats::Vector* v2; \
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
-      switch (type) { \
-        case Rstats::Type::COMPLEX : \
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length); \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i))); \
-          } \
-          break; \
-        case Rstats::Type::DOUBLE : \
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length); \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i))); \
-          } \
-          break; \
-        case Rstats::Type::INTEGER : \
-        case Rstats::Type::LOGICAL : \
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length); \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i))); \
-          } \
-          break; \
-        default: \
-          croak("Error in %s() : non-numeric argument to Rstats::VectorFunc::%s", #FUNC_NAME, #FUNC_NAME); \
-          break; \
-      } \
-      Rstats::VectorFunc::merge_na_positions(v2, v1); \
-      return v2; \
-    }
-
 # define RSTATS_DEF_VECTOR_FUNC_UN_MATH_COMPLEX_INTEGER_TO_DOUBLE(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* v1) { \
       IV length = Rstats::VectorFunc::get_length(v1); \

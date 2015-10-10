@@ -727,11 +727,18 @@ namespace Rstats {
       return v1;
     };
 
-    template <class T>
-    Rstats::Vector* sin2(Rstats::Vector* v1);
-
-    Rstats::Vector* sin(Rstats::Vector*);
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* sin2(Rstats::Vector* v1) {
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<T_OUT>(v2, i, Rstats::ElementFunc::sin(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+      }
+      Rstats::VectorFunc::merge_na_positions(v2, v1);
+      return v2;
+    }
     
+    Rstats::Vector* sin(Rstats::Vector*);
   }
   // Rstats::Func
   namespace Func {

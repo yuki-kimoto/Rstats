@@ -1355,7 +1355,12 @@ namespace Rstats {
     }
     
     char* get_type(SV* sv_r, SV* sv_x1) {
-      return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "type"));
+      if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
+        return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "type"));
+      }
+      else {
+        return "";
+      }
     }
     
     SV* as_vector(SV* sv_r, SV* sv_x1) {
@@ -2257,8 +2262,7 @@ namespace Rstats {
 
     SV* is_character(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "character");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       

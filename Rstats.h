@@ -683,15 +683,21 @@ namespace Rstats {
       IV length = Rstats::VectorFunc::get_length(v1);
       Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+
       for (IV i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<T_OUT>(
-          v3,
-          i,
-          (*func)(
-            Rstats::VectorFunc::get_value<T_IN>(v1, i),
-            Rstats::VectorFunc::get_value<T_IN>(v2, i)
-          )
-        );
+        try {
+          Rstats::VectorFunc::set_value<T_OUT>(
+            v3,
+            i,
+            (*func)(
+              Rstats::VectorFunc::get_value<T_IN>(v1, i),
+              Rstats::VectorFunc::get_value<T_IN>(v2, i)
+            )
+          );
+        }
+        catch (const char* e) {
+          Rstats::VectorFunc::add_na_position(v3, i);
+        }
       }
       Rstats::VectorFunc::merge_na_positions(v3, v1);
       Rstats::VectorFunc::merge_na_positions(v3, v2);

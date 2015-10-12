@@ -71,7 +71,41 @@ namespace Rstats {
       
       return sv_x3;
     }
-    
+
+    SV* more_than(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      // Upgrade type and length
+      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
+      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+      
+      SV* sv_x3;
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      if (strEQ(type, "character")) {
+        Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::more_than;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "complex")) {
+        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::more_than;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::more_than;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::more_than;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else {
+        croak("Error in > : default method not implemented for type '%s'", type);
+      }
+      
+      return sv_x3;
+    }
+        
     SV* sin(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

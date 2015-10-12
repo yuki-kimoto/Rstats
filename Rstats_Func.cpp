@@ -12,54 +12,29 @@ namespace Rstats {
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+ 
 
-      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-      
-      IV length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i), Rstats::VectorFunc::get_value<Rstats::Character>(v2, i)) ? 1 : 0);
-          }
-          break;
-        case Rstats::Type::COMPLEX :
-          for (IV i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i), Rstats::VectorFunc::get_value<Rstats::Complex>(v2, i)) ? 1 : 0);
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          for (IV i = 0; i < length; i++) {
-            try {
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i)) ? 1 : 0);
-            } catch (const char* e) {
-              Rstats::VectorFunc::add_na_position(v3, i);
-            }
-          }
-          break;
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          for (IV i = 0; i < length; i++) {
-            try {
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i)) ? 1 : 0);
-            }
-            catch (const char* e) {
-              Rstats::VectorFunc::add_na_position(v3, i);
-            }
-          }
-          break;
-        default:
-          croak("Error in == : non-comparable argument to +");
+      SV* sv_x3;
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      if (strEQ(type, "character")) {
+        Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::equal;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
-      Rstats::VectorFunc::merge_na_positions(v3, v1);
-      Rstats::VectorFunc::merge_na_positions(v3, v2);
-      
-      SV* sv_x3 = Rstats::Func::new_vector(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x3, v3);
-      
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
+      else if (strEQ(type, "complex")) {
+        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::equal;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::equal;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::equal;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else {
+        croak("Error in == : default method not implemented for type '%s'", type);
+      }
       
       return sv_x3;
     }

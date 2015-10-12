@@ -17,19 +17,19 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in == : default method not implemented for type '%s'", type);
@@ -51,19 +51,19 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::not_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::not_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::not_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::not_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in != : default method not implemented for type '%s'", type);
@@ -85,18 +85,18 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::more_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         croak("Error in > operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::more_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::more_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in > : default method not implemented for type '%s'", type);
@@ -118,18 +118,18 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::less_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         croak("Error in < operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::less_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::less_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in < : default method not implemented for type '%s'", type);
@@ -151,18 +151,18 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::less_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         croak("Error in <= operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::less_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::less_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in <= : default method not implemented for type '%s'", type);
@@ -184,18 +184,18 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::more_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         croak("Error in >= operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::more_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::more_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in >= : default method not implemented for type '%s'", type);
@@ -217,19 +217,19 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::And;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::And;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::And;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::And;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in & : default method not implemented for type '%s'", type);
@@ -251,19 +251,19 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::Or;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::Or;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::Or;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::Or;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in | : default method not implemented for type '%s'", type);
@@ -285,15 +285,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::add;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::add;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Integer (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::add;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in + : non-numeric argument to binary operator");
@@ -315,15 +315,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::subtract;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::subtract;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Integer (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::subtract;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in - : non-numeric argument to binary operator");
@@ -348,11 +348,11 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::remainder;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::remainder;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in % operator : non-numeric argument to binary operator");
@@ -374,15 +374,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::divide;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::divide;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::divide;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in / operator : non-numeric argument to binary operator");
@@ -404,15 +404,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::atan2;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::atan2;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::atan2;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in atan2 : non-numeric argument to atan2");
@@ -434,15 +434,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::pow;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::pow;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::pow;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in pow : non-numeric argument to v");
@@ -464,15 +464,15 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::multiply;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::multiply;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Integer (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::multiply;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        sv_x3 = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
       }
       else {
         croak("Error in * : non-numeric argument to binary operator");
@@ -1218,26 +1218,6 @@ namespace Rstats {
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
       return sv_x2;
-    }
-
-    SV* operate_binary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV* sv_x1, SV* sv_x2) {
-      
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
-      
-      // Upgrade type and length
-      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
-      
-      Rstats::Vector* x3_elements
-        = (*func)(Rstats::Func::get_vector(sv_r, sv_x1), Rstats::Func::get_vector(sv_r, sv_x2));
-      
-      SV* sv_x3 = Rstats::Func::new_vector(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x3, x3_elements);
-      
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
-      
-      return sv_x3;
     }
 
     SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
@@ -2200,8 +2180,7 @@ namespace Rstats {
     }
 
     SV* new_false(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_false());
+      SV* sv_x1 = Rstats::Func::c_logical(sv_r, Rstats::pl_new_sv_iv(0));
       
       return sv_x1;
     }

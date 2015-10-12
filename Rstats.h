@@ -328,7 +328,6 @@ namespace Rstats {
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
     IV get_length (Rstats::Vector*);
     
-    Rstats::Vector* new_false();
     Rstats::Vector* new_nan();
     Rstats::Vector* new_negative_inf();
     Rstats::Vector* new_inf();
@@ -573,7 +572,7 @@ namespace Rstats {
     }
     
     template <class T_IN, class T_OUT>
-    SV* operate_binary2(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2) {
+    SV* operate_binary(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2) {
 
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);

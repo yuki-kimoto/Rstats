@@ -266,23 +266,23 @@ sub matrix {
   my $matrix;
   my $x_matrix;
 
-  if (Rstats::Func::typeof($r, $x1)->value eq "character") {
+  if (Rstats::Func::get_type($r, $x1) eq "character") {
     $x_matrix = c_character($r, $x1_values);
   }
-  elsif (Rstats::Func::typeof($r, $x1)->value  eq "complex") {
+  elsif (Rstats::Func::get_type($r, $x1)  eq "complex") {
     $x_matrix = c_complex($r, $x1_values);
   }
-  elsif (Rstats::Func::typeof($r, $x1)->value  eq "double") {
+  elsif (Rstats::Func::get_type($r, $x1)  eq "double") {
     $x_matrix = c_double($r, $x1_values);
   }
-  elsif (Rstats::Func::typeof($r, $x1)->value  eq "integer") {
+  elsif (Rstats::Func::get_type($r, $x1)  eq "integer") {
     $x_matrix = c_integer($r, $x1_values);
   }
-  elsif (Rstats::Func::typeof($r, $x1)->value  eq "logical") {
+  elsif (Rstats::Func::get_type($r, $x1)  eq "logical") {
     $x_matrix = c_logical($r, $x1_values);
   }
   else {
-    croak("Invalid type " . Rstats::Func::typeof($r, $x1)->value . " is passed");
+    croak("Invalid type " . Rstats::Func::get_type($r, $x1) . " is passed");
   }
   
   if ($byrow) {

@@ -1354,6 +1354,15 @@ namespace Rstats {
       va_end(args);
     }
     
+    SV* get_type_sv(SV* sv_r, SV* sv_x1) {
+      if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
+        return Rstats::pl_hv_fetch(sv_x1, "type");
+      }
+      else {
+        return Rstats::pl_new_sv_pv("");
+      }
+    }
+
     char* get_type(SV* sv_r, SV* sv_x1) {
       if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
         return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "type"));
@@ -1362,7 +1371,7 @@ namespace Rstats {
         return "";
       }
     }
-
+    
     char* get_object_type(SV* sv_r, SV* sv_x1) {
       if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
         return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type"));

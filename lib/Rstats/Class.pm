@@ -233,6 +233,7 @@ my @func_names = qw/
   dim_as_array
   class
   type
+  get_type
   at
   length_value
 /;

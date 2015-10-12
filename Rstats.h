@@ -314,56 +314,6 @@ namespace Rstats {
     void* values;
   } Vector;
 
-# define RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(FUNC_NAME, ELEMENT_FUNC_NAME) \
-    Rstats::Vector* FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
-      if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) { \
-        croak("Can't add different type(Rstats::VectorFunc::%s())", #FUNC_NAME); \
-      } \
-      if (Rstats::VectorFunc::get_length(v1) != Rstats::VectorFunc::get_length(v2)) { \
-        croak("Can't add different length(Rstats::VectorFunc::%s())", #FUNC_NAME); \
-      } \
-      IV length = Rstats::VectorFunc::get_length(v1); \
-      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length); \
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1); \
-      switch (type) { \
-        case Rstats::Type::CHARACTER : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i), Rstats::VectorFunc::get_value<Rstats::Character>(v2, i)) ? 1 : 0); \
-          } \
-          break; \
-        case Rstats::Type::COMPLEX : \
-          for (IV i = 0; i < length; i++) { \
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i), Rstats::VectorFunc::get_value<Rstats::Complex>(v2, i)) ? 1 : 0); \
-          } \
-          break; \
-        case Rstats::Type::DOUBLE : \
-          for (IV i = 0; i < length; i++) { \
-            try {\
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i)) ? 1 : 0); \
-            } catch (const char* e) {\
-              Rstats::VectorFunc::add_na_position(v3, i);\
-            }\
-          } \
-          break; \
-        case Rstats::Type::INTEGER : \
-        case Rstats::Type::LOGICAL : \
-          for (IV i = 0; i < length; i++) { \
-            try {\
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, ELEMENT_FUNC_NAME(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i)) ? 1 : 0); \
-            }\
-            catch (const char* e) {\
-              Rstats::VectorFunc::add_na_position(v3, i);\
-            }\
-          } \
-          break; \
-        default: \
-          croak("Error in %s() : non-comparable argument to %s()", #FUNC_NAME, #FUNC_NAME); \
-      } \
-      Rstats::VectorFunc::merge_na_positions(v3, v1); \
-      Rstats::VectorFunc::merge_na_positions(v3, v2); \
-      return v3; \
-    }
-    
 # define RSTATS_DEF_VECTOR_FUNC_BIN_MATH(FUNC_NAME, ELEMENT_FUNC_NAME) \
     Rstats::Vector* FUNC_NAME(Rstats::Vector* v1, Rstats::Vector* v2) { \
       if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) { \
@@ -740,7 +690,7 @@ namespace Rstats {
           (*func)(
             Rstats::VectorFunc::get_value<T_IN>(v1, i),
             Rstats::VectorFunc::get_value<T_IN>(v2, i)
-          ) ? 1 : 0
+          )
         );
       }
       Rstats::VectorFunc::merge_na_positions(v3, v1);

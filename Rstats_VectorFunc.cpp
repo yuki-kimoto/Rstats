@@ -171,10 +171,6 @@ namespace Rstats {
       return v1;
     }
         
-    Rstats::Vector* new_true() {
-      return new_vector<Rstats::Logical>(1, 1);
-    }
-
     Rstats::Vector* new_false() {
       return new_vector<Rstats::Logical>(1, 0);
     }

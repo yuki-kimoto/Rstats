@@ -2207,9 +2207,7 @@ namespace Rstats {
     }
 
     SV* new_true(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_true());
-      
+      SV* sv_x1 = Rstats::Func::c_logical(sv_r, Rstats::pl_new_sv_iv(1));
       return sv_x1;
     }
 

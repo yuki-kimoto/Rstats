@@ -301,7 +301,7 @@ namespace Rstats {
       
       return sv_x3;
     }
-
+    
     SV* subtract(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
@@ -355,12 +355,42 @@ namespace Rstats {
         sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
       else {
-        croak("Error in - : non-numeric argument to binary operator");
+        croak("Error in % operator : non-numeric argument to binary operator");
       }
       
       return sv_x3;
     }
-                            
+
+    SV* divide(SV* sv_r, SV* sv_x1, SV* sv_x2) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      
+      // Upgrade type and length
+      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
+      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+      
+      SV* sv_x3;
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      if (strEQ(type, "complex")) {
+        Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::divide;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::divide;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::divide;
+        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+      }
+      else {
+        croak("Error in / operator : non-numeric argument to binary operator");
+      }
+      
+      return sv_x3;
+    }
+                                
     SV* multiply(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

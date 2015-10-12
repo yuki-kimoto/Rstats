@@ -687,7 +687,6 @@ namespace Rstats {
 
       IV length = Rstats::VectorFunc::get_length(v1);
       Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
 
       for (IV i = 0; i < length; i++) {
         try {

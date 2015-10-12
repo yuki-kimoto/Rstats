@@ -4,8 +4,6 @@
 namespace Rstats {
   namespace VectorFunc {
    
-    RSTATS_DEF_VECTOR_FUNC_BIN_MATH_INTEGER_TO_DOUBLE(pow, Rstats::ElementFunc::pow)
-
     template <>
     Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, Rstats::Integer pos) {
       Rstats::Character value = (*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos];

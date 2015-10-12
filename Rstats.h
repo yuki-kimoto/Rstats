@@ -663,7 +663,12 @@ namespace Rstats {
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
-        Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+        try {
+          Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+        }
+        catch (const char* e) {
+          Rstats::VectorFunc::add_na_position(v2, i);
+        }
       }
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       

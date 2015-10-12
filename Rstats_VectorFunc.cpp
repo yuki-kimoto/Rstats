@@ -204,39 +204,6 @@ namespace Rstats {
       return v1;
     }
 
-    Rstats::Vector* as (Rstats::Vector* v1, SV* sv_type) {
-      Rstats::Vector* v2;
-      if (SvOK(sv_type)) {
-        char* type = SvPV_nolen(sv_type);
-        if (strEQ(type, "character")) {
-          v2 = Rstats::VectorFunc::as_character(v1);
-        }
-        else if (strEQ(type, "complex")) {
-          v2 = Rstats::VectorFunc::as_complex(v1);
-        }
-        else if (strEQ(type, "double")) {
-          v2 = Rstats::VectorFunc::as_double(v1);
-        }
-        else if (strEQ(type, "numeric")) {
-          v2 = Rstats::VectorFunc::as_numeric(v1);
-        }
-        else if (strEQ(type, "integer")) {
-          v2 = Rstats::VectorFunc::as_integer(v1);
-        }
-        else if (strEQ(type, "logical")) {
-          v2 = Rstats::VectorFunc::as_logical(v1);
-        }
-        else {
-          croak("Invalid mode is passed(Rstats::VectorFunc::as())");
-        }
-      }
-      else {
-        croak("Invalid mode is passed(Rstats::VectorFunc::as())");
-      }
-      
-      return v2;
-    }
-
     SV* to_string_pos(Rstats::Vector* v1, Rstats::Integer pos) {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       SV* sv_str;

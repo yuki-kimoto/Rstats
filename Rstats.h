@@ -336,7 +336,6 @@ namespace Rstats {
     Rstats::Vector* new_na();
     Rstats::Vector* new_null();
     
-    Rstats::Vector* as (Rstats::Vector*, SV*);
     SV* to_string_pos(Rstats::Vector*, IV);
     SV* to_string(Rstats::Vector*);
     Rstats::Vector* as_character(Rstats::Vector*);

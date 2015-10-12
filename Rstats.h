@@ -142,7 +142,7 @@ namespace Rstats {
 
     Rstats::Complex remainder(Rstats::Complex, Rstats::Complex);
     Rstats::Double remainder(Rstats::Double, Rstats::Double);
-    Rstats::Integer remainder(Rstats::Integer, Rstats::Integer);
+    Rstats::Double remainder(Rstats::Integer, Rstats::Integer);
 
     Rstats::Double Re(Rstats::Complex);
     Rstats::Double Re(Rstats::Double);

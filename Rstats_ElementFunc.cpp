@@ -41,11 +41,8 @@ namespace Rstats {
         return e1 - std::floor(e1 / e2) * e2;
       }
     }
-    Rstats::Integer remainder(Rstats::Integer e1, Rstats::Integer e2) {
-      if (e2 == 0) {
-        throw "0 divide exception\n";
-      }
-      return e1 % e2;
+    Rstats::Double remainder(Rstats::Integer e1, Rstats::Integer e2) {
+      return Rstats::ElementFunc::remainder((Rstats::Double) e1, (Rstats::Double) e2);
     }
 
     // Re

@@ -7,6 +7,29 @@ use Rstats::Func;
 
 # operator
 {
+  # operator - remainder, integer
+  {
+    my $x1 = r->as->integer(c_(1, 2, 3));
+    my $x2 = r->as->integer(c_(2, 2, 0));
+    my $x3 = $x1 % $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [1, 0, 'NaN']);
+  }
+  
+  # operator - remainder
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 % 3;
+    is_deeply($x2->values, [1, 2, 0]);
+  }
+
+  # operator - remainder, reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 % $x1;
+    is_deeply($x2->values, [0, 0, 2]);
+  }
+  
   # operator - add(different element number)
   {
     my $x1 = c_(1, 2);
@@ -118,29 +141,6 @@ use Rstats::Func;
     my $x1 = c_(1, 2, 3);
     my $x2 = 2 ** $x1;
     is_deeply($x2->values, [2, 4, 8]);
-  }
-
-  # operator - remainder
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 % 3;
-    is_deeply($x2->values, [1, 2, 0]);
-  }
-
-  # operator - remainder, reverse
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 2 % $x1;
-    is_deeply($x2->values, [0, 0, 2]);
-  }
-  
-  # operator - remainder, integer
-  {
-    my $x1 = r->as->integer(c_(1, 2, 3));
-    my $x2 = r->as->integer(c_(2, 2, 0));
-    my $x3 = $x1 % $x2;
-    ok(r->is->integer($x3));
-    is_deeply($x3->values, [1, 0, undef]);
   }
 }
 

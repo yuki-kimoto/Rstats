@@ -177,7 +177,7 @@ SV* equal(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::operate_binary(sv_r, &Rstats::VectorFunc::equal, sv_x1, sv_x2);
+  SV* sv_x3 = Rstats::Func::equal(sv_r, sv_x1, sv_x2);
   
   return_sv(sv_x3);
 }

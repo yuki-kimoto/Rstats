@@ -266,23 +266,23 @@ sub matrix {
   my $matrix;
   my $x_matrix;
 
-  if ($x1->type eq "character") {
+  if (Rstats::Func::typeof($r, $x1)->value eq "character") {
     $x_matrix = c_character($r, $x1_values);
   }
-  elsif ($x1->type eq "complex") {
+  elsif (Rstats::Func::typeof($r, $x1)->value  eq "complex") {
     $x_matrix = c_complex($r, $x1_values);
   }
-  elsif ($x1->type eq "double") {
+  elsif (Rstats::Func::typeof($r, $x1)->value  eq "double") {
     $x_matrix = c_double($r, $x1_values);
   }
-  elsif ($x1->type eq "integer") {
+  elsif (Rstats::Func::typeof($r, $x1)->value  eq "integer") {
     $x_matrix = c_integer($r, $x1_values);
   }
-  elsif ($x1->type eq "logical") {
+  elsif (Rstats::Func::typeof($r, $x1)->value  eq "logical") {
     $x_matrix = c_logical($r, $x1_values);
   }
   else {
-    croak("Invalid type " . $x1->type . " is passed");
+    croak("Invalid type " . Rstats::Func::typeof($r, $x1)->value . " is passed");
   }
   
   if ($byrow) {

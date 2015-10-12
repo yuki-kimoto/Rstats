@@ -1779,6 +1779,13 @@ namespace Rstats {
       return sv_length;
     }
 
+    SV* Typeof(SV* sv_r, SV* sv_x1) {
+      
+      SV* sv_x2 = Rstats::Func::c_character(sv_r, Rstats::pl_new_sv_pv(Rstats::Func::get_type(sv_r, sv_x1)));
+      
+      return sv_x2;
+    }
+    
     SV* type(SV* sv_r, SV* sv_x1) {
       
       Rstats::Type::Enum type = get_vector(sv_r, sv_x1)->type;

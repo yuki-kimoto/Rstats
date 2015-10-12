@@ -1256,7 +1256,7 @@ SV* typeof(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::c_character(sv_r, Rstats::pl_hv_fetch(sv_x1, "type"));
+  SV* sv_x2 = Rstats::Func::Typeof(sv_r, sv_x1);
   
   return_sv(sv_x2);
 }

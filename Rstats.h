@@ -407,13 +407,13 @@ namespace Rstats {
     SV* c_logical(SV*, SV*);
     SV* c_complex(SV*, SV*);
 
-    SV* new_null(SV*); /* NULL */
+    SV* new_null(SV*); /* r->NULL */
     SV* new_vector(SV*);
-    SV* new_na(SV*); /* NA */
-    SV* new_nan(SV*); /* NaN */
-    SV* new_inf(SV*); /* Inf */
-    SV* new_false(SV*); /* FALSE */
-    SV* new_true(SV*); /* TRUE */
+    SV* new_na(SV*); /* r->NA */
+    SV* new_nan(SV*); /* r->NaN */
+    SV* new_inf(SV*); /* r->Inf */
+    SV* new_false(SV*); /* r->FALSE */
+    SV* new_true(SV*); /* r->TRUE */
 
     SV* to_c(SV*, SV*);
     SV* pi(SV*);
@@ -425,6 +425,7 @@ namespace Rstats {
     SV* is_array(SV*, SV*);
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
+    SV* Typeof(SV*, SV*); // r->typeof
     IV to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);

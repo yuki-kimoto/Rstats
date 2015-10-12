@@ -737,7 +737,7 @@ namespace Rstats {
         Rstats::VectorFunc::set_value<T_OUT>(
           v3,
           i,
-          Rstats::ElementFunc::equal(
+          (*func)(
             Rstats::VectorFunc::get_value<T_IN>(v1, i),
             Rstats::VectorFunc::get_value<T_IN>(v2, i)
           ) ? 1 : 0

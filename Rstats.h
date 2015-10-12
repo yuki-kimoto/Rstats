@@ -723,6 +723,36 @@ namespace Rstats {
       
       return sv_x2;
     }
+    
+    template <class T_IN, class T_OUT>
+    SV* operate_binary2(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2) {
+
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+      Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+
+      IV length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      for (IV i = 0; i < length; i++) {
+        Rstats::VectorFunc::set_value<T_OUT>(
+          v3,
+          i,
+          Rstats::ElementFunc::equal(
+            Rstats::VectorFunc::get_value<T_IN>(v1, i),
+            Rstats::VectorFunc::get_value<T_IN>(v2, i)
+          ) ? 1 : 0
+        );
+      }
+      Rstats::VectorFunc::merge_na_positions(v3, v1);
+      Rstats::VectorFunc::merge_na_positions(v3, v2);
+      
+      SV* sv_x3 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
+      Rstats::Func::set_vector(sv_r, sv_x3, v3);
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);
+      
+      return sv_x3;
+    }
   }
 }
 

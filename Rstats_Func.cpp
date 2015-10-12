@@ -2222,8 +2222,8 @@ namespace Rstats {
 
     SV* is_numeric(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && (strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double") || strEQ(SvPV_nolen(type(sv_r, sv_x1)), "integer"));
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")
+        || strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -2232,8 +2232,7 @@ namespace Rstats {
 
     SV* is_double(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "double");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -2242,8 +2241,7 @@ namespace Rstats {
 
     SV* is_integer(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "integer");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -2252,8 +2250,7 @@ namespace Rstats {
 
     SV* is_complex(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "complex");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "complex");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -2271,8 +2268,7 @@ namespace Rstats {
 
     SV* is_logical(SV* sv_r, SV* sv_x1) {
       
-      bool is = (to_bool(sv_r, is_array(sv_r, sv_x1)) || to_bool(sv_r, is_vector(sv_r, sv_x1)))
-        && strEQ(SvPV_nolen(type(sv_r, sv_x1)), "logical");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       

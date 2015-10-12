@@ -2599,7 +2599,7 @@ namespace Rstats {
       if (length > 0) {
         av_extend(Rstats::pl_av_deref(sv_decomposed_xs), length);
 
-        if (Rstats::VectorFunc::is_character(v1)) {
+        if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character")) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Character>(1, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
@@ -2611,7 +2611,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
         }
-        else if (Rstats::VectorFunc::is_complex(v1)) {
+        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "complex")) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Complex>(1, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
@@ -2623,7 +2623,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
         }
-        else if (Rstats::VectorFunc::is_double(v1)) {
+        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Double>(1, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
@@ -2635,7 +2635,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
         }
-        else if (Rstats::VectorFunc::is_integer(v1)) {
+        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer")) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
@@ -2647,7 +2647,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
           }
         }
-        else if (Rstats::VectorFunc::is_logical(v1)) {
+        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Logical>(1, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));

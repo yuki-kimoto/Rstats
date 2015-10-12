@@ -1362,6 +1362,15 @@ namespace Rstats {
         return "";
       }
     }
+
+    char* get_object_type(SV* sv_r, SV* sv_x1) {
+      if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
+        return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type"));
+      }
+      else {
+        return "";
+      }
+    }
     
     SV* as_vector(SV* sv_r, SV* sv_x1) {
       
@@ -2277,9 +2286,7 @@ namespace Rstats {
 
     SV* is_data_frame(SV* sv_r, SV* sv_x1) {
       
-      bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "data.frame");
+      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "data.frame");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       
@@ -2288,9 +2295,7 @@ namespace Rstats {
 
     SV* is_list(SV* sv_r, SV* sv_x1) {
       
-      bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "list");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "list");
         
       SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
       

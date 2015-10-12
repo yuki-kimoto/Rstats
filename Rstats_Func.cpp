@@ -1713,17 +1713,6 @@ namespace Rstats {
       return sv_new_xs;
     }
     
-    SV* is_matrix(SV* sv_r, SV* sv_x1) {
-
-      bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
-      
-      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
-      
-      return sv_is;
-    }
-
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
       
@@ -1819,33 +1808,41 @@ namespace Rstats {
 
     SV* is_null (SV* sv_r, SV* sv_x1) {
       
-      bool is =
-        sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "NULL");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "NULL");
       
-      SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
-      
-      SV* sv_values = Rstats::pl_new_avrv();
-      Rstats::pl_av_push(sv_values, sv_is);
-      
-      return Rstats::Func::c_logical(sv_r, sv_values);
+      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+            
+      return sv_is;
     }
     
     SV* is_vector (SV* sv_r, SV* sv_x1) {
       
-      bool is =
-        sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "array")
+      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
         && !Rstats::pl_hv_exists(sv_x1, "dim");
       
-      SV* sv_is = is ? Rstats::pl_new_sv_iv(1) : Rstats::pl_new_sv_iv(0);
+      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+            
+      return sv_is;
+    }
+
+    SV* is_array(SV* sv_r, SV* sv_x1) {
+
+      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
+        && Rstats::pl_hv_exists(sv_x1, "dim");
       
-      SV* sv_values = Rstats::pl_new_avrv();
-      Rstats::pl_av_push(sv_values, sv_is);
+      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
-      return Rstats::Func::c_logical(sv_r, sv_values);
+      return sv_is;
+    }
+
+    SV* is_matrix(SV* sv_r, SV* sv_x1) {
+
+      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
+        && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
+      
+      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
+      
+      return sv_is;
     }
 
     IV to_bool (SV* sv_r, SV* sv_x1) {
@@ -1858,18 +1855,6 @@ namespace Rstats {
       else {
         croak("to_bool receive logical array");
       }
-    }
-
-    SV* is_array(SV* sv_r, SV* sv_x1) {
-
-      bool is = sv_isobject(sv_x1)
-        && sv_derived_from(sv_x1, "Rstats::Object")
-        && strEQ(SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type")), "array")
-        && Rstats::pl_hv_exists(sv_x1, "dim");
-      
-      SV* sv_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
-      
-      return sv_is;
     }
 
     SV* pi (SV* sv_r) {

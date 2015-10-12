@@ -4,7 +4,55 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(equal, Rstats::ElementFunc::equal);
+    Rstats::Vector* equal(Rstats::Vector* v1, Rstats::Vector* v2) {
+      if (Rstats::VectorFunc::get_type(v1) != Rstats::VectorFunc::get_type(v2)) {
+        croak("Can't equal different type(==)");
+      }
+      if (Rstats::VectorFunc::get_length(v1) != Rstats::VectorFunc::get_length(v2)) {
+        croak("Can't equal different length(==)");
+      }
+      IV length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      switch (type) {
+        case Rstats::Type::CHARACTER :
+          for (IV i = 0; i < length; i++) {
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Character>(v1, i), Rstats::VectorFunc::get_value<Rstats::Character>(v2, i)) ? 1 : 0);
+          }
+          break;
+        case Rstats::Type::COMPLEX :
+          for (IV i = 0; i < length; i++) {
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i), Rstats::VectorFunc::get_value<Rstats::Complex>(v2, i)) ? 1 : 0);
+          }
+          break;
+        case Rstats::Type::DOUBLE :
+          for (IV i = 0; i < length; i++) {
+            try {
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), Rstats::VectorFunc::get_value<Rstats::Double>(v2, i)) ? 1 : 0);
+            } catch (const char* e) {
+              Rstats::VectorFunc::add_na_position(v3, i);
+            }
+          }
+          break;
+        case Rstats::Type::INTEGER :
+        case Rstats::Type::LOGICAL :
+          for (IV i = 0; i < length; i++) {
+            try {
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v3, i, Rstats::ElementFunc::equal(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), Rstats::VectorFunc::get_value<Rstats::Integer>(v2, i)) ? 1 : 0);
+            }
+            catch (const char* e) {
+              Rstats::VectorFunc::add_na_position(v3, i);
+            }
+          }
+          break;
+        default:
+          croak("Error in == : non-comparable argument to +");
+      }
+      Rstats::VectorFunc::merge_na_positions(v3, v1);
+      Rstats::VectorFunc::merge_na_positions(v3, v2);
+      return v3;
+    }
+    
     RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(not_equal, Rstats::ElementFunc::not_equal);
     RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(more_than, Rstats::ElementFunc::more_than);
     RSTATS_DEF_VECTOR_FUNC_BIN_TO_LOGICAL(less_than, Rstats::ElementFunc::less_than);

@@ -321,13 +321,6 @@ namespace Rstats {
     SV* create_sv_value(Rstats::Vector*, IV);
     SV* create_sv_values(Rstats::Vector*);
     
-    bool is_character (Rstats::Vector*);
-    bool is_complex (Rstats::Vector*);
-    bool is_double (Rstats::Vector*);
-    bool is_integer (Rstats::Vector*);
-    bool is_numeric (Rstats::Vector*);
-    bool is_logical (Rstats::Vector*);
-    
     Rstats::Type::Enum get_type(Rstats::Vector*);
     void add_na_position(Rstats::Vector*, IV);
     bool exists_na_position(Rstats::Vector*, IV position);

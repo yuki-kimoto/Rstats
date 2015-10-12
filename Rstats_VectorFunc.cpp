@@ -26,30 +26,6 @@ namespace Rstats {
       return sv_values;
     }
 
-    bool is_character (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::CHARACTER;
-    }
-
-    bool is_complex (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::COMPLEX;
-    }
-
-    bool is_double (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::DOUBLE;
-    }
-
-    bool is_integer (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::INTEGER;
-    }
-
-    bool is_numeric (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::DOUBLE || Rstats::VectorFunc::get_type(v1) == Rstats::Type::INTEGER;
-    }
-
-    bool is_logical (Rstats::Vector* v1) {
-      return Rstats::VectorFunc::get_type(v1) == Rstats::Type::LOGICAL;
-    }
-
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }

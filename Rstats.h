@@ -717,7 +717,7 @@ namespace Rstats {
       }
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
+      SV* sv_x2 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
       set_vector(sv_r, sv_x2, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       

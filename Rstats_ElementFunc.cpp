@@ -505,9 +505,6 @@ namespace Rstats {
 
     // more_than
     Rstats::Logical more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
-    Rstats::Logical more_than(Rstats::Complex e1, Rstats::Complex e2) {
-      croak("invalid comparison with complex values(more_than())");
-    }
     Rstats::Logical more_than(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 > e2 ? 1 : 0; }
@@ -516,9 +513,6 @@ namespace Rstats {
 
     // less_than
     Rstats::Logical less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
-    Rstats::Logical less_than(Rstats::Complex e1, Rstats::Complex e2) {
-      croak("invalid comparison with complex values(less_than())");
-    }
     Rstats::Logical less_than(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 < e2 ? 1 : 0; }
@@ -527,9 +521,6 @@ namespace Rstats {
 
     // more_than_or_equal
     Rstats::Logical more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
-    Rstats::Logical more_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
-      croak("invalid comparison with complex values(more_than_or_equal())");
-    }
     Rstats::Logical more_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 >= e2 ? 1 : 0; }
@@ -538,9 +529,6 @@ namespace Rstats {
 
     // less_than_or_equal
     Rstats::Logical less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
-    Rstats::Logical less_than_or_equal(Rstats::Complex e1, Rstats::Complex e2) {
-      croak("invalid comparison with complex values(less_than_or_equal())");
-    }
     Rstats::Logical less_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
       else { return e1 <= e2 ? 1 : 0; }

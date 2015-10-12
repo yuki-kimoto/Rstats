@@ -88,8 +88,7 @@ namespace Rstats {
         sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
-        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::more_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        croak("Error in > operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::more_than;
@@ -122,8 +121,7 @@ namespace Rstats {
         sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
-        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::less_than;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        croak("Error in < operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::less_than;
@@ -156,8 +154,7 @@ namespace Rstats {
         sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
-        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::less_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        croak("Error in <= operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::less_than_or_equal;
@@ -190,8 +187,7 @@ namespace Rstats {
         sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
       }
       else if (strEQ(type, "complex")) {
-        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::more_than_or_equal;
-        sv_x3 = Rstats::Func::operate_binary2(sv_r, func, sv_x1, sv_x2);
+        croak("Error in >= operator : invalid comparison with complex values");
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::more_than_or_equal;

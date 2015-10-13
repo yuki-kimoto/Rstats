@@ -699,15 +699,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in sin() : non-numeric argument to sin()");
@@ -724,15 +724,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::tanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::tanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::tanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in tanh() : non-numeric argument to tanh()");
@@ -749,15 +749,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::cos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::cos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::cos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in cos() : non-numeric argument to cos()");
@@ -774,15 +774,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::tan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::tan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::tan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in tan() : non-numeric argument to tan()");
@@ -799,15 +799,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in sinh() : non-numeric argument to sinh()");
@@ -824,15 +824,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::cosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::cosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::cosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in cosh() : non-numeric argument to cosh()");
@@ -849,15 +849,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::log;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::log;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::log;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in log() : non-numeric argument to log()");
@@ -874,15 +874,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::logb;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::logb;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::logb;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in logb() : non-numeric argument to logb()");
@@ -899,15 +899,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::log10;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::log10;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::log10;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in log10() : non-numeric argument to log10()");
@@ -924,15 +924,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::negation;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::negation;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Integer (*func)(Rstats::Integer) = &Rstats::ElementFunc::negation;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in negation() : non-numeric argument to negation()");
@@ -949,15 +949,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Arg;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Arg;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Arg;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in Arg() : non-numeric argument to Arg()");
@@ -974,15 +974,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::abs;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::abs;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::abs;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in abs() : non-numeric argument to abs()");
@@ -999,15 +999,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Mod;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Mod;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Mod;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in Mod() : non-numeric argument to Mod()");
@@ -1024,15 +1024,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Re;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Re;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Re;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in Re() : non-numeric argument to Re()");
@@ -1049,15 +1049,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Im;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Im;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Im;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in Im() : non-numeric argument to Im()");
@@ -1074,15 +1074,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::log2;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::log2;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::log2;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in log2() : non-numeric argument to log2()");
@@ -1099,15 +1099,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex) = &Rstats::ElementFunc::is_infinite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double) = &Rstats::ElementFunc::is_infinite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer) = &Rstats::ElementFunc::is_infinite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in is_infinite() : default method not implemented for type '%s'", type);
@@ -1124,19 +1124,19 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "character")) {
         Rstats::Logical (*func)(Rstats::Character) = &Rstats::ElementFunc::is_nan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex) = &Rstats::ElementFunc::is_nan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double) = &Rstats::ElementFunc::is_nan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer) = &Rstats::ElementFunc::is_nan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in is_nan() : default method not implemented for type '%s'", type);
@@ -1153,15 +1153,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Logical (*func)(Rstats::Complex) = &Rstats::ElementFunc::is_finite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Logical (*func)(Rstats::Double) = &Rstats::ElementFunc::is_finite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Logical (*func)(Rstats::Integer) = &Rstats::ElementFunc::is_finite;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in is_finite() : default method not implemented for type '%s'", type);
@@ -1178,15 +1178,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::acos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::acos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::acos;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in acos() : non-numeric argument to acos()");
@@ -1203,15 +1203,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::acosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::acosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::acosh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in acosh() : non-numeric argument to acosh()");
@@ -1228,15 +1228,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::asinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::asinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::asinh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in asinh() : non-numeric argument to asinh()");
@@ -1253,15 +1253,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::atanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::atanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::atanh;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in atanh() : non-numeric argument to atanh()");
@@ -1278,15 +1278,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::Conj;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Conj;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Conj;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in Conj() : non-numeric argument to Conj()");
@@ -1303,15 +1303,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::asin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::asin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::asin;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in asin() : non-numeric argument to asin()");
@@ -1328,15 +1328,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::atan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::atan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::atan;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in atan() : non-numeric argument to atan()");
@@ -1353,15 +1353,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sqrt;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sqrt;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sqrt;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in sqrt() : non-numeric argument to sqrt()");
@@ -1378,15 +1378,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::expm1;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::expm1;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::expm1;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in expm1() : non-numeric argument to expm1()");
@@ -1403,15 +1403,15 @@ namespace Rstats {
       SV* sv_x2;
       if (strEQ(type, "complex")) {
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::exp;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::exp;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::exp;
-        sv_x2 = Rstats::Func::operate_unary2(sv_r, func, sv_x1);
+        sv_x2 = Rstats::Func::operate_unary(sv_r, func, sv_x1);
       }
       else {
         croak("Error in exp() : non-numeric argument to exp()");
@@ -1420,16 +1420,6 @@ namespace Rstats {
       return sv_x2;
     }
                       
-    SV* operate_unary(SV* sv_r, Rstats::Vector* (*func)(Rstats::Vector*), SV* sv_x1) {
-      
-      Rstats::Vector* x2_elements = (*func)(get_vector(sv_r, sv_x1));
-      SV* sv_x2 = Rstats::Func::new_vector(sv_r);
-      set_vector(sv_r, sv_x2, x2_elements);
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-      
-      return sv_x2;
-    }
-
     SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
       
       IV xs_length = Rstats::pl_av_len(sv_xs);

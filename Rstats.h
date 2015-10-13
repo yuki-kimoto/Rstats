@@ -343,10 +343,6 @@ namespace Rstats {
     Rstats::Vector* as_complex(Rstats::Vector*);
     Rstats::Vector* as_logical(Rstats::Vector*);
 
-    Rstats::Vector* cumprod(Rstats::Vector*);
-    Rstats::Vector* cumsum(Rstats::Vector*);
-    Rstats::Vector* prod(Rstats::Vector*);
-    Rstats::Vector* sum(Rstats::Vector*);
     Rstats::Vector* clone(Rstats::Vector*);
     
     template<class T>
@@ -506,7 +502,6 @@ namespace Rstats {
     SV* sin(SV*, SV*);
     SV* sum(SV*, SV*);
     SV* negation(SV*, SV*);
-    SV* operate_unary(SV*, Rstats::Vector* (*func)(Rstats::Vector*), SV*);
     SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type_avrv(SV*, SV*);
     void upgrade_type(SV*, IV, ...);
@@ -548,7 +543,7 @@ namespace Rstats {
     SV* new_empty_vector<Rstats::Logical>(SV*);
 
     template <class T_IN, class T_OUT>
-    SV* operate_unary2(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
+    SV* operate_unary(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);

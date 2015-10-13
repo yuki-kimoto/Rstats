@@ -343,8 +343,6 @@ namespace Rstats {
     Rstats::Vector* as_complex(Rstats::Vector*);
     Rstats::Vector* as_logical(Rstats::Vector*);
 
-    Rstats::Vector* clone(Rstats::Vector*);
-    
     template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {
       return (std::vector<T>*)v1->values;

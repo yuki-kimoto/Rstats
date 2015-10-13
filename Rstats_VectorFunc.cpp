@@ -689,51 +689,5 @@ namespace Rstats {
       
       return sv_value;
     }
-
-    Rstats::Vector* clone(Rstats::Vector* v1) {
-      
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2;
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Character>(v2, i, Rstats::VectorFunc::get_value<Rstats::Character>(v1, i));
-          }
-          break;
-        case Rstats::Type::COMPLEX :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Double>(v2, i, Rstats::VectorFunc::get_value<Rstats::Double>(v1, i));
-          }
-          break;
-        case Rstats::Type::INTEGER :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
-          }
-          break;
-        case Rstats::Type::LOGICAL :
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
-          }
-          break;
-        default:
-          croak("Invalid type");
-
-      }
-      
-      Rstats::VectorFunc::merge_na_positions(v2, v1);
-      
-      return v2;
-    }
   }
 }

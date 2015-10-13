@@ -781,58 +781,6 @@ namespace Rstats {
       return v2;
     }
 
-    Rstats::Vector* prod(Rstats::Vector* v1) {
-      
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2;
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          croak("Error in prod() : non-numeric argument to prod()");
-          break;
-        case Rstats::Type::COMPLEX : {
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
-          Rstats::Complex v2_total(1, 0);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
-          }
-          Rstats::VectorFunc::set_value<Rstats::Complex>(v2, 0, v2_total);
-          break;
-        }
-        case Rstats::Type::DOUBLE : {
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
-          Rstats::Double v2_total(1);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
-          }
-          Rstats::VectorFunc::set_value<Rstats::Double>(v2, 0, v2_total);
-          break;
-        }
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL : {
-          v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
-          Rstats::Integer v2_total(1);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
-          }
-          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, 0, v2_total);
-          break;
-        }
-        default:
-          croak("Invalid type");
-
-      }
-
-      for (Rstats::Integer i = 0; i < length; i++) {
-        if (Rstats::VectorFunc::exists_na_position(v1, i)) {
-          Rstats::VectorFunc::add_na_position(v2, 0);
-          break;
-        }
-      }
-            
-      return v2;
-    }
-
     Rstats::Vector* clone(Rstats::Vector* v1) {
       
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);

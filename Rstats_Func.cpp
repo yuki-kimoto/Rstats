@@ -57,7 +57,61 @@ namespace Rstats {
       
       return sv_x2;
     }
-    
+
+    SV* prod(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      SV* sv_x2;
+      Rstats::Vector* v2;
+      if (strEQ(type, "complex")) {
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
+        Rstats::Complex v2_total(1, 0);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          v2_total *= Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i);
+        }
+        Rstats::VectorFunc::set_value<Rstats::Complex>(v2, 0, v2_total);
+        
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
+      }
+      else if (strEQ(type, "double")) {
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
+        Rstats::Double v2_total(1);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          v2_total *= Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
+        }
+        Rstats::VectorFunc::set_value<Rstats::Double>(v2, 0, v2_total);
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
+      }
+      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
+        Rstats::Integer v2_total(1);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          v2_total *= Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i);
+        }
+        Rstats::VectorFunc::set_value<Rstats::Integer>(v2, 0, v2_total);
+        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
+      }
+      else {
+        croak("Error in sum() : non-numeric argument to sum()");
+      }
+      
+      for (Rstats::Integer i = 0; i < length; i++) {
+        if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+          Rstats::VectorFunc::add_na_position(v2, 0);
+          break;
+        }
+      }
+      
+      set_vector(sv_r, sv_x2, v2);
+      
+      return sv_x2;
+    }
+        
     SV* equal(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

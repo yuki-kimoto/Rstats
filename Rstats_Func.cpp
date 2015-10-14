@@ -2503,7 +2503,11 @@ namespace Rstats {
     
     SV* new_na(SV* sv_r) {
       SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_na());
+
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Logical>(1);
+      Rstats::VectorFunc::add_na_position(v1, 0);
+
+      set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }

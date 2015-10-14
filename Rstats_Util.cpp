@@ -200,7 +200,7 @@ namespace Rstats {
       else {
         SV* sv_na = Rstats::pl_new_sv_pv("NA");
         if (sv_cmp(sv_value, sv_na) == 0) {
-          sv_ret = Rstats::pl_to_perl_obj(Rstats::VectorFunc::new_na(), "Rstats::Vector");
+          sv_ret = Rstats::pl_new_sv_iv(1);
         }
         else {
           sv_ret = &PL_sv_undef;

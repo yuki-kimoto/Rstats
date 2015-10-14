@@ -101,6 +101,8 @@ sub factor {
   }
   $f1->{levels} = Rstats::Func::as_vector($r, $x_labels);
   
+  $f1->{object_type} = 'factor';
+  
   return $f1;
 }
 
@@ -567,7 +569,7 @@ sub na_omit {
 sub merge {
   my $r = shift;
 
-  die "merge is not implemented yet";
+  die "Error in merge() : merge is not implemented yet";
   
   my ($x1, $x2, $x_all, $x_all_x, $x_all_y, $x_by, $x_by_x, $x_by_y, $x_sort)
     = args_array($r, [qw/x1 x2 all all.x all.y by by.x by.y sort/], @_);
@@ -867,7 +869,7 @@ sub upper_tri {
     return $x2;
   }
   else {
-    Carp::croak 'Not implemented';
+    Carp::croak 'Error in upper_tri() : Not implemented';
   }
 }
 
@@ -902,7 +904,7 @@ sub lower_tri {
     return $x2;
   }
   else {
-    Carp::croak 'Not implemented';
+    Carp::croak 'Error in lower_tri() : Not implemented';
   }
 }
 
@@ -1208,7 +1210,7 @@ sub charmatch {
   
   my ($x1_x, $x1_table) = args_array($r, ['x', 'table'], @_);
   
-  die "Not implemented"
+  die "Error in charmatch() : Not implemented"
     unless $x1_x->type eq 'character' && $x1_table->type eq 'character';
   
   my $x2_values = [];
@@ -1419,7 +1421,7 @@ sub nchar {
     return $x2;
   }
   else {
-    Carp::croak "Not implemented";
+    Carp::croak "Error in nchar() : Not implemented";
   }
 }
 
@@ -2781,7 +2783,7 @@ sub bool {
 sub set {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'NULL' || $x1->{object_type} eq 'array') {
+  if ($x1->{object_type} eq 'NULL' || $x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
     return Rstats::Func::set_array(@_);
   }
   elsif ($x1->{object_type} eq 'list') {
@@ -2791,7 +2793,7 @@ sub set {
     return Rstats::Func::set_dataframe(@_);
   }
   else {
-    croak "Not implemented";
+    croak "Error in set() : Not implemented";
   }
 }
 
@@ -3661,7 +3663,7 @@ sub to_string {
   if ($x1->{object_type} eq 'NULL') {
     return "NULL";
   }
-  elsif ($x1->{object_type} eq 'array') {
+  elsif ($x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
     return Rstats::Func::to_string_array(@_);
   }
   elsif ($x1->{object_type} eq 'list') {
@@ -3672,14 +3674,14 @@ sub to_string {
   }
   else {
     my $class = ref $x1;
-    croak "$class not implemented(Rstats::Func::to_string)";
+    croak "Error in to_string() : $class not implemented(Rstats::Func::to_string)";
   }
 }
 
 sub get {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'array') {
+  if ($x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
     return Rstats::Func::get_array(@_);
   }
   elsif ($x1->{object_type} eq 'list') {
@@ -3689,7 +3691,7 @@ sub get {
     return Rstats::Func::get_dataframe(@_);
   }
   else {
-    croak "Not implemented";
+    croak "Error in get() : Not implemented";
   }
 }
 
@@ -3706,7 +3708,7 @@ sub getin {
     return Rstats::Func::getin_dataframe(@_);
   }
   else {
-    croak "Not implemented";
+    croak "Error in getin() : Not implemented";
   }
 }
 
@@ -3727,7 +3729,6 @@ sub _levels_h {
 sub set_array {
   my $r = shift;
   
-  $DB::single = 1;
   my $x1 = shift;
   my $x2 = Rstats::Func::to_c($r, shift);
   

@@ -3,7 +3,74 @@
 // Rstats::Func
 namespace Rstats {
   namespace Func {
+    
+    SV* as_complex(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+      
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
+      if (strEQ(type, "character")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+          SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
+          
+          if (SvOK(sv_z)) {
+            SV* sv_re = Rstats::pl_hv_fetch(sv_z, "re");
+            SV* sv_im = Rstats::pl_hv_fetch(sv_z, "im");
+            Rstats::Double re = SvNV(sv_re);
+            Rstats::Double im = SvNV(sv_im);
+            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::Complex(re, im));
+          }
+          else {
+            warn("NAs introduced by coercion");
+            Rstats::VectorFunc::add_na_position(v2, i);
+          }
+        }
+      }
+      else if (strEQ(type, "complex")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i));
+        }
+      }
+      else if (strEQ(type, "double")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::Double value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
+          if (std::isnan(value)) {
+            Rstats::VectorFunc::add_na_position(v2, i);
+          }
+          else {
+            Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::Complex(Rstats::VectorFunc::get_value<Rstats::Double>(v1, i), 0));
+          }
+        }
+      }
+      else if (strEQ(type, "integer")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::Complex(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), 0));
+        }
+      }
+      else if (strEQ(type, "logical")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Complex>(v2, i, Rstats::Complex(Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i), 0));
+        }
+      }
+      else {
+        croak("Error in as_integer() : default method not implemented for type '%s'", type);
+      }
+
+      Rstats::VectorFunc::merge_na_positions(v2, v1);
+      
+      Rstats::Func::set_vector(sv_r, sv_x2, v2);
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+      
+      return sv_x2;
+    }
+        
     SV* as_integer(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
@@ -58,7 +125,7 @@ namespace Rstats {
         }
       }
       else {
-        croak("Error in as_logical : default method not implemented for type '%s'", type);
+        croak("Error in as_integer() : default method not implemented for type '%s'", type);
       }
 
       Rstats::VectorFunc::merge_na_positions(v2, v1);
@@ -130,7 +197,7 @@ namespace Rstats {
         }
       }
       else {
-        croak("Error in as_logical : default method not implemented for type '%s'", type);
+        croak("Error in as_integer() : default method not implemented for type '%s'", type);
       }
 
       Rstats::VectorFunc::merge_na_positions(v2, v1);
@@ -2884,15 +2951,6 @@ namespace Rstats {
         }
         Rstats::pl_hv_store(sv_x2, "dimnames", sv_new_dimnames);
       }
-    }
-
-    SV* as_complex(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_complex(Rstats::Func::get_vector(sv_r, sv_x1)));
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-      
-      return sv_x2;
     }
 
     SV* as_double(SV* sv_r, SV* sv_x1) {

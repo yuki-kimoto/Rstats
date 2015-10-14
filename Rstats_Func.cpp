@@ -1781,115 +1781,113 @@ namespace Rstats {
       SV* sv_x1;
 
       // Decide type
-      Rstats::Vector* v2;
+      Rstats::Vector* v1;
       if (type_h[Rstats::Type::CHARACTER]) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
+        v1 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
       }
       else if (type_h[Rstats::Type::COMPLEX]) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
+        v1 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
       }
       else if (type_h[Rstats::Type::DOUBLE]) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
+        v1 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       }
       else if (type_h[Rstats::Type::INTEGER]) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
+        v1 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
       }
       else {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+        v1 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       }
       
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v2);
+      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       
       IV pos = 0;
       for (IV i = 0; i < element_length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+        SV* sv_x_tmp;
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Type::Enum tmp_type = Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_element));
           
-          Rstats::Vector* v_tmp;
-          if (Rstats::VectorFunc::get_type(v1) == type) {
-            v_tmp = v1;
+          if (tmp_type == type) {
+            sv_x_tmp = sv_element;
           }
           else {
             if (type == Rstats::Type::CHARACTER) {
-              v_tmp = Rstats::VectorFunc::as_character(v1);
+              sv_x_tmp = Rstats::Func::as_character(sv_r, sv_element);
             }
             else if (type == Rstats::Type::COMPLEX) {
-              v_tmp = Rstats::VectorFunc::as_complex(v1);
+              sv_x_tmp = Rstats::Func::as_complex(sv_r, sv_element);
             }
             else if (type == Rstats::Type::DOUBLE) {
-              v_tmp = Rstats::VectorFunc::as_double(v1);
+              sv_x_tmp = Rstats::Func::as_double(sv_r, sv_element);
             }
             else if (type == Rstats::Type::INTEGER) {
-              v_tmp = Rstats::VectorFunc::as_integer(v1);
+              sv_x_tmp = Rstats::Func::as_integer(sv_r, sv_element);
             }
             else {
-              v_tmp = Rstats::VectorFunc::as_logical(v1);
+              sv_x_tmp = Rstats::Func::as_logical(sv_r, sv_element);
             }
           }
+
+          Rstats::Vector* v_tmp = Rstats::Func::get_vector(sv_r, sv_x_tmp);
           
           for (IV k = 0; k < Rstats::VectorFunc::get_length(v_tmp); k++) {
             if (Rstats::VectorFunc::exists_na_position(v_tmp, k)) {
-              Rstats::VectorFunc::add_na_position(v2, pos);
+              Rstats::VectorFunc::add_na_position(v1, pos);
             }
             else {
               if (type == Rstats::Type::CHARACTER) {
-                Rstats::VectorFunc::set_value<Rstats::Character>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Character>(v1, pos, Rstats::VectorFunc::get_value<Rstats::Character>(v_tmp, k));
               }
               else if (type == Rstats::Type::COMPLEX) {
-                Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Complex>(v1, pos, Rstats::VectorFunc::get_value<Rstats::Complex>(v_tmp, k));
               }
               else if (type == Rstats::Type::DOUBLE) {
-                Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Double>(v1, pos, Rstats::VectorFunc::get_value<Rstats::Double>(v_tmp, k));
               }
               else if (type == Rstats::Type::INTEGER) {
-                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v1, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
               else {
-                Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
+                Rstats::VectorFunc::set_value<Rstats::Integer>(v1, pos, Rstats::VectorFunc::get_value<Rstats::Integer>(v_tmp, k));
               }
             }
             
             pos++;
           }
-          
-          if (v_tmp != v1) {
-            delete v_tmp;
-          }
         }
         else {
           if (SvOK(sv_element)) {
             if (type == Rstats::Type::CHARACTER) {
-              Rstats::VectorFunc::set_value<Rstats::Character>(v2, pos, sv_element);
+              Rstats::VectorFunc::set_value<Rstats::Character>(v1, pos, sv_element);
             }
             else if (type == Rstats::Type::COMPLEX) {
-              Rstats::VectorFunc::set_value<Rstats::Complex>(v2, pos, std::complex<NV>(SvNV(sv_element), 0));
+              Rstats::VectorFunc::set_value<Rstats::Complex>(v1, pos, std::complex<NV>(SvNV(sv_element), 0));
             }
             else if (type == Rstats::Type::DOUBLE) {
-              Rstats::VectorFunc::set_value<Rstats::Double>(v2, pos, SvNV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Double>(v1, pos, SvNV(sv_element));
             }
             else if (type == Rstats::Type::INTEGER) {
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, SvIV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v1, pos, SvIV(sv_element));
             }
             else {
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, pos, SvIV(sv_element));
+              Rstats::VectorFunc::set_value<Rstats::Integer>(v1, pos, SvIV(sv_element));
             }
           }
           else {
-            Rstats::VectorFunc::add_na_position(v2, pos);
+            Rstats::VectorFunc::add_na_position(v1, pos);
           }
           pos++;
         }
       }
       
       // Array
-      Rstats::Func::set_vector(sv_r, sv_x1, v2);
+      Rstats::Func::set_vector(sv_r, sv_x1, v1);
 
       return sv_x1;
     }

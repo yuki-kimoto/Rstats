@@ -6,8 +6,89 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# Method
+{
+  # sort - contain NA or NaN
+  {
+    my $x1 = c_(2, 1, 5, NA, NaN);
+    my $x1_sorted = r->sort($x1);
+    is_deeply($x1_sorted->values, [1, 2, 5]);
+  }
+    
+  # add (vector)
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = c_($x1, 4, 5);
+    is_deeply($x2->values, [1, 2, 3, 4, 5]);
+  }
+
+  # var
+  {
+    my $x1 = c_(2, 3, 4, 7, 9);
+    my $var = r->var($x1);
+    is($var->value, 8.5);
+  }
+  
+  # add (array)
+  {
+    my $x1 = c_(c_(1, 2), 3, 4);
+    is_deeply($x1->values, [1, 2, 3, 4]);
+  }
+  
+  # add to original vector
+  {
+    my $x1 = c_(1, 2, 3);
+    $x1->at(r->length($x1)->value + 1)->set(6);
+    is_deeply($x1->values, [1, 2, 3, 6]);
+  }
+  
+  # numeric
+  {
+    my $x1 = r->numeric(3);
+    is_deeply($x1->values, [0, 0, 0]);
+  }
+
+  # length
+  {
+    my $x1 = c_(1, 2, 4);
+    my $length = r->length($x1);
+    is($length->value, 3);
+  }
+  
+  # mean
+  {
+    my $x1 = c_(1, 2, 3);
+    my $mean = r->mean($x1);
+    is($mean->value, 2);
+  }
+
+  # sort
+  {
+    # sort - acending
+    {
+      my $x1 = c_(2, 1, 5);
+      my $x1_sorted = r->sort($x1);
+      is_deeply($x1_sorted->values, [1, 2, 5]);
+    }
+    
+    # sort - decreasing
+    {
+      my $x1 = c_(2, 1, 5);
+      my $x1_sorted = r->sort($x1, {decreasing => 1});
+      is_deeply($x1_sorted->values, [5, 2, 1]);
+    }
+  }
+}
+
 # min
 {
+  # min - contain NA
+  {
+    my $x_tmp = c_(1, 2, NaN, NA);
+    my $x1 = r->min(c_(1, 2, NaN, NA));
+    is_deeply($x1->values, [undef]);
+  }
+  
   # min - no argument
   {
     my $x1 = r->min(NULL);
@@ -26,12 +107,6 @@ use Math::Complex ();
     my $x2 = c_(4, 5, 6);
     my $x3 = r->min($x1, $x2);
     is_deeply($x3->values, [1]);
-  }
-  
-  # min - contain NA
-  {
-    my $x1 = r->min(c_(1, 2, NaN, NA));
-    is_deeply($x1->values, [undef]);
   }
   
   # min - contain NaN
@@ -107,80 +182,6 @@ use Math::Complex ();
     my $x1 = c_(NaN);
     my $x2 = r->expm1($x1);
     is($x2->value, 'NaN');
-  }
-}
-
-# Method
-{
-  # add (vector)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_($x1, 4, 5);
-    is_deeply($x2->values, [1, 2, 3, 4, 5]);
-  }
-
-  # var
-  {
-    my $x1 = c_(2, 3, 4, 7, 9);
-    my $var = r->var($x1);
-    is($var->value, 8.5);
-  }
-  
-  # add (array)
-  {
-    my $x1 = c_(c_(1, 2), 3, 4);
-    is_deeply($x1->values, [1, 2, 3, 4]);
-  }
-  
-  # add to original vector
-  {
-    my $x1 = c_(1, 2, 3);
-    $x1->at(r->length($x1)->value + 1)->set(6);
-    is_deeply($x1->values, [1, 2, 3, 6]);
-  }
-  
-  # numeric
-  {
-    my $x1 = r->numeric(3);
-    is_deeply($x1->values, [0, 0, 0]);
-  }
-
-  # length
-  {
-    my $x1 = c_(1, 2, 4);
-    my $length = r->length($x1);
-    is($length->value, 3);
-  }
-  
-  # mean
-  {
-    my $x1 = c_(1, 2, 3);
-    my $mean = r->mean($x1);
-    is($mean->value, 2);
-  }
-
-  # sort
-  {
-    # sort - acending
-    {
-      my $x1 = c_(2, 1, 5);
-      my $x1_sorted = r->sort($x1);
-      is_deeply($x1_sorted->values, [1, 2, 5]);
-    }
-    
-    # sort - decreasing
-    {
-      my $x1 = c_(2, 1, 5);
-      my $x1_sorted = r->sort($x1, {decreasing => 1});
-      is_deeply($x1_sorted->values, [5, 2, 1]);
-    }
-    
-    # sort - contain NA or NaN
-    {
-      my $x1 = c_(2, 1, 5, NA, NaN);
-      my $x1_sorted = r->sort($x1);
-      is_deeply($x1_sorted->values, [1, 2, 5]);
-    }
   }
 }
 

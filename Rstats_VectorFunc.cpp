@@ -168,10 +168,6 @@ namespace Rstats {
       return  Rstats::VectorFunc::new_vector<Rstats::Double>(1, NAN);
     }
 
-    Rstats::Vector* new_negative_inf() {
-      return Rstats::VectorFunc::new_vector<Rstats::Double>(1, -(INFINITY));
-    }
-
     Rstats::Vector* new_na() {
       Rstats::Vector* v1 = new_vector<Rstats::Logical>(1);
       Rstats::VectorFunc::add_na_position(v1, 0);

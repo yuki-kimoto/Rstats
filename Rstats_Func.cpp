@@ -2502,22 +2502,25 @@ namespace Rstats {
     }
     
     SV* new_na(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_na());
       
       return sv_x1;
     }
 
     SV* new_nan(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);;
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_nan());
       
       return sv_x1;
     }
 
     SV* new_inf(SV* sv_r) {
-      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);;
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_inf());
+      SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
+      
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Double>(1, INFINITY);
+      
+      set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }

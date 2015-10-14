@@ -328,7 +328,6 @@ namespace Rstats {
     
     Rstats::Vector* new_nan();
     Rstats::Vector* new_negative_inf();
-    Rstats::Vector* new_inf();
     Rstats::Vector* new_na();
     Rstats::Vector* new_null();
     

@@ -1742,6 +1742,7 @@ namespace Rstats {
 
     SV* c(SV* sv_r, SV* sv_elements) {
       
+      // Convert to array reference
       if (SvOK(sv_elements) && !SvROK(sv_elements)) {
         SV* sv_elements_tmp = sv_elements;
         sv_elements = Rstats::pl_new_avrv();
@@ -1809,13 +1810,7 @@ namespace Rstats {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           
-          Rstats::Vector* v1;
-          if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
-            v1 = Rstats::Func::get_vector(sv_r, sv_element);
-          }
-          else {
-            v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_element);
-          }
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_element);
           
           Rstats::Vector* v_tmp;
           if (Rstats::VectorFunc::get_type(v1) == type) {

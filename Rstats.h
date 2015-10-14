@@ -326,7 +326,6 @@ namespace Rstats {
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
     IV get_length (Rstats::Vector*);
     
-    Rstats::Vector* new_nan();
     Rstats::Vector* new_na();
     Rstats::Vector* new_null();
     

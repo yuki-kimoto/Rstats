@@ -164,10 +164,6 @@ namespace Rstats {
       return new_vector<Rstats::Logical>(1, 0);
     }
 
-    Rstats::Vector* new_nan() {
-      return  Rstats::VectorFunc::new_vector<Rstats::Double>(1, NAN);
-    }
-
     Rstats::Vector* new_na() {
       Rstats::Vector* v1 = new_vector<Rstats::Logical>(1);
       Rstats::VectorFunc::add_na_position(v1, 0);

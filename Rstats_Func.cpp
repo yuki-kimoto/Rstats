@@ -2510,7 +2510,10 @@ namespace Rstats {
 
     SV* new_nan(SV* sv_r) {
       SV* sv_x1 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_nan());
+      
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Double>(1, NAN);
+      
+      set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }

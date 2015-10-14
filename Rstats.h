@@ -318,8 +318,6 @@ namespace Rstats {
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();
     void delete_vector(Rstats::Vector*);
-    SV* create_sv_value(Rstats::Vector*, IV);
-    SV* create_sv_values(Rstats::Vector*);
     
     Rstats::Type::Enum get_type(Rstats::Vector*);
     void add_na_position(Rstats::Vector*, IV);
@@ -508,6 +506,8 @@ namespace Rstats {
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
     char* get_object_type(SV*, SV*);
+    SV* create_sv_value(SV*, SV*, IV);
+    SV* create_sv_values(SV*, SV*);
     
     SV* atan2(SV*, SV*, SV*);
     SV* add(SV*, SV*, SV*);

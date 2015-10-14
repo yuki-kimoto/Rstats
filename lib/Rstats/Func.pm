@@ -3727,6 +3727,7 @@ sub _levels_h {
 sub set_array {
   my $r = shift;
   
+  $DB::single = 1;
   my $x1 = shift;
   my $x2 = Rstats::Func::to_c($r, shift);
   
@@ -3779,6 +3780,8 @@ sub set_array {
   
   my $x1_tmp = Rstats::Func::compose($r, $x1->type, $x1_elements);
   $x1->vector($x1_tmp->vector);
+  $x1->{type} = $x1_tmp->{type};
+  $x1->{object_type} = $x1_tmp->{object_type};
   
   return $x1;
 }

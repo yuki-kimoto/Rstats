@@ -212,11 +212,8 @@ SV* first_value(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  Rstats::Vector* self = Rstats::Func::get_vector(sv_r, ST(1));;
   
-  IV pos = 0;
-  
-  SV* sv_value = Rstats::VectorFunc::create_sv_value(self, 0);
+  SV* sv_value = Rstats::Func::create_sv_value(sv_r, ST(1), 0);
   
   return_sv(sv_value);
 }

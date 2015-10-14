@@ -4,6 +4,132 @@
 namespace Rstats {
   namespace Func {
 
+    SV* create_sv_values(SV* sv_r, SV* sv_x1) {
+
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      SV* sv_values = Rstats::pl_new_avrv();
+      if (!strEQ(type, "NULL")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+        
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::pl_av_push(sv_values, Rstats::Func::create_sv_value(sv_r, sv_x1, i));
+        }
+      }
+      
+      return sv_values;
+    }
+    
+    SV* create_sv_value(SV* sv_r, SV* sv_x1, Rstats::Integer pos) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+      
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+
+      SV* sv_value;
+      Rstats::Vector* v2;
+      if (strEQ(type, "character")) {
+        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, pos);
+        }
+      }
+      else if (strEQ(type, "complex")) {
+        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          Rstats::Complex z = Rstats::VectorFunc::get_value<Rstats::Complex>(v1, pos);
+          
+          Rstats::Double re = z.real();
+          SV* sv_re;
+          if (std::isnan(re)) {
+            sv_re = Rstats::pl_new_sv_pv("NaN");
+          }
+          else if (std::isinf(re) && re > 0) {
+            sv_re = Rstats::pl_new_sv_pv("Inf");
+          }
+          else if (std::isinf(re) && re < 0) {
+            sv_re = Rstats::pl_new_sv_pv("-Inf");
+          }
+          else {
+            sv_re = Rstats::pl_new_sv_nv(re);
+          }
+          
+          Rstats::Double im = z.imag();
+          SV* sv_im;
+          if (std::isnan(im)) {
+            sv_im = Rstats::pl_new_sv_pv("NaN");
+          }
+          else if (std::isinf(im) && im > 0) {
+            sv_im = Rstats::pl_new_sv_pv("Inf");
+          }
+          else if (std::isinf(im) && im < 0) {
+            sv_im = Rstats::pl_new_sv_pv("-Inf");
+          }
+          else {
+            sv_im = Rstats::pl_new_sv_nv(im);
+          }
+
+          sv_value = Rstats::pl_new_hvrv();
+          Rstats::pl_hv_store(sv_value, "re", sv_re);
+          Rstats::pl_hv_store(sv_value, "im", sv_im);
+        }
+      }
+      else if (strEQ(type, "double")) {
+        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          Rstats::Double value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, pos);
+          if (std::isnan(value)) {
+            sv_value = Rstats::pl_new_sv_pv("NaN");
+          }
+          else if (std::isinf(value) && value > 0) {
+            sv_value = Rstats::pl_new_sv_pv("Inf");
+          }
+          else if (std::isinf(value) && value < 0) {
+            sv_value = Rstats::pl_new_sv_pv("-Inf");
+          }
+          else {
+            sv_value = Rstats::pl_new_sv_nv(value);
+          }
+        }
+      }
+      else if (strEQ(type, "integer")) {
+        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          Rstats::Integer value = Rstats::VectorFunc::get_value<Rstats::Integer>(v1, pos);
+          sv_value = Rstats::pl_new_sv_iv(value);
+        }
+      }
+      else if (strEQ(type, "logical")) {
+        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          Rstats::Integer value = Rstats::VectorFunc::get_value<Rstats::Integer>(v1, pos);
+          sv_value = Rstats::pl_new_sv_iv(value);
+        }
+      }
+      else {
+        croak("Error in create_sv_value : default method not implemented for type '%s'", type);
+      }
+      
+      return sv_value;
+    }
+        
     SV* cumprod(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
@@ -1959,9 +2085,8 @@ namespace Rstats {
     }
 
     SV* values(SV* sv_r, SV* sv_x1) {
-      Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
       
-      SV* sv_values = Rstats::VectorFunc::create_sv_values(v1);
+      SV* sv_values = Rstats::Func::create_sv_values(sv_r, sv_x1);
       
       return sv_values;
     }
@@ -2910,6 +3035,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(mode, "double")) {
+        
         sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Double>(len);
         for (IV i = 0; i < len; i++) {

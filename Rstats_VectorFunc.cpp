@@ -15,17 +15,6 @@ namespace Rstats {
       }
     }
     
-    SV* create_sv_values(Rstats::Vector* v1) {
-      
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      SV* sv_values = Rstats::pl_new_avrv();
-      for (Rstats::Integer i = 0; i < length; i++) {
-        Rstats::pl_av_push(sv_values, Rstats::VectorFunc::create_sv_value(v1, i));
-      }
-      
-      return sv_values;
-    }
-
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }
@@ -595,99 +584,6 @@ namespace Rstats {
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       
       return v2;
-    }
-
-    SV* create_sv_value(Rstats::Vector* v1, Rstats::Integer pos) {
-
-      SV* sv_value;
-      
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
-            sv_value = &PL_sv_undef;
-          }
-          else {
-            sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, pos);
-          }
-          break;
-        case Rstats::Type::COMPLEX :
-          if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
-            sv_value = &PL_sv_undef;
-          }
-          else {
-            Rstats::Complex z = Rstats::VectorFunc::get_value<Rstats::Complex>(v1, pos);
-            
-            Rstats::Double re = z.real();
-            SV* sv_re;
-            if (std::isnan(re)) {
-              sv_re = Rstats::pl_new_sv_pv("NaN");
-            }
-            else if (std::isinf(re) && re > 0) {
-              sv_re = Rstats::pl_new_sv_pv("Inf");
-            }
-            else if (std::isinf(re) && re < 0) {
-              sv_re = Rstats::pl_new_sv_pv("-Inf");
-            }
-            else {
-              sv_re = Rstats::pl_new_sv_nv(re);
-            }
-            
-            Rstats::Double im = z.imag();
-            SV* sv_im;
-            if (std::isnan(im)) {
-              sv_im = Rstats::pl_new_sv_pv("NaN");
-            }
-            else if (std::isinf(im) && im > 0) {
-              sv_im = Rstats::pl_new_sv_pv("Inf");
-            }
-            else if (std::isinf(im) && im < 0) {
-              sv_im = Rstats::pl_new_sv_pv("-Inf");
-            }
-            else {
-              sv_im = Rstats::pl_new_sv_nv(im);
-            }
-
-            sv_value = Rstats::pl_new_hvrv();
-            Rstats::pl_hv_store(sv_value, "re", sv_re);
-            Rstats::pl_hv_store(sv_value, "im", sv_im);
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
-            sv_value = &PL_sv_undef;
-          }
-          else {
-            Rstats::Double value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, pos);
-            if (std::isnan(value)) {
-              sv_value = Rstats::pl_new_sv_pv("NaN");
-            }
-            else if (std::isinf(value) && value > 0) {
-              sv_value = Rstats::pl_new_sv_pv("Inf");
-            }
-            else if (std::isinf(value) && value < 0) {
-              sv_value = Rstats::pl_new_sv_pv("-Inf");
-            }
-            else {
-              sv_value = Rstats::pl_new_sv_nv(value);
-            }
-          }
-          break;
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
-            sv_value = &PL_sv_undef;
-          }
-          else {
-            Rstats::Integer value = Rstats::VectorFunc::get_value<Rstats::Integer>(v1, pos);
-            sv_value = Rstats::pl_new_sv_iv(value);
-          }
-          break;
-        default:
-          sv_value = &PL_sv_undef;
-      }
-      
-      return sv_value;
     }
   }
 }

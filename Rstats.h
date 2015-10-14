@@ -329,7 +329,6 @@ namespace Rstats {
     Rstats::Vector* as_character(Rstats::Vector*);
     Rstats::Vector* as_double(Rstats::Vector*);
     Rstats::Vector* as_numeric(Rstats::Vector*);
-    Rstats::Vector* as_integer(Rstats::Vector*);
     Rstats::Vector* as_complex(Rstats::Vector*);
 
     template<class T>

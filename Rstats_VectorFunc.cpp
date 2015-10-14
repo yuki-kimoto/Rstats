@@ -288,59 +288,6 @@ namespace Rstats {
       return Rstats::VectorFunc::as_double(v1);
     }
 
-    Rstats::Vector* as_integer(Rstats::Vector* v1) {
-
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
-      Rstats::Vector* v2 = new_vector<Rstats::Integer>(length);
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
-            SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
-            if (SvOK(sv_value_fix)) {
-              Rstats::Integer value = SvIV(sv_value_fix);
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, value);
-            }
-            else {
-              warn("NAs introduced by coercion");
-              Rstats::VectorFunc::add_na_position(v2, i);
-            }
-          }
-          break;
-        case Rstats::Type::COMPLEX :
-          warn("imaginary parts discarded in coercion");
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (Rstats::Integer)Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
-          }
-          break;
-        case Rstats::Type::DOUBLE :
-          Rstats::Double value;
-          for (Rstats::Integer i = 0; i < length; i++) {
-            value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
-            if (std::isnan(value) || std::isinf(value)) {
-              Rstats::VectorFunc::add_na_position(v2, i);
-            }
-            else {
-              Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (Rstats::Integer)value);
-            }
-          }
-          break;
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
-          }
-          break;
-        default:
-          croak("unexpected type");
-      }
-
-      Rstats::VectorFunc::merge_na_positions(v2, v1);
-      
-      return v2;
-    }
-
     Rstats::Vector* as_complex(Rstats::Vector* v1) {
 
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);

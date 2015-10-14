@@ -4,6 +4,71 @@
 namespace Rstats {
   namespace Func {
 
+    SV* as_integer(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+      
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+
+      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      
+      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
+      if (strEQ(type, "character")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+          SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
+          if (SvOK(sv_value_fix)) {
+            Rstats::Integer value = SvIV(sv_value_fix);
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, value);
+          }
+          else {
+            warn("NAs introduced by coercion");
+            Rstats::VectorFunc::add_na_position(v2, i);
+          }
+        }
+      }
+      else if (strEQ(type, "complex")) {
+        warn("imaginary parts discarded in coercion");
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (Rstats::Integer)Rstats::VectorFunc::get_value<Rstats::Complex>(v1, i).real());
+        }
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Double value;
+        for (Rstats::Integer i = 0; i < length; i++) {
+          value = Rstats::VectorFunc::get_value<Rstats::Double>(v1, i);
+          if (std::isnan(value) || std::isinf(value)) {
+            Rstats::VectorFunc::add_na_position(v2, i);
+          }
+          else {
+            Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, (Rstats::Integer)value);
+          }
+        }
+      }
+      else if (strEQ(type, "integer")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+        }
+      }
+      else if (strEQ(type, "logical")) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::VectorFunc::set_value<Rstats::Integer>(v2, i, Rstats::VectorFunc::get_value<Rstats::Integer>(v1, i));
+        }
+      }
+      else {
+        croak("Error in as_logical : default method not implemented for type '%s'", type);
+      }
+
+      Rstats::VectorFunc::merge_na_positions(v2, v1);
+      
+      Rstats::Func::set_vector(sv_r, sv_x2, v2);
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
+      
+      return sv_x2;
+    }
+    
     SV* as_logical(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
@@ -71,6 +136,7 @@ namespace Rstats {
       Rstats::VectorFunc::merge_na_positions(v2, v1);
       
       Rstats::Func::set_vector(sv_r, sv_x2, v2);
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
       return sv_x2;
     }
@@ -2818,15 +2884,6 @@ namespace Rstats {
         }
         Rstats::pl_hv_store(sv_x2, "dimnames", sv_new_dimnames);
       }
-    }
-
-    SV* as_integer(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x2, Rstats::VectorFunc::as_integer(Rstats::Func::get_vector(sv_r, sv_x1)));
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-
-      return sv_x2;
     }
 
     SV* as_complex(SV* sv_r, SV* sv_x1) {

@@ -1905,7 +1905,12 @@ namespace Rstats {
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_empty_vector();
+      v1->values = NULL;
+      v1->type = Rstats::Type::LOGICAL;
+      
+      set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }
@@ -2496,7 +2501,12 @@ namespace Rstats {
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("NULL"));
-      set_vector(sv_r, sv_x1, Rstats::VectorFunc::new_null());
+
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_empty_vector();
+      v1->values = NULL;
+      v1->type = Rstats::Type::LOGICAL;
+
+      set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;
     }

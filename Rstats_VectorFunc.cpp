@@ -164,13 +164,6 @@ namespace Rstats {
       return new_vector<Rstats::Logical>(1, 0);
     }
 
-    Rstats::Vector* new_null() {
-      Rstats::Vector* v1 = new_empty_vector();
-      v1->values = NULL;
-      v1->type = Rstats::Type::LOGICAL;
-      return v1;
-    }
-
     Rstats::Vector* as_character (Rstats::Vector* v1) {
       Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
       Rstats::Vector* v2 = new_vector<Rstats::Character>(length);

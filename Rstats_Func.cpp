@@ -4,6 +4,33 @@
 namespace Rstats {
   namespace Func {
 
+    Rstats::Integer get_length (SV* sv_r, SV* sv_x1) {
+
+      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+      if (v1->values == NULL) {
+        return 0;
+      }
+      
+      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      switch (type) {
+        case Rstats::Type::CHARACTER :
+          return Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
+          break;
+        case Rstats::Type::COMPLEX :
+          return Rstats::VectorFunc::get_values<Rstats::Complex>(v1)->size();
+          break;
+        case Rstats::Type::DOUBLE :
+          return Rstats::VectorFunc::get_values<Rstats::Double>(v1)->size();
+          break;
+        case Rstats::Type::INTEGER :
+        case Rstats::Type::LOGICAL :
+          return Rstats::VectorFunc::get_values<Rstats::Integer>(v1)->size();
+          break;
+      }
+    }
+    
     SV* as_character(SV* sv_r, SV* sv_x1) {
 
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);

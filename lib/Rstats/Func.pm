@@ -101,11 +101,11 @@ sub factor {
   }
   $f1->{levels} = Rstats::Func::as_vector($r, $x_labels);
   
-  $f1->{object_type} = 'factor';
+  $f1->{type} = 'integer';
+  $f1->{object_type} = 'array';
   
   return $f1;
 }
-
 
 sub ordered {
   my $r = shift;
@@ -2866,6 +2866,8 @@ sub get_array {
 
   # level drop
   if ($level_drop) {
+    $DB::single = 1;
+    my $p = Rstats::Func::as_character($r, $x2);
     $x2 = Rstats::Func::factor($r, Rstats::Func::as_character($r, $x2));
   }
   

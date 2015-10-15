@@ -37,29 +37,6 @@ namespace Rstats {
       return v1->na_positions;
     }
 
-    Rstats::Integer get_length (Rstats::Vector* v1) {
-      if (v1->values == NULL) {
-        return 0;
-      }
-      
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          return Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
-          break;
-        case Rstats::Type::COMPLEX :
-          return Rstats::VectorFunc::get_values<Rstats::Complex>(v1)->size();
-          break;
-        case Rstats::Type::DOUBLE :
-          return Rstats::VectorFunc::get_values<Rstats::Double>(v1)->size();
-          break;
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          return Rstats::VectorFunc::get_values<Rstats::Integer>(v1)->size();
-          break;
-      }
-    }
-
     Rstats::Vector* new_empty_vector() {
       Rstats::Vector* v1 = new Rstats::Vector;
       v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;

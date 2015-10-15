@@ -324,7 +324,6 @@ namespace Rstats {
     bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
-    IV get_length (Rstats::Vector*);
 
     template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {
@@ -445,6 +444,8 @@ namespace Rstats {
     SV* mode(SV*, SV*);
     SV* mode(SV*, SV*, SV*);
     
+    Rstats::Integer get_length(SV*, SV*);
+    
     // dim
     SV* dim(SV*, SV*, SV*);
     SV* dim(SV*, SV*);
@@ -529,7 +530,7 @@ namespace Rstats {
     SV* operate_unary(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -555,7 +556,7 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
 
-      IV length = Rstats::VectorFunc::get_length(v1);
+      IV length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
 
       for (IV i = 0; i < length; i++) {

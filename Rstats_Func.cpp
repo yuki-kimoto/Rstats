@@ -38,7 +38,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
@@ -170,7 +170,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
@@ -231,7 +231,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
@@ -301,7 +301,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
@@ -369,7 +369,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
@@ -446,7 +446,7 @@ namespace Rstats {
       if (!strEQ(type, "NULL")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+        Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
         
         for (Rstats::Integer i = 0; i < length; i++) {
           Rstats::pl_av_push(sv_values, Rstats::Func::create_sv_value(sv_r, sv_x1, i));
@@ -464,7 +464,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
 
       SV* sv_value;
       Rstats::Vector* v2;
@@ -568,7 +568,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_x2;
@@ -619,7 +619,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_x2;
@@ -670,7 +670,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_x2;
@@ -724,7 +724,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_x2;
@@ -2127,7 +2127,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       SV* sv_x2;
       Rstats::Vector* v2;
@@ -3321,7 +3321,7 @@ namespace Rstats {
       
       SV* sv_decomposed_xs = Rstats::pl_new_avrv();
       
-      IV length = Rstats::VectorFunc::get_length(v1);
+      IV length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (length > 0) {
         av_extend(Rstats::pl_av_deref(sv_decomposed_xs), length);

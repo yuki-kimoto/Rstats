@@ -68,7 +68,6 @@ namespace Rstats {
     }
 
     void delete_vector (Rstats::Vector* v1) {
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
       
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       
@@ -76,6 +75,7 @@ namespace Rstats {
         switch (type) {
           case Rstats::Type::CHARACTER : {
             std::vector<Rstats::Character>* values = Rstats::VectorFunc::get_values<Rstats::Character>(v1);
+            Rstats::Integer length = Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
             for (Rstats::Integer i = 0; i < length; i++) {
               if ((*values)[i] != NULL) {
                 SvREFCNT_dec((*values)[i]);

@@ -3386,11 +3386,6 @@ namespace Rstats {
         }
       }
 
-      // SV* sv_key;
-      // while ((sv_key = hv_iterkeysv(hv_iternext(Rstats::pl_hv_deref(sv_opt)))) != NULL) {
-        // croak("unused argument (%s)", SvPV_nolen(sv_key));
-      // }
-      
       return sv_new_opt;
     }
     

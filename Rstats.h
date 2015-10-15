@@ -327,8 +327,6 @@ namespace Rstats {
     IV get_length (Rstats::Vector*);
     
     Rstats::Vector* as_character(Rstats::Vector*);
-    Rstats::Vector* as_double(Rstats::Vector*);
-    Rstats::Vector* as_numeric(Rstats::Vector*);
 
     template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {

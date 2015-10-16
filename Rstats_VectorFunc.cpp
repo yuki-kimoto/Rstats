@@ -4,10 +4,6 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    bool exists_na_position(Rstats::Vector* v1, Rstats::Integer position) {
-      return v1->na_positions->count(position);
-    }
-
     void merge_na_positions(Rstats::Vector* v1, Rstats::Vector* v2) {
       for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = v1->na_positions->begin(); it != v1->na_positions->end(); ++it) {
         v2->add_na_position(it->first);

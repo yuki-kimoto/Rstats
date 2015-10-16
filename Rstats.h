@@ -351,7 +351,6 @@ namespace Rstats {
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();
     
-    bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
 

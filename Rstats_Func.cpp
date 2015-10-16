@@ -468,7 +468,7 @@ namespace Rstats {
       SV* sv_value;
       Rstats::Vector* v2;
       if (strEQ(type, "character")) {
-        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+        if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
@@ -476,7 +476,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "complex")) {
-        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+        if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
@@ -518,7 +518,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "double")) {
-        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+        if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
@@ -538,7 +538,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "integer")) {
-        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+        if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
@@ -547,7 +547,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "logical")) {
-        if (Rstats::VectorFunc::exists_na_position(v1, pos)) {
+        if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
@@ -707,7 +707,7 @@ namespace Rstats {
       }
       
       for (Rstats::Integer i = 0; i < length; i++) {
-        if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+        if (v1->exists_na_position(i)) {
           v2->add_na_position(0);
           break;
         }
@@ -761,7 +761,7 @@ namespace Rstats {
       }
       
       for (Rstats::Integer i = 0; i < length; i++) {
-        if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+        if (v1->exists_na_position(i)) {
           v2->add_na_position(0);
           break;
         }
@@ -2269,7 +2269,7 @@ namespace Rstats {
           Rstats::Vector* v_tmp = Rstats::Func::get_vector(sv_r, sv_x_tmp);
           
           for (IV k = 0; k < Rstats::Func::get_length(sv_r, sv_x_tmp); k++) {
-            if (Rstats::VectorFunc::exists_na_position(v_tmp, k)) {
+            if (v_tmp->exists_na_position(k)) {
               v1->add_na_position(pos);
             }
             else {
@@ -3182,7 +3182,7 @@ namespace Rstats {
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(x1_length);
       
       for (IV i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
-        if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+        if (v1->exists_na_position(i)) {
           v2->set_value<Rstats::Integer>(i, 1);
         }
         else {
@@ -3322,7 +3322,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Character>(1, v1->get_value<Rstats::Character>(i));
-            if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+            if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
@@ -3334,7 +3334,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Complex>(1, v1->get_value<Rstats::Complex>(i));
-            if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+            if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
@@ -3346,7 +3346,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Double>(1, v1->get_value<Rstats::Double>(i));
-            if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+            if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
@@ -3358,7 +3358,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, v1->get_value<Rstats::Integer>(i));
-            if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+            if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
@@ -3370,7 +3370,7 @@ namespace Rstats {
           for (IV i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Logical>(1, v1->get_value<Rstats::Integer>(i));
-            if (Rstats::VectorFunc::exists_na_position(v1, i)) {
+            if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
@@ -3401,7 +3401,7 @@ namespace Rstats {
           }
           Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
           
-          if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+          if (element->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
@@ -3419,7 +3419,7 @@ namespace Rstats {
           }
           Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
-          if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+          if (element->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
@@ -3438,7 +3438,7 @@ namespace Rstats {
           }
           Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
-          if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+          if (element->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
@@ -3457,7 +3457,7 @@ namespace Rstats {
           }
           Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
-          if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+          if (element->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
@@ -3476,7 +3476,7 @@ namespace Rstats {
           }
           Rstats::Vector* element = Rstats::Func::get_vector(sv_r, sv_x1);
 
-          if (Rstats::VectorFunc::exists_na_position(element, 0)) {
+          if (element->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {

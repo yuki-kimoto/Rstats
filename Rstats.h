@@ -308,11 +308,13 @@ namespace Rstats {
     Rstats::Logical is_nan(Rstats::Integer);
   }
 
-  typedef struct {
+  class Vector {
+    public:
+    
     Rstats::Type::Enum type;
     std::map<IV, IV>* na_positions;
     void* values;
-  } Vector;
+  };
 
   // Rstats::VectorFunc
   namespace VectorFunc {

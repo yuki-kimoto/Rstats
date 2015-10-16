@@ -346,11 +346,6 @@ namespace Rstats {
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
 
-    template<class T>
-    std::vector<T>* get_values(Rstats::Vector* v1) {
-      return (std::vector<T>*)v1->values;
-    }
-    
     template <class T>
     T get_value(Rstats::Vector* v1, IV pos) {
       return (*v1->get_values<T>())[pos];

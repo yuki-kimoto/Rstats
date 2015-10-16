@@ -314,6 +314,16 @@ namespace Rstats {
     Rstats::Type::Enum type;
     std::map<IV, IV>* na_positions;
     void* values;
+    
+    Rstats::Integer get_length();
+    
+    template<class T>
+    std::vector<T>* get_values() {
+      return (std::vector<T>*)this->values;
+    }
+
+    Rstats::Type::Enum get_type();
+    
   };
 
   // Rstats::VectorFunc

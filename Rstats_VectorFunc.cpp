@@ -13,17 +13,13 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER :
           return Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
-          break;
         case Rstats::Type::COMPLEX :
           return Rstats::VectorFunc::get_values<Rstats::Complex>(v1)->size();
-          break;
         case Rstats::Type::DOUBLE :
           return Rstats::VectorFunc::get_values<Rstats::Double>(v1)->size();
-          break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
           return Rstats::VectorFunc::get_values<Rstats::Integer>(v1)->size();
-          break;
       }
     }
     

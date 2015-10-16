@@ -540,17 +540,17 @@ namespace Rstats {
     SV* sin(SV*, SV*);
     
     template <class T>
-    SV* new_empty_vector(SV*);
+    SV* new_vector(SV*);
     template <>
-    SV* new_empty_vector<Rstats::Character>(SV*);
+    SV* new_vector<Rstats::Character>(SV*);
     template <>
-    SV* new_empty_vector<Rstats::Complex>(SV*);
+    SV* new_vector<Rstats::Complex>(SV*);
     template <>
-    SV* new_empty_vector<Rstats::Double>(SV*);
+    SV* new_vector<Rstats::Double>(SV*);
     template <>
-    SV* new_empty_vector<Rstats::Integer>(SV*);
+    SV* new_vector<Rstats::Integer>(SV*);
     template <>
-    SV* new_empty_vector<Rstats::Logical>(SV*);
+    SV* new_vector<Rstats::Logical>(SV*);
 
     template <class T_IN, class T_OUT>
     SV* operate_unary(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
@@ -569,7 +569,7 @@ namespace Rstats {
       }
       v2->merge_na_positions(v1);
       
-      SV* sv_x2 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
+      SV* sv_x2 = Rstats::Func::new_vector<T_OUT>(sv_r);
       set_vector(sv_r, sv_x2, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
       
@@ -602,7 +602,7 @@ namespace Rstats {
       v3->merge_na_positions(v1);
       v3->merge_na_positions(v2);
       
-      SV* sv_x3 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
+      SV* sv_x3 = Rstats::Func::new_vector<T_OUT>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x3, v3);
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x3);

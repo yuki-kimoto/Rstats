@@ -4,25 +4,6 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    Rstats::Integer get_length (Rstats::Vector* v1) {
-      if (v1->values == NULL) {
-        return 0;
-      }
-      
-      Rstats::Type::Enum type = v1->get_type();
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          return v1->get_values<Rstats::Character>()->size();
-        case Rstats::Type::COMPLEX :
-          return v1->get_values<Rstats::Complex>()->size();
-        case Rstats::Type::DOUBLE :
-          return v1->get_values<Rstats::Double>()->size();
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          return v1->get_values<Rstats::Integer>()->size();
-      }
-    }
-
     void add_na_position(Rstats::Vector* v1, Rstats::Integer position) {
       (*v1->na_positions)[position] = 1;
     }

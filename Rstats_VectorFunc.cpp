@@ -49,16 +49,6 @@ namespace Rstats {
     }
 
     template <>
-    void set_value<Rstats::Character>(Rstats::Vector* v1, Rstats::Integer pos, Rstats::Character value) {
-      if (value != NULL) {
-        SvREFCNT_dec((*v1->get_values<Rstats::Character>())[pos]);
-      }
-      
-      SV* new_value = Rstats::pl_new_sv_sv(value);
-      (*v1->get_values<Rstats::Character>())[pos] = SvREFCNT_inc(new_value);
-    }
-
-    template <>
     Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer length) {
       Rstats::Vector* v1 = new_empty_vector();
       v1->values = new std::vector<Rstats::Double>(length);

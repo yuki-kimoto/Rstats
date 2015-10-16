@@ -4,16 +4,10 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    Rstats::Vector* new_empty_vector() {
-      Rstats::Vector* v1 = new Rstats::Vector;
-      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
-      
-      return v1;
-    }
-
     template <>
     Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
+      Rstats::Vector* v1 = new Rstats::Vector;
+      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
       v1->values = new std::vector<Rstats::Double>(length);
       v1->type = Rstats::Type::DOUBLE;
       
@@ -22,7 +16,8 @@ namespace Rstats {
 
     template <>
     Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
+      Rstats::Vector* v1 = new Rstats::Vector;
+      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
       v1->values = new std::vector<Rstats::Integer>(length);
       v1->type = Rstats::Type::INTEGER;
       
@@ -31,7 +26,8 @@ namespace Rstats {
 
     template <>
     Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
+      Rstats::Vector* v1 = new Rstats::Vector;
+      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
       v1->values = new std::vector<Rstats::Complex>(length);
       v1->type = Rstats::Type::COMPLEX;
       
@@ -40,7 +36,8 @@ namespace Rstats {
 
     template <>
     Rstats::Vector* new_vector<Rstats::Character>(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
+      Rstats::Vector* v1 = new Rstats::Vector;
+      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
       v1->values = new std::vector<Rstats::Character>(length);
       v1->type = Rstats::Type::CHARACTER;
       
@@ -49,7 +46,8 @@ namespace Rstats {
 
     template <>
     Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Integer length) {
-      Rstats::Vector* v1 = new_empty_vector();
+      Rstats::Vector* v1 = new Rstats::Vector;
+      v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
       v1->values = new std::vector<Rstats::Logical>(length);
       v1->type = Rstats::Type::LOGICAL;
       

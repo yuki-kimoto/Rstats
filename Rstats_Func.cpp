@@ -2903,11 +2903,9 @@ namespace Rstats {
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("NULL"));
-
-      Rstats::Vector* v1 = Rstats::VectorFunc::new_empty_vector();
-      v1->values = NULL;
-      v1->type = Rstats::Type::LOGICAL;
-
+      
+      // should be fix
+      Rstats::Vector* v1 = Rstats::VectorFunc::new_vector<Rstats::Logical>(0);
       set_vector(sv_r, sv_x1, v1);
       
       return sv_x1;

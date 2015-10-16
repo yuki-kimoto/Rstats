@@ -38,7 +38,7 @@ namespace Rstats {
 
   Vector::~Vector() {
     
-    Rstats::Type::Enum type = Rstats::VectorFunc::get_type(this);
+    Rstats::Type::Enum type = this->get_type();
     
     if (this->values != NULL){ 
       switch (type) {

@@ -9,7 +9,7 @@ namespace Rstats {
         return 0;
       }
       
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      Rstats::Type::Enum type = v1->get_type();
       switch (type) {
         case Rstats::Type::CHARACTER :
           return v1->get_values<Rstats::Character>()->size();
@@ -21,10 +21,6 @@ namespace Rstats {
         case Rstats::Type::LOGICAL :
           return v1->get_values<Rstats::Integer>()->size();
       }
-    }
-    
-    Rstats::Type::Enum get_type(Rstats::Vector* v1) {
-      return v1->type;
     }
 
     void add_na_position(Rstats::Vector* v1, Rstats::Integer position) {

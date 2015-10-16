@@ -13,7 +13,7 @@ namespace Rstats {
         return 0;
       }
       
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      Rstats::Type::Enum type = v1->get_type();
       switch (type) {
         case Rstats::Type::CHARACTER :
           return v1->get_values<Rstats::Character>()->size();
@@ -2192,7 +2192,7 @@ namespace Rstats {
         
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           length += Rstats::Func::get_length(sv_r, sv_element);
-          type = Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_element));
+          type = Rstats::Func::get_vector(sv_r, sv_element)->get_type();
           type_h[type] = 1;
         }
         else {
@@ -2236,7 +2236,7 @@ namespace Rstats {
         sv_x1 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
       }
       
-      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      Rstats::Type::Enum type = v1->get_type();
       
       IV pos = 0;
       for (IV i = 0; i < element_length; i++) {
@@ -2244,7 +2244,7 @@ namespace Rstats {
         SV* sv_x_tmp;
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           
-          Rstats::Type::Enum tmp_type = Rstats::VectorFunc::get_type(Rstats::Func::get_vector(sv_r, sv_element));
+          Rstats::Type::Enum tmp_type = Rstats::Func::get_vector(sv_r, sv_element)->get_type();
           
           if (tmp_type == type) {
             sv_x_tmp = sv_element;
@@ -2420,8 +2420,8 @@ namespace Rstats {
       IV xs_length = Rstats::pl_av_len(sv_xs);
       for (IV i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        Rstats::Vector* x1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Type::Enum type = Rstats::VectorFunc::get_type(x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Type::Enum type = v1->get_type();
         
         if (type == Rstats::Type::CHARACTER) {
           type_h[Rstats::Type::CHARACTER] = 1;

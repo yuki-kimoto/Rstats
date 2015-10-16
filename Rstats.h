@@ -338,9 +338,7 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();
-    void delete_vector(Rstats::Vector*);
     
-    Rstats::Type::Enum get_type(Rstats::Vector*);
     void add_na_position(Rstats::Vector*, IV);
     bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);

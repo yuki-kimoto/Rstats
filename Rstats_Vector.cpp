@@ -2,7 +2,18 @@
 
 namespace Rstats {
 
-  Rstats::Type::Enum get_type {
+  template<>
+  Rstats::Character Vector::get_value<Rstats::Character>(IV pos) {
+    Rstats::Character value = (*this->get_values<Rstats::Character>())[pos];
+    if (value == NULL) {
+      return NULL;
+    }
+    else {
+      return Rstats::pl_new_sv_sv(value);
+    }
+  }
+
+  Rstats::Type::Enum Vector::get_type() {
     return this->type;
   }
   
@@ -14,18 +25,18 @@ namespace Rstats {
     Rstats::Type::Enum type = this->get_type();
     switch (type) {
       case Rstats::Type::CHARACTER :
-        return this->get_values<Rstats::Character>->size();
+        return this->get_values<Rstats::Character>()->size();
       case Rstats::Type::COMPLEX :
-        return this->get_values<Rstats::Complex>->size();
+        return this->get_values<Rstats::Complex>()->size();
       case Rstats::Type::DOUBLE :
-        return this->get_values<Rstats::Double>->size();
+        return this->get_values<Rstats::Double>()->size();
       case Rstats::Type::INTEGER :
       case Rstats::Type::LOGICAL :
-        return this->get_values<Rstats::Integer>->size();
+        return this->get_values<Rstats::Integer>()->size();
     }
   }
 
-  void Vector~() {
+  Vector::~Vector() {
     
     Rstats::Type::Enum type = Rstats::VectorFunc::get_type(this);
     

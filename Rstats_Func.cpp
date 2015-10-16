@@ -307,7 +307,7 @@ namespace Rstats {
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
       if (strEQ(type, "character")) {
         for (Rstats::Integer i = 0; i < length; i++) {
-          Rstats::Character sv_value = Rstats::VectorFunc::get_value<Rstats::Character>(v1, i);
+          Rstats::Character sv_value = v1->get_value<Rstats::Character>(i);
           SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
           if (SvOK(sv_value_fix)) {
             Rstats::Integer value = SvIV(sv_value_fix);

@@ -321,10 +321,20 @@ namespace Rstats {
     std::vector<T>* get_values() {
       return (std::vector<T>*)this->values;
     }
+
+    template <class T>
+    T get_value(IV pos) {
+      return (*this->get_values<T>())[pos];
+    } // Rstats::Character is specialized
     
     Rstats::Type::Enum get_type();
+    
+    ~Vector();
   };
 
+  template<>
+  Rstats::Character Vector::get_value<Rstats::Character>(IV pos);
+  
   // Rstats::VectorFunc
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();

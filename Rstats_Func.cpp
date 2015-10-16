@@ -16,17 +16,17 @@ namespace Rstats {
       Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
       switch (type) {
         case Rstats::Type::CHARACTER :
-          return Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
+          return v1->get_values<Rstats::Character>()->size();
           break;
         case Rstats::Type::COMPLEX :
-          return Rstats::VectorFunc::get_values<Rstats::Complex>(v1)->size();
+          return v1->get_values<Rstats::Complex>()->size();
           break;
         case Rstats::Type::DOUBLE :
-          return Rstats::VectorFunc::get_values<Rstats::Double>(v1)->size();
+          return v1->get_values<Rstats::Double>()->size();
           break;
         case Rstats::Type::INTEGER :
         case Rstats::Type::LOGICAL :
-          return Rstats::VectorFunc::get_values<Rstats::Integer>(v1)->size();
+          return v1->get_values<Rstats::Integer>()->size();
           break;
       }
     }
@@ -3457,7 +3457,7 @@ namespace Rstats {
       else if (strEQ(type, "integer")) {
         sv_x_out = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Integer>(len);
-        std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
+        std::vector<IV>* values = compose_elements->get_values<Rstats::Integer>();
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
@@ -3476,7 +3476,7 @@ namespace Rstats {
       else if (strEQ(type, "logical")) {
         sv_x_out = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Logical>(len);
-        std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
+        std::vector<IV>* values = compose_elements->get_values<Rstats::Integer>();
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {

@@ -323,7 +323,6 @@ namespace Rstats {
     }
 
     Rstats::Type::Enum get_type();
-    
   };
 
   // Rstats::VectorFunc
@@ -336,26 +335,26 @@ namespace Rstats {
     bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
-    Rstats::Integer get_length(Rstats::Vector*);
 
     template<class T>
     std::vector<T>* get_values(Rstats::Vector* v1) {
       return (std::vector<T>*)v1->values;
     }
+    
     template <class T>
     T get_value(Rstats::Vector* v1, IV pos) {
-      return (*Rstats::VectorFunc::get_values<T>(v1))[pos];
+      return (*v1->get_values<T>())[pos];
     }
     template <>
     Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, IV pos);
     
     template<class T>
     void set_value(Rstats::Vector* v1, IV pos, T value) {
-      (*Rstats::VectorFunc::get_values<T>(v1))[pos] = value;
+      (*v1->get_values<T>())[pos] = value;
     }
     template <>
     void set_value<Rstats::Character>(Rstats::Vector* v1, IV pos, Rstats::Character value);
-
+    
     template<class T>
     Rstats::Vector* new_vector(IV);
     template<>
@@ -381,7 +380,7 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* operate_unary(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
-      Rstats::Integer length = Rstats::VectorFunc::get_length(v1);
+      Rstats::Integer length = v1->get_length();
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {

@@ -23,17 +23,6 @@ namespace Rstats {
       }
     }
     
-    template <>
-    Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, Rstats::Integer pos) {
-      Rstats::Character value = (*v1->get_values<Rstats::Character>())[pos];
-      if (value == NULL) {
-        return NULL;
-      }
-      else {
-        return Rstats::pl_new_sv_sv(value);
-      }
-    }
-    
     Rstats::Type::Enum get_type(Rstats::Vector* v1) {
       return v1->type;
     }

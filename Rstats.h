@@ -346,13 +346,6 @@ namespace Rstats {
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
 
-    template <class T>
-    T get_value(Rstats::Vector* v1, IV pos) {
-      return (*v1->get_values<T>())[pos];
-    }
-    template <>
-    Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, IV pos);
-    
     template<class T>
     void set_value(Rstats::Vector* v1, IV pos, T value) {
       (*v1->get_values<T>())[pos] = value;
@@ -390,7 +383,7 @@ namespace Rstats {
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
-          Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+          Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(v1->get_value<T_IN>(i)));
         }
         catch (const char* e) {
           Rstats::VectorFunc::add_na_position(v2, i);
@@ -571,7 +564,7 @@ namespace Rstats {
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
-          Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(Rstats::VectorFunc::get_value<T_IN>(v1, i)));
+          Rstats::VectorFunc::set_value<T_OUT>(v2, i, (*func)(v1->get_value<T_IN>(i)));
         }
         catch (const char* e) {
           Rstats::VectorFunc::add_na_position(v2, i);
@@ -601,8 +594,8 @@ namespace Rstats {
             v3,
             i,
             (*func)(
-              Rstats::VectorFunc::get_value<T_IN>(v1, i),
-              Rstats::VectorFunc::get_value<T_IN>(v2, i)
+              v1->get_value<T_IN>(i),
+              v2->get_value<T_IN>(i)
             )
           );
         }

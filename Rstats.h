@@ -350,8 +350,6 @@ namespace Rstats {
   // Rstats::VectorFunc
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();
-    
-    void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
 
     template<class T>
     Rstats::Vector* new_vector(IV);
@@ -410,7 +408,6 @@ namespace Rstats {
     SV* c_complex(SV*, SV*);
 
     SV* new_null(SV*); /* r->NULL */
-    SV* new_vector(SV*);
     SV* new_na(SV*); /* r->NA */
     SV* new_nan(SV*); /* r->NaN */
     SV* new_inf(SV*); /* r->Inf */

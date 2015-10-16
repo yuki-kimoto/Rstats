@@ -321,7 +321,7 @@ namespace Rstats {
     std::vector<T>* get_values() {
       return (std::vector<T>*)this->values;
     }
-
+    
     Rstats::Type::Enum get_type();
   };
 

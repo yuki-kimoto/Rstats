@@ -1416,7 +1416,7 @@ SV* DESTROY(...)
 {
   Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
 
-  Rstats::VectorFunc::delete_vector(self);
+  delete self;
 }
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util

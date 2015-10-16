@@ -3,7 +3,30 @@
 // Rstats::VectorFunc
 namespace Rstats {
   namespace VectorFunc {
-   
+
+    Rstats::Integer get_length (Rstats::Vector* v1) {
+      if (v1->values == NULL) {
+        return 0;
+      }
+      
+      Rstats::Type::Enum type = Rstats::VectorFunc::get_type(v1);
+      switch (type) {
+        case Rstats::Type::CHARACTER :
+          return Rstats::VectorFunc::get_values<Rstats::Character>(v1)->size();
+          break;
+        case Rstats::Type::COMPLEX :
+          return Rstats::VectorFunc::get_values<Rstats::Complex>(v1)->size();
+          break;
+        case Rstats::Type::DOUBLE :
+          return Rstats::VectorFunc::get_values<Rstats::Double>(v1)->size();
+          break;
+        case Rstats::Type::INTEGER :
+        case Rstats::Type::LOGICAL :
+          return Rstats::VectorFunc::get_values<Rstats::Integer>(v1)->size();
+          break;
+      }
+    }
+    
     template <>
     Rstats::Character get_value<Rstats::Character>(Rstats::Vector* v1, Rstats::Integer pos) {
       Rstats::Character value = (*Rstats::VectorFunc::get_values<Rstats::Character>(v1))[pos];

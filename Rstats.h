@@ -389,7 +389,7 @@ namespace Rstats {
           v2->add_na_position(i);
         }
       }
-      v1->merge_na_positions(v2);
+      v2->merge_na_positions(v1);
       
       return v2;
     }
@@ -570,7 +570,7 @@ namespace Rstats {
           v2->add_na_position(i);
         }
       }
-      v1->merge_na_positions(v2);
+      v2->merge_na_positions(v1);
       
       SV* sv_x2 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
       set_vector(sv_r, sv_x2, v2);
@@ -602,8 +602,8 @@ namespace Rstats {
           v3->add_na_position(i);
         }
       }
-      v1->merge_na_positions(v3);
-      v2->merge_na_positions(v3);
+      v3->merge_na_positions(v1);
+      v3->merge_na_positions(v2);
       
       SV* sv_x3 = Rstats::Func::new_empty_vector<T_OUT>(sv_r);
       Rstats::Func::set_vector(sv_r, sv_x3, v3);

@@ -2,6 +2,7 @@
 
 namespace Rstats {
 
+
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {
     if (value != NULL) {

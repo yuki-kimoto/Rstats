@@ -322,6 +322,11 @@ namespace Rstats {
       return (std::vector<T>*)this->values;
     }
 
+    template<class T>
+    void set_value(IV pos, T value) {
+      (*this->get_values<T>())[pos] = value;
+    }
+
     template <class T>
     T get_value(IV pos) {
       return (*this->get_values<T>())[pos];
@@ -334,6 +339,8 @@ namespace Rstats {
 
   template<>
   Rstats::Character Vector::get_value<Rstats::Character>(IV pos);
+  template <>
+  void Vector::set_value<Rstats::Character>(IV pos, Rstats::Character value);
   
   // Rstats::VectorFunc
   namespace VectorFunc {

@@ -2,6 +2,16 @@
 
 namespace Rstats {
 
+  template <>
+  void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {
+    if (value != NULL) {
+      SvREFCNT_dec((*this->get_values<Rstats::Character>())[pos]);
+    }
+    
+    SV* new_value = Rstats::pl_new_sv_sv(value);
+    (*this->get_values<Rstats::Character>())[pos] = SvREFCNT_inc(new_value);
+  }
+
   template<>
   Rstats::Character Vector::get_value<Rstats::Character>(IV pos) {
     Rstats::Character value = (*this->get_values<Rstats::Character>())[pos];

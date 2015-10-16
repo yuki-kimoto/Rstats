@@ -861,8 +861,8 @@ SV* is_double(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_double(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_double(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -871,8 +871,8 @@ SV* is_integer(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_integer(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_integer(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -881,8 +881,8 @@ SV* is_complex(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_complex(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_complex(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -891,8 +891,8 @@ SV* is_character(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_character(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_character(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -901,8 +901,8 @@ SV* is_logical(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_logical(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_logical(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -911,8 +911,8 @@ SV* is_data_frame(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_data_frame(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_data_frame(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -921,8 +921,8 @@ SV* is_list(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_list(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_list(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -931,8 +931,8 @@ SV* as_vector(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::as_vector(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::as_vector(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }

@@ -11,9 +11,9 @@ SV* sin(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::sin(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::sin(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* atan2(...)
@@ -21,9 +21,9 @@ SV* atan2(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x3 = Rstats::Func::atan2(sv_r, ST(1), ST(2));
+  SV* sv_xout = Rstats::Func::atan2(sv_r, ST(1), ST(2));
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* or(...)
@@ -34,9 +34,9 @@ SV* or(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::Or(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::Or(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* add(...)
@@ -47,9 +47,9 @@ SV* add(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::add(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::add(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* subtract(...)
@@ -60,9 +60,9 @@ SV* subtract(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::subtract(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::subtract(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* multiply(...)
@@ -73,9 +73,9 @@ SV* multiply(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::multiply(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::multiply(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* divide(...)
@@ -86,9 +86,9 @@ SV* divide(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::divide(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::divide(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* remainder(...)
@@ -99,9 +99,9 @@ SV* remainder(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::remainder(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::remainder(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* pow(...)
@@ -112,9 +112,9 @@ SV* pow(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::pow(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::pow(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* less_than(...)
@@ -125,9 +125,9 @@ SV* less_than(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::less_than(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::less_than(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* less_than_or_equal(...)
@@ -138,9 +138,9 @@ SV* less_than_or_equal(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::less_than_or_equal(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::less_than_or_equal(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* more_than(...)
@@ -151,9 +151,9 @@ SV* more_than(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::more_than(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::more_than(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* more_than_or_equal(...)
@@ -164,9 +164,9 @@ SV* more_than_or_equal(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::more_than_or_equal(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::more_than_or_equal(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* equal(...)
@@ -177,9 +177,9 @@ SV* equal(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::equal(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::equal(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* not_equal(...)
@@ -190,9 +190,9 @@ SV* not_equal(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::not_equal(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::not_equal(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* and(...)
@@ -203,9 +203,9 @@ SV* and(...)
   SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
   SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
   
-  SV* sv_x3 = Rstats::Func::And(sv_r, sv_x1, sv_x2);
+  SV* sv_xout = Rstats::Func::And(sv_r, sv_x1, sv_x2);
   
-  return_sv(sv_x3);
+  return_sv(sv_xout);
 }
 
 SV* first_value(...)
@@ -223,9 +223,9 @@ SV* tanh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::tanh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::tanh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* Mod(...)
@@ -233,9 +233,9 @@ SV* Mod(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::Mod(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::Mod(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* Arg(...)
@@ -243,9 +243,9 @@ SV* Arg(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::Arg(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::Arg(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* Conj(...)
@@ -253,9 +253,9 @@ SV* Conj(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::Conj(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::Conj(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* acosh(...)
@@ -263,9 +263,9 @@ SV* acosh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::acosh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::acosh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* Re(...)
@@ -273,9 +273,9 @@ SV* Re(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::Re(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::Re(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* Im(...)
@@ -283,9 +283,9 @@ SV* Im(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::Im(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::Im(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* abs(...)
@@ -293,9 +293,9 @@ SV* abs(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::abs(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::abs(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* acos(...)
@@ -303,9 +303,9 @@ SV* acos(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::acos(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::acos(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* asin(...)
@@ -313,9 +313,9 @@ SV* asin(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::asin(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::asin(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* asinh(...)
@@ -323,9 +323,9 @@ SV* asinh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::asinh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::asinh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* atan(...)
@@ -333,9 +333,9 @@ SV* atan(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::atan(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::atan(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* atanh(...)
@@ -343,9 +343,9 @@ SV* atanh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::atanh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::atanh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* cos(...)
@@ -353,9 +353,9 @@ SV* cos(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::cos(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::cos(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* cosh(...)
@@ -363,9 +363,9 @@ SV* cosh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::cosh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::cosh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* cumsum(...)
@@ -373,9 +373,9 @@ SV* cumsum(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::cumsum(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::cumsum(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* cumprod(...)
@@ -383,9 +383,9 @@ SV* cumprod(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::cumprod(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::cumprod(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* exp(...)
@@ -393,9 +393,9 @@ SV* exp(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::exp(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::exp(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* expm1(...)
@@ -403,9 +403,9 @@ SV* expm1(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::expm1(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::expm1(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* log(...)
@@ -413,9 +413,9 @@ SV* log(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::log(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::log(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* logb(...)
@@ -423,9 +423,9 @@ SV* logb(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::logb(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::logb(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* log2(...)
@@ -433,9 +433,9 @@ SV* log2(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::log2(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::log2(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* log10(...)
@@ -443,9 +443,9 @@ SV* log10(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::log10(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::log10(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* prod(...)
@@ -453,9 +453,9 @@ SV* prod(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::prod(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::prod(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* sinh(...)
@@ -463,9 +463,9 @@ SV* sinh(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::sinh(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::sinh(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* sqrt(...)
@@ -473,9 +473,9 @@ SV* sqrt(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::sqrt(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::sqrt(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* tan(...)
@@ -483,9 +483,9 @@ SV* tan(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::tan(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::tan(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* sum(...)
@@ -493,9 +493,9 @@ SV* sum(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::sum(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::sum(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* negation(...)
@@ -503,9 +503,9 @@ SV* negation(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::negation(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::negation(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 
@@ -514,9 +514,9 @@ SV* type(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::type(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::type(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_numeric(...)
@@ -524,9 +524,9 @@ SV* is_numeric(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_numeric(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_numeric(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_array(...)
@@ -534,9 +534,9 @@ SV* is_array(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_array(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_array(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_matrix(...)
@@ -544,9 +544,9 @@ SV* is_matrix(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_matrix(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_matrix(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* dim(...)
@@ -571,9 +571,9 @@ SV* values(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::values(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::values(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* length_value(...)
@@ -581,9 +581,9 @@ SV* length_value(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::length_value(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::length_value(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_vector(...)
@@ -591,9 +591,9 @@ SV* is_vector(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_vector(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_vector(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_null(...)
@@ -601,9 +601,9 @@ SV* is_null(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_null(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_null(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* pi(...)
@@ -859,9 +859,9 @@ SV* is_double(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_double(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_double(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_integer(...)
@@ -869,9 +869,9 @@ SV* is_integer(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_integer(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_integer(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_complex(...)
@@ -879,9 +879,9 @@ SV* is_complex(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_complex(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_complex(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_character(...)
@@ -889,9 +889,9 @@ SV* is_character(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_character(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_character(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_logical(...)
@@ -899,9 +899,9 @@ SV* is_logical(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_logical(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_logical(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_data_frame(...)
@@ -909,9 +909,9 @@ SV* is_data_frame(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_data_frame(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_data_frame(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_list(...)
@@ -919,9 +919,9 @@ SV* is_list(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_list(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_list(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* as_vector(...)
@@ -929,9 +929,9 @@ SV* as_vector(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_vector(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_vector(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* new_data_frame(...)
@@ -970,9 +970,9 @@ SV* as_integer(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_integer(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_integer(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* as_logical(...)
@@ -980,9 +980,9 @@ SV* as_logical(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_logical(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_logical(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* as_complex(...)
@@ -990,9 +990,9 @@ SV* as_complex(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_complex(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_complex(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* as_double(...)
@@ -1000,9 +1000,9 @@ SV* as_double(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_double(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_double(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* as_numeric(...)
@@ -1010,9 +1010,9 @@ SV* as_numeric(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::as_numeric(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::as_numeric(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_finite(...)
@@ -1020,9 +1020,9 @@ SV* is_finite(...)
 {
   SV* sv_r = ST(0);
 
-  SV* sv_x2 = Rstats::Func::is_finite(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::is_finite(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_infinite(...)
@@ -1030,9 +1030,9 @@ SV* is_infinite(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::is_infinite(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::is_infinite(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_nan(...)
@@ -1040,9 +1040,9 @@ SV* is_nan(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x2 = Rstats::Func::is_nan(sv_r, ST(1));
+  SV* sv_xout = Rstats::Func::is_nan(sv_r, ST(1));
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_na(...)
@@ -1050,9 +1050,9 @@ SV* is_na(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_na(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_na(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* class(...)
@@ -1066,8 +1066,8 @@ SV* class(...)
     return_sv(sv_r);
   }
   else {
-    SV* sv_x2 = Rstats::Func::Class(sv_r, sv_x1);
-    return_sv(sv_x2);
+    SV* sv_xout = Rstats::Func::Class(sv_r, sv_x1);
+    return_sv(sv_xout);
   }
 }
 
@@ -1076,9 +1076,9 @@ SV* is_factor(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_factor(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_factor(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* is_ordered(...)
@@ -1086,9 +1086,9 @@ SV* is_ordered(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::is_ordered(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::is_ordered(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* clone(...)
@@ -1096,9 +1096,9 @@ SV* clone(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::clone(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::clone(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* dim_as_array(...)
@@ -1106,9 +1106,9 @@ SV* dim_as_array(...)
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x2 = Rstats::Func::dim_as_array(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::dim_as_array(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* decompose(...)
@@ -1156,8 +1156,8 @@ SV* as_array(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::as_array(sv_r, sv_x1);
-  return_sv(sv_x2);
+  SV* sv_xout = Rstats::Func::as_array(sv_r, sv_x1);
+  return_sv(sv_xout);
 }
 
 SV* levels(...)
@@ -1171,8 +1171,8 @@ SV* levels(...)
     return_sv(sv_r);
   }
   else {
-    SV* sv_x2 = Rstats::Func::levels(sv_r, sv_x1);
-    return_sv(sv_x2);
+    SV* sv_xout = Rstats::Func::levels(sv_r, sv_x1);
+    return_sv(sv_xout);
   }
 }
 
@@ -1182,8 +1182,8 @@ SV* as_character(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::as_character(sv_r, sv_x1);
-  return_sv(sv_x2);
+  SV* sv_xout = Rstats::Func::as_character(sv_r, sv_x1);
+  return_sv(sv_xout);
 }
 
 SV* mode(...)
@@ -1210,9 +1210,9 @@ SV* as(...)
   SV* sv_type = ST(1);
   SV* sv_x1 = ST(2);
   
-  SV* sv_x2 = Rstats::Func::as(sv_r, sv_type, sv_x1);
+  SV* sv_xout = Rstats::Func::as(sv_r, sv_type, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* length(...)
@@ -1221,9 +1221,9 @@ SV* length(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::length(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::length(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* names(...)
@@ -1249,9 +1249,9 @@ SV* typeof(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::Typeof(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::Typeof(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* get_type(...)
@@ -1260,9 +1260,9 @@ SV* get_type(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   
-  SV* sv_x2 = Rstats::Func::get_type_sv(sv_r, sv_x1);
+  SV* sv_xout = Rstats::Func::get_type_sv(sv_r, sv_x1);
   
-  return_sv(sv_x2);
+  return_sv(sv_xout);
 }
 
 SV* upgrade_type(...)

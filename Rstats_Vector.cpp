@@ -12,7 +12,7 @@ namespace Rstats {
 
   void Vector::merge_na_positions(Rstats::Vector* v2) {
     for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = this->na_positions->begin(); it != this->na_positions->end(); ++it) {
-      Rstats::VectorFunc::add_na_position(v2, it->first);
+      v2->add_na_position(it->first);
     }
   }
 

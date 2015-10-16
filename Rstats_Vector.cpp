@@ -2,6 +2,23 @@
 
 namespace Rstats {
 
+  void Vector::add_na_position(Rstats::Integer position) {
+    (*this->na_positions)[position] = 1;
+  }
+
+  bool Vector::exists_na_position(Rstats::Integer position) {
+    return this->na_positions->count(position);
+  }
+
+  void Vector::merge_na_positions(Rstats::Vector* v2) {
+    for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = this->na_positions->begin(); it != this->na_positions->end(); ++it) {
+      Rstats::VectorFunc::add_na_position(v2, it->first);
+    }
+  }
+
+  std::map<Rstats::Integer, Rstats::Integer>* Vector::get_na_positions() {
+    return this->na_positions;
+  }
 
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {

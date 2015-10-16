@@ -574,7 +574,7 @@ namespace Rstats {
       Rstats::Vector* v2;
       if (strEQ(type, "complex")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-        Rstats::Complex v2_total(1, 0);
+        Rstats::Complex v2_total(1);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total *= v1->get_value<Rstats::Complex>(i);
           v2->set_value<Rstats::Complex>(i, v2_total);
@@ -625,7 +625,7 @@ namespace Rstats {
       Rstats::Vector* v2;
       if (strEQ(type, "complex")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
-        Rstats::Complex v2_total(0, 0);
+        Rstats::Complex v2_total(0);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total += v1->get_value<Rstats::Complex>(i);
           v2->set_value<Rstats::Complex>(i, v2_total);
@@ -676,7 +676,7 @@ namespace Rstats {
       Rstats::Vector* v2;
       if (strEQ(type, "complex")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
-        Rstats::Complex v2_total(0, 0);
+        Rstats::Complex v2_total(0);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total += v1->get_value<Rstats::Complex>(i);
         }
@@ -730,7 +730,7 @@ namespace Rstats {
       Rstats::Vector* v2;
       if (strEQ(type, "complex")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
-        Rstats::Complex v2_total(1, 0);
+        Rstats::Complex v2_total(1);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total *= v1->get_value<Rstats::Complex>(i);
         }

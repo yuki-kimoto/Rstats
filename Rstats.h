@@ -351,7 +351,6 @@ namespace Rstats {
   namespace VectorFunc {
     Rstats::Vector* new_empty_vector();
     
-    void add_na_position(Rstats::Vector*, IV);
     bool exists_na_position(Rstats::Vector*, IV position);
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
     std::map<IV, IV>* get_na_positions(Rstats::Vector*);
@@ -389,7 +388,7 @@ namespace Rstats {
           v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
         catch (const char* e) {
-          Rstats::VectorFunc::add_na_position(v2, i);
+          v2->add_na_position(i);
         }
       }
       Rstats::VectorFunc::merge_na_positions(v1, v2);
@@ -570,7 +569,7 @@ namespace Rstats {
           v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
         catch (const char* e) {
-          Rstats::VectorFunc::add_na_position(v2, i);
+          v2->add_na_position(i);
         }
       }
       Rstats::VectorFunc::merge_na_positions(v1, v2);
@@ -602,7 +601,7 @@ namespace Rstats {
           );
         }
         catch (const char* e) {
-          Rstats::VectorFunc::add_na_position(v3, i);
+          v3->add_na_position(i);
         }
       }
       Rstats::VectorFunc::merge_na_positions(v1, v3);

@@ -4,17 +4,13 @@
 namespace Rstats {
   namespace VectorFunc {
 
-    void add_na_position(Rstats::Vector* v1, Rstats::Integer position) {
-      (*v1->na_positions)[position] = 1;
-    }
-
     bool exists_na_position(Rstats::Vector* v1, Rstats::Integer position) {
       return v1->na_positions->count(position);
     }
 
     void merge_na_positions(Rstats::Vector* v1, Rstats::Vector* v2) {
       for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = v1->na_positions->begin(); it != v1->na_positions->end(); ++it) {
-        Rstats::VectorFunc::add_na_position(v2, it->first);
+        v2->add_na_position(it->first);
       }
     }
 

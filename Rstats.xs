@@ -570,8 +570,8 @@ SV* values(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::values(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::values(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -580,8 +580,8 @@ SV* length_value(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::length_value(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::length_value(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -590,8 +590,8 @@ SV* is_vector(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_vector(sv_r, sv_x1);
+
+  SV* sv_x_out = Rstats::Func::is_vector(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -600,8 +600,8 @@ SV* is_null(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_null(sv_r, sv_x1);
+  
+  SV* sv_x_out = Rstats::Func::is_null(sv_r, ST(1));
   
   return_sv(sv_x_out);
 }
@@ -610,99 +610,102 @@ SV* pi(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::pi(sv_r);
   
-  return_sv(sv_x1);
+  SV* sv_x_out = Rstats::Func::pi(sv_r);
+  
+  return_sv(sv_x_out);
 }
 
 SV* NULL(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_null(sv_r);
   
-  return_sv(sv_x1);
+  SV* sv_x_out = Rstats::Func::new_null(sv_r);
+  
+  return_sv(sv_x_out);
 }
 
 SV* NA(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_na(sv_r);
   
-  return_sv(sv_x1);
+  SV* sv_x_out = Rstats::Func::new_na(sv_r);
+  
+  return_sv(sv_x_out);
 }
 
 SV* NaN(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_nan(sv_r);
+  SV* sv_x_out = Rstats::Func::new_nan(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* Inf(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_inf(sv_r);
+  SV* sv_x_out = Rstats::Func::new_inf(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* FALSE(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_false(sv_r);
+  SV* sv_x_out = Rstats::Func::new_false(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* F(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_false(sv_r);
+  SV* sv_x_out = Rstats::Func::new_false(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* F_(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_false(sv_r);
+  SV* sv_x_out = Rstats::Func::new_false(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* TRUE(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_true(sv_r);
+  SV* sv_x_out = Rstats::Func::new_true(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* T(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_true(sv_r);
+  SV* sv_x_out = Rstats::Func::new_true(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* T_(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_true(sv_r);
+  SV* sv_x_out = Rstats::Func::new_true(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* args_h(...)
@@ -744,9 +747,9 @@ SV* c_(...)
     }
   }
   
-  SV* sv_x1 = Rstats::Func::c(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* c_character(...)
@@ -765,9 +768,9 @@ SV* c_character(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::c_character(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_character(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* c_double(...)
@@ -786,9 +789,9 @@ SV* c_double(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::c_double(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_double(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* c_complex(...)
@@ -807,9 +810,9 @@ SV* c_complex(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::c_complex(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_complex(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* c_integer(...)
@@ -828,9 +831,9 @@ SV* c_integer(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::c_integer(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_integer(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* c_logical(...)
@@ -849,9 +852,9 @@ SV* c_logical(...)
     }
   }
 
-  SV* sv_x1 = Rstats::Func::c_logical(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_logical(sv_r, sv_values);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* is_double(...)
@@ -938,18 +941,18 @@ SV* new_data_frame(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_data_frame(sv_r);
+  SV* sv_x_out = Rstats::Func::new_data_frame(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* new_list(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_x1 = Rstats::Func::new_list(sv_r);
+  SV* sv_x_out = Rstats::Func::new_list(sv_r);
   
-  return_sv(sv_x1);
+  return_sv(sv_x_out);
 }
 
 SV* copy_attrs_to(...)

@@ -10,10 +10,6 @@ namespace Rstats {
       }
     }
 
-    std::map<Rstats::Integer, Rstats::Integer>* get_na_positions(Rstats::Vector* v1) {
-      return v1->na_positions;
-    }
-
     Rstats::Vector* new_empty_vector() {
       Rstats::Vector* v1 = new Rstats::Vector;
       v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;

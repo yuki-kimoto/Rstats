@@ -352,7 +352,6 @@ namespace Rstats {
     Rstats::Vector* new_empty_vector();
     
     void merge_na_positions(Rstats::Vector*, Rstats::Vector*);
-    std::map<IV, IV>* get_na_positions(Rstats::Vector*);
 
     template<class T>
     Rstats::Vector* new_vector(IV);

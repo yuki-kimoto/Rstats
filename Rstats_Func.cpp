@@ -3333,9 +3333,9 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
-            Rstats::Func::set_vector(sv_r, sv_x2, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
+            SV* sv_xout = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
+            Rstats::Func::set_vector(sv_r, sv_xout, v2);
+            Rstats::pl_av_push(sv_decomposed_xs, sv_xout);
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "complex")) {
@@ -3345,9 +3345,9 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
-            Rstats::Func::set_vector(sv_r, sv_x2, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
+            SV* sv_xout = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
+            Rstats::Func::set_vector(sv_r, sv_xout, v2);
+            Rstats::pl_av_push(sv_decomposed_xs, sv_xout);
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")) {
@@ -3357,9 +3357,9 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
-            Rstats::Func::set_vector(sv_r, sv_x2, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
+            SV* sv_xout = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
+            Rstats::Func::set_vector(sv_r, sv_xout, v2);
+            Rstats::pl_av_push(sv_decomposed_xs, sv_xout);
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer")) {
@@ -3369,9 +3369,9 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
-            Rstats::Func::set_vector(sv_r, sv_x2, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
+            SV* sv_xout = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
+            Rstats::Func::set_vector(sv_r, sv_xout, v2);
+            Rstats::pl_av_push(sv_decomposed_xs, sv_xout);
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
@@ -3381,9 +3381,9 @@ namespace Rstats {
             if (Rstats::VectorFunc::exists_na_position(v1, i)) {
               Rstats::VectorFunc::add_na_position(v2, 0);
             }
-            SV* sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
-            Rstats::Func::set_vector(sv_r, sv_x2, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x2);
+            SV* sv_xout = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
+            Rstats::Func::set_vector(sv_r, sv_xout, v2);
+            Rstats::pl_av_push(sv_decomposed_xs, sv_xout);
           }
         }
       }
@@ -3398,9 +3398,9 @@ namespace Rstats {
       Rstats::Vector* compose_elements;
       std::vector<IV> na_positions;
       char* type = SvPV_nolen(sv_type);
-      SV* sv_x2;
+      SV* sv_xout;
       if (strEQ(type, "character")) {
-        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
+        sv_xout = Rstats::Func::new_empty_vector<Rstats::Character>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Character>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -3418,7 +3418,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "complex")) {
-        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
+        sv_xout = Rstats::Func::new_empty_vector<Rstats::Complex>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Complex>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -3437,7 +3437,7 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         
-        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
+        sv_xout = Rstats::Func::new_empty_vector<Rstats::Double>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Double>(len);
         for (IV i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
@@ -3455,7 +3455,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "integer")) {
-        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
+        sv_xout = Rstats::Func::new_empty_vector<Rstats::Integer>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Integer>(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
@@ -3474,7 +3474,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "logical")) {
-        sv_x2 = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
+        sv_xout = Rstats::Func::new_empty_vector<Rstats::Logical>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Logical>(len);
         std::vector<IV>* values = Rstats::VectorFunc::get_values<Rstats::Integer>(compose_elements);
         for (IV i = 0; i < len; i++) {
@@ -3500,9 +3500,9 @@ namespace Rstats {
         Rstats::VectorFunc::add_na_position(compose_elements, na_positions[i]);
       }
       
-      Rstats::Func::set_vector(sv_r, sv_x2, compose_elements);
+      Rstats::Func::set_vector(sv_r, sv_xout, compose_elements);
       
-      return sv_x2;
+      return sv_xout;
     }
 
     SV* args_h(SV* sv_r, SV* sv_names, SV* sv_args) {
@@ -3546,10 +3546,10 @@ namespace Rstats {
     
     SV* as_array(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::as_vector(sv_r, sv_x1);
-      SV* sv_x2_dim = Rstats::Func::dim_as_array(sv_r, sv_x1);
+      SV* sv_xout = Rstats::Func::as_vector(sv_r, sv_x1);
+      SV* sv_xout_dim = Rstats::Func::dim_as_array(sv_r, sv_x1);
       
-      return Rstats::Func::array(sv_r, sv_x2, sv_x2_dim);
+      return Rstats::Func::array(sv_r, sv_xout, sv_xout_dim);
     }
 
     SV* levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {

@@ -772,9 +772,9 @@ use Math::Complex ();
   }
 }
 
-# is_element
+# is->element
 {
-  # cumprod - numeric
+  # is->element - numeric
   {
     my $x1 = c_(1, 2, 3, 4);
     my $x2 = c_(1, 2, 3);
@@ -782,7 +782,7 @@ use Math::Complex ();
     is_deeply($x3->values, [1, 1, 1, 0]);
   }
   
-  # cumprod - complex
+  # is->element - complex
   {
     my $x1 = c_(1*i_, 2*i_, 3*i_, 4*i_);
     my $x2 = c_(1*i_, 2*i_, 3*i_);
@@ -858,6 +858,14 @@ use Math::Complex ();
 
 # cumprod
 {
+  # cumprod - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->cumprod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, []);
+  }
+
   # cumprod - logical
   {
     my $x1 = r->c_logical(1, 1, 0);

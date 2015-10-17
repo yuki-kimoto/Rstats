@@ -461,7 +461,7 @@ namespace Rstats {
       return sv_values;
     }
     
-    SV* create_sv_value(SV* sv_r, SV* sv_x1, Rstats::Integer pos) {
+    SV* create_sv_value(SV* sv_r, SV* sv_x1, Rstats::Index pos) {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       
@@ -2018,7 +2018,7 @@ namespace Rstats {
       return sv_new_xs;
     }
     
-    void upgrade_length(SV* sv_r, IV num, ...) {
+    void upgrade_length(SV* sv_r, Rstats::Index num, ...) {
       va_list args;
       
       // Optimization if args count is 2
@@ -2565,7 +2565,7 @@ namespace Rstats {
       return sv_x_is;
     }
 
-    IV to_bool (SV* sv_r, SV* sv_x1) {
+    Rstats::Logical to_bool (SV* sv_r, SV* sv_x1) {
       
       if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
         Rstats::Vector* v1 = get_vector(sv_r, sv_x1);

@@ -426,7 +426,7 @@ namespace Rstats {
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
     SV* Typeof(SV*, SV*); // r->typeof
-    IV to_bool(SV*, SV*);
+    Rstats::Logical to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
     SV* is_complex(SV*, SV*);
@@ -513,13 +513,13 @@ namespace Rstats {
     SV* negation(SV*, SV*);
     SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type_avrv(SV*, SV*);
-    void upgrade_type(SV*, IV, ...);
+    void upgrade_type(SV*, Rstats::Index, ...);
     SV* upgrade_length_avrv(SV*, SV*);
-    void upgrade_length(SV*, IV, ...);
+    void upgrade_length(SV*, Rstats::Index, ...);
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
     char* get_object_type(SV*, SV*);
-    SV* create_sv_value(SV*, SV*, IV);
+    SV* create_sv_value(SV*, SV*, Rstats::Index);
     SV* create_sv_values(SV*, SV*);
     
     SV* atan2(SV*, SV*, SV*);
@@ -583,10 +583,10 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
 
-      IV length = Rstats::Func::get_length(sv_r, sv_x1);
+      Rstats::Index length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
 
-      for (IV i = 0; i < length; i++) {
+      for (Rstats::Index i = 0; i < length; i++) {
         try {
           v3->set_value<T_OUT>(
             i,

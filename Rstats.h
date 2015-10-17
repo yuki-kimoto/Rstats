@@ -551,6 +551,14 @@ namespace Rstats {
     SV* new_vector<Rstats::Integer>(SV*);
     template <>
     SV* new_vector<Rstats::Logical>(SV*);
+    
+    template <class T>
+    SV* new_vector(SV* sv_r, T v1) {
+      SV* sv_x_out = Rstats::Func::new_vector<T>(v1);
+      Rstats::Func::set_vector(sv_r, sv_x_out, v1);
+      
+      return sv_x_out;
+    }
 
     template <class T_IN, class T_OUT>
     SV* operate_unary(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {

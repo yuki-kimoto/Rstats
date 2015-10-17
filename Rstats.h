@@ -414,7 +414,7 @@ namespace Rstats {
     SV* new_false(SV*); /* r->FALSE */
     SV* new_true(SV*); /* r->TRUE */
 
-    SV* to_c(SV*, SV*);
+    SV* to_object(SV*, SV*);
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
     SV* is_vector(SV*, SV*);

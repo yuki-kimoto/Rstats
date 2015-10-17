@@ -30,8 +30,8 @@ SV* or(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::Or(sv_r, sv_x1, sv_x2);
   
@@ -44,8 +44,8 @@ SV* add(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::add(sv_r, sv_x1, sv_x2);
   
@@ -58,8 +58,8 @@ SV* subtract(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::subtract(sv_r, sv_x1, sv_x2);
   
@@ -72,8 +72,8 @@ SV* multiply(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::multiply(sv_r, sv_x1, sv_x2);
   
@@ -86,8 +86,8 @@ SV* divide(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::divide(sv_r, sv_x1, sv_x2);
   
@@ -100,8 +100,8 @@ SV* remainder(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::remainder(sv_r, sv_x1, sv_x2);
   
@@ -114,8 +114,8 @@ SV* pow(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::pow(sv_r, sv_x1, sv_x2);
   
@@ -128,8 +128,8 @@ SV* less_than(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::less_than(sv_r, sv_x1, sv_x2);
   
@@ -142,8 +142,8 @@ SV* less_than_or_equal(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::less_than_or_equal(sv_r, sv_x1, sv_x2);
   
@@ -156,8 +156,8 @@ SV* more_than(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::more_than(sv_r, sv_x1, sv_x2);
   
@@ -170,8 +170,8 @@ SV* more_than_or_equal(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::more_than_or_equal(sv_r, sv_x1, sv_x2);
   
@@ -184,8 +184,8 @@ SV* equal(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::equal(sv_r, sv_x1, sv_x2);
   
@@ -198,8 +198,8 @@ SV* not_equal(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::not_equal(sv_r, sv_x1, sv_x2);
   
@@ -212,8 +212,8 @@ SV* and(...)
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x1 = Rstats::Func::to_c(sv_r, ST(1));
-  SV* sv_x2 = Rstats::Func::to_c(sv_r, ST(2));
+  SV* sv_x1 = Rstats::Func::to_object(sv_r, ST(1));
+  SV* sv_x2 = Rstats::Func::to_object(sv_r, ST(2));
   
   SV* sv_x_out = Rstats::Func::And(sv_r, sv_x1, sv_x2);
   
@@ -777,10 +777,10 @@ SV* args_h(...)
   XSRETURN(1);
 }
 
-SV* to_c(...)
+SV* to_object(...)
   PPCODE:
 {
-  SV* sv_x = Rstats::Func::to_c(ST(0), ST(1));
+  SV* sv_x = Rstats::Func::to_object(ST(0), ST(1));
 
   XPUSHs(sv_x);
   XSRETURN(1);

@@ -158,7 +158,7 @@ namespace Rstats {
 
     Rstats::Integer get_length (SV* sv_r, SV* sv_x1) {
 
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
@@ -200,7 +200,7 @@ namespace Rstats {
     
     SV* as_character(SV* sv_r, SV* sv_x1) {
 
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -341,7 +341,7 @@ namespace Rstats {
     
     SV* as_double(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -410,7 +410,7 @@ namespace Rstats {
         
     SV* as_complex(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -488,7 +488,7 @@ namespace Rstats {
         
     SV* as_integer(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -564,7 +564,7 @@ namespace Rstats {
     
     SV* as_logical(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -646,7 +646,7 @@ namespace Rstats {
 
     SV* create_sv_values(SV* sv_r, SV* sv_x1) {
 
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
 
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_values = Rstats::pl_new_avrv();
@@ -666,7 +666,7 @@ namespace Rstats {
     
     SV* create_sv_value(SV* sv_r, SV* sv_x1, Rstats::Integer pos) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
@@ -773,7 +773,7 @@ namespace Rstats {
         
     SV* cumprod(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
@@ -837,7 +837,7 @@ namespace Rstats {
     
     SV* cumsum(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
@@ -901,7 +901,7 @@ namespace Rstats {
         
     SV* sum(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
@@ -982,7 +982,7 @@ namespace Rstats {
 
     SV* prod(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
@@ -1063,8 +1063,8 @@ namespace Rstats {
         
     SV* equal(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1097,8 +1097,8 @@ namespace Rstats {
 
     SV* not_equal(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1131,8 +1131,8 @@ namespace Rstats {
 
     SV* more_than(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1164,8 +1164,8 @@ namespace Rstats {
 
     SV* less_than(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1197,8 +1197,8 @@ namespace Rstats {
 
     SV* less_than_or_equal(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1230,8 +1230,8 @@ namespace Rstats {
 
     SV* more_than_or_equal(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1263,8 +1263,8 @@ namespace Rstats {
 
     SV* And(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1297,8 +1297,8 @@ namespace Rstats {
 
     SV* Or(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1331,8 +1331,8 @@ namespace Rstats {
 
     SV* add(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1361,8 +1361,8 @@ namespace Rstats {
     
     SV* subtract(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1391,8 +1391,8 @@ namespace Rstats {
 
     SV* remainder(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1420,8 +1420,8 @@ namespace Rstats {
 
     SV* divide(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1450,8 +1450,8 @@ namespace Rstats {
 
     SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1480,8 +1480,8 @@ namespace Rstats {
 
     SV* pow(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1510,8 +1510,8 @@ namespace Rstats {
                                         
     SV* multiply(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
@@ -1540,7 +1540,7 @@ namespace Rstats {
                         
     SV* sin(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1565,7 +1565,7 @@ namespace Rstats {
 
     SV* tanh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1590,7 +1590,7 @@ namespace Rstats {
 
     SV* cos(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1615,7 +1615,7 @@ namespace Rstats {
 
     SV* tan(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1640,7 +1640,7 @@ namespace Rstats {
 
     SV* sinh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1665,7 +1665,7 @@ namespace Rstats {
 
     SV* cosh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1690,7 +1690,7 @@ namespace Rstats {
 
     SV* log(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1715,7 +1715,7 @@ namespace Rstats {
 
     SV* logb(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1740,7 +1740,7 @@ namespace Rstats {
 
     SV* log10(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1765,7 +1765,7 @@ namespace Rstats {
 
     SV* negation(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1790,7 +1790,7 @@ namespace Rstats {
 
     SV* Arg(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1815,7 +1815,7 @@ namespace Rstats {
 
     SV* abs(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1840,7 +1840,7 @@ namespace Rstats {
 
     SV* Mod(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1865,7 +1865,7 @@ namespace Rstats {
 
     SV* Re(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1890,7 +1890,7 @@ namespace Rstats {
 
     SV* Im(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1915,7 +1915,7 @@ namespace Rstats {
         
     SV* log2(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1940,7 +1940,7 @@ namespace Rstats {
 
     SV* is_infinite(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1965,7 +1965,7 @@ namespace Rstats {
 
     SV* is_nan(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1994,7 +1994,7 @@ namespace Rstats {
     
     SV* is_finite(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2019,7 +2019,7 @@ namespace Rstats {
     
     SV* acos(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2044,7 +2044,7 @@ namespace Rstats {
 
     SV* acosh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2069,7 +2069,7 @@ namespace Rstats {
 
     SV* asinh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2094,7 +2094,7 @@ namespace Rstats {
 
     SV* atanh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2119,7 +2119,7 @@ namespace Rstats {
 
     SV* Conj(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2144,7 +2144,7 @@ namespace Rstats {
     
     SV* asin(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2169,7 +2169,7 @@ namespace Rstats {
     
     SV* atan(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2194,7 +2194,7 @@ namespace Rstats {
     
     SV* sqrt(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2219,7 +2219,7 @@ namespace Rstats {
     
     SV* expm1(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2244,7 +2244,7 @@ namespace Rstats {
 
     SV* exp(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -2408,7 +2408,7 @@ namespace Rstats {
     
     SV* as_vector(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -2577,7 +2577,7 @@ namespace Rstats {
     }
     
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
-      sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
+      sv_x_dim = Rstats::Func::to_object(sv_r, sv_x_dim);
       
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Integer x1_length_by_dim = 1;
@@ -3016,12 +3016,12 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* to_c(SV* sv_r, SV* sv_x) {
+    SV* to_object(SV* sv_r, SV* sv_x) {
       
-      Rstats::Logical is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
+      Rstats::Logical is_object = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
       
       SV* sv_x1;
-      if (is_container) {
+      if (is_object) {
         sv_x1 = sv_x;
       }
       else {
@@ -3221,7 +3221,7 @@ namespace Rstats {
 
     SV* is_na(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(x1_length);
@@ -3298,7 +3298,7 @@ namespace Rstats {
     SV* Class(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
       // Set class
-      sv_x2 = Rstats::Func::to_c(sv_r, sv_x2);
+      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       Rstats::pl_hv_store(sv_x1, "class", Rstats::Func::as_vector(sv_r, sv_x2));
       
       return sv_x1;
@@ -3633,7 +3633,7 @@ namespace Rstats {
           Rstats::pl_hv_store(
             sv_new_opt,
             SvPV_nolen(sv_name),
-            Rstats::Func::to_c(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
+            Rstats::Func::to_object(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
           );
         }
         else if (i < names_length) {
@@ -3643,7 +3643,7 @@ namespace Rstats {
             Rstats::pl_hv_store(
               sv_new_opt,
               SvPV_nolen(sv_name),
-              Rstats::Func::to_c(sv_r, sv_arg)
+              Rstats::Func::to_object(sv_r, sv_arg)
             );
           }
         }
@@ -3662,7 +3662,7 @@ namespace Rstats {
 
     SV* levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {
       
-      sv_x_class = Rstats::Func::to_c(sv_r, sv_x_class);
+      sv_x_class = Rstats::Func::to_object(sv_r, sv_x_class);
       if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_class))) {
         sv_x_class = Rstats::Func::as_character(sv_r, sv_x_class);
       }
@@ -3687,7 +3687,7 @@ namespace Rstats {
 
     SV* mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {
       
-      sv_x_type = Rstats::Func::to_c(sv_r, sv_x_type);
+      sv_x_type = Rstats::Func::to_object(sv_r, sv_x_type);
       
       SV* sv_type = Rstats::pl_av_fetch(Rstats::Func::values(sv_r, sv_x_type), 0);
       char* type = SvPV_nolen(sv_type);
@@ -3769,7 +3769,7 @@ namespace Rstats {
     }
 
     SV* names(SV* sv_r, SV* sv_x1, SV* sv_x_names) {
-      sv_x_names = Rstats::Func::to_c(sv_r, sv_x_names);
+      sv_x_names = Rstats::Func::to_object(sv_r, sv_x_names);
       
       if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_names))) {
         sv_x_names = Rstats::Func::as_character(sv_r, sv_x_names);

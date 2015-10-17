@@ -121,7 +121,7 @@ sub list {
   
   my @elements = @_;
   
-  @elements = map { !Rstats::Func::is_list($r, $_) ? Rstats::Func::to_c($r, $_) : $_ } @elements;
+  @elements = map { !Rstats::Func::is_list($r, $_) ? Rstats::Func::to_object($r, $_) : $_ } @elements;
   
   my $list = Rstats::Func::new_list($r);
   $list->list(\@elements);
@@ -353,7 +353,7 @@ sub rownames {
   my $x1 = shift;
   
   if (@_) {
-    my $x_rownames = Rstats::Func::to_c($r, shift);
+    my $x_rownames = Rstats::Func::to_object($r, shift);
     
     unless (exists $x1->{dimnames}) {
       $x1->{dimnames} = [];
@@ -377,7 +377,7 @@ sub colnames {
   my $x1 = shift;
   
   if (@_) {
-    my $x_colnames = Rstats::Func::to_c($r, shift);
+    my $x_colnames = Rstats::Func::to_object($r, shift);
     
     unless (exists $x1->{dimnames}) {
       $x1->{dimnames} = [];
@@ -747,7 +747,7 @@ sub interaction {
   
   my $opt;
   $opt = ref $_[-1] eq 'HASH' ? pop : {};
-  my @xs = map { Rstats::Func::as_factor($r, to_c($r, $_)) } @_;
+  my @xs = map { Rstats::Func::as_factor($r, to_object($r, $_)) } @_;
   my ($x_drop, $x_sep);
   ($x_drop, $x_sep) = args_array($r, ['drop', 'sep'], $opt);
   
@@ -911,7 +911,7 @@ sub lower_tri {
 sub diag {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $size;
   my $x2_values;
@@ -937,8 +937,8 @@ sub diag {
 sub set_diag {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
-  my $x2 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
+  my $x2 = to_object($r, shift);
   
   my $x2_elements;
   my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
@@ -958,8 +958,8 @@ sub set_diag {
 sub kronecker {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
-  my $x2 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
+  my $x2 = to_object($r, shift);
   
   ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
@@ -1011,8 +1011,8 @@ sub kronecker {
 sub outer {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
-  my $x2 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
+  my $x2 = to_object($r, shift);
   
   ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
@@ -1262,7 +1262,7 @@ sub nrow {
 sub is_element {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
   Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -1301,7 +1301,7 @@ sub is_element {
 sub setequal {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
   Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -1326,7 +1326,7 @@ sub setequal {
 sub setdiff {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
   Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -1350,7 +1350,7 @@ sub setdiff {
 sub intersect {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
   Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -1371,7 +1371,7 @@ sub intersect {
 sub union {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
 
   Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -1384,7 +1384,7 @@ sub union {
 sub diff {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $x2_elements = [];
   my $x1_elements = Rstats::Func::decompose($r, $x1);
@@ -1402,7 +1402,7 @@ sub diff {
 
 sub nchar {
   my $r = shift;
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
@@ -1428,7 +1428,7 @@ sub nchar {
 sub tolower {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
@@ -1454,7 +1454,7 @@ sub tolower {
 sub toupper {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
@@ -1480,7 +1480,7 @@ sub toupper {
 sub match {
   my $r = shift;
   
-  my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
+  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -1572,7 +1572,7 @@ sub cbind {
     my $x2_elements = [];
     for my $_x (@xs) {
       
-      my $x1 = to_c($r, $_x);
+      my $x1 = to_object($r, $_x);
       my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
       
       my $row_count;
@@ -1603,7 +1603,7 @@ sub ceiling {
   my $r = shift;
   my $_x1 = shift;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   my @x2_elements
     = map { Rstats::Func::c_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
@@ -1661,7 +1661,7 @@ sub colSums {
 sub cummax {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -1692,7 +1692,7 @@ sub cummax {
 sub cummin {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -1731,10 +1731,10 @@ sub args_array {
     my $name = $names->[$i];
     my $arg;
     if (exists $opt->{$name}) {
-      $arg = to_c($r, delete $opt->{$name});
+      $arg = to_object($r, delete $opt->{$name});
     }
     elsif ($i < @_) {
-      $arg = to_c($r, $_[$i]);
+      $arg = to_object($r, $_[$i]);
     }
     push @args, $arg;
   }
@@ -1807,7 +1807,7 @@ sub floor {
   
   my $_x1 = shift;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   
   my @x2_elements
     = map { Rstats::Func::c_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
@@ -1863,7 +1863,7 @@ sub ifelse {
   
   my ($_x1, $value1, $value2) = @_;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   my $x1_values = $x1->values;
   my @x2_values;
   for my $x1_value (@$x1_values) {
@@ -1914,7 +1914,7 @@ sub max {
 sub mean {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $x2 = divide($r, sum($r, $x1), Rstats::Func::get_length($r, $x1));
   
@@ -1954,7 +1954,7 @@ sub min {
 sub order {
   my $r = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my @xs = map { to_c($r, $_) } @_;
+  my @xs = map { to_object($r, $_) } @_;
   
   my @xs_values;
   for my $x (@xs) {
@@ -1999,7 +1999,7 @@ sub rank {
   my $r = shift;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   my $decreasing = $opt->{decreasing};
   
   my $x1_values = $x1->values;
@@ -2174,9 +2174,9 @@ sub rep {
 sub replace {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
-  my $x2 = to_c($r, shift);
-  my $x3 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
+  my $x2 = to_object($r, shift);
+  my $x3 = to_object($r, shift);
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -2261,7 +2261,7 @@ sub round {
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
 
   my $ro = 10 ** $digits;
   my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
@@ -2319,7 +2319,7 @@ sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_x1, $length) = @_;
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   
   # Replace
   my $replace = $opt->{replace};
@@ -2347,7 +2347,7 @@ sub sequence {
   
   my $_x1 = shift;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   my $x1_values = $x1->values;
   
   my @x2_values;
@@ -2384,7 +2384,7 @@ sub trunc {
   
   my ($_x1) = @_;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   
   my @x2_elements
     = map { Rstats::Func::c_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
@@ -2399,7 +2399,7 @@ sub trunc {
 sub unique {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   if (Rstats::Func::is_vector($r, $x1)) {
     my $x2_elements = [];
@@ -2431,7 +2431,7 @@ sub unique {
 sub median {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $x2 = unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
@@ -2453,7 +2453,7 @@ sub median {
 sub quantile {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $x2 = Rstats::Func::unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
@@ -2515,7 +2515,7 @@ sub quantile {
 sub sd {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $sd = Rstats::Func::sqrt($r, var($r, $x1));
   
@@ -2525,7 +2525,7 @@ sub sd {
 sub var {
   my $r = shift;
   
-  my $x1 = to_c($r, shift);
+  my $x1 = to_object($r, shift);
   
   my $var = sum($r, ($x1 - Rstats::Func::mean($r, $x1)) ** 2) / (Rstats::Func::get_length($r, $x1) - 1);
   
@@ -2537,7 +2537,7 @@ sub which {
   
   my ($_x1, $cond_cb) = @_;
   
-  my $x1 = to_c($r, $_x1);
+  my $x1 = to_object($r, $_x1);
   my $x1_values = $x1->values;
   my @x2_values;
   for (my $i = 0; $i < @$x1_values; $i++) {
@@ -2630,7 +2630,7 @@ sub seq {
   # Along
   my $_along = $opt->{along};
   if (defined $_along) {
-    my $along = to_c($r, $_along);
+    my $along = to_object($r, $_along);
     my $length = Rstats::Func::get_length($r, $along);
     return seq($r, 1, $length);
   }
@@ -3154,7 +3154,7 @@ sub at {
 sub _name_to_index {
   my $r = shift;
   my $x1 = shift;
-  my $x1_index = Rstats::Func::to_c($r, shift);
+  my $x1_index = Rstats::Func::to_object($r, shift);
   
   my $e1_name = $x1_index->value;
   my $found;
@@ -3189,7 +3189,7 @@ sub getin_list {
   }
   $x1->at($_index);
   
-  my $x1_index = Rstats::Func::to_c($r, $_index);
+  my $x1_index = Rstats::Func::to_object($r, $_index);
   my $index;
   if (Rstats::Func::is_character($r, $x1_index)) {
     $index = Rstats::Func::_name_to_index($r, $x1, $x1_index);
@@ -3206,7 +3206,7 @@ sub getin_list {
 sub get_list {
   my $r = shift;
   my $x1 = shift;
-  my $x_index = Rstats::Func::to_c($r, shift);
+  my $x_index = Rstats::Func::to_object($r, shift);
   
   my $elements = $x1->list;
   
@@ -3240,7 +3240,7 @@ sub set_list {
   my ($x1, $v1) = @_;
   
   my $_index = $x1->at;
-  my $x1_index = Rstats::Func::to_c($r, @$_index);
+  my $x1_index = Rstats::Func::to_object($r, @$_index);
   my $index;
   if (Rstats::Func::is_character($r, $x1_index)) {
     $index = Rstats::Func::_name_to_index($r, $x1, $x1_index);
@@ -3248,7 +3248,7 @@ sub set_list {
   else {
     $index = $x1_index->values->[0];
   }
-  $v1 = Rstats::Func::to_c($r, $v1);
+  $v1 = Rstats::Func::to_object($r, $v1);
   
   if (Rstats::Func::is_null($r, $v1)) {
     splice @{$x1->list}, $index - 1, 1;
@@ -3325,8 +3325,8 @@ sub get_dataframe {
     $_col_index = $_row_index;
     $_row_index = Rstats::Func::NULL($r);
   }
-  my $row_index = Rstats::Func::to_c($r, $_row_index);
-  my $col_index = Rstats::Func::to_c($r, $_col_index);
+  my $row_index = Rstats::Func::to_object($r, $_row_index);
+  my $col_index = Rstats::Func::to_object($r, $_col_index);
   
   # Convert name index to number index
   my $col_index_values;
@@ -3731,7 +3731,7 @@ sub set_array {
   my $r = shift;
   
   my $x1 = shift;
-  my $x2 = Rstats::Func::to_c($r, shift);
+  my $x2 = Rstats::Func::to_object($r, shift);
   
   my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];

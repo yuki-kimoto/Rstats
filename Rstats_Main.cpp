@@ -23,10 +23,6 @@ namespace Rstats {
     return sv_2mortal(newSViv(iv));
   }
   
-  SV* pl_new_sv_uv(UV uv) {
-    return sv_2mortal(newSVuv(uv));
-  }
-
   SV* pl_new_sv_nv(NV nv) {
     return sv_2mortal(newSVnv(nv));
   }

@@ -2,26 +2,26 @@
 
 namespace Rstats {
 
-  void Vector::add_na_position(Rstats::Size position) {
+  void Vector::add_na_position(Rstats::Integer position) {
     (*this->na_positions)[position] = 1;
   }
 
-  bool Vector::exists_na_position(Rstats::Size position) {
+  bool Vector::exists_na_position(Rstats::Integer position) {
     return this->na_positions->count(position);
   }
 
-  void Vector::merge_na_positions(std::map<Rstats::Size, Rstats::Integer>* na_positions) {
-    for(std::map<Rstats::Size, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
+  void Vector::merge_na_positions(std::map<Rstats::Integer, Rstats::Integer>* na_positions) {
+    for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
       this->add_na_position(it->first);
     }
   }
   
-  std::map<Rstats::Size, Rstats::Integer>* Vector::get_na_positions() {
+  std::map<Rstats::Integer, Rstats::Integer>* Vector::get_na_positions() {
     return this->na_positions;
   }
 
   template <>
-  void Vector::set_value<Rstats::Character>(Rstats::Size pos, Rstats::Character value) {
+  void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {
     if (value != NULL) {
       SvREFCNT_dec((*this->get_values<Rstats::Character>())[pos]);
     }
@@ -31,7 +31,7 @@ namespace Rstats {
   }
 
   template<>
-  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Size pos) {
+  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Integer pos) {
     Rstats::Character value = (*this->get_values<Rstats::Character>())[pos];
     if (value == NULL) {
       return NULL;
@@ -45,7 +45,7 @@ namespace Rstats {
     return this->type;
   }
   
-  Rstats::Size Vector::get_length() {
+  Rstats::Integer Vector::get_length() {
     if (this->values == NULL) {
       return 0;
     }
@@ -72,8 +72,8 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER : {
           std::vector<Rstats::Character>* values = this->get_values<Rstats::Character>();
-          Rstats::Size length = this->get_values<Rstats::Character>()->size();
-          for (Rstats::Size i = 0; i < length; i++) {
+          Rstats::Integer length = this->get_values<Rstats::Character>()->size();
+          for (Rstats::Integer i = 0; i < length; i++) {
             if ((*values)[i] != NULL) {
               SvREFCNT_dec((*values)[i]);
             }

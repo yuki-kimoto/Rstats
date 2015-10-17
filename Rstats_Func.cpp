@@ -29,6 +29,11 @@ namespace Rstats {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         return v1->get_values<Rstats::Integer>()->size();
       }
+      else if (strEQ(type, "list")) {
+        SV* sv_list = Rstats::pl_hv_fetch(sv_x1, "list");
+        Rstats::Integer length = Rstats::pl_av_len(sv_list);
+        return length;
+      }
       else if (strEQ(type, "NULL")) {
         return 0;
       }
@@ -2447,8 +2452,7 @@ namespace Rstats {
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
       
-      SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-      Rstats::Integer x1_length = SvIV(sv_x1_length);
+      Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Integer x1_length_by_dim = 1;
       
       SV* sv_x_dim_values = values(sv_r, sv_x_dim);
@@ -2552,8 +2556,8 @@ namespace Rstats {
 
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
-      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
-        && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
+      Rstats::Logical is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
+        && Rstats::Func::get_length(sv_r, dim(sv_r, sv_x1)) == 2;
       
       SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
@@ -3097,7 +3101,7 @@ namespace Rstats {
         Rstats::Integer length = Rstats::pl_av_len(sv_dimnames);
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_dimname = Rstats::pl_av_fetch(sv_dimnames, i);;
-          if (SvOK(sv_dimname) && SvIV(Rstats::Func::length_value(sv_r, sv_dimname)) > 0) {
+          if (SvOK(sv_dimname) && Rstats::Func::get_length(sv_r, sv_dimname) > 0) {
             SV* sv_index = SvOK(sv_new_indexes) ? Rstats::pl_av_fetch(sv_new_indexes, i) : &PL_sv_undef;
             SV* sv_dimname_values = Rstats::Func::values(sv_r, sv_dimname);
             SV* sv_new_dimname_values = Rstats::pl_new_avrv();
@@ -3246,8 +3250,8 @@ namespace Rstats {
         return Rstats::Func::dim(sv_r, sv_x1);
       }
       else {
-        SV* sv_length = Rstats::Func::length_value(sv_r, sv_x1);
-        return Rstats::Func::c_double(sv_r, sv_length);
+        Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
+        return Rstats::Func::c_double(sv_r, Rstats::pl_new_sv_iv(length));
       }
     }
 
@@ -3595,7 +3599,7 @@ namespace Rstats {
         );
       }
       else {
-        return Rstats::Func::c_integer(sv_r, Rstats::Func::length_value(sv_r, sv_container));
+        return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(Rstats::Func::get_length(sv_r, sv_container)));
       }
     }
 

@@ -874,24 +874,27 @@ use Math::Complex ();
     is_deeply($x2->values, []);
   }
 
-  # cumprod - logical
-  {
-    my $x1 = r->c_logical(1, 1, 0);
-    my $x2 = r->cumprod($x1);
-    is_deeply($x2->values, [1, 1, 0]);
-  }
-  
   # cumprod - integer
   {
     my $x1 = r->c_integer(2, 3, 4);
     my $x2 = r->cumprod($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [2, 6, 24]);
+  }
+
+  # cumprod - logical
+  {
+    my $x1 = c_(T_, T_, F_);
+    my $x2 = r->cumprod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [1, 1, 0]);
   }
   
   # cumprod - double
   {
     my $x1 = c_(2, 3, 4);
     my $x2 = r->cumprod($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [2, 6, 24]);
   }
   
@@ -899,6 +902,7 @@ use Math::Complex ();
   {
     my $x1 = c_(2*i_, 3*i_, 4*i_);
     my $x2 = r->cumprod($x1);
+    ok(r->is->complex($x2));
     cmp_ok($x2->values->[0]->{re}, '==', 0);
     cmp_ok($x2->values->[0]->{im}, '==', 2);
     cmp_ok($x2->values->[1]->{re}, '==', -6);

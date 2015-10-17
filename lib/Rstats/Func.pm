@@ -2866,7 +2866,6 @@ sub get_array {
 
   # level drop
   if ($level_drop) {
-    $DB::single = 1;
     my $p = Rstats::Func::as_character($r, $x2);
     $x2 = Rstats::Func::factor($r, Rstats::Func::as_character($r, $x2));
   }
@@ -3787,7 +3786,6 @@ sub set_array {
     }
   }
   
-  $DB::single = 1;
   my $x1_tmp = Rstats::Func::compose($r, $type, $x1_elements);
   $x1->vector($x1_tmp->vector);
   $x1->{type} = $x1_tmp->{type};

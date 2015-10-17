@@ -230,6 +230,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1+1*i_, 2+2*i_, 3+3*i_);
     my $x2 = r->sum($x1);
+    ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 6, im => 6}]);
   }
   
@@ -237,6 +238,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = r->sum($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [6]);
   }
   
@@ -244,6 +246,7 @@ use Math::Complex ();
   {
     my $x1 = r->as->integer(c_(1, 2, 3));
     my $x2 = r->sum($x1);
+    ok(r->is->integer($x2));
     is_deeply($x2->values, [6]);
   }
   
@@ -251,6 +254,7 @@ use Math::Complex ();
   {
     my $x1 = c_(T_, T_, F_);
     my $x2 = r->sum($x1);
+    ok(r->is->integer($x2));
     is_deeply($x2->values, [2]);
   }
 }

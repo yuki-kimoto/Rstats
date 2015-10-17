@@ -3363,6 +3363,10 @@ namespace Rstats {
             compose_elements->set_value<Rstats::Character>(i, element->get_value<Rstats::Character>(0));
           }
         }
+        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
+          compose_elements->add_na_position(na_positions[i]);
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       }
       else if (strEQ(type, "complex")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
@@ -3381,6 +3385,10 @@ namespace Rstats {
            compose_elements->set_value<Rstats::Complex>(i, element->get_value<Rstats::Complex>(0));
           }
         }
+        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
+          compose_elements->add_na_position(na_positions[i]);
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       }
       else if (strEQ(type, "double")) {
         
@@ -3400,6 +3408,10 @@ namespace Rstats {
             compose_elements->set_value<Rstats::Double>(i, element->get_value<Rstats::Double>(0));
           }
         }
+        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
+          compose_elements->add_na_position(na_positions[i]);
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       }
       else if (strEQ(type, "integer")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
@@ -3419,6 +3431,10 @@ namespace Rstats {
             compose_elements->set_value<Rstats::Integer>(i, element->get_value<Rstats::Integer>(0));
           }
         }
+        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
+          compose_elements->add_na_position(na_positions[i]);
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       }
       else if (strEQ(type, "logical")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
@@ -3438,6 +3454,11 @@ namespace Rstats {
             compose_elements->set_value<Rstats::Logical>(i, element->get_value<Rstats::Logical>(0));
           }
         }
+        
+        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
+          compose_elements->add_na_position(na_positions[i]);
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       }
       else if (strEQ(type, "NULL")) {
         // Nothing to do
@@ -3445,12 +3466,6 @@ namespace Rstats {
       else {
         croak("Unknown type(Rstats::Func::compose)");
       }
-      
-      for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
-        compose_elements->add_na_position(na_positions[i]);
-      }
-      
-      Rstats::Func::set_vector(sv_r, sv_x_out, compose_elements);
       
       return sv_x_out;
     }

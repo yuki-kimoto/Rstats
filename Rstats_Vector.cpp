@@ -72,8 +72,8 @@ namespace Rstats {
       switch (type) {
         case Rstats::Type::CHARACTER : {
           std::vector<Rstats::Character>* values = this->get_values<Rstats::Character>();
-          Rstats::Integer length = this->get_values<Rstats::Character>()->size();
-          for (Rstats::Integer i = 0; i < length; i++) {
+          Rstats::Size length = this->get_values<Rstats::Character>()->size();
+          for (Rstats::Size i = 0; i < length; i++) {
             if ((*values)[i] != NULL) {
               SvREFCNT_dec((*values)[i]);
             }

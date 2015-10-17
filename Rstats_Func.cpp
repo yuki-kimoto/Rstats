@@ -651,7 +651,7 @@ namespace Rstats {
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+      else if (strEQ(type, "integer")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
         Rstats::Integer v2_total(1);
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -661,6 +661,17 @@ namespace Rstats {
         
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+        Rstats::Logical v2_total(1);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          v2_total *= v1->get_value<Rstats::Logical>(i);
+          v2->set_value<Rstats::Logical>(i, v2_total);
+        }
+        
+        v2->merge_na_positions(v1->get_na_positions());
+        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else {
         croak("Error in cumprod() : non-numeric argument to cumprod()");

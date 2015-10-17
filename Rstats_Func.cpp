@@ -359,6 +359,7 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         warn("imaginary parts discarded in coercion");
@@ -366,6 +367,7 @@ namespace Rstats {
           v2->set_value<Rstats::Integer>(i, (Rstats::Integer)v1->get_value<Rstats::Complex>(i).real());
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double value;
@@ -379,27 +381,30 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Integer>(i, v1->get_value<Rstats::Integer>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "logical")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Integer>(i, v1->get_value<Rstats::Integer>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {
-        // Nothing to do
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(0);
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else {
         croak("Error in as->integer() : default method not implemented for type '%s'", type);
       }
 
-      Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;

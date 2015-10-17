@@ -13,7 +13,7 @@ namespace Rstats {
 
     NV pi () { return M_PI; }
 
-    IV is_perl_number(SV* sv_str) {
+    Rstats::Logical is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
         return 0;
       }

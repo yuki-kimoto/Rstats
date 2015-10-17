@@ -36,12 +36,12 @@
 // Rstats::ElementFunc header
 namespace Rstats {
 
-  REGEXP* pl_pregcomp (SV*, IV);
   SV* pl_new_rv(SV*);
   SV* pl_new_sv_sv(SV*);
   SV* pl_new_sv_pv(const char*);
   SV* pl_new_sv_iv(IV);
   SV* pl_new_sv_nv(NV);
+  SV* pl_new_sv_uv(UV);
   AV* pl_new_av();
   SV* pl_new_avrv();
   HV* pl_new_hv();
@@ -49,20 +49,20 @@ namespace Rstats {
   SV* pl_deref(SV*);
   AV* pl_av_deref(SV*);
   HV* pl_hv_deref(SV*);
-  IV pl_av_len (AV*);
-  IV pl_av_len (SV*);
-  SV* pl_av_fetch(AV*, IV);
-  SV* pl_av_fetch(SV*, IV);
+  SSize_t pl_av_len (AV*);
+  SSize_t pl_av_len (SV*);
+  SV* pl_av_fetch(AV*, SSize_t);
+  SV* pl_av_fetch(SV*, SSize_t);
   bool pl_hv_exists(HV*, char*);
   bool pl_hv_exists(SV*, char*);
   SV* pl_hv_delete(HV*, char*);
   SV* pl_hv_delete(SV*, char*);
   SV* pl_hv_fetch(HV*, const char*);
   SV* pl_hv_fetch(SV*, const char*);
-  IV pl_hv_key_count(HV* hv);
-  IV pl_hv_key_count(SV* hv_ref);
-  void pl_av_store(AV*, IV, SV*);
-  void pl_av_store(SV*, IV, SV*);
+  SSize_t pl_hv_key_count(HV* hv);
+  SSize_t pl_hv_key_count(SV* hv_ref);
+  void pl_av_store(AV*, SSize_t, SV*);
+  void pl_av_store(SV*, SSize_t, SV*);
   SV* pl_av_copy(SV*);
   void pl_hv_store(HV*, const char*, SV*);
   void pl_hv_store(SV*, const char* key, SV*);
@@ -73,6 +73,8 @@ namespace Rstats {
   void pl_av_unshift(AV*, SV*);
   void pl_av_unshift(SV*, SV*);
   SV* pl_sv_bless(SV*, const char*);
+  REGEXP* pl_pregcomp (SV*, IV);
+  IV pl_pregexec(SV*, REGEXP*);
   template <class X> X pl_to_c_obj(SV* perl_obj_ref) {
     SV* perl_obj = SvROK(perl_obj_ref) ? SvRV(perl_obj_ref) : perl_obj_ref;
     IV obj_addr = SvIV(perl_obj);
@@ -89,7 +91,6 @@ namespace Rstats {
     
     return perl_obj;
   }
-  IV pl_pregexec(SV*, REGEXP*);
   
   namespace Type {
     enum Enum {
@@ -109,7 +110,7 @@ namespace Rstats {
   typedef SSize_t Index;
   
   namespace Util {
-    IV is_perl_number(SV*);
+    Rstats::Logical is_perl_number(SV*);
     SV* cross_product(SV*);
     SV* pos_to_index(SV*, SV*);
     SV* index_to_pos(SV*, SV*);
@@ -125,7 +126,7 @@ namespace Rstats {
 
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
     Rstats::Double add(Rstats::Double, Rstats::Double);
-    IV add(Rstats::Integer, Rstats::Integer);
+    Rstats::Integer add(Rstats::Integer, Rstats::Integer);
 
     Rstats::Complex subtract(Rstats::Complex, Rstats::Complex);
     Rstats::Double subtract(Rstats::Double, Rstats::Double);
@@ -315,7 +316,7 @@ namespace Rstats {
     public:
     
     Rstats::Type::Enum type;
-    std::map<IV, IV>* na_positions;
+    std::map<Rstats::Index, Rstats::Integer>* na_positions;
     void* values;
     
     Rstats::Index get_length();

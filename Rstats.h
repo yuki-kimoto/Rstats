@@ -471,7 +471,7 @@ namespace Rstats {
     SV* mode(SV*, SV*);
     SV* mode(SV*, SV*, SV*);
     
-    Rstats::Integer get_length(SV*, SV*);
+    Rstats::Index get_length(SV*, SV*);
     
     // dim
     SV* dim(SV*, SV*, SV*);

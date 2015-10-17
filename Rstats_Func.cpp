@@ -4,7 +4,7 @@
 namespace Rstats {
   namespace Func {
 
-    Rstats::Integer get_length (SV* sv_r, SV* sv_x1) {
+    Rstats::Index get_length (SV* sv_r, SV* sv_x1) {
 
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       

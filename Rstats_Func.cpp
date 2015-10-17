@@ -7,27 +7,33 @@ namespace Rstats {
     Rstats::Integer get_length (SV* sv_r, SV* sv_x1) {
 
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
-      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-
-      if (v1->values == NULL) {
+      
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      if (strEQ(type, "character")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        return v1->get_values<Rstats::Character>()->size();
+      }
+      else if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        return v1->get_values<Rstats::Complex>()->size();
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        return v1->get_values<Rstats::Double>()->size();
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        return v1->get_values<Rstats::Integer>()->size();
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        return v1->get_values<Rstats::Integer>()->size();
+      }
+      else if (strEQ(type, "NULL")) {
         return 0;
       }
-      
-      Rstats::Type::Enum type = v1->get_type();
-      switch (type) {
-        case Rstats::Type::CHARACTER :
-          return v1->get_values<Rstats::Character>()->size();
-          break;
-        case Rstats::Type::COMPLEX :
-          return v1->get_values<Rstats::Complex>()->size();
-          break;
-        case Rstats::Type::DOUBLE :
-          return v1->get_values<Rstats::Double>()->size();
-          break;
-        case Rstats::Type::INTEGER :
-        case Rstats::Type::LOGICAL :
-          return v1->get_values<Rstats::Integer>()->size();
-          break;
+      else {
+        croak("Error in get_length() : default method not implemented for type '%s'", type);
       }
     }
     

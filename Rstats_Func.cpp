@@ -3398,8 +3398,8 @@ namespace Rstats {
       else if (strEQ(type, "integer")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Integer>(len);
-        std::vector<IV>* values = compose_elements->get_values<Rstats::Integer>();
-        for (IV i = 0; i < len; i++) {
+        std::vector<Rstats::Integer>* values = compose_elements->get_values<Rstats::Integer>();
+        for (Rstats::Index i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_na(sv_r);
@@ -3417,8 +3417,8 @@ namespace Rstats {
       else if (strEQ(type, "logical")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Logical>(len);
-        std::vector<IV>* values = compose_elements->get_values<Rstats::Integer>();
-        for (IV i = 0; i < len; i++) {
+        std::vector<Rstats::Logical>* values = compose_elements->get_values<Rstats::Logical>();
+        for (Rstats::Index i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_na(sv_r);
@@ -3429,7 +3429,7 @@ namespace Rstats {
             na_positions.push_back(i);
           }
           else {
-            compose_elements->set_value<Rstats::Integer>(i, element->get_value<Rstats::Integer>(0));
+            compose_elements->set_value<Rstats::Logical>(i, element->get_value<Rstats::Logical>(0));
           }
         }
       }
@@ -3440,7 +3440,7 @@ namespace Rstats {
         croak("Unknown type(Rstats::Func::compose)");
       }
       
-      for (IV i = 0; i < na_positions.size(); i++) {
+      for (Rstats::Index i = 0; i < na_positions.size(); i++) {
         compose_elements->add_na_position(na_positions[i]);
       }
       
@@ -3451,7 +3451,7 @@ namespace Rstats {
 
     SV* args_h(SV* sv_r, SV* sv_names, SV* sv_args) {
       
-      IV args_length = Rstats::pl_av_len(sv_args);
+      Rstats::Index args_length = Rstats::pl_av_len(sv_args);
       SV* sv_opt;
       SV* sv_arg_last = Rstats::pl_av_fetch(sv_args, args_length - 1);
       if (!sv_isobject(sv_arg_last) && sv_derived_from(sv_arg_last, "HASH")) {
@@ -3462,8 +3462,8 @@ namespace Rstats {
       }
       
       SV* sv_new_opt = Rstats::pl_new_hvrv();
-      IV names_length = Rstats::pl_av_len(sv_names);
-      for (IV i = 0; i < names_length; i++) {
+      Rstats::Index names_length = Rstats::pl_av_len(sv_names);
+      for (Rstats::Index i = 0; i < names_length; i++) {
         SV* sv_name = Rstats::pl_av_fetch(sv_names, i);
         if (Rstats::pl_hv_exists(sv_opt, SvPV_nolen(sv_name))) {
           Rstats::pl_hv_store(

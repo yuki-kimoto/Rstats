@@ -926,6 +926,7 @@ use Math::Complex ();
   {
     my $x1 = r->c_logical(1, 0, 1);
     my $x2 = r->cumsum($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [1, 1, 2]);
   }
 
@@ -933,6 +934,7 @@ use Math::Complex ();
   {
     my $x1 = r->c_integer(1, 2, 3);
     my $x2 = r->cumsum($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [1, 3, 6]);
   }
 
@@ -940,6 +942,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = r->cumsum($x1);
+    ok(r->is->double($x2));
     is_deeply($x2->values, [1, 3, 6]);
   }
   
@@ -947,6 +950,7 @@ use Math::Complex ();
   {
     my $x1 = c_(1*i_, 2*i_, 3*i_);
     my $x2 = r->cumsum($x1);
+    ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
   }
 }

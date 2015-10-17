@@ -63,7 +63,7 @@ sub factor {
   
   my $labels_length = Rstats::Func::length($r, $x_labels)->value;
   my $levels_length = Rstats::Func::length($r, $x_levels)->value;
-  if ($labels_length == 1 && Rstats::Func::length_value($r, $x1) != 1) {
+  if ($labels_length == 1 && Rstats::Func::get_length($r, $x1) != 1) {
     my $value = $x_labels->value;
     $x_labels = paste($r, $value, C_($r, "1:$levels_length"), {sep => ""});
   }
@@ -172,7 +172,7 @@ sub data_frame {
       }
     }
     else {
-      my $count = Rstats::Func::length_value($r, $v);
+      my $count = Rstats::Func::get_length($r, $v);
       push @$counts, $count;
       my $fix_name;
       if (my $count = $name_count->{$name}) {
@@ -251,7 +251,7 @@ sub matrix {
   $byrow = $x_byrow->value if defined $x_byrow;
   
   my $x1_values = $x1->values;
-  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
   if (!defined $nrow && !defined $ncol) {
     $nrow = $x1_length;
     $ncol = 1;
@@ -314,7 +314,7 @@ sub dimnames {
   if (@_) {
     my $dimnames_list = shift;
     if ($dimnames_list->{object_type} eq 'list') {
-      my $length = Rstats::Func::length_value($r, $dimnames_list);
+      my $length = Rstats::Func::get_length($r, $dimnames_list);
       my $dimnames = [];
       for (my $i = 0; $i < $length; $i++) {
         my $x_dimname = $dimnames_list->getin($i + 1);
@@ -769,7 +769,7 @@ sub interaction {
     my $chars = [];
     for my $x (@xs) {
       my $fix_x = Rstats::Func::as_character($r, $x);
-      my $length = Rstats::Func::length_value($r, $fix_x);
+      my $length = Rstats::Func::get_length($r, $fix_x);
       push @$chars, $fix_x->value(($i % $length) + 1)
     }
     my $value = join $sep, @$chars;
@@ -915,13 +915,13 @@ sub diag {
   
   my $size;
   my $x2_values;
-  if (Rstats::Func::length_value($r, $x1) == 1) {
+  if (Rstats::Func::get_length($r, $x1) == 1) {
     $size = $x1->value;
     $x2_values = [];
     push @$x2_values, 1 for (1 .. $size);
   }
   else {
-    $size = Rstats::Func::length_value($r, $x1);
+    $size = Rstats::Func::get_length($r, $x1);
     $x2_values = $x1->values;
   }
   
@@ -966,7 +966,7 @@ sub kronecker {
   my $x1_dim = Rstats::Func::dim($r, $x1);
   my $x2_dim = Rstats::Func::dim($r, $x2);
   my $dim_max_length
-    = Rstats::Func::length_value($r, $x1_dim) > Rstats::Func::length_value($r, $x2_dim) ? Rstats::Func::length_value($r, $x1_dim) : Rstats::Func::length_value($r, $x2_dim);
+    = Rstats::Func::get_length($r, $x1_dim) > Rstats::Func::get_length($r, $x2_dim) ? Rstats::Func::get_length($r, $x1_dim) : Rstats::Func::get_length($r, $x2_dim);
   
   my $x3_dim_values = [];
   my $x1_dim_values = $x1_dim->values;
@@ -1026,7 +1026,7 @@ sub outer {
   }
   my $poses = Rstats::Util::cross_product($indexs);
   
-  my $x1_dim_length = Rstats::Func::length_value($r, $x1_dim);
+  my $x1_dim_length = Rstats::Func::get_length($r, $x1_dim);
   my $x3_values = [];
   for my $pos (@$poses) {
     my $pos_tmp = [@$pos];
@@ -1220,7 +1220,7 @@ sub charmatch {
     my $match_count;
     my $match_pos;
     my $x1_table_values = $x1_table->values;
-    for (my $k = 0; $k < Rstats::Func::length_value($r, $x1_table); $k++) {
+    for (my $k = 0; $k < Rstats::Func::get_length($r, $x1_table); $k++) {
       my $x1_table_char = $x1_table_values->[$k];
       if ($x1_table_char =~ /$x1_x_char_q/) {
         $match_count++;
@@ -1308,12 +1308,12 @@ sub setequal {
   my $x3 = Rstats::Func::sort($r, $x1);
   my $x4 = Rstats::Func::sort($r, $x2);
   
-  return Rstats::Func::FALSE($r) if Rstats::Func::length_value($r, $x3) ne Rstats::Func::length_value($r, $x4);
+  return Rstats::Func::FALSE($r) if Rstats::Func::get_length($r, $x3) ne Rstats::Func::get_length($r, $x4);
   
   my $not_equal;
   my $x3_elements = Rstats::Func::decompose($r, $x3);
   my $x4_elements = Rstats::Func::decompose($r, $x4);
-  for (my $i = 0; $i < Rstats::Func::length_value($r, $x3); $i++) {
+  for (my $i = 0; $i < Rstats::Func::get_length($r, $x3); $i++) {
     unless ($x3_elements->[$i] == $x4_elements->[$i]) {
       $not_equal = 1;
       last;
@@ -1388,7 +1388,7 @@ sub diff {
   
   my $x2_elements = [];
   my $x1_elements = Rstats::Func::decompose($r, $x1);
-  for (my $i = 0; $i < Rstats::Func::length_value($r, $x1) - 1; $i++) {
+  for (my $i = 0; $i < Rstats::Func::get_length($r, $x1) - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
     my $x2_element = $x1_element2 - $x1_element1;
@@ -1516,7 +1516,7 @@ sub append {
   # Default
   $x_after = NULL($r) unless defined $x_after;
   
-  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
   $x_after = Rstats::Func::c_($r, $x1_length) if Rstats::Func::is_null($r, $x_after);
   my $after = $x_after->value;
   
@@ -1663,7 +1663,7 @@ sub cummax {
   
   my $x1 = to_c($r, shift);
   
-  unless (Rstats::Func::length_value($r, $x1)) {
+  unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::Func::Inf($r));
   }
@@ -1694,7 +1694,7 @@ sub cummin {
   
   my $x1 = to_c($r, shift);
   
-  unless (Rstats::Func::length_value($r, $x1)) {
+  unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::Func::Inf($r));
   }
@@ -1754,9 +1754,9 @@ sub complex {
 
   my $x2_elements = [];
   # Create complex from mod and arg
-  if (Rstats::Func::length_value($r, $x1_mod) || Rstats::Func::length_value($r, $x1_arg)) {
-    my $x1_mod_length = Rstats::Func::length_value($r, $x1_mod);
-    my $x1_arg_length = Rstats::Func::length_value($r, $x1_arg);
+  if (Rstats::Func::get_length($r, $x1_mod) || Rstats::Func::get_length($r, $x1_arg)) {
+    my $x1_mod_length = Rstats::Func::get_length($r, $x1_mod);
+    my $x1_arg_length = Rstats::Func::get_length($r, $x1_arg);
     my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
     
     my $x1_mod_elements = Rstats::Func::decompose($r, $x1_mod);
@@ -1781,7 +1781,7 @@ sub complex {
     
     my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
     my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
-    for (my $i = 0; $i <  Rstats::Func::length_value($r, $x1_im); $i++) {
+    for (my $i = 0; $i <  Rstats::Func::get_length($r, $x1_im); $i++) {
       my $x_re;
       if (defined $x1_re_elements->[$i]) {
         $x_re = $x1_re_elements->[$i];
@@ -1837,7 +1837,7 @@ sub head {
   }
   else {
     my $x1_elements = Rstats::Func::decompose($r, $x1);
-    my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
+    my $max = Rstats::Func::get_length($r, $x1) < $n ? Rstats::Func::get_length($r, $x1) : $n;
     my @x2_elements;
     for (my $i = 0; $i < $max; $i++) {
       push @x2_elements, $x1_elements->[$i];
@@ -1888,7 +1888,7 @@ sub max {
   
   my $x1 = Rstats::Func::c_($r, @args);
   
-  unless (Rstats::Func::length_value($r, $x1)) {
+  unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
     return -(Rstats::Func::Inf($r));
   }
@@ -1916,7 +1916,7 @@ sub mean {
   
   my $x1 = to_c($r, shift);
   
-  my $x2 = divide($r, sum($r, $x1), Rstats::Func::length_value($r, $x1));
+  my $x2 = divide($r, sum($r, $x1), Rstats::Func::get_length($r, $x1));
   
   return $x2;
 }
@@ -1928,7 +1928,7 @@ sub min {
   
   my $x1 = Rstats::Func::c_($r, @args);
   
-  unless (Rstats::Func::length_value($r, $x1)) {
+  unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to min; returning Inf';
     return Rstats::Func::Inf($r);
   }
@@ -2324,7 +2324,7 @@ sub sample {
   # Replace
   my $replace = $opt->{replace};
   
-  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
   $length = $x1_length unless defined $length;
   
   Carp::croak "second argument element must be bigger than first argument elements count when you specify 'replace' option"
@@ -2367,10 +2367,10 @@ sub tail {
   my $n = defined $x_n ? $x_n->value : 6;
   
   my $e1 = Rstats::Func::decompose($r, $x1);
-  my $max = Rstats::Func::length_value($r, $x1) < $n ? Rstats::Func::length_value($r, $x1) : $n;
+  my $max = Rstats::Func::get_length($r, $x1) < $n ? Rstats::Func::get_length($r, $x1) : $n;
   my @e2;
   for (my $i = 0; $i < $max; $i++) {
-    unshift @e2, $e1->[Rstats::Func::length_value($r, $x1) - ($i  + 1)];
+    unshift @e2, $e1->[Rstats::Func::get_length($r, $x1) - ($i  + 1)];
   }
   
   my $x2 = Rstats::Func::c_($r, @e2);
@@ -2435,7 +2435,7 @@ sub median {
   
   my $x2 = unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
-  my $x3_length = Rstats::Func::length_value($r, $x3);
+  my $x3_length = Rstats::Func::get_length($r, $x3);
   
   if ($x3_length % 2 == 0) {
     my $middle = $x3_length / 2;
@@ -2457,7 +2457,7 @@ sub quantile {
   
   my $x2 = Rstats::Func::unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
-  my $x3_length = Rstats::Func::length_value($r, $x3);
+  my $x3_length = Rstats::Func::get_length($r, $x3);
   
   my $quantile_elements = [];
   
@@ -2527,7 +2527,7 @@ sub var {
   
   my $x1 = to_c($r, shift);
   
-  my $var = sum($r, ($x1 - Rstats::Func::mean($r, $x1)) ** 2) / (Rstats::Func::length_value($r, $x1) - 1);
+  my $var = sum($r, ($x1 - Rstats::Func::mean($r, $x1)) ** 2) / (Rstats::Func::get_length($r, $x1) - 1);
   
   return $var;
 }
@@ -2564,7 +2564,7 @@ sub inner_product {
   if (Rstats::Func::is_matrix($r, $x1) && Rstats::Func::is_matrix($r, $x2)) {
     
     Carp::croak "requires numeric/complex matrix/vector arguments"
-      if Rstats::Func::length_value($r, $x1) == 0 || Rstats::Func::length_value($r, $x2) == 0;
+      if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;
     Carp::croak "Error in a x b : non-conformable arguments"
       unless Rstats::Func::dim($r, $x1)->values->[1] == Rstats::Func::dim($r, $x2)->values->[0];
     
@@ -2611,7 +2611,7 @@ sub ncol {
   my $x1 = shift;
   
   if (Rstats::Func::is_data_frame($r, $x1)) {
-    return Rstats::Func::c_($r, Rstats::Func::length_value($r, $x1));
+    return Rstats::Func::c_($r, Rstats::Func::get_length($r, $x1));
   }
   elsif (Rstats::Func::is_list($r, $x1)) {
     return Rstats::Func::NULL($r);
@@ -2631,7 +2631,7 @@ sub seq {
   my $_along = $opt->{along};
   if (defined $_along) {
     my $along = to_c($r, $_along);
-    my $length = Rstats::Func::length_value($r, $along);
+    my $length = Rstats::Func::get_length($r, $along);
     return seq($r, 1, $length);
   }
   else {
@@ -2740,7 +2740,7 @@ sub bool {
   
   my $x1 = shift;
   
-  my $length = Rstats::Func::length_value($r, $x1);
+  my $length = Rstats::Func::get_length($r, $x1);
   if ($length == 0) {
     Carp::croak 'Error in if (a) { : argument is of length zero';
   }
@@ -3089,10 +3089,10 @@ sub str {
     
     # Dimention
     my @dim_str;
-    my $length = Rstats::Func::length_value($r, $x1);
+    my $length = Rstats::Func::get_length($r, $x1);
     if (exists $x1->{dim}) {
       my $dim_values = $x1->{dim}->values;
-      for (my $i = 0; $i < $x1->{dim}->length_value; $i++) {
+      for (my $i = 0; $i < $x1->{dim}->get_length; $i++) {
         my $d = $dim_values->[$i];
         my $d_str;
         if ($d == 1) {
@@ -3102,7 +3102,7 @@ sub str {
           $d_str = "1:$d";
         }
         
-        if ($x1->{dim}->length_value == 1) {
+        if ($x1->{dim}->get_length == 1) {
           $d_str .= "(" . ($i + 1) . "d)";
         }
         push @dim_str, $d_str;
@@ -3179,7 +3179,7 @@ sub nlevels {
   
   my $x1 = shift;
   
-  return Rstats::Func::c_($r, Rstats::Func::length_value($r, Rstats::Func::levels($r, $x1)));
+  return Rstats::Func::c_($r, Rstats::Func::get_length($r, Rstats::Func::levels($r, $x1)));
 }
 
 sub getin_list {
@@ -3267,8 +3267,8 @@ sub set_list {
   }
   else {
     if (Rstats::Func::is_data_frame($r, $x1)) {
-      my $x1_length = $x1->length_value;
-      my $v1_length = $v1->length_value;
+      my $x1_length = $x1->get_length;
+      my $v1_length = $v1->get_length;
       if ($x1_length != $v1_length) {
         croak "Error in data_frame set: replacement has $v1_length rows, data has $x1_length";
       }
@@ -3332,7 +3332,7 @@ sub get_dataframe {
   # Convert name index to number index
   my $col_index_values;
   if (Rstats::Func::is_null($r, $col_index)) {
-    $col_index_values = [1 .. Rstats::Func::names($r, $x1)->length_value];
+    $col_index_values = [1 .. Rstats::Func::names($r, $x1)->get_length];
   }
   elsif (Rstats::Func::is_character($r, $col_index)) {
     $col_index_values = [];
@@ -3357,7 +3357,7 @@ sub get_dataframe {
       }
       
       $col_index_values = [];
-      for (my $index = 1; $index <= Rstats::Func::names($r, $x1)->length_value; $index++) {
+      for (my $index = 1; $index <= Rstats::Func::names($r, $x1)->get_length; $index++) {
         push @$col_index_values, $index unless $delete_col_index_values_h->{$index};
       }
     }
@@ -3389,7 +3389,7 @@ sub get_dataframe {
     {new_indexes => [$row_index, Rstats::Func::c_($r, @$col_index_values)]}
   );
   $data_frame->{dimnames}[0] = Rstats::Func::c_character($r,
-    1 .. Rstats::Func::getin_dataframe($r, $data_frame, 1)->length_value
+    1 .. Rstats::Func::getin_dataframe($r, $data_frame, 1)->get_length
   );
   
   return $data_frame;
@@ -3440,7 +3440,7 @@ sub sweep {
   my $x2_dim_values = Rstats::Func::dim($r, $x2)->values;
   my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
   
-  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
   
   my $x_result_elements = [];
   for (my $x1_pos = 0; $x1_pos < $x1_length; $x1_pos++) {
@@ -3531,7 +3531,7 @@ sub apply {
     push @$new_dim_values, $dim_values->[$i - 1];
   }
   
-  my $x1_length = Rstats::Func::length_value($r, $x1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
   my $new_elements_array = [];
   for (my $i = 0; $i < $x1_length; $i++) {
     my $index = Rstats::Util::pos_to_index($i, $dim_values);
@@ -3554,7 +3554,7 @@ sub apply {
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   $x2->{dim} = Rstats::Func::c_integer($r, @$new_dim_values);
   
-  if ($x2->{dim}->length_value == 1) {
+  if ($x2->{dim}->get_length == 1) {
     delete $x2->{dim};
   }
   
@@ -3572,10 +3572,10 @@ sub mapply {
   @xs = map { Rstats::Func::c_($r, $_) } @xs;
   
   # Fix length
-  my @xs_length = map { Rstats::Func::length_value($r, $_) } @xs;
+  my @xs_length = map { Rstats::Func::get_length($r, $_) } @xs;
   my $max_length = List::Util::max @xs_length;
   for my $x (@xs) {
-    if (Rstats::Func::length_value($r, $x) < $max_length) {
+    if (Rstats::Func::get_length($r, $x) < $max_length) {
       $x = Rstats::Func::array($r, $x, $max_length);
     }
   }
@@ -3610,7 +3610,7 @@ sub tapply {
   my $x2_values = $x2->values;
   
   # Group values
-  for (my $i = 0; $i < Rstats::Func::length_value($r, $x1); $i++) {
+  for (my $i = 0; $i < Rstats::Func::get_length($r, $x1); $i++) {
     my $x1_value = $x1_values->[$i];
     my $index = $x2_values->[$i];
     $new_values->[$index] ||= [];

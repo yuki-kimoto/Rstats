@@ -235,7 +235,7 @@ my @func_names = qw/
   type
   get_type
   at
-  length_value
+  get_length
 /;
 
 sub new {

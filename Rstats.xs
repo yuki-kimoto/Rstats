@@ -614,12 +614,12 @@ SV* values(...)
   XSRETURN(1);
 }
 
-SV* length_value(...)
+SV* get_length(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
 
-  SV* sv_x_out = Rstats::Func::length_value(sv_r, ST(1));
+  SV* sv_x_out = Rstats::Func::get_length_sv(sv_r, ST(1));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

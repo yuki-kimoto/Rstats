@@ -418,7 +418,6 @@ namespace Rstats {
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
     SV* is_vector(SV*, SV*);
-    SV* length_value(SV*, SV*);
     SV* values(SV*, SV*);
     SV* is_matrix(SV*, SV*);
     SV* is_array(SV*, SV*);
@@ -471,6 +470,7 @@ namespace Rstats {
     SV* mode(SV*, SV*, SV*);
     
     Rstats::Integer get_length(SV*, SV*);
+    SV* get_length_sv(SV*, SV*);
     
     // dim
     SV* dim(SV*, SV*, SV*);

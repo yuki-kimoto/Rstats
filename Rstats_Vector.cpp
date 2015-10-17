@@ -45,7 +45,7 @@ namespace Rstats {
     return this->type;
   }
   
-  Rstats::Integer Vector::get_length() {
+  Rstats::Index Vector::get_length() {
     if (this->values == NULL) {
       return 0;
     }

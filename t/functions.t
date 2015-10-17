@@ -902,6 +902,14 @@ use Math::Complex ();
 
 # cumsum
 {
+  # cumprod - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->cumsum($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, []);
+  }
+
   # cumsum - logical
   {
     my $x1 = r->c_logical(1, 0, 1);

@@ -2606,8 +2606,8 @@ namespace Rstats {
 
     IV to_bool (SV* sv_r, SV* sv_x1) {
       
-      Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
-      if (v1->type == Rstats::Type::LOGICAL) {
+      if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
+        Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
         IV is = v1->get_value<Rstats::Integer>(0);
         return is;
       }

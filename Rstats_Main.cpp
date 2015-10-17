@@ -60,22 +60,22 @@ namespace Rstats {
     return (HV*)pl_deref(ref);
   }
 
-  IV pl_av_len (AV* av) {
+  SSize_t pl_av_len (AV* av) {
     return av_len(av) + 1;
   }
 
-  IV pl_av_len (SV* av_ref) {
+  SSize_t pl_av_len (SV* av_ref) {
     return av_len((AV*)pl_deref(av_ref)) + 1;
   }
 
-  SV* pl_av_fetch(AV* av, IV pos) {
+  SV* pl_av_fetch(AV* av, SSize_t pos) {
     SV** const element_ptr = av_fetch(av, pos, FALSE);
     SV* const element = element_ptr ? *element_ptr : &PL_sv_undef;
     
     return element;
   }
 
-  SV* pl_av_fetch(SV* av_ref, IV pos) {
+  SV* pl_av_fetch(SV* av_ref, SSize_t pos) {
     AV* av = (AV*)pl_deref(av_ref);
     return pl_av_fetch(av, pos);
   }
@@ -108,11 +108,11 @@ namespace Rstats {
     return pl_hv_fetch(hv, key);
   }
 
-  void pl_av_store(AV* av, IV pos, SV* element) {
+  void pl_av_store(AV* av, SSize_t pos, SV* element) {
     av_store(av, pos, SvREFCNT_inc(element));
   }
 
-  void pl_av_store(SV* av_ref, IV pos, SV* element) {
+  void pl_av_store(SV* av_ref, SSize_t pos, SV* element) {
     AV* av = pl_av_deref(av_ref);
     pl_av_store(av, pos, element);
   }
@@ -120,7 +120,7 @@ namespace Rstats {
   SV* pl_av_copy(SV* sv_av_ref) {
     SV* sv_new_av_ref = pl_new_avrv();
     
-    for (IV i = 0; i < pl_av_len(sv_av_ref); i++) {
+    for (SSize_t i = 0; i < pl_av_len(sv_av_ref); i++) {
       pl_av_store(sv_new_av_ref, i, pl_new_sv_sv(pl_av_fetch(sv_av_ref, i)));
     }
     
@@ -136,10 +136,10 @@ namespace Rstats {
     return pl_hv_store(hv, key, element);
   }
 
-  IV pl_hv_key_count(HV* hv) {
+  SSize_t pl_hv_key_count(HV* hv) {
     hv_iterinit(hv);
     
-    IV count = 0;
+    SSize_t count = 0;
     while (1) {
       HE* he_iter = hv_iternext(hv);
       if (he_iter == NULL) {
@@ -153,7 +153,7 @@ namespace Rstats {
     return count;
   }
 
-  IV pl_hv_key_count(SV* hv_ref) {
+  SSize_t pl_hv_key_count(SV* hv_ref) {
     HV* hv = pl_hv_deref(hv_ref);
     return pl_hv_key_count(hv);
   }

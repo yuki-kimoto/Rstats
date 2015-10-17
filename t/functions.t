@@ -187,32 +187,44 @@ use Math::Complex ();
 
 # prod
 {
+  # prod - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->prod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [1]);
+  }
+  
   # prod - complex
   {
     my $x1 = c_(1+1*i_, 2+3*i_);
-    my $prod = r->prod($x1);
-    is_deeply($prod->values, [{re => -1, im => 5}]);
+    my $x2 = r->prod($x1);
+    ok(r->is->complex($x2));
+    is_deeply($x2->values, [{re => -1, im => 5}]);
   }
 
   # prod - double
   {
     my $x1 = c_(2, 3, 4);
-    my $prod = r->prod($x1);
-    is_deeply($prod->values, [24]);
+    my $x2 = r->prod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [24]);
   }
 
   # prod - integer
   {
     my $x1 = r->as->integer(c_(2, 3, 4));
-    my $prod = r->prod($x1);
-    is_deeply($prod->values, [24]);
+    my $x2 = r->prod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [24]);
   }
 
   # prod - logical
   {
     my $x1 = c_(T_, T_, T_);
-    my $prod = r->prod($x1);
-    is_deeply($prod->values, [1]);
+    my $x2 = r->prod($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [1]);
   }
 }
 

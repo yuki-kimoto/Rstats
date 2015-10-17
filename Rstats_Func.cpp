@@ -110,7 +110,7 @@ namespace Rstats {
           
           SV* sv_x1_values = Rstats::Func::values(sv_r, sv_x1);
           SV* sv_x_out_values = Rstats::pl_new_avrv();
-          IV x1_values_length = Rstats::pl_av_len(sv_x1_values);
+          Rstats::Size x1_values_length = Rstats::pl_av_len(sv_x1_values);
           for (Rstats::Size i = 0; i < x1_values_length; i++) {
             SV* sv_x1_value = Rstats::pl_av_fetch(sv_x1_values, i);
              
@@ -1986,12 +1986,12 @@ namespace Rstats {
                       
     SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
       
-      IV xs_length = Rstats::pl_av_len(sv_xs);
-      IV max_length = 0;
+      Rstats::Size xs_length = Rstats::pl_av_len(sv_xs);
+      Rstats::Size max_length = 0;
       for (Rstats::Size i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
         SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        IV x1_length = SvIV(sv_x1_length);
+        Rstats::Size x1_length = SvIV(sv_x1_length);
         
         if (x1_length > max_length) {
           max_length = x1_length;
@@ -2002,7 +2002,7 @@ namespace Rstats {
       for (Rstats::Size i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
         SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        IV x1_length = SvIV(sv_x1_length);
+        Rstats::Size x1_length = SvIV(sv_x1_length);
         
         if (x1_length != max_length) {
           Rstats::pl_av_push(
@@ -2057,7 +2057,7 @@ namespace Rstats {
       va_end(args);
     }
         
-    void upgrade_type(SV* sv_r, IV num, ...) {
+    void upgrade_type(SV* sv_r, Rstats::Size num, ...) {
       va_list args;
       
       // Optimization if args count is 2
@@ -2187,7 +2187,7 @@ namespace Rstats {
         Rstats::pl_av_push(sv_elements, sv_elements_tmp);
       }
       
-      IV element_length = Rstats::pl_av_len(sv_elements);
+      Rstats::Size element_length = Rstats::pl_av_len(sv_elements);
       // Check type and length
       SV* sv_type_h = Rstats::pl_new_hvrv();
       Rstats::Size length = 0;
@@ -2243,7 +2243,7 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
-      IV pos = 0;
+      Rstats::Size pos = 0;
       for (Rstats::Size i = 0; i < element_length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
         SV* sv_x_tmp;
@@ -2274,7 +2274,7 @@ namespace Rstats {
 
           Rstats::Vector* v_tmp = Rstats::Func::get_vector(sv_r, sv_x_tmp);
           
-          for (IV k = 0; k < Rstats::Func::get_length(sv_r, sv_x_tmp); k++) {
+          for (Rstats::Size k = 0; k < Rstats::Func::get_length(sv_r, sv_x_tmp); k++) {
             if (v_tmp->exists_na_position(k)) {
               v1->add_na_position(pos);
             }
@@ -2359,8 +2359,8 @@ namespace Rstats {
       if (!SvIV(Rstats::Func::length_value(sv_r, sv_x_dim))) {
         sv_x_dim = Rstats::Func::c_integer(sv_r, sv_x1_length);
       }
-      IV dim_product = 1;
-      IV x_dim_length = SvIV(Rstats::Func::length_value(sv_r, sv_x_dim));
+      Rstats::Size dim_product = 1;
+      Rstats::Size x_dim_length = SvIV(Rstats::Func::length_value(sv_r, sv_x_dim));
       for (Rstats::Size i = 0; i < x_dim_length; i++) {
         SV* sv_values = Rstats::Func::values(sv_r, sv_x_dim);
         dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
@@ -2381,12 +2381,12 @@ namespace Rstats {
       }
       else if (SvIV(sv_x1_length) < dim_product) {
         SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
-        IV elements_tmp_length = Rstats::pl_av_len(sv_elements_tmp);
-        IV repeat_count = (IV)(dim_product / elements_tmp_length) + 1;
+        Rstats::Size elements_tmp_length = Rstats::pl_av_len(sv_elements_tmp);
+        Rstats::Size repeat_count = (Rstats::Size)(dim_product / elements_tmp_length) + 1;
         SV* sv_elements_tmp2 = Rstats::pl_new_avrv();
-        IV elements_tmp2_length = Rstats::pl_av_len(sv_elements_tmp2);
+        Rstats::Size elements_tmp2_length = Rstats::pl_av_len(sv_elements_tmp2);
         for (Rstats::Size i = 0; i < repeat_count; i++) {
-          for (IV k = 0; k < elements_tmp_length; k++) {
+          for (Rstats::Size k = 0; k < elements_tmp_length; k++) {
             Rstats::pl_av_push(sv_elements_tmp2, Rstats::pl_av_fetch(sv_elements_tmp, k));
           }
         }
@@ -2407,7 +2407,7 @@ namespace Rstats {
       // Check elements
       SV* sv_type_h = Rstats::pl_new_hvrv();
       
-      IV xs_length = Rstats::pl_av_len(sv_xs);
+      Rstats::Size xs_length = Rstats::pl_av_len(sv_xs);
       for (Rstats::Size i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
         char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -2417,7 +2417,7 @@ namespace Rstats {
 
       // Upgrade elements and type if type is different
       SV* sv_new_xs = Rstats::pl_new_avrv();;
-      IV type_length = Rstats::pl_hv_key_count(sv_type_h);
+      Rstats::Size type_length = Rstats::pl_hv_key_count(sv_type_h);
 
       if (type_length > 1) {
         SV* sv_to_type;
@@ -2453,15 +2453,15 @@ namespace Rstats {
       sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
       
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-      IV x1_length = SvIV(sv_x1_length);
-      IV x1_length_by_dim = 1;
+      Rstats::Size x1_length = SvIV(sv_x1_length);
+      Rstats::Size x1_length_by_dim = 1;
       
       SV* sv_x_dim_values = values(sv_r, sv_x_dim);
-      IV x_dim_values_length = Rstats::pl_av_len(sv_x_dim_values);
+      Rstats::Size x_dim_values_length = Rstats::pl_av_len(sv_x_dim_values);
       
       for (Rstats::Size i = 0; i < x_dim_values_length; i++) {
         SV* sv_x_dim_value = Rstats::pl_av_fetch(sv_x_dim_values, i);
-        IV x_dim_value = SvIV(sv_x_dim_value);
+        Rstats::Size x_dim_value = SvIV(sv_x_dim_value);
         x1_length_by_dim *= x_dim_value;
       }
       
@@ -2569,7 +2569,7 @@ namespace Rstats {
       
       if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
         Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
-        IV is = v1->get_value<Rstats::Integer>(0);
+        Rstats::Logical is = v1->get_value<Rstats::Integer>(0);
         return is;
       }
       else {
@@ -2818,7 +2818,7 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* c_integer(SV* sv_r, IV value) {
+    SV* c_integer(SV* sv_r, Rstats::Integer value) {
       return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(value));
     }
 
@@ -2922,7 +2922,7 @@ namespace Rstats {
 
     SV* to_c(SV* sv_r, SV* sv_x) {
       
-      IV is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
+      Rstats::Logical is_container = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
       
       SV* sv_x1;
       if (is_container) {
@@ -3084,7 +3084,7 @@ namespace Rstats {
           SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
           
           for (Rstats::Size i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
-            IV idx = SvIV(Rstats::pl_av_fetch(sv_index_values, i));
+            Rstats::Size idx = SvIV(Rstats::pl_av_fetch(sv_index_values, i));
             SV* sv_x2_names_value = Rstats::pl_av_fetch(sv_x1_names_values, idx - 1);
             Rstats::pl_av_push(sv_x2_names_values, sv_x2_names_value);
           }
@@ -3127,7 +3127,7 @@ namespace Rstats {
       
       sv_x1 = Rstats::Func::to_c(sv_r, sv_x1);
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      IV x1_length = Rstats::Func::get_length(sv_r, sv_x1);
+      Rstats::Size x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(x1_length);
       
       for (Rstats::Size i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
@@ -3205,9 +3205,9 @@ namespace Rstats {
       
       SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
       Rstats::Vector* v_classes = Rstats::Func::get_vector(sv_r, sv_classes);
-      IV v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
+      Rstats::Size v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
       
-      IV match = 0;
+      Rstats::Logical match = 0;
       for (Rstats::Size i = 0; i < v_classes_length; i++) {
         SV* sv_class = v_classes->get_value<Rstats::Character>(i);
         if (strEQ(SvPV_nolen(sv_class), "factor")) {
@@ -3223,9 +3223,9 @@ namespace Rstats {
       
       SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
       Rstats::Vector* v_classes = Rstats::Func::get_vector(sv_r, sv_classes);
-      IV v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
+      Rstats::Size v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
       
-      IV match = 0;
+      Rstats::Logical match = 0;
       for (Rstats::Size i = 0; i < v_classes_length; i++) {
         SV* sv_class = v_classes->get_value<Rstats::Character>(i);
         if (strEQ(SvPV_nolen(sv_class), "ordered")) {

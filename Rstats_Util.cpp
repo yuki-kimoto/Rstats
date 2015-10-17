@@ -51,18 +51,18 @@ namespace Rstats {
       while (1) {
         for (Rstats::Size i = 0; i < values_length; i++) {
           
-          if (SvIV(Rstats::pl_av_fetch(sv_idxs, i)) < Rstats::pl_av_len(Rstats::pl_av_fetch(sv_values, i)) - 1) {
+          if (SvUV(Rstats::pl_av_fetch(sv_idxs, i)) < Rstats::pl_av_len(Rstats::pl_av_fetch(sv_values, i)) - 1) {
             
             SV* sv_idxs_tmp = Rstats::pl_av_fetch(sv_idxs, i);
             sv_inc(sv_idxs_tmp);
-            Rstats::pl_av_store(sv_x1, i, Rstats::pl_av_fetch(Rstats::pl_av_fetch(sv_values, i), SvIV(sv_idxs_tmp)));
+            Rstats::pl_av_store(sv_x1, i, Rstats::pl_av_fetch(Rstats::pl_av_fetch(sv_values, i), SvUV(sv_idxs_tmp)));
             
             Rstats::pl_av_push(sv_result, Rstats::pl_av_copy(sv_x1));
             
             break;
           }
           
-          if (i == SvIV(Rstats::pl_av_fetch(sv_idx_idx, values_length - 1))) {
+          if (i == SvUV(Rstats::pl_av_fetch(sv_idx_idx, values_length - 1))) {
             end_loop = 1;
             break;
           }
@@ -81,16 +81,16 @@ namespace Rstats {
     SV* pos_to_index(SV* sv_pos, SV* sv_dim) {
       
       SV* sv_index = Rstats::pl_new_avrv();
-      Rstats::Size pos = SvIV(sv_pos);
+      Rstats::Size pos = SvUV(sv_pos);
       Rstats::Size before_dim_product = 1;
       for (Rstats::Size i = 0; i < Rstats::pl_av_len(sv_dim); i++) {
-        before_dim_product *= SvIV(Rstats::pl_av_fetch(sv_dim, i));
+        before_dim_product *= SvUV(Rstats::pl_av_fetch(sv_dim, i));
       }
       
       for (Rstats::Size i = Rstats::pl_av_len(sv_dim) - 1; i >= 0; i--) {
         Rstats::Size dim_product = 1;
         for (Rstats::Size k = 0; k < i; k++) {
-          dim_product *= SvIV(Rstats::pl_av_fetch(sv_dim, k));
+          dim_product *= SvUV(Rstats::pl_av_fetch(sv_dim, k));
         }
         
         Rstats::Integer reminder = pos % before_dim_product;
@@ -110,12 +110,12 @@ namespace Rstats {
         if (i > 0) {
           Rstats::Size tmp = 1;
           for (Rstats::Size k = 0; k < i; k++) {
-            tmp *= SvIV(Rstats::pl_av_fetch(sv_dim_values, k));
+            tmp *= SvUV(Rstats::pl_av_fetch(sv_dim_values, k));
           }
-          pos += tmp * (SvIV(Rstats::pl_av_fetch(sv_index, i)) - 1);
+          pos += tmp * (SvUV(Rstats::pl_av_fetch(sv_index, i)) - 1);
         }
         else {
-          pos += SvIV(Rstats::pl_av_fetch(sv_index, i));
+          pos += SvUV(Rstats::pl_av_fetch(sv_index, i));
         }
       }
       

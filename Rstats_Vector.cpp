@@ -16,6 +16,12 @@ namespace Rstats {
     }
   }
 
+  void Vector::merge_na_positions2(std::map<IV, IV>* na_positions) {
+    for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
+      this->add_na_position(it->first);
+    }
+  }
+  
   std::map<Rstats::Integer, Rstats::Integer>* Vector::get_na_positions() {
     return this->na_positions;
   }

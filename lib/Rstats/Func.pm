@@ -961,7 +961,7 @@ sub kronecker {
   my $x1 = to_c($r, shift);
   my $x2 = to_c($r, shift);
   
-  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->type ne $x2->type;
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
   my $x1_dim = Rstats::Func::dim($r, $x1);
   my $x2_dim = Rstats::Func::dim($r, $x2);
@@ -1014,7 +1014,7 @@ sub outer {
   my $x1 = to_c($r, shift);
   my $x2 = to_c($r, shift);
   
-  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->type ne $x2->type;
+  ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
   my $x1_dim = Rstats::Func::dim($r, $x1);
   my $x2_dim = Rstats::Func::dim($r, $x2);
@@ -1211,7 +1211,7 @@ sub charmatch {
   my ($x1_x, $x1_table) = args_array($r, ['x', 'table'], @_);
   
   die "Error in charmatch() : Not implemented"
-    unless $x1_x->type eq 'character' && $x1_table->type eq 'character';
+    unless $x1_x->get_type eq 'character' && $x1_table->get_type eq 'character';
   
   my $x2_values = [];
   for my $x1_x_value (@{$x1_x->values}) {
@@ -1264,9 +1264,9 @@ sub is_element {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
+  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
-  my $type = $x1->type;
+  my $type = $x1->get_type;
   my $x1_values = $x1->values;
   my $x2_values = $x2->values;
   my $x3_values = [];
@@ -1303,7 +1303,7 @@ sub setequal {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
+  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x3 = Rstats::Func::sort($r, $x1);
   my $x4 = Rstats::Func::sort($r, $x2);
@@ -1328,7 +1328,7 @@ sub setdiff {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
+  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -1352,7 +1352,7 @@ sub intersect {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
+  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -1373,7 +1373,7 @@ sub union {
   
   my ($x1, $x2) = (to_c($r, shift), to_c($r, shift));
 
-  Carp::croak "mode is diffrence" if $x1->type ne $x2->type;
+  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x3 = Rstats::Func::c_($r, $x1, $x2);
   my $x4 = unique($r, $x3);
@@ -1404,7 +1404,7 @@ sub nchar {
   my $r = shift;
   my $x1 = to_c($r, shift);
   
-  if ($x1->type eq 'character') {
+  if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
@@ -1430,7 +1430,7 @@ sub tolower {
   
   my $x1 = to_c($r, shift);
   
-  if ($x1->type eq 'character') {
+  if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
@@ -1456,7 +1456,7 @@ sub toupper {
   
   my $x1 = to_c($r, shift);
   
-  if ($x1->type eq 'character') {
+  if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
       if (Rstats::Func::is_na($r, $x1_element)) {
@@ -2748,7 +2748,7 @@ sub bool {
     Carp::carp 'In if (a) { : the condition has length > 1 and only the first element will be used';
   }
   
-  my $type = $x1->type;
+  my $type = $x1->get_type;
   my $value = $x1->value;
 
   my $is;
@@ -2836,23 +2836,23 @@ sub get_array {
   
   # array
   my $x_matrix;
-  if ($x1->type eq "character") {
+  if ($x1->get_type eq "character") {
     $x_matrix = c_character($r, \@x2_values);
   }
-  elsif ($x1->type eq "complex") {
+  elsif ($x1->get_type eq "complex") {
     $x_matrix = c_complex($r, \@x2_values);
   }
-  elsif ($x1->type eq "double") {
+  elsif ($x1->get_type eq "double") {
     $x_matrix = c_double($r, \@x2_values);
   }
-  elsif ($x1->type eq "integer") {
+  elsif ($x1->get_type eq "integer") {
     $x_matrix = c_integer($r, \@x2_values);
   }
-  elsif ($x1->type eq "logical") {
+  elsif ($x1->get_type eq "logical") {
     $x_matrix = c_logical($r, \@x2_values);
   }
   else {
-    croak("Invalid type " . $x1->type . " is passed");
+    croak("Invalid type " . $x1->get_type . " is passed");
   }
   
   my $x2 = Rstats::Func::array(
@@ -2893,7 +2893,7 @@ sub to_string_array {
   my $is_character = Rstats::Func::is_character($r, $x1);
 
   my $values = $x1->values;
-  my $type = $x1->type;
+  my $type = $x1->get_type;
   
   my $dim_values = $x1->dim_as_array->values;
   
@@ -3065,7 +3065,7 @@ sub str {
   }
   elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
     # Short type
-    my $type = $x1->type;
+    my $type = $x1->get_type;
     my $short_type;
     if ($type eq 'character') {
       $short_type = 'chr';
@@ -3762,20 +3762,20 @@ sub set_array {
         }
       }
     }
-    $type = $x1->type;
+    $type = $x1->get_type;
   }
   else {
     # Upgrade mode if type is different
-    if ($x1->type ne $x2->type) {
+    if ($x1->get_type ne $x2->get_type) {
       my $x1_tmp;
       ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};
       Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
       $x1->vector($x1_tmp->vector);
       
-      $type = $x1_tmp->type;
+      $type = $x1_tmp->get_type;
     }
     else {
-      $type = $x1->type;
+      $type = $x1->get_type;
     }
 
     $x1_elements = Rstats::Func::decompose($r, $x1);

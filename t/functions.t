@@ -218,6 +218,14 @@ use Math::Complex ();
 
 # sum
 {
+  # sum - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->sum($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, [0]);
+  }
+
   # sum - complex
   {
     my $x1 = c_(1+1*i_, 2+2*i_, 3+3*i_);

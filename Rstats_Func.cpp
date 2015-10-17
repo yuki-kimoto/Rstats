@@ -759,45 +759,73 @@ namespace Rstats {
       SV* sv_x_out;
       Rstats::Vector* v2;
       if (strEQ(type, "complex")) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(1);
         Rstats::Complex v2_total(0);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total += v1->get_value<Rstats::Complex>(i);
         }
         v2->set_value<Rstats::Complex>(0, v2_total);
-        
-        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          if (v1->exists_na_position(i)) {
+            v2->add_na_position(0);
+            break;
+          }
+        }
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1);
         Rstats::Double v2_total(0);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total += v1->get_value<Rstats::Double>(i);
         }
         v2->set_value<Rstats::Double>(0, v2_total);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          if (v1->exists_na_position(i)) {
+            v2->add_na_position(0);
+            break;
+          }
+        }
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1);
         Rstats::Integer v2_total(0);
         for (Rstats::Integer i = 0; i < length; i++) {
           v2_total += v1->get_value<Rstats::Integer>(i);
         }
         v2->set_value<Rstats::Integer>(0, v2_total);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
+        for (Rstats::Integer i = 0; i < length; i++) {
+          if (v1->exists_na_position(i)) {
+            v2->add_na_position(0);
+            break;
+          }
+        }
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(1);
+        Rstats::Logical v2_total(0);
+        for (Rstats::Logical i = 0; i < length; i++) {
+          v2_total += v1->get_value<Rstats::Logical>(i);
+        }
+        v2->set_value<Rstats::Logical>(0, v2_total);
+        for (Rstats::Logical i = 0; i < length; i++) {
+          if (v1->exists_na_position(i)) {
+            v2->add_na_position(0);
+            break;
+          }
+        }
+        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
+      }
+      else if (strEQ(type, "NULL")) {
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, 0);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else {
         croak("Error in sum() : non-numeric argument to sum()");
       }
       
-      for (Rstats::Integer i = 0; i < length; i++) {
-        if (v1->exists_na_position(i)) {
-          v2->add_na_position(0);
-          break;
-        }
-      }
-      
-      set_vector(sv_r, sv_x_out, v2);
       
       return sv_x_out;
     }

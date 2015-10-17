@@ -21,7 +21,7 @@ namespace Rstats {
   }
 
   template <>
-  void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {
+  void Vector::set_value<Rstats::Character>(Rstats::Index pos, Rstats::Character value) {
     if (value != NULL) {
       SvREFCNT_dec((*this->get_values<Rstats::Character>())[pos]);
     }
@@ -31,7 +31,7 @@ namespace Rstats {
   }
 
   template<>
-  Rstats::Character Vector::get_value<Rstats::Character>(IV pos) {
+  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Index pos) {
     Rstats::Character value = (*this->get_values<Rstats::Character>())[pos];
     if (value == NULL) {
       return NULL;

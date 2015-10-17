@@ -326,12 +326,12 @@ namespace Rstats {
     }
 
     template<class T>
-    void set_value(IV pos, T value) {
+    void set_value(Rstats::Index pos, T value) {
       (*this->get_values<T>())[pos] = value;
     } // Rstats::Character is specialized
 
     template <class T>
-    T get_value(IV pos) {
+    T get_value(Rstats::Index pos) {
       return (*this->get_values<T>())[pos];
     } // Rstats::Character is specialized
     
@@ -346,29 +346,29 @@ namespace Rstats {
   };
 
   template<>
-  Rstats::Character Vector::get_value<Rstats::Character>(IV pos);
+  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Index pos);
   template <>
-  void Vector::set_value<Rstats::Character>(IV pos, Rstats::Character value);
+  void Vector::set_value<Rstats::Character>(Rstats::Index pos, Rstats::Character value);
   
   // Rstats::VectorFunc
   namespace VectorFunc {
     template<class T>
-    Rstats::Vector* new_vector(IV);
+    Rstats::Vector* new_vector(Rstats::Index);
     template<>
-    Rstats::Vector* new_vector<Rstats::Double>(IV);
+    Rstats::Vector* new_vector<Rstats::Double>(Rstats::Index);
     template<>
-    Rstats::Vector* new_vector<Rstats::Integer>(IV);
+    Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Index);
     template<>
-    Rstats::Vector* new_vector<Rstats::Complex>(IV);
+    Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Index);
     template<>
-    Rstats::Vector* new_vector<Rstats::Character>(IV);
+    Rstats::Vector* new_vector<Rstats::Character>(Rstats::Index);
     template<>
-    Rstats::Vector* new_vector<Rstats::Logical>(IV);
+    Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Index);
     
     template <class T>
-    Rstats::Vector* new_vector(IV length, T value) {
+    Rstats::Vector* new_vector(Rstats::Index length, T value) {
       Rstats::Vector* v1 = new_vector<T>(length);
-      for (IV i = 0; i < length; i++) {
+      for (Rstats::Index i = 0; i < length; i++) {
         v1->set_value<T>(i, value);
       }
       return v1;

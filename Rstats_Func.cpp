@@ -171,7 +171,8 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {
-        // Nothing to do
+        Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Character>(0);
+        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
       }
       else {
         croak("Error in as_double() : default method not implemented for type '%s'", type);

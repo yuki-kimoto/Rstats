@@ -325,9 +325,17 @@ use Rstats;
   }
 }
 
-# as_character
+# as->character
 {
-  # as_character - complex
+  # as->double - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->as->character($x1);
+    ok(r->is->character($x2));
+    is_deeply($x2->values, []);
+  }
+  
+  # as->character - complex
   {
     my $x0 = r->complex(1, 2);
     my $x1 = array(r->complex(1, 2));
@@ -336,7 +344,7 @@ use Rstats;
     is($x2->values->[0], "1+2i");
   }
 
-  # as_character - NA
+  # as->character - NA
   {
     my $x1 = array(NA);
     my $x2 = r->as->character($x1);
@@ -344,7 +352,7 @@ use Rstats;
     is_deeply($x2->values, [undef]);
   }
 
-  # as_character - Inf
+  # as->character - Inf
   {
     my $x1 = Inf;
     my $x2 = r->as->character($x1);
@@ -352,7 +360,7 @@ use Rstats;
     is_deeply($x2->values, ["Inf"]);
   }
 
-  # as_character - NaN
+  # as->character - NaN
   {
     my $x1 = NaN;
     my $x2 = r->as->character($x1);
@@ -360,7 +368,7 @@ use Rstats;
     is_deeply($x2->values, ["NaN"]);
   }
   
-  # as_character - character
+  # as->character - character
   {
     my $x1 = array(c_("a"));
     my $x2 = r->as->character($x1);
@@ -368,7 +376,7 @@ use Rstats;
     is($x2->values->[0], "a");
   }
   
-  # as_character - complex, 0 + 0i
+  # as->character - complex, 0 + 0i
   {
     my $x1 = array(r->complex(0, 0));
     my $x2 = r->as->character($x1);
@@ -376,7 +384,7 @@ use Rstats;
     is($x2->values->[0], "0+0i");
   }
   
-  # as_character - numeric
+  # as->character - numeric
   {
     my $x1 = array(c_(1.1, 0));
     my $x2 = r->as->character($x1);
@@ -385,7 +393,7 @@ use Rstats;
     is($x2->values->[1], "0");
   }
   
-  # as_character - logical
+  # as->character - logical
   {
     my $x1 = array(c_(TRUE, FALSE));
     my $x2 = r->as->character($x1);

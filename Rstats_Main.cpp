@@ -136,6 +136,28 @@ namespace Rstats {
     return pl_hv_store(hv, key, element);
   }
 
+  IV pl_hv_key_count(HV* hv) {
+    hv_iterinit(hv);
+    
+    IV count = 0;
+    while (1) {
+      HE* he_iter = hv_iternext(hv);
+      if (he_iter == NULL) {
+        break;
+      }
+      else {
+        count++;
+      }
+    }
+    
+    return count;
+  }
+
+  IV pl_hv_key_count(SV* hv_ref) {
+    HV* hv = pl_hv_deref(hv_ref);
+    return pl_hv_key_count(hv);
+  }
+
   void pl_av_push(AV* av, SV* sv) {
     av_push(av, SvREFCNT_inc(sv));
   }

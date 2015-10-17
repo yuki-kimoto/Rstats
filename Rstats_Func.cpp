@@ -2189,28 +2189,28 @@ namespace Rstats {
       
       IV element_length = Rstats::pl_av_len(sv_elements);
       // Check type and length
-      std::map<Rstats::Type::Enum, IV> type_h;
+      SV* sv_type_h = Rstats::pl_new_hvrv();
       IV length = 0;
       for (IV i = 0; i < element_length; i++) {
-        Rstats::Type::Enum type;
+        char* type;
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
         
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           length += Rstats::Func::get_length(sv_r, sv_element);
-          type = Rstats::Func::get_vector(sv_r, sv_element)->get_type();
-          type_h[type] = 1;
+          type = Rstats::Func::get_type(sv_r, sv_element);
+          Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
         }
         else {
           if (SvOK(sv_element)) {
             if (Rstats::Util::is_perl_number(sv_element)) {
-              type_h[Rstats::Type::DOUBLE] = 1;
+              Rstats::pl_hv_store(sv_type_h, "double", Rstats::pl_new_sv_iv(1));
             }
             else {
-              type_h[Rstats::Type::CHARACTER] = 1;
+              Rstats::pl_hv_store(sv_type_h, "character", Rstats::pl_new_sv_iv(1));
             }
           }
           else {
-            type_h[Rstats::Type::LOGICAL] = 1;
+            Rstats::pl_hv_store(sv_type_h, "logical", Rstats::pl_new_sv_iv(1));
           }
           length += 1;
         }
@@ -2220,19 +2220,19 @@ namespace Rstats {
 
       // Decide type
       Rstats::Vector* v1;
-      if (type_h[Rstats::Type::CHARACTER]) {
+      if (Rstats::pl_hv_exists(sv_type_h, "character")) {
         v1 = Rstats::VectorFunc::new_vector<Rstats::Character>(length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Character>(sv_r);
       }
-      else if (type_h[Rstats::Type::COMPLEX]) {
+      else if (Rstats::pl_hv_exists(sv_type_h, "complex")) {
         v1 = Rstats::VectorFunc::new_vector<Rstats::Complex>(length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
       }
-      else if (type_h[Rstats::Type::DOUBLE]) {
+      else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
         v1 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r);
       }
-      else if (type_h[Rstats::Type::INTEGER]) {
+      else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
         v1 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
       }
@@ -2241,7 +2241,7 @@ namespace Rstats {
         sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
       }
       
-      Rstats::Type::Enum type = v1->get_type();
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       IV pos = 0;
       for (IV i = 0; i < element_length; i++) {
@@ -2249,22 +2249,22 @@ namespace Rstats {
         SV* sv_x_tmp;
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
           
-          Rstats::Type::Enum tmp_type = Rstats::Func::get_vector(sv_r, sv_element)->get_type();
+          char* tmp_type = Rstats::Func::get_type(sv_r, sv_element);
           
-          if (tmp_type == type) {
+          if (strEQ(tmp_type, type)) {
             sv_x_tmp = sv_element;
           }
           else {
-            if (type == Rstats::Type::CHARACTER) {
+            if (strEQ(type, "character")) {
               sv_x_tmp = Rstats::Func::as_character(sv_r, sv_element);
             }
-            else if (type == Rstats::Type::COMPLEX) {
+            else if (strEQ(type, "complex")) {
               sv_x_tmp = Rstats::Func::as_complex(sv_r, sv_element);
             }
-            else if (type == Rstats::Type::DOUBLE) {
+            else if (strEQ(type, "double")) {
               sv_x_tmp = Rstats::Func::as_double(sv_r, sv_element);
             }
-            else if (type == Rstats::Type::INTEGER) {
+            else if (strEQ(type, "integer")) {
               sv_x_tmp = Rstats::Func::as_integer(sv_r, sv_element);
             }
             else {
@@ -2279,16 +2279,16 @@ namespace Rstats {
               v1->add_na_position(pos);
             }
             else {
-              if (type == Rstats::Type::CHARACTER) {
+              if (strEQ(type, "character")) {
                 v1->set_value<Rstats::Character>(pos, v_tmp->get_value<Rstats::Character>(k));
               }
-              else if (type == Rstats::Type::COMPLEX) {
+              else if (strEQ(type, "complex")) {
                 v1->set_value<Rstats::Complex>(pos, v_tmp->get_value<Rstats::Complex>(k));
               }
-              else if (type == Rstats::Type::DOUBLE) {
+              else if (strEQ(type, "double")) {
                 v1->set_value<Rstats::Double>(pos, v_tmp->get_value<Rstats::Double>(k));
               }
-              else if (type == Rstats::Type::INTEGER) {
+              else if (strEQ(type, "integer")) {
                 v1->set_value<Rstats::Integer>(pos, v_tmp->get_value<Rstats::Integer>(k));
               }
               else {
@@ -2301,16 +2301,16 @@ namespace Rstats {
         }
         else {
           if (SvOK(sv_element)) {
-            if (type == Rstats::Type::CHARACTER) {
+            if (strEQ(type, "character")) {
               v1->set_value<Rstats::Character>(pos, sv_element);
             }
-            else if (type == Rstats::Type::COMPLEX) {
+            else if (strEQ(type, "complex")) {
               v1->set_value<Rstats::Complex>(pos, std::complex<NV>(SvNV(sv_element), 0));
             }
-            else if (type == Rstats::Type::DOUBLE) {
+            else if (strEQ(type, "double")) {
               v1->set_value<Rstats::Double>(pos, SvNV(sv_element));
             }
-            else if (type == Rstats::Type::INTEGER) {
+            else if (strEQ(type, "integer")) {
               v1->set_value<Rstats::Integer>(pos, SvIV(sv_element));
             }
             else {
@@ -2403,54 +2403,37 @@ namespace Rstats {
     }
 
     SV* upgrade_type_avrv(SV* sv_r, SV* sv_xs) {
+      
       // Check elements
-      std::map<Rstats::Type::Enum, IV> type_h;
+      SV* sv_type_h = Rstats::pl_new_hvrv();
       
       IV xs_length = Rstats::pl_av_len(sv_xs);
       for (IV i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Type::Enum type = v1->get_type();
+        char* type = Rstats::Func::get_type(sv_r, sv_x1);
         
-        if (type == Rstats::Type::CHARACTER) {
-          type_h[Rstats::Type::CHARACTER] = 1;
-        }
-        else if (type == Rstats::Type::COMPLEX) {
-          type_h[Rstats::Type::COMPLEX] = 1;
-        }
-        else if (type == Rstats::Type::DOUBLE) {
-          type_h[Rstats::Type::DOUBLE] = 1;
-        }
-        else if (type == Rstats::Type::INTEGER) {
-          type_h[Rstats::Type::INTEGER] = 1;
-        }
-        else if (type == Rstats::Type::LOGICAL) {
-          type_h[Rstats::Type::LOGICAL] = 1;
-        }
-        else {
-          croak("Invalid type(Rstats::Func::upgrade_type_avrv()");
-        }
+        Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
       }
 
       // Upgrade elements and type if type is different
       SV* sv_new_xs = Rstats::pl_new_avrv();;
-      IV type_length = type_h.size();
+      IV type_length = Rstats::pl_hv_key_count(sv_type_h);
 
       if (type_length > 1) {
         SV* sv_to_type;
-        if (type_h.count(Rstats::Type::CHARACTER)) {
+        if (Rstats::pl_hv_exists(sv_type_h, "character")) {
           sv_to_type = Rstats::pl_new_sv_pv("character");
         }
-        else if (type_h.count(Rstats::Type::COMPLEX)) {
+        else if (Rstats::pl_hv_exists(sv_type_h, "complex")) {
           sv_to_type = Rstats::pl_new_sv_pv("complex");
         }
-        else if (type_h.count(Rstats::Type::DOUBLE)) {
+        else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
           sv_to_type = Rstats::pl_new_sv_pv("double");
         }
-        else if (type_h.count(Rstats::Type::INTEGER)) {
+        else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
           sv_to_type = Rstats::pl_new_sv_pv("integer");
         }
-        else if (type_h.count(Rstats::Type::LOGICAL)) {
+        else if (Rstats::pl_hv_exists(sv_type_h, "logical")) {
           sv_to_type = Rstats::pl_new_sv_pv("logical");
         }
         

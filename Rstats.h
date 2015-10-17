@@ -59,6 +59,8 @@ namespace Rstats {
   SV* pl_hv_delete(SV*, char*);
   SV* pl_hv_fetch(HV*, const char*);
   SV* pl_hv_fetch(SV*, const char*);
+  IV pl_hv_key_count(HV* hv);
+  IV pl_hv_key_count(SV* hv_ref);
   void pl_av_store(AV*, IV, SV*);
   void pl_av_store(SV*, IV, SV*);
   SV* pl_av_copy(SV*);

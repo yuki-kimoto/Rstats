@@ -107,7 +107,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-  typedef SSize_t Index;
+  typedef SSize_t Size;
   
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
@@ -316,10 +316,10 @@ namespace Rstats {
     public:
     
     Rstats::Type::Enum type;
-    std::map<Rstats::Index, Rstats::Integer>* na_positions;
+    std::map<Rstats::Size, Rstats::Integer>* na_positions;
     void* values;
     
-    Rstats::Index get_length();
+    Rstats::Size get_length();
     
     template<class T>
     std::vector<T>* get_values() {
@@ -327,49 +327,49 @@ namespace Rstats {
     }
 
     template<class T>
-    void set_value(Rstats::Index pos, T value) {
+    void set_value(Rstats::Size pos, T value) {
       (*this->get_values<T>())[pos] = value;
     } // Rstats::Character is specialized
 
     template <class T>
-    T get_value(Rstats::Index pos) {
+    T get_value(Rstats::Size pos) {
       return (*this->get_values<T>())[pos];
     } // Rstats::Character is specialized
     
     Rstats::Type::Enum get_type();
 
-    void add_na_position(Rstats::Index);
-    bool exists_na_position(Rstats::Index position);
-    void merge_na_positions(std::map<Rstats::Index, Rstats::Integer>*);
-    std::map<Rstats::Index, Rstats::Integer>* get_na_positions();
+    void add_na_position(Rstats::Size);
+    bool exists_na_position(Rstats::Size position);
+    void merge_na_positions(std::map<Rstats::Size, Rstats::Integer>*);
+    std::map<Rstats::Size, Rstats::Integer>* get_na_positions();
     
     ~Vector();
   };
 
   template<>
-  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Index pos);
+  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Size pos);
   template <>
-  void Vector::set_value<Rstats::Character>(Rstats::Index pos, Rstats::Character value);
+  void Vector::set_value<Rstats::Character>(Rstats::Size pos, Rstats::Character value);
   
   // Rstats::VectorFunc
   namespace VectorFunc {
     template<class T>
-    Rstats::Vector* new_vector(Rstats::Index);
+    Rstats::Vector* new_vector(Rstats::Size);
     template<>
-    Rstats::Vector* new_vector<Rstats::Double>(Rstats::Index);
+    Rstats::Vector* new_vector<Rstats::Double>(Rstats::Size);
     template<>
-    Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Index);
+    Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Size);
     template<>
-    Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Index);
+    Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Size);
     template<>
-    Rstats::Vector* new_vector<Rstats::Character>(Rstats::Index);
+    Rstats::Vector* new_vector<Rstats::Character>(Rstats::Size);
     template<>
-    Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Index);
+    Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Size);
     
     template <class T>
-    Rstats::Vector* new_vector(Rstats::Index length, T value) {
+    Rstats::Vector* new_vector(Rstats::Size length, T value) {
       Rstats::Vector* v1 = new_vector<T>(length);
-      for (Rstats::Index i = 0; i < length; i++) {
+      for (Rstats::Size i = 0; i < length; i++) {
         v1->set_value<T>(i, value);
       }
       return v1;
@@ -378,10 +378,10 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* operate_unary(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
-      Rstats::Index length = v1->get_length();
+      Rstats::Size length = v1->get_length();
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
-      for (Rstats::Index i = 0; i < length; i++) {
+      for (Rstats::Size i = 0; i < length; i++) {
         try {
           v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
@@ -472,7 +472,7 @@ namespace Rstats {
     SV* mode(SV*, SV*);
     SV* mode(SV*, SV*, SV*);
     
-    Rstats::Index get_length(SV*, SV*);
+    Rstats::Size get_length(SV*, SV*);
     
     // dim
     SV* dim(SV*, SV*, SV*);
@@ -514,13 +514,13 @@ namespace Rstats {
     SV* negation(SV*, SV*);
     SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type_avrv(SV*, SV*);
-    void upgrade_type(SV*, Rstats::Index, ...);
+    void upgrade_type(SV*, Rstats::Size, ...);
     SV* upgrade_length_avrv(SV*, SV*);
-    void upgrade_length(SV*, Rstats::Index, ...);
+    void upgrade_length(SV*, Rstats::Size, ...);
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
     char* get_object_type(SV*, SV*);
-    SV* create_sv_value(SV*, SV*, Rstats::Index);
+    SV* create_sv_value(SV*, SV*, Rstats::Size);
     SV* create_sv_values(SV*, SV*);
     
     SV* atan2(SV*, SV*, SV*);
@@ -558,10 +558,10 @@ namespace Rstats {
     SV* operate_unary(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
       
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Index length = Rstats::Func::get_length(sv_r, sv_x1);
+      Rstats::Size length = Rstats::Func::get_length(sv_r, sv_x1);
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
-      for (Rstats::Index i = 0; i < length; i++) {
+      for (Rstats::Size i = 0; i < length; i++) {
         try {
           v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
@@ -584,10 +584,10 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
 
-      Rstats::Index length = Rstats::Func::get_length(sv_r, sv_x1);
+      Rstats::Size length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
 
-      for (Rstats::Index i = 0; i < length; i++) {
+      for (Rstats::Size i = 0; i < length; i++) {
         try {
           v3->set_value<T_OUT>(
             i,

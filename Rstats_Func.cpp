@@ -3135,18 +3135,71 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Logical>(x1_length);
-      
-      for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
-        if (v1->exists_na_position(i)) {
-          v2->set_value<Rstats::Integer>(i, 1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+
+      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
+      if (strEQ(type, "character")) {
+        for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
+          if (v1->exists_na_position(i)) {
+            v2->set_value<Rstats::Integer>(i, 1);
+          }
+          else {
+            v2->set_value<Rstats::Integer>(i, 0);
+          }
         }
-        else {
-          v2->set_value<Rstats::Integer>(i, 0);
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
+      }
+      else if (strEQ(type, "complex")) {
+        for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
+          if (v1->exists_na_position(i)) {
+            v2->set_value<Rstats::Integer>(i, 1);
+          }
+          else {
+            v2->set_value<Rstats::Integer>(i, 0);
+          }
         }
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
+      }
+      else if (strEQ(type, "double")) {
+        for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
+          if (v1->exists_na_position(i)) {
+            v2->set_value<Rstats::Integer>(i, 1);
+          }
+          else {
+            v2->set_value<Rstats::Integer>(i, 0);
+          }
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
+          if (v1->exists_na_position(i)) {
+            v2->set_value<Rstats::Integer>(i, 1);
+          }
+          else {
+            v2->set_value<Rstats::Integer>(i, 0);
+          }
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        for (Rstats::Integer i = 0; i < Rstats::Func::get_length(sv_r, sv_x1); i++) {
+          if (v1->exists_na_position(i)) {
+            v2->set_value<Rstats::Integer>(i, 1);
+          }
+          else {
+            v2->set_value<Rstats::Integer>(i, 0);
+          }
+        }
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
+      }
+      else if (strEQ(type, "NULL")) {
+        // Nothing to do
+      }
+      else {
+        croak("Error in is->na() : default method not implemented for type '%s'", type);
       }
       
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
-      Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;

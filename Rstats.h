@@ -337,10 +337,10 @@ namespace Rstats {
     
     Rstats::Type::Enum get_type();
 
-    void add_na_position(IV);
-    bool exists_na_position(IV position);
-    void merge_na_positions(std::map<IV, IV>*);
-    std::map<IV, IV>* get_na_positions();
+    void add_na_position(Rstats::Index);
+    bool exists_na_position(Rstats::Index position);
+    void merge_na_positions(std::map<Rstats::Index, Rstats::Integer>*);
+    std::map<Rstats::Index, Rstats::Integer>* get_na_positions();
     
     ~Vector();
   };

@@ -2,21 +2,21 @@
 
 namespace Rstats {
 
-  void Vector::add_na_position(Rstats::Integer position) {
+  void Vector::add_na_position(Rstats::Index position) {
     (*this->na_positions)[position] = 1;
   }
 
-  bool Vector::exists_na_position(Rstats::Integer position) {
+  bool Vector::exists_na_position(Rstats::Index position) {
     return this->na_positions->count(position);
   }
 
-  void Vector::merge_na_positions(std::map<IV, IV>* na_positions) {
-    for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
+  void Vector::merge_na_positions(std::map<Rstats::Index, Rstats::Integer>* na_positions) {
+    for(std::map<Rstats::Index, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
       this->add_na_position(it->first);
     }
   }
   
-  std::map<Rstats::Integer, Rstats::Integer>* Vector::get_na_positions() {
+  std::map<Rstats::Index, Rstats::Integer>* Vector::get_na_positions() {
     return this->na_positions;
   }
 

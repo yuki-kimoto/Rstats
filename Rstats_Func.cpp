@@ -175,7 +175,7 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
       }
       else {
-        croak("Error in as_double() : default method not implemented for type '%s'", type);
+        croak("Error in as->character() : default method not implemented for type '%s'", type);
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -248,7 +248,7 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
       }
       else {
-        croak("Error in as_double() : default method not implemented for type '%s'", type);
+        croak("Error in as->double() : default method not implemented for type '%s'", type);
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -285,12 +285,14 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Complex>(i, v1->get_value<Rstats::Complex>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -303,27 +305,30 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Complex>(i, Rstats::Complex(v1->get_value<Rstats::Integer>(i), 0));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "logical")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Complex>(i, Rstats::Complex(v1->get_value<Rstats::Integer>(i), 0));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {
-        // Nothing to do
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(0);
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else {
-        croak("Error in as_integer() : default method not implemented for type '%s'", type);
+        croak("Error in as->complex() : default method not implemented for type '%s'", type);
       }
       
-      Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
@@ -391,7 +396,7 @@ namespace Rstats {
         // Nothing to do
       }
       else {
-        croak("Error in as_integer() : default method not implemented for type '%s'", type);
+        croak("Error in as->integer() : default method not implemented for type '%s'", type);
       }
 
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
@@ -468,7 +473,7 @@ namespace Rstats {
         // Nothing to do
       }
       else {
-        croak("Error in as_integer() : default method not implemented for type '%s'", type);
+        croak("Error in as->integer() : default method not implemented for type '%s'", type);
       }
 
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);

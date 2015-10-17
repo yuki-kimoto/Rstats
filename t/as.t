@@ -532,6 +532,14 @@ use Rstats;
 
 # as->complex
 {
+  # as->complex - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->as->complex($x1);
+    ok(r->is->complex($x2));
+    is_deeply($x2->values, []);
+  }
+
   # as->complex - Inf
   {
     my $x1 = Inf;

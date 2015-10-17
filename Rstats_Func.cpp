@@ -63,6 +63,7 @@ namespace Rstats {
           v2->set_value<Rstats::Character>(i, sv_value);
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -84,6 +85,7 @@ namespace Rstats {
           v2->set_value<Rstats::Character>(i, sv_str);
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -104,6 +106,7 @@ namespace Rstats {
           v2->set_value<Rstats::Character>(i, sv_str);
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         // Factor
@@ -152,6 +155,7 @@ namespace Rstats {
             );
           }
           v2->merge_na_positions(v1->get_na_positions());
+          Rstats::Func::set_vector(sv_r, sv_x_out, v2);
         }
       }
       else if (strEQ(type, "logical")) {
@@ -164,6 +168,7 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {
         // Nothing to do
@@ -172,7 +177,6 @@ namespace Rstats {
         croak("Error in as_double() : default method not implemented for type '%s'", type);
       }
 
-      Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;

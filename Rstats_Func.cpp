@@ -156,7 +156,7 @@ namespace Rstats {
         croak("Error in as_double() : default method not implemented for type '%s'", type);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -221,7 +221,7 @@ namespace Rstats {
         croak("Error in as_double() : default method not implemented for type '%s'", type);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -291,7 +291,7 @@ namespace Rstats {
         croak("Error in as_integer() : default method not implemented for type '%s'", type);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -359,7 +359,7 @@ namespace Rstats {
         croak("Error in as_integer() : default method not implemented for type '%s'", type);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -434,7 +434,7 @@ namespace Rstats {
         croak("Error in as_integer() : default method not implemented for type '%s'", type);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -612,7 +612,7 @@ namespace Rstats {
         croak("Error in cumprod() : non-numeric argument to cumprod()");
       }
       
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       set_vector(sv_r, sv_x_out, v2);
       
@@ -663,7 +663,7 @@ namespace Rstats {
         croak("Error in cumsum() : non-numeric argument to cumsum()");
       }
       
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       
       set_vector(sv_r, sv_x_out, v2);
       
@@ -2172,7 +2172,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
       }
 
-      v2->merge_na_positions2(v1->get_na_positions());
+      v2->merge_na_positions(v1->get_na_positions());
       Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       
       return sv_x_out;

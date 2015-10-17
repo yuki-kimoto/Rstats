@@ -100,7 +100,7 @@ namespace Rstats {
           SV* sv_x_levels = Rstats::Func::levels(sv_r, sv_x1);
           SV* sv_x_levels_values = Rstats::Func::values(sv_r, sv_x_levels);
           SV* sv_levels_length = Rstats::Func::length_value(sv_r, sv_x_levels);
-          for (Rstats::Size i = 1; i <= SvIV(sv_levels_length); i++) {
+          for (Rstats::Size i = 1; i <= SvUV(sv_levels_length); i++) {
             Rstats::pl_hv_store(
               sv_levels,
               SvPV_nolen(Rstats::pl_new_sv_iv(i)),
@@ -1991,7 +1991,7 @@ namespace Rstats {
       for (Rstats::Size i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
         SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        Rstats::Size x1_length = SvIV(sv_x1_length);
+        Rstats::Size x1_length = SvUV(sv_x1_length);
         
         if (x1_length > max_length) {
           max_length = x1_length;
@@ -2002,7 +2002,7 @@ namespace Rstats {
       for (Rstats::Size i = 0; i < xs_length; i++) {
         SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
         SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-        Rstats::Size x1_length = SvIV(sv_x1_length);
+        Rstats::Size x1_length = SvUV(sv_x1_length);
         
         if (x1_length != max_length) {
           Rstats::pl_av_push(
@@ -2030,7 +2030,7 @@ namespace Rstats {
         SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
         SV* sv_x2_length = Rstats::Func::length_value(sv_r, sv_x2);
         
-        if (SvIV(sv_x1_length) == SvIV(sv_x2_length)) {
+        if (SvUV(sv_x1_length) == SvUV(sv_x2_length)) {
           return;
         }
       }
@@ -2356,30 +2356,30 @@ namespace Rstats {
       
       Rstats::Func::length_value(sv_r, sv_x_dim);
       
-      if (!SvIV(Rstats::Func::length_value(sv_r, sv_x_dim))) {
+      if (!SvUV(Rstats::Func::length_value(sv_r, sv_x_dim))) {
         sv_x_dim = Rstats::Func::c_integer(sv_r, sv_x1_length);
       }
       Rstats::Size dim_product = 1;
-      Rstats::Size x_dim_length = SvIV(Rstats::Func::length_value(sv_r, sv_x_dim));
+      Rstats::Size x_dim_length = SvUV(Rstats::Func::length_value(sv_r, sv_x_dim));
       for (Rstats::Size i = 0; i < x_dim_length; i++) {
         SV* sv_values = Rstats::Func::values(sv_r, sv_x_dim);
-        dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
+        dim_product *= SvUV(Rstats::pl_av_fetch(sv_values, i));
       }
 
       
       // Fix elements length
       SV* sv_elements;
-      if (SvIV(sv_x1_length) == dim_product) {
+      if (SvUV(sv_x1_length) == dim_product) {
         sv_elements = Rstats::Func::decompose(sv_r, sv_x1);
       }
-      else if (SvIV(sv_x1_length) > dim_product) {
+      else if (SvUV(sv_x1_length) > dim_product) {
         SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
         sv_elements = Rstats::pl_new_avrv();
         for (Rstats::Size i = 0; i < dim_product; i++) {
           Rstats::pl_av_push(sv_elements, Rstats::pl_av_fetch(sv_elements_tmp, i));
         }
       }
-      else if (SvIV(sv_x1_length) < dim_product) {
+      else if (SvUV(sv_x1_length) < dim_product) {
         SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
         Rstats::Size elements_tmp_length = Rstats::pl_av_len(sv_elements_tmp);
         Rstats::Size repeat_count = (Rstats::Size)(dim_product / elements_tmp_length) + 1;
@@ -2453,7 +2453,7 @@ namespace Rstats {
       sv_x_dim = Rstats::Func::to_c(sv_r, sv_x_dim);
       
       SV* sv_x1_length = Rstats::Func::length_value(sv_r, sv_x1);
-      Rstats::Size x1_length = SvIV(sv_x1_length);
+      Rstats::Size x1_length = SvUV(sv_x1_length);
       Rstats::Size x1_length_by_dim = 1;
       
       SV* sv_x_dim_values = values(sv_r, sv_x_dim);
@@ -2461,7 +2461,7 @@ namespace Rstats {
       
       for (Rstats::Size i = 0; i < x_dim_values_length; i++) {
         SV* sv_x_dim_value = Rstats::pl_av_fetch(sv_x_dim_values, i);
-        Rstats::Size x_dim_value = SvIV(sv_x_dim_value);
+        Rstats::Size x_dim_value = SvUV(sv_x_dim_value);
         x1_length_by_dim *= x_dim_value;
       }
       
@@ -2558,7 +2558,7 @@ namespace Rstats {
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
       bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
-        && SvIV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
+        && SvUV(length_value(sv_r, dim(sv_r, sv_x1))) == 2;
       
       SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
@@ -3084,7 +3084,7 @@ namespace Rstats {
           SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
           
           for (Rstats::Size i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
-            Rstats::Size idx = SvIV(Rstats::pl_av_fetch(sv_index_values, i));
+            Rstats::Size idx = SvUV(Rstats::pl_av_fetch(sv_index_values, i));
             SV* sv_x2_names_value = Rstats::pl_av_fetch(sv_x1_names_values, idx - 1);
             Rstats::pl_av_push(sv_x2_names_values, sv_x2_names_value);
           }
@@ -3102,7 +3102,7 @@ namespace Rstats {
         Rstats::Size length = Rstats::pl_av_len(sv_dimnames);
         for (Rstats::Size i = 0; i < length; i++) {
           SV* sv_dimname = Rstats::pl_av_fetch(sv_dimnames, i);;
-          if (SvOK(sv_dimname) && SvIV(Rstats::Func::length_value(sv_r, sv_dimname)) > 0) {
+          if (SvOK(sv_dimname) && SvUV(Rstats::Func::length_value(sv_r, sv_dimname)) > 0) {
             SV* sv_index = SvOK(sv_new_indexes) ? Rstats::pl_av_fetch(sv_new_indexes, i) : &PL_sv_undef;
             SV* sv_dimname_values = Rstats::Func::values(sv_r, sv_dimname);
             SV* sv_new_dimname_values = Rstats::pl_new_avrv();
@@ -3110,7 +3110,7 @@ namespace Rstats {
               SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
               for (Rstats::Size i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
                 SV* sv_k = Rstats::pl_av_fetch(sv_index_values, i);
-                Rstats::pl_av_push(sv_new_dimname_values, Rstats::pl_av_fetch(sv_dimname_values, SvIV(sv_k) - 1));
+                Rstats::pl_av_push(sv_new_dimname_values, Rstats::pl_av_fetch(sv_dimname_values, SvUV(sv_k) - 1));
               }
             }
             else {

@@ -638,7 +638,7 @@ namespace Rstats {
         }
         
         v2->merge_na_positions(v1->get_na_positions());
-        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(length);
@@ -649,7 +649,7 @@ namespace Rstats {
         }
           
         v2->merge_na_positions(v1->get_na_positions());
-        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer") || strEQ(type, "logical")) {
         v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(length);
@@ -660,13 +660,11 @@ namespace Rstats {
         }
         
         v2->merge_na_positions(v1->get_na_positions());
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else {
         croak("Error in cumprod() : non-numeric argument to cumprod()");
       }
-      
-      set_vector(sv_r, sv_x_out, v2);
       
       return sv_x_out;
     }

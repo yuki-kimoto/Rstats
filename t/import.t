@@ -71,7 +71,7 @@ use Rstats;
   my $null = NULL;
   is_deeply($null->values, []);
   is_deeply(r->dim($null)->values, []);
-  is_deeply($null->type, 'logical');
+  is_deeply($null->type, 'NULL');
 }
 
 # r

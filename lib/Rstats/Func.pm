@@ -3738,6 +3738,7 @@ sub set_array {
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   my ($poss, $x2_dim) = @{Rstats::Util::parse_index($r, $x1, 0, $_indexs)};
   
+  my $type;
   my $x1_elements;
   if (Rstats::Func::is_factor($r, $x1)) {
     $x1_elements = Rstats::Func::decompose($r, $x1);
@@ -3761,6 +3762,7 @@ sub set_array {
         }
       }
     }
+    $type = $x1->type;
   }
   else {
     # Upgrade mode if type is different
@@ -3769,6 +3771,11 @@ sub set_array {
       ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};
       Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
       $x1->vector($x1_tmp->vector);
+      
+      $type = $x1_tmp->type;
+    }
+    else {
+      $type = $x1->type;
     }
 
     $x1_elements = Rstats::Func::decompose($r, $x1);
@@ -3780,7 +3787,8 @@ sub set_array {
     }
   }
   
-  my $x1_tmp = Rstats::Func::compose($r, $x1->type, $x1_elements);
+  $DB::single = 1;
+  my $x1_tmp = Rstats::Func::compose($r, $type, $x1_elements);
   $x1->vector($x1_tmp->vector);
   $x1->{type} = $x1_tmp->{type};
   $x1->{object_type} = $x1_tmp->{object_type};

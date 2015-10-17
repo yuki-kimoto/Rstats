@@ -2540,29 +2540,7 @@ namespace Rstats {
     
     SV* type(SV* sv_r, SV* sv_x1) {
       
-      Rstats::Type::Enum type = get_vector(sv_r, sv_x1)->type;
-      
-      SV* sv_type;
-      if (type == Rstats::Type::CHARACTER) {
-        sv_type = Rstats::pl_new_sv_pv("character");
-      }
-      else if (type == Rstats::Type::COMPLEX) {
-        sv_type = Rstats::pl_new_sv_pv("complex");
-      }
-      else if (type == Rstats::Type::DOUBLE) {
-        sv_type = Rstats::pl_new_sv_pv("double");
-      }
-      else if (type == Rstats::Type::INTEGER) {
-        sv_type = Rstats::pl_new_sv_pv("integer");
-      }
-      else if (type == Rstats::Type::LOGICAL) {
-        sv_type = Rstats::pl_new_sv_pv("logical");
-      }
-      else {
-        croak("Invalid type(Rstats::Func::type)"); 
-      }
-      
-      return sv_type;
+      return Rstats::pl_new_sv_pv(Rstats::Func::get_type(sv_r, sv_x1));
     }
 
     SV* is_null (SV* sv_r, SV* sv_x1) {
@@ -3471,6 +3449,9 @@ namespace Rstats {
             compose_elements->set_value<Rstats::Integer>(i, element->get_value<Rstats::Integer>(0));
           }
         }
+      }
+      else if (strEQ(type, "NULL")) {
+        // Nothing to do
       }
       else {
         croak("Unknown type(Rstats::Func::compose)");

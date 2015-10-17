@@ -106,6 +106,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
+  typedef UV Index;
   
   namespace Util {
     IV is_perl_number(SV*);

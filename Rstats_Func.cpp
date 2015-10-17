@@ -211,6 +211,7 @@ namespace Rstats {
           }
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         warn("imaginary parts discarded in coercion");
@@ -218,33 +219,37 @@ namespace Rstats {
           v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Complex>(i).real());
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Double>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Integer>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "logical")) {
         for (Rstats::Integer i = 0; i < length; i++) {
           v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Integer>(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {
-        // Nothing to do
+        Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Double>(0);
+        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
       }
       else {
         croak("Error in as_double() : default method not implemented for type '%s'", type);
       }
 
-      Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
@@ -478,6 +483,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_values = Rstats::pl_new_avrv();
       if (!strEQ(type, "NULL")) {
+        
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
         Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);

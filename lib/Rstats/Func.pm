@@ -3734,7 +3734,6 @@ sub set_array {
   my $x1 = shift;
   my $x2 = Rstats::Func::to_c($r, shift);
   
-  
   my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];
   my ($poss, $x2_dim) = @{Rstats::Util::parse_index($r, $x1, 0, $_indexs)};

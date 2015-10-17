@@ -349,8 +349,6 @@ namespace Rstats {
   
   // Rstats::VectorFunc
   namespace VectorFunc {
-    Rstats::Vector* new_empty_vector();
-
     template<class T>
     Rstats::Vector* new_vector(IV);
     template<>

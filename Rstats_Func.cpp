@@ -3304,7 +3304,7 @@ namespace Rstats {
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer")) {
-          for (IV i = 0; i < length; i++) {
+          for (Rstats::Index i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, v1->get_value<Rstats::Integer>(i));
             if (v1->exists_na_position(i)) {
@@ -3316,7 +3316,7 @@ namespace Rstats {
           }
         }
         else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
-          for (IV i = 0; i < length; i++) {
+          for (Rstats::Index i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::VectorFunc::new_vector<Rstats::Logical>(1, v1->get_value<Rstats::Integer>(i));
             if (v1->exists_na_position(i)) {
@@ -3334,16 +3334,16 @@ namespace Rstats {
 
     SV* compose(SV* sv_r, SV* sv_type, SV* sv_elements)
     {
-      IV len = Rstats::pl_av_len(sv_elements);
+      Rstats::Index len = Rstats::pl_av_len(sv_elements);
       
       Rstats::Vector* compose_elements;
-      std::vector<IV> na_positions;
+      std::vector<Rstats::Index> na_positions;
       char* type = SvPV_nolen(sv_type);
       SV* sv_x_out;
       if (strEQ(type, "character")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Character>(len);
-        for (IV i = 0; i < len; i++) {
+        for (Rstats::Index i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_na(sv_r);
@@ -3361,7 +3361,7 @@ namespace Rstats {
       else if (strEQ(type, "complex")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Complex>(len);
-        for (IV i = 0; i < len; i++) {
+        for (Rstats::Index i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_na(sv_r);
@@ -3380,7 +3380,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r);
         compose_elements = Rstats::VectorFunc::new_vector<Rstats::Double>(len);
-        for (IV i = 0; i < len; i++) {
+        for (Rstats::Index i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_na(sv_r);

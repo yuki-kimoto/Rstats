@@ -3338,47 +3338,52 @@ namespace Rstats {
     SV* Class(SV* sv_r, SV* sv_x1) {
       
       // Get class
-      SV* sv_x_out;
+      SV* sv_x_class;
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
       if (Rstats::pl_hv_exists(sv_x1, "class")) {
-        sv_x_out = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
+        sv_x_class = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
       }
-      else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_x1))) {
+      else if (strEQ(type, "NULL")) {
         SV* sv_class_names = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("NULL"));
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_avrv();
-        SV* sv_class_name = Rstats::Func::type(sv_r, sv_x1);
-        if (strEQ(SvPV_nolen(sv_class_name), "double") || strEQ(SvPV_nolen(sv_class_name), "integer")) {
+        SV* sv_class_name;
+        if (strEQ(type, "double") || strEQ(type, "integer")) {
           sv_class_name = Rstats::pl_new_sv_pv("numeric");
+        }
+        else {
+         sv_class_name = Rstats::pl_new_sv_pv(type); 
         }
         
         Rstats::pl_av_push(sv_class_names, sv_class_name);
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_matrix(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("matrix"));
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("array"));
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("data.frame"));
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_list(sv_r, sv_x1))) {
         SV* sv_class_names = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_class_names, Rstats::pl_new_sv_pv("list"));
-        sv_x_out = Rstats::Func::c_character(sv_r, sv_class_names);
+        sv_x_class = Rstats::Func::c_character(sv_r, sv_class_names);
       }
       
-      return sv_x_out;
+      return sv_x_class;
     }
 
     SV* is_factor(SV* sv_r, SV* sv_x1) {

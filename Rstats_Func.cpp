@@ -3739,20 +3739,24 @@ namespace Rstats {
     
     SV* mode(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_type = Rstats::Func::type(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
-      SV* sv_mode;
-      if (to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_x1))) {
-        sv_mode = Rstats::pl_new_sv_pv("NULL");
+      char* mode;
+      if (strEQ(type, "NULL")) {
+        mode = "NULL";
       }
-      else if (strEQ(SvPV_nolen(sv_type), "integer") || strEQ(SvPV_nolen(sv_type), "double")) {
-        sv_mode = Rstats::pl_new_sv_pv("numeric");
+      else if (strEQ(type, "integer") || strEQ(type, "double")) {
+        mode = "numeric";
       }
       else {
-        sv_mode = sv_type;
+        mode = type;
       }
       
-      return Rstats::Func::c_character(sv_r, sv_mode);
+      Rstats::Vector* v_mode = Rstats::VectorFunc::new_vector<Rstats::Character>(1, Rstats::pl_new_sv_pv(mode));
+      
+      SV* sv_mode = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_mode);
+      
+      return sv_mode;
     }
     
     SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {

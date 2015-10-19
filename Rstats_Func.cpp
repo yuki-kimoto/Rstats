@@ -3185,20 +3185,25 @@ namespace Rstats {
           sv_index = &PL_sv_undef;
         }
         
+        Rstats::Vector* v2_names;
+        SV* sv_x2_names;
         if (SvOK(sv_index)) {
+          
           SV* sv_x1_names_values = Rstats::Func::values(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
           SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
+          Rstats::Vector* v2_names = Rstats::VectorFunc::new_vector<Rstats::Character>(Rstats::pl_av_len(sv_index_values));
           
           for (Rstats::Integer i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
             Rstats::Integer idx = SvIV(Rstats::pl_av_fetch(sv_index_values, i));
             SV* sv_x2_names_value = Rstats::pl_av_fetch(sv_x1_names_values, idx - 1);
-            Rstats::pl_av_push(sv_x2_names_values, sv_x2_names_value);
+            v2_names->set_value(i, Rstats::pl_new_sv_sv(sv_x2_names_value));
           }
+          sv_x2_names = Rstats::Func::new_vector<Rstats::Character>(sv_r, v2_names);
         }
         else {
-          sv_x2_names_values = Rstats::Func::values(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
+          sv_x2_names = Rstats::Func::clone(sv_r, Rstats::pl_hv_fetch(sv_x1, "names"));
         }
-        Rstats::pl_hv_store(sv_x2, "names", Rstats::Func::c_character(sv_r, sv_x2_names_values));
+        Rstats::pl_hv_store(sv_x2, "names", sv_x2_names);
       }
       
       // dimnames

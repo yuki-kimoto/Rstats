@@ -145,10 +145,12 @@ namespace Rstats {
     Rstats::Complex pow(Rstats::Complex, Rstats::Complex);
     Rstats::Double pow(Rstats::Double, Rstats::Double);
     Rstats::Double pow(Rstats::Integer, Rstats::Integer);
+    Rstats::Double pow(Rstats::Logical, Rstats::Logical);
 
     Rstats::Complex remainder(Rstats::Complex, Rstats::Complex);
     Rstats::Double remainder(Rstats::Double, Rstats::Double);
     Rstats::Double remainder(Rstats::Integer, Rstats::Integer);
+    Rstats::Double remainder(Rstats::Logical, Rstats::Logical);
 
     Rstats::Double Re(Rstats::Complex);
     Rstats::Double Re(Rstats::Double);
@@ -198,6 +200,7 @@ namespace Rstats {
     Rstats::Double abs(Rstats::Complex);
     Rstats::Double abs(Rstats::Double);
     Rstats::Double abs(Rstats::Integer);
+    Rstats::Double abs(Rstats::Logical);
 
     Rstats::Double Mod(Rstats::Complex);
     Rstats::Double Mod(Rstats::Double);
@@ -206,30 +209,37 @@ namespace Rstats {
     Rstats::Complex log(Rstats::Complex);
     Rstats::Double log(Rstats::Double);
     Rstats::Double log(Rstats::Integer);
+    Rstats::Double log(Rstats::Logical);
 
     Rstats::Complex logb(Rstats::Complex);
     Rstats::Double logb(Rstats::Double);
     Rstats::Double logb(Rstats::Integer);
+    Rstats::Double logb(Rstats::Logical);
 
     Rstats::Complex log10(Rstats::Complex);
     Rstats::Double log10(Rstats::Double);
     Rstats::Double log10(Rstats::Integer);
+    Rstats::Double log10(Rstats::Logical);
 
     Rstats::Complex log2(Rstats::Complex);
     Rstats::Double log2(Rstats::Double);
     Rstats::Double log2(Rstats::Integer);
+    Rstats::Double log2(Rstats::Logical);
     
     Rstats::Complex expm1(Rstats::Complex);
     Rstats::Double expm1(Rstats::Double);
     Rstats::Double expm1(Rstats::Integer);
+    Rstats::Double expm1(Rstats::Logical);
 
     Rstats::Double Arg(Rstats::Complex);
     Rstats::Double Arg(Rstats::Double);
     Rstats::Double Arg(Rstats::Integer);
+    Rstats::Double Arg(Rstats::Logical);
 
     Rstats::Complex exp(Rstats::Complex);
     Rstats::Double exp(Rstats::Double);
     Rstats::Double exp(Rstats::Integer);
+    Rstats::Double exp(Rstats::Logical);
 
     Rstats::Complex sqrt(Rstats::Complex);
     Rstats::Double sqrt(Rstats::Double);
@@ -238,89 +248,108 @@ namespace Rstats {
     Rstats::Complex atan(Rstats::Complex);
     Rstats::Double atan(Rstats::Double);
     Rstats::Double atan(Rstats::Integer);
+    Rstats::Double atan(Rstats::Logical);
 
     Rstats::Complex asin(Rstats::Complex);
     Rstats::Double asin(Rstats::Double);
     Rstats::Double asin(Rstats::Integer);
+    Rstats::Double asin(Rstats::Logical);
 
     Rstats::Complex acos(Rstats::Complex);
     Rstats::Double acos(Rstats::Double);
     Rstats::Double acos(Rstats::Integer);
+    Rstats::Double acos(Rstats::Logical);
 
     Rstats::Complex asinh(Rstats::Complex);
     Rstats::Double asinh(Rstats::Double);
     Rstats::Double asinh(Rstats::Integer);
+    Rstats::Double asinh(Rstats::Logical);
 
     Rstats::Complex acosh(Rstats::Complex);
     Rstats::Double acosh(Rstats::Double);
     Rstats::Double acosh(Rstats::Integer);
+    Rstats::Double acosh(Rstats::Logical);
 
     Rstats::Complex atanh(Rstats::Complex);
     Rstats::Double atanh(Rstats::Double);
     Rstats::Double atanh(Rstats::Integer);
+    Rstats::Double atanh(Rstats::Logical);
     
     Rstats::Complex negation(Rstats::Complex);
     Rstats::Double negation(Rstats::Double);
     Rstats::Integer negation(Rstats::Integer);
+    Rstats::Integer negation(Rstats::Logical);
 
     Rstats::Complex atan2(Rstats::Complex, Rstats::Complex);
     Rstats::Double atan2(Rstats::Double, Rstats::Double);
     Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
+    Rstats::Double atan2(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical And(SV*, SV*);
     Rstats::Logical And(Rstats::Complex, Rstats::Complex);
     Rstats::Logical And(Rstats::Double, Rstats::Double);
     Rstats::Logical And(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical And(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical Or(SV*, SV*);
     Rstats::Logical Or(Rstats::Complex, Rstats::Complex);
     Rstats::Logical Or(Rstats::Double, Rstats::Double);
     Rstats::Logical Or(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical Or(Rstats::Logical, Rstats::Logical);
     
     Rstats::Logical equal(SV*, SV*);
     Rstats::Logical equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical equal(Rstats::Double, Rstats::Double);
     Rstats::Logical equal(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical equal(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical not_equal(SV*, SV*);
     Rstats::Logical not_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical not_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical not_equal(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical not_equal(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical more_than(SV*, SV*);
     Rstats::Logical more_than(Rstats::Complex, Rstats::Complex);
     Rstats::Logical more_than(Rstats::Double, Rstats::Double);
     Rstats::Logical more_than(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical more_than(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical less_than(SV*, SV*);
     Rstats::Logical less_than(Rstats::Complex, Rstats::Complex);
     Rstats::Logical less_than(Rstats::Double, Rstats::Double);
     Rstats::Logical less_than(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical less_than(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical more_than_or_equal(SV*, SV*);
     Rstats::Logical more_than_or_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical more_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical more_than_or_equal(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical more_than_or_equal(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical less_than_or_equal(SV*, SV*);
     Rstats::Logical less_than_or_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical less_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical less_than_or_equal(Rstats::Integer, Rstats::Integer);
+    Rstats::Logical less_than_or_equal(Rstats::Logical, Rstats::Logical);
 
     Rstats::Logical is_infinite(SV*);
     Rstats::Logical is_infinite(Rstats::Complex);
     Rstats::Logical is_infinite(Rstats::Double);
     Rstats::Logical is_infinite(Rstats::Integer);
+    Rstats::Logical is_infinite(Rstats::Logical);
 
     Rstats::Logical is_finite(SV*);
     Rstats::Logical is_finite(Rstats::Complex);
     Rstats::Logical is_finite(Rstats::Double);
     Rstats::Logical is_finite(Rstats::Integer);
+    Rstats::Logical is_finite(Rstats::Logical);
 
     Rstats::Logical is_nan(SV*);
     Rstats::Logical is_nan(Rstats::Complex);
     Rstats::Logical is_nan(Rstats::Double);
     Rstats::Logical is_nan(Rstats::Integer);
+    Rstats::Logical is_nan(Rstats::Logical);
   }
 
   class Vector {

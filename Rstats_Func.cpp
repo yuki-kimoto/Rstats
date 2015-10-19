@@ -3212,22 +3212,25 @@ namespace Rstats {
         SV* sv_dimnames = Rstats::pl_hv_fetch(sv_x1, "dimnames");
         Rstats::Integer length = Rstats::pl_av_len(sv_dimnames);
         for (Rstats::Integer i = 0; i < length; i++) {
-          SV* sv_dimname = Rstats::pl_av_fetch(sv_dimnames, i);;
+          SV* sv_dimname = Rstats::pl_av_fetch(sv_dimnames, i);
           if (SvOK(sv_dimname) && Rstats::Func::get_length(sv_r, sv_dimname) > 0) {
             SV* sv_index = SvOK(sv_new_indexes) ? Rstats::pl_av_fetch(sv_new_indexes, i) : &PL_sv_undef;
             SV* sv_dimname_values = Rstats::Func::values(sv_r, sv_dimname);
             SV* sv_new_dimname_values = Rstats::pl_new_avrv();
+            SV* sv_x2_dimnames;
             if (SvOK(sv_index)) {
               SV* sv_index_values = Rstats::Func::values(sv_r, sv_index);
+              Rstats::Vector* v_k = Rstats::VectorFunc::new_vector<Rstats::Character>(Rstats::pl_av_len(sv_index_values));
               for (Rstats::Integer i = 0; i < Rstats::pl_av_len(sv_index_values); i++) {
                 SV* sv_k = Rstats::pl_av_fetch(sv_index_values, i);
-                Rstats::pl_av_push(sv_new_dimname_values, Rstats::pl_av_fetch(sv_dimname_values, SvIV(sv_k) - 1));
+                v_k->set_value<Rstats::Character>(i, Rstats::pl_new_sv_sv(Rstats::pl_av_fetch(sv_dimname_values, SvIV(sv_k) - 1)));
               }
+              sv_x2_dimnames = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_k);
             }
             else {
-              sv_new_dimname_values = sv_dimname_values;
+              sv_x2_dimnames = Rstats::Func::clone(sv_r, sv_dimname);
             }
-            Rstats::pl_av_push(sv_new_dimnames, Rstats::Func::c_character(sv_r, sv_new_dimname_values));
+            Rstats::pl_av_push(sv_new_dimnames, sv_x2_dimnames);
           }
         }
         Rstats::pl_hv_store(sv_x2, "dimnames", sv_new_dimnames);

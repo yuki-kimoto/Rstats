@@ -2634,9 +2634,11 @@ namespace Rstats {
 
     SV* Typeof(SV* sv_r, SV* sv_x1) {
       
-      SV* sv_x2 = Rstats::Func::c_character(sv_r, Rstats::pl_new_sv_pv(Rstats::Func::get_type(sv_r, sv_x1)));
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Character>(1, Rstats::pl_new_sv_pv(type));
+      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       
-      return sv_x2;
+      return sv_x_out;
     }
     
     SV* type(SV* sv_r, SV* sv_x1) {

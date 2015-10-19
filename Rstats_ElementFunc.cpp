@@ -59,14 +59,14 @@ namespace Rstats {
     // Im
     Rstats::Double Im(Rstats::Complex e1) { return e1.imag(); }
     Rstats::Double Im(Rstats::Double e1) { return 0; }
-    Rstats::Double Im(Rstats::Integer e1) { return 0; }
-    Rstats::Double Im(Rstats::Logical e1) { return 0; }
+    Rstats::Double Im(Rstats::Integer e1) { return Rstats::ElementFunc::Im((Rstats::Double)e1); }
+    Rstats::Double Im(Rstats::Logical e1) { return Rstats::ElementFunc::Im((Rstats::Double)e1); }
 
     // Conj
     Rstats::Complex Conj(Rstats::Complex e1) { return Rstats::Complex(e1.real(), -e1.imag()); }
     Rstats::Double Conj(Rstats::Double e1) { return e1; }
-    Rstats::Double Conj(Rstats::Integer e1) { return e1; }
-    Rstats::Double Conj(Rstats::Logical e1) { return e1; }
+    Rstats::Double Conj(Rstats::Integer e1) { return Rstats::ElementFunc::Conj((Rstats::Double)e1); }
+    Rstats::Double Conj(Rstats::Logical e1) { return Rstats::ElementFunc::Conj((Rstats::Double)e1); }
 
     // sin
     Rstats::Complex sin(Rstats::Complex e1) { return std::sin(e1); }

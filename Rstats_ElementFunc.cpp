@@ -63,7 +63,8 @@ namespace Rstats {
     // sin
     Rstats::Complex sin(Rstats::Complex e1) { return std::sin(e1); }
     Rstats::Double sin(Rstats::Double e1) { return std::sin(e1); }
-    Rstats::Double sin(Rstats::Integer e1) { return sin((Rstats::Double)e1); }
+    Rstats::Double sin(Rstats::Integer e1) { return Rstats::ElementFunc::sin((Rstats::Double)e1); }
+    Rstats::Double sin(Rstats::Logical e1) { return Rstats::ElementFunc::sin((Rstats::Double)e1); }
 
     // cos
     Rstats::Complex cos(Rstats::Complex e1) { return std::cos(e1); }

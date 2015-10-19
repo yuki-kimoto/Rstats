@@ -1593,20 +1593,42 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
         Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sin;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
         Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sin;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
         Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sin;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Double (*func)(Rstats::Logical) = &Rstats::ElementFunc::sin;
+        Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
+      }      
       else {
         croak("Error in sin() : non-numeric argument to sin()");
       }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }

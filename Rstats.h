@@ -161,6 +161,7 @@ namespace Rstats {
     Rstats::Complex sin(Rstats::Complex);
     Rstats::Double sin(Rstats::Double);
     Rstats::Double sin(Rstats::Integer);
+    Rstats::Double sin(Rstats::Logical);
     
     Rstats::Complex cos(Rstats::Complex);
     Rstats::Double cos(Rstats::Double);

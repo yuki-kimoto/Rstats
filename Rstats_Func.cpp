@@ -2691,12 +2691,12 @@ namespace Rstats {
     }
 
     SV* pi (SV* sv_r) {
-      SV* sv_values = Rstats::pl_new_avrv();
       Rstats::Double pi = Rstats::Util::pi();
-      SV* sv_pi = Rstats::pl_new_sv_nv(pi);
-      Rstats::pl_av_push(sv_values, sv_pi);
       
-      return c_double(sv_r, sv_values);
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector(1, pi);
+      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+      
+      return sv_x_out;
     }
 
     SV* c_character(SV* sv_r, SV* sv_values) {

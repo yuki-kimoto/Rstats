@@ -207,7 +207,8 @@ namespace Rstats {
     // exp
     Rstats::Complex exp(Rstats::Complex e1) { return std::exp(e1); }
     Rstats::Double exp(Rstats::Double e1) { return std::exp(e1); }
-    Rstats::Double exp(Rstats::Integer e1) { return exp((Rstats::Double)e1); }
+    Rstats::Double exp(Rstats::Integer e1) { return Rstats::ElementFunc::exp((Rstats::Double)e1); }
+    Rstats::Double exp(Rstats::Logical e1) { return Rstats::ElementFunc::exp((Rstats::Double)e1); }
 
     // sqrt
     Rstats::Complex sqrt(Rstats::Complex e1) {
@@ -220,7 +221,8 @@ namespace Rstats {
       }
     }
     Rstats::Double sqrt(Rstats::Double e1) { return std::sqrt(e1); }
-    Rstats::Double sqrt(Rstats::Integer e1) { return sqrt((Rstats::Double)e1); }
+    Rstats::Double sqrt(Rstats::Integer e1) { return Rstats::ElementFunc::sqrt((Rstats::Double)e1); }
+    Rstats::Double sqrt(Rstats::Logical e1) { return Rstats::ElementFunc::sqrt((Rstats::Double)e1); }
 
     // atan
     Rstats::Complex atan(Rstats::Complex e1) {
@@ -240,7 +242,8 @@ namespace Rstats {
       }
     }
     Rstats::Double atan(Rstats::Double e1) { return ::atan2(e1, 1); }
-    Rstats::Double atan(Rstats::Integer e1) { return atan2((Rstats::Double)e1, (Rstats::Double)1); }
+    Rstats::Double atan(Rstats::Integer e1) { return Rstats::ElementFunc::atan2((Rstats::Double)e1, (Rstats::Double)1); }
+    Rstats::Double atan(Rstats::Logical e1) { return Rstats::ElementFunc::atan2((Rstats::Double)e1, (Rstats::Double)1); }
 
     // asin
     Rstats::Complex asin(Rstats::Complex e1) {
@@ -295,7 +298,8 @@ namespace Rstats {
       }
     }
     Rstats::Double asin(Rstats::Double e1) { return std::asin(e1); }
-    Rstats::Double asin(Rstats::Integer e1) { return asin((Rstats::Double)e1); }
+    Rstats::Double asin(Rstats::Integer e1) { return Rstats::ElementFunc::asin((Rstats::Double)e1); }
+    Rstats::Double asin(Rstats::Logical e1) { return Rstats::ElementFunc::asin((Rstats::Double)e1); }
 
     // acos
     Rstats::Complex acos(Rstats::Complex e1) {
@@ -350,7 +354,8 @@ namespace Rstats {
       }
     }
     Rstats::Double acos(Rstats::Double e1) { return std::acos(e1); }
-    Rstats::Double acos(Rstats::Integer e1) { return acos((Rstats::Double)e1); }
+    Rstats::Double acos(Rstats::Integer e1) { return Rstats::ElementFunc::acos((Rstats::Double)e1); }
+    Rstats::Double acos(Rstats::Logical e1) { return Rstats::ElementFunc::acos((Rstats::Double)e1); }
 
     // asinh
     Rstats::Complex asinh(Rstats::Complex e1) {
@@ -371,7 +376,8 @@ namespace Rstats {
       
       return std::log(e2_t);
     }
-    Rstats::Double asinh(Rstats::Integer e1) { return asinh((Rstats::Double)e1); }
+    Rstats::Double asinh(Rstats::Integer e1) { return Rstats::ElementFunc::asinh((Rstats::Double)e1); }
+    Rstats::Double asinh(Rstats::Logical e1) { return Rstats::ElementFunc::asinh((Rstats::Double)e1); }
 
     // acosh
     Rstats::Complex acosh(Rstats::Complex e1) {
@@ -425,7 +431,8 @@ namespace Rstats {
         return std::numeric_limits<Rstats::Double>::signaling_NaN();
       }
     }
-    Rstats::Double acosh(Rstats::Integer e1) { return acosh((Rstats::Double)e1); }
+    Rstats::Double acosh(Rstats::Integer e1) { return Rstats::ElementFunc::acosh((Rstats::Double)e1); }
+    Rstats::Double acosh(Rstats::Logical e1) { return Rstats::ElementFunc::acosh((Rstats::Double)e1); }
 
     // atanh
     Rstats::Complex atanh(Rstats::Complex e1) {
@@ -468,12 +475,14 @@ namespace Rstats {
         }
       }
     }
-    Rstats::Double atanh(Rstats::Integer e1) { return atanh((Rstats::Double)e1); }
+    Rstats::Double atanh(Rstats::Integer e1) { return Rstats::ElementFunc::atanh((Rstats::Double)e1); }
+    Rstats::Double atanh(Rstats::Logical e1) { return Rstats::ElementFunc::atanh((Rstats::Double)e1); }
 
     // negation
     Rstats::Complex negation(Rstats::Complex e1) { return -e1; }
     Rstats::Double negation(Rstats::Double e1) { return -e1; }
     Rstats::Integer negation(Rstats::Integer e1) { return -e1; }
+    Rstats::Integer negation(Rstats::Logical e1) { return Rstats::ElementFunc::negation((Rstats::Integer)e1); }
 
     // atan2
     Rstats::Complex atan2(Rstats::Complex e1, Rstats::Complex e2) {
@@ -506,7 +515,12 @@ namespace Rstats {
         return ::atan2(e1, e2);
       }
     }
-    Rstats::Double atan2(Rstats::Integer e1, Rstats::Integer e2) { return atan2((Rstats::Double)e1, (Rstats::Double)e2); }
+    Rstats::Double atan2(Rstats::Integer e1, Rstats::Integer e2) {
+      return Rstats::ElementFunc::atan2((Rstats::Double)e1, (Rstats::Double)e2);
+    }
+    Rstats::Double atan2(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::atan2((Rstats::Double)e1, (Rstats::Double)e2);
+    }
 
     // And
     Rstats::Logical And(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
@@ -519,6 +533,9 @@ namespace Rstats {
       else { return e1 && e2 ? 1 : 0; }
     }
     Rstats::Logical And(Rstats::Integer e1, Rstats::Integer e2) { return e1 && e2 ? 1 : 0; }
+    Rstats::Logical And(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::And((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // Or
     Rstats::Logical Or(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
@@ -531,7 +548,10 @@ namespace Rstats {
       else { return e1 || e2 ? 1 : 0; }
     }
     Rstats::Logical Or(Rstats::Integer e1, Rstats::Integer e2) { return e1 || e2 ? 1 : 0; }
-
+    Rstats::Logical Or(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::Or((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
+    
     // equal
     Rstats::Logical equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
     Rstats::Logical equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 == e2 ? 1 : 0; }
@@ -540,6 +560,9 @@ namespace Rstats {
       else { return e1 == e2 ? 1 : 0; }
     }
     Rstats::Logical equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 == e2 ? 1 : 0; }
+    Rstats::Logical equal(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::equal((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // not equal
     Rstats::Logical not_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
@@ -549,6 +572,9 @@ namespace Rstats {
       else { return e1 != e2 ? 1 : 0; }
     }
     Rstats::Logical not_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 != e2 ? 1 : 0; }
+    Rstats::Logical not_equal(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::not_equal((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // more_than
     Rstats::Logical more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
@@ -557,6 +583,9 @@ namespace Rstats {
       else { return e1 > e2 ? 1 : 0; }
     }
     Rstats::Logical more_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 > e2 ? 1 : 0; }
+    Rstats::Logical more_than(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::more_than((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // less_than
     Rstats::Logical less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
@@ -565,6 +594,9 @@ namespace Rstats {
       else { return e1 < e2 ? 1 : 0; }
     }
     Rstats::Logical less_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 < e2 ? 1 : 0; }
+    Rstats::Logical less_than(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::less_than((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // more_than_or_equal
     Rstats::Logical more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
@@ -573,7 +605,10 @@ namespace Rstats {
       else { return e1 >= e2 ? 1 : 0; }
     }
     Rstats::Logical more_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 >= e2 ? 1 : 0; }
-
+    Rstats::Logical more_than_or_equal(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::more_than_or_equal((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
+    
     // less_than_or_equal
     Rstats::Logical less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
     Rstats::Logical less_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
@@ -581,6 +616,9 @@ namespace Rstats {
       else { return e1 <= e2 ? 1 : 0; }
     }
     Rstats::Logical less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
+    Rstats::Logical less_than_or_equal(Rstats::Logical e1, Rstats::Logical e2) {
+      return Rstats::ElementFunc::less_than_or_equal((Rstats::Integer)e1, (Rstats::Integer)e2);
+    }
 
     // is_infinite
     Rstats::Logical is_infinite(Rstats::Character e1) { return 0; }
@@ -597,6 +635,7 @@ namespace Rstats {
     }
     Rstats::Logical is_infinite(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_infinite(Rstats::Integer e1) { return 0; }
+    Rstats::Logical is_infinite(Rstats::Logical e1) { return Rstats::ElementFunc::is_infinite((Rstats::Integer)e1); }
 
     // is_finite
     Rstats::Logical is_finite(Rstats::Character e1) { return 0; }
@@ -610,6 +649,7 @@ namespace Rstats {
     }
     Rstats::Logical is_finite(Rstats::Double e1) { return std::isfinite(e1) ? 1 : 0; }
     Rstats::Logical is_finite(Rstats::Integer e1) { return 1; }
+    Rstats::Logical is_finite(Rstats::Logical e1) { return Rstats::ElementFunc::is_finite((Rstats::Integer)e1); }
 
     // is_nan
     Rstats::Logical is_nan(Rstats::Character e1) { return 0; }
@@ -623,5 +663,6 @@ namespace Rstats {
     }
     Rstats::Logical is_nan(Rstats::Double e1) { return std::isnan(e1) ? 1 : 0; }
     Rstats::Logical is_nan(Rstats::Integer e1) { return 1; }
+    Rstats::Logical is_nan(Rstats::Logical e1) { return Rstats::ElementFunc::is_nan((Rstats::Integer)e1); }
   }
 }

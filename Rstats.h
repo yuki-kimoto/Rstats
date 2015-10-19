@@ -407,12 +407,12 @@ namespace Rstats {
     SV* c_logical(SV*, SV*);
     SV* c_complex(SV*, SV*);
 
-    SV* new_null(SV*); /* r->NULL */
-    SV* new_na(SV*); /* r->NA */
-    SV* new_nan(SV*); /* r->NaN */
-    SV* new_inf(SV*); /* r->Inf */
-    SV* new_false(SV*); /* r->FALSE */
-    SV* new_true(SV*); /* r->TRUE */
+    SV* new_NULL(SV*); /* r->NULL */
+    SV* new_NA(SV*); /* r->NA */
+    SV* new_NaN(SV*); /* r->NaN */
+    SV* new_Inf(SV*); /* r->Inf */
+    SV* new_FALSE(SV*); /* r->FALSE */
+    SV* new_TRUE(SV*); /* r->TRUE */
 
     SV* to_object(SV*, SV*);
     SV* pi(SV*);

@@ -205,6 +205,7 @@ namespace Rstats {
     Rstats::Double Mod(Rstats::Complex);
     Rstats::Double Mod(Rstats::Double);
     Rstats::Double Mod(Rstats::Integer);
+    Rstats::Double Mod(Rstats::Logical);
 
     Rstats::Complex log(Rstats::Complex);
     Rstats::Double log(Rstats::Double);

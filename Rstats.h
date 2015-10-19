@@ -125,18 +125,22 @@ namespace Rstats {
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
     Rstats::Double add(Rstats::Double, Rstats::Double);
     Rstats::Integer add(Rstats::Integer, Rstats::Integer);
+    Rstats::Integer add(Rstats::Logical, Rstats::Logical);
 
     Rstats::Complex subtract(Rstats::Complex, Rstats::Complex);
     Rstats::Double subtract(Rstats::Double, Rstats::Double);
     Rstats::Integer subtract(Rstats::Integer, Rstats::Integer);
+    Rstats::Integer subtract(Rstats::Logical, Rstats::Logical);
 
     Rstats::Complex multiply(Rstats::Complex, Rstats::Complex);
     Rstats::Double multiply(Rstats::Double, Rstats::Double);
     Rstats::Integer multiply(Rstats::Integer, Rstats::Integer);
+    Rstats::Integer multiply(Rstats::Logical, Rstats::Logical);
 
     Rstats::Complex divide(Rstats::Complex, Rstats::Complex);
     Rstats::Double divide(Rstats::Double, Rstats::Double);
     Rstats::Double divide(Rstats::Integer, Rstats::Integer);
+    Rstats::Double divide(Rstats::Logical, Rstats::Logical);
 
     Rstats::Complex pow(Rstats::Complex, Rstats::Complex);
     Rstats::Double pow(Rstats::Double, Rstats::Double);
@@ -149,14 +153,17 @@ namespace Rstats {
     Rstats::Double Re(Rstats::Complex);
     Rstats::Double Re(Rstats::Double);
     Rstats::Double Re(Rstats::Integer);
+    Rstats::Double Re(Rstats::Logical);
 
     Rstats::Double Im(Rstats::Complex);
     Rstats::Double Im(Rstats::Double);
     Rstats::Double Im(Rstats::Integer);
+    Rstats::Double Im(Rstats::Logical);
 
     Rstats::Complex Conj(Rstats::Complex);
     Rstats::Double Conj(Rstats::Double);
     Rstats::Double Conj(Rstats::Integer);
+    Rstats::Double Conj(Rstats::Logical);
 
     Rstats::Complex sin(Rstats::Complex);
     Rstats::Double sin(Rstats::Double);
@@ -166,22 +173,27 @@ namespace Rstats {
     Rstats::Complex cos(Rstats::Complex);
     Rstats::Double cos(Rstats::Double);
     Rstats::Double cos(Rstats::Integer);
+    Rstats::Double cos(Rstats::Logical);
 
     Rstats::Complex tan(Rstats::Complex);
     Rstats::Double tan(Rstats::Double);
     Rstats::Double tan(Rstats::Integer);
+    Rstats::Double tan(Rstats::Logical);
 
     Rstats::Complex sinh(Rstats::Complex);
     Rstats::Double sinh(Rstats::Double);
     Rstats::Double sinh(Rstats::Integer);
+    Rstats::Double sinh(Rstats::Logical);
 
     Rstats::Complex cosh(Rstats::Complex);
     Rstats::Double cosh(Rstats::Double);
     Rstats::Double cosh(Rstats::Integer);
+    Rstats::Double cosh(Rstats::Logical);
 
     Rstats::Complex tanh (Rstats::Complex z);
     Rstats::Double tanh(Rstats::Double);
     Rstats::Double tanh(Rstats::Integer);
+    Rstats::Double tanh(Rstats::Logical);
 
     Rstats::Double abs(Rstats::Complex);
     Rstats::Double abs(Rstats::Double);
@@ -405,6 +417,15 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* sin(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sin;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* tanh(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tanh;
       
       Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
       

@@ -100,7 +100,8 @@ namespace Rstats {
       }
     }
     Rstats::Double tanh(Rstats::Double e1) { return std::tanh(e1); }
-    Rstats::Double tanh(Rstats::Integer e1) { return tanh((Rstats::Double)e1); }
+    Rstats::Double tanh(Rstats::Integer e1) { return Rstats::ElementFunc::tanh((Rstats::Double)e1); }
+    Rstats::Double tanh(Rstats::Logical e1) { return Rstats::ElementFunc::tanh((Rstats::Double)e1); }
 
     // abs
     Rstats::Double abs(Rstats::Complex e1) { return std::abs(e1); }

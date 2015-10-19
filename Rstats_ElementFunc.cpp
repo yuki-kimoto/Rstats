@@ -8,26 +8,31 @@ namespace Rstats {
     Rstats::Complex add(Rstats::Complex e1, Rstats::Complex e2) { return e1 + e2; }
     Rstats::Double add(Rstats::Double e1, Rstats::Double e2) { return e1 + e2; }
     Rstats::Integer add(Rstats::Integer e1, Rstats::Integer e2) { return e1 + e2; }
+    Rstats::Integer add(Rstats::Logical e1, Rstats::Logical e2) { return e1 + e2; }
 
     // subtract
     Rstats::Complex subtract(Rstats::Complex e1, Rstats::Complex e2) { return e1 - e2; }
     Rstats::Double subtract(Rstats::Double e1, Rstats::Double e2) { return e1 - e2; }
     Rstats::Integer subtract(Rstats::Integer e1, Rstats::Integer e2) { return e1 - e2; }
+    Rstats::Integer subtract(Rstats::Logical e1, Rstats::Logical e2) { return e1 - e2; }
 
     // multiply
     Rstats::Complex multiply(Rstats::Complex e1, Rstats::Complex e2) { return e1 * e2; }
     Rstats::Double multiply(Rstats::Double e1, Rstats::Double e2) { return e1 * e2; }
     Rstats::Integer multiply(Rstats::Integer e1, Rstats::Integer e2) { return e1 * e2; }
+    Rstats::Integer multiply(Rstats::Logical e1, Rstats::Logical e2) { return e1 * e2; }
 
     // divide
     Rstats::Complex divide(Rstats::Complex e1, Rstats::Complex e2) { return e1 / e2; }
     Rstats::Double divide(Rstats::Double e1, Rstats::Double e2) { return e1 / e2; }
     Rstats::Double divide(Rstats::Integer e1, Rstats::Integer e2) { return e1 / e2; }
+    Rstats::Double divide(Rstats::Logical e1, Rstats::Logical e2) { return e1 / e2; }
 
     // pow
     Rstats::Complex pow(Rstats::Complex e1, Rstats::Complex e2) { return std::pow(e1, e2); }
     Rstats::Double pow(Rstats::Double e1, Rstats::Double e2) { return ::pow(e1, e2); }
     Rstats::Double pow(Rstats::Integer e1, Rstats::Integer e2) { return pow((Rstats::Double)e1, (Rstats::Double)e2); }
+    Rstats::Double pow(Rstats::Logical e1, Rstats::Logical e2) { return pow((Rstats::Double)e1, (Rstats::Double)e2); }
 
     // remainder
     Rstats::Complex remainder(Rstats::Complex e1, Rstats::Complex e2) {
@@ -49,16 +54,19 @@ namespace Rstats {
     Rstats::Double Re(Rstats::Complex e1) { return e1.real(); }
     Rstats::Double Re(Rstats::Double e1) { return e1; }
     Rstats::Double Re(Rstats::Integer e1) { return e1; }
+    Rstats::Double Re(Rstats::Logical e1) { return e1; }
 
     // Im
     Rstats::Double Im(Rstats::Complex e1) { return e1.imag(); }
     Rstats::Double Im(Rstats::Double e1) { return 0; }
     Rstats::Double Im(Rstats::Integer e1) { return 0; }
+    Rstats::Double Im(Rstats::Logical e1) { return 0; }
 
     // Conj
     Rstats::Complex Conj(Rstats::Complex e1) { return Rstats::Complex(e1.real(), -e1.imag()); }
     Rstats::Double Conj(Rstats::Double e1) { return e1; }
     Rstats::Double Conj(Rstats::Integer e1) { return e1; }
+    Rstats::Double Conj(Rstats::Logical e1) { return e1; }
 
     // sin
     Rstats::Complex sin(Rstats::Complex e1) { return std::sin(e1); }
@@ -69,22 +77,26 @@ namespace Rstats {
     // cos
     Rstats::Complex cos(Rstats::Complex e1) { return std::cos(e1); }
     Rstats::Double cos(Rstats::Double e1) { return std::cos(e1); }
-    Rstats::Double cos(Rstats::Integer e1) { return cos((Rstats::Double)e1); }
+    Rstats::Double cos(Rstats::Integer e1) { return Rstats::ElementFunc::cos((Rstats::Double)e1); }
+    Rstats::Double cos(Rstats::Logical e1) { return Rstats::ElementFunc::cos((Rstats::Double)e1); }
 
     // tan
     Rstats::Complex tan(Rstats::Complex e1) { return std::tan(e1); }
     Rstats::Double tan(Rstats::Double e1) { return std::tan(e1); }
-    Rstats::Double tan(Rstats::Integer e1) { return tan((Rstats::Double)e1); }
+    Rstats::Double tan(Rstats::Integer e1) { return Rstats::ElementFunc::tan((Rstats::Double)e1); }
+    Rstats::Double tan(Rstats::Logical e1) { return Rstats::ElementFunc::tan((Rstats::Double)e1); }
 
     // sinh
     Rstats::Complex sinh(Rstats::Complex e1) { return std::sinh(e1); }
     Rstats::Double sinh(Rstats::Double e1) { return std::sinh(e1); }
-    Rstats::Double sinh(Rstats::Integer e1) { return sinh((Rstats::Double)e1); }
+    Rstats::Double sinh(Rstats::Integer e1) { return Rstats::ElementFunc::sinh((Rstats::Double)e1); }
+    Rstats::Double sinh(Rstats::Logical e1) { return Rstats::ElementFunc::sinh((Rstats::Double)e1); }
 
     // cosh
     Rstats::Complex cosh(Rstats::Complex e1) { return std::cosh(e1); }
     Rstats::Double cosh(Rstats::Double e1) { return std::cosh(e1); }
-    Rstats::Double cosh(Rstats::Integer e1) { return cosh((Rstats::Double)e1); }
+    Rstats::Double cosh(Rstats::Integer e1) { return Rstats::ElementFunc::cosh((Rstats::Double)e1); }
+    Rstats::Double cosh(Rstats::Logical e1) { return Rstats::ElementFunc::cosh((Rstats::Double)e1); }
 
     // tanh
     Rstats::Complex tanh (Rstats::Complex z) {
@@ -106,27 +118,32 @@ namespace Rstats {
     // abs
     Rstats::Double abs(Rstats::Complex e1) { return std::abs(e1); }
     Rstats::Double abs(Rstats::Double e1) { return std::abs(e1); }
-    Rstats::Double abs(Rstats::Integer e1) { return abs((Rstats::Double)e1); }
+    Rstats::Double abs(Rstats::Integer e1) { return Rstats::ElementFunc::abs((Rstats::Double)e1); }
+    Rstats::Double abs(Rstats::Logical e1) { return Rstats::ElementFunc::abs((Rstats::Double)e1); }
 
     // abs
     Rstats::Double Mod(Rstats::Complex e1) { return abs(e1); }
     Rstats::Double Mod(Rstats::Double e1) { return abs(e1); }
-    Rstats::Double Mod(Rstats::Integer e1) { return abs((Rstats::Double)e1); }
+    Rstats::Double Mod(Rstats::Integer e1) { return Rstats::ElementFunc::abs((Rstats::Double)e1); }
+    Rstats::Double Mod(Rstats::Logical e1) { return Rstats::ElementFunc::abs((Rstats::Double)e1); }
 
     // log
     Rstats::Complex log(Rstats::Complex e1) { return std::log(e1); }
     Rstats::Double log(Rstats::Double e1) { return std::log(e1); }
-    Rstats::Double log(Rstats::Integer e1) { return log((Rstats::Double)e1); }
+    Rstats::Double log(Rstats::Integer e1) { return Rstats::ElementFunc::log((Rstats::Double)e1); }
+    Rstats::Double log(Rstats::Logical e1) { return Rstats::ElementFunc::log((Rstats::Double)e1); }
 
     // logb
     Rstats::Complex logb(Rstats::Complex e1) { return log(e1); }
     Rstats::Double logb(Rstats::Double e1) { return log(e1); }
-    Rstats::Double logb(Rstats::Integer e1) { return log((Rstats::Double)e1); }
+    Rstats::Double logb(Rstats::Integer e1) { return Rstats::ElementFunc::log((Rstats::Double)e1); }
+    Rstats::Double logb(Rstats::Logical e1) { return Rstats::ElementFunc::log((Rstats::Double)e1); }
 
     // log10
     Rstats::Complex log10(Rstats::Complex e1) { return std::log10(e1); }
     Rstats::Double log10(Rstats::Double e1) { return std::log10(e1); }
-    Rstats::Double log10(Rstats::Integer e1) { return std::log10((Rstats::Double)e1); }
+    Rstats::Double log10(Rstats::Integer e1) { return Rstats::ElementFunc::log10((Rstats::Double)e1); }
+    Rstats::Double log10(Rstats::Logical e1) { return Rstats::ElementFunc::log10((Rstats::Double)e1); }
 
     // log2
     Rstats::Complex log2(Rstats::Complex e1) {

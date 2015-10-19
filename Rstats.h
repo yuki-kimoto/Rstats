@@ -471,6 +471,60 @@ namespace Rstats {
       return v2;
     }
 
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* tan(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tan;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* sinh(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sinh;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* cosh(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::cosh;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* log(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* logb(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::logb;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* log10(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log10;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
+
   }
   // Rstats::Func
   namespace Func {

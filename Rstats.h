@@ -400,7 +400,7 @@ namespace Rstats {
     SV* new_array(SV*);
     void set_vector(SV*, SV*, Rstats::Vector*);
     Rstats::Vector* get_vector(SV*, SV*);
-    SV* c(SV*, SV*);
+    SV* c_(SV*, SV*);
     SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);

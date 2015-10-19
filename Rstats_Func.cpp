@@ -11,7 +11,7 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* c(SV* sv_r, SV* sv_elements) {
+    SV* c_(SV* sv_r, SV* sv_elements) {
       
       // Convert to array reference
       if (SvOK(sv_elements) && !SvROK(sv_elements)) {
@@ -2535,7 +2535,7 @@ namespace Rstats {
         }
       }
       
-      SV* sv_x2 = Rstats::Func::c(sv_r, sv_elements);
+      SV* sv_x2 = Rstats::Func::c_(sv_r, sv_elements);
       Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
       
       return sv_x2;
@@ -3037,7 +3037,7 @@ namespace Rstats {
       else {
         SV* sv_tmp = Rstats::pl_new_avrv();
         Rstats::pl_av_push(sv_tmp, sv_x);
-        sv_x1 = Rstats::Func::c(sv_r, sv_tmp);
+        sv_x1 = Rstats::Func::c_(sv_r, sv_tmp);
       }
       
       return sv_x1;

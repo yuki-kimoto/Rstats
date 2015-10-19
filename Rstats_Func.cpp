@@ -2493,7 +2493,8 @@ namespace Rstats {
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (!Rstats::Func::get_length(sv_r, sv_x_dim)) {
-        sv_x_dim = Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(x1_length));
+        Rstats::Vector* v_dim = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, x1_length);
+        sv_x_dim = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_dim);
       }
       Rstats::Integer dim_product = 1;
       Rstats::Integer x_dim_length = Rstats::Func::get_length(sv_r, sv_x_dim);
@@ -2927,10 +2928,6 @@ namespace Rstats {
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v1);
       
       return sv_x1;
-    }
-
-    SV* c_integer(SV* sv_r, Rstats::Integer value) {
-      return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(value));
     }
 
     SV* c_logical(SV* sv_r, SV* sv_values) {

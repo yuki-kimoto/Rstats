@@ -707,15 +707,12 @@ namespace Rstats {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
-      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
-
-      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
 
       SV* sv_value;
       Rstats::Vector* v2;
       if (strEQ(type, "character")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
@@ -724,6 +721,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
@@ -766,6 +764,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
@@ -786,6 +785,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
@@ -795,6 +795,7 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }

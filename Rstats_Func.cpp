@@ -4,6 +4,13 @@
 namespace Rstats {
   namespace Func {
 
+    SV* length(SV* sv_r, SV* x1) {
+      Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, x1);
+      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Integer>(1, x1_length);
+      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
+      return sv_x_out;
+    }
+
     SV* c(SV* sv_r, SV* sv_elements) {
       
       // Convert to array reference
@@ -3038,7 +3045,7 @@ namespace Rstats {
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")
         || strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3047,7 +3054,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3056,7 +3063,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3065,7 +3072,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "complex");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3074,7 +3081,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3083,7 +3090,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3092,7 +3099,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "data.frame");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3101,7 +3108,7 @@ namespace Rstats {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "list");
         
-      SV* sv_x_is = is ? new_true(sv_r) : new_false(sv_r);
+      SV* sv_x_is = is ? Rstats::Func::new_true(sv_r) : Rstats::Func::new_false(sv_r);
       
       return sv_x_is;
     }
@@ -3763,21 +3770,6 @@ namespace Rstats {
       }
       else {
         croak("Invalid mode %s is passed", type);
-      }
-    }
-
-    SV* length(SV* sv_r, SV* sv_container) {
-      if (to_bool(sv_r, Rstats::Func::is_null(sv_r, sv_container))) {
-        return Rstats::Func::c_integer(sv_r, (Rstats::Integer)0);
-      }
-      else if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_container)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_container))) {
-        return Rstats::Func::c_integer(
-          sv_r,
-          Rstats::Func::get_length(sv_r, sv_container)
-        );
-      }
-      else {
-        return Rstats::Func::c_integer(sv_r, Rstats::pl_new_sv_iv(Rstats::Func::get_length(sv_r, sv_container)));
       }
     }
 

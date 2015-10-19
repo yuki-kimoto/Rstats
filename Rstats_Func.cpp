@@ -2293,9 +2293,11 @@ namespace Rstats {
         Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
         
         if (x1_length != max_length) {
+          Rstats::Vector* v_length = Rstats::VectorFunc::new_vector<Rstats::Double>(1, max_length);
+          SV* sv_x_length = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_length);
           Rstats::pl_av_push(
             sv_new_xs,
-            Rstats::Func::array(sv_r, sv_x1, Rstats::Func::c_double(sv_r, Rstats::pl_new_sv_iv(max_length)))
+            Rstats::Func::array(sv_r, sv_x1, sv_x_length)
           );
         }
         else {

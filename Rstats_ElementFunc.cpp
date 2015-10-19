@@ -190,10 +190,20 @@ namespace Rstats {
         return Rstats::ElementFunc::atan2(im, re);
       }
     }
-    Rstats::Double Arg(Rstats::Double e1) { croak("Error in Arg : unimplemented double function"); }
-    Rstats::Double Arg(Rstats::Integer e1) { return Arg((Rstats::Double)e1); }
-    Rstats::Double Arg(Rstats::Logical e1) { return Arg((Rstats::Double)e1); }
-
+    Rstats::Double Arg(Rstats::Double e1) {
+      if (std::isnan(e1)) {
+        return std::numeric_limits<Rstats::Double>::signaling_NaN();
+      }
+      else if (e1 >= 0) {
+        return 0;
+      }
+      else {
+        return Rstats::Util::pi();
+      }
+    }
+    Rstats::Double Arg(Rstats::Integer e1) { return Rstats::ElementFunc::Arg((Rstats::Double)e1); }
+    Rstats::Double Arg(Rstats::Logical e1) { return Rstats::ElementFunc::Arg((Rstats::Double)e1); }
+    
     // exp
     Rstats::Complex exp(Rstats::Complex e1) { return std::exp(e1); }
     Rstats::Double exp(Rstats::Double e1) { return std::exp(e1); }

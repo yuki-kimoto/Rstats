@@ -6,6 +6,64 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# Arg
+{
+  # Arg - double
+  {
+    my $x1 = c_(1.2);
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [0]);
+  }
+
+  # Arg - integer
+  {
+    my $x1 = r->as->integer(c_(-3));
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [Rstats::Util::pi()]);
+  }
+
+  # Arg - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [0]);
+  }
+
+  # Arg - double,NaN
+  {
+    my $x1 = c_(NaN);
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, ['NaN']);
+  }
+  
+  # Arg - complex, non 0 values
+  {
+    my $x1 = c_(1 + 1*i_, 2 + 2*i_);
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [Rstats::Util::pi() / 4, Rstats::Util::pi() / 4]);
+  }
+  
+  # Arg - complex, 0 values
+  {
+    my $x1 = c_(0 + 0*i_);
+    my $x2 = r->Arg($x1);
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [0]);
+  }
+
+  # Arg - dim
+  {
+    my $x1 = array(c_(T_, T_));
+    my $x2 = r->Arg($x1);
+    is_deeply($x2->dim->values, [2]);
+  }
+}
+
 # Method
 {
   # sort - contain NA or NaN
@@ -546,23 +604,6 @@ use Math::Complex ();
     my $x1 = c_(NaN);
     my $x2 = r->log($x1);
     is($x2->value, 'NaN');
-  }
-}
-
-# Arg
-{
-  # Arg - non 0 values
-  {
-    my $x1 = c_(1 + 1*i_, 2 + 2*i_);
-    my $x2 = r->Arg($x1);
-    is_deeply($x2->values, [Rstats::Util::pi() / 4, Rstats::Util::pi() / 4]);
-  }
-  
-  # Arg - 0 values
-  {
-    my $x1 = c_(0 + 0*i_);
-    my $x2 = r->Arg($x1);
-    is_deeply($x2->values, [0]);
   }
 }
 

@@ -1595,8 +1595,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sin;
-        Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+        Rstats::Vector* v2 = Rstats::VectorFunc::sin<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }

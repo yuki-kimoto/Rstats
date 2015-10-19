@@ -285,18 +285,20 @@ namespace Rstats {
           SV* sv_x1_values = Rstats::Func::values(sv_r, sv_x1);
           SV* sv_x_out_values = Rstats::pl_new_avrv();
           Rstats::Integer x1_values_length = Rstats::pl_av_len(sv_x1_values);
+          
+          Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Character>(x1_values_length);
           for (Rstats::Integer i = 0; i < x1_values_length; i++) {
             SV* sv_x1_value = Rstats::pl_av_fetch(sv_x1_values, i);
              
             if (SvOK(sv_x1_value)) {
               SV* sv_character = Rstats::pl_hv_fetch(sv_levels, SvPV_nolen(sv_x1_value));
-              Rstats::pl_av_push(sv_x_out_values, Rstats::pl_new_sv_pv(SvPV_nolen(sv_character)));
+              v_out->set_value<Rstats::Character>(i, Rstats::pl_new_sv_sv(sv_character));
             }
             else {
-              Rstats::pl_av_push(sv_x_out_values, &PL_sv_undef);
+              v_out->add_na_position(i);
             }
           }
-          sv_x_out = Rstats::Func::c_character(sv_r, sv_x_out_values);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
           
           Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
           Rstats::pl_hv_delete(sv_x_out, "levels");

@@ -138,7 +138,7 @@ namespace Rstats {
               v1->set_value<Rstats::Character>(pos, sv_element);
             }
             else if (strEQ(type, "complex")) {
-              v1->set_value<Rstats::Complex>(pos, std::complex<NV>(SvNV(sv_element), 0));
+              v1->set_value<Rstats::Complex>(pos, Rstats::Complex(SvNV(sv_element), 0));
             }
             else if (strEQ(type, "double")) {
               v1->set_value<Rstats::Double>(pos, SvNV(sv_element));
@@ -2692,7 +2692,7 @@ namespace Rstats {
 
     SV* pi (SV* sv_r) {
       SV* sv_values = Rstats::pl_new_avrv();
-      NV pi = Rstats::Util::pi();
+      Rstats::Double pi = Rstats::Util::pi();
       SV* sv_pi = Rstats::pl_new_sv_nv(pi);
       Rstats::pl_av_push(sv_values, sv_pi);
       
@@ -2811,7 +2811,7 @@ namespace Rstats {
             v1->set_value<Rstats::Double>(i, -(INFINITY));
           }
           else {
-            NV value = SvNV(sv_value);
+            Rstats::Double value = SvNV(sv_value);
             v1->set_value<Rstats::Double>(i, value);
           }
         }
@@ -2842,7 +2842,7 @@ namespace Rstats {
           SV* sv_value_re = Rstats::pl_hv_fetch(sv_value, "re");
           SV* sv_value_im = Rstats::pl_hv_fetch(sv_value, "im");
 
-          NV re;
+          Rstats::Double re;
           if (SvOK(sv_value_re)) {
             char* sv_value_re_str = SvPV_nolen(sv_value_re);
             if (strEQ(sv_value_re_str, "NaN")) {
@@ -2863,7 +2863,7 @@ namespace Rstats {
           }
           
 
-          NV im;
+          Rstats::Double im;
           if (SvOK(sv_value_im)) {
             char* sv_value_im_str = SvPV_nolen(sv_value_im);
             if (strEQ(sv_value_im_str, "NaN")) {
@@ -2885,7 +2885,7 @@ namespace Rstats {
           
           v1->set_value<Rstats::Complex>(
             i,
-            std::complex<NV>(re, im)
+            Rstats::Complex(re, im)
           );
         }
         else {
@@ -3421,13 +3421,14 @@ namespace Rstats {
       }
       else {
         Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
-        return Rstats::Func::c_double(sv_r, Rstats::pl_new_sv_iv(length));
+        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(1, length);
+        SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+        return sv_x_out;
       }
     }
 
     SV* decompose(SV* sv_r, SV* sv_x1) {
-      SV* sv_v1 = Rstats::pl_hv_fetch(sv_x1, "vector");
-      Rstats::Vector* v1 = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_v1);
+      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
       SV* sv_decomposed_xs = Rstats::pl_new_avrv();
       

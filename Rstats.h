@@ -374,19 +374,28 @@ namespace Rstats {
     };
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* operate_unary(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
+    Rstats::Vector* operate_unary(T_OUT (*func)(T_IN), Rstats::Vector* v1, Rstats::Logical na_flag) {
       
       Rstats::Integer length = v1->get_length();
       
       Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        try {
-          v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
-        }
-        catch (const char* e) {
-          v2->add_na_position(i);
+      
+      if (na_flag) {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          try {
+            v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+          }
+          catch (const char* e) {
+            v2->add_na_position(i);
+          }
         }
       }
+      else {
+        for (Rstats::Integer i = 0; i < length; i++) {
+          v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+        }
+      }
+      
       v2->merge_na_positions(v1->get_na_positions());
       
       return v2;

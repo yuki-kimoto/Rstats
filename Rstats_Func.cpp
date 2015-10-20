@@ -2367,24 +2367,42 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
-        Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Re;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Re<Rstats::Complex, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Re;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Re<Rstats::Double, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Re;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Re<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Re<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
         croak("Error in Re() : non-numeric argument to Re()");
       }
+
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }
-
+    
     SV* Im(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
@@ -2392,24 +2410,42 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
-        Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Im;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Complex, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Im;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Double, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Im;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
         croak("Error in Im() : non-numeric argument to Im()");
       }
+
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }
-        
+            
     SV* is_infinite(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);

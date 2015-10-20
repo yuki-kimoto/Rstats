@@ -159,7 +159,15 @@ use Rstats;
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0]);
   }
-  
+
+  # is->infinite - complex
+  {
+    my $x1 = c_(1+2*i_, r->complex(NaN, 1), Inf + 1*i_, r->complex(1, Inf));
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0, 0, 1, 1]);
+  }
+    
   # is->infinite - double
   {
     my $x1 = c_(1, 2);

@@ -150,4 +150,52 @@ use Rstats;
   }
 }
 
+# is->infinite
+{
+  # is->infinite - Double
+  {
+    my $x_num = c_(1);
+    ok(!r->is->infinite($x_num)->value);
+  }
+
+  # is->infinite - Inf, true
+  {
+    my $x_inf = Inf;
+    ok(r->is->infinite($x_inf)->value);
+  }
+  
+  # is->infinite - -Inf, true
+  {
+    my $x_negative_inf = -Inf;
+    ok(r->is->infinite($x_negative_inf)->value);
+  }
+}
+
+# is->finite
+{
+  # is->finite - Inf, false
+  {
+    my $x_inf = Inf;
+    ok(!r->is->finite($x_inf)->value);
+  }
+  
+  # is->finite - -Inf, false
+  {
+    my $x_negative_inf = r->c_double('-Inf');
+    ok(!r->is->finite($x_negative_inf)->value);
+  }
+  
+  # is->finite - Double
+  {
+    my $x_num = c_(1);
+    ok(r->is->finite($x_num)->value);
+  }
+  
+  # is->finite - logical, TRUE
+  {
+    my $x_num = TRUE;
+    ok(r->is->finite($x_num)->value);
+  }
+}
+
 

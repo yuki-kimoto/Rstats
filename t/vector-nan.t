@@ -10,10 +10,10 @@ use Rstats;
   ok(r->is->double($x_nan));
 }
 
-# negation
+# negate
 {
   my $x_nan1 = r->c_double('NaN');
-  my $x_nan2 = r->negation($x_nan1);
+  my $x_nan2 = r->negate($x_nan1);
   ok(r->is->nan($x_nan2)->value);
 }
 

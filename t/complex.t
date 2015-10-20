@@ -105,10 +105,10 @@ my $r = Rstats::Class->new;
 
 # operation
 {
-  # operation - negation
+  # operation - negate
   {
     my $z1 = r->c_complex({re => 1, im => 2});
-    my $z2 = r->negation($z1);
+    my $z2 = r->negate($z1);
     is($z2->value->{re}, -1);
     is($z2->value->{im}, -2);
   }

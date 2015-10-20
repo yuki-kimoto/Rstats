@@ -2188,7 +2188,7 @@ namespace Rstats {
       return sv_x_out;
     }
         
-    SV* negation(SV* sv_r, SV* sv_x1) {
+    SV* negate(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -2197,28 +2197,28 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negation<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negation<Rstats::Double, Rstats::Double>(v1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Double, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negation<Rstats::Integer, Rstats::Integer>(v1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Integer, Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negation<Rstats::Logical, Rstats::Integer>(v1);
+        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Logical, Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }

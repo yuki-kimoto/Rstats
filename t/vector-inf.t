@@ -27,11 +27,11 @@ use Rstats;
 
 # Inf
 {
-  # Inf - negation repeat
+  # Inf - negate repeat
   {
     my $x_inf = r->c_double('Inf');
-    my $x_negative_inf = r->negation($x_inf);
-    my $x_inf2 = r->negation($x_negative_inf);
+    my $x_negative_inf = r->negate($x_inf);
+    my $x_inf2 = r->negate($x_negative_inf);
     ok($x_inf2->value, 'Inf');
   }
   
@@ -41,10 +41,10 @@ use Rstats;
     is("$x_inf", "[1] Inf\n");
   }
 
-  # Inf - negation
+  # Inf - negate
   {
     my $x_inf = r->c_double('Inf');
-    my $x_negative_inf = r->negation($x_inf);
+    my $x_negative_inf = r->negate($x_inf);
     is($x_negative_inf->value, '-Inf');
   }
 

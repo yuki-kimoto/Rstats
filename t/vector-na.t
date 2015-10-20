@@ -10,10 +10,10 @@ use Rstats;
   ok(r->is->na($x_na));
 }
 
-# negation
+# negate
 {
   my $x_na1 = r->c_logical(undef);
-  my $x_na2 = r->negation($x_na1);
+  my $x_na2 = r->negate($x_na1);
   ok(r->is->na($x_na2));
 }
 

@@ -478,11 +478,11 @@ namespace Rstats {
     Rstats::Double atanh(Rstats::Integer e1) { return Rstats::ElementFunc::atanh((Rstats::Double)e1); }
     Rstats::Double atanh(Rstats::Logical e1) { return Rstats::ElementFunc::atanh((Rstats::Double)e1); }
 
-    // negation
-    Rstats::Complex negation(Rstats::Complex e1) { return -e1; }
-    Rstats::Double negation(Rstats::Double e1) { return -e1; }
-    Rstats::Integer negation(Rstats::Integer e1) { return -e1; }
-    Rstats::Integer negation(Rstats::Logical e1) { return Rstats::ElementFunc::negation((Rstats::Integer)e1); }
+    // negate
+    Rstats::Complex negate(Rstats::Complex e1) { return -e1; }
+    Rstats::Double negate(Rstats::Double e1) { return -e1; }
+    Rstats::Integer negate(Rstats::Integer e1) { return -e1; }
+    Rstats::Integer negate(Rstats::Logical e1) { return Rstats::ElementFunc::negate((Rstats::Integer)e1); }
 
     // atan2
     Rstats::Complex atan2(Rstats::Complex e1, Rstats::Complex e2) {

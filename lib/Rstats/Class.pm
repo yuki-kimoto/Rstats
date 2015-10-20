@@ -219,7 +219,7 @@ my @func_names = qw/
   multiply
   divide
   pow
-  negation
+  negate
   dim
   Inf
   NaN

@@ -39,7 +39,7 @@ use Rstats::Func;
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
   
-  # operator - negation
+  # operator - negate
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = -$x1;

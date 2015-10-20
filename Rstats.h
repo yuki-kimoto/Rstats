@@ -276,10 +276,10 @@ namespace Rstats {
     Rstats::Double atanh(Rstats::Integer);
     Rstats::Double atanh(Rstats::Logical);
     
-    Rstats::Complex negation(Rstats::Complex);
-    Rstats::Double negation(Rstats::Double);
-    Rstats::Integer negation(Rstats::Integer);
-    Rstats::Integer negation(Rstats::Logical);
+    Rstats::Complex negate(Rstats::Complex);
+    Rstats::Double negate(Rstats::Double);
+    Rstats::Integer negate(Rstats::Integer);
+    Rstats::Integer negate(Rstats::Logical);
 
     Rstats::Complex atan2(Rstats::Complex, Rstats::Complex);
     Rstats::Double atan2(Rstats::Double, Rstats::Double);
@@ -571,8 +571,8 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* negation(Rstats::Vector* v1) {
-      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negation;
+    Rstats::Vector* negate(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negate;
       
       Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
@@ -696,7 +696,7 @@ namespace Rstats {
     SV* tan(SV*, SV*);
     SV* sin(SV*, SV*);
     SV* sum(SV*, SV*);
-    SV* negation(SV*, SV*);
+    SV* negate(SV*, SV*);
     SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     SV* upgrade_type_avrv(SV*, SV*);
     void upgrade_type(SV*, Rstats::Integer, ...);

@@ -2225,6 +2225,8 @@ namespace Rstats {
       else {
         croak("Error in -$x : non-numeric argument to - operator");
       }
+
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }
@@ -2236,20 +2238,38 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
-        Rstats::Double (*func)(Rstats::Complex) = &Rstats::ElementFunc::Arg;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Arg<Rstats::Complex, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Arg;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Arg<Rstats::Double, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Arg;
-        sv_x_out = Rstats::Func::operate_unary(sv_r, func, sv_x1);
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Arg<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::Arg<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
-        croak("Error in Arg() : non-numeric argument to Arg()");
+        croak("Error in -$x : non-numeric argument to - operator");
       }
+
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }

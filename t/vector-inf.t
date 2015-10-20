@@ -27,25 +27,10 @@ use Rstats;
 
 # Inf
 {
-  # Inf - negate repeat
-  {
-    my $x_inf = r->c_double('Inf');
-    my $x_negative_inf = r->negate($x_inf);
-    my $x_inf2 = r->negate($x_negative_inf);
-    ok($x_inf2->value, 'Inf');
-  }
-  
   # Inf - to_string, plus
   {
     my $x_inf = r->c_double('Inf');
     is("$x_inf", "[1] Inf\n");
-  }
-
-  # Inf - negate
-  {
-    my $x_inf = r->c_double('Inf');
-    my $x_negative_inf = r->negate($x_inf);
-    is($x_negative_inf->value, '-Inf');
   }
 
   # Inf - to_string, minus

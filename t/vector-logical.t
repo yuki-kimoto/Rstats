@@ -18,22 +18,6 @@ use Rstats;
     ok(!$x_false->value);
   }
   
-  # negate, true
-  {
-    my $x_true = r->c_logical(1);
-    my $x_num = r->negate($x_true);
-    ok(r->is->integer($x_num));
-    is($x_num->value, -1);
-  }
-
-  # negate, false
-  {
-    my $x_false = r->c_logical(0);
-    my $x_num = r->negate($x_false);
-    ok(r->is->integer($x_num));
-    is($x_num->value, 0);
-  }
-  
   # to_string, true
   {
     my $x_true = r->c_logical(1);

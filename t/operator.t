@@ -5,6 +5,84 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
+# negate
+{
+  # negate - dimention
+  {
+    my $x1 = array(c_(1, 2, 3));
+    my $x2 = -$x1;
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [-1, -2, -3]);
+    is_deeply($x2->dim->values, [3]);
+  }
+  
+  # negate - double
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = -$x1;
+    ok(r->is->double($x2));
+    is_deeply($x2->values, [-1, -2, -3]);
+  }
+
+  # negate - double,NaN
+  {
+    my $x1 = NaN;
+    my $x2 = -$x1;
+    ok(r->is->double($x2));
+    ok(r->is->nan($x2)->value);
+  }
+  
+  # negate - double,-Inf
+  {
+    my $x1 = -Inf;
+    my $x2 = -$x1;
+    ok(r->is->double($x2));
+    ok($x2->value, 'Inf');
+  }
+
+  # negate - double,Inf
+  {
+    my $x1 = Inf;
+    my $x2 = -$x1;
+    ok(r->is->double($x2));
+    is($x2->value, '-Inf');
+  }
+
+  # negate - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = -$x1;
+    ok(r->is->complex($x2));
+    is($x2->value->{re}, -1);
+    is($x2->value->{im}, -2);
+  }
+  
+  # negate - logical,true
+  {
+    my $x1 = c_(T_);
+    my $x2 = -$x1;
+    ok(r->is->integer($x2));
+    is($x2->value, -1);
+  }
+
+  # negate - logical,false
+  {
+    my $x1 = c_(F_);
+    my $x2 = -$x1;
+    ok(r->is->integer($x2));
+    is($x2->value, 0);
+  }
+  
+  # negate - NA
+  {
+    my $x1 = NA;
+    my $x2 = r->negate($x1);
+    ok(r->is->integer($x2));
+    ok(r->is->na($x2));
+  }
+}
+
+
 # operator
 {
   # operator - remainder, integer
@@ -37,13 +115,6 @@ use Rstats::Func;
     
     my $x3 = $x1 + $x2;
     is_deeply($x3->values, [4, 6, 6, 8]);
-  }
-  
-  # operator - negate
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = -$x1;
-    is_deeply($x2->values, [-1, -2, -3]);
   }
   
   # operator - add

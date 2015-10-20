@@ -570,6 +570,14 @@ namespace Rstats {
       return v2;
     }
 
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* negation(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negation;
+      
+      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v2;
+    }
   }
   // Rstats::Func
   namespace Func {

@@ -421,173 +421,181 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
       if (na_flag) {
         for (Rstats::Integer i = 0; i < length; i++) {
           try {
-            v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+            v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
           }
           catch (const char* e) {
-            v2->add_na_position(i);
+            v_out->add_na_position(i);
           }
         }
       }
       else {
         for (Rstats::Integer i = 0; i < length; i++) {
-          v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+          v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
       }
       
-      v2->merge_na_positions(v1->get_na_positions());
+      v_out->merge_na_positions(v1->get_na_positions());
       
-      return v2;
+      return v_out;
     }
     
     template <class T_IN, class T_OUT>
     Rstats::Vector* sin(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sin;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* tanh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tanh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* cos(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::cos;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* tan(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tan;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* sinh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sinh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* cosh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::cosh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* log(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* logb(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::logb;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* log10(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log10;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* log2(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log2;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* acos(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::acos;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* acosh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::acosh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* asinh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::asinh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* atanh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::atanh;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* negate(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negate;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* Arg(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Arg;
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
       
-      return v2;
+      return v_out;
     }
 
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* abs(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::abs;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v_out;
+    }
   }
   // Rstats::Func
   namespace Func {

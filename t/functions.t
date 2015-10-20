@@ -1490,3 +1490,140 @@ use Math::Complex ();
   }
 }
 
+# c_double
+{
+  # c_double - arguments is list
+  {
+    my $x1 = r->c_double(1.1, 1.2, 1.3);
+    ok($x1->is->double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+
+  # c_double - arguments is array reference
+  {
+    my $x1 = r->c_double([1.1, 1.2, 1.3]);
+    ok($x1->is->double);
+    is_deeply($x1->values, [1.1, 1.2, 1.3]);
+  }
+}
+
+# clone
+{
+  
+  # clone - vector
+  {
+    my $x1 = r->matrix(C_('1:24'), 3, 2);
+    r->names($x1 => c_('r1', 'r2', 'r3'));
+    my $x2 = r->clone($x1);
+    is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
+  }
+  
+  # clone - matrix
+  {
+    my $x1 = r->matrix(C_('1:24'), 3, 2);
+    r->rownames($x1 => c_('r1', 'r2', 'r3'));
+    r->colnames($x1 => c_('c1', 'c2'));
+    my $x2 = r->clone($x1);
+    ok(r->is->matrix($x2));
+    is_deeply(r->dim($x2)->values, [3, 2]);
+    is_deeply(r->rownames($x2)->values, ['r1', 'r2', 'r3']);
+    is_deeply(r->colnames($x2)->values, ['c1', 'c2']);
+  }
+}
+
+# c_character
+{
+  # c_character - arguments is list
+  {
+    my $x1 = r->c_character("a", "b", "c");
+    ok($x1->is->character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+
+  # c_character - arguments is array reference
+  {
+    my $x1 = r->c_character(["a", "b", "c"]);
+    ok($x1->is->character);
+    is_deeply($x1->values, [qw/a b c/]);
+  }
+}
+
+# c_complex
+{
+  # c_complex - arguments is list
+  {
+    my $x1 = r->c_complex({re => 1, im => 2}, {re => 3, im => 4});
+    ok($x1->is->complex);
+    is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
+  }
+
+  # c_complex - arguments is array reference
+  {
+    my $x1 = r->c_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
+    ok($x1->is->complex);
+    is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
+  }
+}
+
+# array
+{
+  # array - basic
+  {
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    is_deeply($x1->values, [1 .. 24]);
+    is_deeply(r->dim($x1)->values, [4, 3, 2]);
+  }
+  
+  # array - dim option
+  {
+    my $x1 = array(C_('1:24'), {dim => c_(4, 3, 2)});
+    is_deeply($x1->values, [1 .. 24]);
+    is_deeply(r->dim($x1)->values, [4, 3, 2]);
+  }
+}
+
+# value
+{
+  # value - none argument
+  {
+    my $x1 = array(C_('1:4'));
+    is($x1->value, 1);
+  }
+
+  # value - one-dimetion
+  {
+    my $x1 = array(C_('1:4'));
+    is($x1->value(2), 2);
+  }
+  
+  # value - two-dimention
+  {
+    my $x1 = array(C_('1:12'), c_(4, 3));
+    is($x1->value(3, 2), 7);
+  }
+
+  # value - two-dimention, as_vector
+  {
+    my $x1 = array(C_('1:12'), c_(4, 3));
+    is(r->as->vector($x1)->value(5), 5);
+  }
+  
+  # value - three-dimention
+  {
+    my $x1 = array(C_('1:24'), c_(4, 3, 1));
+    is($x1->value(3, 2, 1), 7);
+  }
+}
+
+# create element
+{
+  # create element - double
+  {
+    my $x1 = c_(1, 2, 3);
+  }
+  
+  # create element - character
+  {
+    my $x1 = c_("a", "b", "c");
+  }
+}

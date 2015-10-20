@@ -637,7 +637,7 @@ namespace Rstats {
         return 0;
       }
     }
-    Rstats::Logical is_infinite(Rstats::Double e1) { return std::isinf(e1); }
+    Rstats::Logical is_infinite(Rstats::Double e1) { return std::isinf(e1) ? 1 : 0; }
     Rstats::Logical is_infinite(Rstats::Integer e1) { return 0; }
     Rstats::Logical is_infinite(Rstats::Logical e1) { return Rstats::ElementFunc::is_infinite((Rstats::Integer)e1); }
 

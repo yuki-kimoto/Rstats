@@ -152,22 +152,67 @@ use Rstats;
 
 # is->infinite
 {
-  # is->infinite - Double
+  # is->infinite - character
   {
-    my $x_num = c_(1);
-    ok(!r->is->infinite($x_num)->value);
-  }
-
-  # is->infinite - Inf, true
-  {
-    my $x_inf = Inf;
-    ok(r->is->infinite($x_inf)->value);
+    my $x1 = c_("a");
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0]);
   }
   
-  # is->infinite - -Inf, true
+  # is->infinite - double
   {
-    my $x_negative_inf = -Inf;
-    ok(r->is->infinite($x_negative_inf)->value);
+    my $x1 = c_(1, 2);
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0, 0]);
+  }
+
+  # is->infinite - double,Inf
+  {
+    my $x1 = Inf;
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [1]);
+  }
+  
+  # is->infinite - double,-Inf
+  {
+    my $x1 = -Inf;
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [1]);
+  }
+
+  # is->infinite - double,NaN
+  {
+    my $x1 = NaN;
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0]);
+  }
+
+  # is->infinite - integer
+  {
+    my $x1 = r->as->integer(c_(1));
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0]);
+  }
+
+  # is->infinite - logical
+  {
+    my $x1 = TRUE;
+    my $x2 = r->is->infinite($x1);
+    ok(r->is->logical($x2));
+    is_deeply($x2->values, [0]);
+  }
+  
+  # is->infinite - dimention
+  {
+    my $x1 = array(c_(1, 2));
+    my $x2 = r->is->infinite($x1);
+    is_deeply($x2->dim->values, [2]);
   }
 }
 

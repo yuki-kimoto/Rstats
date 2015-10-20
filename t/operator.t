@@ -241,7 +241,7 @@ use Rstats::Func;
   }
 }
 
-# bool context
+# bool
 {
   {
     my $x1 = array(1);
@@ -253,7 +253,7 @@ use Rstats::Func;
     }
   }
   
-  # bool context - one argument, false
+  # bool - one argument, false
   {
     my $x1 = array(0);
     if ($x1) {
@@ -264,7 +264,7 @@ use Rstats::Func;
     }
   }
 
-  # bool context - two argument, true
+  # bool - two argument, true
   {
     my $x1 = array(3, 3);
     if ($x1) {
@@ -275,7 +275,7 @@ use Rstats::Func;
     }
   }
 
-  # bool context - two argument, true
+  # bool - two argument, true
   {
     my $x1 = r->NULL;
     eval {
@@ -284,6 +284,18 @@ use Rstats::Func;
       }
     };
     like($@, qr/zero/);
+  }
+
+  # bool - logical,TRUE
+  {
+    my $x1 = TRUE;
+    ok($x1);
+  }
+  
+  # bool - logical,FALSE
+  {
+    my $x1 = FALSE;
+    ok(!$x1);
   }
 }
 

@@ -6,6 +6,15 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# NaN
+{
+  # NaN - type
+  {
+    my $x_nan = NaN;
+    ok(r->is->double($x_nan));
+  }
+}
+
 # Arg
 {
   # Arg - double
@@ -1280,9 +1289,11 @@ use Math::Complex ();
 
 # NA
 {
-  my $na = NA;
-  my $na_value = $na->value;
+  my $x1 = NA;
+  my $na_value = $x1->value;
   is($na_value, undef);
+  ok(r->is->na($x1));
+  ok(r->is->logical($x1));
 }
 
 # round

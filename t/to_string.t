@@ -6,6 +6,46 @@ use Rstats;
 
 # to_string
 {
+  # to_string - TRUE
+  {
+    my $x1 = TRUE;
+    is("$x1", "[1] TRUE\n");
+  }
+
+  # to_string - FALSE
+  {
+    my $x1 = FALSE;
+    is("$x1", "[1] FALSE\n");
+  }
+
+  # to_string - NA
+  {
+    my $x1 = NA;
+    is("$x1", "[1] NA\n");
+  }
+
+  # to_string - NaN
+  {
+    my $x1 = NaN;
+    is("$x1", "[1] NaN\n");
+  }
+
+  # to_string - Inf
+  {
+    my $x1 = Inf;
+    is("$x1", "[1] Inf\n");
+  }
+
+  # to_string - -Inf
+  {
+    my $x1 = -Inf;
+    is("$x1", "[1] -Inf\n");
+  }
+}
+
+
+# to_string
+{
   # to_string - character, 1 dimention
   {
     my $x1 = array(c_("a", "b"));

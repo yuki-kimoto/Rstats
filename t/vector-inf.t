@@ -25,21 +25,6 @@ use Rstats;
   }
 }
 
-# Inf
-{
-  # Inf - to_string, plus
-  {
-    my $x_inf = r->c_double('Inf');
-    is("$x_inf", "[1] Inf\n");
-  }
-
-  # Inf - to_string, minus
-  {
-    my $x_negative_inf = r->c_double('-Inf');
-    is("$x_negative_inf", "[1] -Inf\n");
-  }
-}
-
 # is_finite
 {
   # is_finite - Inf, false

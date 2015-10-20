@@ -626,6 +626,15 @@ namespace Rstats {
       
       return v_out;
     }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* is_infinite(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::is_infinite;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v_out;
+    }
   }
   // Rstats::Func
   namespace Func {

@@ -599,6 +599,15 @@ namespace Rstats {
       
       return v_out;
     }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* Mod(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Mod;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary(func, v1, 0);
+      
+      return v_out;
+    }
   }
   // Rstats::Func
   namespace Func {

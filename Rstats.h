@@ -117,10 +117,13 @@ namespace Rstats {
     SV* looks_like_na(SV*);
     SV* looks_like_integer(SV*);
     SV* looks_like_double(SV*);
-    NV pi();
   }
 
   namespace ElementFunc {
+
+    Rstats::Double pi();
+    Rstats::Double Inf();
+    Rstats::Double NaN();
 
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
     Rstats::Double add(Rstats::Double, Rstats::Double);

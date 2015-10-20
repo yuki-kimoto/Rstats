@@ -1389,16 +1389,6 @@ SV* DESTROY(...)
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 
-SV* pi(...)
-  PPCODE:
-{
-  NV pi = Rstats::Util::pi();
-  SV* sv_pi = Rstats::pl_new_sv_nv(pi);
-  
-  XPUSHs(sv_pi);
-  XSRETURN(1);
-}
-
 SV* is_perl_number(...)
   PPCODE:
 {

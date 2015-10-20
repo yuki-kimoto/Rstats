@@ -30,7 +30,7 @@ use Math::Complex ();
     my $x1 = r->as->integer(c_(-3));
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
-    is_deeply($x2->values, [Rstats::Util::pi()]);
+    is_deeply($x2->values, [r->pi->value]);
   }
 
   # Arg - logical
@@ -54,7 +54,7 @@ use Math::Complex ();
     my $x1 = c_(1 + 1*i_, 2 + 2*i_);
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
-    is_deeply($x2->values, [Rstats::Util::pi() / 4, Rstats::Util::pi() / 4]);
+    is_deeply($x2->values, [r->pi->value / 4, r->pi->value / 4]);
   }
   
   # Arg - complex, 0 values

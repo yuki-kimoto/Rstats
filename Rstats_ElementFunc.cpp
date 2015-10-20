@@ -4,6 +4,10 @@
 namespace Rstats {
   namespace ElementFunc {
 
+    Rstats::Double pi() { return M_PI; }
+    Rstats::Double Inf() { return INFINITY; }
+    Rstats::Double NaN() { return std::numeric_limits<Rstats::Double>::signaling_NaN(); }
+
     // add
     Rstats::Complex add(Rstats::Complex e1, Rstats::Complex e2) { return e1 + e2; }
     Rstats::Double add(Rstats::Double e1, Rstats::Double e2) { return e1 + e2; }
@@ -54,7 +58,7 @@ namespace Rstats {
     }
     Rstats::Double remainder(Rstats::Double e1, Rstats::Double e2) {
       if (std::isnan(e1) || std::isnan(e2) || e2 == 0) {
-        return std::numeric_limits<Rstats::Double>::signaling_NaN();
+        return Rstats::ElementFunc::NaN();
       }
       else {
         return e1 - std::floor(e1 / e2) * e2;
@@ -192,13 +196,13 @@ namespace Rstats {
     }
     Rstats::Double Arg(Rstats::Double e1) {
       if (std::isnan(e1)) {
-        return std::numeric_limits<Rstats::Double>::signaling_NaN();
+        return Rstats::ElementFunc::NaN();
       }
       else if (e1 >= 0) {
         return 0;
       }
       else {
-        return Rstats::Util::pi();
+        return Rstats::ElementFunc::pi();
       }
     }
     Rstats::Double Arg(Rstats::Integer e1) { return Rstats::ElementFunc::Arg((Rstats::Double)e1); }
@@ -230,10 +234,10 @@ namespace Rstats {
         return Rstats::Complex(0, 0);
       }
       else if (e1 == Rstats::Complex(0, 1)) {
-        return Rstats::Complex(0, INFINITY);
+        return Rstats::Complex(0, Rstats::ElementFunc::Inf());
       }
       else if (e1 == Rstats::Complex(0, -1)) {
-        return Rstats::Complex(0, -INFINITY);
+        return Rstats::Complex(0, -Rstats::ElementFunc::Inf());
       }
       else {  
         Rstats::Complex e2_i = Rstats::Complex(0, 1);
@@ -416,7 +420,7 @@ namespace Rstats {
       if (e1 >= 1) {
         if (std::isinf(e1)) {
           warn("In acosh() : NaNs produced");
-          return std::numeric_limits<Rstats::Double>::signaling_NaN();
+          return Rstats::ElementFunc::NaN();
         }
         else {
           return std::log(
@@ -428,7 +432,7 @@ namespace Rstats {
       }
       else {
         warn("In acosh() : NaNs produced");
-        return std::numeric_limits<Rstats::Double>::signaling_NaN();
+        return Rstats::ElementFunc::NaN();
       }
     }
     Rstats::Double acosh(Rstats::Integer e1) { return Rstats::ElementFunc::acosh((Rstats::Double)e1); }
@@ -438,11 +442,11 @@ namespace Rstats {
     Rstats::Complex atanh(Rstats::Complex e1) {
       if (e1 == Rstats::Complex(1, 0)) {
         warn("In atanh() : NaNs produced");
-        return Rstats::Complex(INFINITY, std::numeric_limits<Rstats::Double>::signaling_NaN());
+        return Rstats::Complex(Rstats::ElementFunc::Inf(), Rstats::ElementFunc::NaN());
       }
       else if (e1 == Rstats::Complex(-1, 0)) {
         warn("In atanh() : NaNs produced");
-        return Rstats::Complex(-INFINITY, std::numeric_limits<Rstats::Double>::signaling_NaN());
+        return Rstats::Complex(-Rstats::ElementFunc::Inf(), Rstats::ElementFunc::NaN());
       }
       else {
         return Rstats::Complex(0.5, 0)
@@ -457,21 +461,21 @@ namespace Rstats {
     Rstats::Double atanh(Rstats::Double e1) {
       if (std::isinf(e1)) {
         warn("In acosh() : NaNs produced");
-        return std::numeric_limits<Rstats::Double>::signaling_NaN();
+        return Rstats::ElementFunc::NaN();
       }
       else {
         if (e1 == 1) {
-          return INFINITY;
+          return Rstats::ElementFunc::Inf();
         }
         else if (e1 == -1) {
-          return -INFINITY;
+          return -Rstats::ElementFunc::Inf();
         }
         else if (std::abs(e1) < 1) {
           return std::log((1 + e1) / (1 - e1)) / 2;
         }
         else {
           warn("In acosh() : NaNs produced");
-          return std::numeric_limits<Rstats::Double>::signaling_NaN();
+          return Rstats::ElementFunc::NaN();
         }
       }
     }
@@ -499,16 +503,16 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Double e1, Rstats::Double e2) {
       if (std::isinf(e1) && std::isinf(e2)) {
         if (e1 > 0 && e2 > 0) {
-          return (Rstats::Util::pi() / 4);
+          return (Rstats::ElementFunc::pi() / 4);
         }
         else if (e1 > 0 && e2 < 0) {
-          return ((3 * Rstats::Util::pi()) / 4);
+          return ((3 * Rstats::ElementFunc::pi()) / 4);
         }
         else if (e1 < 0 && e2 > 0) {
-          return -(Rstats::Util::pi() / 4);
+          return -(Rstats::ElementFunc::pi() / 4);
         }
         else {
-          return -((3 * Rstats::Util::pi()) / 4);
+          return -((3 * Rstats::ElementFunc::pi()) / 4);
         }
       }
       else {

@@ -11,8 +11,6 @@ namespace Rstats {
     static REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     static REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
 
-    NV pi () { return M_PI; }
-
     Rstats::Logical is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
         return 0;

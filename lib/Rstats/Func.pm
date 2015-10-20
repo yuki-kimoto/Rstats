@@ -2239,12 +2239,14 @@ sub rnorm {
   
   # Random numbers(standard deviation)
   my @x1_elements;
+  
+  my $pi = $r->pi->value;
   for (1 .. $count) {
     my ($rand1, $rand2) = (rand, rand);
     while ($rand1 == 0) { $rand1 = rand(); }
     
     my $rnorm = ($sd * CORE::sqrt(-2 * CORE::log($rand1))
-      * CORE::sin(2 * Rstats::Util::pi() * $rand2))
+      * CORE::sin(2 * $pi * $rand2))
       + $mean;
     
     push @x1_elements, $rnorm;

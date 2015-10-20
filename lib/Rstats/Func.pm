@@ -26,6 +26,7 @@ sub factor {
   
   # default - levels
   unless (defined $x_levels) {
+    $DB::single = 1;
     $x_levels = Rstats::Func::sort($r, unique($r, $x1), {'na.last' => Rstats::Func::TRUE($r)});
   }
   

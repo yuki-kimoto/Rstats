@@ -1627,3 +1627,23 @@ use Math::Complex ();
     my $x1 = c_("a", "b", "c");
   }
 }
+
+# names
+{
+  # names - get
+  {
+    my $x1 = c_(1, 2, 3, 4);
+    is_deeply($x1->values, [1, 2, 3, 4]);
+    
+    r->names($x1 => c_('a', 'b', 'c', 'd'));
+    my $x2 = $x1->get(c_('b', 'd'));
+    is_deeply($x2->values, [2, 4]);
+  }
+  
+  # names - to_string
+  {
+    my $x1 = c_(1, 2, 3);
+    r->names($x1 => c_('a', 'b', 'c'));
+    is("$x1", "a b c\n[1] 1 2 3\n");
+  }
+}

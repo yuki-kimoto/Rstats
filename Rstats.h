@@ -421,26 +421,14 @@ namespace Rstats {
     };
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* operate_unary_math(T_OUT (*func)(T_IN), Rstats::Vector* v1, Rstats::Logical na_flag) {
+    Rstats::Vector* operate_unary_math(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
       Rstats::Integer length = v1->get_length();
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
-      if (na_flag) {
-        for (Rstats::Integer i = 0; i < length; i++) {
-          try {
-            v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
-          }
-          catch (const char* e) {
-            v_out->add_na_position(i);
-          }
-        }
-      }
-      else {
-        for (Rstats::Integer i = 0; i < length; i++) {
-          v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
-        }
+      for (Rstats::Integer i = 0; i < length; i++) {
+        v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
       
       v_out->merge_na_positions(v1->get_na_positions());
@@ -471,7 +459,7 @@ namespace Rstats {
     Rstats::Vector* sin(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sin;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -480,7 +468,7 @@ namespace Rstats {
     Rstats::Vector* tanh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tanh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -489,7 +477,7 @@ namespace Rstats {
     Rstats::Vector* cos(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::cos;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -498,7 +486,7 @@ namespace Rstats {
     Rstats::Vector* tan(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::tan;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -507,7 +495,7 @@ namespace Rstats {
     Rstats::Vector* sinh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sinh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -516,7 +504,7 @@ namespace Rstats {
     Rstats::Vector* cosh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::cosh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -525,7 +513,7 @@ namespace Rstats {
     Rstats::Vector* log(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -534,7 +522,7 @@ namespace Rstats {
     Rstats::Vector* logb(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::logb;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -543,7 +531,7 @@ namespace Rstats {
     Rstats::Vector* log10(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log10;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -552,7 +540,7 @@ namespace Rstats {
     Rstats::Vector* log2(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::log2;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -561,7 +549,7 @@ namespace Rstats {
     Rstats::Vector* acos(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::acos;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -570,7 +558,7 @@ namespace Rstats {
     Rstats::Vector* acosh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::acosh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -579,7 +567,7 @@ namespace Rstats {
     Rstats::Vector* asinh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::asinh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -588,7 +576,7 @@ namespace Rstats {
     Rstats::Vector* atanh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::atanh;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -597,7 +585,7 @@ namespace Rstats {
     Rstats::Vector* Conj(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Conj;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -606,7 +594,7 @@ namespace Rstats {
     Rstats::Vector* asin(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::asin;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -615,7 +603,7 @@ namespace Rstats {
     Rstats::Vector* atan(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::atan;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -624,7 +612,7 @@ namespace Rstats {
     Rstats::Vector* sqrt(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sqrt;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -633,7 +621,7 @@ namespace Rstats {
     Rstats::Vector* expm1(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::expm1;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -642,7 +630,7 @@ namespace Rstats {
     Rstats::Vector* exp(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::exp;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -651,7 +639,7 @@ namespace Rstats {
     Rstats::Vector* negate(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negate;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -660,7 +648,7 @@ namespace Rstats {
     Rstats::Vector* Arg(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Arg;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -669,7 +657,7 @@ namespace Rstats {
     Rstats::Vector* abs(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::abs;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -678,7 +666,7 @@ namespace Rstats {
     Rstats::Vector* Mod(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Mod;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -687,7 +675,7 @@ namespace Rstats {
     Rstats::Vector* Re(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Re;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }
@@ -696,7 +684,7 @@ namespace Rstats {
     Rstats::Vector* Im(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Im;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       
       return v_out;
     }

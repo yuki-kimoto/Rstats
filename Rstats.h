@@ -447,6 +447,25 @@ namespace Rstats {
       return v_out;
     }
 
+    template <class T_IN>
+    Rstats::Vector* operate_unary_is(Rstats::Logical (*func)(T_IN), Rstats::Vector* v1) {
+      
+      Rstats::Integer length = v1->get_length();
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      
+      for (Rstats::Integer i = 0; i < length; i++) {
+        if (v1->exists_na_position(i)) {
+          v_out->set_value<Rstats::Logical>(i, 0);
+        }
+        else {
+          v_out->set_value<Rstats::Logical>(i, (*func)(v1->get_value<T_IN>(i)));
+        }
+      }
+      
+      return v_out;
+    }
+    
     template <class T_IN, class T_OUT>
     Rstats::Vector* sin(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sin;
@@ -627,33 +646,32 @@ namespace Rstats {
       return v_out;
     }
 
-    template <class T_IN, class T_OUT>
+    template <class T_IN>
     Rstats::Vector* is_infinite(Rstats::Vector* v1) {
-      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::is_infinite;
+      Rstats::Logical (*func)(T_IN) = &Rstats::ElementFunc::is_infinite;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_is(func, v1);
       
       return v_out;
     }
 
-    template <class T_IN, class T_OUT>
+    template <class T_IN>
     Rstats::Vector* is_nan(Rstats::Vector* v1) {
-      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::is_nan;
+      Rstats::Logical (*func)(T_IN) = &Rstats::ElementFunc::is_nan;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_is(func, v1);
       
       return v_out;
     }
 
-    template <class T_IN, class T_OUT>
+    template <class T_IN>
     Rstats::Vector* is_finite(Rstats::Vector* v1) {
-      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::is_finite;
+      Rstats::Logical (*func)(T_IN) = &Rstats::ElementFunc::is_finite;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_is(func, v1);
       
       return v_out;
     }
-
   }
   // Rstats::Func
   namespace Func {

@@ -718,5 +718,20 @@ namespace Rstats {
         return Rstats::pl_new_sv_pv("FALSE");
       }
     }
+
+    // as_double
+    Rstats::Double as_double(Rstats::Character e1) {
+      SV* sv_value_fix = Rstats::Util::looks_like_double(e1);
+      if (SvOK(sv_value_fix)) {
+        return SvNV(sv_value_fix);
+      }
+      else {
+        throw "NAs introduced by coercion";
+      }
+    }
+    Rstats::Double as_double(Rstats::Complex e1) { return e1.real(); }
+    Rstats::Double as_double(Rstats::Double e1) { return e1; }
+    Rstats::Double as_double(Rstats::Integer e1) { return (Rstats::Double)e1; }
+    Rstats::Double as_double(Rstats::Logical e1) { return (Rstats::Double)e1; }
   }
 }

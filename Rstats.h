@@ -361,6 +361,12 @@ namespace Rstats {
     Rstats::Character as_character(Rstats::Double);
     Rstats::Character as_character(Rstats::Integer);
     Rstats::Character as_character(Rstats::Logical);
+
+    Rstats::Double as_double(Rstats::Character);
+    Rstats::Double as_double(Rstats::Complex);
+    Rstats::Double as_double(Rstats::Double);
+    Rstats::Double as_double(Rstats::Integer);
+    Rstats::Double as_double(Rstats::Logical);
   }
 
   class Vector {
@@ -489,6 +495,15 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_character(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_character;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* as_double(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_double;
       
       Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       

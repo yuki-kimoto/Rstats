@@ -1066,6 +1066,7 @@ sub sub {
         $x =~ s/$pattern/$replacement/i;
       }
       else {
+        $DB::single = 1;
         $x =~ s/$pattern/$replacement/;
       }
       push @$x2_values, "$x";

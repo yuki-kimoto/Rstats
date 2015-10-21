@@ -113,7 +113,7 @@ namespace Rstats {
             }
             else {
               if (strEQ(type, "character")) {
-                v1->set_value<Rstats::Character>(pos, v_tmp->get_value<Rstats::Character>(k));
+                v1->set_value<Rstats::Character>(pos, Rstats::pl_new_sv_sv(v_tmp->get_value<Rstats::Character>(k)));
               }
               else if (strEQ(type, "complex")) {
                 v1->set_value<Rstats::Complex>(pos, v_tmp->get_value<Rstats::Complex>(k));
@@ -135,7 +135,7 @@ namespace Rstats {
         else {
           if (SvOK(sv_element)) {
             if (strEQ(type, "character")) {
-              v1->set_value<Rstats::Character>(pos, sv_element);
+              v1->set_value<Rstats::Character>(pos, Rstats::pl_new_sv_sv(sv_element));
             }
             else if (strEQ(type, "complex")) {
               v1->set_value<Rstats::Complex>(pos, Rstats::Complex(SvNV(sv_element), 0));
@@ -3300,7 +3300,7 @@ namespace Rstats {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
         if (SvOK(sv_value)) {
-          v1->set_value<Rstats::Character>(i,sv_value);
+          v1->set_value<Rstats::Character>(i, Rstats::pl_new_sv_sv(sv_value));
         }
         else {
           v1->add_na_position(i);

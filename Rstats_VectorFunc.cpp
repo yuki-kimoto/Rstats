@@ -38,7 +38,7 @@ namespace Rstats {
     Rstats::Vector* new_vector<Rstats::Character>(Rstats::Integer length) {
       Rstats::Vector* v1 = new Rstats::Vector;
       v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;
-      v1->values = new std::vector<Rstats::Character>(length);
+      v1->values = new std::vector<Rstats::Character>(length, &PL_sv_undef);
       v1->type = Rstats::Type::CHARACTER;
       
       return v1;

@@ -6,6 +6,27 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 
+# sub
+{
+  # sub - case not ignore
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3 = c_("ad1ad1", NA, "ad2ad2");
+    my $x4 = r->sub($x1, $x2, $x3);
+    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
+  }
+
+  # sub - case ignore
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3 = c_("Ad1ad1", NA, "ad2ad2");
+    my $x4 = r->sub($x1, $x2, $x3, {'ignore.case' => TRUE});
+    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
+  }
+}
+
 # NaN
 {
   # NaN - type
@@ -613,27 +634,6 @@ use Math::Complex ();
     my $x1 = c_(NaN);
     my $x2 = r->log($x1);
     is($x2->value, 'NaN');
-  }
-}
-
-# sub
-{
-  # sub - case not ignore
-  {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
-    my $x3 = c_("ad1ad1", NA, "ad2ad2");
-    my $x4 = r->sub($x1, $x2, $x3);
-    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
-  }
-
-  # sub - case ignore
-  {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
-    my $x3 = c_("Ad1ad1", NA, "ad2ad2");
-    my $x4 = r->sub($x1, $x2, $x3, {'ignore.case' => TRUE});
-    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 }
 

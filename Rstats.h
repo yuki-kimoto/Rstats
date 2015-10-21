@@ -379,7 +379,7 @@ namespace Rstats {
     template <class T>
     T get_value(Rstats::Integer pos) {
       return (*this->get_values<T>())[pos];
-    } // Rstats::Character is specialized
+    }
     
     Rstats::Type::Enum get_type();
 
@@ -391,8 +391,6 @@ namespace Rstats {
     ~Vector();
   };
 
-  template<>
-  Rstats::Character Vector::get_value<Rstats::Character>(Rstats::Integer pos);
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
   

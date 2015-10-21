@@ -477,7 +477,7 @@ namespace Rstats {
         try {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
-        catch (char* e) {
+        catch (...) {
           v_out->add_na_position(i);
           na_produced = 1;
         }

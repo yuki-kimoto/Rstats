@@ -6,6 +6,14 @@ use Rstats;
 
 # as->double
 {
+  # as->double - error
+  {
+    my $x1 = array("a");
+    my $x2 = r->as->double($x1);
+    ok(r->is->double($x2));
+    is($x2->values->[0], undef);
+  }
+  
   # as->double - NULL
   {
     my $x1 = NULL;
@@ -77,14 +85,6 @@ use Rstats;
     is($x2->values->[0], 1);
   }
 
-  # as->double - error
-  {
-    my $x1 = array("a");
-    my $x2 = r->as->double($x1);
-    ok(r->is->double($x2));
-    is($x2->values->[0], undef);
-  }
-  
   # as->double - complex
   {
     my $x1 = array(r->complex(1, 2));

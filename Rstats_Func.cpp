@@ -323,57 +323,28 @@ namespace Rstats {
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r);
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          Rstats::Character sv_value = v1->get_value<Rstats::Character>(i);
-          SV* sv_value_fix = Rstats::Util::looks_like_double(sv_value);
-          if (SvOK(sv_value_fix)) {
-            Rstats::Double value = SvNV(sv_value_fix);
-            v2->set_value<Rstats::Double>(i, value);
-          }
-          else {
-            warn("NAs introduced by coercion");
-            v2->add_na_position(i);
-          }
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Character, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         warn("imaginary parts discarded in coercion");
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Complex>(i).real());
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Complex, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Double>(i));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Double, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Integer>(i));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Integer, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Double>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Integer>(i));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Logical, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {

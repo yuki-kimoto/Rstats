@@ -290,71 +290,77 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
     Rstats::Double atan2(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical And(SV*, SV*);
+    Rstats::Logical And(Rstats::Character, Rstats::Character);
     Rstats::Logical And(Rstats::Complex, Rstats::Complex);
     Rstats::Logical And(Rstats::Double, Rstats::Double);
     Rstats::Logical And(Rstats::Integer, Rstats::Integer);
     Rstats::Logical And(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical Or(SV*, SV*);
+    Rstats::Logical Or(Rstats::Character, Rstats::Character);
     Rstats::Logical Or(Rstats::Complex, Rstats::Complex);
     Rstats::Logical Or(Rstats::Double, Rstats::Double);
     Rstats::Logical Or(Rstats::Integer, Rstats::Integer);
     Rstats::Logical Or(Rstats::Logical, Rstats::Logical);
     
-    Rstats::Logical equal(SV*, SV*);
+    Rstats::Logical equal(Rstats::Character, Rstats::Character);
     Rstats::Logical equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical equal(Rstats::Double, Rstats::Double);
     Rstats::Logical equal(Rstats::Integer, Rstats::Integer);
     Rstats::Logical equal(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical not_equal(SV*, SV*);
+    Rstats::Logical not_equal(Rstats::Character, Rstats::Character);
     Rstats::Logical not_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical not_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical not_equal(Rstats::Integer, Rstats::Integer);
     Rstats::Logical not_equal(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical more_than(SV*, SV*);
+    Rstats::Logical more_than(Rstats::Character, Rstats::Character);
     Rstats::Logical more_than(Rstats::Complex, Rstats::Complex);
     Rstats::Logical more_than(Rstats::Double, Rstats::Double);
     Rstats::Logical more_than(Rstats::Integer, Rstats::Integer);
     Rstats::Logical more_than(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical less_than(SV*, SV*);
+    Rstats::Logical less_than(Rstats::Character, Rstats::Character);
     Rstats::Logical less_than(Rstats::Complex, Rstats::Complex);
     Rstats::Logical less_than(Rstats::Double, Rstats::Double);
     Rstats::Logical less_than(Rstats::Integer, Rstats::Integer);
     Rstats::Logical less_than(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical more_than_or_equal(SV*, SV*);
+    Rstats::Logical more_than_or_equal(Rstats::Character, Rstats::Character);
     Rstats::Logical more_than_or_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical more_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical more_than_or_equal(Rstats::Integer, Rstats::Integer);
     Rstats::Logical more_than_or_equal(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical less_than_or_equal(SV*, SV*);
+    Rstats::Logical less_than_or_equal(Rstats::Character, Rstats::Character);
     Rstats::Logical less_than_or_equal(Rstats::Complex, Rstats::Complex);
     Rstats::Logical less_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Logical less_than_or_equal(Rstats::Integer, Rstats::Integer);
     Rstats::Logical less_than_or_equal(Rstats::Logical, Rstats::Logical);
 
-    Rstats::Logical is_infinite(SV*);
+    Rstats::Logical is_infinite(Rstats::Character);
     Rstats::Logical is_infinite(Rstats::Complex);
     Rstats::Logical is_infinite(Rstats::Double);
     Rstats::Logical is_infinite(Rstats::Integer);
     Rstats::Logical is_infinite(Rstats::Logical);
 
-    Rstats::Logical is_finite(SV*);
+    Rstats::Logical is_finite(Rstats::Character);
     Rstats::Logical is_finite(Rstats::Complex);
     Rstats::Logical is_finite(Rstats::Double);
     Rstats::Logical is_finite(Rstats::Integer);
     Rstats::Logical is_finite(Rstats::Logical);
 
-    Rstats::Logical is_nan(SV*);
+    Rstats::Logical is_nan(Rstats::Character);
     Rstats::Logical is_nan(Rstats::Complex);
     Rstats::Logical is_nan(Rstats::Double);
     Rstats::Logical is_nan(Rstats::Integer);
     Rstats::Logical is_nan(Rstats::Logical);
+
+    Rstats::Character as_character(Rstats::Character);
+    Rstats::Character as_character(Rstats::Complex);
+    Rstats::Character as_character(Rstats::Double);
+    Rstats::Character as_character(Rstats::Integer);
+    Rstats::Character as_character(Rstats::Logical);
   }
 
   class Vector {
@@ -472,6 +478,15 @@ namespace Rstats {
       }
 
       v_out->merge_na_positions(v1->get_na_positions());
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* as_character(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_character;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }

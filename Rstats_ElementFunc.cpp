@@ -669,23 +669,54 @@ namespace Rstats {
     Rstats::Logical is_nan(Rstats::Integer e1) { return 0; }
     Rstats::Logical is_nan(Rstats::Logical e1) { return Rstats::ElementFunc::is_nan((Rstats::Integer)e1); }
 
-/*
     // as_character
-    Rstats::Logical as_character(Rstats::Character e1) {
-      
+    Rstats::Character as_character(Rstats::Character e1) {
+      return Rstats::pl_new_sv_sv(e1);
     }
-    Rstats::Logical as_character(Rstats::Complex e1) {
-      if (std::isfinite(e1.real()) && std::isfinite(e1.imag())) {
-        return 1;
+    Rstats::Character as_character(Rstats::Complex e1) {
+      Rstats::Double re = e1.real();
+      Rstats::Double im = e1.imag();
+      
+      SV* sv_re = Rstats::pl_new_sv_nv(re);
+      SV* sv_im = Rstats::pl_new_sv_nv(im);
+      SV* sv_str = Rstats::pl_new_sv_pv("");
+      
+      sv_catpv(sv_str, SvPV_nolen(sv_re));
+      if (im >= 0) {
+        sv_catpv(sv_str, "+");
+      }
+      sv_catpv(sv_str, SvPV_nolen(sv_im));
+      sv_catpv(sv_str, "i");
+      
+      return sv_str;
+    }
+    Rstats::Character as_character(Rstats::Double e1) {
+      SV* sv_str = Rstats::pl_new_sv_pv("");
+      if (std::isinf(e1) && e1 > 0) {
+        sv_catpv(sv_str, "Inf");
+      }
+      else if (std::isinf(e1) && e1 < 0) {
+        sv_catpv(sv_str, "-Inf");
+      }
+      else if (std::isnan(e1)) {
+        sv_catpv(sv_str, "NaN");
       }
       else {
-        return 0;
+        sv_catpv(sv_str, SvPV_nolen(Rstats::pl_new_sv_nv(e1)));
+      }
+      
+      return sv_str;
+    }
+    Rstats::Character as_character(Rstats::Integer e1) {
+      return Rstats::pl_new_sv_iv(e1);
+    }
+    Rstats::Character as_character(Rstats::Logical e1) {
+      if (e1) {
+        return Rstats::pl_new_sv_pv("TRUE");
+      }
+      else {
+        return Rstats::pl_new_sv_pv("FALSE");
       }
     }
-    Rstats::Logical as_character(Rstats::Double e1) { return std::isfinite(e1) ? 1 : 0; }
-    Rstats::Logical as_character(Rstats::Integer e1) { return 1; }
-    Rstats::Logical as_character(Rstats::Logical e1) { return Rstats::ElementFunc::is_finite((Rstats::Integer)e1); }
-*/
-
   }
 }

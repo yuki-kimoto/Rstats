@@ -2187,7 +2187,265 @@ namespace Rstats {
       
       return sv_x_out;
     }
+
+    SV* Conj(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         
+        Rstats::Vector* v2 = Rstats::VectorFunc::Conj<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::Conj<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::Conj<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::Conj<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in Conj() : non-numeric argument to Conj()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+
+    SV* asin(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::asin<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::asin<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::asin<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::asin<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in asin() : non-numeric argument to asin()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+
+    SV* atan(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::atan<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::atan<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::atan<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::atan<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in atan() : non-numeric argument to atan()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+    
+    SV* sqrt(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::sqrt<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::sqrt<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::sqrt<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::sqrt<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in sqrt() : non-numeric argument to sqrt()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+
+    SV* expm1(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::expm1<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::expm1<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::expm1<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::expm1<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in expm1() : non-numeric argument to expm1()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+
+    SV* exp(SV* sv_r, SV* sv_x1) {
+      
+      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
+      char* type = Rstats::Func::get_type(sv_r, sv_x1);
+      
+      SV* sv_x_out;
+      if (strEQ(type, "complex")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        
+        Rstats::Vector* v2 = Rstats::VectorFunc::exp<Rstats::Complex, Rstats::Complex>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+      }
+      else if (strEQ(type, "double")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::exp<Rstats::Double, Rstats::Double>(v1);
+
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "integer")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::exp<Rstats::Integer, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+
+        Rstats::Vector* v2 = Rstats::VectorFunc::exp<Rstats::Logical, Rstats::Double>(v1);
+        
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
+      }      
+      else {
+        croak("Error in exp() : non-numeric argument to exp()");
+      }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+      
+      return sv_x_out;
+    }
+    
     SV* negate(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
@@ -2596,156 +2854,6 @@ namespace Rstats {
       return sv_x_out;
     }
     
-    SV* Conj(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::Conj;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::Conj;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::Conj;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in Conj() : non-numeric argument to Conj()");
-      }
-      
-      return sv_x_out;
-    }
-    
-    SV* asin(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::asin;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::asin;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::asin;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in asin() : non-numeric argument to asin()");
-      }
-      
-      return sv_x_out;
-    }
-    
-    SV* atan(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::atan;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::atan;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::atan;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in atan() : non-numeric argument to atan()");
-      }
-      
-      return sv_x_out;
-    }
-    
-    SV* sqrt(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::sqrt;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::sqrt;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::sqrt;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in sqrt() : non-numeric argument to sqrt()");
-      }
-      
-      return sv_x_out;
-    }
-    
-    SV* expm1(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::expm1;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::expm1;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::expm1;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in expm1() : non-numeric argument to expm1()");
-      }
-      
-      return sv_x_out;
-    }
-
-    SV* exp(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex) = &Rstats::ElementFunc::exp;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double) = &Rstats::ElementFunc::exp;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer) = &Rstats::ElementFunc::exp;
-        sv_x_out = Rstats::Func::operate_unary_math(sv_r, func, sv_x1);
-      }
-      else {
-        croak("Error in exp() : non-numeric argument to exp()");
-      }
-      
-      return sv_x_out;
-    }
-                      
     SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
       
       Rstats::Integer xs_length = Rstats::pl_av_len(sv_xs);

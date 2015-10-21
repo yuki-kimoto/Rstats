@@ -248,6 +248,7 @@ namespace Rstats {
     Rstats::Complex sqrt(Rstats::Complex);
     Rstats::Double sqrt(Rstats::Double);
     Rstats::Double sqrt(Rstats::Integer);
+    Rstats::Double sqrt(Rstats::Logical);
 
     Rstats::Complex atan(Rstats::Complex);
     Rstats::Double atan(Rstats::Double);
@@ -586,6 +587,60 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* atanh(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::atanh;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* Conj(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::Conj;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* asin(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::asin;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* atan(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::atan;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* sqrt(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sqrt;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* expm1(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::expm1;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
+      
+      return v_out;
+    }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* exp(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::exp;
       
       Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_math(func, v1, 0);
       

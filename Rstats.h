@@ -460,11 +460,11 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* operate_unary_as(Rstats::Logical (*func)(T_IN), Rstats::Vector* v1) {
+    Rstats::Vector* operate_unary_as(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
       Rstats::Logical na_produced = 0;
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -475,6 +475,10 @@ namespace Rstats {
           v_out->add_na_position(i);
           na_produced = 1;
         }
+      }
+      
+      if (na_produced) {
+        warn("Warning message:\nNAs introduced by coercion");
       }
 
       v_out->merge_na_positions(v1->get_na_positions());

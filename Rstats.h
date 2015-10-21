@@ -455,6 +455,29 @@ namespace Rstats {
       return v_out;
     }
 
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* operate_unary_as(Rstats::Logical (*func)(T_IN), Rstats::Vector* v1) {
+      
+      Rstats::Integer length = v1->get_length();
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      
+      Rstats::Logical na_produced = 0;
+      for (Rstats::Integer i = 0; i < length; i++) {
+        try {
+          v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+        }
+        catch (char* e) {
+          v_out->add_na_position(i);
+          na_produced = 1;
+        }
+      }
+
+      v_out->merge_na_positions(v1->get_na_positions());
+      
+      return v_out;
+    }
+    
     template <class T_IN>
     Rstats::Vector* is_na(Rstats::Vector* v1) {
       

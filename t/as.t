@@ -4,6 +4,121 @@ use warnings;
 
 use Rstats;
 
+# as->integer
+{
+  # as->integer - Inf
+  {
+    my $x1 = Inf;
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, [undef]);
+  }
+
+  # as->integer - NULL
+  {
+    my $x1 = NULL;
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, []);
+  }
+  
+  # as->integer - dim
+  {
+    my $x1 = array(c_(1, 2));
+    my $x2 = r->as->integer($x1);
+    is_deeply($x2->dim->values, [2]);
+  }
+
+  # as->integer - NA
+  {
+    my $x1 = array(NA);
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, [undef]);
+  }
+
+  # as->integer - NaN
+  {
+    my $x1 = NaN;
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, [undef]);
+  }
+  
+  # as->integer - character, only real number, no sign
+  {
+    my $x1 = array(c_("1.23"));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+
+  # as->integer - character, only real number, plus
+  {
+    my $x1 = array(c_("+1"));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+  
+  # as->integer - character, only real number, minus
+  {
+    my $x1 = array(c_("-1.23"));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], -1);
+  }
+
+  # as->integer - character, pre and trailing space
+  {
+    my $x1 = array(c_("  1  "));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+
+  # as->integer - error
+  {
+    my $x1 = array(c_("a"));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], undef);
+  }
+  
+  # as->integer - complex
+  {
+    my $x1 = array(r->complex(1, 2));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+  
+  # as->integer - double
+  {
+    my $x1 = array(c_(1.1));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+  
+  # as->integer - integer
+  {
+    my $x1 = array(c_(1));
+    my $x2 = r->as->integer(r->as->integer($x1));
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+  }
+  
+  # as->integer - logical
+  {
+    my $x1 = array(c_(TRUE, FALSE));
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], 1);
+    is($x2->values->[1], 0);
+  }
+}
+
 # as->double
 {
   # as->double - error
@@ -400,122 +515,6 @@ use Rstats;
     ok(r->is->character($x2));
     is($x2->values->[0], "TRUE");
     is($x2->values->[1], "FALSE");
-  }
-}
-
-
-# as->integer
-{
-  # as->integer - NULL
-  {
-    my $x1 = NULL;
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is_deeply($x2->values, []);
-  }
-  
-  # as->integer - dim
-  {
-    my $x1 = array(c_(1, 2));
-    my $x2 = r->as->integer($x1);
-    is_deeply($x2->dim->values, [2]);
-  }
-
-  # as->integer - Inf
-  {
-    my $x1 = Inf;
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is_deeply($x2->values, [undef]);
-  }
-
-  # as->integer - NA
-  {
-    my $x1 = array(NA);
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is_deeply($x2->values, [undef]);
-  }
-
-  # as->integer - NaN
-  {
-    my $x1 = NaN;
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is_deeply($x2->values, [undef]);
-  }
-  
-  # as->integer - character, only real number, no sign
-  {
-    my $x1 = array(c_("1.23"));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-
-  # as->integer - character, only real number, plus
-  {
-    my $x1 = array(c_("+1"));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->integer - character, only real number, minus
-  {
-    my $x1 = array(c_("-1.23"));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], -1);
-  }
-
-  # as->integer - character, pre and trailing space
-  {
-    my $x1 = array(c_("  1  "));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-
-  # as->integer - error
-  {
-    my $x1 = array(c_("a"));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], undef);
-  }
-  
-  # as->integer - complex
-  {
-    my $x1 = array(r->complex(1, 2));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->integer - double
-  {
-    my $x1 = array(c_(1.1));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->integer - integer
-  {
-    my $x1 = array(c_(1));
-    my $x2 = r->as->integer(r->as->integer($x1));
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->integer - logical
-  {
-    my $x1 = array(c_(TRUE, FALSE));
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
   }
 }
 

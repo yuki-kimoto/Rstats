@@ -719,21 +719,6 @@ namespace Rstats {
       }
     }
 
-    // as_double
-    Rstats::Double as_double(Rstats::Character e1) {
-      SV* sv_value_fix = Rstats::Util::looks_like_double(e1);
-      if (SvOK(sv_value_fix)) {
-        return SvNV(sv_value_fix);
-      }
-      else {
-        throw "NAs introduced by coercion";
-      }
-    }
-    Rstats::Double as_double(Rstats::Complex e1) { return e1.real(); }
-    Rstats::Double as_double(Rstats::Double e1) { return e1; }
-    Rstats::Double as_double(Rstats::Integer e1) { return (Rstats::Double)e1; }
-    Rstats::Double as_double(Rstats::Logical e1) { return (Rstats::Double)e1; }
-
     // as_complex
     Rstats::Complex as_complex(Rstats::Character e1) {
       SV* sv_z = Rstats::Util::looks_like_complex(e1);
@@ -753,5 +738,43 @@ namespace Rstats {
     Rstats::Complex as_complex(Rstats::Double e1) { return Rstats::Complex(e1, 0); }
     Rstats::Complex as_complex(Rstats::Integer e1) { return Rstats::ElementFunc::as_complex((Rstats::Double)e1); }
     Rstats::Complex as_complex(Rstats::Logical e1) { return Rstats::ElementFunc::as_complex((Rstats::Double)e1); }
+
+    // as_double
+    Rstats::Double as_double(Rstats::Character e1) {
+      SV* sv_value_fix = Rstats::Util::looks_like_double(e1);
+      if (SvOK(sv_value_fix)) {
+        return SvNV(sv_value_fix);
+      }
+      else {
+        throw "NAs introduced by coercion";
+      }
+    }
+    Rstats::Double as_double(Rstats::Complex e1) { return e1.real(); }
+    Rstats::Double as_double(Rstats::Double e1) { return e1; }
+    Rstats::Double as_double(Rstats::Integer e1) { return (Rstats::Double)e1; }
+    Rstats::Double as_double(Rstats::Logical e1) { return (Rstats::Double)e1; }
+
+    // as_integer
+    Rstats::Integer as_integer(Rstats::Character e1) {
+      SV* sv_value_fix = Rstats::Util::looks_like_double(e1);
+      if (SvOK(sv_value_fix)) {
+        Rstats::Integer value = SvIV(sv_value_fix);
+        return value;
+      }
+      else {
+        throw "NAs introduced by coercion";
+      }
+    }
+    Rstats::Integer as_integer(Rstats::Complex e1) { return (Rstats::Integer)e1.real(); }
+    Rstats::Integer as_integer(Rstats::Double e1) {
+      if (std::isnan(e1) || std::isinf(e1)) {
+        throw "NAs introduced by coercion";
+      }
+      else {
+        return (Rstats::Integer)e1;
+      }
+    }
+    Rstats::Integer as_integer(Rstats::Integer e1) { return e1; }
+    Rstats::Integer as_integer(Rstats::Logical e1) { return (Rstats::Integer)e1; }
   }
 }

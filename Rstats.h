@@ -373,6 +373,12 @@ namespace Rstats {
     Rstats::Complex as_complex(Rstats::Double);
     Rstats::Complex as_complex(Rstats::Integer);
     Rstats::Complex as_complex(Rstats::Logical);
+
+    Rstats::Integer as_integer(Rstats::Character);
+    Rstats::Integer as_integer(Rstats::Complex);
+    Rstats::Integer as_integer(Rstats::Double);
+    Rstats::Integer as_integer(Rstats::Integer);
+    Rstats::Integer as_integer(Rstats::Logical);
   }
 
   class Vector {
@@ -534,6 +540,19 @@ namespace Rstats {
     }
     template <>
     Rstats::Vector* as_complex<Rstats::Character, Rstats::Complex>(Rstats::Vector* v1);
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* as_integer(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_integer;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      
+      return v_out;
+    }
+    template <>
+    Rstats::Vector* as_integer<Rstats::Character, Rstats::Integer>(Rstats::Vector* v1);
+    template <>
+    Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1);
     
     template <class T_IN>
     Rstats::Vector* is_na(Rstats::Vector* v1) {

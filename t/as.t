@@ -317,7 +317,7 @@ use Rstats;
     is_deeply($x2->values, [undef]);
   }
 
-  # as->logical - NaN
+  # as->logical - doubke,NaN
   {
     my $x1 = NaN;
     my $x2 = r->as->logical($x1);
@@ -348,15 +348,47 @@ use Rstats;
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
-  
-  # as->logical - complex
+
+  # as->logical - complex, 1 + NaN*i
   {
-    my $x1 = array(r->complex(1, 2));
+    my $x1 = array(r->complex(1, NaN));
+    my $x2 = r->as->logical($x1);
+    ok(r->is->logical($x2));
+    is($x2->values->[0], undef);
+  }
+
+  # as->logical - complex, NaN + 1*i
+  {
+    my $x1 = array(r->complex(NaN, 1));
+    my $x2 = r->as->logical($x1);
+    ok(r->is->logical($x2));
+    is($x2->values->[0], undef);
+  }
+  
+  # as->logical - complex, 1 + 0*i
+  {
+    my $x1 = array(r->complex(1, 0));
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
   }
 
+  # as->logical - complex, Inf + 0*i
+  {
+    my $x1 = array(r->complex(1, 0));
+    my $x2 = r->as->logical($x1);
+    ok(r->is->logical($x2));
+    is($x2->values->[0], 1);
+  }
+  
+  # as->logical - complex, 0 + 1*i
+  {
+    my $x1 = array(r->complex(0, 1));
+    my $x2 = r->as->logical($x1);
+    ok(r->is->logical($x2));
+    is($x2->values->[0], 1);
+  }
+  
   # as->logical - complex, 0 + 0i
   {
     my $x1 = array(r->complex(0, 0));

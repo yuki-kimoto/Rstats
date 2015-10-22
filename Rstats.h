@@ -571,6 +571,8 @@ namespace Rstats {
     template <>
     Rstats::Vector* as_logical<Rstats::Character, Rstats::Logical>(Rstats::Vector* v1);
     template <>
+    Rstats::Vector* as_logical<Rstats::Complex, Rstats::Logical>(Rstats::Vector* v1);
+    template <>
     Rstats::Vector* as_logical<Rstats::Double, Rstats::Logical>(Rstats::Vector* v1);
     
     template <class T_IN>

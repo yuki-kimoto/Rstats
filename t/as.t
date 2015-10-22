@@ -562,7 +562,7 @@ use Rstats;
     my $x1 = NaN;
     my $x2 = r->as->complex($x1);
     ok(r->is->complex($x2));
-    is_deeply($x2->values, [undef]);
+    is_deeply($x2->values, [{re => 'NaN', im => 0}]);
   }
 
   # as->complex - character, only real number, no sign

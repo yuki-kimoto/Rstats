@@ -369,66 +369,27 @@ namespace Rstats {
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          Rstats::Character sv_value = v1->get_value<Rstats::Character>(i);
-          SV* sv_z = Rstats::Util::looks_like_complex(sv_value);
-          
-          if (SvOK(sv_z)) {
-            SV* sv_re = Rstats::pl_hv_fetch(sv_z, "re");
-            SV* sv_im = Rstats::pl_hv_fetch(sv_z, "im");
-            Rstats::Double re = SvNV(sv_re);
-            Rstats::Double im = SvNV(sv_im);
-            v2->set_value<Rstats::Complex>(i, Rstats::Complex(re, im));
-          }
-          else {
-            warn("NAs introduced by coercion");
-            v2->add_na_position(i);
-          }
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_complex<Rstats::Character, Rstats::Complex>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Complex>(i, v1->get_value<Rstats::Complex>(i));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_complex<Rstats::Complex, Rstats::Complex>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          Rstats::Double value = v1->get_value<Rstats::Double>(i);
-          if (std::isnan(value)) {
-            v2->add_na_position(i);
-          }
-          else {
-            v2->set_value<Rstats::Complex>(i, Rstats::Complex(v1->get_value<Rstats::Double>(i), 0));
-          }
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_complex<Rstats::Double, Rstats::Complex>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Complex>(i, Rstats::Complex(v1->get_value<Rstats::Integer>(i), 0));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_complex<Rstats::Integer, Rstats::Complex>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<Rstats::Complex>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Complex>(i, Rstats::Complex(v1->get_value<Rstats::Integer>(i), 0));
-        }
-        v2->merge_na_positions(v1->get_na_positions());
+        Rstats::Vector* v2 = Rstats::VectorFunc::as_complex<Rstats::Logical, Rstats::Complex>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "NULL")) {

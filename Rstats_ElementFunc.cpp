@@ -733,5 +733,25 @@ namespace Rstats {
     Rstats::Double as_double(Rstats::Double e1) { return e1; }
     Rstats::Double as_double(Rstats::Integer e1) { return (Rstats::Double)e1; }
     Rstats::Double as_double(Rstats::Logical e1) { return (Rstats::Double)e1; }
+
+    // as_complex
+    Rstats::Complex as_complex(Rstats::Character e1) {
+      SV* sv_z = Rstats::Util::looks_like_complex(e1);
+      
+      if (SvOK(sv_z)) {
+        SV* sv_re = Rstats::pl_hv_fetch(sv_z, "re");
+        SV* sv_im = Rstats::pl_hv_fetch(sv_z, "im");
+        Rstats::Double re = SvNV(sv_re);
+        Rstats::Double im = SvNV(sv_im);
+        return Rstats::Complex(re, im);
+      }
+      else {
+        throw "NAs introduced by coercion";
+      }
+    }
+    Rstats::Complex as_complex(Rstats::Complex e1) { return e1; }
+    Rstats::Complex as_complex(Rstats::Double e1) { return Rstats::Complex(e1, 0); }
+    Rstats::Complex as_complex(Rstats::Integer e1) { return Rstats::ElementFunc::as_complex((Rstats::Double)e1); }
+    Rstats::Complex as_complex(Rstats::Logical e1) { return Rstats::ElementFunc::as_complex((Rstats::Double)e1); }
   }
 }

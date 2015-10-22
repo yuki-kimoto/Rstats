@@ -107,6 +107,12 @@ namespace Rstats {
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
   
+  extern Rstats::Integer ERROR;
+  
+  const Rstats::Integer ERROR_NA_INTRODUCED = 1;
+  const Rstats::Integer ERROR_NAN_PRODUCED = 2;
+  const Rstats::Integer ERROR_IMAGINARY_PART_DISCARDED = 4;
+  
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
     SV* cross_product(SV*);

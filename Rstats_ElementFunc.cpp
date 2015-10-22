@@ -55,7 +55,7 @@ namespace Rstats {
       croak("unimplemented complex operation(Rstats::VectorFunc::remainder())");
     }
     Rstats::Double remainder(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2) || e2 == 0) {
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2) || e2 == 0) {
         return Rstats::Util::NaN();
       }
       else {
@@ -123,7 +123,7 @@ namespace Rstats {
       
       // For fix FreeBSD bug
       // FreeBAD return (NaN + NaNi) when real value is negative infinite
-      if (std::isinf(re) && re < 0) {
+      if (Rstats::Util::is_Inf(re) && re < 0) {
         return Rstats::Complex(-1, 0);
       }
       else {
@@ -193,7 +193,7 @@ namespace Rstats {
       }
     }
     Rstats::Double Arg(Rstats::Double e1) {
-      if (std::isnan(e1)) {
+      if (Rstats::Util::is_NaN(e1)) {
         return Rstats::Util::NaN();
       }
       else if (e1 >= 0) {
@@ -416,7 +416,7 @@ namespace Rstats {
     }
     Rstats::Double acosh(Rstats::Double e1) {
       if (e1 >= 1) {
-        if (std::isinf(e1)) {
+        if (Rstats::Util::is_Inf(e1)) {
           warn("In acosh() : NaNs produced");
           return Rstats::Util::NaN();
         }
@@ -457,7 +457,7 @@ namespace Rstats {
       }
     }
     Rstats::Double atanh(Rstats::Double e1) {
-      if (std::isinf(e1)) {
+      if (Rstats::Util::is_Inf(e1)) {
         warn("In acosh() : NaNs produced");
         return Rstats::Util::NaN();
       }
@@ -499,7 +499,7 @@ namespace Rstats {
       }
     }
     Rstats::Double atan2(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isinf(e1) && std::isinf(e2)) {
+      if (Rstats::Util::is_Inf(e1) && Rstats::Util::is_Inf(e2)) {
         if (e1 > 0 && e2 > 0) {
           return (Rstats::Util::pi() / 4);
         }
@@ -531,7 +531,7 @@ namespace Rstats {
       else { return 0; }
     }
     Rstats::Logical And(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Na exception"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Na exception"; }
       else { return e1 && e2 ? 1 : 0; }
     }
     Rstats::Logical And(Rstats::Integer e1, Rstats::Integer e2) { return e1 && e2 ? 1 : 0; }
@@ -546,7 +546,7 @@ namespace Rstats {
       else { return 0; }
     }
     Rstats::Logical Or(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Na exception"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Na exception"; }
       else { return e1 || e2 ? 1 : 0; }
     }
     Rstats::Logical Or(Rstats::Integer e1, Rstats::Integer e2) { return e1 || e2 ? 1 : 0; }
@@ -558,7 +558,7 @@ namespace Rstats {
     Rstats::Logical equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) == 0 ? 1 : 0; }
     Rstats::Logical equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 == e2 ? 1 : 0; }
     Rstats::Logical equal(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 == e2 ? 1 : 0; }
     }
     Rstats::Logical equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 == e2 ? 1 : 0; }
@@ -570,7 +570,7 @@ namespace Rstats {
     Rstats::Logical not_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) != 0 ? 1 : 0; }
     Rstats::Logical not_equal(Rstats::Complex e1, Rstats::Complex e2) { return e1 != e2 ? 1 : 0; }
     Rstats::Logical not_equal(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 != e2 ? 1 : 0; }
     }
     Rstats::Logical not_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 != e2 ? 1 : 0; }
@@ -581,7 +581,7 @@ namespace Rstats {
     // more_than
     Rstats::Logical more_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) > 0 ? 1 : 0; }
     Rstats::Logical more_than(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 > e2 ? 1 : 0; }
     }
     Rstats::Logical more_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 > e2 ? 1 : 0; }
@@ -592,7 +592,7 @@ namespace Rstats {
     // less_than
     Rstats::Logical less_than(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) < 0 ? 1 : 0; }
     Rstats::Logical less_than(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 < e2 ? 1 : 0; }
     }
     Rstats::Logical less_than(Rstats::Integer e1, Rstats::Integer e2) { return e1 < e2 ? 1 : 0; }
@@ -603,7 +603,7 @@ namespace Rstats {
     // more_than_or_equal
     Rstats::Logical more_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) >= 0 ? 1 : 0; }
     Rstats::Logical more_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 >= e2 ? 1 : 0; }
     }
     Rstats::Logical more_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 >= e2 ? 1 : 0; }
@@ -614,7 +614,7 @@ namespace Rstats {
     // less_than_or_equal
     Rstats::Logical less_than_or_equal(Rstats::Character e1, Rstats::Character e2) { return sv_cmp(e1, e2) <= 0 ? 1 : 0; }
     Rstats::Logical less_than_or_equal(Rstats::Double e1, Rstats::Double e2) {
-      if (std::isnan(e1) || std::isnan(e2)) { throw "Can't compare NaN"; }
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2)) { throw "Can't compare NaN"; }
       else { return e1 <= e2 ? 1 : 0; }
     }
     Rstats::Logical less_than_or_equal(Rstats::Integer e1, Rstats::Integer e2) { return e1 <= e2 ? 1 : 0; }
@@ -625,17 +625,17 @@ namespace Rstats {
     // is_infinite
     Rstats::Logical is_infinite(Rstats::Character e1) { return 0; }
     Rstats::Logical is_infinite(Rstats::Complex e1) {
-      if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
+      if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag())) {
         return 0;
       }
-      else if (std::isinf(e1.real()) || std::isinf(e1.imag())) {
+      else if (Rstats::Util::is_Inf(e1.real()) || Rstats::Util::is_Inf(e1.imag())) {
         return 1;
       }
       else {
         return 0;
       }
     }
-    Rstats::Logical is_infinite(Rstats::Double e1) { return std::isinf(e1) ? 1 : 0; }
+    Rstats::Logical is_infinite(Rstats::Double e1) { return Rstats::Util::is_Inf(e1) ? 1 : 0; }
     Rstats::Logical is_infinite(Rstats::Integer e1) { return 0; }
     Rstats::Logical is_infinite(Rstats::Logical e1) { return Rstats::ElementFunc::is_infinite((Rstats::Integer)e1); }
 
@@ -656,14 +656,14 @@ namespace Rstats {
     // is_nan
     Rstats::Logical is_nan(Rstats::Character e1) { return 0; }
     Rstats::Logical is_nan(Rstats::Complex e1) {
-      if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
+      if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag())) {
         return 1;
       }
       else {
         return 0;
       }
     }
-    Rstats::Logical is_nan(Rstats::Double e1) { return std::isnan(e1) ? 1 : 0; }
+    Rstats::Logical is_nan(Rstats::Double e1) { return Rstats::Util::is_NaN(e1) ? 1 : 0; }
     Rstats::Logical is_nan(Rstats::Integer e1) { return 0; }
     Rstats::Logical is_nan(Rstats::Logical e1) { return Rstats::ElementFunc::is_nan((Rstats::Integer)e1); }
 
@@ -690,13 +690,13 @@ namespace Rstats {
     }
     Rstats::Character as_character(Rstats::Double e1) {
       SV* sv_str = Rstats::pl_new_sv_pv("");
-      if (std::isinf(e1) && e1 > 0) {
+      if (Rstats::Util::is_Inf(e1) && e1 > 0) {
         sv_catpv(sv_str, "Inf");
       }
-      else if (std::isinf(e1) && e1 < 0) {
+      else if (Rstats::Util::is_Inf(e1) && e1 < 0) {
         sv_catpv(sv_str, "-Inf");
       }
-      else if (std::isnan(e1)) {
+      else if (Rstats::Util::is_NaN(e1)) {
         sv_catpv(sv_str, "NaN");
       }
       else {
@@ -764,7 +764,7 @@ namespace Rstats {
       }
     }
     Rstats::Integer as_integer(Rstats::Complex e1) {
-      if (std::isnan(e1.real()) || std::isnan(e1.imag()) || std::isinf(e1.real()) || std::isinf(e1.imag())) {
+      if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag()) || Rstats::Util::is_Inf(e1.real()) || Rstats::Util::is_Inf(e1.imag())) {
         throw "NAs intoroduced by coercion";
       }
       else {
@@ -772,7 +772,7 @@ namespace Rstats {
       }
     }
     Rstats::Integer as_integer(Rstats::Double e1) {
-      if (std::isnan(e1) || std::isinf(e1)) {
+      if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_Inf(e1)) {
         throw "NAs introduced by coercion";
       }
       else {
@@ -798,7 +798,7 @@ namespace Rstats {
       }
     }
     Rstats::Logical as_logical(Rstats::Complex e1) {
-      if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
+      if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag())) {
         throw "NAs intoroduced by coercion";
       }
       else if (e1.real() || e1.imag()) {
@@ -809,7 +809,7 @@ namespace Rstats {
       }
     }
     Rstats::Logical as_logical(Rstats::Double e1) {
-      if (std::isnan(e1)) {
+      if (Rstats::Util::is_NaN(e1)) {
         throw "NAs introduced by coercion";
       }
       else {

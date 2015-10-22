@@ -511,10 +511,12 @@ namespace Rstats {
     Rstats::Vector* as_double(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_double;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
       
       return v_out;
     }
+    template <>
+    Rstats::Vector* as_double<Rstats::Character, Rstats::Double>(Rstats::Vector* v1);
     
     template <class T_IN>
     Rstats::Vector* is_na(Rstats::Vector* v1) {

@@ -5,6 +5,15 @@ namespace Rstats {
   namespace VectorFunc {
 
     template <>
+    Rstats::Vector* as_double<Rstats::Character, Rstats::Double>(Rstats::Vector* v1) {
+      Rstats::Double (*func)(Rstats::Character) = &Rstats::ElementFunc::as_double;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      
+      return v_out;
+    }
+
+    template <>
     Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer length) {
       Rstats::Vector* v1 = new Rstats::Vector;
       v1->na_positions = new std::map<Rstats::Integer, Rstats::Integer>;

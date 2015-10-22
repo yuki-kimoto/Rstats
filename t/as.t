@@ -311,7 +311,7 @@ use Rstats;
 
   # as->logical - NA
   {
-    my $x1 = array(NA);
+    my $x1 = NA;
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [undef]);
@@ -327,7 +327,7 @@ use Rstats;
   
   # as->logical - character, double
   {
-    my $x1 = array(c_("1.23"));
+    my $x1 = c_("1.23");
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -335,7 +335,7 @@ use Rstats;
 
   # as->logical - character, pre and trailing space
   {
-    my $x1 = array(c_("  1  "));
+    my $x1 = c_("  1  ");
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -343,7 +343,7 @@ use Rstats;
 
   # as->logical - character
   {
-    my $x1 = array(c_("a"));
+    my $x1 = c_("a");
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -351,7 +351,7 @@ use Rstats;
 
   # as->logical - complex, 1 + NaN*i
   {
-    my $x1 = array(r->complex(1, NaN));
+    my $x1 = r->complex(1, NaN);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -359,7 +359,7 @@ use Rstats;
 
   # as->logical - complex, NaN + 1*i
   {
-    my $x1 = array(r->complex(NaN, 1));
+    my $x1 = r->complex(NaN, 1);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -367,7 +367,7 @@ use Rstats;
   
   # as->logical - complex, 1 + 0*i
   {
-    my $x1 = array(r->complex(1, 0));
+    my $x1 = r->complex(1, 0);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
@@ -375,7 +375,7 @@ use Rstats;
 
   # as->logical - complex, Inf + 0*i
   {
-    my $x1 = array(r->complex(1, 0));
+    my $x1 = r->complex(1, 0);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
@@ -383,7 +383,7 @@ use Rstats;
   
   # as->logical - complex, 0 + 1*i
   {
-    my $x1 = array(r->complex(0, 1));
+    my $x1 = r->complex(0, 1);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
@@ -391,7 +391,7 @@ use Rstats;
   
   # as->logical - complex, 0 + 0i
   {
-    my $x1 = array(r->complex(0, 0));
+    my $x1 = r->complex(0, 0);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 0);
@@ -399,7 +399,7 @@ use Rstats;
   
   # as->logical - double
   {
-    my $x1 = array(c_(1.1, 0));
+    my $x1 = c_(1.1, 0);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
@@ -408,7 +408,7 @@ use Rstats;
 
   # as->logical - integer
   {
-    my $x1 = array(c_(2, 0));
+    my $x1 = c_(2, 0);
     my $x2 = r->as->logical(r->as->integer($x1));
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
@@ -417,7 +417,7 @@ use Rstats;
     
   # as->logical - logical
   {
-    my $x1 = array(c_(TRUE, FALSE));
+    my $x1 = c_(TRUE, FALSE);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);

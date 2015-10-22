@@ -30,6 +30,7 @@ namespace Rstats {
       
       return v_out;
     }
+    
     template <>
     Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1) {
       Rstats::Integer (*func)(Rstats::Double) = &Rstats::ElementFunc::as_integer;
@@ -38,7 +39,32 @@ namespace Rstats {
       
       return v_out;
     }
-    
+
+    template <>
+    Rstats::Vector* as_logical<Rstats::Character, Rstats::Logical>(Rstats::Vector* v1) {
+      Rstats::Logical (*func)(Rstats::Character) = &Rstats::ElementFunc::as_logical;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      
+      return v_out;
+    }
+    template <>
+    Rstats::Vector* as_logical<Rstats::Complex, Rstats::Logical>(Rstats::Vector* v1) {
+      Rstats::Logical (*func)(Rstats::Complex) = &Rstats::ElementFunc::as_logical;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      
+      return v_out;
+    }
+    template <>
+    Rstats::Vector* as_logical<Rstats::Double, Rstats::Logical>(Rstats::Vector* v1) {
+      Rstats::Logical (*func)(Rstats::Double) = &Rstats::ElementFunc::as_logical;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      
+      return v_out;
+    }
+        
     template <>
     Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer length) {
       Rstats::Vector* v1 = new Rstats::Vector;

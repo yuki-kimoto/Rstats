@@ -379,6 +379,12 @@ namespace Rstats {
     Rstats::Integer as_integer(Rstats::Double);
     Rstats::Integer as_integer(Rstats::Integer);
     Rstats::Integer as_integer(Rstats::Logical);
+
+    Rstats::Logical as_logical(Rstats::Character);
+    Rstats::Logical as_logical(Rstats::Complex);
+    Rstats::Logical as_logical(Rstats::Double);
+    Rstats::Logical as_logical(Rstats::Integer);
+    Rstats::Logical as_logical(Rstats::Logical);
   }
 
   class Vector {
@@ -553,6 +559,19 @@ namespace Rstats {
     Rstats::Vector* as_integer<Rstats::Character, Rstats::Integer>(Rstats::Vector* v1);
     template <>
     Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1);
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* as_logical(Rstats::Vector* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_logical;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      
+      return v_out;
+    }
+    template <>
+    Rstats::Vector* as_logical<Rstats::Character, Rstats::Logical>(Rstats::Vector* v1);
+    template <>
+    Rstats::Vector* as_logical<Rstats::Double, Rstats::Logical>(Rstats::Vector* v1);
     
     template <class T_IN>
     Rstats::Vector* is_na(Rstats::Vector* v1) {

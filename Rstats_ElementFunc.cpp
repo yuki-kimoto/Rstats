@@ -776,5 +776,42 @@ namespace Rstats {
     }
     Rstats::Integer as_integer(Rstats::Integer e1) { return e1; }
     Rstats::Integer as_integer(Rstats::Logical e1) { return (Rstats::Integer)e1; }
+
+    // as_logical
+    Rstats::Logical as_logical(Rstats::Character e1) {
+      SV* sv_logical = Rstats::Util::looks_like_logical(e1);
+      if (SvOK(sv_logical)) {
+        if (SvTRUE(sv_logical)) {
+          return 1;
+        }
+        else {
+          return 0;
+        }
+      }
+      else {
+        throw "NAs introduced by coercion";
+      }
+    }
+    Rstats::Logical as_logical(Rstats::Complex e1) {
+      if (std::isnan(e1.real()) || std::isnan(e1.imag())) {
+        throw "NAs intoroduced by coercion";
+      }
+      else if (e1.real() || e1.imag()) {
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    }
+    Rstats::Logical as_logical(Rstats::Double e1) {
+      if (std::isnan(e1)) {
+        throw "NAs introduced by coercion";
+      }
+      else {
+        return e1 ? 1 : 0;
+      }
+    }
+    Rstats::Logical as_logical(Rstats::Integer e1) { return e1 ? 1 : 0; }
+    Rstats::Logical as_logical(Rstats::Logical e1) { return e1; }
   }
 }

@@ -1,7 +1,5 @@
 #include "Rstats.h"
 
-
-
 // Rstats::ElementFunc
 namespace Rstats {
   namespace ElementFunc {
@@ -768,7 +766,7 @@ namespace Rstats {
         throw "NAs intoroduced by coercion";
       }
       else {
-        return e1.real();
+        return (Rstats::Integer)e1.real();
       }
     }
     Rstats::Integer as_integer(Rstats::Double e1) {

@@ -106,8 +106,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-  
-  extern Rstats::Integer ERROR;
+  typedef Rstats::Integer Error;
   
   const Rstats::Integer ERROR_NA_INTRODUCED = 1;
   const Rstats::Integer ERROR_NAN_PRODUCED = 2;
@@ -433,6 +432,7 @@ namespace Rstats {
   
   // Rstats::VectorFunc
   namespace VectorFunc {
+    
     template<class T>
     Rstats::Vector* new_vector(Rstats::Integer);
     template<>

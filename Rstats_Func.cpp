@@ -471,7 +471,6 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "double")) {
-      
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::as_logical<Rstats::Double, Rstats::Logical>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);

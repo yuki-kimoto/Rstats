@@ -30,7 +30,14 @@ namespace Rstats {
       
       return v_out;
     }
-    
+    template <>
+    Rstats::Vector* as_integer<Rstats::Complex, Rstats::Integer>(Rstats::Vector* v1) {
+      Rstats::Integer (*func)(Rstats::Complex) = &Rstats::ElementFunc::as_integer;
+      
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 1);
+      
+      return v_out;
+    }
     template <>
     Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1) {
       Rstats::Integer (*func)(Rstats::Double) = &Rstats::ElementFunc::as_integer;

@@ -558,6 +558,8 @@ namespace Rstats {
     template <>
     Rstats::Vector* as_integer<Rstats::Character, Rstats::Integer>(Rstats::Vector* v1);
     template <>
+    Rstats::Vector* as_integer<Rstats::Complex, Rstats::Integer>(Rstats::Vector* v1);
+    template <>
     Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1);
 
     template <class T_IN, class T_OUT>

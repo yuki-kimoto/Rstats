@@ -765,7 +765,14 @@ namespace Rstats {
         throw "NAs introduced by coercion";
       }
     }
-    Rstats::Integer as_integer(Rstats::Complex e1) { return (Rstats::Integer)e1.real(); }
+    Rstats::Integer as_integer(Rstats::Complex e1) {
+      if (std::isnan(e1.real()) || std::isnan(e1.imag()) || std::isinf(e1.real()) || std::isinf(e1.imag())) {
+        throw "NAs intoroduced by coercion";
+      }
+      else {
+        return e1.real();
+      }
+    }
     Rstats::Integer as_integer(Rstats::Double e1) {
       if (std::isnan(e1) || std::isinf(e1)) {
         throw "NAs introduced by coercion";

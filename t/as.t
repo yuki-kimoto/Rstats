@@ -31,13 +31,13 @@ use Rstats;
 
   # as->integer - NA
   {
-    my $x1 = array(NA);
+    my $x1 = NA;
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
 
-  # as->integer - NaN
+  # as->integer - double,NaN
   {
     my $x1 = NaN;
     my $x2 = r->as->integer($x1);
@@ -47,7 +47,7 @@ use Rstats;
   
   # as->integer - character, only real number, no sign
   {
-    my $x1 = array(c_("1.23"));
+    my $x1 = c_("1.23");
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
@@ -55,7 +55,7 @@ use Rstats;
 
   # as->integer - character, only real number, plus
   {
-    my $x1 = array(c_("+1"));
+    my $x1 = c_("+1");
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
@@ -63,7 +63,7 @@ use Rstats;
   
   # as->integer - character, only real number, minus
   {
-    my $x1 = array(c_("-1.23"));
+    my $x1 = c_("-1.23");
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], -1);
@@ -71,7 +71,7 @@ use Rstats;
 
   # as->integer - character, pre and trailing space
   {
-    my $x1 = array(c_("  1  "));
+    my $x1 = c_("  1  ");
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
@@ -79,23 +79,55 @@ use Rstats;
 
   # as->integer - error
   {
-    my $x1 = array(c_("a"));
+    my $x1 = c_("a");
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
   
-  # as->integer - complex
+  # as->integer - complex, 1 + 2*i
   {
-    my $x1 = array(r->complex(1, 2));
+    my $x1 = r->complex(1, 2);
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
+
+  # as->integer - complex, Inf + 1*i
+  {
+    my $x1 = r->complex(Inf, 1);
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], undef);
+  }
+
+  # as->integer - complex, 1 + Inf*i
+  {
+    my $x1 = r->complex(1, Inf);
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], undef);
+  }
+
+  # as->integer - complex,  NaN + 1*i
+  {
+    my $x1 = r->complex(NaN, 1);
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], undef);
+  }
+
+  # as->integer - complex,  1 + NaN*i
+  {
+    my $x1 = r->complex(1, NaN);
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is($x2->values->[0], undef);
+  }
   
   # as->integer - double
   {
-    my $x1 = array(c_(1.1));
+    my $x1 = c_(1.1);
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
@@ -103,7 +135,7 @@ use Rstats;
   
   # as->integer - integer
   {
-    my $x1 = array(c_(1));
+    my $x1 = c_(1);
     my $x2 = r->as->integer(r->as->integer($x1));
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
@@ -111,7 +143,7 @@ use Rstats;
   
   # as->integer - logical
   {
-    my $x1 = array(c_(TRUE, FALSE));
+    my $x1 = c_(TRUE, FALSE);
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);

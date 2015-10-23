@@ -1,6 +1,6 @@
 #include "Rstats.h"
 
-
+extern Rstats::Integer Rstats::ERROR;
 
 // Rstats::ElementFunc
 namespace Rstats {

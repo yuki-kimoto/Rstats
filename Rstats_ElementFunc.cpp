@@ -418,7 +418,6 @@ namespace Rstats {
       if (e1 >= 1) {
         if (Rstats::Util::is_Inf(e1)) {
           Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
-          warn("In acosh() : NaNs produced");
           return Rstats::Util::NaN();
         }
         else {
@@ -430,7 +429,7 @@ namespace Rstats {
         }
       }
       else {
-        warn("In acosh() : NaNs produced");
+        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
         return Rstats::Util::NaN();
       }
     }
@@ -440,11 +439,11 @@ namespace Rstats {
     // atanh
     Rstats::Complex atanh(Rstats::Complex e1) {
       if (e1 == Rstats::Complex(1, 0)) {
-        warn("In atanh() : NaNs produced");
+        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
         return Rstats::Complex(Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else if (e1 == Rstats::Complex(-1, 0)) {
-        warn("In atanh() : NaNs produced");
+        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
         return Rstats::Complex(-Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else {
@@ -459,7 +458,7 @@ namespace Rstats {
     }
     Rstats::Double atanh(Rstats::Double e1) {
       if (Rstats::Util::is_Inf(e1)) {
-        warn("In acosh() : NaNs produced");
+        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
         return Rstats::Util::NaN();
       }
       else {
@@ -473,7 +472,7 @@ namespace Rstats {
           return std::log((1 + e1) / (1 - e1)) / 2;
         }
         else {
-          warn("In acosh() : NaNs produced");
+          Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
           return Rstats::Util::NaN();
         }
       }

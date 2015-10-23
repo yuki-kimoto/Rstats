@@ -1,6 +1,6 @@
 #include "Rstats.h"
 
-extern Rstats::Integer Rstats::ERROR;
+extern Rstats::Integer Rstats::WARN;
 
 // Rstats::ElementFunc
 namespace Rstats {
@@ -417,7 +417,7 @@ namespace Rstats {
     Rstats::Double acosh(Rstats::Double e1) {
       if (e1 >= 1) {
         if (Rstats::Util::is_Inf(e1)) {
-          Rstats::ERROR = Rstats::ERROR_NAN_PRODUCED;
+          Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
           warn("In acosh() : NaNs produced");
           return Rstats::Util::NaN();
         }

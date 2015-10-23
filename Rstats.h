@@ -107,11 +107,11 @@ namespace Rstats {
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
   
-  extern Rstats::Integer ERROR;
+  extern Rstats::Integer WARN;
   
-  const Rstats::Integer ERROR_NA_INTRODUCED = 1;
-  const Rstats::Integer ERROR_NAN_PRODUCED = 2;
-  const Rstats::Integer ERROR_IMAGINARY_PART_DISCARDED = 4;
+  const Rstats::Integer WARN_NA_INTRODUCED = 1;
+  const Rstats::Integer WARN_NAN_PRODUCED = 2;
+  const Rstats::Integer WARN_IMAGINARY_PART_DISCARDED = 4;
   
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
@@ -462,23 +462,23 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
-      Rstats::ERROR = 0;
+      Rstats::WARN = 0;
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
-      if (Rstats::ERROR) {
-        SV* sv_error = Rstats::pl_new_sv_pv("Warning message:\n");
-        if (Rstats::ERROR & Rstats::ERROR_NAN_PRODUCED) {
-          sv_catpv(sv_error, "NaNs produced\n");
+      if (Rstats::WARN) {
+        SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
+        if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
+          sv_catpv(sv_warn, "NaNs produced\n");
         }
-        if (Rstats::ERROR & Rstats::ERROR_NA_INTRODUCED) {
-          sv_catpv(sv_error, "NAs introduced by coercion\n");
+        if (Rstats::WARN & Rstats::WARN_NA_INTRODUCED) {
+          sv_catpv(sv_warn, "NAs introduced by coercion\n");
         }
-        if (Rstats::ERROR & Rstats::ERROR_IMAGINARY_PART_DISCARDED) {
-          sv_catpv(sv_error, "imaginary parts discarded in coercion\n");
+        if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
+          sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
         }
         
-        warn("%s", SvPV_nolen(sv_error));
+        warn("%s", SvPV_nolen(sv_warn));
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

@@ -462,8 +462,23 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
+      Rstats::ERROR = 0;
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+      }
+      if (Rstats::ERROR) {
+        SV* sv_error = Rstats::pl_new_sv_pv("Warning message:\n");
+        if (Rstats::ERROR & Rstats::ERROR_NAN_PRODUCED) {
+          sv_catpv(sv_error, "NaNs produced\n");
+        }
+        if (Rstats::ERROR & Rstats::ERROR_NA_INTRODUCED) {
+          sv_catpv(sv_error, "NAs introduced by coercion\n");
+        }
+        if (Rstats::ERROR & Rstats::ERROR_IMAGINARY_PART_DISCARDED) {
+          sv_catpv(sv_error, "imaginary parts discarded in coercion\n");
+        }
+        
+        warn("%s", SvPV_nolen(sv_error));
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

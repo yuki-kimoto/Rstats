@@ -1061,30 +1061,6 @@ namespace Rstats {
     }
     
     template <class T_IN, class T_OUT>
-    SV* operate_unary_math(SV* sv_r, T_OUT (*func)(T_IN), SV* sv_x1) {
-      
-      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-      Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
-      
-      Rstats::Vector* v2 = Rstats::Vector::new_vector<T_OUT>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        try {
-          v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
-        }
-        catch (const char* e) {
-          v2->add_na_position(i);
-        }
-      }
-      v2->merge_na_positions(v1->get_na_positions());
-      
-      SV* sv_x2 = Rstats::Func::new_vector<T_OUT>(sv_r);
-      set_vector(sv_r, sv_x2, v2);
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x2);
-      
-      return sv_x2;
-    }
-    
-    template <class T_IN, class T_OUT>
     SV* operate_binary(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2) {
 
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);

@@ -7,7 +7,7 @@
 #endif
 
 #include <vector>
-#include <map>
+#include <set>
 #include <complex>
 #include <cmath>
 #include <limits>
@@ -106,7 +106,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-  typedef std::map<Rstats::Integer, Rstats::Integer> NaPositions;
+  typedef std::set<Rstats::Integer> NaPositions;
   
   extern Rstats::Integer WARN;
   
@@ -422,7 +422,7 @@ namespace Rstats {
     Rstats::Type::Enum get_type();
 
     void add_na_position(Rstats::Integer);
-    bool exists_na_position(Rstats::Integer position);
+    Rstats::Logical exists_na_position(Rstats::Integer position);
     void merge_na_positions(Rstats::NaPositions*);
     Rstats::NaPositions* get_na_positions();
     

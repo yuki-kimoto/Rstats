@@ -81,16 +81,12 @@ namespace Rstats {
     (*this->get_values<Rstats::Character>())[pos] = SvREFCNT_inc(value);
   }
 
-  Rstats::Type::Enum Vector::get_type() {
-    return this->type;
-  }
-  
   Rstats::Integer Vector::get_length() {
     if (this->values == NULL) {
       return 0;
     }
     
-    Rstats::Type::Enum type = this->get_type();
+    Rstats::Type::Enum type = this->type;
     switch (type) {
       case Rstats::Type::CHARACTER :
         return this->get_values<Rstats::Character>()->size();
@@ -106,7 +102,7 @@ namespace Rstats {
 
   Vector::~Vector() {
     
-    Rstats::Type::Enum type = this->get_type();
+    Rstats::Type::Enum type = this->type;
     
     if (this->values != NULL){ 
       switch (type) {

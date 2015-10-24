@@ -439,8 +439,6 @@ namespace Rstats {
       return (*this->get_values<T>())[pos];
     }
     
-    Rstats::Type::Enum get_type();
-
     void add_na_position(Rstats::Integer);
     Rstats::Logical exists_na_position(Rstats::Integer position);
     void merge_na_positions(Rstats::NaPositions*);

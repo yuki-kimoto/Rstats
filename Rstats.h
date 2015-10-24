@@ -552,6 +552,32 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
+    Rstats::Vector* operate_binary_math(SV* sv_r, T_OUT (*func)(T_IN, T_IN), Rstats::Vector* v1, Rstats::Vector* v2) {
+
+      Rstats::Integer length = v1->get_length();
+      Rstats::Vector* v3 = Rstats::Vector::new_vector<T_OUT>(length);
+
+      Rstats::Util::init_warn();
+      for (Rstats::Integer i = 0; i < length; i++) {
+        v3->set_value<T_OUT>(
+          i,
+          (*func)(
+            v1->get_value<T_IN>(i),
+            v2->get_value<T_IN>(i)
+          )
+        );
+      }
+      if (Rstats::Util::get_warn()) {
+        Rstats::Util::print_warn_message();
+      }
+      
+      v3->merge_na_positions(v1->get_na_positions());
+      v3->merge_na_positions(v2->get_na_positions());
+      
+      return v3;
+    }
+    
+    template <class T_IN, class T_OUT>
     Rstats::Vector* as_character(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_character;
       

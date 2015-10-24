@@ -472,9 +472,6 @@ namespace Rstats {
         if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
           sv_catpv(sv_warn, "NaNs produced\n");
         }
-        if (Rstats::WARN & Rstats::WARN_NA_INTRODUCED) {
-          sv_catpv(sv_warn, "NAs introduced by coercion\n");
-        }
         if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
           sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
         }

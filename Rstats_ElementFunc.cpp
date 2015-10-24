@@ -417,7 +417,7 @@ namespace Rstats {
     Rstats::Double acosh(Rstats::Double e1) {
       if (e1 >= 1) {
         if (Rstats::Util::is_Inf(e1)) {
-          Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+          Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
           return Rstats::Util::NaN();
         }
         else {
@@ -429,7 +429,7 @@ namespace Rstats {
         }
       }
       else {
-        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+        Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
         return Rstats::Util::NaN();
       }
     }
@@ -439,11 +439,11 @@ namespace Rstats {
     // atanh
     Rstats::Complex atanh(Rstats::Complex e1) {
       if (e1 == Rstats::Complex(1, 0)) {
-        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+        Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
         return Rstats::Complex(Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else if (e1 == Rstats::Complex(-1, 0)) {
-        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+        Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
         return Rstats::Complex(-Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else {
@@ -458,7 +458,7 @@ namespace Rstats {
     }
     Rstats::Double atanh(Rstats::Double e1) {
       if (Rstats::Util::is_Inf(e1)) {
-        Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+        Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
         return Rstats::Util::NaN();
       }
       else {
@@ -472,7 +472,7 @@ namespace Rstats {
           return std::log((1 + e1) / (1 - e1)) / 2;
         }
         else {
-          Rstats::WARN = Rstats::WARN_NAN_PRODUCED;
+          Rstats::WARN |= Rstats::WARN_NAN_PRODUCED;
           return Rstats::Util::NaN();
         }
       }
@@ -747,7 +747,9 @@ namespace Rstats {
         throw "NAs introduced by coercion";
       }
     }
-    Rstats::Double as_double(Rstats::Complex e1) { return e1.real(); }
+    Rstats::Double as_double(Rstats::Complex e1) {
+      return e1.real();
+    }
     Rstats::Double as_double(Rstats::Double e1) { return e1; }
     Rstats::Double as_double(Rstats::Integer e1) { return (Rstats::Double)e1; }
     Rstats::Double as_double(Rstats::Logical e1) { return (Rstats::Double)e1; }

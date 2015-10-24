@@ -129,6 +129,7 @@ namespace Rstats {
     Rstats::Double NaN();
     Rstats::Logical is_Inf(Rstats::Double);
     Rstats::Logical is_NaN(Rstats::Double);
+    char* get_warn_message();
   }
 
   namespace ElementFunc {
@@ -468,15 +469,7 @@ namespace Rstats {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
       if (Rstats::WARN) {
-        SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
-        if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
-          sv_catpv(sv_warn, "NaNs produced\n");
-        }
-        if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
-          sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
-        }
-        
-        warn("%s", SvPV_nolen(sv_warn));
+        warn(Rstats::Util::get_warn_message());
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

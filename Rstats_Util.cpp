@@ -17,6 +17,18 @@ namespace Rstats {
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
+    char* get_warn_message() {
+      SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
+      if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
+        sv_catpv(sv_warn, "NaNs produced\n");
+      }
+      if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
+        sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
+      }
+      
+      return SvPV_nolen(sv_warn);
+    }
+    
     Rstats::Logical is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
         return 0;

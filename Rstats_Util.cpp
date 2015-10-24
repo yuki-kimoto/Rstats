@@ -29,7 +29,7 @@ namespace Rstats {
       NA_POSITIONS = new Rstats::Integer(length);
     }
     
-    void add_tmp_na_positions(Rstats::Integer na_position) {
+    void add_tmp_na_position(Rstats::Integer na_position) {
       *(NA_POSITIONS + na_position) = 1;
     }
     

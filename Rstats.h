@@ -139,7 +139,7 @@ namespace Rstats {
     Rstats::Integer get_warn();
 
     void init_tmp_na_positions(Rstats::Integer length);
-    void add_tmp_na_positions(Rstats::Integer na_position);
+    void add_tmp_na_position(Rstats::Integer na_position);
     Rstats::Integer* get_tmp_na_positions();
   }
 

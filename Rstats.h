@@ -432,14 +432,15 @@ namespace Rstats {
     void add_na_position(Rstats::Integer);
     Rstats::Logical exists_na_position(Rstats::Integer position);
     void merge_na_positions(Rstats::NaPositions*);
-    void merge_na_positions(Rstats::Integer, Rstats::Logical*);
     Rstats::NaPositions* get_na_positions();
     
     ~Vector();
   };
-
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
+  
+
+
   
   // Rstats::VectorFunc
   namespace VectorFunc {

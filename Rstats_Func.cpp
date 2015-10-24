@@ -3095,7 +3095,7 @@ namespace Rstats {
     SV* pi (SV* sv_r) {
       Rstats::Double pi = Rstats::Util::pi();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector(1, pi);
+      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Double>(1, pi);
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       
       return sv_x_out;

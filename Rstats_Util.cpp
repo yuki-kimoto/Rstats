@@ -1,5 +1,7 @@
 #include "Rstats.h"
 
+extern Rstats::Integer Rstats::WARN;
+
 // Rstats::Util
 namespace Rstats {
   namespace Util {

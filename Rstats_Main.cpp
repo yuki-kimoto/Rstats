@@ -1,6 +1,7 @@
 #include "Rstats.h"
 
 Rstats::Integer Rstats::WARN = 0;
+Rstats::Logical Rstats::NA_INTRODUCED = 0;
 
 // Rstats
 namespace Rstats {

@@ -404,11 +404,13 @@ namespace Rstats {
   }
 
   class Vector {
-    public:
+    private:
     
     Rstats::Type::Enum type;
     Rstats::NaPositions* na_positions;
     void* values;
+    
+    public:
 
     template<class T>
     static Rstats::Vector* new_vector(Rstats::Integer);

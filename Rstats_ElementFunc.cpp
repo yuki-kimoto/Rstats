@@ -748,6 +748,9 @@ namespace Rstats {
       }
     }
     Rstats::Double as_double(Rstats::Complex e1) {
+      if (e1.imag() != 0) {
+        Rstats::WARN |= Rstats::WARN_IMAGINARY_PART_DISCARDED;
+      }
       return e1.real();
     }
     Rstats::Double as_double(Rstats::Double e1) { return e1; }

@@ -21,22 +21,6 @@ namespace Rstats {
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
-    void init_tmp_na_positions(Rstats::Integer length) {
-      if (NA_POSITIONS != NULL) {
-        delete NA_POSITIONS;
-      }
-      
-      NA_POSITIONS = new Rstats::Integer(length);
-    }
-    
-    void add_tmp_na_position(Rstats::Integer na_position) {
-      *(NA_POSITIONS + na_position) = 1;
-    }
-    
-    Rstats::Integer* get_tmp_na_positions() {
-      return NA_POSITIONS;
-    }
-
     void init_warn() {
       WARN = 0;
     }
@@ -57,11 +41,13 @@ namespace Rstats {
         if (WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
           sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
         }
-        
+        if (WARN & Rstats::WARN_NA_INTRODUCED) {
+          sv_catpv(sv_warn, "NAs introduced by coercion\n");
+        }        
         return SvPV_nolen(sv_warn);
       }
       else {
-        return "";
+        return "Unexpected warning";
       }
     }
     

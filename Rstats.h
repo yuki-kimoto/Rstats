@@ -137,10 +137,6 @@ namespace Rstats {
     void init_warn();
     void add_warn(Rstats::Integer warn_id);
     Rstats::Integer get_warn();
-
-    void init_tmp_na_positions(Rstats::Integer length);
-    void add_tmp_na_position(Rstats::Integer na_position);
-    Rstats::Integer* get_tmp_na_positions();
   }
 
   namespace ElementFunc {
@@ -495,7 +491,8 @@ namespace Rstats {
       Rstats::Integer length = v1->get_length();
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
-      
+
+      Rstats::Util::init_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {
           v_out->set_value<Rstats::Logical>(i, 0);
@@ -503,6 +500,9 @@ namespace Rstats {
         else {
           v_out->set_value<Rstats::Logical>(i, (*func)(v1->get_value<T_IN>(i)));
         }
+      }
+      if (Rstats::Util::get_warn()) {
+        Rstats::Util::print_warn_message();
       }
       
       return v_out;
@@ -515,6 +515,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
+      Rstats::Util::init_warn();
       if (na_flag) {
         Rstats::Logical na_produced = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -525,15 +526,15 @@ namespace Rstats {
             v_out->add_na_position(i);
             na_produced = 1;
           }
-          if (na_produced) {
-            warn("Warning message:\nNAs introduced by coercion");
-          }
         }
       }
       else {
         for (Rstats::Integer i = 0; i < length; i++) {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
+      }
+      if (Rstats::Util::get_warn()) {
+        Rstats::Util::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

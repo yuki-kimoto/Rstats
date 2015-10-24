@@ -763,11 +763,13 @@ namespace Rstats {
         return value;
       }
       else {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
     }
     Rstats::Integer as_integer(Rstats::Complex e1) {
       if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag()) || Rstats::Util::is_Inf(e1.real()) || Rstats::Util::is_Inf(e1.imag())) {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {
@@ -776,6 +778,7 @@ namespace Rstats {
     }
     Rstats::Integer as_integer(Rstats::Double e1) {
       if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_Inf(e1)) {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {
@@ -797,11 +800,13 @@ namespace Rstats {
         }
       }
       else {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
     }
     Rstats::Logical as_logical(Rstats::Complex e1) {
       if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag())) {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else if (e1.real() || e1.imag()) {
@@ -813,6 +818,7 @@ namespace Rstats {
     }
     Rstats::Logical as_logical(Rstats::Double e1) {
       if (Rstats::Util::is_NaN(e1)) {
+        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {

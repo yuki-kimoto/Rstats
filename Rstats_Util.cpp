@@ -21,7 +21,7 @@ namespace Rstats {
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
-    void init_na_positions(Rstats::Integer length) {
+    void init_tmp_na_positions(Rstats::Integer length) {
       if (NA_POSITIONS != NULL) {
         delete NA_POSITIONS;
       }
@@ -29,11 +29,11 @@ namespace Rstats {
       NA_POSITIONS = new Rstats::Integer(length);
     }
     
-    void add_na_positions(Rstats::Integer na_position) {
+    void add_tmp_na_positions(Rstats::Integer na_position) {
       *(NA_POSITIONS + na_position) = 1;
     }
     
-    Rstats::Integer* get_na_positions() {
+    Rstats::Integer* get_tmp_na_positions() {
       return NA_POSITIONS;
     }
 

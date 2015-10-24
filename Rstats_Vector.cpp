@@ -10,13 +10,13 @@ namespace Rstats {
     return this->na_positions->count(position);
   }
 
-  void Vector::merge_na_positions(std::map<Rstats::Integer, Rstats::Integer>* na_positions) {
-    for(std::map<Rstats::Integer, Rstats::Integer>::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
+  void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
+    for(Rstats::NaPositions::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
       this->add_na_position(it->first);
     }
   }
   
-  std::map<Rstats::Integer, Rstats::Integer>* Vector::get_na_positions() {
+  Rstats::NaPositions* Vector::get_na_positions() {
     return this->na_positions;
   }
 

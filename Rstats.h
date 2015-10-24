@@ -106,6 +106,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
+  typedef std::map<Rstats::Integer, Rstats::Integer> NaPositions;
   
   extern Rstats::Integer WARN;
   
@@ -398,7 +399,7 @@ namespace Rstats {
     public:
     
     Rstats::Type::Enum type;
-    std::map<Rstats::Integer, Rstats::Integer>* na_positions;
+    Rstats::NaPositions* na_positions;
     void* values;
     
     Rstats::Integer get_length();
@@ -422,8 +423,8 @@ namespace Rstats {
 
     void add_na_position(Rstats::Integer);
     bool exists_na_position(Rstats::Integer position);
-    void merge_na_positions(std::map<Rstats::Integer, Rstats::Integer>*);
-    std::map<Rstats::Integer, Rstats::Integer>* get_na_positions();
+    void merge_na_positions(Rstats::NaPositions*);
+    Rstats::NaPositions* get_na_positions();
     
     ~Vector();
   };

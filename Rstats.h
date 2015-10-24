@@ -109,7 +109,6 @@ namespace Rstats {
   typedef std::set<Rstats::Integer> NaPositions;
   
   extern Rstats::Integer WARN;
-  extern Rstats::Logical NA_INTRODUCED;
   
   const Rstats::Integer WARN_NA_INTRODUCED = 1;
   const Rstats::Integer WARN_NAN_PRODUCED = 2;
@@ -485,7 +484,6 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
       
-      Rstats::WARN = 0;
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {
           v_out->set_value<Rstats::Logical>(i, 0);
@@ -493,9 +491,6 @@ namespace Rstats {
         else {
           v_out->set_value<Rstats::Logical>(i, (*func)(v1->get_value<T_IN>(i)));
         }
-      }
-      if (Rstats::WARN) {
-        warn(Rstats::Util::get_warn_message());
       }
       
       return v_out;
@@ -508,7 +503,6 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
-      Rstats::WARN = 0;
       if (na_flag) {
         Rstats::Logical na_produced = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -528,9 +522,6 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < length; i++) {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
         }
-      }
-      if (Rstats::WARN) {
-        warn(Rstats::Util::get_warn_message());
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

@@ -1,7 +1,6 @@
 #include "Rstats.h"
 
 extern Rstats::Integer Rstats::WARN;
-extern Rstats::Logical Rstats::NA_INTRODUCED;
 
 // Rstats::ElementFunc
 namespace Rstats {
@@ -774,7 +773,7 @@ namespace Rstats {
         throw "NAs intoroduced by coercion";
       }
       else {
-        return (Rstats::Integer)e1.real();
+        return e1.real();
       }
     }
     Rstats::Integer as_integer(Rstats::Double e1) {

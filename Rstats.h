@@ -409,7 +409,19 @@ namespace Rstats {
     Rstats::Type::Enum type;
     Rstats::NaPositions* na_positions;
     void* values;
+
+    template<class T>
+    static Rstats::Vector* new_vector(Rstats::Integer);
     
+    template <class T>
+    static Rstats::Vector* new_vector(Rstats::Integer length, T value) {
+      Rstats::Vector* v1 = new_vector<T>(length);
+      for (Rstats::Integer i = 0; i < length; i++) {
+        v1->set_value<T>(i, value);
+      }
+      return v1;
+    };
+        
     Rstats::Integer get_length();
     
     template<class T>
@@ -438,40 +450,26 @@ namespace Rstats {
   };
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
-  
-
-
+  template<>
+  Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer);
+  template<>
+  Rstats::Vector* Vector::new_vector<Rstats::Integer>(Rstats::Integer);
+  template<>
+  Rstats::Vector* Vector::new_vector<Rstats::Complex>(Rstats::Integer);
+  template<>
+  Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer);
+  template<>
+  Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer);
   
   // Rstats::VectorFunc
   namespace VectorFunc {
-    template<class T>
-    Rstats::Vector* new_vector(Rstats::Integer);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Double>(Rstats::Integer);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Integer>(Rstats::Integer);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Complex>(Rstats::Integer);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Character>(Rstats::Integer);
-    template<>
-    Rstats::Vector* new_vector<Rstats::Logical>(Rstats::Integer);
-    
-    template <class T>
-    Rstats::Vector* new_vector(Rstats::Integer length, T value) {
-      Rstats::Vector* v1 = new_vector<T>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        v1->set_value<T>(i, value);
-      }
-      return v1;
-    };
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* operate_unary_math(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
       Rstats::Util::init_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -491,7 +489,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
 
       Rstats::Util::init_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -514,7 +512,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
       Rstats::Util::init_warn();
       if (na_flag) {
@@ -609,7 +607,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<Rstats::Logical>(length);
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
       
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {
@@ -1058,7 +1056,7 @@ namespace Rstats {
       Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
-      Rstats::Vector* v2 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Vector* v2 = Rstats::Vector::new_vector<T_OUT>(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
           v2->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
@@ -1083,7 +1081,7 @@ namespace Rstats {
       Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
 
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
-      Rstats::Vector* v3 = Rstats::VectorFunc::new_vector<T_OUT>(length);
+      Rstats::Vector* v3 = Rstats::Vector::new_vector<T_OUT>(length);
 
       for (Rstats::Integer i = 0; i < length; i++) {
         try {

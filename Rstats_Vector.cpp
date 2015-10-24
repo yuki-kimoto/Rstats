@@ -15,6 +15,14 @@ namespace Rstats {
       this->add_na_position(*it);
     }
   }
+
+  void Vector::merge_na_positions(Rstats::Integer length, Rstats::Logical* na_positions) {
+    for(Rstats::Integer i = 0; i < length; i++) {
+      if (*(na_positions + i)) {
+        this->add_na_position(i);
+      }
+    }
+  }
   
   Rstats::NaPositions* Vector::get_na_positions() {
     return this->na_positions;

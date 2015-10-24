@@ -109,12 +109,6 @@ namespace Rstats {
   typedef UV Logical;// 0 or 1
   typedef std::set<Rstats::Integer> NaPositions;
   
-  // Global Na position information
-  extern Rstats::NaPositions NA_POSITIONS;
-  
-  // Global Error information
-  extern Rstats::Integer WARN;
-  
   // Error constant value
   const Rstats::Integer WARN_NA_INTRODUCED = 1;
   const Rstats::Integer WARN_NAN_PRODUCED = 2;

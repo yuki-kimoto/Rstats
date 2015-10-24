@@ -1,10 +1,12 @@
 #include "Rstats.h"
 
-Rstats::Integer Rstats::WARN = 0;
 
 // Rstats::Util
 namespace Rstats {
   namespace Util {
+    
+    static Rstats::Integer WARN = 0;
+    static Rstats::NaPositions* NA_POSITIONS;
 
     static REGEXP* LOGICAL_RE = pregcomp(newSVpv("^ *(T|TRUE|F|FALSE) *$", 0), 0);
     static REGEXP* LOGICAL_TRUE_RE = pregcomp(newSVpv("T", 0), 0);
@@ -20,23 +22,23 @@ namespace Rstats {
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
     void init_warn() {
-      Rstats::WARN = 0;
+      WARN = 0;
     }
     void add_warn(Rstats::Integer warn_id) {
-      Rstats::WARN |= warn_id;
+      WARN |= warn_id;
     }
     
     Rstats::Integer get_warn() {
-      return Rstats::WARN;
+      return WARN;
     }
     
     char* get_warn_message() {
       if (Rstats::Util::get_warn()) {
         SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
-        if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
+        if (WARN & Rstats::WARN_NAN_PRODUCED) {
           sv_catpv(sv_warn, "NaNs produced\n");
         }
-        if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
+        if (WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
           sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
         }
         

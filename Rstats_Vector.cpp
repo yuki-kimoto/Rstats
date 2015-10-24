@@ -99,7 +99,21 @@ namespace Rstats {
         return this->get_values<Rstats::Integer>()->size();
     }
   }
+  
+  template<>
+  void Vector::delete_vector<Rstats::Character>() {
 
+    std::vector<Rstats::Character>* values = this->get_values<Rstats::Character>();
+    Rstats::Integer length = this->get_values<Rstats::Character>()->size();
+    for (Rstats::Integer i = 0; i < length; i++) {
+      if ((*values)[i] != NULL) {
+        SvREFCNT_dec((*values)[i]);
+      }
+    }
+    delete values;
+    delete this->na_positions;
+  }
+  
   Vector::~Vector() {
     
     Rstats::Type::Enum type = this->type;

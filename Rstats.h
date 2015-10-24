@@ -445,6 +445,13 @@ namespace Rstats {
     Rstats::NaPositions* get_na_positions();
     
     ~Vector();
+
+    template <class T>
+    void delete_vector() {
+      std::vector<T>* values = this->get_values<T>();
+      delete values;
+      delete this->na_positions;
+    }
   };
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
@@ -458,7 +465,10 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer);
   template<>
   Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer);
-  
+
+  template <>
+  void Vector::delete_vector<Rstats::Character>();
+
   // Rstats::VectorFunc
   namespace VectorFunc {
 

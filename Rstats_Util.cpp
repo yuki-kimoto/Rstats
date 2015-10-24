@@ -1,5 +1,7 @@
 #include "Rstats.h"
 
+extern Rstats::Integer Rstats::WARN;
+
 // Rstats::Util
 namespace Rstats {
   namespace Util {
@@ -17,16 +19,36 @@ namespace Rstats {
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
+    void init_warn() {
+      Rstats::WARN = 0;
+    }
+    void add_warn(Rstats::Integer warn_id) {
+      Rstats::WARN |= warn_id;
+    }
+    
+    Rstats::Integer get_warn() {
+      return Rstats::WARN;
+    }
+    
     char* get_warn_message() {
-      SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
-      if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
-        sv_catpv(sv_warn, "NaNs produced\n");
+      if (Rstats::Util::get_warn()) {
+        SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
+        if (Rstats::WARN & Rstats::WARN_NAN_PRODUCED) {
+          sv_catpv(sv_warn, "NaNs produced\n");
+        }
+        if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
+          sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
+        }
+        
+        return SvPV_nolen(sv_warn);
       }
-      if (Rstats::WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
-        sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
+      else {
+        return "";
       }
-      
-      return SvPV_nolen(sv_warn);
+    }
+    
+    void print_warn_message() {
+      warn(Rstats::Util::get_warn_message());
     }
     
     Rstats::Logical is_perl_number(SV* sv_str) {

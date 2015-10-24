@@ -1,7 +1,5 @@
 #include "Rstats.h"
 
-extern Rstats::Integer Rstats::WARN;
-
 // Rstats::VectorFunc
 namespace Rstats {
   namespace VectorFunc {

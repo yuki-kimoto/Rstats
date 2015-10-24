@@ -101,6 +101,7 @@ namespace Rstats {
     };
   }
 
+  // Rstats type
   typedef SV* Character;
   typedef std::complex<NV> Complex;
   typedef NV Double;
@@ -108,11 +109,18 @@ namespace Rstats {
   typedef UV Logical;// 0 or 1
   typedef std::set<Rstats::Integer> NaPositions;
   
+  // Global Na position information
+  extern Rstats::NaPositions NA_POSITIONS;
+  
+  // Global Error information
   extern Rstats::Integer WARN;
   
+  // Error constant value
   const Rstats::Integer WARN_NA_INTRODUCED = 1;
   const Rstats::Integer WARN_NAN_PRODUCED = 2;
   const Rstats::Integer WARN_IMAGINARY_PART_DISCARDED = 4;
+
+  const Rstats::Integer NaException = 1;
   
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
@@ -129,7 +137,12 @@ namespace Rstats {
     Rstats::Double NaN();
     Rstats::Logical is_Inf(Rstats::Double);
     Rstats::Logical is_NaN(Rstats::Double);
+    
     char* get_warn_message();
+    void print_warn_message();
+    void init_warn();
+    void add_warn(Rstats::Integer warn_id);
+    Rstats::Integer get_warn();
   }
 
   namespace ElementFunc {
@@ -464,12 +477,12 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::VectorFunc::new_vector<T_OUT>(length);
       
-      Rstats::WARN = 0;
+      Rstats::Util::init_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
-      if (Rstats::WARN) {
-        warn(Rstats::Util::get_warn_message());
+      if (Rstats::Util::get_warn()) {
+        Rstats::Util::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

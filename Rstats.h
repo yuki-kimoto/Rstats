@@ -543,7 +543,7 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* operate_binary_math(SV* sv_r, T_OUT (*func)(T_IN, T_IN), Rstats::Vector* v1, Rstats::Vector* v2) {
+    Rstats::Vector* operate_binary_math(T_OUT (*func)(T_IN, T_IN), Rstats::Vector* v1, Rstats::Vector* v2) {
 
       Rstats::Integer length = v1->get_length();
       Rstats::Vector* v3 = Rstats::Vector::new_vector<T_OUT>(length);
@@ -566,6 +566,13 @@ namespace Rstats {
       v3->merge_na_positions(v2->get_na_positions());
       
       return v3;
+    }
+    
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* add(Rstats::Vector* v1, Rstats::Vector* v2) {
+      T_OUT (*func)(T_IN, T_IN) = &Rstats::ElementFunc::add;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_math(func, v1, v2);
+      return v_out;
     }
     
     template <class T_IN, class T_OUT>

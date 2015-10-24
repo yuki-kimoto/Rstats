@@ -1204,8 +1204,10 @@ namespace Rstats {
       SV* sv_x_out;
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::add;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
+        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+        Rstats::Vector* v_out = Rstats::VectorFunc::add<Rstats::Complex, Rstats::Complex>(v1, v2);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::add;

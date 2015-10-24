@@ -518,28 +518,19 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector* operate_unary_as(T_OUT (*func)(T_IN), Rstats::Vector* v1, Rstats::Logical na_flag) {
+    Rstats::Vector* operate_unary_as(T_OUT (*func)(T_IN), Rstats::Vector* v1) {
       
       Rstats::Integer length = v1->get_length();
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
       Rstats::Util::init_warn();
-      if (na_flag) {
-        Rstats::Logical na_produced = 0;
-        for (Rstats::Integer i = 0; i < length; i++) {
-          try {
-            v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
-          }
-          catch (...) {
-            v_out->add_na_position(i);
-            na_produced = 1;
-          }
-        }
-      }
-      else {
-        for (Rstats::Integer i = 0; i < length; i++) {
+      for (Rstats::Integer i = 0; i < length; i++) {
+        try {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
+        }
+        catch (...) {
+          v_out->add_na_position(i);
         }
       }
       if (Rstats::Util::get_warn()) {
@@ -581,7 +572,7 @@ namespace Rstats {
     Rstats::Vector* as_character(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_character;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }
@@ -590,53 +581,37 @@ namespace Rstats {
     Rstats::Vector* as_double(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_double;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }
-    template <>
-    Rstats::Vector* as_double<Rstats::Character, Rstats::Double>(Rstats::Vector* v1);
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_complex(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_complex;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }
-    template <>
-    Rstats::Vector* as_complex<Rstats::Character, Rstats::Complex>(Rstats::Vector* v1);
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_integer(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_integer;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }
-    template <>
-    Rstats::Vector* as_integer<Rstats::Character, Rstats::Integer>(Rstats::Vector* v1);
-    template <>
-    Rstats::Vector* as_integer<Rstats::Complex, Rstats::Integer>(Rstats::Vector* v1);
-    template <>
-    Rstats::Vector* as_integer<Rstats::Double, Rstats::Integer>(Rstats::Vector* v1);
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_logical(Rstats::Vector* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::as_logical;
       
-      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1, 0);
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_unary_as(func, v1);
       
       return v_out;
     }
-    template <>
-    Rstats::Vector* as_logical<Rstats::Character, Rstats::Logical>(Rstats::Vector* v1);
-    template <>
-    Rstats::Vector* as_logical<Rstats::Complex, Rstats::Logical>(Rstats::Vector* v1);
-    template <>
-    Rstats::Vector* as_logical<Rstats::Double, Rstats::Logical>(Rstats::Vector* v1);
     
     template <class T_IN>
     Rstats::Vector* is_na(Rstats::Vector* v1) {

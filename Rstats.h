@@ -137,6 +137,10 @@ namespace Rstats {
     void init_warn();
     void add_warn(Rstats::Integer warn_id);
     Rstats::Integer get_warn();
+
+    void init_na_positions(Rstats::Integer length);
+    void add_na_positions(Rstats::Integer na_position);
+    Rstats::Integer* get_na_positions();
   }
 
   namespace ElementFunc {

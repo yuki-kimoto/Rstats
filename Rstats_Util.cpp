@@ -6,7 +6,7 @@ namespace Rstats {
   namespace Util {
     
     static Rstats::Integer WARN = 0;
-    static Rstats::NaPositions* NA_POSITIONS;
+    static Rstats::Integer* NA_POSITIONS;
 
     static REGEXP* LOGICAL_RE = pregcomp(newSVpv("^ *(T|TRUE|F|FALSE) *$", 0), 0);
     static REGEXP* LOGICAL_TRUE_RE = pregcomp(newSVpv("T", 0), 0);
@@ -21,6 +21,22 @@ namespace Rstats {
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
+    void init_na_positions(Rstats::Integer length) {
+      if (NA_POSITIONS != NULL) {
+        delete NA_POSITIONS;
+      }
+      
+      NA_POSITIONS = new Rstats::Integer(length);
+    }
+    
+    void add_na_positions(Rstats::Integer na_position) {
+      *(NA_POSITIONS + na_position) = 1;
+    }
+    
+    Rstats::Integer* get_na_positions() {
+      return NA_POSITIONS;
+    }
+
     void init_warn() {
       WARN = 0;
     }

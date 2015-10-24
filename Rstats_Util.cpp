@@ -1,6 +1,6 @@
 #include "Rstats.h"
 
-extern Rstats::Integer Rstats::WARN;
+Rstats::Integer Rstats::WARN = 0;
 
 // Rstats::Util
 namespace Rstats {

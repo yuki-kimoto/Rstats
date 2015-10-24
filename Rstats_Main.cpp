@@ -1,7 +1,5 @@
 #include "Rstats.h"
 
-Rstats::Integer Rstats::WARN = 0;
-
 // Rstats
 namespace Rstats {
 

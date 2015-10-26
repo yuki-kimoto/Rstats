@@ -5,6 +5,103 @@ use warnings;
 use Rstats;
 use Rstats::Func;
 
+# add
+{
+  # add - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = $x1 + $x2};
+    like($@, qr/\QError in + : non-numeric argument/);
+  }
+  
+  # add - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3 + 4*i_);
+    my $x3 = $x1 + $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => 4, im => 6}]);
+  }
+  
+  # add - double
+  {
+    my $x1 = c_(1);
+    my $x2 = c_(2);
+    my $x3 = $x1 + $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [3]);
+  }
+
+  # add - integer
+  {
+    my $x1 = r->as->integer(c_(1));
+    my $x2 = r->as->integer(c_(2));
+    my $x3 = $x1 + $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [3]);
+  }
+
+  # add - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = c_(T_);
+    my $x3 = $x1 + $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [2]);
+  }
+
+  # add - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3 = $x1 + $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+
+  # add - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3 = $x1 + $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+      
+  # add - different number elements
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 5, 6);
+    my $x3 = $x1 + $x2;
+    is_deeply($x3->values, [4, 6, 6, 8]);
+  }
+
+  # add - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = $x1 + $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => 4, im => 2}]);
+  }
+  
+  # add - perl number
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 + 1;
+    is_deeply($x2->values, [2, 3, 4]);
+  }
+
+  # add - perl number,reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 1 + $x1;
+    is_deeply($x2->values, [2, 3, 4]);
+  }
+}
+
 # negate
 {
   # negate - dimention
@@ -106,30 +203,6 @@ use Rstats::Func;
     my $x1 = c_(1, 2, 3);
     my $x2 = 2 % $x1;
     is_deeply($x2->values, [0, 0, 2]);
-  }
-  
-  # operator - add(different element number)
-  {
-    my $x1 = c_(1, 2);
-    my $x2 = c_(3, 4, 5, 6);
-    
-    my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [4, 6, 6, 8]);
-  }
-  
-  # operator - add
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(2, 3, 4);
-    my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [3, 5, 7]);
-  }
-
-  # operator - add(real number)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 + 1;
-    is_deeply($x2->values, [2, 3, 4]);
   }
   
   # operator - subtract

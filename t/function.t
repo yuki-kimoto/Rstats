@@ -103,7 +103,7 @@ use Math::Complex ();
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
     
-  # add (vector)
+  # c_ - append (vector)
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = c_($x1, 4, 5);
@@ -117,13 +117,13 @@ use Math::Complex ();
     is($var->value, 8.5);
   }
   
-  # add (array)
+  # c_ - append (array)
   {
     my $x1 = c_(c_(1, 2), 3, 4);
     is_deeply($x1->values, [1, 2, 3, 4]);
   }
   
-  # add to original vector
+  # c_ - append to original vector
   {
     my $x1 = c_(1, 2, 3);
     $x1->at(r->length($x1)->value + 1)->set(6);

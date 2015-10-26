@@ -7,6 +7,16 @@ use Rstats::Func;
 
 # add
 {
+  # add - dim
+  {
+    my $x1 = array(c_(1 + 2*i_), 2);
+    my $x2 = array(c_(3 + 4*i_), 2);
+    my $x3 = $x1 + $x2;
+    ok(r->is->complex($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [{re => 4, im => 6}, {re => 4, im => 6}]);
+  }
+  
   # add - character
   {
     my $x1 = c_("a");
@@ -104,6 +114,16 @@ use Rstats::Func;
 
 # subtract
 {
+  # subtract - dim
+  {
+    my $x1 = array(c_(1), 2);
+    my $x2 = array(c_(2), 2);
+    my $x3 = $x1 - $x2;
+    ok(r->is->double($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [-1, -1]);
+  }
+  
   # subtract - character
   {
     my $x1 = c_("a");
@@ -201,6 +221,16 @@ use Rstats::Func;
 
 # multiply
 {
+  # multiply - double
+  {
+    my $x1 = array(c_(3), 2);
+    my $x2 = array(c_(2), 2);
+    my $x3 = $x1 * $x2;
+    ok(r->is->double($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [6, 6]);
+  }
+
   # multiply - character
   {
     my $x1 = c_("a");
@@ -298,6 +328,16 @@ use Rstats::Func;
 
 # divide
 {
+  # divide - double
+  {
+    my $x1 = array(c_(5), 2);
+    my $x2 = array(c_(2), 2);
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [5/2, 5/2]);
+  }
+  
   # divide - character
   {
     my $x1 = c_("a");
@@ -395,6 +435,16 @@ use Rstats::Func;
 
 # remainder
 {
+  # remainder - double
+  {
+    my $x1 = array(c_(5), 2);
+    my $x2 = array(c_(2), 2);
+    my $x3 = $x1 % $x2;
+    ok(r->is->double($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [1, 1]);
+  }
+
   # remainder - character
   {
     my $x1 = c_("a");

@@ -1236,6 +1236,7 @@ namespace Rstats {
         else {
           croak("Error in + : non-numeric argument to binary operator");
         }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;
@@ -1288,6 +1289,7 @@ namespace Rstats {
         else {
           croak("Error in - : non-numeric argument to binary operator");
         }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;
@@ -1337,6 +1339,7 @@ namespace Rstats {
         else {
           croak("Error in % : non-numeric argument to binary operator");
         }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;
@@ -1388,6 +1391,7 @@ namespace Rstats {
         else {
           croak("Error in / : non-numeric argument to binary operator");
         }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;
@@ -1420,6 +1424,8 @@ namespace Rstats {
         croak("Error in atan2 : non-numeric argument to atan2");
       }
       
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
+
       return sv_x_out;
     }
 
@@ -1449,6 +1455,8 @@ namespace Rstats {
       else {
         croak("Error in pow : non-numeric argument to v");
       }
+      
+      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
     }
@@ -1500,6 +1508,7 @@ namespace Rstats {
         else {
           croak("Error in * : non-numeric argument to binary operator");
         }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;

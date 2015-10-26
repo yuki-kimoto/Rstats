@@ -66,29 +66,33 @@ namespace Rstats {
       croak("na_postiions is already initialized");
     }
     if (this->get_length()) {
-      Rstats::Integer length = ((this->get_length() - 1) / 8) + 1;
-      this->na_positions = new Rstats::NaPositionBits[length];
-      memset(this->na_positions, 0, length);
+      Rstats::Integer byte_length = this->get_na_positions_byte_length();
+      this->na_positions = new Rstats::NaPositions[byte_length];
+      memset(this->na_positions, 0, byte_length);
     }
   }
   
+  Rstats::Integer Vector::get_na_positions_byte_length() {
+    return ((this->get_length() - 1) / 8) + 1;
+  }
+  
   void Vector::add_na_position(Rstats::Integer position) {
-    if (this->na_positions == NULL) {
+    if (this->get_na_positions() == NULL) {
       this->init_na_positions();
     }
     
-    *(this->na_positions + (position / 8)) |= (1 << (position % 8));
+    *(this->get_na_positions() + (position / 8)) |= (1 << (position % 8));
   }
 
   Rstats::Logical Vector::exists_na_position(Rstats::Integer position) {
-    if (this->na_positions == NULL) {
+    if (this->get_na_positions() == NULL) {
       return 0;
     }
 
-    return (*(this->na_positions + (position / 8)) & (1 << (position % 8))) ? 1: 0;
+    return (*(this->get_na_positions() + (position / 8)) & (1 << (position % 8))) ? 1: 0;
   }
 
-  void Vector::merge_na_positions(Rstats::NaPositionBits* na_positions) {
+  void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
     
     if (na_positions == NULL) {
       return;
@@ -99,13 +103,13 @@ namespace Rstats {
     }
     
     if (this->get_length()) {
-      for (Rstats::Integer i = 0; i < ((this->get_length() - 1) / 8) + 1; i++) {
-        *(this->na_positions + (i / 8)) |= *(na_positions + (i / 8));
+      for (Rstats::Integer i = 0; i < this->get_na_positions_byte_length(); i++) {
+        *(this->get_na_positions() + (i / 8)) |= *(na_positions + (i / 8));
       }
     }
   }
 
-  Rstats::NaPositionBits* Vector::get_na_positions() {
+  Rstats::NaPositions* Vector::get_na_positions() {
     return this->na_positions;
   }
 

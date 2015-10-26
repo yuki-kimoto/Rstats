@@ -107,7 +107,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-  typedef std::set<Rstats::Integer> NaPositions;
+  typedef unsigned char NaPositionBits;
   
   // Error constant value
   const Rstats::Integer WARN_NA_INTRODUCED = 1;
@@ -407,7 +407,7 @@ namespace Rstats {
     private:
     
     Rstats::Type::Enum type;
-    Rstats::NaPositions* na_positions;
+    Rstats::NaPositionBits* na_positions;
     void* values;
     Rstats::Integer length;
     
@@ -443,10 +443,11 @@ namespace Rstats {
       return *(this->get_values<T>() + pos);
     }
     
+    void init_na_positions();
     void add_na_position(Rstats::Integer);
     Rstats::Logical exists_na_position(Rstats::Integer position);
-    void merge_na_positions(Rstats::NaPositions*);
-    Rstats::NaPositions* get_na_positions();
+    void merge_na_positions(Rstats::NaPositionBits*);
+    Rstats::NaPositionBits* get_na_positions();
     
     ~Vector();
 

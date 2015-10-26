@@ -6,6 +6,14 @@ use Rstats;
 
 # as->integer
 {
+  # as->integer - NA
+  {
+    my $x1 = NA;
+    my $x2 = r->as->integer($x1);
+    ok(r->is->integer($x2));
+    is_deeply($x2->values, [undef]);
+  }
+
   # as->integer - Inf
   {
     my $x1 = Inf;
@@ -13,7 +21,6 @@ use Rstats;
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
-
   # as->integer - NULL
   {
     my $x1 = NULL;
@@ -27,14 +34,6 @@ use Rstats;
     my $x1 = array(c_(1, 2));
     my $x2 = r->as->integer($x1);
     is_deeply($x2->dim->values, [2]);
-  }
-
-  # as->integer - NA
-  {
-    my $x1 = NA;
-    my $x2 = r->as->integer($x1);
-    ok(r->is->integer($x2));
-    is_deeply($x2->values, [undef]);
   }
 
   # as->integer - double,NaN

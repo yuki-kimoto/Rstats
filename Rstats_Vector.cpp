@@ -60,39 +60,52 @@ namespace Rstats {
     
     return v1;
   }
-    
-  void Vector::add_na_position(Rstats::Integer position) {
-    
-    if (this->na_positions == NULL) {
-      this->na_positions = new Rstats::NaPositions;
+  
+  void Vector::init_na_positions() {
+    if (this->na_positions != NULL) {
+      croak("na_postiions is already initialized");
     }
-    this->na_positions->insert(position);
+    if (this->get_length()) {
+      Rstats::Integer length = ((this->get_length() - 1) / 8) + 1;
+      this->na_positions = new Rstats::NaPositionBits[length];
+      memset(this->na_positions, 0, length);
+    }
+  }
+  
+  void Vector::add_na_position(Rstats::Integer position) {
+    if (this->na_positions == NULL) {
+      this->init_na_positions();
+    }
+    
+    *(this->na_positions + (position / 8)) |= (1 << (position % 8));
   }
 
   Rstats::Logical Vector::exists_na_position(Rstats::Integer position) {
     if (this->na_positions == NULL) {
       return 0;
     }
-    
-    return this->na_positions->count(position);
+
+    return (*(this->na_positions + (position / 8)) & (1 << (position % 8))) ? 1: 0;
   }
 
-  void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
+  void Vector::merge_na_positions(Rstats::NaPositionBits* na_positions) {
     
     if (na_positions == NULL) {
       return;
     }
     
     if (this->na_positions == NULL) {
-      this->na_positions = new Rstats::NaPositions;
+      this->init_na_positions();
     }
     
-    for(Rstats::NaPositions::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
-      this->add_na_position(*it);
+    if (this->get_length()) {
+      for (Rstats::Integer i = 0; i < ((this->get_length() - 1) / 8) + 1; i++) {
+        *(this->na_positions + (i / 8)) |= *(na_positions + (i / 8));
+      }
     }
   }
 
-  Rstats::NaPositions* Vector::get_na_positions() {
+  Rstats::NaPositionBits* Vector::get_na_positions() {
     return this->na_positions;
   }
 

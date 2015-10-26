@@ -199,6 +199,103 @@ use Rstats::Func;
   }
 }
 
+# multiply
+{
+  # multiply - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = $x1 * $x2};
+    like($@, qr/\QError in * : non-numeric argument/);
+  }
+  
+  # multiply - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3 + 4*i_);
+    my $x3 = $x1 * $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => -5, im => 10}]);
+  }
+  
+  # multiply - double
+  {
+    my $x1 = c_(3);
+    my $x2 = c_(2);
+    my $x3 = $x1 * $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [6]);
+  }
+
+  # multiply - integer
+  {
+    my $x1 = r->as->integer(c_(3));
+    my $x2 = r->as->integer(c_(2));
+    my $x3 = $x1 * $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [6]);
+  }
+
+  # multiply - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = c_(T_);
+    my $x3 = $x1 * $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [1]);
+  }
+
+  # multiply - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3 = $x1 * $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+
+  # multiply - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3 = $x1 * $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+  
+  # multiply - different number elements
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 5, 6);
+    my $x3 = $x1 * $x2;
+    is_deeply($x3->values, [3, 8, 5, 12]);
+  }
+
+  # multiply - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = $x1 * $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => 3, im => 6}]);
+  }
+  
+  # multiply - perl number
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 * 2;
+    is_deeply($x2->values, [2, 4, 6]);
+  }
+
+  # multiply - perl number,reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 * $x1;
+    is_deeply($x2->values, [2, 4, 6]);
+  }
+}
+
 # negate
 {
   # negate - dimention

@@ -57,7 +57,7 @@ namespace Rstats {
         return Rstats::Util::NaN();
       }
       else {
-        return e1 - std::floor(e1 / e2) * e2;
+        return fmod(e1, e2);;
       }
     }
     Rstats::Double remainder(Rstats::Integer e1, Rstats::Integer e2) {

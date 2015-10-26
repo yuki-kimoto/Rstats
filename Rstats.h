@@ -595,6 +595,13 @@ namespace Rstats {
       Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_math(func, v1, v2);
       return v_out;
     }
+
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* remainder(Rstats::Vector* v1, Rstats::Vector* v2) {
+      T_OUT (*func)(T_IN, T_IN) = &Rstats::ElementFunc::remainder;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_math(func, v1, v2);
+      return v_out;
+    }
     
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_character(Rstats::Vector* v1) {

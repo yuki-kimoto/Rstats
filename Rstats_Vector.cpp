@@ -88,8 +88,8 @@ namespace Rstats {
     if (this->get_na_positions() == NULL) {
       return 0;
     }
-
-    return (*(this->get_na_positions() + (position / 8)) & (1 << (position % 8))) ? 1: 0;
+    
+    return (*(this->get_na_positions() + (position / 8)) & (1 << (position % 8))) ? 1 : 0;
   }
 
   void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
@@ -104,7 +104,7 @@ namespace Rstats {
     
     if (this->get_length()) {
       for (Rstats::Integer i = 0; i < this->get_na_positions_byte_length(); i++) {
-        *(this->get_na_positions() + (i / 8)) |= *(na_positions + (i / 8));
+        *(this->get_na_positions() + i) |= *(na_positions + i);
       }
     }
   }

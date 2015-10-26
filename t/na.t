@@ -7,38 +7,36 @@ use Rstats;
 # NA
 {
 
-=pod
-  # NA - 128
+  # NA - 129 count
   {
-    my $x1 = array(c_(1, NA), c_(4, 8));
-    my $x2 = array(c_(1, NA, NA, 2), c_(4, 8));
+    my $x1 = c_(1);
+    my $x2 = array(NA, 129);
     my $x3 = $x1 + $x2;
-    1;
+    is_deeply($x3->values, [(undef) x 129]);
   }
-=cut
+  
+  # NA - double + NA
+  {
+    my $x1 = c_(1);
+    my $x2 = array(NA, 128);
+    my $x3 = $x1 + $x2;
+    is_deeply($x3->values, [(undef) x 128]);
+  }
 
   # NA - NA + NA
   {
-    my $x1 = NA;
-    my $x2 = NA;
+    my $x1 = array(NA, 128);
+    my $x2 = array(NA, 128);
     my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [undef]);
+    is_deeply($x3->values, [(undef) x 128]);
   }
   
   # NA - NA + double
   {
-    my $x1 = NA;
+    my $x1 = array(NA, 128);
     my $x2 = c_(1);
     my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [undef]);
-  }
-
-  # NA - double + NA
-  {
-    my $x1 = c_(1);
-    my $x2 = NA;
-    my $x3 = $x1 + $x2;
-    is_deeply($x3->values, [undef]);
+    is_deeply($x3->values, [(undef) x 128]);
   }
 }
   

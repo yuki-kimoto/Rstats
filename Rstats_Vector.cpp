@@ -5,10 +5,10 @@ namespace Rstats {
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
-    v1->na_positions = new Rstats::NaPositions;
     v1->values = new Rstats::Double[length];
     v1->type = Rstats::Type::DOUBLE;
     v1->length = length;
+    v1->na_positions = NULL;
     
     return v1;
   };
@@ -16,10 +16,10 @@ namespace Rstats {
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Integer>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
-    v1->na_positions = new Rstats::NaPositions;
     v1->values = new Rstats::Integer[length];
     v1->type = Rstats::Type::INTEGER;
     v1->length = length;
+    v1->na_positions = NULL;
     
     return v1;
   }
@@ -27,10 +27,10 @@ namespace Rstats {
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Complex>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
-    v1->na_positions = new Rstats::NaPositions;
     v1->values = new Rstats::Complex[length];
     v1->type = Rstats::Type::COMPLEX;
     v1->length = length;
+    v1->na_positions = NULL;
     
     return v1;
   }
@@ -38,7 +38,6 @@ namespace Rstats {
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
-    v1->na_positions = new Rstats::NaPositions;
     v1->values = new Rstats::Character[length];
     for (Rstats::Integer i = 0; i < length; i++) {
       SV** value_ptr = (SV**)v1->values;
@@ -46,6 +45,7 @@ namespace Rstats {
     }
     v1->type = Rstats::Type::CHARACTER;
     v1->length = length;
+    v1->na_positions = NULL;
     
     return v1;
   }
@@ -53,23 +53,40 @@ namespace Rstats {
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
-    v1->na_positions = new Rstats::NaPositions;
     v1->values = new Rstats::Logical[length];
     v1->type = Rstats::Type::LOGICAL;
     v1->length = length;
+    v1->na_positions = NULL;
     
     return v1;
   }
     
   void Vector::add_na_position(Rstats::Integer position) {
+    
+    if (this->na_positions == NULL) {
+      this->na_positions = new Rstats::NaPositions;
+    }
     this->na_positions->insert(position);
   }
 
   Rstats::Logical Vector::exists_na_position(Rstats::Integer position) {
+    if (this->na_positions == NULL) {
+      return 0;
+    }
+    
     return this->na_positions->count(position);
   }
 
   void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
+    
+    if (na_positions == NULL) {
+      return;
+    }
+    
+    if (this->na_positions == NULL) {
+      this->na_positions = new Rstats::NaPositions;
+    }
+    
     for(Rstats::NaPositions::iterator it = na_positions->begin(); it != na_positions->end(); ++it) {
       this->add_na_position(*it);
     }

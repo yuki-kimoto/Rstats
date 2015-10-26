@@ -102,6 +102,103 @@ use Rstats::Func;
   }
 }
 
+# subtract
+{
+  # subtract - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = $x1 - $x2};
+    like($@, qr/\QError in - : non-numeric argument/);
+  }
+  
+  # subtract - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3 + 4*i_);
+    my $x3 = $x1 - $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => -2, im => -2}]);
+  }
+  
+  # subtract - double
+  {
+    my $x1 = c_(1);
+    my $x2 = c_(2);
+    my $x3 = $x1 - $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [-1]);
+  }
+
+  # subtract - integer
+  {
+    my $x1 = r->as->integer(c_(1));
+    my $x2 = r->as->integer(c_(2));
+    my $x3 = $x1 - $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [-1]);
+  }
+
+  # subtract - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = c_(T_);
+    my $x3 = $x1 - $x2;
+    ok(r->is->integer($x3));
+    is_deeply($x3->values, [0]);
+  }
+
+  # subtract - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3 = $x1 - $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+
+  # subtract - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3 = $x1 - $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+      
+  # subtract - different number elements
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 5, 6);
+    my $x3 = $x1 - $x2;
+    is_deeply($x3->values, [-2, -2, -4, -4]);
+  }
+
+  # subtract - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = $x1 - $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => -2, im => 2}]);
+  }
+  
+  # subtract - perl number
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 - 1;
+    is_deeply($x2->values, [0, 1, 2]);
+  }
+
+  # subtract - perl number,reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 1 - $x1;
+    is_deeply($x2->values, [0, -1, -2]);
+  }
+}
+
 # negate
 {
   # negate - dimention
@@ -203,28 +300,6 @@ use Rstats::Func;
     my $x1 = c_(1, 2, 3);
     my $x2 = 2 % $x1;
     is_deeply($x2->values, [0, 0, 2]);
-  }
-  
-  # operator - subtract
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(3, 3, 3);
-    my $x3 = $x1 - $x2;
-    is_deeply($x3->values, [-2, -1, 0]);
-  }
-
-  # operator - subtract(real number)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 - 1;
-    is_deeply($x2->values, [0, 1, 2]);
-  }
-
-  # operator - subtract(real number, reverse)
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 1 - $x1;
-    is_deeply($x2->values, [0, -1, -2]);
   }
     
   # operator - mutiply

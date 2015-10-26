@@ -409,6 +409,8 @@ namespace Rstats {
     Rstats::Type::Enum type;
     Rstats::NaPositions* na_positions;
     void* values;
+    Rstats::Integer length;
+    
     
     public:
 
@@ -427,18 +429,18 @@ namespace Rstats {
     Rstats::Integer get_length();
     
     template<class T>
-    std::vector<T>* get_values() {
-      return (std::vector<T>*)this->values;
+    T* get_values() {
+      return (T*)this->values;
     }
 
     template<class T>
     void set_value(Rstats::Integer pos, T value) {
-      (*this->get_values<T>())[pos] = value;
+      *(this->get_values<T>() + pos) = value;
     } // Rstats::Character is specialized
 
     template <class T>
     T get_value(Rstats::Integer pos) {
-      return (*this->get_values<T>())[pos];
+      return *(this->get_values<T>() + pos);
     }
     
     void add_na_position(Rstats::Integer);
@@ -450,7 +452,7 @@ namespace Rstats {
 
     template <class T>
     void delete_vector() {
-      std::vector<T>* values = this->get_values<T>();
+      T* values = this->get_values<T>();
       delete values;
       delete this->na_positions;
     }

@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Rstats;
 
-my $inf = r->new_double('Inf');
+my $inf = Inf;
 
 print $inf;
 

@@ -170,23 +170,23 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        return v1->get_values<Rstats::Character>()->size();
+        return v1->get_length();
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        return v1->get_values<Rstats::Complex>()->size();
+        return v1->get_length();
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        return v1->get_values<Rstats::Double>()->size();
+        return v1->get_length();
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        return v1->get_values<Rstats::Integer>()->size();
+        return v1->get_length();
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        return v1->get_values<Rstats::Integer>()->size();
+        return v1->get_length();
       }
       else if (strEQ(type, "list")) {
         SV* sv_list = Rstats::pl_hv_fetch(sv_x1, "list");
@@ -4051,7 +4051,7 @@ namespace Rstats {
       else if (strEQ(type, "integer")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
         compose_elements = Rstats::Vector::new_vector<Rstats::Integer>(len);
-        std::vector<Rstats::Integer>* values = compose_elements->get_values<Rstats::Integer>();
+        Rstats::Integer* values = compose_elements->get_values<Rstats::Integer>();
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
@@ -4074,7 +4074,7 @@ namespace Rstats {
       else if (strEQ(type, "logical")) {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
         compose_elements = Rstats::Vector::new_vector<Rstats::Logical>(len);
-        std::vector<Rstats::Logical>* values = compose_elements->get_values<Rstats::Logical>();
+        Rstats::Logical* values = compose_elements->get_values<Rstats::Logical>();
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {

@@ -6,8 +6,9 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->na_positions = new Rstats::NaPositions;
-    v1->values = new std::vector<Rstats::Double>(length);
+    v1->values = new Rstats::Double[length];
     v1->type = Rstats::Type::DOUBLE;
+    v1->length = length;
     
     return v1;
   };
@@ -16,8 +17,9 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Integer>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->na_positions = new Rstats::NaPositions;
-    v1->values = new std::vector<Rstats::Integer>(length);
+    v1->values = new Rstats::Integer[length];
     v1->type = Rstats::Type::INTEGER;
+    v1->length = length;
     
     return v1;
   }
@@ -26,8 +28,9 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Complex>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->na_positions = new Rstats::NaPositions;
-    v1->values = new std::vector<Rstats::Complex>(length);
+    v1->values = new Rstats::Complex[length];
     v1->type = Rstats::Type::COMPLEX;
+    v1->length = length;
     
     return v1;
   }
@@ -36,8 +39,13 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->na_positions = new Rstats::NaPositions;
-    v1->values = new std::vector<Rstats::Character>(length, &PL_sv_undef);
+    v1->values = new Rstats::Character[length];
+    for (Rstats::Integer i = 0; i < length; i++) {
+      SV** value_ptr = (SV**)v1->values;
+      *(value_ptr + i) = &PL_sv_undef;
+    }
     v1->type = Rstats::Type::CHARACTER;
+    v1->length = length;
     
     return v1;
   }
@@ -46,8 +54,9 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->na_positions = new Rstats::NaPositions;
-    v1->values = new std::vector<Rstats::Logical>(length);
+    v1->values = new Rstats::Logical[length];
     v1->type = Rstats::Type::LOGICAL;
+    v1->length = length;
     
     return v1;
   }
@@ -72,42 +81,27 @@ namespace Rstats {
 
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value) {
-    SV* current_value = (*this->get_values<Rstats::Character>())[pos];
+    SV* current_value = *(this->get_values<Rstats::Character>() + pos);
     
     if (SvOK(current_value)) {
       SvREFCNT_dec(current_value);
     }
     
-    (*this->get_values<Rstats::Character>())[pos] = SvREFCNT_inc(value);
+    *(this->get_values<Rstats::Character>() + pos) = SvREFCNT_inc(value);
   }
 
   Rstats::Integer Vector::get_length() {
-    if (this->values == NULL) {
-      return 0;
-    }
-    
-    Rstats::Type::Enum type = this->type;
-    switch (type) {
-      case Rstats::Type::CHARACTER :
-        return this->get_values<Rstats::Character>()->size();
-      case Rstats::Type::COMPLEX :
-        return this->get_values<Rstats::Complex>()->size();
-      case Rstats::Type::DOUBLE :
-        return this->get_values<Rstats::Double>()->size();
-      case Rstats::Type::INTEGER :
-      case Rstats::Type::LOGICAL :
-        return this->get_values<Rstats::Integer>()->size();
-    }
+    return this->length;
   }
   
   template<>
   void Vector::delete_vector<Rstats::Character>() {
 
-    std::vector<Rstats::Character>* values = this->get_values<Rstats::Character>();
-    Rstats::Integer length = this->get_values<Rstats::Character>()->size();
+    Rstats::Character* values = this->get_values<Rstats::Character>();
+    Rstats::Integer length = this->get_length();
     for (Rstats::Integer i = 0; i < length; i++) {
-      if ((*values)[i] != NULL) {
-        SvREFCNT_dec((*values)[i]);
+      if (*(values + i) != NULL) {
+        SvREFCNT_dec(*(values + i));
       }
     }
     delete values;

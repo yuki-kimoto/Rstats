@@ -327,7 +327,6 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
-        warn("imaginary parts discarded in coercion");
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::as_double<Rstats::Complex, Rstats::Double>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
@@ -418,7 +417,6 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
-        warn("imaginary parts discarded in coercion");
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::as_integer<Rstats::Complex, Rstats::Integer>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
@@ -465,7 +463,6 @@ namespace Rstats {
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);
       }
       else if (strEQ(type, "complex")) {
-        warn("imaginary parts discarded in coercion");
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::as_logical<Rstats::Complex, Rstats::Logical>(v1);
         Rstats::Func::set_vector(sv_r, sv_x_out, v2);

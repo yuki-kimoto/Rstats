@@ -410,7 +410,6 @@ namespace Rstats {
     Rstats::NaPositions* na_positions;
     void* values;
     Rstats::Integer length;
-    Rstats::Integer get_na_positions_byte_length();
     
     public:
 
@@ -448,6 +447,8 @@ namespace Rstats {
     Rstats::Logical exists_na_position(Rstats::Integer position);
     void merge_na_positions(Rstats::NaPositions*);
     Rstats::NaPositions* get_na_positions();
+    Rstats::Integer get_na_positions_length();
+    Rstats::Integer get_na_positions_unit_size();
     
     ~Vector();
 

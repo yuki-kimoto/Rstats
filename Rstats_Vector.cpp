@@ -66,22 +66,27 @@ namespace Rstats {
       croak("na_postiions is already initialized");
     }
     if (this->get_length()) {
-      Rstats::Integer byte_length = this->get_na_positions_byte_length();
+      Rstats::Integer byte_length = this->get_na_positions_length();
       this->na_positions = new Rstats::NaPositions[byte_length];
       memset(this->na_positions, 0, byte_length);
     }
   }
   
-  Rstats::Integer Vector::get_na_positions_byte_length() {
-    return ((this->get_length() - 1) / 8) + 1;
+  Rstats::Integer Vector::get_na_positions_length() {
+    return ((this->get_length() - 1) / this->get_na_positions_unit_size()) + 1;
   }
-  
+
+  Rstats::Integer Vector::get_na_positions_unit_size() {
+    return 8;
+  }
+    
   void Vector::add_na_position(Rstats::Integer position) {
     if (this->get_na_positions() == NULL) {
       this->init_na_positions();
     }
     
-    *(this->get_na_positions() + (position / 8)) |= (1 << (position % 8));
+    *(this->get_na_positions() + (position / this->get_na_positions_unit_size()))
+      |= (1 << (position % this->get_na_positions_unit_size()));
   }
 
   Rstats::Logical Vector::exists_na_position(Rstats::Integer position) {
@@ -89,7 +94,9 @@ namespace Rstats {
       return 0;
     }
     
-    return (*(this->get_na_positions() + (position / 8)) & (1 << (position % 8))) ? 1 : 0;
+    return (*(this->get_na_positions() + (position / this->get_na_positions_unit_size()))
+      & (1 << (position % this->get_na_positions_unit_size())))
+      ? 1 : 0;
   }
 
   void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
@@ -103,7 +110,7 @@ namespace Rstats {
     }
     
     if (this->get_length()) {
-      for (Rstats::Integer i = 0; i < this->get_na_positions_byte_length(); i++) {
+      for (Rstats::Integer i = 0; i < this->get_na_positions_length(); i++) {
         *(this->get_na_positions() + i) |= *(na_positions + i);
       }
     }

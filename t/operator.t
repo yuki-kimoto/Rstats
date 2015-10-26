@@ -296,6 +296,103 @@ use Rstats::Func;
   }
 }
 
+# divide
+{
+  # divide - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = $x1 / $x2};
+    like($@, qr#\QError in / : non-numeric argument#);
+  }
+
+  # divide - complex
+  {
+    my $x1 = 5 + -6*i_;
+    my $x2 = 3 + 2*i_;
+    my $x3 = r->divide($x1, $x2);
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => 3/13, im => -28/13}]);
+  }
+
+  # divide - double
+  {
+    my $x1 = c_(5);
+    my $x2 = c_(2);
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [5/2]);
+  }
+
+  # divide - integer
+  {
+    my $x1 = r->as->integer(c_(5));
+    my $x2 = r->as->integer(c_(2));
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [5/2]);
+  }
+
+  # divide - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = c_(T_);
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [1]);
+  }
+
+  # divide - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+
+  # divide - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3 = $x1 / $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+  
+  # divide - different number elements
+  {
+    my $x1 = c_(24, 12);
+    my $x2 = c_(2, 3, 4, 6);
+    my $x3 = $x1 / $x2;
+    is_deeply($x3->values, [12, 4, 6, 2]);
+  }
+
+  # divide - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = $x1 / $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => 1/3, im => 2/3}]);
+  }
+  
+  # divide - perl number
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 / 2;
+    is_deeply($x2->values, [1/2, 1, 3/2]);
+  }
+
+  # divide - perl number,reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 / $x1;
+    is_deeply($x2->values, [2, 1, 2/3]);
+  }
+}
+
 # negate
 {
   # negate - dimention
@@ -414,37 +511,6 @@ use Rstats::Func;
     is_deeply($x2->values, [2, 4, 6]);
   }
 
-  # operator - divide
-  {
-    my $x1 = r->as->integer(c_(6, 3, 12));
-    my $x2 = r->as->integer(c_(2, 3, 4));
-    my $x3 = $x1 / $x2;
-    is_deeply($x3->values, [3, 1, 3]);
-    ok(r->is->double($x3));
-  }
-  
-  # operator - divide
-  {
-    my $x1 = c_(6, 3, 12);
-    my $x2 = c_(2, 3, 4);
-    my $x3 = $x1 / $x2;
-    is_deeply($x3->values, [3, 1, 3]);
-  }
-
-  # operator - divide(real number)
-  {
-    my $x1 = c_(2, 4, 6);
-    my $x2 = $x1 / 2;
-    is_deeply($x2->values, [1, 2, 3]);
-  }
-
-  # operator - divide(real number, reverse)
-  {
-    my $x1 = c_(2, 4, 6);
-    my $x2 = 2 / $x1;
-    is_deeply($x2->values, [1, 1/2, 1/3]);
-  }
-  
   # operator - pow
   {
     my $x1 = c_(1, 2, 3);

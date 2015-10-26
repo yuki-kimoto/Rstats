@@ -105,33 +105,6 @@ my $r = Rstats::Class->new;
 
 # operation
 {
-  # operation - add
-  {
-    my $z1 = r->c_complex({re => 1, im => 2});
-    my $z2 = r->c_complex({re => 3, im => 4});
-    my $z3 = r->add($z1, $z2);
-    is($z3->value->{re}, 4);
-    is($z3->value->{im}, 6);
-  }
-  
-  # operation - subtract
-  {
-    my $z1 = r->c_complex({re => 1, im => 2});
-    my $z2 = r->c_complex({re => 3, im => 4});
-    my $z3 = r->subtract($z1, $z2);
-    is($z3->value->{re}, -2);
-    is($z3->value->{im}, -2);
-  }
-  
-  # operation - multiply
-  {
-    my $z1 = r->c_complex({re => 1, im => 2});
-    my $z2 = r->c_complex({re => 3, im => 4});
-    my $z3 = r->multiply($z1, $z2);
-    is($z3->value->{re}, -5);
-    is($z3->value->{im}, 10);
-  }
-
   # operation - abs
   {
     my $z1 = r->c_complex({re => 3, im => 4});
@@ -147,15 +120,6 @@ my $r = Rstats::Class->new;
     is($conj->value->{im}, -2);
   }
   
-  # operation - divide
-  {
-    my $z1 = r->c_complex({re => 5, im => -6});
-    my $z2 = r->c_complex({re => 3, im => 2});
-    my $z3 = r->divide($z1, $z2);
-    is($z3->value->{re}, 3/13);
-    is($z3->value->{im}, -28/13);
-  }
-
   # operation - pow
   {
     my $z1 = r->c_complex({re => 1, im => 2});

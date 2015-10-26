@@ -1329,27 +1329,48 @@ namespace Rstats {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
-      
-      // Upgrade type and length
-      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
-      
       SV* sv_x_out;
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type, "complex")) {
-        Rstats::Complex (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::divide;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Double (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::divide;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Double (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::divide;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
+      
+      // NULL check
+      char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
+      char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
+      if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
+        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
-        croak("Error in / operator : non-numeric argument to binary operator");
+        // Upgrade type and length
+        upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
+        upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+        
+        char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
+        if (strEQ(type1, "complex")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::divide<Rstats::Complex, Rstats::Complex>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "double")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::divide<Rstats::Double, Rstats::Double>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "integer")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::divide<Rstats::Integer, Rstats::Double>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "logical")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::divide<Rstats::Logical, Rstats::Double>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+        }
+        else {
+          croak("Error in / : non-numeric argument to binary operator");
+        }
       }
       
       return sv_x_out;

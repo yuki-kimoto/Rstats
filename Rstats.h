@@ -107,7 +107,7 @@ namespace Rstats {
   typedef NV Double;
   typedef IV Integer;
   typedef UV Logical;// 0 or 1
-  typedef unsigned char NaPositions;
+  typedef UV NaPositions;
   
   // Error constant value
   const Rstats::Integer WARN_NA_INTRODUCED = 1;
@@ -448,7 +448,7 @@ namespace Rstats {
     void merge_na_positions(Rstats::NaPositions*);
     Rstats::NaPositions* get_na_positions();
     Rstats::Integer get_na_positions_length();
-    Rstats::Integer get_na_positions_unit_size();
+    Rstats::Integer get_na_positions_unit_bits();
     
     ~Vector();
 

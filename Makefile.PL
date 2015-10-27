@@ -51,6 +51,6 @@ WriteMakefile(
     LD => $ld,
     LIBS              => [],
     DEFINE            => '',
-    INC               => '-I.',
-    OBJECT            => '$(O_FILES)',
+    INC               => '-I. -I./Rstats_lib/include',
+    OBJECT            => '$(O_FILES) ',
 );

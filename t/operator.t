@@ -4,6 +4,7 @@ use warnings;
 
 use Rstats;
 use Rstats::Func;
+use POSIX();
 
 # add
 {
@@ -469,7 +470,7 @@ use Rstats::Func;
     my $x2 = c_(2, 3, 2/5, 0);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
-    is_deeply($x3->values, [1, 2, 4/10, "NaN"]);
+    is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
   }
 
   # remainder - integer

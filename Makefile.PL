@@ -22,6 +22,14 @@ elsif ($Config{archname} =~ /solaris/i) {
   $ld = 'CC';
 }
 
+my $xs_source_file = (glob('*.xs'))[0];
+$xs_source_file =~ s/\.xs/.c/;
+my @source_files = ($xs_source_file, glob('*.cpp'), glob('Rstats_lib/src/*.cpp'));
+my @object_files = map { $_ =~ s/(\.c|\.cpp)$/.o/; $_ } @source_files;
+my $OBJECT = join(' ', @object_files);
+my @link_files = map { $_ =~ s/^.*\///; $_ } @object_files;
+my $LDFROM = join(' ', @link_files);
+
 WriteMakefile(
     NAME                => 'Rstats',
     AUTHOR              => 'Yuki Kimoto <kimoto.yuki@gmail.com>',
@@ -52,5 +60,6 @@ WriteMakefile(
     LIBS              => [],
     DEFINE            => '',
     INC               => '-I. -I./Rstats_lib/include',
-    OBJECT            => '$(O_FILES) ',
+    OBJECT            => $OBJECT,
+    LDFROM            => $LDFROM
 );

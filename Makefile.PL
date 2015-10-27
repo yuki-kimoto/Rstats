@@ -6,21 +6,14 @@ use ExtUtils::MakeMaker;
 
 use Config;
 
-# Compiler(gcc or clang)
-my $cc;
-my $ld;
-if ($Config{gccversion} =~ /clang/i) {
-  $cc = 'clang++';
-  $ld = 'clang++';
-}
-elsif ($Config{gccversion}) {
-  $cc = 'g++';
-  $ld = 'g++';
-}
-elsif ($Config{archname} =~ /solaris/i) {
-  $cc = 'CC';
-  $ld = 'CC';
-}
+# C++ compiler
+my $cpp_compilers = {
+  gcc => 'g++',
+  clang => 'clang++',
+  CC => 'CC'
+};
+my $cc = $cpp_compilers->{$Config{ccname}};
+my $ld = $cc;
 
 WriteMakefile(
     NAME                => 'Rstats',

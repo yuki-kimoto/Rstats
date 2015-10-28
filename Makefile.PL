@@ -45,6 +45,7 @@ WriteMakefile(
     LIBS              => [],
     DEFINE            => '',
     INC               => '-I. -I./Rstats_lib/include',
+    H => ['ppport.h', glob('Rstats_lib/include/*.h')],
     C => ['Rstats.c', glob('Rstats_lib/src/*.cpp')],
     OBJECT            => '$(O_FILES)',
     DEFINE => '-o $@'

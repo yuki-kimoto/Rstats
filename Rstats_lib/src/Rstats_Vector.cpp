@@ -73,20 +73,16 @@ namespace Rstats {
   }
   
   Rstats::Integer Vector::get_na_positions_length() {
-    return ((this->get_length() - 1) / this->get_na_positions_unit_bits()) + 1;
+    return ((this->get_length() - 1) / Rstats::NA_POSITION_BIT_LENGTH) + 1;
   }
 
-  Rstats::Integer Vector::get_na_positions_unit_bits() {
-    return 8 * sizeof(Rstats::NaPosition);
-  }
-    
   void Vector::add_na_position(Rstats::Integer position) {
     if (this->get_na_positions() == NULL) {
       this->init_na_positions();
     }
     
-    *(this->get_na_positions() + (position / this->get_na_positions_unit_bits()))
-      |= (1 << (position % this->get_na_positions_unit_bits()));
+    *(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
+      |= (1 << (position % Rstats::NA_POSITION_BIT_LENGTH));
   }
 
   Rstats::Logical Vector::exists_na_position(Rstats::Integer position) {
@@ -94,8 +90,8 @@ namespace Rstats {
       return 0;
     }
     
-    return (*(this->get_na_positions() + (position / this->get_na_positions_unit_bits()))
-      & (1 << (position % this->get_na_positions_unit_bits())))
+    return (*(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
+      & (1 << (position % Rstats::NA_POSITION_BIT_LENGTH)))
       ? 1 : 0;
   }
 

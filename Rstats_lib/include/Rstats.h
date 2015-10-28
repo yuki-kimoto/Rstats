@@ -35,7 +35,8 @@
 
 // Rstats::ElementFunc header
 namespace Rstats {
-
+  
+  // Perl helper functions
   SV* pl_new_rv(SV*);
   SV* pl_new_sv_sv(SV*);
   SV* pl_new_sv_pv(const char*);
@@ -78,6 +79,7 @@ namespace Rstats {
   template <class T> T pl_object_unwrap(SV* sv_object, const char* class_name);
   template <class T> SV* pl_object_wrap(T ptr, const char* class_name);
   
+  // Type
   namespace Type {
     enum Enum {
       LOGICAL = 0,
@@ -102,7 +104,10 @@ namespace Rstats {
   const Rstats::Integer WARN_IMAGINARY_PART_DISCARDED = 4;
 
   const Rstats::Integer NaException = 1;
-  
+  const Rstats::Integer NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
+
+# include "Rstats_Main_impl.h"
+
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
     SV* cross_product(SV*);
@@ -435,7 +440,6 @@ namespace Rstats {
     void merge_na_positions(Rstats::NaPosition*);
     Rstats::NaPosition* get_na_positions();
     Rstats::Integer get_na_positions_length();
-    Rstats::Integer get_na_positions_unit_bits();
     
     ~Vector();
 

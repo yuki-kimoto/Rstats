@@ -67,7 +67,7 @@ namespace Rstats {
     }
     if (this->get_length()) {
       Rstats::Integer length = this->get_na_positions_length();
-      this->na_positions = new Rstats::NaPositions[length];
+      this->na_positions = new Rstats::NaPosition[length];
       std::fill_n(this->na_positions, length, 0);
     }
   }
@@ -77,7 +77,7 @@ namespace Rstats {
   }
 
   Rstats::Integer Vector::get_na_positions_unit_bits() {
-    return 8 * sizeof(Rstats::NaPositions);
+    return 8 * sizeof(Rstats::NaPosition);
   }
     
   void Vector::add_na_position(Rstats::Integer position) {
@@ -99,7 +99,7 @@ namespace Rstats {
       ? 1 : 0;
   }
 
-  void Vector::merge_na_positions(Rstats::NaPositions* na_positions) {
+  void Vector::merge_na_positions(Rstats::NaPosition* na_positions) {
     
     if (na_positions == NULL) {
       return;
@@ -116,7 +116,7 @@ namespace Rstats {
     }
   }
 
-  Rstats::NaPositions* Vector::get_na_positions() {
+  Rstats::NaPosition* Vector::get_na_positions() {
     return this->na_positions;
   }
 

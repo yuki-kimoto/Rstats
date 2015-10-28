@@ -7,6 +7,17 @@ use Rstats;
 # TODO
 # arr.ind=TRUE
 
+# cbind
+{
+  my $m1 = r->cbind(
+    c_(1, 2, 3, 4),
+    c_(5, 6, 7, 8),
+    c_(9, 10, 11, 12)
+  );
+  is_deeply($m1->values, [1 .. 12]);
+  is_deeply(r->dim($m1)->values, [4, 3]);
+}
+
 # matrix
 {
   
@@ -212,17 +223,6 @@ EOS
     is_deeply($m2->values, [1, 4, 2, 5, 3, 6]);
     is_deeply(r->dim($m2)->values, [2, 3]);
   }
-}
-
-# cbind
-{
-  my $m1 = r->cbind(
-    c_(1, 2, 3, 4),
-    c_(5, 6, 7, 8),
-    c_(9, 10, 11, 12)
-  );
-  is_deeply($m1->values, [1 .. 12]);
-  is_deeply(r->dim($m1)->values, [4, 3]);
 }
 
 # rbind

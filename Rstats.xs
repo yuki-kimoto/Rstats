@@ -1382,7 +1382,7 @@ MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 SV* DESTROY(...)
   PPCODE:
 {
-  Rstats::Vector* self = Rstats::pl_to_c_obj<Rstats::Vector*>(ST(0));
+  Rstats::Vector* self = Rstats::pl_object_unwrap<Rstats::Vector*>(ST(0), "Rstats::Vector");
 
   delete self;
 }

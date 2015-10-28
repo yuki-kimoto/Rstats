@@ -3472,14 +3472,20 @@ namespace Rstats {
     }
 
     void set_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
-      SV* sv_vector = Rstats::pl_to_perl_obj<Rstats::Vector*>(v1, "Rstats::Vector");
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector*>(v1, "Rstats::Vector");
       Rstats::pl_hv_store(sv_a1, "vector", sv_vector);
     }
 
     Rstats::Vector* get_vector(SV* sv_r, SV* sv_a1) {
       SV* sv_vector = Rstats::pl_hv_fetch(sv_a1, "vector");
-      Rstats::Vector* vector = Rstats::pl_to_c_obj<Rstats::Vector*>(sv_vector);
-      return vector;
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector* vector = Rstats::pl_object_unwrap<Rstats::Vector*>(sv_vector, "Rstats::Vector");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
     }
 
     SV* new_NULL(SV* sv_r) {
@@ -3912,6 +3918,7 @@ namespace Rstats {
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (length > 0) {
+      
         av_extend(Rstats::pl_av_deref(sv_decomposed_xs), length);
 
         if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character")) {

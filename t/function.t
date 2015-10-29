@@ -719,27 +719,6 @@ use Math::Complex ();
   }
 }
 
-# Im
-{
-  my $x1 = c_(1 + 2*i_, 2 + 3*i_);
-  my $x2 = r->Im($x1);
-  is_deeply($x2->values, [2, 3]);
-}
-
-# Re
-{
-  my $x1 = c_(1 + 2*i_, 2 + 3*i_);
-  my $x2 = r->Re($x1);
-  is_deeply($x2->values, [1, 2]);
-}
-
-# Conj
-{
-  my $x1 = c_(1 + 2*i_, 2 + 3*i_);
-  my $x2 = r->Conj($x1);
-  is_deeply($x2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
-}
-
 # pi
 {
   my $x1 = pi;
@@ -1466,38 +1445,6 @@ use Math::Complex ();
         sqrt $x1->values->[2]
       ]
     );
-  }
-}
-
-# abs
-{
-  # abs - array refference
-  {
-    my $x1 = r->abs(c_(-3, 4));
-    is_deeply($x1->values, [3, 4]);
-  }
-
-  # abs - matrix
-  {
-    my $x1 = r->abs(matrix(c_(-3, 4)));
-    is_deeply($x1->values, [3, 4]);
-  }
-  
-  # abs - complex
-  {
-    my $x1 = c_(3 + 4*i_, 6 + 8*i_);
-    my $x2 = r->abs($x1);
-    is_deeply($x2->values, [5, 10]);
-  }
-}
-
-# Mod
-{
-  # Mod - complex
-  {
-    my $x1 = c_(3 + 4*i_, 6 + 8*i_);
-    my $x2 = r->Mod($x1);
-    is_deeply($x2->values, [5, 10]);
   }
 }
 

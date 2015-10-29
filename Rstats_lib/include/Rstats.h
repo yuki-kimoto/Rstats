@@ -7,7 +7,6 @@
 #endif
 
 #include <vector>
-#include <set>
 #include <complex>
 #include <cmath>
 #include <limits>
@@ -128,7 +127,10 @@ namespace Rstats {
     void add_warn(Rstats::Integer warn_id);
     Rstats::Integer get_warn();
   }
+}
+# include "Rstats_Main_impl.h"
 
+namespace Rstats {
   namespace ElementFunc {
 
     Rstats::Complex add(Rstats::Complex, Rstats::Complex);
@@ -392,7 +394,9 @@ namespace Rstats {
     Rstats::Logical as_logical(Rstats::Integer);
     Rstats::Logical as_logical(Rstats::Logical);
   }
+}
 
+namespace Rstats {
   class Vector {
     private:
     
@@ -463,8 +467,9 @@ namespace Rstats {
 
   template <>
   void Vector::delete_vector<Rstats::Character>();
+}
 
-  // Rstats::VectorFunc
+namespace Rstats {
   namespace VectorFunc {
 
     template <class T_IN, class T_OUT>
@@ -562,8 +567,10 @@ namespace Rstats {
     Rstats::Vector* is_finite(Rstats::Vector* v1);
     
   }
+}
+# include "Rstats_VectorFunc_impl.h"
 
-  // Rstats::Func
+namespace Rstats {
   namespace Func {
 
     void set_vector(SV*, SV*, Rstats::Vector*);
@@ -733,12 +740,8 @@ namespace Rstats {
     
     template <class T_IN, class T_OUT>
     SV* operate_binary(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2);
-
   }
 }
-
-# include "Rstats_Main_impl.h"
-# include "Rstats_VectorFunc_impl.h"
 # include "Rstats_Func_impl.h"
 
 #endif

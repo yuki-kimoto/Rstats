@@ -106,8 +106,6 @@ namespace Rstats {
   const Rstats::Integer NaException = 1;
   const Rstats::Integer NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
 
-# include "Rstats_Main_impl.h"
-
   namespace Util {
     Rstats::Logical is_perl_number(SV*);
     SV* cross_product(SV*);
@@ -563,8 +561,8 @@ namespace Rstats {
     template <class T_IN>
     Rstats::Vector* is_finite(Rstats::Vector* v1);
     
-#   include "Rstats_VectorFunc_impl.h"
   }
+
   // Rstats::Func
   namespace Func {
 
@@ -736,8 +734,11 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     SV* operate_binary(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2);
 
-#   include "Rstats_Func_impl.h"
   }
 }
+
+# include "Rstats_Main_impl.h"
+# include "Rstats_VectorFunc_impl.h"
+# include "Rstats_Func_impl.h"
 
 #endif

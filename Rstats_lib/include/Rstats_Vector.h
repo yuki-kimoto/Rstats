@@ -55,8 +55,8 @@ namespace Rstats {
     template <class T>
     void delete_vector() {
       T* values = this->get_values<T>();
-      delete values;
-      delete this->na_positions;
+      delete[] values;
+      delete[] this->na_positions;
     }
   };
   template <>

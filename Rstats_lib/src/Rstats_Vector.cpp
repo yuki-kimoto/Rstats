@@ -146,8 +146,8 @@ namespace Rstats {
         SvREFCNT_dec(*(values + i));
       }
     }
-    delete values;
-    delete this->na_positions;
+    delete[] values;
+    delete[] this->na_positions;
   }
   
   Vector::~Vector() {

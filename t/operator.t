@@ -6,6 +6,123 @@ use Rstats;
 use Rstats::Func;
 use POSIX();
 
+
+# operation - pow
+{
+  my $z1 = r->c_complex({re => 1, im => 2});
+  my $z2 = r->c_complex({re => 3, im => 0});
+  my $z3 = r->pow($z1, $z2);
+  is($z3->value->{re}, -11);
+  is($z3->value->{im}, -2);
+}
+
+# pow
+{
+  # pow - dim
+  {
+    my $x1 = array(c_(5), 2);
+    my $x2 = array(c_(2), 2);
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    ok(r->dim($x3)->values, [2]);
+    is_deeply($x3->values, [25, 25]);
+  }
+  
+  # pow - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = $x1 ** $x2};
+    like($@, qr#\QError in ** : non-numeric argument#);
+  }
+
+  # pow - complex
+  {
+    my $x1 = 1 + 2*i_;
+    my $x2 = 3 + 0*i_;
+    my $x3 = $x1 ** $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => -11, im => -2}]);
+  }
+
+  # pow - double
+  {
+    my $x1 = c_(5);
+    my $x2 = c_(2);
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [25]);
+  }
+
+  # pow - integer
+  {
+    my $x1 = r->as->integer(c_(5));
+    my $x2 = r->as->integer(c_(2));
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [25]);
+  }
+
+  # pow - logical
+  {
+    my $x1 = c_(T_);
+    my $x2 = c_(T_);
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, [1]);
+  }
+
+  # pow - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+
+  # pow - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3 = $x1 ** $x2;
+    ok(r->is->double($x3));
+    is_deeply($x3->values, []);
+  }
+  
+  # pow - different number elements
+  {
+    my $x1 = c_(5, 3);
+    my $x2 = c_(2, 2, 3, 1);
+    my $x3 = $x1 ** $x2;
+    is_deeply($x3->values, [25, 9, 125, 3]);
+  }
+
+  # pow - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = $x1 ** $x2;
+    ok(r->is->complex($x3));
+    is_deeply($x3->values, [{re => -11, im => -2}]);
+  }
+  
+  # pow - perl number
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = $x1 ** 2;
+    is_deeply($x2->values, [1, 4, 9]);
+  }
+
+  # pow - perl number,reverse
+  {
+    my $x1 = c_(1, 2, 3);
+    my $x2 = 2 ** $x1;
+    is_deeply($x2->values, [2, 4, 8]);
+  }
+}
+
 # add
 {
   # add - dim
@@ -329,7 +446,7 @@ use POSIX();
 
 # divide
 {
-  # divide - double
+  # divide - dim
   {
     my $x1 = array(c_(5), 2);
     my $x2 = array(c_(2), 2);
@@ -615,24 +732,6 @@ use POSIX();
     my $x2 = r->negate($x1);
     ok(r->is->integer($x2));
     ok(r->is->na($x2));
-  }
-}
-
-
-# operator
-{
-  # operator - pow
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = $x1 ** 2;
-    is_deeply($x2->values, [1, 4, 9]);
-  }
-
-  # operator - pow, reverse
-  {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = 2 ** $x1;
-    is_deeply($x2->values, [2, 4, 8]);
   }
 }
 

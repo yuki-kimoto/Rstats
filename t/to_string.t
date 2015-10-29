@@ -4,6 +4,27 @@ use warnings;
 
 use Rstats;
 
+# complex
+{
+  # complex - image number is 0
+  {
+    my $z1 = r->c_complex({re => 1, im => 0});
+    is("$z1", "[1] 1+0i\n");
+  }
+  
+  # complex - basic
+  {
+    my $z1 = r->c_complex({re => 1, im => 2});
+    is("$z1", "[1] 1+2i\n");
+  }
+  
+  # complex - image number is minus
+  {
+    my $z1 = r->c_complex({re => 1, im => -1});
+    is("$z1", "[1] 1-1i\n");
+  }
+}
+
 # to_string
 {
   # to_string - TRUE

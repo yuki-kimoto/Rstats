@@ -8,27 +8,6 @@ use Rstats::Class;
 
 my $r = Rstats::Class->new;
 
-# to_string
-{
-  # to_string - image number is 0
-  {
-    my $z1 = r->c_complex({re => 1, im => 0});
-    is("$z1", "[1] 1+0i\n");
-  }
-  
-  # to_string - basic
-  {
-    my $z1 = r->c_complex({re => 1, im => 2});
-    is("$z1", "[1] 1+2i\n");
-  }
-  
-  # to_string - image number is minus
-  {
-    my $z1 = r->c_complex({re => 1, im => -1});
-    is("$z1", "[1] 1-1i\n");
-  }
-}
-
 # comparison operator
 {
   # comparison operator - ==, true
@@ -120,12 +99,4 @@ my $r = Rstats::Class->new;
     is($conj->value->{im}, -2);
   }
   
-  # operation - pow
-  {
-    my $z1 = r->c_complex({re => 1, im => 2});
-    my $z2 = r->c_complex({re => 3, im => 0});
-    my $z3 = r->pow($z1, $z2);
-    is($z3->value->{re}, -11);
-    is($z3->value->{im}, -2);
-  }
 }

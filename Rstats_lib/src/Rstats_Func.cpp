@@ -55,23 +55,23 @@ namespace Rstats {
       Rstats::Vector* v1;
       if (Rstats::pl_hv_exists(sv_type_h, "character")) {
         v1 = Rstats::Vector::new_vector<Rstats::Character>(length);
-        sv_x1 = Rstats::Func::new_vector<Rstats::Character>(sv_r);
+        sv_x1 = Rstats::Func::new_vector<Rstats::Character>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "complex")) {
         v1 = Rstats::Vector::new_vector<Rstats::Complex>(length);
-        sv_x1 = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
+        sv_x1 = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
         v1 = Rstats::Vector::new_vector<Rstats::Double>(length);
-        sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r);
+        sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
         v1 = Rstats::Vector::new_vector<Rstats::Integer>(length);
-        sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
+        sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v1);
       }
       else {
         v1 = Rstats::Vector::new_vector<Rstats::Logical>(length);
-        sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r);
+        sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
       }
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -156,9 +156,6 @@ namespace Rstats {
           pos++;
         }
       }
-      
-      // Array
-      Rstats::Func::set_vector(sv_r, sv_x1, v1);
 
       return sv_x1;
     }

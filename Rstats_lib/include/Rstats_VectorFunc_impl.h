@@ -72,11 +72,11 @@ namespace Rstats {
     Rstats::Vector* operate_binary_math(T_OUT (*func)(T_IN, T_IN), Rstats::Vector* v1, Rstats::Vector* v2) {
 
       Rstats::Integer length = v1->get_length();
-      Rstats::Vector* v3 = Rstats::Vector::new_vector<T_OUT>(length);
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
 
       Rstats::Util::init_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
-        v3->set_value<T_OUT>(
+        v_out->set_value<T_OUT>(
           i,
           (*func)(
             v1->get_value<T_IN>(i),
@@ -88,10 +88,48 @@ namespace Rstats {
         Rstats::Util::print_warn_message();
       }
       
-      v3->merge_na_positions(v1->get_na_positions());
-      v3->merge_na_positions(v2->get_na_positions());
+      v_out->merge_na_positions(v1->get_na_positions());
+      v_out->merge_na_positions(v2->get_na_positions());
       
-      return v3;
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* operate_binary_compare(Rstats::Logical (*func)(T_IN, T_IN), Rstats::Vector* v1, Rstats::Vector* v2) {
+
+      Rstats::Integer length = v1->get_length();
+      Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
+
+      Rstats::Util::init_warn();
+      for (Rstats::Integer i = 0; i < length; i++) {
+        try {
+          v_out->set_value<Rstats::Logical>(
+            i,
+            (*func)(
+              v1->get_value<T_IN>(i),
+              v2->get_value<T_IN>(i)
+            )
+          );
+        }
+        catch (...) {
+          v_out->add_na_position(i);
+        }
+      }
+      if (Rstats::Util::get_warn()) {
+        Rstats::Util::print_warn_message();
+      }
+      
+      v_out->merge_na_positions(v1->get_na_positions());
+      v_out->merge_na_positions(v2->get_na_positions());
+      
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* equal(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::equal;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
     }
 
     template <class T_IN, class T_OUT>

@@ -925,31 +925,56 @@ namespace Rstats {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
-      
-      // Upgrade type and length
-      upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
-      
       SV* sv_x_out;
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type, "character")) {
-        Rstats::Logical (*func)(Rstats::Character, Rstats::Character) = &Rstats::ElementFunc::equal;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
-      }
-      else if (strEQ(type, "complex")) {
-        Rstats::Logical (*func)(Rstats::Complex, Rstats::Complex) = &Rstats::ElementFunc::equal;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Logical (*func)(Rstats::Double, Rstats::Double) = &Rstats::ElementFunc::equal;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
-      }
-      else if (strEQ(type, "integer") || strEQ(type, "logical")) {
-        Rstats::Logical (*func)(Rstats::Integer, Rstats::Integer) = &Rstats::ElementFunc::equal;
-        sv_x_out = Rstats::Func::operate_binary(sv_r, func, sv_x1, sv_x2);
+      
+      // NULL check
+      char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
+      char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
+      if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
+        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
-        croak("Error in == : default method not implemented for type '%s'", type);
+      
+        // Upgrade type and length
+        upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
+        upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
+        
+        char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
+        if (strEQ(type1, "character")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Character>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "complex")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Complex>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "double")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Double>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "integer")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Integer>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+        }
+        else if (strEQ(type1, "logical")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Logical>(v1, v2);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+        }
+        else {
+          croak("Error in == : invalid argument to comparison operator");
+        }
+        Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }
       
       return sv_x_out;

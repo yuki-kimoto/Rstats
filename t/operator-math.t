@@ -6,7 +6,6 @@ use Rstats;
 use Rstats::Func;
 use POSIX();
 
-
 # operation - pow
 {
   my $z1 = r->c_complex({re => 1, im => 2});

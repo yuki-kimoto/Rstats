@@ -1,6 +1,5 @@
-#include "Rstats.h"
+#include "Rstats_VectorFunc.h"
 
-// Rstats::VectorFunc
 namespace Rstats {
   namespace VectorFunc {
 

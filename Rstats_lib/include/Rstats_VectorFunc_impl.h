@@ -132,6 +132,55 @@ namespace Rstats {
       return v_out;
     }
 
+    template <class T_IN>
+    Rstats::Vector* not_equal(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::not_equal;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* more_than(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::more_than;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* more_than_or_equal(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::more_than_or_equal;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* less_than(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::less_than;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* less_than_or_equal(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::less_than_or_equal;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* And(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::And;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
+    template <class T_IN>
+    Rstats::Vector* Or(Rstats::Vector* v1, Rstats::Vector* v2) {
+      Rstats::Logical (*func)(T_IN, T_IN) = &Rstats::ElementFunc::Or;
+      Rstats::Vector* v_out = Rstats::VectorFunc::operate_binary_compare(func, v1, v2);
+      return v_out;
+    }
+
     template <class T_IN, class T_OUT>
     Rstats::Vector* add(Rstats::Vector* v1, Rstats::Vector* v2) {
       T_OUT (*func)(T_IN, T_IN) = &Rstats::ElementFunc::add;

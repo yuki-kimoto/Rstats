@@ -23,6 +23,20 @@ namespace Rstats {
 
     template <class T_IN>
     Rstats::Vector* equal(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* not_equal(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* more_than(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* more_than_or_equal(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* less_than(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* less_than_or_equal(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* And(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN>
+    Rstats::Vector* Or(Rstats::Vector* v1, Rstats::Vector* v2);
 
     template <class T_IN, class T_OUT>
     Rstats::Vector* add(Rstats::Vector* v1, Rstats::Vector* v2);

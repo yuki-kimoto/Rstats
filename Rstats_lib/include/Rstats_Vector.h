@@ -14,35 +14,7 @@ namespace Rstats {
     
     public:
 
-    template<class T>
-    static Rstats::Vector* new_vector(Rstats::Integer);
-    
-    template <class T>
-    static Rstats::Vector* new_vector(Rstats::Integer length, T value) {
-      Rstats::Vector* v1 = new_vector<T>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        v1->set_value<T>(i, value);
-      }
-      return v1;
-    };
-        
     Rstats::Integer get_length();
-    
-    template<class T>
-    T* get_values() {
-      return (T*)this->values;
-    }
-
-    template<class T>
-    void set_value(Rstats::Integer pos, T value) {
-      *(this->get_values<T>() + pos) = value;
-    } // Rstats::Character is specialized
-
-    template <class T>
-    T get_value(Rstats::Integer pos) {
-      return *(this->get_values<T>() + pos);
-    }
-    
     void init_na_positions();
     void add_na_position(Rstats::Integer);
     Rstats::Logical exists_na_position(Rstats::Integer position);
@@ -52,15 +24,26 @@ namespace Rstats {
     
     ~Vector();
 
+    template<class T> // Specialized
+    static Rstats::Vector* new_vector(Rstats::Integer);
     template <class T>
-    void delete_vector() {
-      T* values = this->get_values<T>();
-      delete[] values;
-      delete[] this->na_positions;
-    }
+    static Rstats::Vector* new_vector(Rstats::Integer length, T value);
+    
+    template<class T>
+    T* get_values();
+    template<class T> // Rstats::Character is specialized
+    void set_value(Rstats::Integer pos, T value); 
+    template <class T>
+    T get_value(Rstats::Integer pos);
+    
+    template <class T> // Rstats::Character is specialized
+    void delete_vector();
   };
   template <>
   void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
+  template <>
+  void Vector::delete_vector<Rstats::Character>();
+
   template<>
   Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer);
   template<>
@@ -72,8 +55,7 @@ namespace Rstats {
   template<>
   Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer);
 
-  template <>
-  void Vector::delete_vector<Rstats::Character>();
 }
+#include "Rstats_Vector_impl.h"
 
 #endif

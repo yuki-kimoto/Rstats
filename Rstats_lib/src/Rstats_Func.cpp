@@ -49,6 +49,7 @@ namespace Rstats {
         }
       }
 
+
       SV* sv_x1;
 
       // Decide type
@@ -1281,13 +1282,10 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::And<Rstats::Character>(v1, v2);
-          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+          croak("Error in & : operations are possible only for numeric, logical or complex types");
         }
         else if (strEQ(type1, "complex")) {
-          croak("Error in & operator : invalid comparison with complex values");
+          croak("Error in & : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
           Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
@@ -1337,13 +1335,10 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::Or<Rstats::Character>(v1, v2);
-          sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
+          croak("Error in | : operations are possible only for numeric, logical or complex types");
         }
         else if (strEQ(type1, "complex")) {
-          croak("Error in | operator : invalid comparison with complex values");
+          croak("Error in | : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
           Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
@@ -2517,11 +2512,7 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        
-        Rstats::Vector* v2 = Rstats::VectorFunc::expm1<Rstats::Complex, Rstats::Complex>(v1);
-        
-        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
+        croak("Error in expm1 : unimplemented complex function");
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);

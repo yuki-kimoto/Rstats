@@ -49,9 +49,6 @@ namespace Rstats {
     }
 
     // remainder
-    Rstats::Complex remainder(Rstats::Complex e1, Rstats::Complex e2) {
-      croak("unimplemented complex operation(Rstats::VectorFunc::remainder())");
-    }
     Rstats::Double remainder(Rstats::Double e1, Rstats::Double e2) {
       if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_NaN(e2) || e2 == 0) {
         return Rstats::Util::NaN();
@@ -173,7 +170,6 @@ namespace Rstats {
     Rstats::Double log2(Rstats::Logical e1) { return Rstats::ElementFunc::log2((Rstats::Double)e1); }
     
     // expm1
-    Rstats::Complex expm1(Rstats::Complex e1) { croak("Error in expm1 : unimplemented complex function"); }
     Rstats::Double expm1(Rstats::Double e1) { return ::expm1(e1); }
     Rstats::Double expm1(Rstats::Integer e1) { return Rstats::ElementFunc::expm1((Rstats::Double)e1); }
     Rstats::Double expm1(Rstats::Logical e1) { return Rstats::ElementFunc::expm1((Rstats::Double)e1); }
@@ -523,7 +519,6 @@ namespace Rstats {
     }
 
     // And
-    Rstats::Logical And(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
     Rstats::Logical And(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) && e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }
@@ -538,7 +533,6 @@ namespace Rstats {
     }
 
     // Or
-    Rstats::Logical Or(Rstats::Character e1, Rstats::Character e2) { croak("operations are possible only for numeric, logical or complex types"); }
     Rstats::Logical Or(Rstats::Complex e1, Rstats::Complex e2) {
       if (e1 != Rstats::Complex(0, 0) || e2 != Rstats::Complex(0, 0)) { return 1; }
       else { return 0; }

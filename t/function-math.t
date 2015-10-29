@@ -6,6 +6,187 @@ use Rstats;
 use Math::Trig ();
 use Math::Complex ();
 
+# atan2
+{
+
+  # atan2 - auto upgrade type
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3);
+    my $x3 = r->atan2($x1, $x2);
+    ok(r->is->complex($x3));
+    is(sprintf("%.6f", $x3->values->[0]->{re}), '0.491397');
+    is(sprintf("%.6f", $x3->values->[0]->{im}), '0.641237');
+  }
+
+  # atan2 - complex
+  {
+    my $x1 = c_(1 + 2*i_);
+    my $x2 = c_(3 + 4*i_);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value->{re}), 0.416491);
+    is(sprintf("%.6f", $x3->value->{im}), 0.067066);
+    ok(r->is->complex($x3));
+  }
+  
+  # atan2 - dim
+  {
+    my $x1 = array(c_(1, 2));
+    my $x2 = array(c_(3, 4));
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->values->[0]), '0.321751');
+    is(sprintf("%.6f", $x3->values->[1]), '0.463648');
+    is_deeply(r->dim($x3)->values, [2]);
+    ok(r->is->double($x3));
+  }
+
+  # atan2 - double
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->values->[0]), '0.321751');
+    is(sprintf("%.6f", $x3->values->[1]), '0.463648');
+    ok(r->is->double($x3));
+  }
+  
+  # atan2 - y is -Inf, x is Inf
+  {
+    my $x1 = c_(-Inf);
+    my $x2 = c_(Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '-0.785398');
+  }
+  
+  # atan2 - y is inf, x is -inf
+  {
+    my $x1 = c_(Inf);
+    my $x2 = c_(-Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '2.356194');
+  }
+  
+  # atan2 - x and y is Inf
+  {
+    my $x1 = c_(Inf);
+    my $x2 = c_(Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '0.785398');
+  }
+  
+  # atan2 - x and y is -Inf
+  {
+    my $x1 = c_(-Inf);
+    my $x2 = c_(-Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '-2.356194');
+  }
+  
+  # atan2 - x is Inf
+  {
+    my $x1 = c_(0);
+    my $x2 = c_(Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is($x3->value, 0);
+  }
+  
+  # atan2 - y >= 0, x is -Inf
+  {
+    my $x1 = c_(0, 1);
+    my $x2 = c_(-Inf, -Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->values->[0]), 3.141593);
+    is(sprintf("%.6f", $x3->values->[1]), 3.141593);
+  }
+  
+  # atan2 - y >= 0, x is -Inf
+  {
+    my $x1 = c_(-1);
+    my $x2 = c_(-Inf);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), -3.141593);
+  }
+  
+  # atan2 - y is Inf
+  {
+    my $x1 = c_(Inf);
+    my $x2 = c_(0);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '1.570796');
+  }
+  
+  # atan2 - y is -Inf
+  {
+    my $x1 = c_(-Inf);
+    my $x2 = c_(0);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->value), '-1.570796');
+  }
+
+  # atan2 - y is NA
+  {
+    my $x1 = r->atan2(NA, 0);
+    ok(!defined $x1->value);
+  }  
+
+  # atan2 - x is NA
+  {
+    my $x1 = r->atan2(0, NA);
+    ok(!defined $x1->value);
+  }
+
+  # atan2 - y is NaN
+  {
+    my $x1 = r->atan2(NaN, 0);
+    is($x1->value, 'NaN');
+  }
+  
+  # atan2 - x is NaN
+  {
+    my $x1 = r->atan2(0, NaN);
+    is($x1->value, 'NaN');
+  }
+
+  # atan2 - character
+  {
+    my $x1 = c_("a");
+    my $x2 = c_("b");
+    my $x3;
+    eval { $x3 = r->atan2($x1, $x2) };
+    like($@, qr#\QError in atan2() : non-numeric argument#);
+  }
+
+  # atan2 - NULL, left
+  {
+    my $x1 = NULL;
+    my $x2 = c_(1);
+    my $x3;
+    eval { $x3 = r->atan2($x1, $x2) };
+    like($@, qr#\QError in atan2() : non-numeric argument#);
+  }
+
+  # atan2 - NULL, right
+  {
+    my $x1 = c_(1);
+    my $x2 = NULL;
+    my $x3;
+    eval { $x3 = r->atan2($x1, $x2) };
+    like($@, qr#\QError in atan2() : non-numeric argument#);
+  }
+  
+  # atan2 - different number elements
+  {
+    my $x1 = c_(1, 2);
+    my $x2 = c_(3, 4, 3, 4);
+    my $x3 = r->atan2($x1, $x2);
+    is(sprintf("%.6f", $x3->values->[0]), '0.321751');
+    is(sprintf("%.6f", $x3->values->[1]), '0.463648');
+    is(sprintf("%.6f", $x3->values->[2]), '0.321751');
+    is(sprintf("%.6f", $x3->values->[3]), '0.463648');
+    ok(r->is->double($x3));
+  }
+}
+
 # tanh
 {
   # tanh - complex, -Inf - 2i
@@ -817,127 +998,6 @@ use Math::Complex ();
     my $x1 = c_(NaN);
     my $x2 = r->atan($x1);
     is($x2->value, 'NaN');
-  }
-}
-
-# atan2
-{
-  # atan2 - complex
-  {
-    my $x1 = c_(1 + 2*i_);
-    my $x2 = c_(3 + 4*i_);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value->{re}), 0.416491);
-    is(sprintf("%.6f", $x3->value->{im}), 0.067066);
-    ok(r->is->complex($x3));
-  }
-  
-  # atan2 - double,array
-  {
-    my $x1 = array(c_(1, 2));
-    my $x2 = array(c_(3, 4));
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->values->[0]), '0.321751');
-    is(sprintf("%.6f", $x3->values->[1]), '0.463648');
-    is_deeply(r->dim($x3)->values, [2]);
-    ok(r->is->double($x3));
-  }
-
-  # atan2 - y is -Inf, x is Inf
-  {
-    my $x1 = c_(-Inf);
-    my $x2 = c_(Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '-0.785398');
-  }
-  
-  # atan2 - y is inf, x is -inf
-  {
-    my $x1 = c_(Inf);
-    my $x2 = c_(-Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '2.356194');
-  }
-  
-  # atan2 - x and y is Inf
-  {
-    my $x1 = c_(Inf);
-    my $x2 = c_(Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '0.785398');
-  }
-  
-  # atan2 - x and y is -Inf
-  {
-    my $x1 = c_(-Inf);
-    my $x2 = c_(-Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '-2.356194');
-  }
-  
-  # atan2 - x is Inf
-  {
-    my $x1 = c_(0);
-    my $x2 = c_(Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is($x3->value, 0);
-  }
-  
-  # atan2 - y >= 0, x is -Inf
-  {
-    my $x1 = c_(0, 1);
-    my $x2 = c_(-Inf, -Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->values->[0]), 3.141593);
-    is(sprintf("%.6f", $x3->values->[1]), 3.141593);
-  }
-  
-  # atan2 - y >= 0, x is -Inf
-  {
-    my $x1 = c_(-1);
-    my $x2 = c_(-Inf);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), -3.141593);
-  }
-  
-  # atan2 - y is Inf
-  {
-    my $x1 = c_(Inf);
-    my $x2 = c_(0);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '1.570796');
-  }
-  
-  # atan2 - y is -Inf
-  {
-    my $x1 = c_(-Inf);
-    my $x2 = c_(0);
-    my $x3 = r->atan2($x1, $x2);
-    is(sprintf("%.6f", $x3->value), '-1.570796');
-  }
-
-  # atan2 - y is NA
-  {
-    my $x1 = r->atan2(NA, 0);
-    ok(!defined $x1->value);
-  }  
-
-  # atan2 - x is NA
-  {
-    my $x1 = r->atan2(0, NA);
-    ok(!defined $x1->value);
-  }
-
-  # atan2 - y is NaN
-  {
-    my $x1 = r->atan2(NaN, 0);
-    is($x1->value, 'NaN');
-  }
-  
-  # atan2 - x is NaN
-  {
-    my $x1 = r->atan2(0, NaN);
-    is($x1->value, 'NaN');
   }
 }
 

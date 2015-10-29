@@ -1407,8 +1407,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+        croak("Error in atan2() : non-numeric argument to mathematical function");
       }
       else {
         // Upgrade type and length
@@ -1441,7 +1440,7 @@ namespace Rstats {
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else {
-          croak("Error in atan2() : non-numeric argument to binary operator");
+          croak("Error in atan2() : non-numeric argument to mathematical function");
         }
         Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       }

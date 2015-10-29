@@ -102,29 +102,6 @@ namespace Rstats {
 
   const Rstats::Integer NaException = 1;
   const Rstats::Integer NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
-
-  namespace Util {
-    Rstats::Logical is_perl_number(SV*);
-    SV* cross_product(SV*);
-    SV* pos_to_index(SV*, SV*);
-    SV* index_to_pos(SV*, SV*);
-    SV* looks_like_complex(SV*);
-    SV* looks_like_logical(SV*);
-    SV* looks_like_na(SV*);
-    SV* looks_like_integer(SV*);
-    SV* looks_like_double(SV*);
-    Rstats::Double pi();
-    Rstats::Double Inf();
-    Rstats::Double NaN();
-    Rstats::Logical is_Inf(Rstats::Double);
-    Rstats::Logical is_NaN(Rstats::Double);
-    
-    char* get_warn_message();
-    void print_warn_message();
-    void init_warn();
-    void add_warn(Rstats::Integer warn_id);
-    Rstats::Integer get_warn();
-  }
 }
 # include "Rstats_Main_impl.h"
 

@@ -2,6 +2,7 @@
 #define PERL_RSTATS_ELEMENTFUNC_H
 
 #include "Rstats_Main.h"
+#include "Rstats_Util.h"
 
 namespace Rstats {
   namespace ElementFunc {

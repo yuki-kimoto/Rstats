@@ -3,50 +3,6 @@
 namespace Rstats {
 
   template <>
-  void Vector::initialize<Rstats::Double>(Rstats::Integer length) {
-    this->values = new Rstats::Double[length];
-    this->type = Rstats::Type::DOUBLE;
-    this->length = length;
-    this->na_positions = NULL;
-  };
-
-  template <>
-  void Vector::initialize<Rstats::Integer>(Rstats::Integer length) {
-    this->values = new Rstats::Integer[length];
-    this->type = Rstats::Type::INTEGER;
-    this->length = length;
-    this->na_positions = NULL;
-  }
-
-  template <>
-  void Vector::initialize<Rstats::Complex>(Rstats::Integer length) {
-    this->values = new Rstats::Complex[length];
-    this->type = Rstats::Type::COMPLEX;
-    this->length = length;
-    this->na_positions = NULL;
-  }
-
-  template <>
-  void Vector::initialize<Rstats::Character>(Rstats::Integer length) {
-    this->values = new Rstats::Character[length];
-    for (Rstats::Integer i = 0; i < length; i++) {
-      SV** value_ptr = (SV**)this->values;
-      *(value_ptr + i) = &PL_sv_undef;
-    }
-    this->type = Rstats::Type::CHARACTER;
-    this->length = length;
-    this->na_positions = NULL;
-  }
-
-  template <>
-  void Vector::initialize<Rstats::Logical>(Rstats::Integer length) {
-    this->values = new Rstats::Logical[length];
-    this->type = Rstats::Type::LOGICAL;
-    this->length = length;
-    this->na_positions = NULL;
-  }
-  
-  template <>
   Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;
     v1->values = new Rstats::Double[length];
@@ -55,7 +11,8 @@ namespace Rstats {
     v1->na_positions = NULL;
     
     return v1;
-  }
+  };
+
   template <>
   Rstats::Vector* Vector::new_vector<Rstats::Integer>(Rstats::Integer length) {
     Rstats::Vector* v1 = new Rstats::Vector;

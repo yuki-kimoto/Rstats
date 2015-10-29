@@ -23,7 +23,7 @@ namespace Rstats {
     
     char* get_warn_message();
     void print_warn_message();
-    void init_warn();
+    void clear_warn();
     void add_warn(Rstats::Integer warn_id);
     Rstats::Integer get_warn();
   }

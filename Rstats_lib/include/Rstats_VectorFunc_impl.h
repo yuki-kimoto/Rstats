@@ -7,7 +7,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
-      Rstats::Util::init_warn();
+      Rstats::Util::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
@@ -27,7 +27,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
 
-      Rstats::Util::init_warn();
+      Rstats::Util::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {
           v_out->set_value<Rstats::Logical>(i, 0);
@@ -50,7 +50,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
-      Rstats::Util::init_warn();
+      Rstats::Util::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
@@ -74,7 +74,7 @@ namespace Rstats {
       Rstats::Integer length = v1->get_length();
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
 
-      Rstats::Util::init_warn();
+      Rstats::Util::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(
           i,
@@ -100,7 +100,7 @@ namespace Rstats {
       Rstats::Integer length = v1->get_length();
       Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
 
-      Rstats::Util::init_warn();
+      Rstats::Util::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
           v_out->set_value<Rstats::Logical>(

@@ -11,6 +11,9 @@ namespace Rstats {
     Rstats::NaPosition* na_positions;
     void* values;
     Rstats::Integer length;
+
+    template <class T>
+    void initialize(Rstats::Integer length);
     
     public:
 
@@ -54,6 +57,17 @@ namespace Rstats {
   Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer);
   template<>
   Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer);
+
+  template<>
+  void Vector::initialize<Rstats::Double>(Rstats::Integer);
+  template<>
+  void Vector::initialize<Rstats::Integer>(Rstats::Integer);
+  template<>
+  void Vector::initialize<Rstats::Complex>(Rstats::Integer);
+  template<>
+  void Vector::initialize<Rstats::Character>(Rstats::Integer);
+  template<>
+  void Vector::initialize<Rstats::Logical>(Rstats::Integer);
 
 }
 #include "Rstats_Vector_impl.h"

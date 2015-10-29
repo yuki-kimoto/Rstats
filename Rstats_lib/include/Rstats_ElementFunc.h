@@ -1,7 +1,9 @@
 #ifndef PERL_RSTATS_ELEMENTFUNC_H
 #define PERL_RSTATS_ELEMENTFUNC_H
 
-#include "Rstats_Main.h"
+#include <complex>
+#include <cmath>
+
 #include "Rstats_Util.h"
 
 namespace Rstats {

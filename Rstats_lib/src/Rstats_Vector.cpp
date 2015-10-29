@@ -1,4 +1,4 @@
-#include "Rstats.h"
+#include "Rstats_Vector.h"
 
 namespace Rstats {
 

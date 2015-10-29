@@ -1,6 +1,9 @@
 #ifndef PERL_RSTATS_UTIL_H
 #define PERL_RSTATS_UTIL_H
 
+#include <limits>
+#include "Rstats_Main.h"
+
 namespace Rstats {
   namespace Util {
     Rstats::Logical is_perl_number(SV*);

@@ -3,7 +3,13 @@
 // Rstats::ElementFunc
 namespace Rstats {
   namespace ElementFunc {
-
+    
+    /* Note:
+      In ElementFunction, croak method should't be called.
+      If you want to tell warnings, use add_warn function.
+      If you want to tell NA introduced, throw Rstats::NaException.
+    */
+    
     // add
     Rstats::Complex add(Rstats::Complex e1, Rstats::Complex e2) { return e1 + e2; }
     Rstats::Double add(Rstats::Double e1, Rstats::Double e2) { return e1 + e2; }

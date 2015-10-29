@@ -677,30 +677,31 @@ namespace Rstats {
     SV* log2(SV*, SV*);
     SV* log10(SV*, SV*);
     SV* prod(SV*, SV*);
+    SV* sin(SV*, SV*);
     SV* sinh(SV*, SV*);
     SV* sqrt(SV*, SV*);
     SV* tan(SV*, SV*);
     SV* sin(SV*, SV*);
     SV* sum(SV*, SV*);
     SV* negate(SV*, SV*);
-    SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
+    
     SV* upgrade_type_avrv(SV*, SV*);
     void upgrade_type(SV*, Rstats::Integer, ...);
     SV* upgrade_length_avrv(SV*, SV*);
     void upgrade_length(SV*, Rstats::Integer, ...);
+
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
     char* get_object_type(SV*, SV*);
-    SV* create_sv_value(SV*, SV*, Rstats::Integer);
-    SV* create_sv_values(SV*, SV*);
-    
-    SV* atan2(SV*, SV*, SV*);
+
     SV* add(SV*, SV*, SV*);
     SV* subtract(SV*, SV*, SV*);
     SV* multiply(SV*, SV*, SV*);
     SV* divide(SV*, SV*, SV*);
     SV* remainder(SV*, SV*, SV*);
     SV* pow(SV*, SV*, SV*);
+    SV* atan2(SV*, SV*, SV*);
+    
     SV* less_than(SV*, SV*, SV*);
     SV* less_than_or_equal(SV*, SV*, SV*);
     SV* more_than(SV*, SV*, SV*);
@@ -710,7 +711,10 @@ namespace Rstats {
     SV* And(SV*, SV*, SV*);
     SV* Or(SV*, SV*, SV*);
 
-    SV* sin(SV*, SV*);
+    SV* create_sv_value(SV*, SV*, Rstats::Integer);
+    SV* create_sv_values(SV*, SV*);
+
+    SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
     
     template <class T>
     SV* new_vector(SV*);

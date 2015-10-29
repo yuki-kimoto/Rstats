@@ -567,18 +567,11 @@ namespace Rstats {
   }
   // Rstats::Func
   namespace Func {
-    SV* fix_length(SV*, SV*, SV*);
-    SV* fix_type(SV*, SV*, SV*);
-    
-    SV* new_array(SV*);
+
     void set_vector(SV*, SV*, Rstats::Vector*);
     Rstats::Vector* get_vector(SV*, SV*);
-    SV* c_(SV*, SV*);
-    SV* c_character(SV*, SV*);
-    SV* c_double(SV*, SV*);
-    SV* c_integer(SV*, SV*);
-    SV* c_logical(SV*, SV*);
-    SV* c_complex(SV*, SV*);
+
+    SV* to_object(SV*, SV*);
 
     SV* new_NULL(SV*); /* r->NULL */
     SV* new_NA(SV*); /* r->NA */
@@ -587,7 +580,16 @@ namespace Rstats {
     SV* new_FALSE(SV*); /* r->FALSE */
     SV* new_TRUE(SV*); /* r->TRUE */
 
-    SV* to_object(SV*, SV*);
+    SV* new_data_frame(SV*);
+    SV* new_list(SV*);
+
+    SV* c_(SV*, SV*);
+    SV* c_character(SV*, SV*);
+    SV* c_double(SV*, SV*);
+    SV* c_integer(SV*, SV*);
+    SV* c_logical(SV*, SV*);
+    SV* c_complex(SV*, SV*);
+
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
     SV* is_vector(SV*, SV*);
@@ -605,12 +607,17 @@ namespace Rstats {
     SV* is_logical(SV*, SV*);
     SV* is_data_frame(SV*, SV*);
     SV* is_list(SV*, SV*);
-    SV* as_vector(SV*, SV*);
-    SV* new_data_frame(SV*);
-    SV* new_list(SV*);
+    SV* is_finite(SV*, SV*);
+    SV* is_infinite(SV*, SV*);
+    SV* is_nan(SV*, SV*);
+    SV* is_na(SV*, SV*);
+    SV* is_factor(SV*, SV*);
+    SV* is_ordered(SV*, SV*);
+
     SV* copy_attrs_to(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);
 
+    SV* as_vector(SV*, SV*);
     SV* as_integer(SV*, SV*);
     SV* as_logical(SV*, SV*);
     SV* as_complex(SV*, SV*);
@@ -619,12 +626,6 @@ namespace Rstats {
     SV* as_character(SV*, SV*);
     SV* as(SV*, SV*, SV*);
 
-    SV* is_finite(SV*, SV*);
-    SV* is_infinite(SV*, SV*);
-    SV* is_nan(SV*, SV*);
-    SV* is_na(SV*, SV*);
-    SV* is_factor(SV*, SV*);
-    SV* is_ordered(SV*, SV*);
     SV* clone(SV*, SV*);
     SV* dim_as_array(SV*, SV*);
     SV* decompose(SV*, SV*);

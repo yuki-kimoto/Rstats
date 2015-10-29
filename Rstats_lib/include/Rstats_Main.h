@@ -100,6 +100,12 @@ namespace Rstats {
 
   const Rstats::Integer NaException = 1;
   const Rstats::Integer NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
+
+  char* get_warn_message();
+  void print_warn_message();
+  void clear_warn();
+  void add_warn(Rstats::Integer warn_id);
+  Rstats::Integer get_warn();
 }
 # include "Rstats_Main_impl.h"
 

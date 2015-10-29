@@ -3,8 +3,6 @@
 // Rstats::Util
 namespace Rstats {
   namespace Util {
-    
-    static Rstats::Integer WARN = 0;
 
     static REGEXP* LOGICAL_RE = pregcomp(newSVpv("^ *(T|TRUE|F|FALSE) *$", 0), 0);
     static REGEXP* LOGICAL_TRUE_RE = pregcomp(newSVpv("T", 0), 0);
@@ -18,40 +16,6 @@ namespace Rstats {
     Rstats::Double NaN() { return std::numeric_limits<Rstats::Double>::signaling_NaN(); }
     Rstats::Logical is_Inf(Rstats::Double e1) { return std::isinf(e1); }
     Rstats::Logical is_NaN(Rstats::Double e1) { return std::isnan(e1); }
-    
-    void clear_warn() {
-      WARN = 0;
-    }
-    void add_warn(Rstats::Integer warn_id) {
-      WARN |= warn_id;
-    }
-    
-    Rstats::Integer get_warn() {
-      return WARN;
-    }
-    
-    char* get_warn_message() {
-      if (Rstats::Util::get_warn()) {
-        SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
-        if (WARN & Rstats::WARN_NAN_PRODUCED) {
-          sv_catpv(sv_warn, "NaNs produced\n");
-        }
-        if (WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
-          sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
-        }
-        if (WARN & Rstats::WARN_NA_INTRODUCED) {
-          sv_catpv(sv_warn, "NAs introduced by coercion\n");
-        }        
-        return SvPV_nolen(sv_warn);
-      }
-      else {
-        return "Unexpected warning";
-      }
-    }
-    
-    void print_warn_message() {
-      warn(Rstats::Util::get_warn_message());
-    }
     
     Rstats::Logical is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {

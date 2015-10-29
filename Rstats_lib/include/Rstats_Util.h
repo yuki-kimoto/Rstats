@@ -20,12 +20,6 @@ namespace Rstats {
     Rstats::Double NaN();
     Rstats::Logical is_Inf(Rstats::Double);
     Rstats::Logical is_NaN(Rstats::Double);
-    
-    char* get_warn_message();
-    void print_warn_message();
-    void clear_warn();
-    void add_warn(Rstats::Integer warn_id);
-    Rstats::Integer get_warn();
   }
 }
 

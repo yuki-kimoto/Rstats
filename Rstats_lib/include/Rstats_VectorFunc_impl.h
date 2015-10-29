@@ -7,12 +7,12 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
-      Rstats::Util::clear_warn();
+      Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
       }
-      if (Rstats::Util::get_warn()) {
-        Rstats::Util::print_warn_message();
+      if (Rstats::get_warn()) {
+        Rstats::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());
@@ -27,7 +27,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
 
-      Rstats::Util::clear_warn();
+      Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {
           v_out->set_value<Rstats::Logical>(i, 0);
@@ -36,8 +36,8 @@ namespace Rstats {
           v_out->set_value<Rstats::Logical>(i, (*func)(v1->get_value<T_IN>(i)));
         }
       }
-      if (Rstats::Util::get_warn()) {
-        Rstats::Util::print_warn_message();
+      if (Rstats::get_warn()) {
+        Rstats::print_warn_message();
       }
       
       return v_out;
@@ -50,7 +50,7 @@ namespace Rstats {
       
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
       
-      Rstats::Util::clear_warn();
+      Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
           v_out->set_value<T_OUT>(i, (*func)(v1->get_value<T_IN>(i)));
@@ -59,8 +59,8 @@ namespace Rstats {
           v_out->add_na_position(i);
         }
       }
-      if (Rstats::Util::get_warn()) {
-        Rstats::Util::print_warn_message();
+      if (Rstats::get_warn()) {
+        Rstats::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());
@@ -74,7 +74,7 @@ namespace Rstats {
       Rstats::Integer length = v1->get_length();
       Rstats::Vector* v_out = Rstats::Vector::new_vector<T_OUT>(length);
 
-      Rstats::Util::clear_warn();
+      Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         v_out->set_value<T_OUT>(
           i,
@@ -84,8 +84,8 @@ namespace Rstats {
           )
         );
       }
-      if (Rstats::Util::get_warn()) {
-        Rstats::Util::print_warn_message();
+      if (Rstats::get_warn()) {
+        Rstats::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());
@@ -100,7 +100,7 @@ namespace Rstats {
       Rstats::Integer length = v1->get_length();
       Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(length);
 
-      Rstats::Util::clear_warn();
+      Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
         try {
           v_out->set_value<Rstats::Logical>(
@@ -115,8 +115,8 @@ namespace Rstats {
           v_out->add_na_position(i);
         }
       }
-      if (Rstats::Util::get_warn()) {
-        Rstats::Util::print_warn_message();
+      if (Rstats::get_warn()) {
+        Rstats::print_warn_message();
       }
       
       v_out->merge_na_positions(v1->get_na_positions());

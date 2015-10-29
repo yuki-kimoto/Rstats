@@ -3,6 +3,8 @@
 // Rstats
 namespace Rstats {
 
+  static Rstats::Integer WARN = 0;
+
   REGEXP* pl_pregcomp (SV* sv_re, IV flag) {
     return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
   }
@@ -202,5 +204,39 @@ namespace Rstats {
     );
     
     return ret;
+  }
+
+  void clear_warn() {
+    WARN = 0;
+  }
+  void add_warn(Rstats::Integer warn_id) {
+    WARN |= warn_id;
+  }
+  
+  Rstats::Integer get_warn() {
+    return WARN;
+  }
+  
+  char* get_warn_message() {
+    if (Rstats::get_warn()) {
+      SV* sv_warn = Rstats::pl_new_sv_pv("Warning message:\n");
+      if (WARN & Rstats::WARN_NAN_PRODUCED) {
+        sv_catpv(sv_warn, "NaNs produced\n");
+      }
+      if (WARN & Rstats::WARN_IMAGINARY_PART_DISCARDED) {
+        sv_catpv(sv_warn, "imaginary parts discarded in coercion\n");
+      }
+      if (WARN & Rstats::WARN_NA_INTRODUCED) {
+        sv_catpv(sv_warn, "NAs introduced by coercion\n");
+      }        
+      return SvPV_nolen(sv_warn);
+    }
+    else {
+      return "Unexpected warning";
+    }
+  }
+  
+  void print_warn_message() {
+    warn(Rstats::get_warn_message());
   }
 }

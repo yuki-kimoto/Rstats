@@ -6,7 +6,8 @@ namespace Rstats {
     
     /* Note:
       In ElementFunction, croak method should't be called.
-      If you want to tell warnings, use add_warn function.
+      If you want to tell warnings, use Rstats::add_warn function.
+      Rstats::clear_warn function should't be called.
       If you want to tell NA introduced, throw Rstats::NaException.
     */
     
@@ -417,7 +418,7 @@ namespace Rstats {
     Rstats::Double acosh(Rstats::Double e1) {
       if (e1 >= 1) {
         if (Rstats::Util::is_Inf(e1)) {
-          Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+          Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
           return Rstats::Util::NaN();
         }
         else {
@@ -429,7 +430,7 @@ namespace Rstats {
         }
       }
       else {
-        Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+        Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
         return Rstats::Util::NaN();
       }
     }
@@ -439,11 +440,11 @@ namespace Rstats {
     // atanh
     Rstats::Complex atanh(Rstats::Complex e1) {
       if (e1 == Rstats::Complex(1, 0)) {
-        Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+        Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
         return Rstats::Complex(Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else if (e1 == Rstats::Complex(-1, 0)) {
-        Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+        Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
         return Rstats::Complex(-Rstats::Util::Inf(), Rstats::Util::NaN());
       }
       else {
@@ -458,7 +459,7 @@ namespace Rstats {
     }
     Rstats::Double atanh(Rstats::Double e1) {
       if (Rstats::Util::is_Inf(e1)) {
-        Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+        Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
         return Rstats::Util::NaN();
       }
       else {
@@ -472,7 +473,7 @@ namespace Rstats {
           return std::log((1 + e1) / (1 - e1)) / 2;
         }
         else {
-          Rstats::Util::add_warn(Rstats::WARN_NAN_PRODUCED);
+          Rstats::add_warn(Rstats::WARN_NAN_PRODUCED);
           return Rstats::Util::NaN();
         }
       }
@@ -747,7 +748,7 @@ namespace Rstats {
     }
     Rstats::Double as_double(Rstats::Complex e1) {
       if (e1.imag() != 0) {
-        Rstats::Util::add_warn(Rstats::WARN_IMAGINARY_PART_DISCARDED);
+        Rstats::add_warn(Rstats::WARN_IMAGINARY_PART_DISCARDED);
       }
       return e1.real();
     }
@@ -763,13 +764,13 @@ namespace Rstats {
         return value;
       }
       else {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
     }
     Rstats::Integer as_integer(Rstats::Complex e1) {
       if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag()) || Rstats::Util::is_Inf(e1.real()) || Rstats::Util::is_Inf(e1.imag())) {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {
@@ -778,7 +779,7 @@ namespace Rstats {
     }
     Rstats::Integer as_integer(Rstats::Double e1) {
       if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_Inf(e1)) {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {
@@ -800,13 +801,13 @@ namespace Rstats {
         }
       }
       else {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
     }
     Rstats::Logical as_logical(Rstats::Complex e1) {
       if (Rstats::Util::is_NaN(e1.real()) || Rstats::Util::is_NaN(e1.imag())) {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else if (e1.real() || e1.imag()) {
@@ -818,7 +819,7 @@ namespace Rstats {
     }
     Rstats::Logical as_logical(Rstats::Double e1) {
       if (Rstats::Util::is_NaN(e1)) {
-        Rstats::Util::add_warn(WARN_NA_INTRODUCED);
+        Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
       }
       else {

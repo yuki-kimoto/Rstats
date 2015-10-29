@@ -27,6 +27,10 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector* divide(Rstats::Vector* v1, Rstats::Vector* v2);
     template <class T_IN, class T_OUT>
+    Rstats::Vector* pow(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN, class T_OUT>
+    Rstats::Vector* atan2(Rstats::Vector* v1, Rstats::Vector* v2);
+    template <class T_IN, class T_OUT>
     Rstats::Vector* remainder(Rstats::Vector* v1, Rstats::Vector* v2);
     template <class T_IN, class T_OUT>
     Rstats::Vector* as_character(Rstats::Vector* v1);

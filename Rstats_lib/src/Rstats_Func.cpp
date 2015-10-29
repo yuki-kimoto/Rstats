@@ -211,16 +211,16 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r);
+      SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_character<Rstats::Character, Rstats::Character>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_character<Rstats::Complex, Rstats::Character>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
@@ -243,7 +243,7 @@ namespace Rstats {
           v_out->set_value<Rstats::Character>(i, sv_str);
         }
         v_out->merge_na_positions(v1->get_na_positions());
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
         // Factor
@@ -289,17 +289,17 @@ namespace Rstats {
         else {
           Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           Rstats::Vector* v_out = Rstats::VectorFunc::as_character<Rstats::Integer, Rstats::Character>(v1);
-          Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+          sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
         }
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_character<Rstats::Logical, Rstats::Character>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
         Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Character>(0);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else {
         croak("Error in as->character() : default method not implemented for type '%s'", type);
@@ -320,35 +320,35 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r);
+      SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_double<Rstats::Character, Rstats::Double>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_double<Rstats::Complex, Rstats::Double>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_double<Rstats::Double, Rstats::Double>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_double<Rstats::Integer, Rstats::Double>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_double<Rstats::Logical, Rstats::Double>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
         Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
         croak("Error in as->double() : default method not implemented for type '%s'", type);
@@ -365,35 +365,35 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r);
+      SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Character, Rstats::Complex>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Complex, Rstats::Complex>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Double, Rstats::Complex>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Integer, Rstats::Complex>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Logical, Rstats::Complex>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
         Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Complex>(0);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else {
         croak("Error in as->complex() : default method not implemented for type '%s'", type);
@@ -410,36 +410,36 @@ namespace Rstats {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r);
+      SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Character, Rstats::Integer>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Complex, Rstats::Integer>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Double value;
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Double, Rstats::Integer>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Integer, Rstats::Integer>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Logical, Rstats::Integer>(v1);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
         Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Integer>(0);
-        Rstats::Func::set_vector(sv_r, sv_x_out, v_out);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else {
         croak("Error in as->integer() : default method not implemented for type '%s'", type);

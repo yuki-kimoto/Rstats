@@ -155,8 +155,6 @@ namespace Rstats {
     SV* create_sv_value(SV*, SV*, Rstats::Integer);
     SV* create_sv_values(SV*, SV*);
 
-    SV* operate_binary(SV*, Rstats::Vector* (*func)(Rstats::Vector*, Rstats::Vector*), SV*, SV*);
-    
     template <class T>
     SV* new_vector(SV*);
     template <>
@@ -172,9 +170,6 @@ namespace Rstats {
     
     template <class T>
     SV* new_vector(SV* sv_r, Rstats::Vector* v1);
-    
-    template <class T_IN, class T_OUT>
-    SV* operate_binary(SV* sv_r, T_OUT (*func)(T_IN, T_IN), SV* sv_x1, SV* sv_x2);
   }
 }
 #include "Rstats_Func_impl.h"

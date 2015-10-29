@@ -73,7 +73,12 @@ namespace Rstats {
   }
   
   Rstats::Integer Vector::get_na_positions_length() {
-    return ((this->get_length() - 1) / Rstats::NA_POSITION_BIT_LENGTH) + 1;
+    if (this->get_length() == 0) {
+      return 0;
+    }
+    else {
+      return ((this->get_length() - 1) / Rstats::NA_POSITION_BIT_LENGTH) + 1;
+    }
   }
 
   void Vector::add_na_position(Rstats::Integer position) {

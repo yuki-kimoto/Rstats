@@ -13,13 +13,6 @@ namespace Rstats {
 
     SV* c_(SV* sv_r, SV* sv_elements) {
       
-      // Convert to array reference
-      if (SvOK(sv_elements) && !SvROK(sv_elements)) {
-        SV* sv_elements_tmp = sv_elements;
-        sv_elements = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_elements, sv_elements_tmp);
-      }
-      
       Rstats::Integer element_length = Rstats::pl_av_len(sv_elements);
       // Check type and length
       SV* sv_type_h = Rstats::pl_new_hvrv();
@@ -3752,18 +3745,18 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* to_object(SV* sv_r, SV* sv_x) {
+    SV* to_object(SV* sv_r, SV* sv_element) {
       
-      Rstats::Logical is_object = sv_isobject(sv_x) && sv_derived_from(sv_x, "Rstats::Object");
+      Rstats::Logical is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
       
       SV* sv_x1;
       if (is_object) {
-        sv_x1 = sv_x;
+        sv_x1 = sv_element;
       }
       else {
-        SV* sv_tmp = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_tmp, sv_x);
-        sv_x1 = Rstats::Func::c_(sv_r, sv_tmp);
+        SV* sv_elements = Rstats::pl_new_avrv();
+        Rstats::pl_av_push(sv_elements, sv_element);
+        sv_x1 = Rstats::Func::c_(sv_r, sv_elements);
       }
       
       return sv_x1;

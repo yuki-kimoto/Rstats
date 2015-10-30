@@ -3509,9 +3509,7 @@ namespace Rstats {
     SV* c_double(SV* sv_r, SV* sv_values) {
       
       if (!sv_derived_from(sv_values, "ARRAY")) {
-        SV* sv_values_av_ref = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_values_av_ref, sv_values);
-        sv_values = sv_values_av_ref;
+        croak("Invalid argment(c_double()");
       }
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
@@ -3548,9 +3546,7 @@ namespace Rstats {
 
     SV* c_complex(SV* sv_r, SV* sv_values) {
       if (!sv_derived_from(sv_values, "ARRAY")) {
-        SV* sv_values_av_ref = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_values_av_ref, sv_values);
-        sv_values = sv_values_av_ref;
+        croak("Invalid argment(c_complex()");
       }
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
@@ -3621,9 +3617,7 @@ namespace Rstats {
 
     SV* c_integer(SV* sv_r, SV* sv_values) {
       if (!sv_derived_from(sv_values, "ARRAY")) {
-        SV* sv_values_av_ref = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_values_av_ref, sv_values);
-        sv_values = sv_values_av_ref;
+        croak("Invalid argment(c_integer()");
       }
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
@@ -3650,9 +3644,7 @@ namespace Rstats {
 
     SV* c_logical(SV* sv_r, SV* sv_values) {
       if (!sv_derived_from(sv_values, "ARRAY")) {
-        SV* sv_values_av_ref = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_values_av_ref, sv_values);
-        sv_values = sv_values_av_ref;
+        croak("Invalid argment(c_logical()");
       }
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);

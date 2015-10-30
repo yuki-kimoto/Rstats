@@ -1,33 +1,113 @@
 namespace Rstats {
 
   template <class T>
-  Rstats::Vector* Vector::new_vector(Rstats::Integer length, T value) {
-    Rstats::Vector* v1 = new_vector<T>(length);
+  void Vector<T>::init_na_positions() {
+    if (this->na_positions != NULL) {
+      croak("na_postiions is already initialized");
+    }
+    if (this->get_length()) {
+      Rstats::Integer length = this->get_na_positions_length();
+      this->na_positions = new Rstats::NaPosition[length];
+      std::fill_n(this->na_positions, length, 0);
+    }
+  }
+  
+  template <class T>
+  Rstats::Integer Vector<T>::get_na_positions_length() {
+    if (this->get_length() == 0) {
+      return 0;
+    }
+    else {
+      return ((this->get_length() - 1) / Rstats::NA_POSITION_BIT_LENGTH) + 1;
+    }
+  }
+
+  template <class T>
+  void Vector<T>::add_na_position(Rstats::Integer position) {
+    if (this->get_na_positions() == NULL) {
+      this->init_na_positions();
+    }
+    
+    *(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
+      |= (1 << (position % Rstats::NA_POSITION_BIT_LENGTH));
+  }
+
+  template <class T>
+  Rstats::Logical Vector<T>::exists_na_position(Rstats::Integer position) {
+    if (this->get_na_positions() == NULL) {
+      return 0;
+    }
+    
+    return (*(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
+      & (1 << (position % Rstats::NA_POSITION_BIT_LENGTH)))
+      ? 1 : 0;
+  }
+
+  template <class T>
+  void Vector<T>::merge_na_positions(Rstats::NaPosition* na_positions) {
+    
+    if (na_positions == NULL) {
+      return;
+    }
+    
+    if (this->na_positions == NULL) {
+      this->init_na_positions();
+    }
+    
+    if (this->get_length()) {
+      for (Rstats::Integer i = 0; i < this->get_na_positions_length(); i++) {
+        *(this->get_na_positions() + i) |= *(na_positions + i);
+      }
+    }
+  }
+
+  template <class T>
+  Rstats::NaPosition* Vector<T>::get_na_positions() {
+    return this->na_positions;
+  }
+
+  template <class T>
+  Rstats::Integer Vector<T>::get_length() {
+    return this->length;
+  }
+
+  template <class T>
+  Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length) {
+    Rstats::Vector<T>* v1 = new T;
+    v1->values = new T[length];
+    v1->length = length;
+    v1->na_positions = NULL;
+    
+    return v1;
+  };
+  
+  template <class T>
+  Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length, T value) {
+    Rstats::Vector<T>* v1 = Rstats::Vector<T>::new_vector(length);
     for (Rstats::Integer i = 0; i < length; i++) {
-      v1->set_value<T>(i, value);
+      v1->set_value(i, value);
     }
     return v1;
   };
 
   template<class T>
-  void Vector::set_value(Rstats::Integer pos, T value) {
-    *(this->get_values<T>() + pos) = value;
+  void Vector<T>::set_value(Rstats::Integer pos, T value) {
+    *(this->get_values() + pos) = value;
   }
 
   template<class T>
-  T* Vector::get_values() {
-    return (T*)this->values;
+  T* Vector<T>::get_values() {
+    return this->values;
   }
   
   template <class T>
-  T Vector::get_value(Rstats::Integer pos) {
-    return *(this->get_values<T>() + pos);
+  T Vector<T>::get_value(Rstats::Integer pos) {
+    return *(this->get_values() + pos);
   }
 
   template <class T>
-  void Vector::delete_vector() {
-    T* values = this->get_values<T>();
-    delete[] values;
-    delete[] this->na_positions;
+  Vector<T>::~Vector() {
+    delete[] this->get_values();
+    delete[] this->get_na_positions;
   }
 }

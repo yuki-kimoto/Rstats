@@ -4,15 +4,19 @@
 #include "Rstats_ElementFunc.h"
 
 namespace Rstats {
+  
+  template <class T>
   class Vector {
     private:
     
-    Rstats::Type::Enum type;
     Rstats::NaPosition* na_positions;
     void* values;
     Rstats::Integer length;
     
     public:
+
+    static Rstats::Vector<T>* new_vector(Rstats::Integer);
+    static Rstats::Vector<T>* new_vector(Rstats::Integer length, T value);
 
     Rstats::Integer get_length();
     void init_na_positions();
@@ -22,39 +26,19 @@ namespace Rstats {
     Rstats::NaPosition* get_na_positions();
     Rstats::Integer get_na_positions_length();
     
-    ~Vector();
-
-    template<class T> // Specialized
-    static Rstats::Vector* new_vector(Rstats::Integer);
-    template <class T>
-    static Rstats::Vector* new_vector(Rstats::Integer length, T value);
-    
-    template<class T>
     T* get_values();
-    template<class T> // Rstats::Character is specialized
     void set_value(Rstats::Integer pos, T value); 
-    template <class T>
     T get_value(Rstats::Integer pos);
     
-    template <class T> // Rstats::Character is specialized
-    void delete_vector();
+    ~Vector();
   };
   template <>
-  void Vector::set_value<Rstats::Character>(Rstats::Integer pos, Rstats::Character value);
+  void Vector<Rstats::Character>::set_value(Rstats::Integer pos, Rstats::Character value);
   template <>
-  void Vector::delete_vector<Rstats::Character>();
+  Vector<Rstats::Character>::~Vector();
 
   template<>
-  Rstats::Vector* Vector::new_vector<Rstats::Double>(Rstats::Integer);
-  template<>
-  Rstats::Vector* Vector::new_vector<Rstats::Integer>(Rstats::Integer);
-  template<>
-  Rstats::Vector* Vector::new_vector<Rstats::Complex>(Rstats::Integer);
-  template<>
-  Rstats::Vector* Vector::new_vector<Rstats::Character>(Rstats::Integer);
-  template<>
-  Rstats::Vector* Vector::new_vector<Rstats::Logical>(Rstats::Integer);
-
+  Rstats::Vector<Rstats::Character>* Vector<Rstats::Character>::new_vector(Rstats::Integer);
 }
 #include "Rstats_Vector_impl.h"
 

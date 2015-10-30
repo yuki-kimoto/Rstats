@@ -4124,17 +4124,19 @@ namespace Rstats {
     }
 
     SV* decompose(SV* sv_r, SV* sv_x1) {
-      Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
       
-      SV* sv_decomposed_xs = Rstats::pl_new_avrv();
+      SV* sv_elements = Rstats::pl_new_avrv();
       
       Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (length > 0) {
       
-        av_extend(Rstats::pl_av_deref(sv_decomposed_xs), length);
+        av_extend(Rstats::pl_av_deref(sv_elements), length);
+        
+        char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-        if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character")) {
+        if (strEQ(type, "character")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::Vector::new_vector<Rstats::Character>(1, v1->get_value<Rstats::Character>(i));
@@ -4142,10 +4144,11 @@ namespace Rstats {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x_out);
+            Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
-        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "complex")) {
+        else if (strEQ(type, "complex")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::Vector::new_vector<Rstats::Complex>(1, v1->get_value<Rstats::Complex>(i));
@@ -4153,10 +4156,11 @@ namespace Rstats {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x_out);
+            Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
-        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")) {
+        else if (strEQ(type, "double")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::Vector::new_vector<Rstats::Double>(1, v1->get_value<Rstats::Double>(i));
@@ -4164,10 +4168,11 @@ namespace Rstats {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x_out);
+            Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
-        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer")) {
+        else if (strEQ(type, "integer")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::Vector::new_vector<Rstats::Integer>(1, v1->get_value<Rstats::Integer>(i));
@@ -4175,10 +4180,11 @@ namespace Rstats {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x_out);
+            Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
-        else if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
+        else if (strEQ(type, "logical")) {
+          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
               = Rstats::Vector::new_vector<Rstats::Logical>(1, v1->get_value<Rstats::Integer>(i));
@@ -4186,12 +4192,12 @@ namespace Rstats {
               v2->add_na_position(0);
             }
             SV* sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
-            Rstats::pl_av_push(sv_decomposed_xs, sv_x_out);
+            Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
       }
       
-      return sv_decomposed_xs;
+      return sv_elements;
     }
 
     SV* compose(SV* sv_r, SV* sv_type, SV* sv_elements)

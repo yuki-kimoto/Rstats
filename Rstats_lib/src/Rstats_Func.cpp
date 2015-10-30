@@ -13,16 +13,20 @@ namespace Rstats {
 
     SV* c_(SV* sv_r, SV* sv_elements) {
       
-      Rstats::Integer element_length = Rstats::pl_av_len(sv_elements);
+      void* v_out;
+      Rstats::Integer length = Rstats::pl_av_len(sv_elements);
+      
       // Check type and length
       SV* sv_type_h = Rstats::pl_new_hvrv();
-      Rstats::Integer length = 0;
-      for (Rstats::Integer i = 0; i < element_length; i++) {
+      Rstats::Integer total_length = 0;
+      for (Rstats::Integer i = 0; i < length; i++) {
         char* type;
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
         
-        if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {
-          length += Rstats::Func::get_length(sv_r, sv_element);
+        if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element))
+          || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))
+        ) {
+          total_length += Rstats::Func::get_length(sv_r, sv_element);
           type = Rstats::Func::get_type(sv_r, sv_element);
           Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
         }
@@ -38,40 +42,39 @@ namespace Rstats {
           else {
             Rstats::pl_hv_store(sv_type_h, "logical", Rstats::pl_new_sv_iv(1));
           }
-          length += 1;
+          total_length += 1;
         }
       }
-
 
       SV* sv_x1;
 
       // Decide type
       Rstats::Vector* v1;
       if (Rstats::pl_hv_exists(sv_type_h, "character")) {
-        v1 = Rstats::Vector::new_vector<Rstats::Character>(length);
+        v1 = Rstats::Vector::new_vector<Rstats::Character>(total_length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Character>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "complex")) {
-        v1 = Rstats::Vector::new_vector<Rstats::Complex>(length);
+        v1 = Rstats::Vector::new_vector<Rstats::Complex>(total_length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
-        v1 = Rstats::Vector::new_vector<Rstats::Double>(length);
+        v1 = Rstats::Vector::new_vector<Rstats::Double>(total_length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r, v1);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
-        v1 = Rstats::Vector::new_vector<Rstats::Integer>(length);
+        v1 = Rstats::Vector::new_vector<Rstats::Integer>(total_length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v1);
       }
       else {
-        v1 = Rstats::Vector::new_vector<Rstats::Logical>(length);
+        v1 = Rstats::Vector::new_vector<Rstats::Logical>(total_length);
         sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
       }
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       Rstats::Integer pos = 0;
-      for (Rstats::Integer i = 0; i < element_length; i++) {
+      for (Rstats::Integer i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
         SV* sv_x_tmp;
         if (to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_element)) || to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_element))) {

@@ -520,7 +520,6 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
       SV* sv_value;
-      Rstats::Vector* v2;
       if (strEQ(type, "character")) {
         Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
@@ -3912,7 +3911,6 @@ namespace Rstats {
           sv_index = &PL_sv_undef;
         }
         
-        Rstats::Vector* v2_names;
         SV* sv_x2_names;
         if (SvOK(sv_index)) {
           

@@ -10,7 +10,7 @@ namespace Rstats {
     private:
     
     Rstats::NaPosition* na_positions;
-    void* values;
+    T* values;
     Rstats::Integer length;
     
     public:

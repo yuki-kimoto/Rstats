@@ -1377,9 +1377,34 @@ MODULE = Rstats::Vector PACKAGE = Rstats::Vector
 SV* DESTROY(...)
   PPCODE:
 {
-  Rstats::Vector* self = Rstats::pl_object_unwrap<Rstats::Vector*>(ST(0), "Rstats::Vector");
-
-  delete self;
+  SV* sv_x = ST(0);
+  SV* sv_r = Rstats::pl_hv_fetch(sv_x, "r");
+  
+  char* type = Rstats::Func::get_type(sv_r, sv_x);
+  
+  if (strEQ(type, "character")) {
+    Rstats::Vector<Rstats::Character>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_x, "Rstats::Vector");
+    delete v;
+  }
+  else if (strEQ(type, "complex")) {
+    Rstats::Vector<Rstats::Complex>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Complex>*>(sv_x, "Rstats::Vector");
+    delete v;
+  }
+  else if (strEQ(type, "double")) {
+    Rstats::Vector<Rstats::Double>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Double>*>(sv_x, "Rstats::Vector");
+    delete v;
+  }
+  else if (strEQ(type, "integer")) {
+    Rstats::Vector<Rstats::Integer>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Integer>*>(sv_x, "Rstats::Vector");
+    delete v;
+  }
+  else if (strEQ(type, "logical")) {
+    Rstats::Vector<Rstats::Logical>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Logical>*>(sv_x, "Rstats::Vector");
+    delete v;
+  }
+  else {
+    croak("Error in DESTROY : Invalid type is set to Rstats::Vector");
+  }
 }
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util

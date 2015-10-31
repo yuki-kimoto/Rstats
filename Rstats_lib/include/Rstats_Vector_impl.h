@@ -108,6 +108,6 @@ namespace Rstats {
   template <class T>
   Vector<T>::~Vector() {
     delete[] this->get_values();
-    delete[] this->get_na_positions;
+    delete[] this->get_na_positions();
   }
 }

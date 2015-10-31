@@ -129,11 +129,15 @@ namespace Rstats {
     return sv_new_av_ref;
   }
 
-  void pl_hv_store(HV* hv, const char* key, SV* element) {
-    hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
+  SV** pl_hv_store(HV* hv, const char* key, SV* element) {
+    SV** ret = hv_store(hv, key, strlen(key), SvREFCNT_inc(element), FALSE);
+    if (ret == NULL) {
+      SvREFCNT_dec(element);
+    }
+    return ret;
   }
 
-  void pl_hv_store(SV* hv_ref, const char* key, SV* element) {
+  SV** pl_hv_store(SV* hv_ref, const char* key, SV* element) {
     HV* hv = pl_hv_deref(hv_ref);
     return pl_hv_store(hv, key, element);
   }

@@ -12,9 +12,9 @@ use Math::Trig ();
   # c_()
   {
     my $x1 = c_();
-    ok(r->is->null($x1));
+    my $x_tmp = r->is->null($x1);
+    ok($x_tmp);
   }
-    die;
   
   # c_(NULL)
   {

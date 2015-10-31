@@ -59,8 +59,8 @@ namespace Rstats {
   void pl_av_store(AV*, SSize_t, SV*);
   void pl_av_store(SV*, SSize_t, SV*);
   SV* pl_av_copy(SV*);
-  void pl_hv_store(HV*, const char*, SV*);
-  void pl_hv_store(SV*, const char* key, SV*);
+  SV** pl_hv_store(HV*, const char*, SV*);
+  SV** pl_hv_store(SV*, const char* key, SV*);
   void pl_av_push(AV*, SV*);
   void pl_av_push(SV*, SV*);
   SV* pl_av_pop(AV*);

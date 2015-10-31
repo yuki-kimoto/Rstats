@@ -2758,6 +2758,7 @@ sub bool {
   }
   
   my $type = $x1->get_type;
+  $DB::single = 1;
   my $value = $x1->value;
 
   my $is;

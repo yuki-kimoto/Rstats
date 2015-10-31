@@ -30,7 +30,9 @@ namespace Rstats {
 
     template <>
     void set_vector<Rstats::Logical>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Logical>* v1) {
+      
       SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Logical>*>(v1, "Rstats::Vector::Logical");
+      
       Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
     }
     
@@ -598,11 +600,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       SV* sv_values = Rstats::pl_new_avrv();
       if (!strEQ(type, "NULL")) {
-        
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        
         Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
-        
         for (Rstats::Integer i = 0; i < length; i++) {
           Rstats::pl_av_push(sv_values, Rstats::Func::create_sv_value(sv_r, sv_x1, i));
         }
@@ -3469,7 +3467,7 @@ namespace Rstats {
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "NULL");
       
       SV* sv_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-            
+      
       return sv_is;
     }
     
@@ -3821,7 +3819,7 @@ namespace Rstats {
       Rstats::Vector<Rstats::Logical>* v1 = Rstats::Vector<Rstats::Logical>::new_vector(1, 1);
       
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
-
+      
       return sv_x1;
     }
 

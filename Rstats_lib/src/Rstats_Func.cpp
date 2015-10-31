@@ -3745,13 +3745,22 @@ namespace Rstats {
       if (SvOK(sv_element)) {
         if (SvROK(sv_element)) {
           Rstats::Logical is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
-          sv_x_out = sv_element;
+          if (is_object) {
+            sv_x_out = sv_element;
+          }
+          else {
+            croak("Can't receive reference value except Rstats::Object object");
+          }
         }
         else {
-          SV* sv_elements = Rstats::pl_new_avrv();
-          Rstats::pl_av_push(sv_elements, sv_element);
-          sv_x_out = Rstats::Func::c_(sv_r, sv_elements);
-          
+          if (Rstats::Util::is_perl_number(sv_element)) {
+            Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(1, SvNV(sv_element));
+            sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
+          }
+          else {
+            Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Character>(1, Rstats::pl_new_sv_sv(sv_element));
+            sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
+          }
         }
       }
       else {

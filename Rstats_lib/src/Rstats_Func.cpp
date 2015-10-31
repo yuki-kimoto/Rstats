@@ -6,7 +6,7 @@ namespace Rstats {
 
     SV* length(SV* sv_r, SV* x1) {
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, x1);
-      Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Integer>(1, x1_length);
+      Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(1, x1_length);
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       return sv_x_out;
     }
@@ -42,7 +42,7 @@ namespace Rstats {
 
       // Decide type
       if (Rstats::pl_hv_exists(sv_type_h, "character")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Character>(total_length);
+        Rstats::Vector<Rstats::Character>* v_out = Rstats::Vector<Rstats::Character>::new_vector(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
@@ -50,14 +50,14 @@ namespace Rstats {
           if (!strEQ(type, "character")) {
             sv_element = Rstats::Func::as_character(sv_r, sv_element);
           }
-          Rstats::Vector* v1 =  Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Vector<Rstats::Character>* v1 =  Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_element);
           Rstats::Integer v1_length = v1->get_length();
           for (Rstats::Integer k = 0; k < v1_length; k++) {
             if (v1->exists_na_position(k)) {
               v_out->add_na_position(pos);
             }
             else {
-              v_out->set_value<Rstats::Character>(pos, v1->get_value<Rstats::Character>(k));
+              v_out->set_value(pos, v1->get_value(k));
             }
             pos++;
           }
@@ -65,7 +65,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "complex")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Complex>(total_length);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::Vector<Rstats::Complex>::new_vector(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
@@ -73,14 +73,14 @@ namespace Rstats {
           if (!strEQ(type, "complex")) {
             sv_element = Rstats::Func::as_complex(sv_r, sv_element);
           }
-          Rstats::Vector* v1 =  Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Vector<Rstats::Complex>* v1 =  Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_element);
           Rstats::Integer v1_length = v1->get_length();
           for (Rstats::Integer k = 0; k < v1_length; k++) {
             if (v1->exists_na_position(k)) {
               v_out->add_na_position(pos);
             }
             else {
-              v_out->set_value<Rstats::Complex>(pos, v1->get_value<Rstats::Complex>(k));
+              v_out->set_value(pos, v1->get_value(k));
             }
             pos++;
           }
@@ -88,7 +88,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(total_length);
+        Rstats::Vector<Rstats::Double>* v_out = Rstats::Vector<Rstats::Double>::new_vector(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
@@ -96,14 +96,14 @@ namespace Rstats {
           if (!strEQ(type, "double")) {
             sv_element = Rstats::Func::as_double(sv_r, sv_element);
           }
-          Rstats::Vector* v1 =  Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Vector<Rstats::Double>* v1 =  Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_element);
           Rstats::Integer v1_length = v1->get_length();
           for (Rstats::Integer k = 0; k < v1_length; k++) {
             if (v1->exists_na_position(k)) {
               v_out->add_na_position(pos);
             }
             else {
-              v_out->set_value<Rstats::Double>(pos, v1->get_value<Rstats::Double>(k));
+              v_out->set_value(pos, v1->get_value(k));
             }
             pos++;
           }
@@ -111,7 +111,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Integer>(total_length);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::Vector<Rstats::Integer>::new_vector(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
@@ -119,14 +119,14 @@ namespace Rstats {
           if (!strEQ(type, "integer")) {
             sv_element = Rstats::Func::as_integer(sv_r, sv_element);
           }
-          Rstats::Vector* v1 =  Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Vector<Rstats::Integer>* v1 =  Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_element);
           Rstats::Integer v1_length = v1->get_length();
           for (Rstats::Integer k = 0; k < v1_length; k++) {
             if (v1->exists_na_position(k)) {
               v_out->add_na_position(pos);
             }
             else {
-              v_out->set_value<Rstats::Integer>(pos, v1->get_value<Rstats::Integer>(k));
+              v_out->set_value(pos, v1->get_value(k));
             }
             pos++;
           }
@@ -134,7 +134,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(total_length);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
@@ -142,14 +142,14 @@ namespace Rstats {
           if (!strEQ(type, "logical")) {
             sv_element = Rstats::Func::as_logical(sv_r, sv_element);
           }
-          Rstats::Vector* v1 =  Rstats::Func::get_vector(sv_r, sv_element);
+          Rstats::Vector<Rstats::Logical>* v1 =  Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_element);
           Rstats::Integer v1_length = v1->get_length();
           for (Rstats::Integer k = 0; k < v1_length; k++) {
             if (v1->exists_na_position(k)) {
               v_out->add_na_position(pos);
             }
             else {
-              v_out->set_value<Rstats::Logical>(pos, v1->get_value<Rstats::Logical>(k));
+              v_out->set_value(pos, v1->get_value(k));
             }
             pos++;
           }

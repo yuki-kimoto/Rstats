@@ -153,10 +153,10 @@ namespace Rstats {
     SV* create_sv_values(SV*, SV*);
     
     template <class T>
-    void set_vector(SV*, SV*, Rstats::Vector<T>*);
+    void set_vector(SV* sv_r, SV* sv_x1, Rstats::Vector<T>* v1);
     
     template <class T>
-    Rstats::Vector<T>* get_vector(SV*, SV*);
+    Rstats::Vector<T>* get_vector(SV* sv_r, SV* sv_x1);
 
     template <class T>
     SV* new_vector(SV*);

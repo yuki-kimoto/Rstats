@@ -2758,7 +2758,6 @@ sub bool {
   }
   
   my $type = $x1->get_type;
-  $DB::single = 1;
   my $value = $x1->value;
 
   my $is;
@@ -3796,6 +3795,7 @@ sub set_array {
     }
   }
   
+  $DB::single = 1;
   my $x1_tmp = Rstats::Func::compose($r, $type, $x1_elements);
   $x1->vector($x1_tmp->vector);
   $x1->{type} = $x1_tmp->{type};

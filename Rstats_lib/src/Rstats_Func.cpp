@@ -4319,7 +4319,7 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
@@ -4341,7 +4341,7 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
@@ -4385,7 +4385,7 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);

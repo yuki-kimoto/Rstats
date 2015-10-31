@@ -2560,6 +2560,10 @@ sub inner_product {
   
   my ($x1, $x2) = @_;
   
+  if (Rstats::Func::is_null($r, $x1) || Rstats::Func::is_null($r, $x2)) {
+    Carp::croak "requires numeric/complex matrix/vector arguments";
+  }
+  
   # Convert to matrix
   $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))
     if Rstats::Func::is_vector($r, $x1);

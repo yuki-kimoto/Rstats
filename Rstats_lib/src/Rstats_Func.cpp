@@ -35,12 +35,10 @@ namespace Rstats {
       }
       
       SV* sv_x_out;
-      /*
       if (total_length == 0) {
         sv_x_out = Rstats::Func::new_NULL(sv_r);
         return sv_x_out;
       }
-      */
 
       // Decide type
       if (Rstats::pl_hv_exists(sv_type_h, "character")) {

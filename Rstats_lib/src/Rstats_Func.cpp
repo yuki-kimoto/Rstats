@@ -3742,17 +3742,22 @@ namespace Rstats {
       
       Rstats::Logical is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
       
-      SV* sv_x1;
-      if (is_object) {
-        sv_x1 = sv_element;
+      SV* sv_x_out;
+      if (SvOK(sv_element)) {
+        if (is_object) {
+          sv_x_out = sv_element;
+        }
+        else {
+          SV* sv_elements = Rstats::pl_new_avrv();
+          Rstats::pl_av_push(sv_elements, sv_element);
+          sv_x_out = Rstats::Func::c_(sv_r, sv_elements);
+        }        
       }
       else {
-        SV* sv_elements = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_elements, sv_element);
-        sv_x1 = Rstats::Func::c_(sv_r, sv_elements);
+        sv_x_out = Rstats::Func::new_NA(sv_r);
       }
       
-      return sv_x1;
+      return sv_x_out;
     }
 
     SV* is_numeric(SV* sv_r, SV* sv_x1) {

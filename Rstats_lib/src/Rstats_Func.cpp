@@ -3740,18 +3740,19 @@ namespace Rstats {
 
     SV* to_object(SV* sv_r, SV* sv_element) {
       
-      Rstats::Logical is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
       
       SV* sv_x_out;
       if (SvOK(sv_element)) {
-        if (is_object) {
+        if (SvROK(sv_element)) {
+          Rstats::Logical is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
           sv_x_out = sv_element;
         }
         else {
           SV* sv_elements = Rstats::pl_new_avrv();
           Rstats::pl_av_push(sv_elements, sv_element);
           sv_x_out = Rstats::Func::c_(sv_r, sv_elements);
-        }        
+          
+        }
       }
       else {
         sv_x_out = Rstats::Func::new_NA(sv_r);

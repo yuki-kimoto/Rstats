@@ -73,7 +73,7 @@ namespace Rstats {
 
   template <class T>
   Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length) {
-    Rstats::Vector<T>* v1 = new T;
+    Rstats::Vector<T>* v1 = new Rstats::Vector<T>;
     v1->values = new T[length];
     v1->length = length;
     v1->na_positions = NULL;

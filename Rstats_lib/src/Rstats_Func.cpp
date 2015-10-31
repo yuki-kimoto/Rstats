@@ -334,17 +334,17 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::as_double<Rstats::Integer, Rstats::Double>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::as_double<Rstats::Logical, Rstats::Double>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector<Rstats::Double>* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -365,31 +365,31 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Character, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::as_complex<Rstats::Character, Rstats::Complex>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::as_complex<Rstats::Complex, Rstats::Complex>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Double, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::as_complex<Rstats::Double, Rstats::Complex>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Integer, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::as_complex<Rstats::Integer, Rstats::Complex>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_complex<Rstats::Logical, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::as_complex<Rstats::Logical, Rstats::Complex>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Complex>(0);
+        Rstats::Vector<Rstats::Complex>* v_out = Rstats::Vector<Rstats::Complex>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
       }
       else {
@@ -410,31 +410,31 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Character, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Character, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Complex, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Complex, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Double, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Double, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Integer, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Integer, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_integer<Rstats::Logical, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Logical, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Integer>(0);
+        Rstats::Vector<Rstats::Integer>* v_out = Rstats::Vector<Rstats::Integer>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else {
@@ -455,31 +455,31 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "character")) {
         Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_logical<Rstats::Character, Rstats::Logical>(v1);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::as_logical<Rstats::Character, Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_logical<Rstats::Complex, Rstats::Logical>(v1);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::as_logical<Rstats::Complex, Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_logical<Rstats::Double, Rstats::Logical>(v1);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::as_logical<Rstats::Double, Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_logical<Rstats::Integer, Rstats::Logical>(v1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::as_logical<Rstats::Integer, Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v_out = Rstats::VectorFunc::as_logical<Rstats::Logical, Rstats::Logical>(v1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::as_logical<Rstats::Logical, Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -499,7 +499,7 @@ namespace Rstats {
       SV* sv_values = Rstats::pl_new_avrv();
       if (!strEQ(type, "NULL")) {
         
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
         
@@ -524,7 +524,7 @@ namespace Rstats {
           sv_value = &PL_sv_undef;
         }
         else {
-          sv_value = v1->get_value<Rstats::Character>(pos);
+          sv_value = v1->get_value(pos);
         }
       }
       else if (strEQ(type, "complex")) {
@@ -533,7 +533,7 @@ namespace Rstats {
           sv_value = &PL_sv_undef;
         }
         else {
-          Rstats::Complex z = v1->get_value<Rstats::Complex>(pos);
+          Rstats::Complex z = v1->get_value(pos);
           
           Rstats::Double re = z.real();
           SV* sv_re;
@@ -576,7 +576,7 @@ namespace Rstats {
           sv_value = &PL_sv_undef;
         }
         else {
-          Rstats::Double value = v1->get_value<Rstats::Double>(pos);
+          Rstats::Double value = v1->get_value(pos);
           if (std::isnan(value)) {
             sv_value = Rstats::pl_new_sv_pv("NaN");
           }
@@ -592,22 +592,22 @@ namespace Rstats {
         }
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        if (v1->exists_na_position(pos)) {
-          sv_value = &PL_sv_undef;
-        }
-        else {
-          Rstats::Integer value = v1->get_value<Rstats::Integer>(pos);
-          sv_value = Rstats::pl_new_sv_iv(value);
-        }
-      }
-      else if (strEQ(type, "logical")) {
         Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
         }
         else {
-          Rstats::Integer value = v1->get_value<Rstats::Integer>(pos);
+          Rstats::Integer value = v1->get_value(pos);
+          sv_value = Rstats::pl_new_sv_iv(value);
+        }
+      }
+      else if (strEQ(type, "logical")) {
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        if (v1->exists_na_position(pos)) {
+          sv_value = &PL_sv_undef;
+        }
+        else {
+          Rstats::Integer value = v1->get_value(pos);
           sv_value = Rstats::pl_new_sv_iv(value);
         }
       }
@@ -627,11 +627,11 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Complex>(v1->get_length());
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::Vector<Rstats::Complex>::new_vector(v1->get_length());
         Rstats::Complex v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Complex>(i);
-          v2->set_value<Rstats::Complex>(i, v2_total);
+          v2_total *= v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
@@ -639,42 +639,42 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Double>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total *= v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
           
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Integer>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total *= v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Logical>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total *= v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
@@ -693,11 +693,11 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Complex>(v1->get_length());
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::Vector<Rstats::Complex>::new_vector(v1->get_length());
         Rstats::Complex v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Complex>(i);
-          v2->set_value<Rstats::Complex>(i, v2_total);
+          v2_total += v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
@@ -705,42 +705,42 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Double>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total += v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
           
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Integer>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total += v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         Rstats::Double v2_total(0);
         for (Rstats::Logical i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Logical>(i);
-          v2->set_value<Rstats::Double>(i, v2_total);
+          v2_total += v1->get_value(i);
+          v2->set_value(i, v2_total);
         }
         
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
@@ -759,12 +759,12 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Complex>(1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::Vector<Rstats::Complex>::new_vector(1);
         Rstats::Complex v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Complex>(i);
+          v2_total += v1->get_value(i);
         }
-        v2->set_value<Rstats::Complex>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -775,12 +775,12 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1);
         Rstats::Double v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Double>(i);
+          v2_total += v1->get_value(i);
         }
-        v2->set_value<Rstats::Double>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -790,13 +790,13 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Integer>(1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(1);
         Rstats::Integer v2_total(0);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Integer>(i);
+          v2_total += v1->get_value(i);
         }
-        v2->set_value<Rstats::Integer>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -806,13 +806,13 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Integer>(1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(1);
         Rstats::Integer v2_total(0);
         for (Rstats::Logical i = 0; i < v1->get_length(); i++) {
-          v2_total += v1->get_value<Rstats::Logical>(i);
+          v2_total += v1->get_value(i);
         }
-        v2->set_value<Rstats::Integer>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Logical i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -822,7 +822,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Integer>(1, 0);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(1, 0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else {
@@ -842,12 +842,12 @@ namespace Rstats {
       SV* sv_x_out;
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Complex>(1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::Vector<Rstats::Complex>::new_vector(1);
         Rstats::Complex v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Complex>(i);
+          v2_total *= v1->get_value(i);
         }
-        v2->set_value<Rstats::Complex>(0, v2_total);
+        v2->set_value(0, v2_total);
         
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
@@ -859,12 +859,12 @@ namespace Rstats {
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1);
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Double>(i);
+          v2_total *= v1->get_value(i);
         }
-        v2->set_value<Rstats::Double>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -874,13 +874,13 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1);
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Integer>(i);
+          v2_total *= v1->get_value(i);
         }
-        v2->set_value<Rstats::Double>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -890,13 +890,13 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1);
         Rstats::Double v2_total(1);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2_total *= v1->get_value<Rstats::Logical>(i);
+          v2_total *= v1->get_value(i);
         }
-        v2->set_value<Rstats::Double>(0, v2_total);
+        v2->set_value(0, v2_total);
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
           if (v1->exists_na_position(i)) {
             v2->add_na_position(0);
@@ -906,7 +906,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1, 1);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1, 1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else {
@@ -926,7 +926,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -937,31 +937,31 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v2 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::equal<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::equal<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -985,7 +985,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -996,31 +996,31 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v2 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::not_equal<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::not_equal<Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::not_equal<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::not_equal<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::not_equal<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1044,7 +1044,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1055,8 +1055,8 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-          Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v2 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
@@ -1064,19 +1064,19 @@ namespace Rstats {
           croak("Error in > operator : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::more_than<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1100,7 +1100,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1111,7 +1111,7 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1120,19 +1120,19 @@ namespace Rstats {
           croak("Error in <= operator : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1156,7 +1156,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1167,7 +1167,7 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1176,19 +1176,19 @@ namespace Rstats {
           croak("Error in < operator : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::less_than<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1212,7 +1212,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1223,7 +1223,7 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "character")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Character>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1232,19 +1232,19 @@ namespace Rstats {
           croak("Error in <= operator : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1268,7 +1268,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1285,19 +1285,19 @@ namespace Rstats {
           croak("Error in & : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::And<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::And<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::And<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1321,7 +1321,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Logical>(0);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
       }
       else {
@@ -1338,19 +1338,19 @@ namespace Rstats {
           croak("Error in | : invalid comparison with complex values");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::Or<Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::Or<Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector* v_out = Rstats::VectorFunc::Or<Rstats::Logical>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
@@ -1374,7 +1374,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1385,27 +1385,27 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::add<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::add<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::add<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::add<Rstats::Integer, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::add<Rstats::Integer, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::add<Rstats::Logical, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::add<Rstats::Logical, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else {
@@ -1427,7 +1427,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1438,27 +1438,27 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::subtract<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::subtract<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::subtract<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::subtract<Rstats::Integer, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::subtract<Rstats::Integer, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::subtract<Rstats::Logical, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::subtract<Rstats::Logical, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else {
@@ -1480,7 +1480,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1494,19 +1494,19 @@ namespace Rstats {
           croak("Error in % : unimplemented complex operation");
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::remainder<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::remainder<Rstats::Integer, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::remainder<Rstats::Logical, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
@@ -1530,7 +1530,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1540,25 +1540,25 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::divide<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::divide<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::divide<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::divide<Rstats::Integer, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::divide<Rstats::Logical, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
@@ -1591,25 +1591,25 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::atan2<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::atan2<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::atan2<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::atan2<Rstats::Integer, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::atan2<Rstats::Logical, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
@@ -1633,7 +1633,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1643,25 +1643,25 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::pow<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::pow<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::pow<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::pow<Rstats::Integer, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::pow<Rstats::Logical, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
@@ -1685,7 +1685,7 @@ namespace Rstats {
       char* original_type1 = Rstats::Func::get_type(sv_r, sv_x1);
       char* original_type2 = Rstats::Func::get_type(sv_r, sv_x2);
       if (strEQ(original_type1, "NULL") || strEQ(original_type2, "NULL")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(0);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else {
@@ -1696,27 +1696,27 @@ namespace Rstats {
         
         char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
         if (strEQ(type1, "complex")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::multiply<Rstats::Complex, Rstats::Complex>(v1, v2);
+          Rstats::Vector<Rstats::Complex>* v_out = Rstats::VectorFunc::multiply<Rstats::Complex, Rstats::Complex>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v_out);
         }
         else if (strEQ(type1, "double")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
           Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::multiply<Rstats::Double, Rstats::Double>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
         else if (strEQ(type1, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::multiply<Rstats::Integer, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::multiply<Rstats::Integer, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else if (strEQ(type1, "logical")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           Rstats::Vector* v2 = Rstats::Func::get_vector(sv_r, sv_x2);
-          Rstats::Vector* v_out = Rstats::VectorFunc::multiply<Rstats::Logical, Rstats::Integer>(v1, v2);
+          Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::multiply<Rstats::Logical, Rstats::Integer>(v1, v2);
           sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
         }
         else {
@@ -1737,7 +1737,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::sin<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::sin<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1749,14 +1749,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sin<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sin<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1780,7 +1780,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::tanh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::tanh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1792,14 +1792,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::tanh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::tanh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1823,7 +1823,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::cos<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::cos<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1835,14 +1835,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::cos<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::cos<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1866,7 +1866,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::tan<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::tan<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1878,14 +1878,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::tan<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::tan<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1909,7 +1909,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::sinh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::sinh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1921,14 +1921,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sinh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sinh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1952,7 +1952,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::cosh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::cosh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -1964,14 +1964,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::cosh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::cosh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -1995,7 +1995,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::log<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::log<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2007,14 +2007,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2038,7 +2038,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::logb<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::logb<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2050,14 +2050,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::logb<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::logb<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2081,7 +2081,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::log10<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::log10<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2093,14 +2093,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log10<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log10<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2124,7 +2124,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::log2<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::log2<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2136,14 +2136,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log2<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::log2<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2167,7 +2167,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::acos<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::acos<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2179,14 +2179,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::acos<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::acos<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2210,7 +2210,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::acosh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::acosh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2222,14 +2222,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::acosh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::acosh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2253,7 +2253,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::asinh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::asinh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2265,14 +2265,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::asinh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::asinh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2296,7 +2296,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::atanh<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::atanh<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2308,14 +2308,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::atanh<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::atanh<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2339,7 +2339,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::Conj<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::Conj<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2351,14 +2351,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Conj<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Conj<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2382,7 +2382,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::asin<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::asin<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2394,14 +2394,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::asin<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::asin<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2425,7 +2425,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::atan<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::atan<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2437,14 +2437,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::atan<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::atan<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2468,7 +2468,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::sqrt<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::sqrt<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2480,14 +2480,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sqrt<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::sqrt<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2519,14 +2519,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::expm1<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::expm1<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2550,7 +2550,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::exp<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::exp<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2562,7 +2562,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::exp<Rstats::Integer, Rstats::Double>(v1);
         
@@ -2593,7 +2593,7 @@ namespace Rstats {
       if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Complex, Rstats::Complex>(v1);
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::VectorFunc::negate<Rstats::Complex, Rstats::Complex>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
@@ -2605,16 +2605,16 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Integer, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::VectorFunc::negate<Rstats::Integer, Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
-        Rstats::Vector* v2 = Rstats::VectorFunc::negate<Rstats::Logical, Rstats::Integer>(v1);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::VectorFunc::negate<Rstats::Logical, Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
@@ -2648,14 +2648,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Arg<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Arg<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2691,14 +2691,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::abs<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::abs<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2734,14 +2734,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Mod<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Mod<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2777,14 +2777,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Re<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Double>* v2 = Rstats::VectorFunc::Re<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2820,14 +2820,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Integer, Rstats::Double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::Im<Rstats::Logical, Rstats::Double>(v1);
         
@@ -2870,14 +2870,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_infinite<Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_infinite<Rstats::Logical>(v1);
         
@@ -2920,14 +2920,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_nan<Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_nan<Rstats::Logical>(v1);
         
@@ -2970,14 +2970,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_finite<Rstats::Integer>(v1);
         
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         
         Rstats::Vector* v2 = Rstats::VectorFunc::is_finite<Rstats::Logical>(v1);
         
@@ -3011,7 +3011,7 @@ namespace Rstats {
         Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
         
         if (x1_length != max_length) {
-          Rstats::Vector* v_length = Rstats::Vector::new_vector<Rstats::Double>(1, max_length);
+          Rstats::Vector* v_length = Rstats::Vector<Rstats::Double>::new_vector(1, max_length);
           SV* sv_x_length = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_length);
           Rstats::pl_av_push(
             sv_new_xs,
@@ -3144,43 +3144,43 @@ namespace Rstats {
         Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Character>(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Character>(i, v1->get_value<Rstats::Character>(i));
+          v2->set_value<Rstats::Character>(i, v1->get_value(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v2);
       }
       else if (strEQ(type, "complex")) {
         Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Complex>(v1->get_length());
+        Rstats::Vector<Rstats::Complex>* v2 = Rstats::Vector<Rstats::Complex>::new_vector(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Complex>(i, v1->get_value<Rstats::Complex>(i));
+          v2->set_value(i, v1->get_value(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Complex>(sv_r, v2);
       }
       else if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector::new_vector<Rstats::Double>(v1->get_length());
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Double>(i, v1->get_value<Rstats::Double>(i));
+          v2->set_value(i, v1->get_value(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Integer>(v1->get_length());
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Integer>(i, v1->get_value<Rstats::Integer>(i));
+          v2->set_value(i, v1->get_value(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Logical>(v1->get_length());
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+        Rstats::Vector* v2 = Rstats::Vector<Rstats::Logical>::new_vector(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v2->set_value<Rstats::Integer>(i, v1->get_value<Rstats::Integer>(i));
+          v2->set_value(i, v1->get_value(i));
         }
         v2->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
@@ -3213,7 +3213,7 @@ namespace Rstats {
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (!Rstats::Func::get_length(sv_r, sv_x_dim)) {
-        Rstats::Vector* v_dim = Rstats::Vector::new_vector<Rstats::Integer>(1, x1_length);
+        Rstats::Vector* v_dim = Rstats::Vector<Rstats::Integer>::new_vector(1, x1_length);
         sv_x_dim = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_dim);
       }
       Rstats::Integer dim_product = 1;
@@ -3407,7 +3407,7 @@ namespace Rstats {
       
       if (strEQ(Rstats::Func::get_type(sv_r, sv_x1), "logical")) {
         Rstats::Vector* v1 = get_vector(sv_r, sv_x1);
-        Rstats::Logical is = v1->get_value<Rstats::Integer>(0);
+        Rstats::Logical is = v1->get_value(0);
         return is;
       }
       else {
@@ -3418,7 +3418,7 @@ namespace Rstats {
     SV* pi (SV* sv_r) {
       Rstats::Double pi = Rstats::Util::pi();
       
-      Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(1, pi);
+      Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(1, pi);
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       
       return sv_x_out;
@@ -3518,24 +3518,24 @@ namespace Rstats {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Double>(length);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Double>::new_vector(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
         if (SvOK(sv_value)) {
           char* sv_value_str = SvPV_nolen(sv_value);
           if (strEQ(sv_value_str, "NaN")) {
-            v1->set_value<Rstats::Double>(i, NAN);
+            v1->set_value(i, NAN);
           }
           else if (strEQ(sv_value_str, "Inf")) {
-            v1->set_value<Rstats::Double>(i, INFINITY);
+            v1->set_value(i, INFINITY);
           }
           else if (strEQ(sv_value_str, "-Inf")) {
-            v1->set_value<Rstats::Double>(i, -(INFINITY));
+            v1->set_value(i, -(INFINITY));
           }
           else {
             Rstats::Double value = SvNV(sv_value);
-            v1->set_value<Rstats::Double>(i, value);
+            v1->set_value(i, value);
           }
         }
         else {
@@ -3555,7 +3555,7 @@ namespace Rstats {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Complex>(length);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Complex>::new_vector(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
@@ -3604,7 +3604,7 @@ namespace Rstats {
             im = 0;
           }
           
-          v1->set_value<Rstats::Complex>(
+          v1->set_value(
             i,
             Rstats::Complex(re, im)
           );
@@ -3626,12 +3626,12 @@ namespace Rstats {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Integer>(length);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Integer>::new_vector(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
         if (SvOK(sv_value)) {
-          v1->set_value<Rstats::Integer>(
+          v1->set_value(
             i,
             SvIV(sv_value)
           );
@@ -3653,12 +3653,12 @@ namespace Rstats {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_values);
       
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Logical>(length);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Logical>::new_vector(length);
       for (Rstats::Integer i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
         if (SvOK(sv_value)) {
-          v1->set_value<Rstats::Integer>(
+          v1->set_value(
             i,
             SvIV(sv_value)
           );
@@ -3685,7 +3685,7 @@ namespace Rstats {
     }
     
     SV* new_NA(SV* sv_r) {
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Logical>(1, 0);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Logical>::new_vector(1, 0);
       v1->add_na_position(0);
 
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
@@ -3694,7 +3694,7 @@ namespace Rstats {
     }
 
     SV* new_NaN(SV* sv_r) {
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Double>(1, NAN);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Double>::new_vector(1, NAN);
       
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r, v1);
       
@@ -3702,7 +3702,7 @@ namespace Rstats {
     }
 
     SV* new_Inf(SV* sv_r) {
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Double>(1, INFINITY);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Double>::new_vector(1, INFINITY);
       
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Double>(sv_r, v1);
       
@@ -3710,7 +3710,7 @@ namespace Rstats {
     }
 
     SV* new_FALSE(SV* sv_r) {
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Logical>(1, 0);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Logical>::new_vector(1, 0);
       
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
       
@@ -3718,7 +3718,7 @@ namespace Rstats {
     }
 
     SV* new_TRUE(SV* sv_r) {
-      Rstats::Vector* v1 = Rstats::Vector::new_vector<Rstats::Logical>(1, 1);
+      Rstats::Vector* v1 = Rstats::Vector<Rstats::Logical>::new_vector(1, 1);
       
       SV* sv_x1 = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v1);
 
@@ -3741,7 +3741,7 @@ namespace Rstats {
         }
         else {
           if (Rstats::Util::is_perl_number(sv_element)) {
-            Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Double>(1, SvNV(sv_element));
+            Rstats::Vector* v_out = Rstats::Vector<Rstats::Double>::new_vector(1, SvNV(sv_element));
             sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
           }
           else {
@@ -3973,17 +3973,17 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::is_na<Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         Rstats::Vector* v2 = Rstats::VectorFunc::is_na<Rstats::Logical>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
       }
       else if (strEQ(type, "NULL")) {
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Logical>(0, 0);
+        Rstats::Vector* v2 = Rstats::Vector<Rstats::Logical>::new_vector(0, 0);
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v2);
         warn("Warning message:\nIn is->na(NULL) : is->na() applied to non-(list or vector) of type 'NULL'\n");
       }
@@ -4060,7 +4060,7 @@ namespace Rstats {
       
       Rstats::Logical match = 0;
       for (Rstats::Integer i = 0; i < v_classes_length; i++) {
-        SV* sv_class = v_classes->get_value<Rstats::Character>(i);
+        SV* sv_class = v_classes->get_value(i);
         if (strEQ(SvPV_nolen(sv_class), "factor")) {
           match = 1;
           break;
@@ -4078,7 +4078,7 @@ namespace Rstats {
       
       Rstats::Logical match = 0;
       for (Rstats::Integer i = 0; i < v_classes_length; i++) {
-        SV* sv_class = v_classes->get_value<Rstats::Character>(i);
+        SV* sv_class = v_classes->get_value(i);
         if (strEQ(SvPV_nolen(sv_class), "ordered")) {
           match = 1;
           break;
@@ -4103,7 +4103,7 @@ namespace Rstats {
       }
       else {
         Rstats::Integer length = Rstats::Func::get_length(sv_r, sv_x1);
-        Rstats::Vector* v2 = Rstats::Vector::new_vector<Rstats::Double>(1, length);
+        Rstats::Vector<Rstats::Double>* v2 = Rstats::Vector<Rstats::Double>::new_vector(1, length);
         SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v2);
         return sv_x_out;
       }
@@ -4125,7 +4125,7 @@ namespace Rstats {
           Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::Vector::new_vector<Rstats::Character>(1, v1->get_value<Rstats::Character>(i));
+              = Rstats::Vector::new_vector<Rstats::Character>(1, v1->get_value(i));
             if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
@@ -4137,7 +4137,7 @@ namespace Rstats {
           Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::Vector::new_vector<Rstats::Complex>(1, v1->get_value<Rstats::Complex>(i));
+              = Rstats::Vector<Rstats::Complex>::new_vector(1, v1->get_value(i));
             if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
@@ -4149,7 +4149,7 @@ namespace Rstats {
           Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::Vector::new_vector<Rstats::Double>(1, v1->get_value<Rstats::Double>(i));
+              = Rstats::Vector<Rstats::Double>::new_vector(1, v1->get_value(i));
             if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
@@ -4158,10 +4158,10 @@ namespace Rstats {
           }
         }
         else if (strEQ(type, "integer")) {
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::Vector::new_vector<Rstats::Integer>(1, v1->get_value<Rstats::Integer>(i));
+              = Rstats::Vector<Rstats::Integer>::new_vector(1, v1->get_value(i));
             if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
@@ -4170,10 +4170,10 @@ namespace Rstats {
           }
         }
         else if (strEQ(type, "logical")) {
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector* v2
-              = Rstats::Vector::new_vector<Rstats::Logical>(1, v1->get_value<Rstats::Integer>(i));
+              = Rstats::Vector<Rstats::Logical>::new_vector(1, v1->get_value(i));
             if (v1->exists_na_position(i)) {
               v2->add_na_position(0);
             }
@@ -4200,13 +4200,13 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
           
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value<Rstats::Character>(i, v1->get_value<Rstats::Character>(0));
+            v_out->set_value<Rstats::Character>(i, v1->get_value(0));
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4221,13 +4221,13 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-           v_out->set_value<Rstats::Complex>(i, v1->get_value<Rstats::Complex>(0));
+           v_out->set_value(i, v1->get_value(0));
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4243,13 +4243,13 @@ namespace Rstats {
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value<Rstats::Double>(i, v1->get_value<Rstats::Double>(0));
+            v_out->set_value(i, v1->get_value(0));
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4258,20 +4258,20 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        Rstats::Vector* v_out = Rstats::Vector::new_vector<Rstats::Integer>(len);
+        Rstats::Vector* v_out = Rstats::Vector<Rstats::Integer>::new_vector(len);
         Rstats::Integer* values = v_out->get_values<Rstats::Integer>();
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value<Rstats::Integer>(i, v1->get_value<Rstats::Integer>(0));
+            v_out->set_value(i, v1->get_value(0));
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4280,20 +4280,20 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(len);
+        Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(len);
         Rstats::Logical* values = v_out->get_values<Rstats::Logical>();
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
             sv_x1 = Rstats::Func::new_NA(sv_r);
           }
-          Rstats::Vector* v1 = Rstats::Func::get_vector(sv_r, sv_x1);
+          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
 
           if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value<Rstats::Logical>(i, v1->get_value<Rstats::Logical>(0));
+            v_out->set_value(i, v1->get_value(0));
           }
         }
         

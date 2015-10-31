@@ -8,9 +8,6 @@
 namespace Rstats {
   namespace Func {
 
-    void set_vector(SV*, SV*, Rstats::Vector*);
-    Rstats::Vector* get_vector(SV*, SV*);
-
     SV* to_object(SV*, SV*);
 
     SV* new_NULL(SV*); /* r->NULL */
@@ -154,6 +151,12 @@ namespace Rstats {
 
     SV* create_sv_value(SV*, SV*, Rstats::Integer);
     SV* create_sv_values(SV*, SV*);
+    
+    template <class T>
+    void set_vector(SV*, SV*, Rstats::Vector<T>*);
+    
+    template <class T>
+    Rstats::Vector<T>* get_vector(SV*, SV*);
 
     template <class T>
     SV* new_vector(SV*);
@@ -169,7 +172,7 @@ namespace Rstats {
     SV* new_vector<Rstats::Logical>(SV*);
     
     template <class T>
-    SV* new_vector(SV* sv_r, Rstats::Vector* v1);
+    SV* new_vector(SV* sv_r, Rstats::Vector<T>* v1);
   }
 }
 #include "Rstats_Func_impl.h"

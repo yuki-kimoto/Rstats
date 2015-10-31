@@ -3674,23 +3674,6 @@ namespace Rstats {
       return sv_x1;
     }
 
-    void set_vector(SV* sv_r, SV* sv_a1, Rstats::Vector* v1) {
-      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector*>(v1, "Rstats::Vector");
-      Rstats::pl_hv_store(sv_a1, "vector", sv_vector);
-    }
-
-    Rstats::Vector* get_vector(SV* sv_r, SV* sv_a1) {
-      SV* sv_vector = Rstats::pl_hv_fetch(sv_a1, "vector");
-      
-      if (SvOK(sv_vector)) {
-        Rstats::Vector* vector = Rstats::pl_object_unwrap<Rstats::Vector*>(sv_vector, "Rstats::Vector");
-        return vector;
-      }
-      else {
-        return NULL;
-      }
-    }
-
     SV* new_NULL(SV* sv_r) {
       
       SV* sv_x1 = Rstats::pl_new_hvrv();

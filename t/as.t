@@ -4,6 +4,21 @@ use warnings;
 
 use Rstats;
 
+# array upgrade mode
+{
+  # array decide mode - complex
+  {
+    my $x0 = r->complex(3, 4);
+    my $x0_1 = c_(1, $x0);
+    my $x1 = array($x0_1);
+    is($x1->values->[0]->{re}, 1);
+    is($x1->values->[0]->{im}, 0);
+    is($x1->values->[1]->{re}, 3);
+    is($x1->values->[1]->{im}, 4);
+    ok(r->is->complex($x1));
+  }
+}
+
 # as->integer
 {
   # as->integer - NA
@@ -453,21 +468,6 @@ use Rstats;
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
-  }
-}
-
-# array upgrade mode
-{
-  # array decide mode - complex
-  {
-    my $x0 = r->complex(3, 4);
-    my $x0_1 = c_(1, $x0);
-    my $x1 = array($x0_1);
-    is($x1->values->[0]->{re}, 1);
-    is($x1->values->[0]->{im}, 0);
-    is($x1->values->[1]->{re}, 3);
-    is($x1->values->[1]->{im}, 4);
-    ok(r->is->complex($x1));
   }
 }
 

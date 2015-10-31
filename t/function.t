@@ -7,6 +7,59 @@ use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
 
+# c_
+{
+  # c_(1, 3 + 4*i_);
+  {
+    my $x1 =  c_(1, r->complex(3, 4));
+    ok(r->is->complex($x1));
+    is($x1->values->[0]->{re}, 1);
+    is($x1->values->[0]->{im}, 0);
+    is($x1->values->[1]->{re}, 3);
+    is($x1->values->[1]->{im}, 4);
+  }
+
+  # c_("a", "b")
+  {
+    my $x1 = c_("a", "b");
+    ok(r->is->character($x1));
+    is_deeply($x1->values, ["a", "b"]);
+  }
+
+  # c_([1, 2, 3])
+  {
+    my $x1 = c_([1, 2, 3]);
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # c_(c_(1, 2, 3))
+  {
+    my $x1 = c_(c_(1, 2, 3));
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # c_(1, 2, c_(3, 4, 5))
+  {
+    my $x1 = c_(1, 2, c_(3, 4, 5));
+    is_deeply($x1->values, [1, 2, 3, 4, 5]);
+  }
+
+  # c_ - append (array)
+  {
+    my $x1 = c_(c_(1, 2), 3, 4);
+    is_deeply($x1->values, [1, 2, 3, 4]);
+  }
+  
+  # c_ - append to original vector
+  {
+    my $x1 = c_(1, 2, 3);
+    $x1->at(r->length($x1)->value + 1)->set(6);
+    is_deeply($x1->values, [1, 2, 3, 6]);
+  }
+}
+
 # NULL
 {
   my $x1 = r->NULL;
@@ -59,34 +112,6 @@ use Math::Trig ();
   {
     my $x1 = list(1, 2);
     is_deeply($x1->class->values, ['list']);
-  }
-}
-
-# c
-{
-  # c_("a", "b")
-  {
-    my $x1 = c_("a", "b");
-    is_deeply($x1->values, ["a", "b"]);
-  }
-
-  # c_([1, 2, 3])
-  {
-    my $x1 = c_([1, 2, 3]);
-    is(r->typeof($x1)->value, 'double');
-    is_deeply($x1->values, [1, 2, 3]);
-  }
-  
-  # c_(c_(1, 2, 3))
-  {
-    my $x1 = c_(c_(1, 2, 3));
-    is_deeply($x1->values, [1, 2, 3]);
-  }
-  
-  # c_(1, 2, c_(3, 4, 5))
-  {
-    my $x1 = c_(1, 2, c_(3, 4, 5));
-    is_deeply($x1->values, [1, 2, 3, 4, 5]);
   }
 }
 
@@ -496,19 +521,6 @@ use Math::Trig ();
     my $x1 = c_(2, 3, 4, 7, 9);
     my $var = r->var($x1);
     is($var->value, 8.5);
-  }
-  
-  # c_ - append (array)
-  {
-    my $x1 = c_(c_(1, 2), 3, 4);
-    is_deeply($x1->values, [1, 2, 3, 4]);
-  }
-  
-  # c_ - append to original vector
-  {
-    my $x1 = c_(1, 2, 3);
-    $x1->at(r->length($x1)->value + 1)->set(6);
-    is_deeply($x1->values, [1, 2, 3, 6]);
   }
   
   # numeric

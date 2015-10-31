@@ -26,7 +26,6 @@ sub factor {
   
   # default - levels
   unless (defined $x_levels) {
-    $DB::single = 1;
     $x_levels = Rstats::Func::sort($r, unique($r, $x1), {'na.last' => Rstats::Func::TRUE($r)});
   }
   
@@ -233,6 +232,7 @@ sub data_frame {
 sub matrix {
   my $r = shift;
   
+  
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = Rstats::Func::args_array($r, ['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
@@ -259,9 +259,11 @@ sub matrix {
   }
   elsif (!defined $nrow) {
     $nrow = int($x1_length / $ncol);
+    $nrow ||= 1;
   }
   elsif (!defined $ncol) {
     $ncol = int($x1_length / $nrow);
+    $ncol ||= 1;
   }
   my $length = $nrow * $ncol;
   
@@ -1066,7 +1068,6 @@ sub sub {
         $x =~ s/$pattern/$replacement/i;
       }
       else {
-        $DB::single = 1;
         $x =~ s/$pattern/$replacement/;
       }
       push @$x2_values, "$x";
@@ -2558,6 +2559,10 @@ sub inner_product {
   my $r = shift;
   
   my ($x1, $x2) = @_;
+  
+  if (Rstats::Func::is_null($r, $x1) || Rstats::Func::is_null($r, $x2)) {
+    Carp::croak "requires numeric/complex matrix/vector arguments";
+  }
   
   # Convert to matrix
   $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))

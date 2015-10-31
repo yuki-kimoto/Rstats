@@ -7,18 +7,14 @@ use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
 
-# NULL
-{
-  my $x1 = r->NULL;
-  is_deeply($x1->values, []);
-  is("$x1", 'NULL');
-  $x1->at(3);
-  $x1->set(5);
-  is_deeply($x1->values, [undef, undef, 5]);
-}
-
 # class
 {
+  # class - matrix
+  {
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->class->values, ['matrix']);
+  }
+
   # class - data frame
   {
     my $x1 = data_frame(sex => c_(1, 2));
@@ -31,12 +27,6 @@ use Math::Trig ();
     is_deeply($x1->class->values, ['numeric']);
   }
   
-  # class - matrix
-  {
-    my $x1 = matrix(2, 2);
-    is_deeply($x1->class->values, ['matrix']);
-  }
-
   # class - array
   {
     my $x1 = array(C_('1:24'), c_(4, 3, 2));
@@ -62,24 +52,76 @@ use Math::Trig ();
   }
 }
 
-# c
+# c_
 {
+  # c_()
+  {
+    my $x1 = c_();
+    ok(r->is->null($x1));
+  }
+  
+  # c_(NULL)
+  {
+    my $x1 = c_(NULL);
+    ok(r->is->null($x1));
+  }
+  
+  # c_(1, 2, 3, NULL)
+  {
+    my $x1 = c_(1, 2, 3);
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # c_(T_, F_);
+  {
+    my $x1 = c_(T_, F_);
+    ok(r->is->logical($x1));
+    is_deeply($x1->values, [1, 0]);
+  }
+
+  # c_(T_, r->as->integer(2));
+  {
+    my $x1 = c_(T_, r->as->integer(2));
+    ok(r->is->integer($x1));
+    is_deeply($x1->values, [1, 2]);
+  }
+
+  # c_(1, r->as->integer(2));
+  {
+    my $x1 = c_(1, r->as->integer(2));
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2]);
+  }
+    
+  # c_(1, 3 + 4*i_);
+  {
+    my $x1 =  c_(1, r->complex(3, 4));
+    ok(r->is->complex($x1));
+    is($x1->values->[0]->{re}, 1);
+    is($x1->values->[0]->{im}, 0);
+    is($x1->values->[1]->{re}, 3);
+    is($x1->values->[1]->{im}, 4);
+  }
+
   # c_("a", "b")
   {
     my $x1 = c_("a", "b");
+    ok(r->is->character($x1));
     is_deeply($x1->values, ["a", "b"]);
   }
 
   # c_([1, 2, 3])
   {
     my $x1 = c_([1, 2, 3]);
-    is(r->typeof($x1)->value, 'double');
+    ok(r->is->double($x1));
     is_deeply($x1->values, [1, 2, 3]);
   }
   
   # c_(c_(1, 2, 3))
   {
     my $x1 = c_(c_(1, 2, 3));
+    ok(r->is->double($x1));
     is_deeply($x1->values, [1, 2, 3]);
   }
   
@@ -88,6 +130,29 @@ use Math::Trig ();
     my $x1 = c_(1, 2, c_(3, 4, 5));
     is_deeply($x1->values, [1, 2, 3, 4, 5]);
   }
+
+  # c_ - append (array)
+  {
+    my $x1 = c_(c_(1, 2), 3, 4);
+    is_deeply($x1->values, [1, 2, 3, 4]);
+  }
+  
+  # c_ - append to original vector
+  {
+    my $x1 = c_(1, 2, 3);
+    $x1->at(r->length($x1)->value + 1)->set(6);
+    is_deeply($x1->values, [1, 2, 3, 6]);
+  }
+}
+
+# NULL
+{
+  my $x1 = r->NULL;
+  is_deeply($x1->values, []);
+  is("$x1", 'NULL');
+  $x1->at(3);
+  $x1->set(5);
+  is_deeply($x1->values, [undef, undef, 5]);
 }
 
 # C_
@@ -496,19 +561,6 @@ use Math::Trig ();
     my $x1 = c_(2, 3, 4, 7, 9);
     my $var = r->var($x1);
     is($var->value, 8.5);
-  }
-  
-  # c_ - append (array)
-  {
-    my $x1 = c_(c_(1, 2), 3, 4);
-    is_deeply($x1->values, [1, 2, 3, 4]);
-  }
-  
-  # c_ - append to original vector
-  {
-    my $x1 = c_(1, 2, 3);
-    $x1->at(r->length($x1)->value + 1)->set(6);
-    is_deeply($x1->values, [1, 2, 3, 6]);
   }
   
   # numeric

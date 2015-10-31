@@ -797,7 +797,6 @@ SV* c_character(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-  
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }
@@ -819,7 +818,6 @@ SV* c_double(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-  
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }
@@ -841,7 +839,6 @@ SV* c_complex(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-  
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }
@@ -863,7 +860,6 @@ SV* c_integer(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-  
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }
@@ -885,7 +881,6 @@ SV* c_logical(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-  
     for (IV i = 1; i < items; i++) {
       Rstats::pl_av_push(sv_values, ST(i));
     }

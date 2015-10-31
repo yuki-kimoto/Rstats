@@ -21,6 +21,13 @@ use Rstats;
 # matrix
 {
   
+  # matrix - matrix(2, 2);
+  {
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->values, [2, 2]);
+    is_deeply($x1->dim->values, [2, 1]);
+  }
+  
   # matrix - byrow
   {
     my $m1 = matrix(C_('1:12'), 3, 4, {byrow => 1});

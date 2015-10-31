@@ -26,7 +26,6 @@ sub factor {
   
   # default - levels
   unless (defined $x_levels) {
-    $DB::single = 1;
     $x_levels = Rstats::Func::sort($r, unique($r, $x1), {'na.last' => Rstats::Func::TRUE($r)});
   }
   
@@ -1066,7 +1065,6 @@ sub sub {
         $x =~ s/$pattern/$replacement/i;
       }
       else {
-        $DB::single = 1;
         $x =~ s/$pattern/$replacement/;
       }
       push @$x2_values, "$x";

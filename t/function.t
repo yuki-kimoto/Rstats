@@ -9,6 +9,20 @@ use Math::Trig ();
 
 # c_
 {
+=pod
+  # c_(NULL)
+  {
+    my $x1 = c_();
+    ok(r->is->null($x1));
+  }
+  
+  # c_(NULL)
+  {
+    my $x1 = c_(NULL);
+    ok(r->is->null($x1));
+  }
+=cut
+
   # c_(1, 3 + 4*i_);
   {
     my $x1 =  c_(1, r->complex(3, 4));

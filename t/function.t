@@ -7,51 +7,6 @@ use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
 
-# class
-{
-  # class - matrix
-  {
-    my $x1 = matrix(2, 2);
-    is_deeply($x1->class->values, ['matrix']);
-  }
-
-  # class - data frame
-  {
-    my $x1 = data_frame(sex => c_(1, 2));
-    is_deeply($x1->class->values, ['data.frame']);
-  }
-
-  # class - vector, numeric
-  {
-    my $x1 = c_(1, 2);
-    is_deeply($x1->class->values, ['numeric']);
-  }
-  
-  # class - array
-  {
-    my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    is_deeply($x1->class->values, ['array']);
-  }
-  
-  # class - factor
-  {
-    my $x1 = factor(c_(1, 2, 3));
-    is_deeply($x1->class->values, ['factor']);
-  }
-  
-  # class - factor, ordered
-  {
-    my $x1 = ordered(c_(1, 2, 3));
-    is_deeply($x1->class->values, ['factor', 'ordered']);
-  }
-  
-  # class - list
-  {
-    my $x1 = list(1, 2);
-    is_deeply($x1->class->values, ['list']);
-  }
-}
-
 # c_
 {
   # c_()
@@ -59,6 +14,7 @@ use Math::Trig ();
     my $x1 = c_();
     ok(r->is->null($x1));
   }
+    die;
   
   # c_(NULL)
   {
@@ -142,6 +98,51 @@ use Math::Trig ();
     my $x1 = c_(1, 2, 3);
     $x1->at(r->length($x1)->value + 1)->set(6);
     is_deeply($x1->values, [1, 2, 3, 6]);
+  }
+}
+
+# class
+{
+  # class - matrix
+  {
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->class->values, ['matrix']);
+  }
+
+  # class - data frame
+  {
+    my $x1 = data_frame(sex => c_(1, 2));
+    is_deeply($x1->class->values, ['data.frame']);
+  }
+
+  # class - vector, numeric
+  {
+    my $x1 = c_(1, 2);
+    is_deeply($x1->class->values, ['numeric']);
+  }
+  
+  # class - array
+  {
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    is_deeply($x1->class->values, ['array']);
+  }
+  
+  # class - factor
+  {
+    my $x1 = factor(c_(1, 2, 3));
+    is_deeply($x1->class->values, ['factor']);
+  }
+  
+  # class - factor, ordered
+  {
+    my $x1 = ordered(c_(1, 2, 3));
+    is_deeply($x1->class->values, ['factor', 'ordered']);
+  }
+  
+  # class - list
+  {
+    my $x1 = list(1, 2);
+    is_deeply($x1->class->values, ['list']);
   }
 }
 

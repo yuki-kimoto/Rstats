@@ -1372,40 +1372,61 @@ SV* upgrade_length(...)
   XSRETURN(1);
 }
 
-MODULE = Rstats::Vector PACKAGE = Rstats::Vector
+MODULE = Rstats::Vector::Character PACKAGE = Rstats::Vector::Character
 
 SV* DESTROY(...)
   PPCODE:
 {
-  SV* sv_x = ST(0);
-  SV* sv_r = Rstats::pl_hv_fetch(sv_x, "r");
-  
-  char* type = Rstats::Func::get_type(sv_r, sv_x);
-  
-  if (strEQ(type, "character")) {
-    Rstats::Vector<Rstats::Character>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_x, "Rstats::Vector");
-    delete v;
-  }
-  else if (strEQ(type, "complex")) {
-    Rstats::Vector<Rstats::Complex>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Complex>*>(sv_x, "Rstats::Vector");
-    delete v;
-  }
-  else if (strEQ(type, "double")) {
-    Rstats::Vector<Rstats::Double>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Double>*>(sv_x, "Rstats::Vector");
-    delete v;
-  }
-  else if (strEQ(type, "integer")) {
-    Rstats::Vector<Rstats::Integer>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Integer>*>(sv_x, "Rstats::Vector");
-    delete v;
-  }
-  else if (strEQ(type, "logical")) {
-    Rstats::Vector<Rstats::Logical>* v = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Logical>*>(sv_x, "Rstats::Vector");
-    delete v;
-  }
-  else {
-    croak("Error in DESTROY : Invalid type is set to Rstats::Vector");
-  }
+  SV* sv_v = ST(0);
+  Rstats::Vector<Rstats::Character>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_v, "Rstats::Vector::Character");
+  delete v;
 }
+
+MODULE = Rstats::Vector::Complex PACKAGE = Rstats::Vector::Complex
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  SV* sv_v = ST(0);
+  Rstats::Vector<Rstats::Complex>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Complex>*>(sv_v, "Rstats::Vector::Complex");
+  delete v;
+}
+
+MODULE = Rstats::Vector::Double PACKAGE = Rstats::Vector::Double
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  SV* sv_v = ST(0);
+  Rstats::Vector<Rstats::Double>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Double>*>(sv_v, "Rstats::Vector::Double");
+  delete v;
+}
+
+MODULE = Rstats::Vector::Integer PACKAGE = Rstats::Vector::Integer
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  SV* sv_v = ST(0);
+  Rstats::Vector<Rstats::Integer>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Integer>*>(sv_v, "Rstats::Vector::Integer");
+  delete v;
+}
+
+MODULE = Rstats::Vector::Logical PACKAGE = Rstats::Vector::Logical
+
+SV* DESTROY(...)
+  PPCODE:
+{
+  SV* sv_v = ST(0);
+  Rstats::Vector<Rstats::Logical>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Logical>*>(sv_v, "Rstats::Vector::Logical");
+  delete v;
+}
+
 
 MODULE = Rstats::Util PACKAGE = Rstats::Util
 

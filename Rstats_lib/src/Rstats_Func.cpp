@@ -4,6 +4,106 @@
 namespace Rstats {
   namespace Func {
 
+    template <>
+    void set_vector<Rstats::Character>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Character>* v1) {
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Character>*>(v1, "Rstats::Vector::Character");
+      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
+    }
+
+    template <>
+    void set_vector<Rstats::Complex>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Complex>* v1) {
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Complex>*>(v1, "Rstats::Vector::Complex");
+      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
+    }
+
+    template <>
+    void set_vector<Rstats::Double>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Double>* v1) {
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Double>*>(v1, "Rstats::Vector::Double");
+      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
+    }
+
+    template <>
+    void set_vector<Rstats::Integer>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Integer>* v1) {
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Integer>*>(v1, "Rstats::Vector::Integer");
+      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
+    }
+
+    template <>
+    void set_vector<Rstats::Logical>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Logical>* v1) {
+      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Logical>*>(v1, "Rstats::Vector::Logical");
+      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
+    }
+    
+    template <>
+    Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV* sv_r, SV* sv_x1) {
+      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector<Rstats::Character>* vector
+          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_vector, "Rstats::Vector::Character");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
+    }
+
+    template <>
+    Rstats::Vector<Rstats::Complex>* get_vector<Rstats::Complex>(SV* sv_r, SV* sv_x1) {
+      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector<Rstats::Complex>* vector
+          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Complex>*>(sv_vector, "Rstats::Vector::Complex");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
+    }
+
+    template <>
+    Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV* sv_r, SV* sv_x1) {
+      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector<Rstats::Double>* vector
+          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Double>*>(sv_vector, "Rstats::Vector::Double");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
+    }
+
+    template <>
+    Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV* sv_r, SV* sv_x1) {
+      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector<Rstats::Integer>* vector
+          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Integer>*>(sv_vector, "Rstats::Vector::Integer");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
+    }
+    
+    template <>
+    Rstats::Vector<Rstats::Logical>* get_vector<Rstats::Logical>(SV* sv_r, SV* sv_x1) {
+      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
+      
+      if (SvOK(sv_vector)) {
+        Rstats::Vector<Rstats::Logical>* vector
+          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Logical>*>(sv_vector, "Rstats::Vector::Logical");
+        return vector;
+      }
+      else {
+        return NULL;
+      }
+    }
+
     SV* length(SV* sv_r, SV* x1) {
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, x1);
       Rstats::Vector<Rstats::Integer>* v2 = Rstats::Vector<Rstats::Integer>::new_vector(1, x1_length);

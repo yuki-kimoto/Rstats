@@ -54,8 +54,7 @@ use Math::Trig ();
 
 # c_
 {
-=pod
-  # c_(NULL)
+  # c_()
   {
     my $x1 = c_();
     ok(r->is->null($x1));
@@ -66,8 +65,35 @@ use Math::Trig ();
     my $x1 = c_(NULL);
     ok(r->is->null($x1));
   }
-=cut
+  
+  # c_(1, 2, 3, NULL)
+  {
+    my $x1 = c_(1, 2, 3);
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # c_(T_, F_);
+  {
+    my $x1 = c_(T_, F_);
+    ok(r->is->logical($x1));
+    is_deeply($x1->values, [1, 0]);
+  }
 
+  # c_(T_, r->as->integer(2));
+  {
+    my $x1 = c_(T_, r->as->integer(2));
+    ok(r->is->integer($x1));
+    is_deeply($x1->values, [1, 2]);
+  }
+
+  # c_(1, r->as->integer(2));
+  {
+    my $x1 = c_(1, r->as->integer(2));
+    ok(r->is->double($x1));
+    is_deeply($x1->values, [1, 2]);
+  }
+    
   # c_(1, 3 + 4*i_);
   {
     my $x1 =  c_(1, r->complex(3, 4));

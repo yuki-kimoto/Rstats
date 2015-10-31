@@ -4296,15 +4296,17 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
-            sv_x1 = Rstats::Func::new_NA(sv_r);
-          }
-          Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-          
-          if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value(i, v1->get_value(0));
+            Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
+            
+            if (v1->exists_na_position(0)) {
+              na_positions.push_back(i);
+            }
+            else {
+              v_out->set_value(i, v1->get_value(0));
+            }
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4317,15 +4319,17 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
-            sv_x1 = Rstats::Func::new_NA(sv_r);
-          }
-          Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-
-          if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-           v_out->set_value(i, v1->get_value(0));
+            Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
+
+            if (v1->exists_na_position(0)) {
+              na_positions.push_back(i);
+            }
+            else {
+              v_out->set_value(i, v1->get_value(0));
+            }
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4339,15 +4343,17 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
-            sv_x1 = Rstats::Func::new_NA(sv_r);
-          }
-          Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-
-          if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value(i, v1->get_value(0));
+            Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
+
+            if (v1->exists_na_position(0)) {
+              na_positions.push_back(i);
+            }
+            else {
+              v_out->set_value(i, v1->get_value(0));
+            }
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4361,15 +4367,17 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
-            sv_x1 = Rstats::Func::new_NA(sv_r);
-          }
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-
-          if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value(i, v1->get_value(0));
+            Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+
+            if (v1->exists_na_position(0)) {
+              na_positions.push_back(i);
+            }
+            else {
+              v_out->set_value(i, v1->get_value(0));
+            }
           }
         }
         for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
@@ -4383,15 +4391,17 @@ namespace Rstats {
         for (Rstats::Integer i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
           if (!SvOK(sv_x1)) {
-            sv_x1 = Rstats::Func::new_NA(sv_r);
-          }
-          Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
-
-          if (v1->exists_na_position(0)) {
             na_positions.push_back(i);
           }
           else {
-            v_out->set_value(i, v1->get_value(0));
+            Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
+
+            if (v1->exists_na_position(0)) {
+              na_positions.push_back(i);
+            }
+            else {
+              v_out->set_value(i, v1->get_value(0));
+            }
           }
         }
         

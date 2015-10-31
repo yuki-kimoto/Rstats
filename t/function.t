@@ -7,6 +7,17 @@ use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
 
+# NULL
+{
+  my $x1 = r->NULL;
+  is_deeply($x1->values, []);
+  is("$x1", 'NULL');
+  $x1->at(3);
+  $x1->set(5);
+  is_deeply($x1->values, [undef, undef, 5]);
+}
+
+
 # c_
 {
   # c_()
@@ -144,16 +155,6 @@ use Math::Trig ();
     my $x1 = list(1, 2);
     is_deeply($x1->class->values, ['list']);
   }
-}
-
-# NULL
-{
-  my $x1 = r->NULL;
-  is_deeply($x1->values, []);
-  is("$x1", 'NULL');
-  $x1->at(3);
-  $x1->set(5);
-  is_deeply($x1->values, [undef, undef, 5]);
 }
 
 # C_

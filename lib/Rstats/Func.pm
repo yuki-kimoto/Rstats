@@ -232,6 +232,7 @@ sub data_frame {
 sub matrix {
   my $r = shift;
   
+  
   my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
     = Rstats::Func::args_array($r, ['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
 
@@ -258,9 +259,11 @@ sub matrix {
   }
   elsif (!defined $nrow) {
     $nrow = int($x1_length / $ncol);
+    $nrow ||= 1;
   }
   elsif (!defined $ncol) {
     $ncol = int($x1_length / $nrow);
+    $ncol ||= 1;
   }
   my $length = $nrow * $ncol;
   

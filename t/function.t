@@ -7,6 +7,51 @@ use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
 
+# class
+{
+  # class - matrix
+  {
+    my $x1 = matrix(2, 2);
+    is_deeply($x1->class->values, ['matrix']);
+  }
+
+  # class - data frame
+  {
+    my $x1 = data_frame(sex => c_(1, 2));
+    is_deeply($x1->class->values, ['data.frame']);
+  }
+
+  # class - vector, numeric
+  {
+    my $x1 = c_(1, 2);
+    is_deeply($x1->class->values, ['numeric']);
+  }
+  
+  # class - array
+  {
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    is_deeply($x1->class->values, ['array']);
+  }
+  
+  # class - factor
+  {
+    my $x1 = factor(c_(1, 2, 3));
+    is_deeply($x1->class->values, ['factor']);
+  }
+  
+  # class - factor, ordered
+  {
+    my $x1 = ordered(c_(1, 2, 3));
+    is_deeply($x1->class->values, ['factor', 'ordered']);
+  }
+  
+  # class - list
+  {
+    my $x1 = list(1, 2);
+    is_deeply($x1->class->values, ['list']);
+  }
+}
+
 # c_
 {
 =pod
@@ -82,51 +127,6 @@ use Math::Trig ();
   $x1->at(3);
   $x1->set(5);
   is_deeply($x1->values, [undef, undef, 5]);
-}
-
-# class
-{
-  # class - data frame
-  {
-    my $x1 = data_frame(sex => c_(1, 2));
-    is_deeply($x1->class->values, ['data.frame']);
-  }
-
-  # class - vector, numeric
-  {
-    my $x1 = c_(1, 2);
-    is_deeply($x1->class->values, ['numeric']);
-  }
-  
-  # class - matrix
-  {
-    my $x1 = matrix(2, 2);
-    is_deeply($x1->class->values, ['matrix']);
-  }
-
-  # class - array
-  {
-    my $x1 = array(C_('1:24'), c_(4, 3, 2));
-    is_deeply($x1->class->values, ['array']);
-  }
-  
-  # class - factor
-  {
-    my $x1 = factor(c_(1, 2, 3));
-    is_deeply($x1->class->values, ['factor']);
-  }
-  
-  # class - factor, ordered
-  {
-    my $x1 = ordered(c_(1, 2, 3));
-    is_deeply($x1->class->values, ['factor', 'ordered']);
-  }
-  
-  # class - list
-  {
-    my $x1 = list(1, 2);
-    is_deeply($x1->class->values, ['list']);
-  }
 }
 
 # C_

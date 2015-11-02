@@ -153,30 +153,30 @@ namespace Rstats {
     SV* create_sv_values(SV*, SV*);
     
     template <class T>
-    void set_vector(SV* sv_r, SV* sv_x1, Rstats::Vector<T>* v1);
+    void set_vector(SV*, SV*, Rstats::Vector<T>*);
     template <>
-    void set_vector<Rstats::Character>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Character>* v1);
+    void set_vector<Rstats::Character>(SV*, SV*, Rstats::Vector<Rstats::Character>*);
     template <>
-    void set_vector<Rstats::Complex>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Complex>* v1);
+    void set_vector<Rstats::Complex>(SV*, SV*, Rstats::Vector<Rstats::Complex>*);
     template <>
-    void set_vector<Rstats::Double>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Double>* v1);
+    void set_vector<Rstats::Double>(SV*, SV*, Rstats::Vector<Rstats::Double>*);
     template <>
-    void set_vector<Rstats::Integer>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Integer>* v1);
+    void set_vector<Rstats::Integer>(SV*, SV*, Rstats::Vector<Rstats::Integer>*);
     template <>
-    void set_vector<Rstats::Logical>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Logical>* v1);
+    void set_vector<Rstats::Logical>(SV*, SV*, Rstats::Vector<Rstats::Logical>* v1);
     
     template <class T>
-    Rstats::Vector<T>* get_vector(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<T>* get_vector(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Complex>* get_vector<Rstats::Complex>(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<Rstats::Complex>* get_vector<Rstats::Complex>(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Logical>* get_vector<Rstats::Logical>(SV* sv_r, SV* sv_x1);
+    Rstats::Vector<Rstats::Logical>* get_vector<Rstats::Logical>(SV*, SV*);
 
     template <class T>
     SV* new_vector(SV*);
@@ -192,7 +192,7 @@ namespace Rstats {
     SV* new_vector<Rstats::Logical>(SV*);
     
     template <class T>
-    SV* new_vector(SV* sv_r, Rstats::Vector<T>* v1);
+    SV* new_vector(SV*, Rstats::Vector<T>* v1);
   }
 }
 #include "Rstats_Func_impl.h"

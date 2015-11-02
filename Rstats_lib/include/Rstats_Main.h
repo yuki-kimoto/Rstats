@@ -71,8 +71,8 @@ namespace Rstats {
   REGEXP* pl_pregcomp (SV*, IV);
   IV pl_pregexec(SV*, REGEXP*);
   
-  template <class T> T pl_object_unwrap(SV* sv_object, const char* class_name);
-  template <class T> SV* pl_object_wrap(T ptr, const char* class_name);
+  template <class T> T pl_object_unwrap(SV*, const char*);
+  template <class T> SV* pl_object_wrap(T ptr, const char*);
   
   // Type
   namespace Type {

@@ -15,30 +15,30 @@ namespace Rstats {
     
     public:
     
-    void initialize(Rstats::Integer length);
+    void initialize(Rstats::Integer);
     Vector<T>(Rstats::Integer);
-    Vector<T>(Rstats::Integer length, T value);
+    Vector<T>(Rstats::Integer, T);
 
     Rstats::Integer get_length();
     void init_na_positions();
     void add_na_position(Rstats::Integer);
-    Rstats::Logical exists_na_position(Rstats::Integer position);
+    Rstats::Logical exists_na_position(Rstats::Integer);
     void merge_na_positions(Rstats::NaPosition*);
     Rstats::NaPosition* get_na_positions();
     Rstats::Integer get_na_positions_length();
     
     T* get_values();
-    void set_value(Rstats::Integer pos, T value); 
-    T get_value(Rstats::Integer pos);
+    void set_value(Rstats::Integer, T); 
+    T get_value(Rstats::Integer);
     
     ~Vector();
   };
   template <>
-  void Vector<Rstats::Character>::initialize(Rstats::Integer length);
+  void Vector<Rstats::Character>::initialize(Rstats::Integer);
   template<>
   Vector<Rstats::Character>::Vector(Rstats::Integer);
   template <>
-  void Vector<Rstats::Character>::set_value(Rstats::Integer pos, Rstats::Character value);
+  void Vector<Rstats::Character>::set_value(Rstats::Integer, Rstats::Character);
   template <>
   Vector<Rstats::Character>::~Vector();
 }

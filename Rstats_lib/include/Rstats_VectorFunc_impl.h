@@ -5,7 +5,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector<T_OUT>* v_out = Rstats::Vector<T_OUT>::new_vector(length);
+      Rstats::Vector<T_OUT>* v_out = new Rstats::Vector<T_OUT>(length);
       
       Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -25,7 +25,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(length);
+      Rstats::Vector<Rstats::Logical>* v_out = new Rstats::Vector<Rstats::Logical>(length);
 
       Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -48,7 +48,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector<T_OUT>* v_out = Rstats::Vector<T_OUT>::new_vector(length);
+      Rstats::Vector<T_OUT>* v_out = new Rstats::Vector<T_OUT>(length);
       
       Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -72,7 +72,7 @@ namespace Rstats {
     Rstats::Vector<T_OUT>* operate_binary_math(T_OUT (*func)(T_IN, T_IN), Rstats::Vector<T_IN>* v1, Rstats::Vector<T_IN>* v2) {
 
       Rstats::Integer length = v1->get_length();
-      Rstats::Vector<T_OUT>* v_out = Rstats::Vector<T_OUT>::new_vector(length);
+      Rstats::Vector<T_OUT>* v_out = new Rstats::Vector<T_OUT>(length);
 
       Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -98,7 +98,7 @@ namespace Rstats {
     Rstats::Vector<Rstats::Logical>* operate_binary_compare(Rstats::Logical (*func)(T_IN, T_IN), Rstats::Vector<T_IN>* v1, Rstats::Vector<T_IN>* v2) {
 
       Rstats::Integer length = v1->get_length();
-      Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(length);
+      Rstats::Vector<Rstats::Logical>* v_out = new Rstats::Vector<Rstats::Logical>(length);
 
       Rstats::clear_warn();
       for (Rstats::Integer i = 0; i < length; i++) {
@@ -280,7 +280,7 @@ namespace Rstats {
       
       Rstats::Integer length = v1->get_length();
       
-      Rstats::Vector<Rstats::Logical>* v_out = Rstats::Vector<Rstats::Logical>::new_vector(length);
+      Rstats::Vector<Rstats::Logical>* v_out = new Rstats::Vector<Rstats::Logical>(length);
       
       for (Rstats::Integer i = 0; i < length; i++) {
         if (v1->exists_na_position(i)) {

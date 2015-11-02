@@ -1,16 +1,22 @@
 #include "Rstats_Vector.h"
 
 namespace Rstats {
+
   template <>
-  Rstats::Vector<Rstats::Character>* Vector<Rstats::Character>::new_vector(Rstats::Integer length) {
-    Rstats::Vector<Rstats::Character>* v1 = new Rstats::Vector<Rstats::Character>;
+  void Vector<Rstats::Character>::initialize(Rstats::Vector<Rstats::Character>* v1, Rstats::Integer length) {
     v1->values = new Rstats::Character[length];
+    v1->length = length;
+    v1->na_positions = NULL;
     for (Rstats::Integer i = 0; i < length; i++) {
       SV** value_ptr = (SV**)v1->values;
       *(value_ptr + i) = &PL_sv_undef;
     }
-    v1->length = length;
-    v1->na_positions = NULL;
+  }
+
+  template <>
+  Rstats::Vector<Rstats::Character>* Vector<Rstats::Character>::new_vector(Rstats::Integer length) {
+    Rstats::Vector<Rstats::Character>* v1 = new Rstats::Vector<Rstats::Character>;
+    Rstats::Vector<Rstats::Character>::initialize(v1, length);
     
     return v1;
   }

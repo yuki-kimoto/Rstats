@@ -72,18 +72,25 @@ namespace Rstats {
   }
 
   template <class T>
-  Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length) {
-    Rstats::Vector<T>* v1 = new Rstats::Vector<T>;
+  void Vector<T>::initialize(Rstats::Vector<T>* v1, Rstats::Integer length) {
     v1->values = new T[length];
     v1->length = length;
     v1->na_positions = NULL;
+  }
+
+  template <class T>
+  Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length) {
+    Rstats::Vector<T>* v1 = new Rstats::Vector<T>;
+    Rstats::Vector<T>::initialize(v1, length);
     
     return v1;
   };
   
   template <class T>
   Rstats::Vector<T>* Vector<T>::new_vector(Rstats::Integer length, T value) {
-    Rstats::Vector<T>* v1 = Rstats::Vector<T>::new_vector(length);
+    Rstats::Vector<T>* v1 = new Rstats::Vector<T>;
+    Rstats::Vector<T>::initialize(v1, length);
+
     for (Rstats::Integer i = 0; i < length; i++) {
       v1->set_value(i, value);
     }

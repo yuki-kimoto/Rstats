@@ -14,7 +14,8 @@ namespace Rstats {
     Rstats::Integer length;
     
     public:
-
+    
+    static void initialize(Rstats::Vector<T>* v1, Rstats::Integer length);
     static Rstats::Vector<T>* new_vector(Rstats::Integer);
     static Rstats::Vector<T>* new_vector(Rstats::Integer length, T value);
 
@@ -33,12 +34,13 @@ namespace Rstats {
     ~Vector();
   };
   template <>
+  void Vector<Rstats::Character>::initialize(Rstats::Vector<Rstats::Character>* v1, Rstats::Integer length);
+  template<>
+  Rstats::Vector<Rstats::Character>* Vector<Rstats::Character>::new_vector(Rstats::Integer);
+  template <>
   void Vector<Rstats::Character>::set_value(Rstats::Integer pos, Rstats::Character value);
   template <>
   Vector<Rstats::Character>::~Vector();
-
-  template<>
-  Rstats::Vector<Rstats::Character>* Vector<Rstats::Character>::new_vector(Rstats::Integer);
 }
 #include "Rstats_Vector_impl.h"
 

@@ -6,14 +6,21 @@ use ExtUtils::MakeMaker;
 
 use Config;
 
-# C++ compiler
-my $cpp_compilers = {
-  gcc => 'g++',
-  clang => 'clang++',
-  CC => 'CC'
-};
-my $cc = $cpp_compilers->{$Config{ccname}};
-my $ld = $cc;
+# Decide cpp compiler
+my @cpp_compilers = ('g++', 'c++', 'CC');
+my $found_cpp_compiler;
+for my $cpp_compiler (@cpp_compilers) {
+  # Check if command exists
+  if (system($cpp_compiler) != -1) {
+    $found_cpp_compiler = $cpp_compiler;
+    last;
+  }
+}
+unless ($found_cpp_compiler) {
+  die "Can't find c++ compiler";
+}
+my $cc = $found_cpp_compiler;
+my $ld = $found_cpp_compiler;
 
 WriteMakefile(
     NAME                => 'Rstats',

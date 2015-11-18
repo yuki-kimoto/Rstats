@@ -7,7 +7,7 @@ use ExtUtils::MakeMaker;
 use Config;
 
 # Decide cpp compiler
-my @cpp_compilers = ('g++', 'c++', 'CC');
+my @cpp_compilers = ('c++', 'g++', 'CC');
 my $found_cpp_compiler;
 for my $cpp_compiler (@cpp_compilers) {
   # Check if command exists

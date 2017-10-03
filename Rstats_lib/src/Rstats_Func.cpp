@@ -113,7 +113,7 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* c_(SV* sv_r, SV* sv_elements) {
+    SV* c(SV* sv_r, SV* sv_elements) {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_elements);
       
@@ -3351,7 +3351,7 @@ namespace Rstats {
         }
       }
       
-      SV* sv_x2 = Rstats::Func::c_(sv_r, sv_elements);
+      SV* sv_x2 = Rstats::Func::c(sv_r, sv_elements);
       Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
       
       return sv_x2;

@@ -20,8 +20,8 @@ my $r = Rstats::Class->new;
   # $r->list - get, multiple, names
   {
     my $x1 = $r->list(1, 2, 3);
-    r->names($x1, $r->c_("n1", "n2", "n3"));
-    my $l2 = $x1->get($r->c_("n1", "n3"));
+    r->names($x1, $r->c("n1", "n2", "n3"));
+    my $l2 = $x1->get($r->c("n1", "n3"));
     ok(r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
@@ -37,7 +37,7 @@ my $r = Rstats::Class->new;
   
   # $r->list - as_list, input is $r->array
   {
-    my $x1 = $r->c_("a", "b");
+    my $x1 = $r->c("a", "b");
     my $x2 = r->as->list($x1);
     ok(r->is->list($x2));
     is_deeply($x2->getin(1)->values, ["a", "b"]);
@@ -45,7 +45,7 @@ my $r = Rstats::Class->new;
 
   # $r->list - basic
   {
-    my $x1 = $r->list($r->c_(1, 2, 3), $r->list("Hello", $r->c_($r->TRUE, $r->FALSE, $r->FALSE)));
+    my $x1 = $r->list($r->c(1, 2, 3), $r->list("Hello", $r->c($r->TRUE, $r->FALSE, $r->FALSE)));
     is_deeply($x1->list->[0]->values, [1, 2, 3]);
     is_deeply($x1->list->[1]->list->[0]->values, ["Hello"]);
     is_deeply(
@@ -64,7 +64,7 @@ my $r = Rstats::Class->new;
     
   # $r->list - to_string
   {
-    my $x1 = $r->list($r->c_(1, 2, 3), $r->list("Hello", $r->c_($r->TRUE, $r->FALSE, $r->FALSE)));
+    my $x1 = $r->list($r->c(1, 2, 3), $r->list("Hello", $r->c($r->TRUE, $r->FALSE, $r->FALSE)));
     my $str = $x1->to_string;
     my $expected = <<"EOS";
 [[1]]
@@ -110,7 +110,7 @@ EOS
   # $r->list - getin,name
   {
     my $x1 = $r->list("a", "b", $r->list("c", "d", $r->list("e")));
-    r->names($x1, $r->c_("n1", "n2", "n3"));
+    r->names($x1, $r->c("n1", "n2", "n3"));
     my $x2 = $x1->getin("n1");
     is_deeply($x2->values, ["a"]);
 
@@ -121,7 +121,7 @@ EOS
   # $r->list - get, multiple
   {
     my $x1 = $r->list(1, 2, 3);
-    my $l2 = $x1->get($r->c_(1, 3));
+    my $l2 = $x1->get($r->c(1, 3));
     ok(r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
@@ -146,8 +146,8 @@ EOS
 {
   # set - NULL, dimnames
   {
-    my $x1 = $r->list($r->c_(1, 2, 3), $r->c_(4, 5, 6), $r->c_(7, 8, 9));
-    r->dimnames($x1, $r->list($r->c_("r1", "r2", "r3"), $r->c_("c1", "c2", "c3")));
+    my $x1 = $r->list($r->c(1, 2, 3), $r->c(4, 5, 6), $r->c(7, 8, 9));
+    r->dimnames($x1, $r->list($r->c("r1", "r2", "r3"), $r->c("c1", "c2", "c3")));
     $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
@@ -157,8 +157,8 @@ EOS
   
   # set - NULL, names
   {
-    my $x1 = $r->list($r->c_(1, 2, 3), $r->c_(4, 5, 6), $r->c_(7, 8, 9));
-    r->names($x1, $r->c_("c1", "c2", "c3"));
+    my $x1 = $r->list($r->c(1, 2, 3), $r->c(4, 5, 6), $r->c(7, 8, 9));
+    r->names($x1, $r->c("c1", "c2", "c3"));
     $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
@@ -177,7 +177,7 @@ EOS
   # set - name
   {
     my $x1 = $r->list(1, 2, 3);
-    r->names($x1, $r->c_("n1", "n2", "n3"));
+    r->names($x1, $r->c("n1", "n2", "n3"));
     $x1->at("n2")->set(5);
     is_deeply($x1->getin(1)->values, [1]);
     is_deeply($x1->getin(2)->values, [5]);

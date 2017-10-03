@@ -72,7 +72,7 @@ my $r = Rstats::Class->new;
 {
   # to_string - character, 1 dimention
   {
-    my $x1 = $r->array($r->c_("a", "b"));
+    my $x1 = $r->array($r->c("a", "b"));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
     my $expected = qq/[1] "a" "b"\n/;
@@ -81,7 +81,7 @@ my $r = Rstats::Class->new;
 
   # to_string - character, 2 dimention
   {
-    my $x1 = $r->array($r->C('1:4'), $r->c_(4, 1));
+    my $x1 = $r->array($r->C('1:4'), $r->c(4, 1));
     my $x2 = r->as->character($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -100,7 +100,7 @@ EOS
 
   # to_string - character,3 dimention
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c_(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     $x1 = r->as->character($x1);
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
@@ -135,7 +135,7 @@ EOS
 
   # to_string - 2-dimention
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c_(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -202,7 +202,7 @@ EOS
 
   # to_string - 1-dimention, TRUE, FALSE
   {
-    my $x1 = $r->array($r->c_(r->TRUE, r->FALSE));
+    my $x1 = $r->array($r->c(r->TRUE, r->FALSE));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -216,7 +216,7 @@ EOS
 
   # to_string - 2-dimention
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c_(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -235,7 +235,7 @@ EOS
 
   # to_string - 2-dimention, as_vector
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c_(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = r->as->vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -250,7 +250,7 @@ EOS
 
   # to_string - 2-dimention, as_matrix
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c_(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -269,7 +269,7 @@ EOS
   
   # to_string - 3-dimention
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c_(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
@@ -294,7 +294,7 @@ EOS
 
   # to_string - 3-dimention, as_vector
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c_(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     my $x2 = r->as->vector($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -309,7 +309,7 @@ EOS
 
   # to_string - 3-dimention, as_matrix
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c_(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     my $x2 = r->as->matrix($x1);
     my $x2_str = "$x2";
     $x2_str =~ s/[ \t]+/ /;
@@ -347,7 +347,7 @@ EOS
   
   # to_string - 4 dimention
   {
-    my $x1 = $r->array($r->C('1:120'), $r->c_(5, 4, 3, 2));
+    my $x1 = $r->array($r->C('1:120'), $r->c(5, 4, 3, 2));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 

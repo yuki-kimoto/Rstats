@@ -13,9 +13,9 @@ my $r = Rstats::Class->new;
 # cbind
 {
   my $m1 = r->cbind(
-    $r->c_(1, 2, 3, 4),
-    $r->c_(5, 6, 7, 8),
-    $r->c_(9, 10, 11, 12)
+    $r->c(1, 2, 3, 4),
+    $r->c(5, 6, 7, 8),
+    $r->c(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1 .. 12]);
   is_deeply(r->dim($m1)->values, [4, 3]);
@@ -109,17 +109,17 @@ my $r = Rstats::Class->new;
   # rownames and colnames - accessor
   {
     my $m1 = $r->matrix($r->C('1:6'), 2, 3);
-    r->colnames($m1,$r->c_(qw/c1 c2 c3/));
+    r->colnames($m1,$r->c(qw/c1 c2 c3/));
     is_deeply(r->colnames($m1)->values, [qw/c1 c2 c3/]);
-    r->rownames($m1, $r->c_(qw/r1 r2 r3/));
+    r->rownames($m1, $r->c(qw/r1 r2 r3/));
     is_deeply(r->rownames($m1)->values, [qw/r1 r2 r3/]);
   }
 
   # rownames and colnames - to_string
   {
     my $m1 = $r->matrix($r->C('1:6'), 2, 3);
-    r->colnames($m1, $r->c_(qw/c1 c2 c3/));
-    r->rownames($m1, $r->c_(qw/r1 r2 r3/));
+    r->colnames($m1, $r->c(qw/c1 c2 c3/));
+    r->rownames($m1, $r->c(qw/r1 r2 r3/));
     my $m1_str = "$m1";
     $m1_str =~ s/[ \t]+/ /;
 
@@ -238,9 +238,9 @@ EOS
 # rbind
 {
   my $m1 = r->rbind(
-    $r->c_(1, 2, 3, 4),
-    $r->c_(5, 6, 7, 8),
-    $r->c_(9, 10, 11, 12)
+    $r->c(1, 2, 3, 4),
+    $r->c(5, 6, 7, 8),
+    $r->c(9, 10, 11, 12)
   );
   is_deeply($m1->values, [1, 5, 9, 2, 6, 10, 3, 7, 11, 4, 8, 12]);
   is_deeply(r->dim($m1)->values, [3, 4]);

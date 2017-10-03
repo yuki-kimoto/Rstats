@@ -20,7 +20,7 @@ namespace Rstats {
     SV* new_data_frame(SV*);
     SV* new_list(SV*);
 
-    SV* c_(SV*, SV*);
+    SV* c(SV*, SV*);
     SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);

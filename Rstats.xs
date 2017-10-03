@@ -766,7 +766,7 @@ SV* to_object(...)
   XSRETURN(1);
 }
 
-SV* c_(...)
+SV* c(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -781,7 +781,7 @@ SV* c_(...)
     }
   }
   
-  SV* sv_x_out = Rstats::Func::c_(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c(sv_r, sv_values);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

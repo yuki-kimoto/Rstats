@@ -12,8 +12,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 < $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -21,8 +21,8 @@ my $r = Rstats::Class->new;
   
   # comparison operator numeric - <, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 < $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -30,8 +30,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <=
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 <= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
@@ -39,8 +39,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 <= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
@@ -48,8 +48,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 > $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
@@ -57,8 +57,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 > $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
@@ -66,8 +66,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >=
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 >= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -75,8 +75,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 >= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -84,8 +84,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - ==
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2,2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 == $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -93,8 +93,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - ==, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 == $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -102,8 +102,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - !=
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2,2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 != $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
@@ -111,8 +111,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - !=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 != $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
@@ -123,8 +123,8 @@ my $r = Rstats::Class->new;
 {
   # comparison operator - >
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 > $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 0 1/]);
@@ -132,8 +132,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator - >=
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 >= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 1/]);
@@ -141,8 +141,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator - <
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 < $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 0/]);
@@ -150,8 +150,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator - <=
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 <= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 0/]);
@@ -159,8 +159,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator - ==
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 == $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 0/]);
@@ -168,8 +168,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator - !=
   {
-    my $x1 = $r->array($r->c_(0, 1, 2));
-    my $x2 = $r->array($r->c_(1, 1, 1));
+    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 != $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 1/]);
@@ -181,8 +181,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <
   {
-    my $x1 = $r->array($r->c_(1, 2, 3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1, 2, 3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 < $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -190,8 +190,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 < $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
@@ -199,8 +199,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <=
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 <= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
@@ -208,8 +208,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - <=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 <= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
@@ -217,8 +217,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 > $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
@@ -226,8 +226,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 > $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
@@ -235,8 +235,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >=
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2,1,3));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 >= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -244,8 +244,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - >=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2,3));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2,3));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 >= $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
@@ -253,8 +253,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - ==
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2,2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 == $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -262,8 +262,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - ==, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 == $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
@@ -271,8 +271,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - !=
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2,2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 != $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
@@ -280,8 +280,8 @@ my $r = Rstats::Class->new;
 
   # comparison operator numeric - !=, arguments count is different
   {
-    my $x1 = $r->array($r->c_(1,2));
-    my $x2 = $r->array($r->c_(2));
+    my $x1 = $r->array($r->c(1,2));
+    my $x2 = $r->array($r->c(2));
     my $x3 = $x1 != $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);

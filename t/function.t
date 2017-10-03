@@ -117,9 +117,9 @@ my $r = Rstats::Class->new;
 
 # class
 {
-  # class - matrix
+  # class - $r->matrix
   {
-    my $x1 = matrix(2, 2);
+    my $x1 = $r->matrix(2, 2);
     is_deeply($x1->class->values, ['matrix']);
   }
 
@@ -198,10 +198,10 @@ my $r = Rstats::Class->new;
   }
 }
 
-# matrix
+# $r->matrix
 {
   {
-    my $mat = matrix(0, 2, 5);
+    my $mat = $r->matrix(0, 2, 5);
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply(r->dim($mat)->values, [2, 5]);
     ok(r->is->matrix($mat));
@@ -209,7 +209,7 @@ my $r = Rstats::Class->new;
   
   # matrix - repeat values
   {
-    my $mat = matrix(c_(1,2), 2, 5);
+    my $mat = $r->matrix(c_(1,2), 2, 5);
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply(r->dim($mat)->values, [2, 5]);
     ok(r->is->matrix($mat));
@@ -1688,7 +1688,7 @@ my $r = Rstats::Class->new;
   # round - matrix
   {
     my $x1 = c_(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $x2 = r->round(matrix($x1));
+    my $x2 = r->round($r->matrix($x1));
     is_deeply(
       $x2->values,
       [-1, 2, 2, 3, 4]
@@ -1718,7 +1718,7 @@ my $r = Rstats::Class->new;
   # round - matrix
   {
     my $x1 = c_(-13, 24, 25, 25.1, 35.1);
-    my $x2 = r->round(matrix($x1), -1);
+    my $x2 = r->round($r->matrix($x1), -1);
     is_deeply(
       $x2->values,
       [-10, 20, 20, 30, 40]
@@ -1738,7 +1738,7 @@ my $r = Rstats::Class->new;
   # round - matrix
   {
     my $x1 = c_(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $x2 = r->round(matrix($x1), 1);
+    my $x2 = r->round($r->matrix($x1), 1);
     is_deeply(
       $x2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]
@@ -1761,7 +1761,7 @@ my $r = Rstats::Class->new;
   # trunc - matrix
   {
     my $x1 = c_(-1.2, -1, 1, 1.2);
-    my $x2 = r->trunc(matrix($x1));
+    my $x2 = r->trunc($r->matrix($x1));
     is_deeply(
       $x2->values,
       [-1, -1, 1, 1]
@@ -1784,7 +1784,7 @@ my $r = Rstats::Class->new;
   # floor - matrix
   {
     my $x1 = c_(2.5, 2.0, -1.0, -1.3);
-    my $x2 = r->floor(matrix($x1));
+    my $x2 = r->floor($r->matrix($x1));
     is_deeply(
       $x2->values,
       [2, 2, -1, -2]
@@ -1804,10 +1804,10 @@ my $r = Rstats::Class->new;
     );
   }
 
-  # ceiling - matrix
+  # ceiling - $r->matrix
   {
     my $x1 = c_(2.5, 2.0, -1.0, -1.3);
-    my $x2 = r->ceiling(matrix($x1));
+    my $x2 = r->ceiling($r->matrix($x1));
     is_deeply(
       $x2->values,
       [3, 2, -1, -1]
@@ -1831,10 +1831,10 @@ my $r = Rstats::Class->new;
     );
   }
 
-  # sqrt - matrix
+  # sqrt - $r->matrix
   {
     my $x1 = c_(2, 3, 4);
-    my $x2 = r->sqrt(matrix($x1));
+    my $x2 = r->sqrt($r->matrix($x1));
     is_deeply(
       $x2->values,
       [
@@ -1874,7 +1874,7 @@ my $r = Rstats::Class->new;
     is_deeply(r->names($x2)->values, ['r1', 'r2', 'r3']);
   }
   
-  # clone - matrix
+  # clone - $r->matrix
   {
     my $x1 = r->matrix(C_('1:24'), 3, 2);
     r->rownames($x1 => c_('r1', 'r2', 'r3'));

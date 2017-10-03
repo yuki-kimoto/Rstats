@@ -6,6 +6,12 @@ use Rstats;
 use Math::Trig ();
 use Math::Complex ();
 
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
+
+
+
 # Im
 {
   my $x1 = c_(1 + 2*i_, 2 + 3*i_);
@@ -37,7 +43,7 @@ use Math::Complex ();
 
   # abs - matrix
   {
-    my $x1 = r->abs(matrix(c_(-3, 4)));
+    my $x1 = r->abs($r->matrix(c_(-3, 4)));
     is_deeply($x1->values, [3, 4]);
   }
   

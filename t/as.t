@@ -3,6 +3,10 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
+
 
 # array upgrade mode
 {
@@ -483,7 +487,7 @@ use Rstats;
 
   # is_* - is_matrix
   {
-    my $x = matrix(C_('1:12'), 4, 3);
+    my $x = $r->matrix(C_('1:12'), 4, 3);
     ok(r->is->matrix($x));
     ok(r->is->array($x));
   }
@@ -859,9 +863,9 @@ use Rstats;
     is_deeply(r->dim(r->as->matrix($x))->values, [24, 1]);
   }
 
-  # as->matrix - from matrix
+  # as->matrix - from $r->matrix
   {
-    my $x = matrix(C_('1:12'), 4, 3);
+    my $x = $r->matrix(C_('1:12'), 4, 3);
     is_deeply(r->as->matrix($x)->values, [1 .. 12]);
     is_deeply(r->dim(r->as->matrix($x))->values, [4, 3]);
   }

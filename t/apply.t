@@ -203,7 +203,7 @@ my $r = Rstats::Class->new;
     
   # apply - two dimention, margin 1
   {
-    my $x1 = matrix(C_('1:6'), 2, 3);
+    my $x1 = $r->matrix(C_('1:6'), 2, 3);
     my $x2 = r->apply($x1, 1, 'sum');
     is_deeply($x2->values, [9, 12]);
     is_deeply(r->dim($x2)->values, []);
@@ -211,7 +211,7 @@ my $r = Rstats::Class->new;
 
   # apply - two dimention, margin 2
   {
-    my $x1 = matrix(C_('1:6'), 2, 3);
+    my $x1 = $r->matrix(C_('1:6'), 2, 3);
     my $x2 = r->apply($x1, 2, 'sum');
     is_deeply($x2->values, [3, 7, 11]);
     is_deeply(r->dim($x2)->values, []);
@@ -219,7 +219,7 @@ my $r = Rstats::Class->new;
 
   # apply - two dimention, margin 1, 2
   {
-    my $x1 = matrix(c_(1, 4, 9, 16, 25, 36), 2, 3);
+    my $x1 = $r->matrix(c_(1, 4, 9, 16, 25, 36), 2, 3);
     my $x2 = r->apply($x1, c_(1, 2), 'sqrt');
     is_deeply($x2->values, [1, 2, 3, 4, 5, 6]);
     is_deeply(r->dim($x2)->values, [2, 3]);

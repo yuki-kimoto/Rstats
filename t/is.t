@@ -300,7 +300,7 @@ my $r = Rstats::Class->new;
 {
   # is->matrix
   {
-    my $x = matrix(C_('1:24'), 4, 3);
+    my $x = $r->matrix(C_('1:24'), 4, 3);
     ok(r->is->matrix($x));
   }
 }

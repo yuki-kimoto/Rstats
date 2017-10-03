@@ -119,8 +119,8 @@ my $r = Rstats::Class->new;
 {
   # get logical array - basic
   {
-    my $x1 = matrix(C_('1:9'), 3, 3);
-    my $x2 = matrix(c_(T_, F_, F_, F_, T_, F_, F_, F_, T_), 3, 3);
+    my $x1 = $r->matrix(C_('1:9'), 3, 3);
+    my $x2 = $r->matrix(c_(T_, F_, F_, F_, T_, F_, F_, F_, T_), 3, 3);
     my $x3 = $x1->get($x2);
     is_deeply($x3->values, [1, 5, 9]);
     is_deeply(r->dim($x3)->values, [3]);

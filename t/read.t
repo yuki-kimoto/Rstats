@@ -4,9 +4,9 @@ use warnings;
 
 use Rstats;
 use FindBin;
-use Rstats::Class;
+use Rstats;
 
-my $r = Rstats::Class->new;
+my $r = Rstats->new;
 
 # read_table
 {

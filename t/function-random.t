@@ -3,9 +3,9 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats::Class;
+use Rstats;
 
-my $r = Rstats::Class->new;
+my $r = Rstats->new;
 
 # skip test on openbsd because openbsd srand and rand can't ensure reproducibility
 if($^O eq 'openbsd') {

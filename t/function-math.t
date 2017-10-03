@@ -6,9 +6,9 @@ use Rstats;
 use Math::Trig ();
 use Math::Complex ();
 
-use Rstats::Class;
+use Rstats;
 
-my $r = Rstats::Class->new;
+my $r = Rstats->new;
 
 
 

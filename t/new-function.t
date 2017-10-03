@@ -7,6 +7,4 @@ use Rstats;
 
 my $r = Rstats->new;
 
-
-
 ok(1);

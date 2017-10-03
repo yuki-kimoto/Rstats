@@ -1,0 +1,11 @@
+package SPVM::Rstats::Data {
+  has type : int;
+  has integral_values : long[];
+  has double_values : double[];
+  has complex_values : double[][];
+  has string_values : byte[][];
+  
+  enum {
+    TYPE_DOUBLE
+  }
+}

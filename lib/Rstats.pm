@@ -11,6 +11,8 @@ use Rstats::Util ();
 use Digest::MD5 'md5_hex';
 use Rstats::Object;
 
+use SPVM 'Rstats::Data';
+
 has helpers => sub { {} };
 
 sub get_helper {

@@ -1108,7 +1108,7 @@ my $r = Rstats::Class->new;
   
   # cos - double,array
   {
-    my $x1 = $r->array(c_(pi/2, pi/3));
+    my $x1 = $r->array(c_($r->pi/2, $r->pi/3));
     my $x2 = r->cos($x1);
     cmp_ok(abs($x2->values->[0]), '<', 1e-15);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
@@ -1162,7 +1162,7 @@ my $r = Rstats::Class->new;
   
   # sin - double,array
   {
-    my $x1 = $r->array(c_(pi/2, pi/6));
+    my $x1 = $r->array(c_($r->pi/2, $r->pi/6));
     my $x2 = r->sin($x1);
     is(sprintf("%.5f", $x2->values->[0]), '1.00000');
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');

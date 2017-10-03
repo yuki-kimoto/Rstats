@@ -1119,7 +1119,7 @@ my $r = Rstats::Class->new;
 
 # pi
 {
-  my $x1 = pi;
+  my $x1 = $r->pi;
   is(sprintf('%.4f', $x1->value), 3.1416);
 }
 
@@ -1152,7 +1152,7 @@ my $r = Rstats::Class->new;
   
   # complex - mod and arg option
   {
-    my $x1 = r->complex({mod => 2, arg => pi});
+    my $x1 = r->complex({mod => 2, arg => $r->pi});
     is($x1->value->{re}, -2);
     cmp_ok(abs($x1->value->{im}), '<', 1e-15);
   }
@@ -1166,7 +1166,7 @@ my $r = Rstats::Class->new;
 
   # complex - mod and arg option, omit mod
   {
-    my $x1 = r->complex({arg => pi});
+    my $x1 = r->complex({arg => $r->pi});
     is($x1->value->{re}, -1);
     cmp_ok(abs($x1->value->{im}), '<', 1e-15);
   }

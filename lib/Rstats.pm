@@ -15,13 +15,6 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c_/;
-  for my $method (@methods) {
-    no strict 'refs';
-    my $func = \&{"Rstats::Func::$method"};
-
-    *{"${class}::$method"} = sub { $func->($r, @_) }
-  }
   *{"${class}::r"} = sub { $r };
 }
 

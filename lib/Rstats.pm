@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c_ C_/;
+  my @methods = qw/c_/;
   for my $method (@methods) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};
@@ -23,8 +23,6 @@ sub import {
     *{"${class}::$method"} = sub { $func->($r, @_) }
   }
   *{"${class}::r"} = sub { $r };
-  
-  warnings->unimport('ambiguous');
 }
 
 require XSLoader;

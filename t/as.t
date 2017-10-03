@@ -479,7 +479,7 @@ my $r = Rstats::Class->new;
 {
   # is_* - is_array
   {
-    my $x = $r->array(C_('1:24'), c_(4, 3, 2));
+    my $x = $r->array($r->C('1:24'), c_(4, 3, 2));
     ok(r->is->array($x));
     ok(!r->is->vector($x));
     ok(!r->is->matrix($x));
@@ -487,21 +487,21 @@ my $r = Rstats::Class->new;
 
   # is_* - is_matrix
   {
-    my $x = $r->matrix(C_('1:12'), 4, 3);
+    my $x = $r->matrix($r->C('1:12'), 4, 3);
     ok(r->is->matrix($x));
     ok(r->is->array($x));
   }
 
   # is_* - is_vector
   {
-    my $x = C_('1:24');
+    my $x = $r->C('1:24');
     ok(r->is->vector($x));
     ok(!r->is->array($x));
   }
 
   # is_* - is_vector
   {
-    my $x = $r->array(C_('1:24'));
+    my $x = $r->array($r->C('1:24'));
     ok(!r->is->vector($x));
     ok(r->is->array($x));
   }
@@ -849,7 +849,7 @@ my $r = Rstats::Class->new;
 
 # as->vector
 {
-  my $x = $r->array(C_('1:24'), c_(4, 3, 2));
+  my $x = $r->array($r->C('1:24'), c_(4, 3, 2));
   is_deeply(r->as->vector($x)->values, [1 .. 24]);
   is_deeply(r->dim(r->as->vector($x))->values, []);
 }
@@ -858,21 +858,21 @@ my $r = Rstats::Class->new;
 {
   # as->matrix - from vector
   {
-    my $x = c_(C_('1:24'));
+    my $x = c_($r->C('1:24'));
     is_deeply(r->as->matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as->matrix($x))->values, [24, 1]);
   }
 
   # as->matrix - from $r->matrix
   {
-    my $x = $r->matrix(C_('1:12'), 4, 3);
+    my $x = $r->matrix($r->C('1:12'), 4, 3);
     is_deeply(r->as->matrix($x)->values, [1 .. 12]);
     is_deeply(r->dim(r->as->matrix($x))->values, [4, 3]);
   }
 
   # as->matrix - from $r->array
   {
-    my $x = $r->array(C_('1:24'), c_(4, 3, 2));
+    my $x = $r->array($r->C('1:24'), c_(4, 3, 2));
     is_deeply(r->as->matrix($x)->values, [1 .. 24]);
     is_deeply(r->dim(r->as->matrix($x))->values, [24, 1]);
   }
@@ -882,7 +882,7 @@ my $r = Rstats::Class->new;
 {
   # as->array - from vector
   {
-    my $x1 = C_('1:24');
+    my $x1 = $r->C('1:24');
     my $x2 = r->as->array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [24]);
@@ -890,7 +890,7 @@ my $r = Rstats::Class->new;
 
   # as->array - from $r->array
   {
-    my $x1 = $r->array(C_('1:24'), c_(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), c_(4, 3, 2));
     my $x2 = r->as->array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);

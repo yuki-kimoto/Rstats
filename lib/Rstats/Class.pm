@@ -87,7 +87,7 @@ my @func_names = qw/
   c_complex
   c_integer
   c_logical
-  C_
+  C
   charmatch
   chartr
   cbind

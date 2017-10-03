@@ -291,7 +291,7 @@ my $r = Rstats::Class->new;
 {
   # is->vector
   {
-    my $x = $r->array(C_('1:24'));
+    my $x = $r->array($r->C('1:24'));
     ok(!r->is->vector($x));
   }
 }
@@ -300,7 +300,7 @@ my $r = Rstats::Class->new;
 {
   # is->matrix
   {
-    my $x = $r->matrix(C_('1:24'), 4, 3);
+    my $x = $r->matrix($r->C('1:24'), 4, 3);
     ok(r->is->matrix($x));
   }
 }
@@ -310,7 +310,7 @@ my $r = Rstats::Class->new;
   # is->array
   {
     
-    my $x = $r->array(C_('1:12'), c_(4, 3, 2));
+    my $x = $r->array($r->C('1:12'), c_(4, 3, 2));
     ok(r->is->array($x));
   }
 }

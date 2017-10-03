@@ -65,7 +65,7 @@ sub factor {
   my $levels_length = Rstats::Func::length($r, $x_levels)->value;
   if ($labels_length == 1 && Rstats::Func::get_length($r, $x1) != 1) {
     my $value = $x_labels->value;
-    $x_labels = paste($r, $value, C_($r, "1:$levels_length"), {sep => ""});
+    $x_labels = paste($r, $value, C($r, "1:$levels_length"), {sep => ""});
   }
   elsif ($labels_length != $levels_length) {
     Carp::croak("Error in factor 'labels'; length $labels_length should be 1 or $levels_length");
@@ -1142,7 +1142,7 @@ sub grep {
   return Rstats::Func::c_double($r, @$x2_values);
 }
 
-sub C_ {
+sub C {
   my $r = shift;
   my $seq_str = shift;
 
@@ -1833,7 +1833,7 @@ sub head {
   if (Rstats::Func::is_data_frame($r, $x1)) {
     my $max = $x1->{row_length} < $n ? $x1->{row_length} : $n;
     
-    my $x_range = Rstats::Func::C_($r, "1:$max");
+    my $x_range = Rstats::Func::C($r, "1:$max");
     my $x2 = $x1->get($x_range, Rstats::Func::NULL($r));
     
     return $x2;

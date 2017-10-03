@@ -32,7 +32,7 @@ my $r = Rstats::Class->new;
   
   # c_(NULL)
   {
-    my $x1 = c_(NULL);
+    my $x1 = c_($r->NULL);
     ok(r->is->null($x1));
   }
   
@@ -577,7 +577,7 @@ my $r = Rstats::Class->new;
   
   # min - no argument
   {
-    my $x1 = r->min(NULL);
+    my $x1 = r->min($r->NULL);
     is_deeply($x1->values, ['Inf']);
   }
   # min
@@ -675,7 +675,7 @@ my $r = Rstats::Class->new;
 {
   # prod - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->prod($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [1]);
@@ -718,7 +718,7 @@ my $r = Rstats::Class->new;
 {
   # sum - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->sum($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [0]);
@@ -1311,7 +1311,7 @@ my $r = Rstats::Class->new;
 {
   # cumprod - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->cumprod($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, []);
@@ -1359,7 +1359,7 @@ my $r = Rstats::Class->new;
 {
   # cumprod - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->cumsum($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, []);
@@ -1598,7 +1598,7 @@ my $r = Rstats::Class->new;
   
   # max - no argument
   {
-    my $x1 = r->max(NULL);
+    my $x1 = r->max($r->NULL);
     is_deeply($x1->values, ['-Inf']);
   }
   

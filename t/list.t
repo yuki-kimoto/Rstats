@@ -148,7 +148,7 @@ EOS
   {
     my $x1 = $r->list(c_(1, 2, 3), c_(4, 5, 6), c_(7, 8, 9));
     r->dimnames($x1, $r->list(c_("r1", "r2", "r3"), c_("c1", "c2", "c3")));
-    $x1->at(2)->set(NULL);
+    $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
     is_deeply(r->dimnames($x1)->getin(1)->values, ["r1", "r2", "r3"]);
@@ -159,7 +159,7 @@ EOS
   {
     my $x1 = $r->list(c_(1, 2, 3), c_(4, 5, 6), c_(7, 8, 9));
     r->names($x1, c_("c1", "c2", "c3"));
-    $x1->at(2)->set(NULL);
+    $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
     is_deeply(r->names($x1)->values, ["c1", "c3"]);

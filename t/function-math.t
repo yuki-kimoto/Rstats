@@ -217,7 +217,7 @@ my $r = Rstats::Class->new;
 
   # atan2 - NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3;
     eval { $x3 = r->atan2($x1, $x2) };
@@ -227,7 +227,7 @@ my $r = Rstats::Class->new;
   # atan2 - NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3;
     eval { $x3 = r->atan2($x1, $x2) };
     like($@, qr#\QError in atan2() : non-numeric argument#);

@@ -74,19 +74,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [1]);
   }
 
-  # pow - NULL, left
+  # pow - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # pow - NULL, right
+  # pow - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -181,19 +181,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [2]);
   }
 
-  # add - NULL, left
+  # add - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 + $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # add - NULL, right
+  # add - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 + $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -288,19 +288,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [0]);
   }
 
-  # subtract - NULL, left
+  # subtract - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # subtract - NULL, right
+  # subtract - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -395,19 +395,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [1]);
   }
 
-  # multiply - NULL, left
+  # multiply - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # multiply - NULL, right
+  # multiply - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -502,19 +502,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [1]);
   }
 
-  # divide - NULL, left
+  # divide - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # divide - NULL, right
+  # divide - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -609,19 +609,19 @@ my $r = Rstats::Class->new;
     is_deeply($x3->values, [0]);
   }
 
-  # remainder - NULL, left
+  # remainder - $r->NULL, left
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = c_(1);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
-  # remainder - NULL, right
+  # remainder - $r->NULL, right
   {
     my $x1 = c_(1);
-    my $x2 = NULL;
+    my $x2 = $r->NULL;
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);

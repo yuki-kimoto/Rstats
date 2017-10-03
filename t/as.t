@@ -42,7 +42,7 @@ my $r = Rstats::Class->new;
   }
   # as->integer - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, []);
@@ -181,7 +181,7 @@ my $r = Rstats::Class->new;
   
   # as->double - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, []);
@@ -335,7 +335,7 @@ my $r = Rstats::Class->new;
 { 
   # as->logical - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, []);
@@ -511,7 +511,7 @@ my $r = Rstats::Class->new;
 {
   # as->double - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, []);
@@ -600,7 +600,7 @@ my $r = Rstats::Class->new;
 {
   # as->complex - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->as->complex($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, []);

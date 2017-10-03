@@ -180,7 +180,7 @@ my $r = Rstats::Class->new;
   
   # is->na - NULL
   {
-    my $x1 = NULL;
+    my $x1 = $r->NULL;
     my $x2 = r->is->na($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, []);

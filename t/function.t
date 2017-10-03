@@ -125,7 +125,7 @@ my $r = Rstats::Class->new;
 
   # class - data frame
   {
-    my $x1 = data_frame(sex => c_(1, 2));
+    my $x1 = $r->data_frame(sex => c_(1, 2));
     is_deeply($x1->class->values, ['data.frame']);
   }
 

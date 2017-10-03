@@ -6,15 +6,6 @@ our $VERSION = '0.0148';
 
 use Rstats::Class;
 
-sub import {
-  my $self = shift;
-  
-  my $class = caller;
-  
-  my $r = Rstats::Class->new;
-  
-}
-
 require XSLoader;
 XSLoader::load('Rstats', $VERSION);
 

@@ -14,7 +14,7 @@ my $r = Rstats::Class->new;
   my $x2 = $r->array($r->C('1:24'), $r->c(3, 4));
   my $x3 = $r->outer($x1, $x2);
   is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
-  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
+  is_deeply($r->dim($x3)->values, [1, 2, 3, 4]);
 }
 
 # diag
@@ -23,14 +23,14 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->diag(3);
     is_deeply($x1->values, [1, 0, 0, 0, 1, 0, 0, 0, 1]);
-    is_deeply(r->dim($x1)->values, [3, 3]);
+    is_deeply($r->dim($x1)->values, [3, 3]);
   }
 
   # diag - basic
   {
     my $x1 = $r->diag($r->c(1, 2, 3));
     is_deeply($x1->values, [1, 0, 0, 0, 2, 0, 0, 0, 3]);
-    is_deeply(r->dim($x1)->values, [3, 3]);
+    is_deeply($r->dim($x1)->values, [3, 3]);
   }  
 }
 
@@ -57,7 +57,7 @@ my $r = Rstats::Class->new;
    140 150 160 143 154 165 176 156 168 180 192 170 180 190 200 187 198 209 220 204 216 228 240
    210 220 230 240 231 242 253 264 252 264 276 288
       /]);
-    is_deeply(r->dim($x3)->values, [12, 12, 2]);
+    is_deeply($r->dim($x3)->values, [12, 12, 2]);
   }
 
   # kronecker - reverse
@@ -81,6 +81,6 @@ my $r = Rstats::Class->new;
 105 126  88 110 132  92 115 138  96 120 144 147 168 189 154 176 198 161 184 207 168 192 216
 210 231 252 220 242 264 230 253 276 240 264 288
       /]);
-    is_deeply(r->dim($x3)->values, [12, 12, 2]);
+    is_deeply($r->dim($x3)->values, [12, 12, 2]);
   }
 }

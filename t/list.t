@@ -11,7 +11,7 @@ my $r = Rstats::Class->new;
 {
   my $x1 = $r->list(1, 2);
   my $x2 = $r->typeof($x1);
-  ok(r->is->character($x2));
+  ok($r->is->character($x2));
   is_deeply($x2->values, ['list']);
 }
 
@@ -22,7 +22,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->list(1, 2, 3);
     $r->names($x1, $r->c("n1", "n2", "n3"));
     my $l2 = $x1->get($r->c("n1", "n3"));
-    ok(r->is->list($l2));
+    ok($r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
@@ -31,7 +31,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->list(1, 2, 3);
     my $l2 = $x1->get(1);
-    ok(r->is->list($l2));
+    ok($r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
   }
   
@@ -39,7 +39,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c("a", "b");
     my $x2 = $r->as->list($x1);
-    ok(r->is->list($x2));
+    ok($r->is->list($x2));
     is_deeply($x2->getin(1)->values, ["a", "b"]);
   }
 
@@ -84,7 +84,7 @@ EOS
   # $r->list - length
   {
     my $x1 = $r->list("a", "b");
-    is_deeply(r->length($x1)->values, [2]);
+    is_deeply($r->length($x1)->values, [2]);
   }
 
   # $r->list - as_list, input is $r->list
@@ -122,7 +122,7 @@ EOS
   {
     my $x1 = $r->list(1, 2, 3);
     my $l2 = $x1->get($r->c(1, 3));
-    ok(r->is->list($l2));
+    ok($r->is->list($l2));
     is_deeply($l2->getin(1)->values, [1]);
     is_deeply($l2->getin(2)->values, [3]);
   }
@@ -132,14 +132,14 @@ EOS
 {
   my $x1 = $r->list(1, 2, 3);
   my $x2 = $r->ncol($x1);
-  ok(r->is->null($x2));
+  ok($r->is->null($x2));
 }
 
 # nrow
 {
   my $x1 = $r->list(1, 2, 3);
   my $x2 = $r->nrow($x1);
-  ok(r->is->null($x2));
+  ok($r->is->null($x2));
 }
 
 # set
@@ -151,8 +151,8 @@ EOS
     $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
-    is_deeply(r->dimnames($x1)->getin(1)->values, ["r1", "r2", "r3"]);
-    is_deeply(r->dimnames($x1)->getin(2)->values, ["c1", "c3"]);
+    is_deeply($r->dimnames($x1)->getin(1)->values, ["r1", "r2", "r3"]);
+    is_deeply($r->dimnames($x1)->getin(2)->values, ["c1", "c3"]);
   }
   
   # set - NULL, names
@@ -162,7 +162,7 @@ EOS
     $x1->at(2)->set($r->NULL);
     is_deeply($x1->getin(1)->values, [1, 2, 3]);
     is_deeply($x1->getin(2)->values, [7, 8, 9]);
-    is_deeply(r->names($x1)->values, ["c1", "c3"]);
+    is_deeply($r->names($x1)->values, ["c1", "c3"]);
   }
   
   # set - basic

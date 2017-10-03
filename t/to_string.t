@@ -202,7 +202,7 @@ EOS
 
   # to_string - 1-dimention, TRUE, FALSE
   {
-    my $x1 = $r->array($r->c(r->TRUE, $r->FALSE));
+    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 

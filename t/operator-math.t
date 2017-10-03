@@ -24,8 +24,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(5), 2);
     my $x2 = $r->array($r->c(2), 2);
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->double($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [25, 25]);
   }
   
@@ -43,7 +43,7 @@ my $r = Rstats::Class->new;
     my $x1 = 1 + 2*$r->i;
     my $x2 = 3 + 0*$r->i;
     my $x3 = $x1 ** $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => -11, im => -2}]);
   }
 
@@ -52,7 +52,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(5);
     my $x2 = $r->c(2);
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [25]);
   }
 
@@ -61,7 +61,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [25]);
   }
 
@@ -70,7 +70,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [1]);
   }
 
@@ -79,7 +79,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -88,7 +88,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 ** $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
   
@@ -105,7 +105,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
     my $x3 = $x1 ** $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => -11, im => -2}]);
   }
   
@@ -131,8 +131,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1 + 2*$r->i), 2);
     my $x2 = $r->array($r->c(3 + 4*$r->i), 2);
     my $x3 = $x1 + $x2;
-    ok(r->is->complex($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->complex($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [{re => 4, im => 6}, {re => 4, im => 6}]);
   }
   
@@ -150,7 +150,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3 + 4*$r->i);
     my $x3 = $x1 + $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => 4, im => 6}]);
   }
   
@@ -159,7 +159,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->c(2);
     my $x3 = $x1 + $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [3]);
   }
 
@@ -168,7 +168,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(1));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 + $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [3]);
   }
 
@@ -177,7 +177,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 + $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [2]);
   }
 
@@ -186,7 +186,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 + $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -195,7 +195,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 + $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
       
@@ -212,7 +212,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
     my $x3 = $x1 + $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => 4, im => 2}]);
   }
   
@@ -238,8 +238,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1), 2);
     my $x2 = $r->array($r->c(2), 2);
     my $x3 = $x1 - $x2;
-    ok(r->is->double($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->double($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [-1, -1]);
   }
   
@@ -257,7 +257,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3 + 4*$r->i);
     my $x3 = $x1 - $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => -2, im => -2}]);
   }
   
@@ -266,7 +266,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->c(2);
     my $x3 = $x1 - $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [-1]);
   }
 
@@ -275,7 +275,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(1));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 - $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [-1]);
   }
 
@@ -284,7 +284,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 - $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [0]);
   }
 
@@ -293,7 +293,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 - $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -302,7 +302,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 - $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
       
@@ -319,7 +319,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
     my $x3 = $x1 - $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => -2, im => 2}]);
   }
   
@@ -345,8 +345,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(3), 2);
     my $x2 = $r->array($r->c(2), 2);
     my $x3 = $x1 * $x2;
-    ok(r->is->double($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->double($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [6, 6]);
   }
 
@@ -364,7 +364,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3 + 4*$r->i);
     my $x3 = $x1 * $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => -5, im => 10}]);
   }
   
@@ -373,7 +373,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(3);
     my $x2 = $r->c(2);
     my $x3 = $x1 * $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [6]);
   }
 
@@ -382,7 +382,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(3));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 * $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [6]);
   }
 
@@ -391,7 +391,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 * $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [1]);
   }
 
@@ -400,7 +400,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 * $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -409,7 +409,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 * $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
   
@@ -426,7 +426,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
     my $x3 = $x1 * $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => 3, im => 6}]);
   }
   
@@ -452,8 +452,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(5), 2);
     my $x2 = $r->array($r->c(2), 2);
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->double($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [5/2, 5/2]);
   }
   
@@ -471,7 +471,7 @@ my $r = Rstats::Class->new;
     my $x1 = 5 + -6*$r->i;
     my $x2 = 3 + 2*$r->i;
     my $x3 = $x1 / $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => 3/13, im => -28/13}]);
   }
 
@@ -480,7 +480,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(5);
     my $x2 = $r->c(2);
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [5/2]);
   }
 
@@ -489,7 +489,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [5/2]);
   }
 
@@ -498,7 +498,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [1]);
   }
 
@@ -507,7 +507,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -516,7 +516,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 / $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
   
@@ -533,7 +533,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
     my $x3 = $x1 / $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is_deeply($x3->values, [{re => 1/3, im => 2/3}]);
   }
   
@@ -559,8 +559,8 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(5), 2);
     my $x2 = $r->array($r->c(2), 2);
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
-    ok(r->dim($x3)->values, [2]);
+    ok($r->is->double($x3));
+    ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [1, 1]);
   }
 
@@ -587,7 +587,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(5, 5, 2, 2);
     my $x2 = $r->c(2, 3, 2/5, 0);
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
   }
 
@@ -596,7 +596,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [1]);
   }
 
@@ -605,7 +605,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE);
     my $x2 = $r->c($r->TRUE);
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [0]);
   }
 
@@ -614,7 +614,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
 
@@ -623,7 +623,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, []);
   }
   
@@ -640,7 +640,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(5);
     my $x2 = $r->as->integer($r->c(3));
     my $x3 = $x1 % $x2;
-    ok(r->is->double($x3));
+    ok($r->is->double($x3));
     is_deeply($x3->values, [2]);
   }
   
@@ -665,7 +665,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->array($r->c(1, 2, 3));
     my $x2 = -$x1;
-    ok(r->is->double($x2));
+    ok($r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
     is_deeply($x2->dim->values, [3]);
   }
@@ -674,7 +674,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1, 2, 3);
     my $x2 = -$x1;
-    ok(r->is->double($x2));
+    ok($r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
   }
 
@@ -682,15 +682,15 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->NaN;
     my $x2 = -$x1;
-    ok(r->is->double($x2));
-    ok(r->is->nan($x2)->value);
+    ok($r->is->double($x2));
+    ok($r->is->nan($x2)->value);
   }
   
   # negate - double,-Inf
   {
     my $x1 = -$r->Inf;
     my $x2 = -$x1;
-    ok(r->is->double($x2));
+    ok($r->is->double($x2));
     ok($x2->value, 'Inf');
   }
 
@@ -698,7 +698,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->Inf;
     my $x2 = -$x1;
-    ok(r->is->double($x2));
+    ok($r->is->double($x2));
     is($x2->value, '-Inf');
   }
 
@@ -706,7 +706,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = -$x1;
-    ok(r->is->complex($x2));
+    ok($r->is->complex($x2));
     is($x2->value->{re}, -1);
     is($x2->value->{im}, -2);
   }
@@ -715,7 +715,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c($r->TRUE);
     my $x2 = -$x1;
-    ok(r->is->integer($x2));
+    ok($r->is->integer($x2));
     is($x2->value, -1);
   }
 
@@ -723,7 +723,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c($r->FALSE);
     my $x2 = -$x1;
-    ok(r->is->integer($x2));
+    ok($r->is->integer($x2));
     is($x2->value, 0);
   }
   
@@ -731,8 +731,8 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->NA;
     my $x2 = $r->negate($x1);
-    ok(r->is->integer($x2));
-    ok(r->is->na($x2));
+    ok($r->is->integer($x2));
+    ok($r->is->na($x2));
   }
 }
 
@@ -744,11 +744,11 @@ my $r = Rstats::Class->new;
     my $x2 = $r->c($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 & $x2;
     my $proxy = $r->is;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     ok($x3->is->logical);
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     ok($x3->is->logical);
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 0 0/]);
   }
   
@@ -757,7 +757,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
     my $x2 = $r->c($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 | $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 1 0/]);
   }
 }
@@ -824,10 +824,10 @@ my $r = Rstats::Class->new;
 {
   # numeric operator auto upgrade - complex
   {
-    my $x1 = $r->array($r->c(r->complex(1,2), $r->complex(3,4)));
+    my $x1 = $r->array($r->c($r->complex(1,2), $r->complex(3,4)));
     my $x2 = $r->array($r->c(1, 2));
     my $x3 = $x1 + $x2;
-    ok(r->is->complex($x3));
+    ok($r->is->complex($x3));
     is($x3->values->[0]->{re}, 2);
     is($x3->values->[0]->{im}, 2);
     is($x3->values->[1]->{re}, 5);
@@ -839,7 +839,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->as->integer($r->c(3, 5));
     my $x2 = $r->c($r->TRUE, $r->FALSE);
     my $x3 = $x1 + $x2;
-    ok(r->is->integer($x3));
+    ok($r->is->integer($x3));
     is_deeply($x3->values, [4, 5])
   }
     
@@ -848,7 +848,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1.1, 1.2));
     my $x2 = $r->as->integer($r->array($r->c(1, 2)));
     my $x3 = $x1 + $x2;
-    ok(r->is->numeric($x3));
+    ok($r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
   }
 

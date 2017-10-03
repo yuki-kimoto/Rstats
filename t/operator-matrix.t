@@ -15,7 +15,7 @@ my $r = Rstats::Class->new;
     my $x2 = $r->c(4, 5, 6);
     my $x3 = $x1 x $x2;
     is_deeply($x3->values, [32]);
-    is_deeply(r->dim($x3)->values, [1, 1]);
+    is_deeply($r->dim($x3)->values, [1, 1]);
   }
   
   # innert product - size is different

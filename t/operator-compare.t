@@ -15,7 +15,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 < $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
   
@@ -24,7 +24,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 < $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -33,7 +33,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 <= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
   }
 
@@ -42,7 +42,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 <= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
   }
 
@@ -51,7 +51,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 > $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
   }
 
@@ -60,7 +60,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 > $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
   }
 
@@ -69,7 +69,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 >= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -78,7 +78,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 >= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -87,7 +87,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 == $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -96,7 +96,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 == $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -105,7 +105,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 != $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 
@@ -114,7 +114,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 != $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 }
@@ -126,7 +126,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 > $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/0 0 1/]);
   }
 
@@ -135,7 +135,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 >= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 1/]);
   }
 
@@ -144,7 +144,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 < $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 0/]);
   }
 
@@ -153,7 +153,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 <= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 0/]);
   }
 
@@ -162,7 +162,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 == $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/0 1 0/]);
   }
 
@@ -171,7 +171,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(0, 1, 2));
     my $x2 = $r->array($r->c(1, 1, 1));
     my $x3 = $x1 != $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [qw/1 0 1/]);
   }
 }
@@ -184,7 +184,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1, 2, 3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 < $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -193,7 +193,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 < $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 0]);
   }
 
@@ -202,7 +202,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 <= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0, 1]);
   }
 
@@ -211,7 +211,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 <= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 1, 0]);
   }
 
@@ -220,7 +220,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 > $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 0]);
   }
 
@@ -229,7 +229,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 > $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 0, 1]);
   }
 
@@ -238,7 +238,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2,1,3));
     my $x3 = $x1 >= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -247,7 +247,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2,3));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 >= $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1, 1]);
   }
 
@@ -256,7 +256,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 == $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -265,7 +265,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 == $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [0, 1]);
   }
 
@@ -274,7 +274,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2,2));
     my $x3 = $x1 != $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 
@@ -283,7 +283,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->array($r->c(1,2));
     my $x2 = $r->array($r->c(2));
     my $x3 = $x1 != $x2;
-    ok(r->is->logical($x3));
+    ok($r->is->logical($x3));
     is_deeply($x3->values, [1, 0]);
   }
 }
@@ -309,14 +309,14 @@ my $r = Rstats::Class->new;
   {
     my $z1 = $r->c_complex({re => 1, im => 2});
     my $z2 = $r->c_complex({re => 1, im => 2});
-    is(r->not_equal($z1, $z2)->value, 0);
+    is($r->not_equal($z1, $z2)->value, 0);
   }
   
   # comparison operator - !=, false
   {
     my $z1 = $r->c_complex({re => 1, im => 2});
     my $z2 = $r->c_complex({re => 1, im => 1});
-    is(r->not_equal($z1, $z2)->value, 1);
+    is($r->not_equal($z1, $z2)->value, 1);
   }
 
   # comparison operator - <, error

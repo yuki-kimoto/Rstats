@@ -13,9 +13,6 @@ sub import {
   
   my $r = Rstats::Class->new;
   
-  # Export primary methods
-  no strict 'refs';
-  *{"${class}::r"} = sub { $r };
 }
 
 require XSLoader;

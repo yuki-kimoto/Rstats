@@ -4,6 +4,9 @@ use warnings;
 
 use Rstats;
 use POSIX();
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # operation - pow
 {
@@ -18,8 +21,8 @@ use POSIX();
 {
   # pow - dim
   {
-    my $x1 = array(c_(5), 2);
-    my $x2 = array(c_(2), 2);
+    my $x1 = $r->array(c_(5), 2);
+    my $x2 = $r->array(c_(2), 2);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -125,8 +128,8 @@ use POSIX();
 {
   # add - dim
   {
-    my $x1 = array(c_(1 + 2*i_), 2);
-    my $x2 = array(c_(3 + 4*i_), 2);
+    my $x1 = $r->array(c_(1 + 2*i_), 2);
+    my $x2 = $r->array(c_(3 + 4*i_), 2);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     ok(r->dim($x3)->values, [2]);
@@ -232,8 +235,8 @@ use POSIX();
 {
   # subtract - dim
   {
-    my $x1 = array(c_(1), 2);
-    my $x2 = array(c_(2), 2);
+    my $x1 = $r->array(c_(1), 2);
+    my $x2 = $r->array(c_(2), 2);
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -339,8 +342,8 @@ use POSIX();
 {
   # multiply - double
   {
-    my $x1 = array(c_(3), 2);
-    my $x2 = array(c_(2), 2);
+    my $x1 = $r->array(c_(3), 2);
+    my $x2 = $r->array(c_(2), 2);
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -446,8 +449,8 @@ use POSIX();
 {
   # divide - dim
   {
-    my $x1 = array(c_(5), 2);
-    my $x2 = array(c_(2), 2);
+    my $x1 = $r->array(c_(5), 2);
+    my $x2 = $r->array(c_(2), 2);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -553,8 +556,8 @@ use POSIX();
 {
   # remainder - double
   {
-    my $x1 = array(c_(5), 2);
-    my $x2 = array(c_(2), 2);
+    my $x1 = $r->array(c_(5), 2);
+    my $x2 = $r->array(c_(2), 2);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -660,7 +663,7 @@ use POSIX();
 {
   # negate - dimention
   {
-    my $x1 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_(1, 2, 3));
     my $x2 = -$x1;
     ok(r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
@@ -762,7 +765,7 @@ use POSIX();
 # bool
 {
   {
-    my $x1 = array(1);
+    my $x1 = $r->array(1);
     if ($x1) {
       pass;
     }
@@ -773,7 +776,7 @@ use POSIX();
   
   # bool - one argument, false
   {
-    my $x1 = array(0);
+    my $x1 = $r->array(0);
     if ($x1) {
       fail;
     }
@@ -784,7 +787,7 @@ use POSIX();
 
   # bool - two argument, true
   {
-    my $x1 = array(3, 3);
+    my $x1 = $r->array(3, 3);
     if ($x1) {
       pass;
     }
@@ -821,8 +824,8 @@ use POSIX();
 {
   # numeric operator auto upgrade - complex
   {
-    my $x1 = array(c_(r->complex(1,2), r->complex(3,4)));
-    my $x2 = array(c_(1, 2));
+    my $x1 = $r->array(c_(r->complex(1,2), r->complex(3,4)));
+    my $x2 = $r->array(c_(1, 2));
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     is($x3->values->[0]->{re}, 2);
@@ -842,8 +845,8 @@ use POSIX();
     
   # numeric operator auto upgrade - numeric
   {
-    my $x1 = array(c_(1.1, 1.2));
-    my $x2 = r->as->integer(array(c_(1, 2)));
+    my $x1 = $r->array(c_(1.1, 1.2));
+    my $x2 = r->as->integer($r->array(c_(1, 2)));
     my $x3 = $x1 + $x2;
     ok(r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
@@ -851,48 +854,48 @@ use POSIX();
 
   # numeric operator auto upgrade - character, +
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 + $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, -
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 - $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, *
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 * $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, /
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 / $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, ^
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 ** $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, %
   {
-    my $x1 = array(c_("1", "2", "3"));
-    my $x2 = array(c_(1, 2, 3));
+    my $x1 = $r->array(c_("1", "2", "3"));
+    my $x2 = $r->array(c_(1, 2, 3));
     eval { my $ret = $x1 % $x2 };
     like($@, qr/non-numeric argument/);
   }

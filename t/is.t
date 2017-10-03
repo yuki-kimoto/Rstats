@@ -74,7 +74,7 @@ my $r = Rstats::Class->new;
   
   # is->nan - dimention
   {
-    my $x1 = array(c_(1, 2));
+    my $x1 = $r->array(c_(1, 2));
     my $x2 = r->is->nan($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -163,7 +163,7 @@ my $r = Rstats::Class->new;
   
   # is->infinite - dimention
   {
-    my $x1 = array(c_(1, 2));
+    my $x1 = $r->array(c_(1, 2));
     my $x2 = r->is->infinite($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -173,7 +173,7 @@ my $r = Rstats::Class->new;
 {
   # is->na - dim
   {
-    my $x1 = array(c_(1.1, 1.2));
+    my $x1 = $r->array(c_(1.1, 1.2));
     my $x2 = r->is->na($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -291,7 +291,7 @@ my $r = Rstats::Class->new;
 {
   # is->vector
   {
-    my $x = array(C_('1:24'));
+    my $x = $r->array(C_('1:24'));
     ok(!r->is->vector($x));
   }
 }
@@ -310,7 +310,7 @@ my $r = Rstats::Class->new;
   # is->array
   {
     
-    my $x = array(C_('1:12'), c_(4, 3, 2));
+    my $x = $r->array(C_('1:12'), c_(4, 3, 2));
     ok(r->is->array($x));
   }
 }

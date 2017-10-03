@@ -21,17 +21,17 @@ my $r = Rstats::Class->new;
   is_deeply(r->dim($m1)->values, [4, 3]);
 }
 
-# $r->matrix
+# matrix
 {
   
-  # $r->matrix - $r->matrix(2, 2);
+  # matrix - $r->matrix(2, 2);
   {
     my $x1 = $r->matrix(2, 2);
     is_deeply($x1->values, [2, 2]);
     is_deeply($x1->dim->values, [2, 1]);
   }
   
-  # $r->matrix - byrow
+  # matrix - byrow
   {
     my $m1 = $r->matrix(C_('1:12'), 3, 4, {byrow => 1});
     is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
@@ -39,7 +39,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
 
-  # $r->matrix - omit col
+  # matrix - omit col
   {
     my $m1 = $r->matrix(C_('1:12'), undef, 4);
     is_deeply($m1->values, [1 .. 12]);
@@ -47,7 +47,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
   
-  # $r->matrix - basic
+  # matrix - basic
   {
     my $m1 = $r->matrix(C_('1:12'), 3, 4);
     is_deeply($m1->values, [1 .. 12]);
@@ -55,7 +55,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
   
-  # $r->matrix - omit row
+  # matrix - omit row
   {
     my $m1 = $r->matrix(C_('1:12'), 3);
     is_deeply($m1->values, [1 .. 12]);
@@ -63,7 +63,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
   
-  # $r->matrix - omit col
+  # matrix - omit col
   {
     my $m1 = $r->matrix(C_('1:12'));
     is_deeply($m1->values, [1 .. 12]);
@@ -71,7 +71,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
 
-  # $r->matrix - nrow and ncol option
+  # matrix - nrow and ncol option
   {
     my $m1 = $r->matrix(C_('1:12'), {nrow => 4, ncol => 3});
     is_deeply($m1->values, [1 .. 12]);
@@ -79,7 +79,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
   
-  # $r->matrix - repeat
+  # matrix - repeat
   {
     my $m1 = $r->matrix(C_('1:3'), 3, 4);
     is_deeply($m1->values, [(1 .. 3) x 4]);
@@ -87,7 +87,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
 
-  # $r->matrix - repeat 2
+  # matrix - repeat 2
   {
     my $m1 = $r->matrix(C_('1:10'), 3, 4);
     is_deeply($m1->values, [1 .. 10, 1, 2]);
@@ -95,7 +95,7 @@ my $r = Rstats::Class->new;
     ok(r->is->matrix($m1));
   }
   
-  # $r->matrix - repeat 3
+  # matrix - repeat 3
   {
     my $m1 = $r->matrix(0, 3, 4);
     is_deeply($m1->values, [(0) x 12]);

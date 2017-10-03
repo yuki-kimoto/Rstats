@@ -135,9 +135,9 @@ my $r = Rstats::Class->new;
     is_deeply($x1->class->values, ['numeric']);
   }
   
-  # class - array
+  # class - $r->array
   {
-    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x1 = $r->array(C_('1:24'), c_(4, 3, 2));
     is_deeply($x1->class->values, ['array']);
   }
   
@@ -198,7 +198,7 @@ my $r = Rstats::Class->new;
   }
 }
 
-# $r->matrix
+# matrix
 {
   {
     my $mat = $r->matrix(0, 2, 5);
@@ -332,25 +332,25 @@ my $r = Rstats::Class->new;
 
 # length
 {
-  my $x = array(c_(1, 2, 3));
+  my $x = $r->array(c_(1, 2, 3));
   is(r->length($x)->value, 3);
 }
 
 # array
 {
   {
-    my $x = array(25);
+    my $x = $r->array(25);
     is_deeply($x->values, [25]);
   }
   {
-    my $x = array(c_(1, 2, 3));
+    my $x = $r->array(c_(1, 2, 3));
     is_deeply(r->dim($x)->values, [3]);
   }
 }
 
 # Array get and set
 {
-  my $x = array(c_(1, 2, 3));
+  my $x = $r->array(c_(1, 2, 3));
   is_deeply($x->get(1)->values, [1]);
   is_deeply($x->get(3)->values, [3]);
   $x->at(1)->set(5);;
@@ -499,7 +499,7 @@ my $r = Rstats::Class->new;
 
   # Arg - dim
   {
-    my $x1 = array(c_(T_, T_));
+    my $x1 = $r->array(c_(T_, T_));
     my $x2 = r->Arg($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -587,7 +587,7 @@ my $r = Rstats::Class->new;
     is_deeply($x2->values, [1]);
   }
 
-  # min - multiple arrays
+  # min - multiple $r->arrays
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = c_(4, 5, 6);
@@ -607,7 +607,7 @@ my $r = Rstats::Class->new;
   # expm1 - double,array
   {
     my $x0 = c_(1, 2);
-    my $x1 = array($x0);
+    my $x1 = $r->array($x0);
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.718282');
     is(sprintf("%.6f", $x2->values->[1]), '6.389056');
@@ -626,7 +626,7 @@ my $r = Rstats::Class->new;
   
   # expm1 - double,less than 1e-5
   {
-    my $x1 = array(c_(0.0000001234));
+    my $x1 = $r->array(c_(0.0000001234));
     my $x2 = r->expm1($x1);
     my $x2_value_str = sprintf("%.13e", $x2->value);
     $x2_value_str =~ s/e-0+/e-/;
@@ -636,7 +636,7 @@ my $r = Rstats::Class->new;
 
   # expm1 - integer
   {
-    my $x1 = r->as->integer(array(c_(2)));
+    my $x1 = r->as->integer($r->array(c_(2)));
     my $x2 = r->expm1($x1);
     is(sprintf("%.6f", $x2->value), '6.389056');
     ok(r->is->double($x2));
@@ -766,21 +766,21 @@ my $r = Rstats::Class->new;
 # str
 {
 
-  # str - array, one element
+  # str - $r->array, one element
   {
-    my $x1 = array(1, 1);
+    my $x1 = $r->array(1, 1);
     is(r->str($x1), 'num [1(1d)] 1');
   }
   
-  # str - array, one dimention
+  # str - $r->array, one dimention
   {
-    my $x1 = array(C_('1:4'), c_(4));
+    my $x1 = $r->array(C_('1:4'), c_(4));
     is(r->str($x1), 'num [1:4(1d)] 1 2 3 4');
   }
   
-  # str - array
+  # str - $r->array
   {
-    my $x1 = array(C_('1:12'), c_(4, 3));
+    my $x1 = $r->array(C_('1:12'), c_(4, 3));
     is(r->str($x1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
   }
   
@@ -846,7 +846,7 @@ my $r = Rstats::Class->new;
   
   # exp - double,array
   {
-    my $x1 = array(c_(1, 2));
+    my $x1 = $r->array(c_(1, 2));
     my $x2 = r->exp($x1);
     is(sprintf("%.6f", $x2->values->[0]), '2.718282');
     is(sprintf("%.6f", $x2->values->[1]), '7.389056');
@@ -900,7 +900,7 @@ my $r = Rstats::Class->new;
   
   # log10 - double,array
   {
-    my $x1 = array(c_(10));
+    my $x1 = $r->array(c_(10));
     my $x2 = r->log10($x1);
     is($x2->value, 1);
     is_deeply(r->dim($x2)->values, [1]);
@@ -909,7 +909,7 @@ my $r = Rstats::Class->new;
 
   # log10 - integer
   {
-    my $x1 = array(r->c_integer(10));
+    my $x1 = $r->array(r->c_integer(10));
     my $x2 = r->log10($x1);
     is($x2->value, 1);
     is_deeply(r->dim($x2)->values, [1]);
@@ -918,7 +918,7 @@ my $r = Rstats::Class->new;
 
   # log10 - logical
   {
-    my $x1 = array(r->c_logical(10));
+    my $x1 = $r->array(r->c_logical(10));
     my $x2 = r->log10($x1);
     is($x2->value, 1);
     is_deeply(r->dim($x2)->values, [1]);
@@ -943,7 +943,7 @@ my $r = Rstats::Class->new;
   
   # log2 - double,array
   {
-    my $x1 = array(c_(2));
+    my $x1 = $r->array(c_(2));
     my $x2 = r->log2($x1);
     is($x2->values->[0], 1);
     is_deeply(r->dim($x2)->values, [1]);
@@ -968,7 +968,7 @@ my $r = Rstats::Class->new;
   
   # logb - double,array
   {
-    my $x1 = array(c_(1, 10, -1, 0));
+    my $x1 = $r->array(c_(1, 10, -1, 0));
     my $x2 = r->logb($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.5f", $x2->values->[1]), '2.30259');
@@ -996,7 +996,7 @@ my $r = Rstats::Class->new;
   
   # log - double,array
   {
-    my $x1 = array(c_(1, 10, -1, 0));
+    my $x1 = $r->array(c_(1, 10, -1, 0));
     my $x2 = r->log($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.5f", $x2->values->[1]), '2.30259');
@@ -1132,13 +1132,13 @@ my $r = Rstats::Class->new;
     is($x1->value->{im}, 2);
   }
   
-  # complex - array
+  # complex - $r->array
   {
     my $x1 = r->complex(c_(1, 2), c_(3, 4));
     is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
   }
 
-  # complex - array, some elements lack
+  # complex - $r->array, some elements lack
   {
     my $x1 = r->complex(c_(1, 2), c_(3, 4, 5));
     is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
@@ -1588,7 +1588,7 @@ my $r = Rstats::Class->new;
     is_deeply($x2->values, [3]);
   }
 
-  # max - multiple arrays
+  # max - multiple $r->arrays
   {
     my $x1 = c_(1, 2, 3);
     my $x2 = c_(4, 5, 6);
@@ -1675,7 +1675,7 @@ my $r = Rstats::Class->new;
 
 # round
 {
-  # round - array reference
+  # round - $r->array reference
   {
     my $x1 = c_(-1.3, 2.4, 2.5, 2.51, 3.51);
     my $x2 = r->round($x1);
@@ -1695,7 +1695,7 @@ my $r = Rstats::Class->new;
     );
   }
 
-  # round - array reference
+  # round - $r->array reference
   {
     my $x1 = c_(-13, 24, 25, 25.1, 35.1);
     my $x2 = r->round($x1, -1);
@@ -1705,7 +1705,7 @@ my $r = Rstats::Class->new;
     );
   }
 
-  # round - array reference
+  # round - $r->array reference
   {
     my $x1 = c_(-13, 24, 25, 25.1, 35.1);
     my $x2 = r->round($x1, {digits => -1});
@@ -1725,7 +1725,7 @@ my $r = Rstats::Class->new;
     );
   }
   
-  # round - array reference
+  # round - $r->array reference
   {
     my $x1 = c_(-0.13, 0.24, 0.25, 0.251, 0.351);
     my $x2 = r->round($x1, 1);
@@ -1748,7 +1748,7 @@ my $r = Rstats::Class->new;
 
 # trunc
 {
-  # trunc - array reference
+  # trunc - $r->array reference
   {
     my $x1 = c_(-1.2, -1, 1, 1.2);
     my $x2 = r->trunc($x1);
@@ -1771,7 +1771,7 @@ my $r = Rstats::Class->new;
 
 # floor
 {
-  # floor - array reference
+  # floor - $r->array reference
   {
     my $x1 = c_(2.5, 2.0, -1.0, -1.3);
     my $x2 = r->floor($x1);
@@ -1794,7 +1794,7 @@ my $r = Rstats::Class->new;
 
 # ceiling
 {
-  # ceiling - array reference
+  # ceiling - $r->array reference
   {
     my $x1 = c_(2.5, 2.0, -1.0, -1.3);
     my $x2 = r->ceiling($x1);
@@ -1817,7 +1817,7 @@ my $r = Rstats::Class->new;
 
 # sqrt
 {
-  # sqrt - array reference
+  # sqrt - $r->array reference
   {
     my $x1 = c_(2, 3, 4);
     my $x2 = r->sqrt($x1);
@@ -1855,7 +1855,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 
-  # c_double - arguments is array reference
+  # c_double - arguments is $r->array reference
   {
     my $x1 = r->c_double([1.1, 1.2, 1.3]);
     ok($x1->is->double);
@@ -1896,7 +1896,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->values, [qw/a b c/]);
   }
 
-  # c_character - arguments is array reference
+  # c_character - arguments is $r->array reference
   {
     my $x1 = r->c_character(["a", "b", "c"]);
     ok($x1->is->character);
@@ -1913,7 +1913,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }
 
-  # c_complex - arguments is array reference
+  # c_complex - arguments is $r->array reference
   {
     my $x1 = r->c_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
     ok($x1->is->complex);
@@ -1925,14 +1925,14 @@ my $r = Rstats::Class->new;
 {
   # array - basic
   {
-    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x1 = $r->array(C_('1:24'), c_(4, 3, 2));
     is_deeply($x1->values, [1 .. 24]);
     is_deeply(r->dim($x1)->values, [4, 3, 2]);
   }
   
   # array - dim option
   {
-    my $x1 = array(C_('1:24'), {dim => c_(4, 3, 2)});
+    my $x1 = $r->array(C_('1:24'), {dim => c_(4, 3, 2)});
     is_deeply($x1->values, [1 .. 24]);
     is_deeply(r->dim($x1)->values, [4, 3, 2]);
   }
@@ -1942,31 +1942,31 @@ my $r = Rstats::Class->new;
 {
   # value - none argument
   {
-    my $x1 = array(C_('1:4'));
+    my $x1 = $r->array(C_('1:4'));
     is($x1->value, 1);
   }
 
   # value - one-dimetion
   {
-    my $x1 = array(C_('1:4'));
+    my $x1 = $r->array(C_('1:4'));
     is($x1->value(2), 2);
   }
   
   # value - two-dimention
   {
-    my $x1 = array(C_('1:12'), c_(4, 3));
+    my $x1 = $r->array(C_('1:12'), c_(4, 3));
     is($x1->value(3, 2), 7);
   }
 
   # value - two-dimention, as_vector
   {
-    my $x1 = array(C_('1:12'), c_(4, 3));
+    my $x1 = $r->array(C_('1:12'), c_(4, 3));
     is(r->as->vector($x1)->value(5), 5);
   }
   
   # value - three-dimention
   {
-    my $x1 = array(C_('1:24'), c_(4, 3, 1));
+    my $x1 = $r->array(C_('1:24'), c_(4, 3, 1));
     is($x1->value(3, 2, 1), 7);
   }
 }

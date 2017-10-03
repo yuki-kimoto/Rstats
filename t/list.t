@@ -35,7 +35,7 @@ my $r = Rstats::Class->new;
     is_deeply($l2->getin(1)->values, [1]);
   }
   
-  # $r->list - as_list, input is array
+  # $r->list - as_list, input is $r->array
   {
     my $x1 = c_("a", "b");
     my $x2 = r->as->list($x1);
@@ -54,7 +54,7 @@ my $r = Rstats::Class->new;
     );
   }
 
-  # $r->list - argument is not array
+  # $r->list - argument is not $r->array
   {
     my $x1 = $r->list(1, 2, 3);
     is_deeply($x1->list->[0]->values, [1]);

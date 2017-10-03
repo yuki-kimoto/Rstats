@@ -279,9 +279,9 @@ my $r = Rstats::Class->new;
   }
 }
 
-# $r->data_frame
+# data_frame
 {
-  # $r->data_frame - with I
+  # data_frame - with I
   {
     my $sex = r->I(c_('F', 'M', 'F'));
     my $height = c_(172, 168, 155);
@@ -292,7 +292,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->getin(2)->values, [172, 168, 155]);
   }
   
-  # $r->data_frame - basic
+  # data_frame - basic
   {
     my $sex = c_('F', 'M', 'F');
     my $height = c_(172, 168, 155);
@@ -305,7 +305,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->getin('height')->values, [172, 168, 155]);
   }
   
-  # $r->data_frame - alias for cbind
+  # data_frame - alias for cbind
   {
     my $sex = c_('F', 'M', 'F');
     my $height = c_(172, 168, 155);
@@ -324,7 +324,7 @@ my $r = Rstats::Class->new;
     is_deeply($x3->getin(3)->values, [5, 6, 7]);
   }
   
-  # $r->data_frame - basic
+  # data_frame - basic
   {
     my $sex = c_('F', 'M', 'F');
     my $height = c_(172, 168, 155);
@@ -337,7 +337,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->getin('height')->values, [172, 168, 155]);
   }
 
-  # $r->data_frame - name duplicate
+  # data_frame - name duplicate
   {
     my $sex = c_('a', 'b', 'c');
     my $sex1 = c_('a1', 'b1', 'c1');
@@ -453,9 +453,9 @@ my $r = Rstats::Class->new;
   ok($x2->values, [2]);
 }
 
-# $r->data_frame - to_string
+# data_frame - to_string
 {
-  # $r->data_frame - to_string
+  # data_frame - to_string
   {
     my $sex = c_('F', 'M', 'F');
     my $height = c_(172, 168, 155);

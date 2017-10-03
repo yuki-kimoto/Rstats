@@ -4,8 +4,13 @@ package SPVM::Rstats::Data {
   has double_values : double[];
   has complex_values : double[][];
   has string_values : byte[][];
+  has dimension : int[];
   
   enum {
-    TYPE_DOUBLE
+    TYPE_BOOLEAN,
+    TYPE_INTEGER,
+    TYPE_DOUBLE,
+    TYPE_COMPLEX,
+    TYPE_STRING,
   }
 }

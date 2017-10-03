@@ -12,7 +12,7 @@ my $r = Rstats::Class->new;
   # get - have names
   {
     my $x1 = $r->c(4, 5, 6);
-    r->names($x1, $r->c("a", "b", "c"));
+    $r->names($x1, $r->c("a", "b", "c"));
     my $x2 = $x1->get($r->c(1, 3));
     is_deeply($x2->values, [4, 6]);
     is_deeply(r->names($x2)->values, ["a", "c"]);
@@ -20,8 +20,8 @@ my $r = Rstats::Class->new;
 
   # get - have dimnames
   {
-    my $x1 = r->matrix($r->C('1:24'), 3, 2);
-    r->dimnames($x1 => $r->list($r->c('r1', 'r2', 'r3'), $r->c('c1', 'c2')));
+    my $x1 = $r->matrix($r->C('1:24'), 3, 2);
+    $r->dimnames($x1 => $r->list($r->c('r1', 'r2', 'r3'), $r->c('c1', 'c2')));
     my $x2 = $x1->get($r->c(1, 3), $r->c(2));
     is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);
@@ -81,7 +81,7 @@ my $r = Rstats::Class->new;
   # get - character
   {
     my $x1 = $r->c(1, 2, 3, 4);
-    r->names($x1 => $r->c('a', 'b', 'c', 'd'));
+    $r->names($x1 => $r->c('a', 'b', 'c', 'd'));
     my $x2 = $x1->get($r->c('b', 'd'));
     is_deeply($x2->values, [2, 4]);
   }
@@ -97,7 +97,7 @@ my $r = Rstats::Class->new;
   # get - as_logical
   {
     my $x1 = $r->c(1, 3, 5, 7);
-    my $logical_v = r->as->logical($r->c(0, 1, 0, 1, 1));
+    my $logical_v = $r->as->logical($r->c(0, 1, 0, 1, 1));
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
   }

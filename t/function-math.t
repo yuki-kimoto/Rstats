@@ -15,21 +15,21 @@ my $r = Rstats::Class->new;
 # Im
 {
   my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = r->Im($x1);
+  my $x2 = $r->Im($x1);
   is_deeply($x2->values, [2, 3]);
 }
 
 # Re
 {
   my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = r->Re($x1);
+  my $x2 = $r->Re($x1);
   is_deeply($x2->values, [1, 2]);
 }
 
 # Conj
 {
   my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = r->Conj($x1);
+  my $x2 = $r->Conj($x1);
   is_deeply($x2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
 }
 
@@ -37,20 +37,20 @@ my $r = Rstats::Class->new;
 {
   # abs - $r->array refference
   {
-    my $x1 = r->abs($r->c(-3, 4));
+    my $x1 = $r->abs($r->c(-3, 4));
     is_deeply($x1->values, [3, 4]);
   }
 
   # abs - matrix
   {
-    my $x1 = r->abs($r->matrix($r->c(-3, 4)));
+    my $x1 = $r->abs($r->matrix($r->c(-3, 4)));
     is_deeply($x1->values, [3, 4]);
   }
   
   # abs - complex
   {
     my $x1 = $r->c(3 + 4*$r->i, 6 + 8*$r->i);
-    my $x2 = r->abs($x1);
+    my $x2 = $r->abs($x1);
     is_deeply($x2->values, [5, 10]);
   }
 }
@@ -60,7 +60,7 @@ my $r = Rstats::Class->new;
   # Mod - complex
   {
     my $x1 = $r->c(3 + 4*$r->i, 6 + 8*$r->i);
-    my $x2 = r->Mod($x1);
+    my $x2 = $r->Mod($x1);
     is_deeply($x2->values, [5, 10]);
   }
 }
@@ -72,7 +72,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     ok(r->is->complex($x3));
     is(sprintf("%.6f", $x3->values->[0]->{re}), '0.491397');
     is(sprintf("%.6f", $x3->values->[0]->{im}), '0.641237');
@@ -82,7 +82,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1 + 2*$r->i);
     my $x2 = $r->c(3 + 4*$r->i);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value->{re}), 0.416491);
     is(sprintf("%.6f", $x3->value->{im}), 0.067066);
     ok(r->is->complex($x3));
@@ -92,7 +92,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->array($r->c(1, 2));
     my $x2 = $r->array($r->c(3, 4));
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     is_deeply(r->dim($x3)->values, [2]);
@@ -103,7 +103,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1, 2);
     my $x2 = $r->c(3, 4);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     ok(r->is->double($x3));
@@ -113,7 +113,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->c($r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '-0.785398');
   }
   
@@ -121,7 +121,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c($r->Inf);
     my $x2 = $r->c(-$r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '2.356194');
   }
   
@@ -129,7 +129,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c($r->Inf);
     my $x2 = $r->c($r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '0.785398');
   }
   
@@ -137,7 +137,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->c(-$r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '-2.356194');
   }
   
@@ -145,7 +145,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(0);
     my $x2 = $r->c($r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is($x3->value, 0);
   }
   
@@ -153,7 +153,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(0, 1);
     my $x2 = $r->c(-$r->Inf, -$r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), 3.141593);
     is(sprintf("%.6f", $x3->values->[1]), 3.141593);
   }
@@ -162,7 +162,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(-1);
     my $x2 = $r->c(-$r->Inf);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), -3.141593);
   }
   
@@ -170,7 +170,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c($r->Inf);
     my $x2 = $r->c(0);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '1.570796');
   }
   
@@ -178,31 +178,31 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->c(0);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '-1.570796');
   }
 
   # atan2 - y is NA
   {
-    my $x1 = r->atan2($r->NA, 0);
+    my $x1 = $r->atan2($r->NA, 0);
     ok(!defined $x1->value);
   }  
 
   # atan2 - x is NA
   {
-    my $x1 = r->atan2(0, $r->NA);
+    my $x1 = $r->atan2(0, $r->NA);
     ok(!defined $x1->value);
   }
 
   # atan2 - y is NaN
   {
-    my $x1 = r->atan2($r->NaN, 0);
+    my $x1 = $r->atan2($r->NaN, 0);
     is($x1->value, 'NaN');
   }
   
   # atan2 - x is NaN
   {
-    my $x1 = r->atan2(0, $r->NaN);
+    my $x1 = $r->atan2(0, $r->NaN);
     is($x1->value, 'NaN');
   }
 
@@ -211,7 +211,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c("a");
     my $x2 = $r->c("b");
     my $x3;
-    eval { $x3 = r->atan2($x1, $x2) };
+    eval { $x3 = $r->atan2($x1, $x2) };
     like($@, qr#\QError in atan2() : non-numeric argument#);
   }
 
@@ -220,7 +220,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->NULL;
     my $x2 = $r->c(1);
     my $x3;
-    eval { $x3 = r->atan2($x1, $x2) };
+    eval { $x3 = $r->atan2($x1, $x2) };
     like($@, qr#\QError in atan2() : non-numeric argument#);
   }
 
@@ -229,7 +229,7 @@ my $r = Rstats::Class->new;
     my $x1 = $r->c(1);
     my $x2 = $r->NULL;
     my $x3;
-    eval { $x3 = r->atan2($x1, $x2) };
+    eval { $x3 = $r->atan2($x1, $x2) };
     like($@, qr#\QError in atan2() : non-numeric argument#);
   }
   
@@ -237,7 +237,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = $r->c(1, 2);
     my $x2 = $r->c(3, 4, 3, 4);
-    my $x3 = r->atan2($x1, $x2);
+    my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     is(sprintf("%.6f", $x3->values->[2]), '0.321751');
@@ -253,7 +253,7 @@ my $r = Rstats::Class->new;
     my $x0 = -$r->Inf;
     
     my $x1 = $r->c(-$r->Inf - 2*$r->i);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->value->{re}, '-1');
     cmp_ok($x2->value->{im}, '==', 0);
   }
@@ -261,7 +261,7 @@ my $r = Rstats::Class->new;
   # tanh - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.166736');
     is(sprintf("%.6f", $x2->value->{im}), '-0.243458');
     ok(r->is->complex($x2));
@@ -269,8 +269,8 @@ my $r = Rstats::Class->new;
   
   # tanh - complex, 1 + Inf
   {
-    my $x1 = r->complex({re => 1, im => $r->Inf});
-    my $x2 = r->tanh($x1);
+    my $x1 = $r->complex({re => 1, im => $r->Inf});
+    my $x2 = $r->tanh($x1);
     is($x2->value->{re}, 'NaN');
     is($x2->value->{im}, 'NaN');
   }
@@ -278,7 +278,7 @@ my $r = Rstats::Class->new;
   # tanh - complex, -$r->Inf + 2i
   {
     my $x1 = $r->c(-$r->Inf + 2*$r->i);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->value->{re}, '-1');
     is($x2->value->{im}, '0');
   }
@@ -286,7 +286,7 @@ my $r = Rstats::Class->new;
   # tanh - double,array
   {
     my $x1 = $r->array($r->c(0, 2));
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.964028');
     is_deeply(r->dim($x2)->values, [2]);
@@ -296,28 +296,28 @@ my $r = Rstats::Class->new;
   # tanh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->value, '1');
   }
   
   # tanh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->value, '-1');
   }
 
   # tanh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     ok(!defined $x2->value);
   }  
 
   # tanh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->tanh($x1);
+    my $x2 = $r->tanh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -327,7 +327,7 @@ my $r = Rstats::Class->new;
   # atanh - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.173287');
     is(sprintf("%.6f", $x2->value->{im}), '1.178097');
     ok(r->is->complex($x2));
@@ -336,7 +336,7 @@ my $r = Rstats::Class->new;
   # atanh - complex, 1 + 0i
   {
     my $x1 = $r->c(1 + 0*$r->i);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->value->{re}, 'Inf');
     is($x2->value->{im}, 'NaN');
     ok(r->is->complex($x2));
@@ -345,7 +345,7 @@ my $r = Rstats::Class->new;
   # atanh - complex, -1 + 0i
   {
     my $x1 = $r->c(-1 + 0*$r->i);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->value->{re}, '-Inf');
     is($x2->value->{im}, 'NaN');
     ok(r->is->complex($x2));
@@ -354,7 +354,7 @@ my $r = Rstats::Class->new;
   # atanh - double,array
   {
     my $x1 = $r->array($r->c(0, 0.5, 1, 2, -1, -0.5, -2));
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.6f", $x2->values->[1]), '0.549306');
     is($x2->values->[2], 'Inf');
@@ -369,7 +369,7 @@ my $r = Rstats::Class->new;
   # atanh - integer
   {
     my $x1 = $r->array($r->c(0, 1, 2, -1, -2));
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->values->[0], 0);
     is($x2->values->[1], 'Inf');
     is($x2->values->[2], 'NaN');
@@ -382,28 +382,28 @@ my $r = Rstats::Class->new;
   # atanh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->value, 'NaN');
   }
   
   # atanh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->value, 'NaN');
   }
 
   # atanh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     ok(!defined $x2->value);
   }
 
   # atanh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->atanh($x1);
+    my $x2 = $r->atanh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -413,7 +413,7 @@ my $r = Rstats::Class->new;
   # acosh - complex, -1 + 0i
   {
     my $x1 = $r->c(-1 + 0*$r->i);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     cmp_ok($x2->value->{re}, '==', 0);
     #is($x2->value->{re}, -0);
     is(sprintf("%.6f", $x2->value->{im}), '3.141593');
@@ -423,7 +423,7 @@ my $r = Rstats::Class->new;
   # acosh - complex, -2 + 0i
   {
     my $x1 = $r->c(-2 + 0*$r->i);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.316958');
     is(sprintf("%.6f", $x2->value->{im}), '3.141593');
     ok(r->is->complex($x2));
@@ -432,7 +432,7 @@ my $r = Rstats::Class->new;
   # acosh - complex, 0 + 1i
   {
     my $x1 = $r->c(0 + 1*$r->i);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.881374');
     is(sprintf("%.6f", $x2->value->{im}), '1.570796');
     ok(r->is->complex($x2));
@@ -441,7 +441,7 @@ my $r = Rstats::Class->new;
   # acosh - complex, 1 + 1i
   {
     my $x1 = $r->c(1 + 1*$r->i);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.061275');
     is(sprintf("%.6f", $x2->value->{im}), '0.904557');
     ok(r->is->complex($x2));
@@ -450,7 +450,7 @@ my $r = Rstats::Class->new;
   # acosh - complex, -1 + 1i
   {
     my $x1 = $r->c(-1 + 1*$r->i);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.061275');
     is(sprintf("%.6f", $x2->value->{im}), '2.237036');
     ok(r->is->complex($x2));
@@ -459,7 +459,7 @@ my $r = Rstats::Class->new;
   # acosh - double,array
   {
     my $x1 = $r->array($r->c(0, 1, 2));
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
@@ -469,8 +469,8 @@ my $r = Rstats::Class->new;
 
   # acosh - integer
   {
-    my $x1 = r->as->integer($r->array($r->c(0, 1, 2)));
-    my $x2 = r->acosh($x1);
+    my $x1 = $r->as->integer($r->array($r->c(0, 1, 2)));
+    my $x2 = $r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
@@ -481,28 +481,28 @@ my $r = Rstats::Class->new;
   # acosh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is($x2->value, 'NaN');
   }
   
   # acosh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is($x2->value, 'NaN');
   }
 
   # acosh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     ok(!defined $x2->value);
   }
 
   # acosh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->acosh($x1);
+    my $x2 = $r->acosh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -512,7 +512,7 @@ my $r = Rstats::Class->new;
   # asinh - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.469352');
     is(sprintf("%.6f", $x2->value->{im}), '1.063440');
     ok(r->is->complex($x2));
@@ -521,7 +521,7 @@ my $r = Rstats::Class->new;
   # asinh - double
   {
     my $x1 = $r->array($r->c(0, 1));
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply(r->dim($x2)->values, [2]);
@@ -530,8 +530,8 @@ my $r = Rstats::Class->new;
 
   # asinh - integer
   {
-    my $x1 = r->as->integer($r->array($r->c(0, 1)));
-    my $x2 = r->asinh($x1);
+    my $x1 = $r->as->integer($r->array($r->c(0, 1)));
+    my $x2 = $r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply(r->dim($x2)->values, [2]);
@@ -541,28 +541,28 @@ my $r = Rstats::Class->new;
   # asinh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     is($x2->value, 'Inf');
   }
   
   # asinh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     ok($x2->value, '-Inf');
   }
 
   # asinh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     ok(!defined $x2->value);
   }
 
   # asinh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->asinh($x1);
+    my $x2 = $r->asinh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -572,7 +572,7 @@ my $r = Rstats::Class->new;
   # cosh - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.642148');
     is(sprintf("%.6f", $x2->value->{im}), '1.068607');
     ok(r->is->complex($x2));
@@ -581,7 +581,7 @@ my $r = Rstats::Class->new;
   # cosh - complex, -$r->Inf - 2i
   {
     my $x1 = $r->c(-$r->Inf - 2*$r->i);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->value->{re}, '-Inf');
     is($x2->value->{im}, 'Inf');
   }
@@ -589,7 +589,7 @@ my $r = Rstats::Class->new;
   # cosh - complex, -$r->Inf + 2i
   {
     my $x1 = $r->c(-$r->Inf + 2*$r->i);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->value->{re}, '-Inf');
     ok($x2->value->{im}, '-Inf');
   }
@@ -597,7 +597,7 @@ my $r = Rstats::Class->new;
   # cosh - double,array
   {
     my $x1 = $r->array($r->c(0, $r->Inf, 2, -$r->Inf));
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->values->[0], '1');
     is($x2->values->[1], 'Inf');
     is(sprintf("%.6f", $x2->values->[2]), '3.762196');
@@ -609,28 +609,28 @@ my $r = Rstats::Class->new;
   # cosh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->value, 'Inf');
   }
   
   # cosh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->value, 'Inf');
   }
 
   # cosh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     ok(!defined $x2->value);
   }  
 
   # cosh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->cosh($x1);
+    my $x2 = $r->cosh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -640,7 +640,7 @@ my $r = Rstats::Class->new;
   # sinh - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.489056');
     is(sprintf("%.6f", $x2->value->{im}), '1.403119');
     ok(r->is->complex($x2));
@@ -649,7 +649,7 @@ my $r = Rstats::Class->new;
   # sinh - complex, -$r->Inf - 2i
   {
     my $x1 = $r->c(-$r->Inf - 2*$r->i);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->value->{re}, 'Inf');
     is($x2->value->{im}, '-Inf');
   }
@@ -657,7 +657,7 @@ my $r = Rstats::Class->new;
   # sinh - complex, -$r->Inf + 2i
   {
     my $x1 = $r->c(-$r->Inf + 2*$r->i);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->value->{re}, 'Inf');
     is($x2->value->{im}, 'Inf');
   }
@@ -665,7 +665,7 @@ my $r = Rstats::Class->new;
   # sinh - double,array
   {
     my $x1 = $r->array($r->c(0, $r->Inf, 2, -$r->Inf));
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->values->[0], '0');
     is($x2->values->[1], 'Inf');
     is(sprintf("%.6f", $x2->values->[2]), '3.626860');
@@ -677,28 +677,28 @@ my $r = Rstats::Class->new;
   # sinh - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->value, 'Inf');
   }
   
   # sinh - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->value, '-Inf');
   }
 
   # sinh - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     ok(!defined $x2->value);
   }  
 
   # sinh - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->sinh($x1);
+    my $x2 = $r->sinh($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -708,7 +708,7 @@ my $r = Rstats::Class->new;
   # atan - complex, 0
   {
     my $x1 = $r->c(0*$r->i);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
     ok(r->is->complex($x2));
@@ -717,7 +717,7 @@ my $r = Rstats::Class->new;
   # atan - complex, 1i
   {
     my $x1 = $r->c(1*$r->i);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]->{im}, 'Inf');
     ok(r->is->complex($x2));
@@ -726,7 +726,7 @@ my $r = Rstats::Class->new;
   # atan - complex, -1
   {
     my $x1 = $r->c(-1*$r->i);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]->{im}, '-Inf');
     ok(r->is->complex($x2));
@@ -735,7 +735,7 @@ my $r = Rstats::Class->new;
   # atan - complex, 1 + 2i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.338973');
     is(sprintf("%.6f", $x2->value->{im}), '0.402359');
   }
@@ -743,7 +743,7 @@ my $r = Rstats::Class->new;
   # atan - double,array
   {
     my $x1 = $r->array($r->c(0.5, 0.6));
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '0.463648');
     is(sprintf("%.6f", $x2->values->[1]), '0.540420');
     is_deeply(r->dim($x2)->values, [2]);
@@ -753,28 +753,28 @@ my $r = Rstats::Class->new;
   # atan - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->value), '1.570796');
   }
   
   # atan - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->value), '-1.570796');
   }
 
   # atan - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     ok(!defined $x2->value);
   }  
 
   # atan - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -784,7 +784,7 @@ my $r = Rstats::Class->new;
   # acos - complex, -1 - 1*$r->i
   {
     my $x1 = $r->c(-1 - 1*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '2.237036');
     is(sprintf("%.6f", $x2->value->{im}), '1.061275');
   }
@@ -794,7 +794,7 @@ my $r = Rstats::Class->new;
   {
   
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.143718');
     is(sprintf("%.6f", $x2->value->{im}), '-1.528571');
   }
@@ -802,7 +802,7 @@ my $r = Rstats::Class->new;
   # acos - complex, 0.5 + 0.5*$r->i
   {
     my $x1 = $r->c(0.5 + 0.5*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '1.118518');
     is(sprintf("%.6f", $x2->value->{im}), '-0.530638');
   }
@@ -810,7 +810,7 @@ my $r = Rstats::Class->new;
   # acos - complex, 1 + 1*$r->i
   {
     my $x1 = $r->c(1 + 1*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.904557');
     is(sprintf("%.6f", $x2->value->{im}), '-1.061275');
   }
@@ -818,7 +818,7 @@ my $r = Rstats::Class->new;
   # acos - complex, 1.5 + 1.5*$r->i
   {
     my $x1 = $r->c(1.5 + 1.5*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.840395');
     is(sprintf("%.6f", $x2->value->{im}), '-1.449734');
   }
@@ -826,7 +826,7 @@ my $r = Rstats::Class->new;
   # acos - complex, -0.5 - 0.5*$r->i
   {
     my $x1 = $r->c(-0.5 - 0.5*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->value->{re}), '2.023075');
     is(sprintf("%.6f", $x2->value->{im}), '0.530638');
   }
@@ -834,7 +834,7 @@ my $r = Rstats::Class->new;
   # acos - complex, 0
   {
     my $x1 = $r->c(0*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), 1.570796);
     is($x2->values->[0]{im}, 0);
     ok(r->is->complex($x2));
@@ -843,7 +843,7 @@ my $r = Rstats::Class->new;
   # acos - complex, 1
   {
     my $x1 = $r->c(1 + 0*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
     ok(r->is->complex($x2));
@@ -852,7 +852,7 @@ my $r = Rstats::Class->new;
   # acos - complex, -1.5
   {
     my $x1 = $r->c(-1.5 + 0*$r->i);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '3.141593');
     is(sprintf("%.6f", $x2->values->[0]{im}), '-0.962424');
     ok(r->is->complex($x2));
@@ -861,7 +861,7 @@ my $r = Rstats::Class->new;
   # acos - double,array
   {
     my $x1 = $r->array($r->c(1, 1.1, -1.1));
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is($x2->values->[0], 0);
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
@@ -872,28 +872,28 @@ my $r = Rstats::Class->new;
   # acos - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is($x2->value, 'NaN');
   }
   
   # acos - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is($x2->value, 'NaN');
   }
 
   # acos - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     ok(!defined $x2->value);
   }  
 
   # acos - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->acos($x1);
+    my $x2 = $r->acos($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -903,7 +903,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 1 + 2*$r->i
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.427079');
     is(sprintf("%.6f", $x2->value->{im}), '1.528571');
   }
@@ -911,7 +911,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 0.5 + 0.5*$r->i
   {
     my $x1 = $r->c(0.5 + 0.5*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.452278');
     is(sprintf("%.6f", $x2->value->{im}), '0.530638');
   }
@@ -919,7 +919,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 1 + 1*$r->i
   {
     my $x1 = $r->c(1 + 1*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.666239');
     is(sprintf("%.6f", $x2->value->{im}), '1.061275');
   }
@@ -927,7 +927,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 1.5 + 1.5*$r->i
   {
     my $x1 = $r->c(1.5 + 1.5*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '0.730401');
     is(sprintf("%.6f", $x2->value->{im}), '1.449734');
   }
@@ -935,7 +935,7 @@ my $r = Rstats::Class->new;
   # asin - complex, -0.5 - 0.5*$r->i
   {
     my $x1 = $r->c(-0.5 - 0.5*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.452278');
     is(sprintf("%.6f", $x2->value->{im}), '-0.530638');
   }
@@ -943,7 +943,7 @@ my $r = Rstats::Class->new;
   # asin - complex, -1 - 1*$r->i
   {
     my $x1 = $r->c(-1 - 1*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-0.666239');
     is(sprintf("%.6f", $x2->value->{im}), '-1.061275');
   }
@@ -951,7 +951,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 0
   {
     my $x1 = $r->c(0*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is($x2->values->[0]{re}, 0);
     is($x2->values->[0]{im}, 0);
     ok(r->is->complex($x2));
@@ -960,7 +960,7 @@ my $r = Rstats::Class->new;
   # asin - complex, 0.5,
   {
     my $x1 = $r->c(-1.5 + 0*$r->i);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '-1.570796');
     is(sprintf("%.6f", $x2->values->[0]{im}), '0.962424');
     ok(r->is->complex($x2));
@@ -969,7 +969,7 @@ my $r = Rstats::Class->new;
   # asin - double,array
   {
     my $x1 = $r->array($r->c(1, 1.1, -1.1));
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.570796');
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
@@ -980,28 +980,28 @@ my $r = Rstats::Class->new;
   # asin - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is($x2->value, 'NaN');
   }
   
   # asin - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is($x2->value, 'NaN');
   }
 
   # asin - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     ok(!defined $x2->value);
   }  
 
   # asin - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->asin($x1);
+    my $x2 = $r->asin($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -1011,7 +1011,7 @@ my $r = Rstats::Class->new;
   # atan - complex
   {
     my $x1 = $r->c(1 + 2*$r->i, $r->i, -$r->i);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]{re}), '1.338973');
     is(sprintf("%.6f", $x2->values->[0]{im}), '0.402359');
     is($x2->values->[1]{re}, 0);
@@ -1024,7 +1024,7 @@ my $r = Rstats::Class->new;
   # atan - double,array
   {
     my $x1 = $r->array($r->c(1, 2));
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '0.785398');
     is(sprintf("%.6f", $x2->values->[1]), '1.107149');
     is_deeply(r->dim($x2)->values, [2]);
@@ -1034,28 +1034,28 @@ my $r = Rstats::Class->new;
   # atan - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.570796');
   }
   
   # atan - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '-1.570796');
   }
 
   # atan - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     ok(!defined $x2->value);
   }  
 
   # atan - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->atan($x1);
+    my $x2 = $r->atan($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -1065,7 +1065,7 @@ my $r = Rstats::Class->new;
   # tan - complex
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->tan($x1);
+    my $x2 = $r->tan($x1);
     my $exp = Math::Complex->make(1, 2)->tan;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
@@ -1078,7 +1078,7 @@ my $r = Rstats::Class->new;
   # tan - double, $r->array
   {
     my $x1 = $r->array($r->c(2, 3));
-    my $x2 = r->tan($x1);
+    my $x2 = $r->tan($x1);
     is_deeply(
       $x2->values,
       [
@@ -1096,7 +1096,7 @@ my $r = Rstats::Class->new;
   # cos - complex
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     my $exp = Math::Complex->make(1, 2)->cos;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
@@ -1109,7 +1109,7 @@ my $r = Rstats::Class->new;
   # cos - double,array
   {
     my $x1 = $r->array($r->c($r->pi/2, $r->pi/3));
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     cmp_ok(abs($x2->values->[0]), '<', 1e-15);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply(r->dim($x2)->values, [2]);
@@ -1119,28 +1119,28 @@ my $r = Rstats::Class->new;
   # cos - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     is($x2->value, 'NaN');
   }
   
   # cos - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     is($x2->value, 'NaN');
   }
 
   # cos - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     ok(!defined $x2->value);
   }  
 
   # cos - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->cos($x1);
+    my $x2 = $r->cos($x1);
     is($x2->value, 'NaN');
   }
 }
@@ -1150,7 +1150,7 @@ my $r = Rstats::Class->new;
   # sin - complex
   {
     my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     my $exp = Math::Complex->make(1, 2)->sin;
     my $exp_re = Math::Complex::Re($exp);
     my $exp_im = Math::Complex::Im($exp);
@@ -1163,7 +1163,7 @@ my $r = Rstats::Class->new;
   # sin - double,array
   {
     my $x1 = $r->array($r->c($r->pi/2, $r->pi/6));
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     is(sprintf("%.5f", $x2->values->[0]), '1.00000');
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply(r->dim($x2)->values, [2]);
@@ -1173,28 +1173,28 @@ my $r = Rstats::Class->new;
   # sin - Inf
   {
     my $x1 = $r->c($r->Inf);
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     is($x2->value, 'NaN');
   }
   
   # sin - -$r->Inf
   {
     my $x1 = $r->c(-$r->Inf);
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     is($x2->value, 'NaN');
   }
 
   # sin - NA
   {
     my $x1 = $r->c($r->NA);
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     ok(!defined $x2->value);
   }  
 
   # sin - NaN
   {
     my $x1 = $r->c($r->NaN);
-    my $x2 = r->sin($x1);
+    my $x2 = $r->sin($x1);
     is($x2->value, 'NaN');
   }
 }

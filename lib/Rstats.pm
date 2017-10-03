@@ -63,10 +63,10 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $null = NULL;
   
   # all methods are called from r
-  my $x1 = r->sum(c(1, 2, 3));
+  my $x1 = $r->sum(c(1, 2, 3));
   
   # Register helper
-  r->helper(my_sum => sub {
+  $r->helper(my_sum => sub {
     my ($r, $x1) = @_;
     
     my $total = 0;
@@ -76,7 +76,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
     
     return c($total);
   });
-  my $x2 = r->my_sum(c(1, 2, 3));
+  my $x2 = $r->my_sum(c(1, 2, 3));
 
 =head1 FUNCTIONS
 
@@ -226,24 +226,24 @@ Alias of FALSE
   $x1 x $x2
   
   # x1 %/% x2 (integer quotient)
-  r->tranc($x1 / $x2)
+  $r->tranc($x1 / $x2)
 
 =head1 METHODS
 
 =head2 abs
 
   # abs(x1)
-  r->abs($x1)
+  $r->abs($x1)
 
 =head2 acos
 
   # acos(x1)
-  r->acos($x1)
+  $r->acos($x1)
 
 =head2 acosh
 
   # acosh(x1)
-  r->acosh($x1)
+  $r->acosh($x1)
 
 =head2 append
 
@@ -256,24 +256,24 @@ Alias of FALSE
 =head2 asin
 
   # asin(x1)
-  r->asin($x1)
+  $r->asin($x1)
 
 =head2 asinh
 
   # asinh(x1)
-  r->asinh($x1)
+  $r->asinh($x1)
 
 =head2 atan2
 
 =head2 atan
 
   # atan(x1)
-  r->atan($x1)
+  $r->atan($x1)
 
 =head2 atanh
 
   # atanh(x1)
-  r->atanh($x1)
+  $r->atanh($x1)
 
 =head2 c
 
@@ -286,22 +286,22 @@ Alias of FALSE
 =head2 cbind
 
   # cbind(c(1, 2), c(3, 4), c(5, 6))
-  r->cbind(c(1, 2), c(3, 4), c(5, 6));
+  $r->cbind(c(1, 2), c(3, 4), c(5, 6));
 
 =head2 ceiling
 
   # ceiling(x1)
-  r->ceiling($x1)
+  $r->ceiling($x1)
 
 =head2 col
 
   # col(x1)
-  r->col($x1)
+  $r->col($x1)
 
 =head2 colMeans
 
   # colMeans(x1)
-  r->colMeans($x1)
+  $r->colMeans($x1)
 
 =head2 colSums
 
@@ -310,12 +310,12 @@ Alias of FALSE
 =head2 cos
 
   # cos(x1)
-  r->cos($x1)
+  $r->cos($x1)
 
 =head2 cosh
 
   # cosh(x1)
-  r->cosh($x1)
+  $r->cosh($x1)
 
 =head2 cummax
 
@@ -336,12 +336,12 @@ Alias of FALSE
 =head2 exp
 
   # exp(x1)
-  r->exp($x1)
+  $r->exp($x1)
 
 =head2 expm1
 
   # expm1(x1)
-  r->expm1($x1)
+  $r->expm1($x1)
 
 =head2 factor
 
@@ -352,7 +352,7 @@ Alias of FALSE
 =head2 floor
 
   # floor(x1)
-  r->floor($x1)
+  $r->floor($x1)
 
 =head2 gl
 
@@ -387,22 +387,22 @@ Alias of FALSE
 =head2 log
 
   # log(x1)
-  r->log($x1)
+  $r->log($x1)
 
 =head2 logb
 
   # logb(x1)
-  r->logb($x1)
+  $r->logb($x1)
 
 =head2 log2
 
   # log2(x1)
-  r->log2($x1)
+  $r->log2($x1)
 
 =head2 log10
 
   # log10(x1)
-  r->log10($x1)
+  $r->log10($x1)
 
 =head2 lower_tri
 
@@ -423,12 +423,12 @@ Alias of FALSE
 =head2 ncol
 
   # ncol(x1)
-  r->ncol($x1)
+  $r->ncol($x1)
 
 =head2 nrow
 
   # nrow(x1)
-  r->nrow($x1)
+  $r->nrow($x1)
 
 =head2 NULL
 
@@ -467,7 +467,7 @@ Alias of FALSE
 =head2 rbind
 
   # rbind(c(1, 2), c(3, 4), c(5, 6))
-  r->rbind(c(1, 2), c(3, 4), c(5, 6))
+  $r->rbind(c(1, 2), c(3, 4), c(5, 6))
 
 =head2 Re
 
@@ -476,7 +476,7 @@ Alias of FALSE
 =head2 read->table
 
   # read.table(...)
-  r->read->table(...)
+  $r->read->table(...)
 
 =head2 rep
 
@@ -489,28 +489,28 @@ Alias of FALSE
 =head2 round
 
   # round(x1)
-  r->round($x1)
+  $r->round($x1)
 
   # round(x1, digit)
-  r->round($x1, $digits)
+  $r->round($x1, $digits)
   
   # round(x1, digits=1)
-  r->round($x1, {digits => TRUE});
+  $r->round($x1, {digits => TRUE});
 
 =head2 row
 
   # row(x1)
-  r->row($x1)
+  $r->row($x1)
 
 =head2 rowMeans
 
   # rowMeans(x1)
-  r->rowMeans($x1)
+  $r->rowMeans($x1)
 
 =head2 rowSums
 
   # rowSums(x1)
-  r->rowSums($x1)
+  $r->rowSums($x1)
 
 =head2 sample
 
@@ -527,19 +527,19 @@ Alias of FALSE
 =head2 sin
 
   # sin(x1)
-  r->sin($x1)
+  $r->sin($x1)
 
 =head2 sinh
 
   # sinh(x1)
-  r->sinh($x1)
+  $r->sinh($x1)
 
 =head2 sum
 
 =head2 sqrt
 
   # sqrt(x1)
-  r->sqrt($x1)
+  $r->sqrt($x1)
 
 =head2 sort
 
@@ -552,19 +552,19 @@ Alias of FALSE
 =head2 t
 
   # t
-  r->t($x1)
+  $r->t($x1)
 
 =head2 tail
 
 =head2 tan
 
   # tan(x1)
-  r->tan($x1)
+  $r->tan($x1)
 
 =head2 tanh
 
   # tanh(x1)
-  r->tanh($x1)
+  $r->tanh($x1)
 
 =head2 tapply
 
@@ -581,7 +581,7 @@ Alias of FALSE
 =head2 trunc
 
   # trunc(x1)
-  r->trunc($x1)
+  $r->trunc($x1)
 
 =head2 unique
 
@@ -596,195 +596,195 @@ Alias of FALSE
 =head2 as->array
 
   # as.array(x1)
-  r->as->array($x1)
+  $r->as->array($x1)
 
 =head2 as->character
 
   # as.character(x1)
-  r->as->character($x1)
+  $r->as->character($x1)
 
 =head2 as->complex
 
   # as.complex(x1)
-  r->as->complex($x1)
+  $r->as->complex($x1)
 
 =head2 as->integer
 
   # as.integer(x1)
-  r->as->integer($x1)
+  $r->as->integer($x1)
 
 =head2 as->list
 
   # as.list
-  r->as->list($x1)
+  $r->as->list($x1)
 
 =head2 as->logical
 
   # as.logical
-  r->as->logical($x1)
+  $r->as->logical($x1)
 
 =head2 as->matrix
 
   # as.matrix(x1)
-  r->as->matrix($x1)
+  $r->as->matrix($x1)
 
 =head2 as->numeric
 
   # as.numeric(x1)
-  r->as->numeric($x1)
+  $r->as->numeric($x1)
 
 =head2 as->vector
 
   # as.vector(x1)
-  r->as->vector($x1)
+  $r->as->vector($x1)
 
 =head2 is->array
 
   # is.array(x1)
-  r->is->array($x1)
+  $r->is->array($x1)
 
 =head2 is->character
 
   # is.character(x1)
-  r->is->character($x1)
+  $r->is->character($x1)
 
 =head2 is->complex
 
   # is.complex(x1)
-  r->is->complex($x1)
+  $r->is->complex($x1)
 
 =head2 is->finite
 
   # is.finite(x1)
-  r->is->finite($x1)
+  $r->is->finite($x1)
 
 =head2 is->infinite
 
   # is.infinite(x1)
-  r->is->infinite($x1)
+  $r->is->infinite($x1)
 
 =head2 is->list
 
   # is.list(x1)
-  r->is->list($x1)
+  $r->is->list($x1)
 
 =head2 is->matrix
 
   # is.matrix(x1)
-  r->is->matrix($x1)
+  $r->is->matrix($x1)
 
 =head2 is->na
 
   # is.na(x1)
-  r->is->na($x1)
+  $r->is->na($x1)
 
 =head2 is->nan
 
   # is.nan(x1)
-  r->is->nan($x1)
+  $r->is->nan($x1)
 
 =head2 is->null
 
   # is.null(x1)
-  r->is->null($x1)
+  $r->is->null($x1)
 
 =head2 is->numeric
 
   # is.numeric(x1)
-  r->is->numeric($x1)
+  $r->is->numeric($x1)
 
 =head2 is->double
 
   # is.double(x1)
-  r->is->double($x1)
+  $r->is->double($x1)
 
 =head2 is->integer
 
   # is.integer(x1)
-  r->is->integer($x1)
+  $r->is->integer($x1)
 
 =head2 is->logical
 
   # is.logical(x1)
-  r->is->logical($x1)
+  $r->is->logical($x1)
 
 =head2 is->vector
 
   # is.vector(x1)
-  r->is->vector($x1)
+  $r->is->vector($x1)
 
 =head2 labels
 
   # labels(x1)
-  r->labels($x1)
+  $r->labels($x1)
 
 =head2 levels
 
   # levels(x1)
-  r->levels($x1)
+  $r->levels($x1)
   
   # levels(x1) <- c("F", "M")
-  r->levels($x1 => c("F", "M"))
+  $r->levels($x1 => c("F", "M"))
 
 =head2 dim
 
   # dim(x1)
-  r->dim($x1)
+  $r->dim($x1)
   
   # dim(x1) <- c(1, 2)
-  r->dim($x1 => c(1, 2))
+  $r->dim($x1 => c(1, 2))
 
 =head2 names
 
   # names(x1)
-  r->names($x1)
+  $r->names($x1)
 
   # names(x1) <- c("n1", "n2")
-  r->names($x1 =>  c("n1", "n2"))
+  $r->names($x1 =>  c("n1", "n2"))
 
 =head2 nlevels
 
   # nlevels(x1)
-  r->nlevels($x1)
+  $r->nlevels($x1)
 
 =head2 dimnames
 
   # dimnames(x1)
-  r->dimnames($x1)
+  $r->dimnames($x1)
   
   # dimnames(x1) <- list(c("r1", "r2"), c("c1", "c2"))
-  r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
+  $r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
 
 =head2 colnames
 
   # colnames(x1)
-  r->colnames($x1)
+  $r->colnames($x1)
   
   # colnames(x1) <- c("r1", "r2")
-  r->colnames($x1 => c("r1", "r2"))
+  $r->colnames($x1 => c("r1", "r2"))
 
 =head2 rownames
 
   # rownames(x1)
-  r->rownames($x1)
+  $r->rownames($x1)
   
   # rownames(x1) <- c("r1", "r2")
-  r->rownames($x1 => c("r1", "r2"))
+  $r->rownames($x1 => c("r1", "r2"))
 
 =head2 mode
 
   # mode(x1)
-  r->mode($x1)
+  $r->mode($x1)
   
   # mode(x1) <- c("r1", "r2")
-  r->mode($x1 => c("r1", "r2"))
+  $r->mode($x1 => c("r1", "r2"))
 
 =head2 str
 
   # str(x1)
-  r->str($x1)
+  $r->str($x1)
 
 =head2 typeof
 
   # typeof(x1)
-  r->typeof($x1);
+  $r->typeof($x1);

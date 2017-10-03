@@ -12,7 +12,7 @@ my $r = Rstats::Class->new;
 {
   # array decide mode - complex
   {
-    my $x0 = r->complex(3, 4);
+    my $x0 = $r->complex(3, 4);
     my $x0_1 = $r->c(1, $x0);
     my $x1 = $r->array($x0_1);
     is($x1->values->[0]->{re}, 1);
@@ -28,7 +28,7 @@ my $r = Rstats::Class->new;
   # as->integer - NA
   {
     my $x1 = $r->NA;
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -36,14 +36,14 @@ my $r = Rstats::Class->new;
   # as->integer - $r->Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
   # as->integer - NULL
   {
     my $x1 = $r->NULL;
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, []);
   }
@@ -51,14 +51,14 @@ my $r = Rstats::Class->new;
   # as->integer - dim
   {
     my $x1 = $r->array($r->c(1, 2));
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     is_deeply($x2->dim->values, [2]);
   }
 
   # as->integer - double,NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -66,7 +66,7 @@ my $r = Rstats::Class->new;
   # as->integer - character, only real number, no sign
   {
     my $x1 = $r->c("1.23");
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
@@ -74,7 +74,7 @@ my $r = Rstats::Class->new;
   # as->integer - character, only real number, plus
   {
     my $x1 = $r->c("+1");
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
@@ -82,7 +82,7 @@ my $r = Rstats::Class->new;
   # as->integer - character, only real number, minus
   {
     my $x1 = $r->c("-1.23");
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], -1);
   }
@@ -90,7 +90,7 @@ my $r = Rstats::Class->new;
   # as->integer - character, pre and trailing space
   {
     my $x1 = $r->c("  1  ");
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
@@ -98,47 +98,47 @@ my $r = Rstats::Class->new;
   # as->integer - error
   {
     my $x1 = $r->c("a");
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
   
   # as->integer - complex, 1 + 2*i
   {
-    my $x1 = r->complex(1, 2);
-    my $x2 = r->as->integer($x1);
+    my $x1 = $r->complex(1, 2);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
 
   # as->integer - complex, $r->Inf + 1*i
   {
-    my $x1 = r->complex($r->Inf, 1);
-    my $x2 = r->as->integer($x1);
+    my $x1 = $r->complex($r->Inf, 1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
 
   # as->integer - complex, 1 + $r->Inf*i
   {
-    my $x1 = r->complex(1, $r->Inf);
-    my $x2 = r->as->integer($x1);
+    my $x1 = $r->complex(1, $r->Inf);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
 
   # as->integer - complex,  NaN + 1*i
   {
-    my $x1 = r->complex($r->NaN, 1);
-    my $x2 = r->as->integer($x1);
+    my $x1 = $r->complex($r->NaN, 1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
 
   # as->integer - complex,  1 + NaN*i
   {
-    my $x1 = r->complex(1, $r->NaN);
-    my $x2 = r->as->integer($x1);
+    my $x1 = $r->complex(1, $r->NaN);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
   }
@@ -146,7 +146,7 @@ my $r = Rstats::Class->new;
   # as->integer - double
   {
     my $x1 = $r->c(1.1);
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
@@ -154,7 +154,7 @@ my $r = Rstats::Class->new;
   # as->integer - integer
   {
     my $x1 = $r->c(1);
-    my $x2 = r->as->integer(r->as->integer($x1));
+    my $x2 = $r->as->integer(r->as->integer($x1));
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
   }
@@ -162,7 +162,7 @@ my $r = Rstats::Class->new;
   # as->integer - logical
   {
     my $x1 = $r->c($r->TRUE, $r->FALSE);
-    my $x2 = r->as->integer($x1);
+    my $x2 = $r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
@@ -174,7 +174,7 @@ my $r = Rstats::Class->new;
   # as->double - error
   {
     my $x1 = $r->array("a");
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], undef);
   }
@@ -182,7 +182,7 @@ my $r = Rstats::Class->new;
   # as->double - NULL
   {
     my $x1 = $r->NULL;
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, []);
   }
@@ -190,14 +190,14 @@ my $r = Rstats::Class->new;
   # as->double - dim
   {
     my $x1 = $r->array($r->c(1.1, 1.2));
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     is_deeply($x2->dim->values, [2]);
   }
   
   # as->double - $r->Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, ['Inf']);
   }
@@ -205,7 +205,7 @@ my $r = Rstats::Class->new;
   # as->double - NA
   {
     my $x1 = $r->array($r->NA);
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -213,7 +213,7 @@ my $r = Rstats::Class->new;
   # as->double - NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, ['NaN']);
   }
@@ -221,7 +221,7 @@ my $r = Rstats::Class->new;
   # as->double - character, only real number, no sign
   {
     my $x1 = $r->array("1.23");
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1.23);
   }
@@ -229,7 +229,7 @@ my $r = Rstats::Class->new;
   # as->double - character, only real number, plus
   {
     my $x1 = $r->array("+1.23");
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1.23);
   }
@@ -237,7 +237,7 @@ my $r = Rstats::Class->new;
   # as->double - character, only real number, minus
   {
     my $x1 = $r->array("-1.23");
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], -1.23);
   }
@@ -245,7 +245,7 @@ my $r = Rstats::Class->new;
   # as->double - character, pre and trailing space
   {
     my $x1 = $r->array("  1  ");
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1);
   }
@@ -253,7 +253,7 @@ my $r = Rstats::Class->new;
   # as->double - complex
   {
     my $x1 = $r->array(r->complex(1, 2));
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1);
   }
@@ -261,7 +261,7 @@ my $r = Rstats::Class->new;
   # as->double - double
   {
     my $x1 = $r->array(1.1);
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1.1);
   }
@@ -269,7 +269,7 @@ my $r = Rstats::Class->new;
   # as->double - integer
   {
     my $x1 = $r->array(1);
-    my $x2 = r->as->double(r->as->integer($x1));
+    my $x2 = $r->as->double(r->as->integer($x1));
     ok(r->is->double($x2));
     is($x2->values->[0], 1);
   }
@@ -277,7 +277,7 @@ my $r = Rstats::Class->new;
   # as->double - logical
   {
     my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = r->as->double($x1);
+    my $x2 = $r->as->double($x1);
     ok(r->is->double($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
@@ -289,17 +289,17 @@ my $r = Rstats::Class->new;
   # as->numeric - from integer
   {
     my $x1 = $r->c(0, 1, 2);
-    r->mode($x1 => 'integer');
-    my $x2 = r->as->numeric($x1);
+    $r->mode($x1 => 'integer');
+    my $x2 = $r->as->numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }
   
   # as->numeric - from complex
   {
-    my $x1 = $r->c(r->complex(1, 1), r->complex(2, 2));
-    r->mode($x1 => 'complex');
-    my $x2 = r->as->numeric($x1);
+    my $x1 = $r->c(r->complex(1, 1), $r->complex(2, 2));
+    $r->mode($x1 => 'complex');
+    my $x2 = $r->as->numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 2]);
   }
@@ -307,8 +307,8 @@ my $r = Rstats::Class->new;
   # as->numeric - from numeric
   {
     my $x1 = $r->c(0.1, 1.1, 2.2);
-    r->mode($x1 => 'numeric');
-    my $x2 = r->as->numeric($x1);
+    $r->mode($x1 => 'numeric');
+    my $x2 = $r->as->numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
@@ -316,16 +316,16 @@ my $r = Rstats::Class->new;
   # as->numeric - from logical
   {
     my $x1 = $r->c(r->TRUE, $r->FALSE);
-    r->mode($x1 => 'logical');
-    my $x2 = r->as->numeric($x1);
+    $r->mode($x1 => 'logical');
+    my $x2 = $r->as->numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [1, 0]);
   }
 
   # as->numeric - from character
   {
-    my $x1 = r->as->integer($r->c(0, 1, 2));
-    my $x2 = r->as->numeric($x1);
+    my $x1 = $r->as->integer($r->c(0, 1, 2));
+    my $x2 = $r->as->numeric($x1);
     is(r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
   }
@@ -336,7 +336,7 @@ my $r = Rstats::Class->new;
   # as->logical - NULL
   {
     my $x1 = $r->NULL;
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, []);
   }
@@ -344,7 +344,7 @@ my $r = Rstats::Class->new;
   # as->logical - dim
   {
     my $x1 = $r->array($r->c(1.1, 0));
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->dim->values, [2]);
     is($x2->values->[0], 1);
@@ -354,7 +354,7 @@ my $r = Rstats::Class->new;
   # as->logical - $r->Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [1]);
   }
@@ -362,7 +362,7 @@ my $r = Rstats::Class->new;
   # as->logical - NA
   {
     my $x1 = $r->NA;
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -370,7 +370,7 @@ my $r = Rstats::Class->new;
   # as->logical - doubke,NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -378,7 +378,7 @@ my $r = Rstats::Class->new;
   # as->logical - character, double
   {
     my $x1 = $r->c("1.23");
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
@@ -386,7 +386,7 @@ my $r = Rstats::Class->new;
   # as->logical - character, pre and trailing space
   {
     my $x1 = $r->c("  1  ");
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
@@ -394,55 +394,55 @@ my $r = Rstats::Class->new;
   # as->logical - character
   {
     my $x1 = $r->c("a");
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
 
   # as->logical - complex, 1 + NaN*i
   {
-    my $x1 = r->complex(1, $r->NaN);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex(1, $r->NaN);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
 
   # as->logical - complex, NaN + 1*i
   {
-    my $x1 = r->complex($r->NaN, 1);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex($r->NaN, 1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
   }
   
   # as->logical - complex, 1 + 0*i
   {
-    my $x1 = r->complex(1, 0);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex(1, 0);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
   }
 
   # as->logical - complex, $r->Inf + 0*i
   {
-    my $x1 = r->complex(1, 0);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex(1, 0);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
   }
   
   # as->logical - complex, 0 + 1*i
   {
-    my $x1 = r->complex(0, 1);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex(0, 1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
   }
   
   # as->logical - complex, 0 + 0i
   {
-    my $x1 = r->complex(0, 0);
-    my $x2 = r->as->logical($x1);
+    my $x1 = $r->complex(0, 0);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 0);
   }
@@ -450,7 +450,7 @@ my $r = Rstats::Class->new;
   # as->logical - double
   {
     my $x1 = $r->c(1.1, 0);
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
@@ -459,7 +459,7 @@ my $r = Rstats::Class->new;
   # as->logical - integer
   {
     my $x1 = $r->c(2, 0);
-    my $x2 = r->as->logical(r->as->integer($x1));
+    my $x2 = $r->as->logical(r->as->integer($x1));
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
@@ -468,7 +468,7 @@ my $r = Rstats::Class->new;
   # as->logical - logical
   {
     my $x1 = $r->c($r->TRUE, $r->FALSE);
-    my $x2 = r->as->logical($x1);
+    my $x2 = $r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], 1);
     is($x2->values->[1], 0);
@@ -512,16 +512,16 @@ my $r = Rstats::Class->new;
   # as->double - NULL
   {
     my $x1 = $r->NULL;
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, []);
   }
   
   # as->character - complex
   {
-    my $x0 = r->complex(1, 2);
+    my $x0 = $r->complex(1, 2);
     my $x1 = $r->array(r->complex(1, 2));
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is($x2->values->[0], "1+2i");
   }
@@ -529,7 +529,7 @@ my $r = Rstats::Class->new;
   # as->character - NA
   {
     my $x1 = $r->array($r->NA);
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -537,7 +537,7 @@ my $r = Rstats::Class->new;
   # as->character - $r->Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, ["Inf"]);
   }
@@ -545,7 +545,7 @@ my $r = Rstats::Class->new;
   # as->character - NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, ["NaN"]);
   }
@@ -553,7 +553,7 @@ my $r = Rstats::Class->new;
   # as->character - character
   {
     my $x1 = $r->array($r->c("a"));
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is($x2->values->[0], "a");
   }
@@ -561,7 +561,7 @@ my $r = Rstats::Class->new;
   # as->character - complex, 0 + 0i
   {
     my $x1 = $r->array(r->complex(0, 0));
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is($x2->values->[0], "0+0i");
   }
@@ -569,7 +569,7 @@ my $r = Rstats::Class->new;
   # as->character - numeric
   {
     my $x1 = $r->array($r->c(1.1, 0));
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is($x2->values->[0], 1.1);
     is($x2->values->[1], "0");
@@ -578,7 +578,7 @@ my $r = Rstats::Class->new;
   # as->character - logical
   {
     my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = r->as->character($x1);
+    my $x2 = $r->as->character($x1);
     ok(r->is->character($x2));
     is($x2->values->[0], "TRUE");
     is($x2->values->[1], "FALSE");
@@ -590,7 +590,7 @@ my $r = Rstats::Class->new;
   # as->numeric - character, pre and trailing space
   {
     my $x1 = $r->array("  1  ");
-    my $x2 = r->as->numeric($x1);
+    my $x2 = $r->as->numeric($x1);
     ok(r->is->numeric($x2));
     is($x2->values->[0], 1);
   }
@@ -601,7 +601,7 @@ my $r = Rstats::Class->new;
   # as->complex - NULL
   {
     my $x1 = $r->NULL;
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, []);
   }
@@ -609,7 +609,7 @@ my $r = Rstats::Class->new;
   # as->complex - $r->Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 'Inf');
     is($x2->values->[0]->{im}, 0);
@@ -618,7 +618,7 @@ my $r = Rstats::Class->new;
   # as->complex - NA
   {
     my $x1 = $r->array($r->NA);
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [undef]);
   }
@@ -626,7 +626,7 @@ my $r = Rstats::Class->new;
   # as->complex - NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 'NaN', im => 0}]);
   }
@@ -634,7 +634,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only real number, no sign
   {
     my $x1 = $r->array("1.23");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1.23);
     is($x2->values->[0]->{im}, 0);
@@ -643,7 +643,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only real number, pre and trailing space
   {
     my $x1 = $r->array("  1.23  ");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1.23);
     is($x2->values->[0]->{im}, 0);
@@ -652,7 +652,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only real number, plus
   {
     my $x1 = $r->array("+1.23");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1.23);
     is($x2->values->[0]->{im}, 0);
@@ -661,7 +661,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only real number, minus
   {
     my $x1 = $r->array("-1.23");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, -1.23);
     is($x2->values->[0]->{im}, 0);
@@ -670,7 +670,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only image number, no sign
   {
     my $x1 = $r->array("1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 0);
     is($x2->values->[0]->{im}, 1.23);
@@ -679,7 +679,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only image number, plus
   {
     my $x1 = $r->array("+1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 0);
     is($x2->values->[0]->{im}, 1.23);
@@ -688,7 +688,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, only image number, minus
   {
     my $x1 = $r->array("-1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 0);
     is($x2->values->[0]->{im}, -1.23);
@@ -697,7 +697,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, real number and image number, no sign
   {
     my $x1 = $r->array("2.5+1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 2.5);
     is($x2->values->[0]->{im}, 1.23);
@@ -706,7 +706,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, real number and image number, plus
   {
     my $x1 = $r->array("+2.5+1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 2.5);
     is($x2->values->[0]->{im}, 1.23);
@@ -715,7 +715,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, real number and image number, minus
   {
     my $x1 = $r->array("-2.5-1.23i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, -2.5);
     is($x2->values->[0]->{im}, -1.23);
@@ -724,7 +724,7 @@ my $r = Rstats::Class->new;
   # as->complex - character, pre and trailing space
   {
     my $x1 = $r->array("  2.5+1.23i  ");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 2.5);
     is($x2->values->[0]->{im}, 1.23);
@@ -733,7 +733,7 @@ my $r = Rstats::Class->new;
   # as->complex - error
   {
     my $x1 = $r->array("a");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0], undef);
   }
@@ -741,7 +741,7 @@ my $r = Rstats::Class->new;
   # as->complex - error
   {
     my $x1 = $r->array("i");
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0], undef);
   }
@@ -749,7 +749,7 @@ my $r = Rstats::Class->new;
   # as->complex - complex
   {
     my $x1 = $r->array(r->complex(1, 2));
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1);
     is($x2->values->[0]->{im}, 2);
@@ -758,7 +758,7 @@ my $r = Rstats::Class->new;
   # as->complex - numeric
   {
     my $x1 = $r->array(1.1);
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1.1);
     is($x2->values->[0]->{im}, 0);
@@ -767,7 +767,7 @@ my $r = Rstats::Class->new;
   # as->complex - integer
   {
     my $x1 = $r->array(1);
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1);
     is($x2->values->[0]->{im}, 0);
@@ -776,7 +776,7 @@ my $r = Rstats::Class->new;
   # as->complex - logical
   {
     my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = r->as->complex($x1);
+    my $x2 = $r->as->complex($x1);
     ok(r->is->complex($x2));
     is($x2->values->[0]->{re}, 1);
     is($x2->values->[0]->{im}, 0);
@@ -789,7 +789,7 @@ my $r = Rstats::Class->new;
 {
   # array decide type - complex
   {
-    my $x1 = $r->array($r->c(r->complex(1, 2), r->complex(3, 4)));
+    my $x1 = $r->array($r->c(r->complex(1, 2), $r->complex(3, 4)));
     is($x1->values->[0]->{re}, 1);
     is($x1->values->[0]->{im}, 2);
     is($x1->values->[1]->{re}, 3);
@@ -883,7 +883,7 @@ my $r = Rstats::Class->new;
   # as->array - from vector
   {
     my $x1 = $r->C('1:24');
-    my $x2 = r->as->array($x1);
+    my $x2 = $r->as->array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [24]);
   }
@@ -891,7 +891,7 @@ my $r = Rstats::Class->new;
   # as->array - from $r->array
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = r->as->array($x1);
+    my $x2 = $r->as->array($x1);
     is_deeply($x2->values, [1 .. 24]);
     is_deeply(r->dim($x2)->values, [4, 3, 2]);
   }

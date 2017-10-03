@@ -160,7 +160,7 @@ EOS
   # upper_tri - diag = TRUE
   {
     my $x1 = $r->matrix(C_('1:12'), 3, 4);
-    my $x2 = r->lower_tri($x1, {diag => TRUE});
+    my $x2 = r->lower_tri($x1, {diag => $r->TRUE});
     is_deeply($x2->values, [
       1,
       1,
@@ -205,7 +205,7 @@ EOS
   # upper_tri - diag = TRUE
   {
     my $x1 = $r->matrix(C_('1:12'), 3, 4);
-    my $x2 = r->upper_tri($x1, {diag => TRUE});
+    my $x2 = r->upper_tri($x1, {diag => $r->TRUE});
     is_deeply($x2->values, [
       1,
       0,

@@ -45,7 +45,7 @@ my $r = Rstats::Class->new;
 
   # $r->list - basic
   {
-    my $x1 = $r->list(c_(1, 2, 3), $r->list("Hello", c_(T_, F_, F_)));
+    my $x1 = $r->list(c_(1, 2, 3), $r->list("Hello", c_($r->TRUE, $r->FALSE, $r->FALSE)));
     is_deeply($x1->list->[0]->values, [1, 2, 3]);
     is_deeply($x1->list->[1]->list->[0]->values, ["Hello"]);
     is_deeply(
@@ -64,7 +64,7 @@ my $r = Rstats::Class->new;
     
   # $r->list - to_string
   {
-    my $x1 = $r->list(c_(1, 2, 3), $r->list("Hello", c_(T_, F_, F_)));
+    my $x1 = $r->list(c_(1, 2, 3), $r->list("Hello", c_($r->TRUE, $r->FALSE, $r->FALSE)));
     my $str = $x1->to_string;
     my $expected = <<"EOS";
 [[1]]

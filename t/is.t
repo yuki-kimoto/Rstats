@@ -92,7 +92,7 @@ my $r = Rstats::Class->new;
 {
   # is->infinite - NA
   {
-    my $x1 = NA;
+    my $x1 = $r->NA;
     my $x2 = r->is->infinite($x1);
     is_deeply($x2->values, [0]);
   }

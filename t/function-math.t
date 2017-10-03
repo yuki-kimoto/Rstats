@@ -395,7 +395,7 @@ my $r = Rstats::Class->new;
 
   # atanh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->atanh($x1);
     ok(!defined $x2->value);
   }
@@ -494,7 +494,7 @@ my $r = Rstats::Class->new;
 
   # acosh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->acosh($x1);
     ok(!defined $x2->value);
   }
@@ -554,7 +554,7 @@ my $r = Rstats::Class->new;
 
   # asinh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->asinh($x1);
     ok(!defined $x2->value);
   }
@@ -622,7 +622,7 @@ my $r = Rstats::Class->new;
 
   # cosh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->cosh($x1);
     ok(!defined $x2->value);
   }  
@@ -690,7 +690,7 @@ my $r = Rstats::Class->new;
 
   # sinh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->sinh($x1);
     ok(!defined $x2->value);
   }  
@@ -766,7 +766,7 @@ my $r = Rstats::Class->new;
 
   # atan - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->atan($x1);
     ok(!defined $x2->value);
   }  
@@ -885,7 +885,7 @@ my $r = Rstats::Class->new;
 
   # acos - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->acos($x1);
     ok(!defined $x2->value);
   }  
@@ -1047,7 +1047,7 @@ my $r = Rstats::Class->new;
 
   # atan - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->atan($x1);
     ok(!defined $x2->value);
   }  
@@ -1132,7 +1132,7 @@ my $r = Rstats::Class->new;
 
   # cos - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->cos($x1);
     ok(!defined $x2->value);
   }  
@@ -1186,7 +1186,7 @@ my $r = Rstats::Class->new;
 
   # sin - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->sin($x1);
     ok(!defined $x2->value);
   }  

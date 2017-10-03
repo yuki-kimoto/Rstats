@@ -67,8 +67,8 @@ my $r = Rstats::Class->new;
 
   # pow - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1]);
@@ -174,8 +174,8 @@ my $r = Rstats::Class->new;
 
   # add - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [2]);
@@ -281,8 +281,8 @@ my $r = Rstats::Class->new;
 
   # subtract - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 - $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [0]);
@@ -388,8 +388,8 @@ my $r = Rstats::Class->new;
 
   # multiply - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 * $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [1]);
@@ -495,8 +495,8 @@ my $r = Rstats::Class->new;
 
   # divide - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1]);
@@ -602,8 +602,8 @@ my $r = Rstats::Class->new;
 
   # remainder - logical
   {
-    my $x1 = c_(T_);
-    my $x2 = c_(T_);
+    my $x1 = c_($r->TRUE);
+    my $x2 = c_($r->TRUE);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [0]);
@@ -713,7 +713,7 @@ my $r = Rstats::Class->new;
   
   # negate - logical,true
   {
-    my $x1 = c_(T_);
+    my $x1 = c_($r->TRUE);
     my $x2 = -$x1;
     ok(r->is->integer($x2));
     is($x2->value, -1);
@@ -721,7 +721,7 @@ my $r = Rstats::Class->new;
 
   # negate - logical,false
   {
-    my $x1 = c_(F_);
+    my $x1 = c_($r->FALSE);
     my $x2 = -$x1;
     ok(r->is->integer($x2));
     is($x2->value, 0);
@@ -729,7 +729,7 @@ my $r = Rstats::Class->new;
   
   # negate - NA
   {
-    my $x1 = NA;
+    my $x1 = $r->NA;
     my $x2 = r->negate($x1);
     ok(r->is->integer($x2));
     ok(r->is->na($x2));
@@ -740,8 +740,8 @@ my $r = Rstats::Class->new;
 {
   # logical operator - &
   {
-    my $x1 = c_(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c_(TRUE, TRUE, FALSE, FALSE);
+    my $x1 = c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
+    my $x2 = c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 & $x2;
     my $proxy = r->is;
     ok(r->is->logical($x3));
@@ -754,8 +754,8 @@ my $r = Rstats::Class->new;
   
   # logical operator - |
   {
-    my $x1 = c_(TRUE, FALSE, TRUE, FALSE);
-    my $x2 = c_(TRUE, TRUE, FALSE, FALSE);
+    my $x1 = c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
+    my $x2 = c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 | $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 1 0/]);
@@ -807,15 +807,15 @@ my $r = Rstats::Class->new;
     like($@, qr/zero/);
   }
 
-  # bool - logical,TRUE
+  # bool - logical,$r->TRUE
   {
-    my $x1 = TRUE;
+    my $x1 = $r->TRUE;
     ok($x1);
   }
   
-  # bool - logical,FALSE
+  # bool - logical,$r->FALSE
   {
-    my $x1 = FALSE;
+    my $x1 = $r->FALSE;
     ok(!$x1);
   }
 }
@@ -837,7 +837,7 @@ my $r = Rstats::Class->new;
   # numeric operator auto upgrade - integer
   {
     my $x1 = r->as->integer(c_(3, 5));
-    my $x2 = c_(TRUE, FALSE);
+    my $x2 = c_($r->TRUE, $r->FALSE);
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [4, 5])

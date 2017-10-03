@@ -43,16 +43,16 @@ my $r = Rstats::Class->new;
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # c_(T_, F_);
+  # c_($r->TRUE, $r->FALSE);
   {
-    my $x1 = c_(T_, F_);
+    my $x1 = c_($r->TRUE, $r->FALSE);
     ok(r->is->logical($x1));
     is_deeply($x1->values, [1, 0]);
   }
 
-  # c_(T_, r->as->integer(2));
+  # c_($r->TRUE, r->as->integer(2));
   {
-    my $x1 = c_(T_, r->as->integer(2));
+    my $x1 = c_($r->TRUE, r->as->integer(2));
     ok(r->is->integer($x1));
     is_deeply($x1->values, [1, 2]);
   }
@@ -423,7 +423,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = c_("a");
     my $x2 = c_("b");
-    my $x3 = c_("ad1ad1", NA, "ad2ad2");
+    my $x3 = c_("ad1ad1", $r->NA, "ad2ad2");
     my $x4 = r->sub($x1, $x2, $x3);
     is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
@@ -432,8 +432,8 @@ my $r = Rstats::Class->new;
   {
     my $x1 = c_("a");
     my $x2 = c_("b");
-    my $x3 = c_("Ad1ad1", NA, "ad2ad2");
-    my $x4 = r->sub($x1, $x2, $x3, {'ignore.case' => TRUE});
+    my $x3 = c_("Ad1ad1", $r->NA, "ad2ad2");
+    my $x4 = r->sub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
     is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
   }
 }
@@ -467,7 +467,7 @@ my $r = Rstats::Class->new;
 
   # Arg - logical
   {
-    my $x1 = c_(T_);
+    my $x1 = c_($r->TRUE);
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [0]);
@@ -499,7 +499,7 @@ my $r = Rstats::Class->new;
 
   # Arg - dim
   {
-    my $x1 = $r->array(c_(T_, T_));
+    my $x1 = $r->array(c_($r->TRUE, $r->TRUE));
     my $x2 = r->Arg($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -658,7 +658,7 @@ my $r = Rstats::Class->new;
 
   # expm1 - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->expm1($x1);
     ok(!defined $x2->value);
   }
@@ -707,7 +707,7 @@ my $r = Rstats::Class->new;
 
   # prod - logical
   {
-    my $x1 = c_(T_, T_, T_);
+    my $x1 = c_($r->TRUE, $r->TRUE, $r->TRUE);
     my $x2 = r->prod($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [1]);
@@ -750,7 +750,7 @@ my $r = Rstats::Class->new;
   
   # sum - logical
   {
-    my $x1 = c_(T_, T_, F_);
+    my $x1 = c_($r->TRUE, $r->TRUE, $r->FALSE);
     my $x2 = r->sum($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [2]);
@@ -798,7 +798,7 @@ my $r = Rstats::Class->new;
 
   # str - vector, logical
   {
-    my $x1 = c_(T_, F_);
+    my $x1 = c_($r->TRUE, $r->FALSE);
     is(r->str($x1), 'logi [1:2] TRUE FALSE');
   }
 
@@ -1022,7 +1022,7 @@ my $r = Rstats::Class->new;
 
   # log - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->log($x1);
     ok(!defined $x2->value);
   }  
@@ -1041,7 +1041,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = c_("a");
     my $x2 = c_("b");
-    my $x3 = c_("ad1ad1", NA, "ad2ad2");
+    my $x3 = c_("ad1ad1", $r->NA, "ad2ad2");
     my $x4 = r->gsub($x1, $x2, $x3);
     is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
@@ -1050,8 +1050,8 @@ my $r = Rstats::Class->new;
   {
     my $x1 = c_("a");
     my $x2 = c_("b");
-    my $x3 = c_("Ad1Ad1", NA, "Ad2Ad2");
-    my $x4 = r->gsub($x1, $x2, $x3, {'ignore.case' => TRUE});
+    my $x3 = c_("Ad1Ad1", $r->NA, "Ad2Ad2");
+    my $x4 = r->gsub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
     is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
   }
 }
@@ -1061,7 +1061,7 @@ my $r = Rstats::Class->new;
   # grep - case not ignore
   {
     my $x1 = c_("abc");
-    my $x2 = c_("abc", NA, "ABC");
+    my $x2 = c_("abc", $r->NA, "ABC");
     my $x3 = r->grep($x1, $x2);
     is_deeply($x3->values, [1]);
   }
@@ -1069,8 +1069,8 @@ my $r = Rstats::Class->new;
   # grep - case ignore
   {
     my $x1 = c_("abc");
-    my $x2 = c_("abc", NA, "ABC");
-    my $x3 = r->grep($x1, $x2, {'ignore.case' => TRUE});
+    my $x2 = c_("abc", $r->NA, "ABC");
+    my $x3 = r->grep($x1, $x2, {'ignore.case' => $r->TRUE});
     is_deeply($x3->values, [1, 3]);
   }
 }
@@ -1079,7 +1079,7 @@ my $r = Rstats::Class->new;
 {
   my $x1 = c_("a-z");
   my $x2 = c_("A-Z");
-  my $x3 = c_("abc", "def", NA);
+  my $x3 = c_("abc", "def", $r->NA);
   my $x4 = r->chartr($x1, $x2, $x3);
   is_deeply($x4->values, ["ABC", "DEF", undef]);
 }
@@ -1327,7 +1327,7 @@ my $r = Rstats::Class->new;
 
   # cumprod - logical
   {
-    my $x1 = c_(T_, T_, F_);
+    my $x1 = c_($r->TRUE, $r->TRUE, $r->FALSE);
     my $x2 = r->cumprod($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [1, 1, 0]);
@@ -1411,7 +1411,7 @@ my $r = Rstats::Class->new;
   {
     my $x1 = c_(4, 3, 3, 3, 1, 5);
     my $x2 = c_(1, 2, 3, 1, 1, 1);
-    my $x3 = r->order($x1, $x2, {decreasing => TRUE});
+    my $x3 = r->order($x1, $x2, {decreasing => $r->TRUE});
     is_deeply($x3->values, [6, 1, 3, 2, 4, 5]);
   }
   
@@ -1426,14 +1426,14 @@ my $r = Rstats::Class->new;
   # order - decreasing FALSE
   {
     my $x1 = c_(2, 4, 3, 1);
-    my $x2 = r->order($x1, {decreasing => FALSE});
+    my $x2 = r->order($x1, {decreasing => $r->FALSE});
     is_deeply($x2->values, [4, 1, 3, 2]);
   }
   
   # order - decreasing TRUE
   {
     my $x1 = c_(2, 4, 3, 1);
-    my $x2 = r->order($x1, {decreasing => TRUE});
+    my $x2 = r->order($x1, {decreasing => $r->TRUE});
     is_deeply($x2->values, [2, 3, 1, 4]);
   }
 
@@ -1449,14 +1449,14 @@ my $r = Rstats::Class->new;
 {
   # diff - numeric
   {
-    my $x1 = c_(1, 5, 10, NA);
+    my $x1 = c_(1, 5, 10, $r->NA);
     my $x2 = r->diff($x1);
     is_deeply($x2->values, [4, 5, undef]);
   }
   
   # diff - complex
   {
-    my $x1 = c_(1 + 2*i_, 5 + 3*i_, NA);
+    my $x1 = c_(1 + 2*i_, 5 + 3*i_, $r->NA);
     my $x2 = r->diff($x1);
     is_deeply($x2->values, [{re => 4, im => 1}, undef]);
   }
@@ -1478,21 +1478,21 @@ my $r = Rstats::Class->new;
 
 # nchar
 {
-  my $x1 = c_("AAA", "BB", NA);
+  my $x1 = c_("AAA", "BB", $r->NA);
   my $x2 = r->nchar($x1);
   is_deeply($x2->values, [3, 2, undef])
 }
 
 # tolower
 {
-  my $x1 = c_("AA", "BB", NA);
+  my $x1 = c_("AA", "BB", $r->NA);
   my $x2 = r->tolower($x1);
   is_deeply($x2->values, ["aa", "bb", undef])
 }
 
 # toupper
 {
-  my $x1 = c_("aa", "bb", NA);
+  my $x1 = c_("aa", "bb", $r->NA);
   my $x2 = r->toupper($x1);
   is_deeply($x2->values, ["AA", "BB", undef])
 }
@@ -1537,7 +1537,7 @@ my $r = Rstats::Class->new;
 
 # T, F
 {
-  my $x1 = c_(T_, F_);
+  my $x1 = c_($r->TRUE, $r->FALSE);
   is_deeply($x1->values, [1, 0]);
 }
 
@@ -1659,14 +1659,14 @@ my $r = Rstats::Class->new;
 # unique
 {
   # uniqeu - numeric
-  my $x1 = c_(1, 1, 2, 2, 3, NA, NA, $r->Inf, $r->Inf);
+  my $x1 = c_(1, 1, 2, 2, 3, $r->NA, $r->NA, $r->Inf, $r->Inf);
   my $x2 = r->unique($x1);
   is_deeply($x2->values, [1, 2, 3, undef, 'Inf']);
 }
 
 # NA
 {
-  my $x1 = NA;
+  my $x1 = $r->NA;
   my $na_value = $x1->value;
   is($na_value, undef);
   ok(r->is->na($x1));

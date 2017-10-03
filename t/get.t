@@ -30,7 +30,7 @@ my $r = Rstats::Class->new;
   # get - logical
   {
     my $x1 = c_(1, 3, 5, 7);
-    my $logical_v = c_(FALSE, TRUE, FALSE, TRUE, TRUE);
+    my $logical_v = c_($r->FALSE, $r->TRUE, $r->FALSE, $r->TRUE, $r->TRUE);
     my $x2 = $x1->get($logical_v);
     is_deeply($x2->values, [3, 7, undef]);
   }
@@ -120,7 +120,7 @@ my $r = Rstats::Class->new;
   # get logical $r->array - basic
   {
     my $x1 = $r->matrix(C_('1:9'), 3, 3);
-    my $x2 = $r->matrix(c_(T_, F_, F_, F_, T_, F_, F_, F_, T_), 3, 3);
+    my $x2 = $r->matrix(c_($r->TRUE, $r->FALSE, $r->FALSE, $r->FALSE, $r->TRUE, $r->FALSE, $r->FALSE, $r->FALSE, $r->TRUE), 3, 3);
     my $x3 = $x1->get($x2);
     is_deeply($x3->values, [1, 5, 9]);
     is_deeply(r->dim($x3)->values, [3]);

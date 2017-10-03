@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # is->nan
 {
@@ -223,9 +226,9 @@ use Rstats;
     is_deeply($x2->values, [0, 1]);
   }
   
-  # is->na - list
+  # is->na - $r->list
   {
-    my $x1 = list(1, 2);
+    my $x1 = $r->list(1, 2);
     my $x2 = r->is->na($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0]);

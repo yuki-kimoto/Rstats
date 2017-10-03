@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # get
 {
@@ -18,7 +21,7 @@ use Rstats;
   # get - have dimnames
   {
     my $x1 = r->matrix(C_('1:24'), 3, 2);
-    r->dimnames($x1 => list(c_('r1', 'r2', 'r3'), c_('c1', 'c2')));
+    r->dimnames($x1 => $r->list(c_('r1', 'r2', 'r3'), c_('c1', 'c2')));
     my $x2 = $x1->get(c_(1, 3), c_(2));
     is_deeply(r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
     is_deeply(r->dimnames($x2)->getin(2)->values, ['c2']);

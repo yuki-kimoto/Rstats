@@ -155,7 +155,7 @@ my $r = Rstats::Class->new;
   
   # class - list
   {
-    my $x1 = list(1, 2);
+    my $x1 = $r->list(1, 2);
     is_deeply($x1->class->values, ['list']);
   }
 }

@@ -9,7 +9,7 @@ my $r = Rstats::Class->new;
 
 # lapply
 {
-  my $x1 = list(c_(1, 2), c_(3, 4));
+  my $x1 = $r->list(c_(1, 2), c_(3, 4));
   my $x2 = r->lapply($x1, 'sum');
   ok(r->is->list($x2));
   is_deeply($x2->getin(1)->values, [3]);
@@ -134,7 +134,7 @@ my $r = Rstats::Class->new;
 
 # sapply
 {
-  my $x1 = list(c_(1, 2), c_(3.2, 4.2));
+  my $x1 = $r->list(c_(1, 2), c_(3.2, 4.2));
   my $x2 = r->sapply($x1, 'sum');
   ok(r->is->vector($x2));
   is_deeply($x2->values, [3, 7.4]);

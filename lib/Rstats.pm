@@ -15,7 +15,7 @@ sub import {
   
   # Export primary methods
   no strict 'refs';
-  my @methods = qw/c_ C_ array matrix list/;
+  my @methods = qw/c_ C_ array matrix/;
   for my $method (@methods) {
     no strict 'refs';
     my $func = \&{"Rstats::Func::$method"};

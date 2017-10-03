@@ -57,7 +57,7 @@ my $r = Rstats::Class->new;
 
   # as->integer - double,NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is_deeply($x2->values, [undef]);
@@ -129,7 +129,7 @@ my $r = Rstats::Class->new;
 
   # as->integer - complex,  NaN + 1*i
   {
-    my $x1 = r->complex(NaN, 1);
+    my $x1 = r->complex($r->NaN, 1);
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
@@ -137,7 +137,7 @@ my $r = Rstats::Class->new;
 
   # as->integer - complex,  1 + NaN*i
   {
-    my $x1 = r->complex(1, NaN);
+    my $x1 = r->complex(1, $r->NaN);
     my $x2 = r->as->integer($x1);
     ok(r->is->integer($x2));
     is($x2->values->[0], undef);
@@ -212,7 +212,7 @@ my $r = Rstats::Class->new;
 
   # as->double - NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = r->as->double($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, ['NaN']);
@@ -369,7 +369,7 @@ my $r = Rstats::Class->new;
 
   # as->logical - doubke,NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [undef]);
@@ -401,7 +401,7 @@ my $r = Rstats::Class->new;
 
   # as->logical - complex, 1 + NaN*i
   {
-    my $x1 = r->complex(1, NaN);
+    my $x1 = r->complex(1, $r->NaN);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -409,7 +409,7 @@ my $r = Rstats::Class->new;
 
   # as->logical - complex, NaN + 1*i
   {
-    my $x1 = r->complex(NaN, 1);
+    my $x1 = r->complex($r->NaN, 1);
     my $x2 = r->as->logical($x1);
     ok(r->is->logical($x2));
     is($x2->values->[0], undef);
@@ -544,7 +544,7 @@ my $r = Rstats::Class->new;
 
   # as->character - NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = r->as->character($x1);
     ok(r->is->character($x2));
     is_deeply($x2->values, ["NaN"]);
@@ -625,7 +625,7 @@ my $r = Rstats::Class->new;
 
   # as->complex - NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = r->as->complex($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 'NaN', im => 0}]);
@@ -834,7 +834,7 @@ my $r = Rstats::Class->new;
 
   # array decide type - NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     is_deeply($x1->values, ['NaN']);
     ok(r->is->numeric($x1));
   }

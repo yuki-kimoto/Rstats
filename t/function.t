@@ -442,7 +442,7 @@ my $r = Rstats::Class->new;
 {
   # NaN - type
   {
-    my $x_nan = NaN;
+    my $x_nan = $r->NaN;
     ok(r->is->double($x_nan));
   }
 }
@@ -475,7 +475,7 @@ my $r = Rstats::Class->new;
 
   # Arg - double,NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, ['NaN']);
@@ -509,7 +509,7 @@ my $r = Rstats::Class->new;
 {
   # sort - contain NA or NaN
   {
-    my $x1 = c_(2, 1, 5, NA, NaN);
+    my $x1 = c_(2, 1, 5, $r->NA, $r->NaN);
     my $x1_sorted = r->sort($x1);
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
@@ -570,8 +570,8 @@ my $r = Rstats::Class->new;
 {
   # min - contain NA
   {
-    my $x_tmp = c_(1, 2, NaN, NA);
-    my $x1 = r->min(c_(1, 2, NaN, NA));
+    my $x_tmp = c_(1, 2, $r->NaN, $r->NA);
+    my $x1 = r->min(c_(1, 2, $r->NaN, $r->NA));
     is_deeply($x1->values, [undef]);
   }
   
@@ -597,7 +597,7 @@ my $r = Rstats::Class->new;
   
   # min - contain NaN
   {
-    my $x1 = r->min(c_(1, 2, NaN));
+    my $x1 = r->min(c_(1, 2, $r->NaN));
     is_deeply($x1->values, ['NaN']);
   }
 }
@@ -665,7 +665,7 @@ my $r = Rstats::Class->new;
 
   # expm1 - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->expm1($x1);
     is($x2->value, 'NaN');
   }
@@ -870,14 +870,14 @@ my $r = Rstats::Class->new;
 
   # exp - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->exp($x1);
     ok(!defined $x2->value);
   }  
 
   # exp - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->exp($x1);
     is($x2->value, 'NaN');
   }
@@ -1029,7 +1029,7 @@ my $r = Rstats::Class->new;
 
   # log - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->log($x1);
     is($x2->value, 'NaN');
   }
@@ -1604,13 +1604,13 @@ my $r = Rstats::Class->new;
   
   # max - contain NA
   {
-    my $x1 = r->max(c_(1, 2, NaN, NA));
+    my $x1 = r->max(c_(1, 2, $r->NaN, $r->NA));
     is_deeply($x1->values, [undef]);
   }
   
   # max - contain NaN
   {
-    my $x1 = r->max(c_(1, 2, NaN));
+    my $x1 = r->max(c_(1, 2, $r->NaN));
     is_deeply($x1->values, ['NaN']);
   }
 }

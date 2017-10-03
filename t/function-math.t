@@ -184,25 +184,25 @@ my $r = Rstats::Class->new;
 
   # atan2 - y is NA
   {
-    my $x1 = r->atan2(NA, 0);
+    my $x1 = r->atan2($r->NA, 0);
     ok(!defined $x1->value);
   }  
 
   # atan2 - x is NA
   {
-    my $x1 = r->atan2(0, NA);
+    my $x1 = r->atan2(0, $r->NA);
     ok(!defined $x1->value);
   }
 
   # atan2 - y is NaN
   {
-    my $x1 = r->atan2(NaN, 0);
+    my $x1 = r->atan2($r->NaN, 0);
     is($x1->value, 'NaN');
   }
   
   # atan2 - x is NaN
   {
-    my $x1 = r->atan2(0, NaN);
+    my $x1 = r->atan2(0, $r->NaN);
     is($x1->value, 'NaN');
   }
 
@@ -309,14 +309,14 @@ my $r = Rstats::Class->new;
 
   # tanh - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->tanh($x1);
     ok(!defined $x2->value);
   }  
 
   # tanh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->tanh($x1);
     is($x2->value, 'NaN');
   }
@@ -402,7 +402,7 @@ my $r = Rstats::Class->new;
 
   # atanh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->atanh($x1);
     is($x2->value, 'NaN');
   }
@@ -501,7 +501,7 @@ my $r = Rstats::Class->new;
 
   # acosh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->acosh($x1);
     is($x2->value, 'NaN');
   }
@@ -561,7 +561,7 @@ my $r = Rstats::Class->new;
 
   # asinh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->asinh($x1);
     is($x2->value, 'NaN');
   }
@@ -629,7 +629,7 @@ my $r = Rstats::Class->new;
 
   # cosh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->cosh($x1);
     is($x2->value, 'NaN');
   }
@@ -697,7 +697,7 @@ my $r = Rstats::Class->new;
 
   # sinh - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->sinh($x1);
     is($x2->value, 'NaN');
   }
@@ -773,7 +773,7 @@ my $r = Rstats::Class->new;
 
   # atan - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->atan($x1);
     is($x2->value, 'NaN');
   }
@@ -892,7 +892,7 @@ my $r = Rstats::Class->new;
 
   # acos - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->acos($x1);
     is($x2->value, 'NaN');
   }
@@ -993,14 +993,14 @@ my $r = Rstats::Class->new;
 
   # asin - NA
   {
-    my $x1 = c_(NA);
+    my $x1 = c_($r->NA);
     my $x2 = r->asin($x1);
     ok(!defined $x2->value);
   }  
 
   # asin - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->asin($x1);
     is($x2->value, 'NaN');
   }
@@ -1054,7 +1054,7 @@ my $r = Rstats::Class->new;
 
   # atan - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->atan($x1);
     is($x2->value, 'NaN');
   }
@@ -1139,7 +1139,7 @@ my $r = Rstats::Class->new;
 
   # cos - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->cos($x1);
     is($x2->value, 'NaN');
   }
@@ -1193,7 +1193,7 @@ my $r = Rstats::Class->new;
 
   # sin - NaN
   {
-    my $x1 = c_(NaN);
+    my $x1 = c_($r->NaN);
     my $x2 = r->sin($x1);
     is($x2->value, 'NaN');
   }

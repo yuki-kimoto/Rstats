@@ -32,25 +32,25 @@ my $r = Rstats::Class->new;
 {
   # to_string - TRUE
   {
-    my $x1 = TRUE;
+    my $x1 = $r->TRUE;
     is("$x1", "[1] TRUE\n");
   }
 
   # to_string - FALSE
   {
-    my $x1 = FALSE;
+    my $x1 = $r->FALSE;
     is("$x1", "[1] FALSE\n");
   }
 
   # to_string - NA
   {
-    my $x1 = NA;
+    my $x1 = $r->NA;
     is("$x1", "[1] NA\n");
   }
 
   # to_string - NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     is("$x1", "[1] NaN\n");
   }
 

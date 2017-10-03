@@ -680,7 +680,7 @@ my $r = Rstats::Class->new;
 
   # negate - double,NaN
   {
-    my $x1 = NaN;
+    my $x1 = $r->NaN;
     my $x2 = -$x1;
     ok(r->is->double($x2));
     ok(r->is->nan($x2)->value);

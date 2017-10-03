@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # get
 {
@@ -26,7 +29,7 @@ use Rstats;
   
   # get - ordered
   {
-    my $x1 = ordered(c_("a1", "a2", "a3", "a1", "a2", "a3"));
+    my $x1 = $r->ordered(c_("a1", "a2", "a3", "a1", "a2", "a3"));
     my $x2 = $x1->get(c_(4, 6));
     ok(r->is->factor($x2));
     ok(r->is->ordered($x2));
@@ -185,7 +188,7 @@ use Rstats;
 {
   # ordered - basic
   {
-    my $x1 = ordered(c_("a", "b", "c", "a", "b", "c"));
+    my $x1 = $r->ordered(c_("a", "b", "c", "a", "b", "c"));
     ok(r->is->ordered($x1));
     ok(r->is->integer($x1));
     ok(r->is->factor($x1));
@@ -194,7 +197,7 @@ use Rstats;
   }
   # ordered - option
   {
-    my $x1 = ordered(c_("a", "b", "c", "a", "b", "c"), {levels => c_("a", "b", "c")});
+    my $x1 = $r->ordered(c_("a", "b", "c", "a", "b", "c"), {levels => c_("a", "b", "c")});
     ok(r->is->ordered($x1));
     ok(r->is->integer($x1));
     ok(r->is->factor($x1));

@@ -6,6 +6,9 @@ use Rstats;
 use Rstats::Util;
 use Math::Complex ();
 use Math::Trig ();
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # NULL
 {
@@ -146,7 +149,7 @@ use Math::Trig ();
   
   # class - factor, ordered
   {
-    my $x1 = ordered(c_(1, 2, 3));
+    my $x1 = $r->ordered(c_(1, 2, 3));
     is_deeply($x1->class->values, ['factor', 'ordered']);
   }
   

@@ -334,36 +334,36 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   use Rstats;
   
   # Vector
-  my $v1 = c(1, 2, 3);
-  my $v2 = c(3, 4, 5);
+  my $v1 = $r->c(1, 2, 3);
+  my $v2 = $r->c(3, 4, 5);
   
   my $v3 = $v1 + v2;
   print $v3;
   
   # Sequence m:n
-  my $v1 = C_("1:3");
+  my $v1 = $r->C("1:3");
 
   # Matrix
-  my $m1 = matrix(C_("1:12"), 4, 3);
+  my $m1 = $r->matrix($r->C("1:12"), 4, 3);
   
   # Array
-  my $a1 = array(C_("1:24"), c(4, 3, 2));
+  my $a1 = $r->array($r->C("1:24"), $r->c(4, 3, 2));
 
   # Complex
-  my $z1 = 1 + 2 * i_;
-  my $z2 = 3 + 4 * i_;
+  my $z1 = 1 + 2 * $r->i;
+  my $z2 = 3 + 4 * $r->i;
   my $z3 = $z1 * $z2;
   
   # Special value
-  my $true = TRUE;
-  my $false = FALSE;
-  my $na = NA;
-  my $nan = NaN;
-  my $inf = Inf;
-  my $null = NULL;
+  my $true = $r->TRUE;
+  my $false = $r->FALSE;
+  my $na = $r->NA;
+  my $nan = $r->NaN;
+  my $inf = $r->Inf;
+  my $null = $r->NULL;
   
   # all methods are called from r
-  my $x1 = $r->sum(c(1, 2, 3));
+  my $x1 = $r->sum($r->c(1, 2, 3));
   
   # Register helper
   $r->helper(my_sum => sub {
@@ -374,85 +374,9 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
       $total += $value;
     }
     
-    return c($total);
+    return $r->c($total);
   });
-  my $x2 = $r->my_sum(c(1, 2, 3));
-
-=head1 FUNCTIONS
-
-=head2 c_
-
-  # c(1, 2, 3)
-  c(1, 2, 3)
-
-Create vector. C<c_> function is equal to C<c> of R.
-
-=head2 C_
-
-  # 1:24
-  C_("1:24")
-
-C_ function is equal to C<m:n> of R.
-
-=head2 array
-
-  # array(1:24, c(4, 3, 2))
-  array(C_("1:24"), c(4, 3, 2))
-
-=head2 TRUE
-
-  # TRUE
-  TRUE
-
-=head2 T_
-
-  # T
-  T_
-
-Alias of TRUE
-
-=head2 FALSE
-  
-  # FALSE
-  FALSE
-
-=head2 F_
-  
-  # F
-  F_
-
-Alias of FALSE
-
-=head2 NA
-
-  # NA
-  NA
-
-=head2 NaN
-  
-  # NaN
-  NaN
-
-=head2 Inf
-
-  # Inf
-  Inf
-
-=head2 NULL
-  
-  # NULL
-  NULL
-
-=head2 matrix
-
-  # matrix(1:12, 4, 3)
-  matrix(C_("1:12"), 4, 3)
-  
-  # matrix(1:12, nrow=4, ncol=3)
-  matrix(C_("1:12"), {nrow => 4, ncol => 3});
-  
-  # matrix(1:12, 4, 3, byrow=TRUE)
-  matrix(C_("1:12"), 4, 3, {byrow => TRUE});
+  my $x2 = $r->my_sum($r->c(1, 2, 3));
 
 =head1 VECTOR ACCESS
 
@@ -529,6 +453,80 @@ Alias of FALSE
   $r->tranc($x1 / $x2)
 
 =head1 METHODS
+
+=head2 c
+
+  # c(1, 2, 3)
+  $r->c(1, 2, 3)
+
+Create vector. C<c> method is equal to C<c> of R.
+
+=head2 C
+
+  # 1:24
+  C("1:24")
+
+C function is equal to C<m:n> of R.
+
+=head2 array
+
+  # array(1:24, c(4, 3, 2))
+  $r->array($r->C("1:24"), $r->c(4, 3, 2))
+
+=head2 TRUE
+
+  # TRUE
+  $r->TRUE
+
+=head2 T
+
+  # T
+  $r->T
+
+Alias of TRUE
+
+=head2 FALSE
+  
+  # FALSE
+  $r->FALSE
+
+=head2 F
+  
+  # F
+  $r->F
+
+Alias of FALSE
+
+=head2 NA
+
+  # NA
+  $r->NA
+
+=head2 NaN
+  
+  # NaN
+  $r->NaN
+
+=head2 Inf
+
+  # Inf
+  $r->Inf
+
+=head2 NULL
+  
+  # NULL
+  $r->NULL
+
+=head2 matrix
+
+  # matrix(1:12, 4, 3)
+  $r->matrix($r->C("1:12"), 4, 3)
+  
+  # matrix(1:12, nrow=4, ncol=3)
+  $r->matrix($r->C("1:12"), {nrow => 4, ncol => 3});
+  
+  # matrix(1:12, 4, 3, byrow=TRUE)
+  $r->matrix($r->C("1:12"), 4, 3, {byrow => $r->TRUE});
 
 =head2 abs
 

@@ -24,15 +24,6 @@ sub import {
   }
   *{"${class}::r"} = sub { $r };
   
-  # Export none argument methods
-  my @methods_no_args = qw/i_/;
-  for my $method (@methods_no_args) {
-    no strict 'refs';
-    my $func = \&{"Rstats::Func::$method"};
-
-    *{"${class}::$method"} = sub () { $func->($r, @_) };
-  }
-  
   warnings->unimport('ambiguous');
 }
 

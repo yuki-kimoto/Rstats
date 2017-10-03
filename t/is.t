@@ -81,7 +81,7 @@ my $r = Rstats::Class->new;
   
   # is->nan - complex
   {
-    my $x1 = c_(1+2*i_, r->complex($r->NaN, 1), r->complex(1, $r->NaN));
+    my $x1 = c_(1+2*$r->i, r->complex($r->NaN, 1), r->complex(1, $r->NaN));
     my $x2 = r->is->nan($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0, 1, 1]);
@@ -107,7 +107,7 @@ my $r = Rstats::Class->new;
 
   # is->infinite - complex
   {
-    my $x1 = c_(1+2*i_, r->complex($r->NaN, 1), $r->Inf + 1*i_, r->complex(1, $r->Inf));
+    my $x1 = c_(1+2*$r->i, r->complex($r->NaN, 1), $r->Inf + 1*$r->i, r->complex(1, $r->Inf));
     my $x2 = r->is->infinite($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0, 0, 1, 1]);
@@ -196,7 +196,7 @@ my $r = Rstats::Class->new;
   
   # is->na - complex
   {
-    my $x1 = c_(1 + 2*i_, $r->NA);
+    my $x1 = c_(1 + 2*$r->i, $r->NA);
     my $x2 = r->is->na($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0, 1]);

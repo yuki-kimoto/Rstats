@@ -40,8 +40,8 @@ my $r = Rstats::Class->new;
 
   # pow - complex
   {
-    my $x1 = 1 + 2*i_;
-    my $x2 = 3 + 0*i_;
+    my $x1 = 1 + 2*$r->i;
+    my $x2 = 3 + 0*$r->i;
     my $x3 = $x1 ** $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -11, im => -2}]);
@@ -102,7 +102,7 @@ my $r = Rstats::Class->new;
 
   # pow - auto upgrade type
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = c_(3);
     my $x3 = $x1 ** $x2;
     ok(r->is->complex($x3));
@@ -128,8 +128,8 @@ my $r = Rstats::Class->new;
 {
   # add - dim
   {
-    my $x1 = $r->array(c_(1 + 2*i_), 2);
-    my $x2 = $r->array(c_(3 + 4*i_), 2);
+    my $x1 = $r->array(c_(1 + 2*$r->i), 2);
+    my $x2 = $r->array(c_(3 + 4*$r->i), 2);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     ok(r->dim($x3)->values, [2]);
@@ -147,8 +147,8 @@ my $r = Rstats::Class->new;
   
   # add - complex
   {
-    my $x1 = c_(1 + 2*i_);
-    my $x2 = c_(3 + 4*i_);
+    my $x1 = c_(1 + 2*$r->i);
+    my $x2 = c_(3 + 4*$r->i);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 4, im => 6}]);
@@ -209,7 +209,7 @@ my $r = Rstats::Class->new;
 
   # add - auto upgrade type
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = c_(3);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
@@ -254,8 +254,8 @@ my $r = Rstats::Class->new;
   
   # subtract - complex
   {
-    my $x1 = c_(1 + 2*i_);
-    my $x2 = c_(3 + 4*i_);
+    my $x1 = c_(1 + 2*$r->i);
+    my $x2 = c_(3 + 4*$r->i);
     my $x3 = $x1 - $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -2, im => -2}]);
@@ -316,7 +316,7 @@ my $r = Rstats::Class->new;
 
   # subtract - auto upgrade type
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = c_(3);
     my $x3 = $x1 - $x2;
     ok(r->is->complex($x3));
@@ -361,8 +361,8 @@ my $r = Rstats::Class->new;
   
   # multiply - complex
   {
-    my $x1 = c_(1 + 2*i_);
-    my $x2 = c_(3 + 4*i_);
+    my $x1 = c_(1 + 2*$r->i);
+    my $x2 = c_(3 + 4*$r->i);
     my $x3 = $x1 * $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -5, im => 10}]);
@@ -423,7 +423,7 @@ my $r = Rstats::Class->new;
 
   # multiply - auto upgrade type
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = c_(3);
     my $x3 = $x1 * $x2;
     ok(r->is->complex($x3));
@@ -468,8 +468,8 @@ my $r = Rstats::Class->new;
 
   # divide - complex
   {
-    my $x1 = 5 + -6*i_;
-    my $x2 = 3 + 2*i_;
+    my $x1 = 5 + -6*$r->i;
+    my $x2 = 3 + 2*$r->i;
     my $x3 = $x1 / $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 3/13, im => -28/13}]);
@@ -530,7 +530,7 @@ my $r = Rstats::Class->new;
 
   # divide - auto upgrade type
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = c_(3);
     my $x3 = $x1 / $x2;
     ok(r->is->complex($x3));
@@ -575,8 +575,8 @@ my $r = Rstats::Class->new;
 
   # remainder - complex
   {
-    my $x1 = 5 + -6*i_;
-    my $x2 = 3 + 2*i_;
+    my $x1 = 5 + -6*$r->i;
+    my $x2 = 3 + 2*$r->i;
     my $x3;
     eval { $x3 = $x1 % $x2 };
     like($@, qr#\QError in % : unimplemented complex operation#);
@@ -704,7 +704,7 @@ my $r = Rstats::Class->new;
 
   # negate - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = -$x1;
     ok(r->is->complex($x2));
     is($x2->value->{re}, -1);
@@ -905,7 +905,7 @@ my $r = Rstats::Class->new;
 {
   # numeric operator - -Inf + 2i
   {
-    my $x2 = c_(2*i_);
+    my $x2 = c_(2*$r->i);
     my $x1 = c_(-Inf);
     my $x3 = $x1 + $x2;
     is($x3->value->{re}, '-Inf');

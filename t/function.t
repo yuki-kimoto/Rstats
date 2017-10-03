@@ -64,7 +64,7 @@ my $r = Rstats::Class->new;
     is_deeply($x1->values, [1, 2]);
   }
     
-  # c_(1, 3 + 4*i_);
+  # c_(1, 3 + 4*$r->i);
   {
     my $x1 =  c_(1, r->complex(3, 4));
     ok(r->is->complex($x1));
@@ -483,7 +483,7 @@ my $r = Rstats::Class->new;
   
   # Arg - complex, non 0 values
   {
-    my $x1 = c_(1 + 1*i_, 2 + 2*i_);
+    my $x1 = c_(1 + 1*$r->i, 2 + 2*$r->i);
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [r->pi->value / 4, r->pi->value / 4]);
@@ -491,7 +491,7 @@ my $r = Rstats::Class->new;
   
   # Arg - complex, 0 values
   {
-    my $x1 = c_(0 + 0*i_);
+    my $x1 = c_(0 + 0*$r->i);
     my $x2 = r->Arg($x1);
     ok(r->is->double($x2));
     is_deeply($x2->values, [0]);
@@ -617,7 +617,7 @@ my $r = Rstats::Class->new;
 
   # expm1 - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     eval {
       my $x2 = r->expm1($x1);
     };
@@ -683,7 +683,7 @@ my $r = Rstats::Class->new;
   
   # prod - complex
   {
-    my $x1 = c_(1+1*i_, 2+3*i_);
+    my $x1 = c_(1+1*$r->i, 2+3*$r->i);
     my $x2 = r->prod($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => -1, im => 5}]);
@@ -726,7 +726,7 @@ my $r = Rstats::Class->new;
 
   # sum - complex
   {
-    my $x1 = c_(1+1*i_, 2+2*i_, 3+3*i_);
+    my $x1 = c_(1+1*$r->i, 2+2*$r->i, 3+3*$r->i);
     my $x2 = r->sum($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 6, im => 6}]);
@@ -810,7 +810,7 @@ my $r = Rstats::Class->new;
 
   # str - vector, complex
   {
-    my $x1 = c_(1 + 1*i_, 1 + 2*i_);
+    my $x1 = c_(1 + 1*$r->i, 1 + 2*$r->i);
     is(r->str($x1), 'cplx [1:2] 1+1i 1+2i');
   }
 
@@ -837,7 +837,7 @@ my $r = Rstats::Class->new;
 {
   # exp - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = r->exp($x1);
     is(sprintf("%.6f", $x2->value->{re}), '-1.131204');
     is(sprintf("%.6f", $x2->value->{im}), '2.471727');
@@ -887,7 +887,7 @@ my $r = Rstats::Class->new;
 {
   # log10 - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = r->log10($x1);
     my $exp = Math::Complex->make(1, 2)->log / Math::Complex->make(10, 0)->log;
     my $exp_re = Math::Complex::Re($exp);
@@ -930,7 +930,7 @@ my $r = Rstats::Class->new;
 {
   # log2 - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = r->log2($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
@@ -955,7 +955,7 @@ my $r = Rstats::Class->new;
 {
   # logb - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = r->logb($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
@@ -983,7 +983,7 @@ my $r = Rstats::Class->new;
 {
   # log - complex
   {
-    my $x1 = c_(1 + 2*i_);
+    my $x1 = c_(1 + 2*$r->i);
     my $x2 = r->log($x1);
     my $exp = Math::Complex->make(1, 2)->log;
     my $exp_re = Math::Complex::Re($exp);
@@ -1235,8 +1235,8 @@ my $r = Rstats::Class->new;
   
   # is->element - complex
   {
-    my $x1 = c_(1*i_, 2*i_, 3*i_, 4*i_);
-    my $x2 = c_(1*i_, 2*i_, 3*i_);
+    my $x1 = c_(1*$r->i, 2*$r->i, 3*$r->i, 4*$r->i);
+    my $x2 = c_(1*$r->i, 2*$r->i, 3*$r->i);
     my $x3 = r->is->element($x1, $x2);
     is_deeply($x3->values, [1, 1, 1, 0])
   }
@@ -1343,7 +1343,7 @@ my $r = Rstats::Class->new;
   
   # cumprod - complex
   {
-    my $x1 = c_(2*i_, 3*i_, 4*i_);
+    my $x1 = c_(2*$r->i, 3*$r->i, 4*$r->i);
     my $x2 = r->cumprod($x1);
     ok(r->is->complex($x2));
     cmp_ok($x2->values->[0]->{re}, '==', 0);
@@ -1391,7 +1391,7 @@ my $r = Rstats::Class->new;
   
   # cumsum - complex
   {
-    my $x1 = c_(1*i_, 2*i_, 3*i_);
+    my $x1 = c_(1*$r->i, 2*$r->i, 3*$r->i);
     my $x2 = r->cumsum($x1);
     ok(r->is->complex($x2));
     is_deeply($x2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
@@ -1456,7 +1456,7 @@ my $r = Rstats::Class->new;
   
   # diff - complex
   {
-    my $x1 = c_(1 + 2*i_, 5 + 3*i_, $r->NA);
+    my $x1 = c_(1 + 2*$r->i, 5 + 3*$r->i, $r->NA);
     my $x2 = r->diff($x1);
     is_deeply($x2->values, [{re => 4, im => 1}, undef]);
   }
@@ -1552,28 +1552,28 @@ my $r = Rstats::Class->new;
 
   # sqrt - complex, 1 + 0i
   {
-    my $e1 = c_(1 + 0*i_);
+    my $e1 = c_(1 + 0*$r->i);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 1, im => 0});
   }
 
   # sqrt - complex, 4 + 0i
   {
-    my $e1 = c_(4 + 0*i_);
+    my $e1 = c_(4 + 0*$r->i);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 2, im => 0});
   }
   
   # sqrt - complex, -1 + 0i
   {
-    my $e1 = c_(-1 + 0*i_);
+    my $e1 = c_(-1 + 0*$r->i);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 0, im => 1});
   }
 
   # sqrt - complex, -4 + 0i
   {
-    my $e1 = c_(-4 + 0*i_);
+    my $e1 = c_(-4 + 0*$r->i);
     my $e2 = r->sqrt($e1);
     is_deeply($e2->value, {re => 0, im => 2});
   }

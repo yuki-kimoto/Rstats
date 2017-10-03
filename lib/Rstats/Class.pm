@@ -116,7 +116,7 @@ my @func_names = qw/
   grep
   gsub
   head
-  i_
+  i
   ifelse
   interaction
   I

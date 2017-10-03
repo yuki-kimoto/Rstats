@@ -1853,7 +1853,7 @@ sub head {
   }
 }
 
-sub i_ {
+sub i {
   my $r = shift;
   
   my $i = Rstats::Func::c_complex($r, {re => 0, im => 1});

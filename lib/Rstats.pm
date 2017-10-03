@@ -16,9 +16,11 @@ use SPVM 'Rstats::Data';
 sub c_v2 {
   my ($r, $values) = @_;
   
+  $DB::single = 1;
+  
   my $r_data = SPVM::new_object("Rstats::Data");
   
-  $r_data->set(type => SPVM::Rstats::Data::TYPE_DOUBLE());
+  # $r_data->set(type => SPVM::Rstats::Data::TYPE_DOUBLE());
   
   my $sp_values = SPVM::new_double_array($values);
   
@@ -26,7 +28,6 @@ sub c_v2 {
   
   return $r_data;
 }
-
 
 has helpers => sub { {} };
 

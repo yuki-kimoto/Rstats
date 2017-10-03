@@ -1,4 +1,4 @@
-package SPVM::Rstats::Data {
+package Rstats::Data {
   has type : int;
   has integral_values : long[];
   has double_values : double[];

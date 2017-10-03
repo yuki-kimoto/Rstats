@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # lapply
 {
@@ -122,7 +125,7 @@ use Rstats;
 # tapply
 {
   my $x1 = c_(1, 2, 4, 5, 4);
-  my $x2 = factor(c_("M", "L", "M", "L", "M"));
+  my $x2 = $r->factor(c_("M", "L", "M", "L", "M"));
   my $x3 = r->tapply($x1, $x2, 'mean');
   is_deeply($x3->values, [3.5, 3]);
   is_deeply(r->names($x3)->values, ["L", "M"]);

@@ -143,7 +143,7 @@ my $r = Rstats::Class->new;
   
   # class - factor
   {
-    my $x1 = factor(c_(1, 2, 3));
+    my $x1 = $r->factor(c_(1, 2, 3));
     is_deeply($x1->class->values, ['factor']);
   }
   

@@ -21,8 +21,8 @@ my $r = Rstats::Class->new;
 {
   # pow - dim
   {
-    my $x1 = $r->array(c_(5), 2);
-    my $x2 = $r->array(c_(2), 2);
+    my $x1 = $r->array($r->c_(5), 2);
+    my $x2 = $r->array($r->c_(2), 2);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -31,8 +31,8 @@ my $r = Rstats::Class->new;
   
   # pow - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 ** $x2};
     like($@, qr#\QError in ** : non-numeric argument#);
@@ -49,8 +49,8 @@ my $r = Rstats::Class->new;
 
   # pow - double
   {
-    my $x1 = c_(5);
-    my $x2 = c_(2);
+    my $x1 = $r->c_(5);
+    my $x2 = $r->c_(2);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [25]);
@@ -58,8 +58,8 @@ my $r = Rstats::Class->new;
 
   # pow - integer
   {
-    my $x1 = r->as->integer(c_(5));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(5));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [25]);
@@ -67,8 +67,8 @@ my $r = Rstats::Class->new;
 
   # pow - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1]);
@@ -77,7 +77,7 @@ my $r = Rstats::Class->new;
   # pow - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -85,7 +85,7 @@ my $r = Rstats::Class->new;
 
   # pow - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 ** $x2;
     ok(r->is->double($x3));
@@ -94,16 +94,16 @@ my $r = Rstats::Class->new;
   
   # pow - different number elements
   {
-    my $x1 = c_(5, 3);
-    my $x2 = c_(2, 2, 3, 1);
+    my $x1 = $r->c_(5, 3);
+    my $x2 = $r->c_(2, 2, 3, 1);
     my $x3 = $x1 ** $x2;
     is_deeply($x3->values, [25, 9, 125, 3]);
   }
 
   # pow - auto upgrade type
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3);
     my $x3 = $x1 ** $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -11, im => -2}]);
@@ -111,14 +111,14 @@ my $r = Rstats::Class->new;
   
   # pow - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 ** 2;
     is_deeply($x2->values, [1, 4, 9]);
   }
 
   # pow - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 2 ** $x1;
     is_deeply($x2->values, [2, 4, 8]);
   }
@@ -128,8 +128,8 @@ my $r = Rstats::Class->new;
 {
   # add - dim
   {
-    my $x1 = $r->array(c_(1 + 2*$r->i), 2);
-    my $x2 = $r->array(c_(3 + 4*$r->i), 2);
+    my $x1 = $r->array($r->c_(1 + 2*$r->i), 2);
+    my $x2 = $r->array($r->c_(3 + 4*$r->i), 2);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     ok(r->dim($x3)->values, [2]);
@@ -138,8 +138,8 @@ my $r = Rstats::Class->new;
   
   # add - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 + $x2};
     like($@, qr/\QError in + : non-numeric argument/);
@@ -147,8 +147,8 @@ my $r = Rstats::Class->new;
   
   # add - complex
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3 + 4*$r->i);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3 + 4*$r->i);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 4, im => 6}]);
@@ -156,8 +156,8 @@ my $r = Rstats::Class->new;
   
   # add - double
   {
-    my $x1 = c_(1);
-    my $x2 = c_(2);
+    my $x1 = $r->c_(1);
+    my $x2 = $r->c_(2);
     my $x3 = $x1 + $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [3]);
@@ -165,8 +165,8 @@ my $r = Rstats::Class->new;
 
   # add - integer
   {
-    my $x1 = r->as->integer(c_(1));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(1));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [3]);
@@ -174,8 +174,8 @@ my $r = Rstats::Class->new;
 
   # add - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [2]);
@@ -184,7 +184,7 @@ my $r = Rstats::Class->new;
   # add - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 + $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -192,7 +192,7 @@ my $r = Rstats::Class->new;
 
   # add - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 + $x2;
     ok(r->is->double($x3));
@@ -201,16 +201,16 @@ my $r = Rstats::Class->new;
       
   # add - different number elements
   {
-    my $x1 = c_(1, 2);
-    my $x2 = c_(3, 4, 5, 6);
+    my $x1 = $r->c_(1, 2);
+    my $x2 = $r->c_(3, 4, 5, 6);
     my $x3 = $x1 + $x2;
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
 
   # add - auto upgrade type
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3);
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 4, im => 2}]);
@@ -218,14 +218,14 @@ my $r = Rstats::Class->new;
   
   # add - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 + 1;
     is_deeply($x2->values, [2, 3, 4]);
   }
 
   # add - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 1 + $x1;
     is_deeply($x2->values, [2, 3, 4]);
   }
@@ -235,8 +235,8 @@ my $r = Rstats::Class->new;
 {
   # subtract - dim
   {
-    my $x1 = $r->array(c_(1), 2);
-    my $x2 = $r->array(c_(2), 2);
+    my $x1 = $r->array($r->c_(1), 2);
+    my $x2 = $r->array($r->c_(2), 2);
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -245,8 +245,8 @@ my $r = Rstats::Class->new;
   
   # subtract - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 - $x2};
     like($@, qr/\QError in - : non-numeric argument/);
@@ -254,8 +254,8 @@ my $r = Rstats::Class->new;
   
   # subtract - complex
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3 + 4*$r->i);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3 + 4*$r->i);
     my $x3 = $x1 - $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -2, im => -2}]);
@@ -263,8 +263,8 @@ my $r = Rstats::Class->new;
   
   # subtract - double
   {
-    my $x1 = c_(1);
-    my $x2 = c_(2);
+    my $x1 = $r->c_(1);
+    my $x2 = $r->c_(2);
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [-1]);
@@ -272,8 +272,8 @@ my $r = Rstats::Class->new;
 
   # subtract - integer
   {
-    my $x1 = r->as->integer(c_(1));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(1));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 - $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [-1]);
@@ -281,8 +281,8 @@ my $r = Rstats::Class->new;
 
   # subtract - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 - $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [0]);
@@ -291,7 +291,7 @@ my $r = Rstats::Class->new;
   # subtract - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -299,7 +299,7 @@ my $r = Rstats::Class->new;
 
   # subtract - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 - $x2;
     ok(r->is->double($x3));
@@ -308,16 +308,16 @@ my $r = Rstats::Class->new;
       
   # subtract - different number elements
   {
-    my $x1 = c_(1, 2);
-    my $x2 = c_(3, 4, 5, 6);
+    my $x1 = $r->c_(1, 2);
+    my $x2 = $r->c_(3, 4, 5, 6);
     my $x3 = $x1 - $x2;
     is_deeply($x3->values, [-2, -2, -4, -4]);
   }
 
   # subtract - auto upgrade type
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3);
     my $x3 = $x1 - $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -2, im => 2}]);
@@ -325,14 +325,14 @@ my $r = Rstats::Class->new;
   
   # subtract - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 - 1;
     is_deeply($x2->values, [0, 1, 2]);
   }
 
   # subtract - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 1 - $x1;
     is_deeply($x2->values, [0, -1, -2]);
   }
@@ -342,8 +342,8 @@ my $r = Rstats::Class->new;
 {
   # multiply - double
   {
-    my $x1 = $r->array(c_(3), 2);
-    my $x2 = $r->array(c_(2), 2);
+    my $x1 = $r->array($r->c_(3), 2);
+    my $x2 = $r->array($r->c_(2), 2);
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -352,8 +352,8 @@ my $r = Rstats::Class->new;
 
   # multiply - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 * $x2};
     like($@, qr/\QError in * : non-numeric argument/);
@@ -361,8 +361,8 @@ my $r = Rstats::Class->new;
   
   # multiply - complex
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3 + 4*$r->i);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3 + 4*$r->i);
     my $x3 = $x1 * $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => -5, im => 10}]);
@@ -370,8 +370,8 @@ my $r = Rstats::Class->new;
   
   # multiply - double
   {
-    my $x1 = c_(3);
-    my $x2 = c_(2);
+    my $x1 = $r->c_(3);
+    my $x2 = $r->c_(2);
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [6]);
@@ -379,8 +379,8 @@ my $r = Rstats::Class->new;
 
   # multiply - integer
   {
-    my $x1 = r->as->integer(c_(3));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(3));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 * $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [6]);
@@ -388,8 +388,8 @@ my $r = Rstats::Class->new;
 
   # multiply - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 * $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [1]);
@@ -398,7 +398,7 @@ my $r = Rstats::Class->new;
   # multiply - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -406,7 +406,7 @@ my $r = Rstats::Class->new;
 
   # multiply - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 * $x2;
     ok(r->is->double($x3));
@@ -415,16 +415,16 @@ my $r = Rstats::Class->new;
   
   # multiply - different number elements
   {
-    my $x1 = c_(1, 2);
-    my $x2 = c_(3, 4, 5, 6);
+    my $x1 = $r->c_(1, 2);
+    my $x2 = $r->c_(3, 4, 5, 6);
     my $x3 = $x1 * $x2;
     is_deeply($x3->values, [3, 8, 5, 12]);
   }
 
   # multiply - auto upgrade type
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3);
     my $x3 = $x1 * $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 3, im => 6}]);
@@ -432,14 +432,14 @@ my $r = Rstats::Class->new;
   
   # multiply - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 * 2;
     is_deeply($x2->values, [2, 4, 6]);
   }
 
   # multiply - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 2 * $x1;
     is_deeply($x2->values, [2, 4, 6]);
   }
@@ -449,8 +449,8 @@ my $r = Rstats::Class->new;
 {
   # divide - dim
   {
-    my $x1 = $r->array(c_(5), 2);
-    my $x2 = $r->array(c_(2), 2);
+    my $x1 = $r->array($r->c_(5), 2);
+    my $x2 = $r->array($r->c_(2), 2);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -459,8 +459,8 @@ my $r = Rstats::Class->new;
   
   # divide - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 / $x2};
     like($@, qr#\QError in / : non-numeric argument#);
@@ -477,8 +477,8 @@ my $r = Rstats::Class->new;
 
   # divide - double
   {
-    my $x1 = c_(5);
-    my $x2 = c_(2);
+    my $x1 = $r->c_(5);
+    my $x2 = $r->c_(2);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [5/2]);
@@ -486,8 +486,8 @@ my $r = Rstats::Class->new;
 
   # divide - integer
   {
-    my $x1 = r->as->integer(c_(5));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(5));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [5/2]);
@@ -495,8 +495,8 @@ my $r = Rstats::Class->new;
 
   # divide - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1]);
@@ -505,7 +505,7 @@ my $r = Rstats::Class->new;
   # divide - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -513,7 +513,7 @@ my $r = Rstats::Class->new;
 
   # divide - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 / $x2;
     ok(r->is->double($x3));
@@ -522,16 +522,16 @@ my $r = Rstats::Class->new;
   
   # divide - different number elements
   {
-    my $x1 = c_(24, 12);
-    my $x2 = c_(2, 3, 4, 6);
+    my $x1 = $r->c_(24, 12);
+    my $x2 = $r->c_(2, 3, 4, 6);
     my $x3 = $x1 / $x2;
     is_deeply($x3->values, [12, 4, 6, 2]);
   }
 
   # divide - auto upgrade type
   {
-    my $x1 = c_(1 + 2*$r->i);
-    my $x2 = c_(3);
+    my $x1 = $r->c_(1 + 2*$r->i);
+    my $x2 = $r->c_(3);
     my $x3 = $x1 / $x2;
     ok(r->is->complex($x3));
     is_deeply($x3->values, [{re => 1/3, im => 2/3}]);
@@ -539,14 +539,14 @@ my $r = Rstats::Class->new;
   
   # divide - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 / 2;
     is_deeply($x2->values, [1/2, 1, 3/2]);
   }
 
   # divide - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 2 / $x1;
     is_deeply($x2->values, [2, 1, 2/3]);
   }
@@ -556,8 +556,8 @@ my $r = Rstats::Class->new;
 {
   # remainder - double
   {
-    my $x1 = $r->array(c_(5), 2);
-    my $x2 = $r->array(c_(2), 2);
+    my $x1 = $r->array($r->c_(5), 2);
+    my $x2 = $r->array($r->c_(2), 2);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     ok(r->dim($x3)->values, [2]);
@@ -566,8 +566,8 @@ my $r = Rstats::Class->new;
 
   # remainder - character
   {
-    my $x1 = c_("a");
-    my $x2 = c_("b");
+    my $x1 = $r->c_("a");
+    my $x2 = $r->c_("b");
     my $x3;
     eval { $x3 = $x1 % $x2};
     like($@, qr#\QError in % : non-numeric argument#);
@@ -584,8 +584,8 @@ my $r = Rstats::Class->new;
 
   # remainder - double
   {
-    my $x1 = c_(5, 5, 2, 2);
-    my $x2 = c_(2, 3, 2/5, 0);
+    my $x1 = $r->c_(5, 5, 2, 2);
+    my $x2 = $r->c_(2, 3, 2/5, 0);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
@@ -593,8 +593,8 @@ my $r = Rstats::Class->new;
 
   # remainder - integer
   {
-    my $x1 = r->as->integer(c_(5));
-    my $x2 = r->as->integer(c_(2));
+    my $x1 = r->as->integer($r->c_(5));
+    my $x2 = r->as->integer($r->c_(2));
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [1]);
@@ -602,8 +602,8 @@ my $r = Rstats::Class->new;
 
   # remainder - logical
   {
-    my $x1 = c_($r->TRUE);
-    my $x2 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
+    my $x2 = $r->c_($r->TRUE);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [0]);
@@ -612,7 +612,7 @@ my $r = Rstats::Class->new;
   # remainder - $r->NULL, left
   {
     my $x1 = $r->NULL;
-    my $x2 = c_(1);
+    my $x2 = $r->c_(1);
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, []);
@@ -620,7 +620,7 @@ my $r = Rstats::Class->new;
 
   # remainder - $r->NULL, right
   {
-    my $x1 = c_(1);
+    my $x1 = $r->c_(1);
     my $x2 = $r->NULL;
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
@@ -629,16 +629,16 @@ my $r = Rstats::Class->new;
   
   # remainder - different number elements
   {
-    my $x1 = c_(24, 12);
-    my $x2 = c_(3, 5, 7, 9);
+    my $x1 = $r->c_(24, 12);
+    my $x2 = $r->c_(3, 5, 7, 9);
     my $x3 = $x1 % $x2;
     is_deeply($x3->values, [0, 2, 3, 3]);
   }
 
   # remainder - auto upgrade type
   {
-    my $x1 = c_(5);
-    my $x2 = r->as->integer(c_(3));
+    my $x1 = $r->c_(5);
+    my $x2 = r->as->integer($r->c_(3));
     my $x3 = $x1 % $x2;
     ok(r->is->double($x3));
     is_deeply($x3->values, [2]);
@@ -646,14 +646,14 @@ my $r = Rstats::Class->new;
   
   # remainder - perl number
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = $x1 % 2;
     is_deeply($x2->values, [1, 0, 1]);
   }
 
   # remainder - perl number,reverse
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = 5 % $x1;
     is_deeply($x2->values, [0, 1, 2]);
   }
@@ -663,7 +663,7 @@ my $r = Rstats::Class->new;
 {
   # negate - dimention
   {
-    my $x1 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_(1, 2, 3));
     my $x2 = -$x1;
     ok(r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
@@ -672,7 +672,7 @@ my $r = Rstats::Class->new;
   
   # negate - double
   {
-    my $x1 = c_(1, 2, 3);
+    my $x1 = $r->c_(1, 2, 3);
     my $x2 = -$x1;
     ok(r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
@@ -704,7 +704,7 @@ my $r = Rstats::Class->new;
 
   # negate - complex
   {
-    my $x1 = c_(1 + 2*$r->i);
+    my $x1 = $r->c_(1 + 2*$r->i);
     my $x2 = -$x1;
     ok(r->is->complex($x2));
     is($x2->value->{re}, -1);
@@ -713,7 +713,7 @@ my $r = Rstats::Class->new;
   
   # negate - logical,true
   {
-    my $x1 = c_($r->TRUE);
+    my $x1 = $r->c_($r->TRUE);
     my $x2 = -$x1;
     ok(r->is->integer($x2));
     is($x2->value, -1);
@@ -721,7 +721,7 @@ my $r = Rstats::Class->new;
 
   # negate - logical,false
   {
-    my $x1 = c_($r->FALSE);
+    my $x1 = $r->c_($r->FALSE);
     my $x2 = -$x1;
     ok(r->is->integer($x2));
     is($x2->value, 0);
@@ -740,8 +740,8 @@ my $r = Rstats::Class->new;
 {
   # logical operator - &
   {
-    my $x1 = c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
-    my $x2 = c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
+    my $x1 = $r->c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
+    my $x2 = $r->c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 & $x2;
     my $proxy = r->is;
     ok(r->is->logical($x3));
@@ -754,8 +754,8 @@ my $r = Rstats::Class->new;
   
   # logical operator - |
   {
-    my $x1 = c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
-    my $x2 = c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
+    my $x1 = $r->c_($r->TRUE, $r->FALSE, $r->TRUE, $r->FALSE);
+    my $x2 = $r->c_($r->TRUE, $r->TRUE, $r->FALSE, $r->FALSE);
     my $x3 = $x1 | $x2;
     ok(r->is->logical($x3));
     is_deeply($x3->values, [qw/1 1 1 0/]);
@@ -824,8 +824,8 @@ my $r = Rstats::Class->new;
 {
   # numeric operator auto upgrade - complex
   {
-    my $x1 = $r->array(c_(r->complex(1,2), r->complex(3,4)));
-    my $x2 = $r->array(c_(1, 2));
+    my $x1 = $r->array($r->c_(r->complex(1,2), r->complex(3,4)));
+    my $x2 = $r->array($r->c_(1, 2));
     my $x3 = $x1 + $x2;
     ok(r->is->complex($x3));
     is($x3->values->[0]->{re}, 2);
@@ -836,8 +836,8 @@ my $r = Rstats::Class->new;
 
   # numeric operator auto upgrade - integer
   {
-    my $x1 = r->as->integer(c_(3, 5));
-    my $x2 = c_($r->TRUE, $r->FALSE);
+    my $x1 = r->as->integer($r->c_(3, 5));
+    my $x2 = $r->c_($r->TRUE, $r->FALSE);
     my $x3 = $x1 + $x2;
     ok(r->is->integer($x3));
     is_deeply($x3->values, [4, 5])
@@ -845,8 +845,8 @@ my $r = Rstats::Class->new;
     
   # numeric operator auto upgrade - numeric
   {
-    my $x1 = $r->array(c_(1.1, 1.2));
-    my $x2 = r->as->integer($r->array(c_(1, 2)));
+    my $x1 = $r->array($r->c_(1.1, 1.2));
+    my $x2 = r->as->integer($r->array($r->c_(1, 2)));
     my $x3 = $x1 + $x2;
     ok(r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
@@ -854,48 +854,48 @@ my $r = Rstats::Class->new;
 
   # numeric operator auto upgrade - character, +
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 + $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, -
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 - $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, *
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 * $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, /
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 / $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, ^
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 ** $x2 };
     like($@, qr/non-numeric argument/);
   }
 
   # numeric operator auto upgrade - character, %
   {
-    my $x1 = $r->array(c_("1", "2", "3"));
-    my $x2 = $r->array(c_(1, 2, 3));
+    my $x1 = $r->array($r->c_("1", "2", "3"));
+    my $x2 = $r->array($r->c_(1, 2, 3));
     eval { my $ret = $x1 % $x2 };
     like($@, qr/non-numeric argument/);
   }
@@ -905,8 +905,8 @@ my $r = Rstats::Class->new;
 {
   # numeric operator - -Inf + 2i
   {
-    my $x2 = c_(2*$r->i);
-    my $x1 = c_(-Inf);
+    my $x2 = $r->c_(2*$r->i);
+    my $x1 = $r->c_(-Inf);
     my $x3 = $x1 + $x2;
     is($x3->value->{re}, '-Inf');
     is($x3->value->{im}, 2);
@@ -914,8 +914,8 @@ my $r = Rstats::Class->new;
 
   # numeric operator - -0.2 * -Inf
   {
-    my $x1 = c_(-0.2);
-    my $x2 = c_(-Inf);
+    my $x1 = $r->c_(-0.2);
+    my $x2 = $r->c_(-Inf);
     my $x3 = $x1 * $x2;
     is_deeply($x3->values, ['Inf']);
   }

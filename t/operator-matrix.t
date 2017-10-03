@@ -3,13 +3,16 @@ use strict;
 use warnings;
 
 use Rstats;
+use Rstats::Class;
+
+my $r = Rstats::Class->new;
 
 # inner product
 {
   # inner product - inner product
   {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(4, 5, 6);
+    my $x1 = $r->c_(1, 2, 3);
+    my $x2 = $r->c_(4, 5, 6);
     my $x3 = $x1 x $x2;
     is_deeply($x3->values, [32]);
     is_deeply(r->dim($x3)->values, [1, 1]);
@@ -17,24 +20,24 @@ use Rstats;
   
   # innert product - size is different
   {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_(4, 5);
+    my $x1 = $r->c_(1, 2, 3);
+    my $x2 = $r->c_(4, 5);
     eval { my $x3 = $x1 x $x2 };
     like($@, qr/non-conformable/);
   }
 
   # innert product - size of first argument is zero
   {
-    my $x1 = c_();
-    my $x2 = c_(4, 5);
+    my $x1 = $r->c_();
+    my $x2 = $r->c_(4, 5);
     eval { my $x3 = $x1 x $x2 };
     like($@, qr#requires numeric/complex matrix/vector arguments#);
   }
 
   # innert product - size of second argument is zero
   {
-    my $x1 = c_(1, 2, 3);
-    my $x2 = c_();
+    my $x1 = $r->c_(1, 2, 3);
+    my $x2 = $r->c_();
     eval { my $x3 = $x1 x $x2 };
     like($@, qr#requires numeric/complex matrix/vector arguments#);
   }

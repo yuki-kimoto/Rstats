@@ -644,14 +644,14 @@ my $r = Rstats::Class->new;
     
   # expm1 - Inf
   {
-    my $x1 = c_(Inf);
+    my $x1 = c_($r->Inf);
     my $x2 = r->expm1($x1);
     is($x2->value, 'Inf');
   }
   
   # expm1 - -Inf
   {
-    my $x1 = c_(-Inf);
+    my $x1 = c_(-$r->Inf);
     my $x2 = r->expm1($x1);
     is($x2->value, -1);
   }
@@ -856,14 +856,14 @@ my $r = Rstats::Class->new;
 
   # exp - Inf
   {
-    my $x1 = c_(Inf);
+    my $x1 = c_($r->Inf);
     my $x2 = r->exp($x1);
     is($x2->value, 'Inf');
   }
   
   # exp - -Inf
   {
-    my $x1 = c_(-Inf);
+    my $x1 = c_(-$r->Inf);
     my $x2 = r->exp($x1);
     is($x2->value, 0);
   }
@@ -1008,14 +1008,14 @@ my $r = Rstats::Class->new;
 
   # log - Inf
   {
-    my $x1 = c_(Inf);
+    my $x1 = c_($r->Inf);
     my $x2 = r->log($x1);
     ok(r->is->infinite($x2)->values, [1]);
   }
   
   # log - Inf()
   {
-    my $x1 = c_(-Inf);
+    my $x1 = c_(-$r->Inf);
     my $x2 = r->log($x1);
     is($x2->value, 'NaN');
   }
@@ -1659,7 +1659,7 @@ my $r = Rstats::Class->new;
 # unique
 {
   # uniqeu - numeric
-  my $x1 = c_(1, 1, 2, 2, 3, NA, NA, Inf, Inf);
+  my $x1 = c_(1, 1, 2, 2, 3, NA, NA, $r->Inf, $r->Inf);
   my $x2 = r->unique($x1);
   is_deeply($x2->values, [1, 2, 3, undef, 'Inf']);
 }

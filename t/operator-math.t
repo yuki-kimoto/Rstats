@@ -688,7 +688,7 @@ my $r = Rstats::Class->new;
   
   # negate - double,-Inf
   {
-    my $x1 = -Inf;
+    my $x1 = -$r->Inf;
     my $x2 = -$x1;
     ok(r->is->double($x2));
     ok($x2->value, 'Inf');
@@ -696,7 +696,7 @@ my $r = Rstats::Class->new;
 
   # negate - double,Inf
   {
-    my $x1 = Inf;
+    my $x1 = $r->Inf;
     my $x2 = -$x1;
     ok(r->is->double($x2));
     is($x2->value, '-Inf');

@@ -34,7 +34,7 @@ my $r = Rstats::Class->new;
 
   # is->nan - double,Inf
   {
-    my $x1 = Inf;
+    my $x1 = $r->Inf;
     my $x2 = r->is->nan($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0]);
@@ -42,7 +42,7 @@ my $r = Rstats::Class->new;
   
   # is->nan - double,-Inf
   {
-    my $x1 = -Inf;
+    my $x1 = -$r->Inf;
     my $x2 = r->is->nan($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0]);
@@ -107,7 +107,7 @@ my $r = Rstats::Class->new;
 
   # is->infinite - complex
   {
-    my $x1 = c_(1+2*i_, r->complex(NaN, 1), Inf + 1*i_, r->complex(1, Inf));
+    my $x1 = c_(1+2*i_, r->complex(NaN, 1), $r->Inf + 1*i_, r->complex(1, $r->Inf));
     my $x2 = r->is->infinite($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [0, 0, 1, 1]);
@@ -123,7 +123,7 @@ my $r = Rstats::Class->new;
 
   # is->infinite - double,Inf
   {
-    my $x1 = Inf;
+    my $x1 = $r->Inf;
     my $x2 = r->is->infinite($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [1]);
@@ -131,7 +131,7 @@ my $r = Rstats::Class->new;
   
   # is->infinite - double,-Inf
   {
-    my $x1 = -Inf;
+    my $x1 = -$r->Inf;
     my $x2 = r->is->infinite($x1);
     ok(r->is->logical($x2));
     is_deeply($x2->values, [1]);
@@ -326,13 +326,13 @@ my $r = Rstats::Class->new;
   
   # is->finite - Inf, false
   {
-    my $x_inf = Inf;
+    my $x_inf = $r->Inf;
     ok(!r->is->finite($x_inf)->value);
   }
   
   # is->finite - -Inf, false
   {
-    my $x1 = -Inf;
+    my $x1 = -$r->Inf;
     ok(!r->is->finite($x1)->value);
   }
   

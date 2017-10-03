@@ -56,13 +56,13 @@ my $r = Rstats::Class->new;
 
   # to_string - Inf
   {
-    my $x1 = Inf;
+    my $x1 = $r->Inf;
     is("$x1", "[1] Inf\n");
   }
 
   # to_string - -Inf
   {
-    my $x1 = -Inf;
+    my $x1 = -$r->Inf;
     is("$x1", "[1] -Inf\n");
   }
 }

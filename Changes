@@ -1,6 +1,4 @@
-0.01xx
-
-  0.01xx is developer release.
-
+0.0149
+  - remove Rstats functions, and rename Rstats::Class to Rstats
 0.01
   - first developer release

@@ -55,5 +55,6 @@ WriteMakefile(
     H => ['ppport.h', glob('Rstats_lib/include/*.h')],
     C => ['Rstats.c', glob('Rstats_lib/src/*.cpp')],
     OBJECT            => '$(O_FILES)',
-    DEFINE => '-o $@'
+    DEFINE => '-o $@',
+    test => {TESTS => 't/*.t t/*/*.t t/*/*/*.t'}
 );

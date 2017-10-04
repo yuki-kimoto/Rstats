@@ -12,7 +12,7 @@ my $r = Rstats->new;
 {
   # read_table - character, complex, double, integer, logical, sep default(\s+)
   {
-    my $d1 = $r->read->table("$FindBin::Bin/data/read.t/basic.txt");
+    my $d1 = $r->read->table("$FindBin::Bin/data/read/basic.txt");
     ok($r->is->factor($d1->getin(1)));
     is_deeply($d1->getin(1)->values, [qw/2 3 4 5 1/]);
     is_deeply($r->levels($d1->getin(1))->values, [qw/NA NB NC ND NE/]);
@@ -29,7 +29,7 @@ my $r = Rstats->new;
   
   # read_table - header
   {
-    my $d1 = $r->read->table("$FindBin::Bin/data/read.t/header.txt",{header => $r->TRUE});
+    my $d1 = $r->read->table("$FindBin::Bin/data/read/header.txt",{header => $r->TRUE});
     is_deeply($r->names($d1)->values, [qw/a b/]);
     is_deeply($d1->getin(1)->values, [qw/1 2/]);
     is_deeply($d1->getin(2)->values, [qw/1.1 1.2/]);
@@ -37,14 +37,14 @@ my $r = Rstats->new;
   
   # read_table - sep comma
   {
-    my $d1 = $r->read->table("$FindBin::Bin/data/read.t/comma.txt",{sep => ','});
+    my $d1 = $r->read->table("$FindBin::Bin/data/read/comma.txt",{sep => ','});
     is_deeply($d1->getin(1)->values, [qw/1 2/]);
     is_deeply($d1->getin(2)->values, [qw/1.1 1.2/]);
   }
 
   # read_table - skip
   {
-    my $d1 = $r->read->table("$FindBin::Bin/data/read.t/skip.txt",{skip => 2});
+    my $d1 = $r->read->table("$FindBin::Bin/data/read/skip.txt",{skip => 2});
     is_deeply($d1->getin(1)->values, [qw/2 3/]);
     is_deeply($d1->getin(2)->values, [qw/1.1 1.2/]);
   }

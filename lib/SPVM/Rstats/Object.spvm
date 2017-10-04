@@ -1,4 +1,4 @@
-package Rstats::Data {
+package Rstats::Object {
   has type : int;
   has integral_values : long[];
   has double_values : double[];

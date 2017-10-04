@@ -12,10 +12,9 @@ my $r = Rstats->new;
 
 ok(1);
 
-=pod
-
 # sin
 {
+=pod
   # sin - complex
   {
     my $x1 = $r->c(1 + 2*$r->i);
@@ -28,7 +27,9 @@ ok(1);
     is($x2->value->{im}, $exp_im);
     ok($r->is->complex($x2));
   }
-  
+=cut
+
+=pod
   # sin - double,array
   {
     my $x1 = $r->array($r->c($r->pi/2, $r->pi/6));
@@ -38,7 +39,9 @@ ok(1);
     is_deeply($r->dim($x2)->values, [2]);
     ok($r->is->double($x2));
   }
+=cut
 
+=pod
   # sin - Inf
   {
     my $x1 = $r->c($r->Inf);
@@ -66,5 +69,6 @@ ok(1);
     my $x2 = $r->sin($x1);
     is($x2->value, 'NaN');
   }
-}
 =cut
+
+}

@@ -11,24 +11,6 @@ use Rstats::Util ();
 use Digest::MD5 'md5_hex';
 use Rstats::Object;
 
-use SPVM 'Rstats::Data';
-
-sub c_v2 {
-  my ($r, $values) = @_;
-  
-  my $r_data = SPVM::new_object("Rstats::Data");
-  
-  $r_data->set(type => SPVM::Rstats::Data::TYPE_DOUBLE());
-  
-  my $sp_values = SPVM::new_double_array($values);
-  
-  $r_data->set(double_values => $sp_values);
-  
-  return $r_data;
-}
-
-
-
 has helpers => sub { {} };
 
 sub get_helper {

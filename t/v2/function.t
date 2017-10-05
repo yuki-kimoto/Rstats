@@ -11,6 +11,9 @@ my $r = Rstats::V2->new;
 {
   my $x1 = $r->c([0.5, 0.025, 0.0125]);
   my $x2 = $r->sin($x1);
+  
+  # $x2->to_string;
+  
 }
 
 ok(1);

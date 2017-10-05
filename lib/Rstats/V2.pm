@@ -21,6 +21,7 @@ sub new_object {
   my $object = Rstats::V2::Object->new;
   
   $object->r($r);
+  $object->object_type('array');
   
   return $object;
 }

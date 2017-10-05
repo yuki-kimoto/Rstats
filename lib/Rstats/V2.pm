@@ -9,36 +9,40 @@ use Rstats::Util ();
 use Digest::MD5 'md5_hex';
 use Rstats::Object;
 
+use Rstats::V2::Object;
+
 use SPVM 'Rstats::Object';
 use SPVM 'Rstats::Vector';
 use SPVM 'Math';
 
-sub c {
+sub c_double {
   my ($r, $values) = @_;
   
-  my $sp_object = SPVM::new_object("Rstats::Object");
+  my $object = Rstats::V2::Object->new;
   
-  $sp_object->set(type => SPVM::Rstats::Object::TYPE_DOUBLE());
+  $object->type('double');
   
-  my $sp_values = SPVM::new_double_array($values);
+  my $sp_vector = SPVM::new_double_array($values);
   
-  $sp_object->set(double_values => $sp_values);
+  $object->vector($sp_vector);
   
-  return $sp_object;
+  return $object;
 }
 
+sub c { shift->c_double(@_) }
+
 sub sin {
-  my ($r, $r_object_in) = @_;
+  my ($r, $object_in) = @_;
   
-  my $sp_values_in = $r_object_in->get('double_value');
+  my $vector_in = $object_in->vector;
   
-  my $r_object_out = SPVM::new_object("Rstats::Object");
-  $r_object_out->set(type => SPVM::Rstats::Object::TYPE_DOUBLE());
+  my $vector_out = SPVM::Rstats::Vector::sin($vector_in);
   
-  my $sp_values_out = SPVM::Rstats::Vector::sin($sp_values_in);
-  $r_object_out->set(double_values => $sp_values_out);
+  my $object_out = Rstats::V2::Object->new;
+  $object_out->type('double');
+  $object_out->vector($vector_out);
   
-  return $r_object_out;
+  return $object_out;
 }
 
 sub pi {

@@ -1,6 +1,7 @@
 package Rstats::Object;
 use Object::Simple -base;
 
+
 use overload
   '+' => sub {
     my $x1 = shift;

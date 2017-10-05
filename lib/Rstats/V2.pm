@@ -15,10 +15,20 @@ use SPVM 'Rstats::Object';
 use SPVM 'Rstats::Vector';
 use SPVM 'Math';
 
+sub new_object {
+  my $r = shift;
+  
+  my $object = Rstats::V2::Object->new;
+  
+  $object->r($r);
+  
+  return $object;
+}
+
 sub c_double {
   my ($r, $values) = @_;
   
-  my $object = Rstats::V2::Object->new;
+  my $object = $r->new_object;
   
   $object->type('double');
   
@@ -38,7 +48,7 @@ sub sin {
   
   my $vector_out = SPVM::Rstats::Vector::sin($vector_in);
   
-  my $object_out = Rstats::V2::Object->new;
+  my $object_out = $r->new_object;
   $object_out->type('double');
   $object_out->vector($vector_out);
   

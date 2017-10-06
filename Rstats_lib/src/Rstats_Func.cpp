@@ -287,11 +287,6 @@ namespace Rstats {
         Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
         return v1->get_length();
       }
-      else if (strEQ(type, "list")) {
-        SV* sv_list = Rstats::pl_hv_fetch(sv_x1, "list");
-        Rstats::Integer length = Rstats::pl_av_len(sv_list);
-        return length;
-      }
       else if (strEQ(type, "NULL")) {
         return 0;
       }
@@ -345,51 +340,9 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
-        // Factor
-        if (to_bool(sv_r, Rstats::Func::is_factor(sv_r, sv_x1))) {
-          SV* sv_levels = Rstats::pl_new_hvrv();
-          SV* sv_x_levels = Rstats::Func::levels(sv_r, sv_x1);
-          SV* sv_x_levels_values = Rstats::Func::values(sv_r, sv_x_levels);
-          Rstats::Integer levels_length = Rstats::Func::get_length(sv_r, sv_x_levels);
-          for (Rstats::Integer i = 1; i <= levels_length; i++) {
-            Rstats::pl_hv_store(
-              sv_levels,
-              SvPV_nolen(Rstats::pl_new_sv_iv(i)),
-              Rstats::pl_av_fetch(sv_x_levels_values, i - 1)
-            );
-          }
-          
-          SV* sv_x1_values = Rstats::Func::values(sv_r, sv_x1);
-          SV* sv_x_out_values = Rstats::pl_new_avrv();
-          Rstats::Integer x1_values_length = Rstats::pl_av_len(sv_x1_values);
-          
-          Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(x1_values_length);
-          for (Rstats::Integer i = 0; i < x1_values_length; i++) {
-            SV* sv_x1_value = Rstats::pl_av_fetch(sv_x1_values, i);
-             
-            if (SvOK(sv_x1_value)) {
-              SV* sv_character = Rstats::pl_hv_fetch(sv_levels, SvPV_nolen(sv_x1_value));
-              v_out->set_value(i, Rstats::pl_new_sv_sv(sv_character));
-            }
-            else {
-              v_out->add_na_position(i);
-            }
-          }
-          sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-          
-          Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
-          Rstats::pl_hv_delete(sv_x_out, "levels");
-          Rstats::pl_hv_delete(sv_x_out, "class");
-          
-          // Todo na positions
-          
-          return sv_x_out;
-        }
-        else {
-          Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-          Rstats::Vector<Rstats::Character>* v_out = Rstats::VectorFunc::as_character<Rstats::Integer, Rstats::Character>(v1);
-          sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-        }
+        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
+        Rstats::Vector<Rstats::Character>* v_out = Rstats::VectorFunc::as_character<Rstats::Integer, Rstats::Character>(v1);
+        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
       }
       else if (strEQ(type, "logical")) {
         Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
@@ -3910,42 +3863,12 @@ namespace Rstats {
       return sv_x_is;
     }
 
-    SV* is_data_frame(SV* sv_r, SV* sv_x1) {
-      
-      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "data.frame");
-        
-      SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_x_is;
-    }
-
-    SV* is_list(SV* sv_r, SV* sv_x1) {
-      
-      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "list");
-        
-      SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_x_is;
-    }
-
     SV* new_data_frame(SV* sv_r) {
       SV* sv_data_frame = Rstats::pl_new_hvrv();
       Rstats::pl_sv_bless(sv_data_frame, "Rstats::Object");
       Rstats::pl_hv_store(sv_data_frame, "r", sv_r);
-      Rstats::pl_hv_store(sv_data_frame, "object_type", Rstats::pl_new_sv_pv("data.frame"));
-      Rstats::pl_hv_store(sv_data_frame, "type", Rstats::pl_new_sv_pv("list"));
       
       return sv_data_frame;
-    }
-
-    SV* new_list(SV* sv_r) {
-      SV* sv_list = Rstats::pl_new_hvrv();
-      Rstats::pl_sv_bless(sv_list, "Rstats::Object");
-      Rstats::pl_hv_store(sv_list, "r", sv_r);
-      Rstats::pl_hv_store(sv_list, "object_type", Rstats::pl_new_sv_pv("list"));
-      Rstats::pl_hv_store(sv_list, "type", Rstats::pl_new_sv_pv("list"));
-      
-      return sv_list;
     }
 
     SV* copy_attrs_to(SV* sv_r, SV* sv_x1, SV* sv_x2) {
@@ -3990,7 +3913,7 @@ namespace Rstats {
         SV* sv_x2_names_values = Rstats::pl_new_avrv();
         SV* sv_index;
         if (SvOK(sv_new_indexes)) {
-          sv_index = Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))
+          sv_index = Rstats::Func::to_bool(sv_r, 0)
             ? Rstats::pl_av_fetch(sv_new_indexes, 1) : Rstats::pl_av_fetch(sv_new_indexes, 0);
         }
         else {
@@ -4085,9 +4008,6 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
         warn("Warning message:\nIn is->na(NULL) : is->na() applied to non-(list or vector) of type 'NULL'\n");
       }
-      else if (strEQ(type, "list")) {
-        sv_x_out = Rstats::Func::new_FALSE(sv_r);
-      }
       else {
         croak("Error in is->na() : default method not implemented for type '%s'", type);
       }
@@ -4133,12 +4053,6 @@ namespace Rstats {
         }
         else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_x1))) {
           class_name = "array";
-        }
-        else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
-          class_name = "data.frame";
-        }
-        else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_list(sv_r, sv_x1))) {
-          class_name = "list";
         }
         else {
           croak("Error in class() : Invalid class");
@@ -4572,7 +4486,7 @@ namespace Rstats {
       }
       Rstats::pl_hv_store(sv_x1, "names", Rstats::Func::as_vector(sv_r, sv_x_names));
       
-      if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_data_frame(sv_r, sv_x1))) {
+      if (Rstats::Func::to_bool(sv_r, 0)) {
         SV* sv_x1_dimnames = Rstats::pl_hv_fetch(sv_x1, "dimnames");
         Rstats::pl_av_store(
           sv_x1_dimnames,

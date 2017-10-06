@@ -17,9 +17,6 @@ namespace Rstats {
     SV* new_FALSE(SV*); /* $r->FALSE */
     SV* new_TRUE(SV*); /* $r->TRUE */
 
-    SV* new_data_frame(SV*);
-    SV* new_list(SV*);
-
     SV* c(SV*, SV*);
     SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
@@ -42,14 +39,10 @@ namespace Rstats {
     SV* is_complex(SV*, SV*);
     SV* is_character(SV*, SV*);
     SV* is_logical(SV*, SV*);
-    SV* is_data_frame(SV*, SV*);
-    SV* is_list(SV*, SV*);
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
     SV* is_na(SV*, SV*);
-    SV* is_factor(SV*, SV*);
-    SV* is_ordered(SV*, SV*);
 
     SV* copy_attrs_to(SV*, SV*, SV*);
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);

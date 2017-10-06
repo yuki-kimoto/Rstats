@@ -1857,7 +1857,6 @@ sub quantile {
   push @$quantile_elements , $x3->get($x3_length);
   
   my $x4 = Rstats::Func::c($r, @$quantile_elements);
-  Rstats::Func::names($r, $x4, Rstats::Func::c($r, qw/0%  25%  50%  75% 100%/));
   
   return $x4;
 }
@@ -2147,12 +2146,7 @@ sub get_array {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
   my $level_drop;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $level_drop = $opt->{drop};
-  }
-  else {
-    $dim_drop = $opt->{drop};
-  }
+  $dim_drop = $opt->{drop};
   
   $dim_drop = 1 unless defined $dim_drop;
   $level_drop = 0 unless defined $level_drop;
@@ -2220,14 +2214,7 @@ sub to_string_array {
   
   my $x1 = shift;
   
-  my $is_factor = Rstats::Func::is_factor($r, $x1);
-  my $is_ordered = Rstats::Func::is_ordered($r, $x1);
   my $levels;
-  if ($is_factor) {
-    $levels = Rstats::Func::levels($r, $x1)->values;
-  }
-  
-  $x1 = Rstats::Func::as_character($r, $x1) if Rstats::Func::is_factor($r, $x1);
   
   my $is_character = Rstats::Func::is_character($r, $x1);
 
@@ -2247,7 +2234,7 @@ sub to_string_array {
       if (@$names) {
         $str .= join(' ', @$names) . "\n";
       }
-      my @parts = map { Rstats::Func::_value_to_string($r, $x1, $_, $type, $is_factor) } @$values;
+      my @parts = map { Rstats::Func::_value_to_string($r, $x1, $_, $type) } @$values;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }
     elsif ($dim_length == 2) {
@@ -2263,7 +2250,7 @@ sub to_string_array {
         my @parts;
         for my $d2 (1 .. $dim_values->[1]) {
           my $part = $x1->value($d1, $d2);
-          push @parts, Rstats::Func::_value_to_string($r, $x1, $part, $type, $is_factor);
+          push @parts, Rstats::Func::_value_to_string($r, $x1, $part, $type);
         }
         
         $str .= join(' ', @parts) . "\n";
@@ -2296,7 +2283,7 @@ sub to_string_array {
               my @parts;
               for my $d2 (1 .. $dim_values[1]) {
                 my $part = $x1->value($d1, $d2, @$poss);
-                push @parts, Rstats::Func::_value_to_string($r, $x1, $part, $type, $is_factor);
+                push @parts, Rstats::Func::_value_to_string($r, $x1, $part, $type);
               }
               
               $str .= join(' ', @parts) . "\n";
@@ -2306,15 +2293,6 @@ sub to_string_array {
         }
       };
       $code->(@$dim_values);
-    }
-
-    if ($is_factor) {
-      if ($is_ordered) {
-        $str .= 'Levels: ' . join(' < ', @$levels) . "\n";
-      }
-      else {
-        $str .= 'Levels: ' . join(' ', , @$levels) . "\n";
-      }
     }
   }
   else {
@@ -2327,37 +2305,27 @@ sub to_string_array {
 sub _value_to_string {
   my $r = shift;
   
-  my ($x1, $value, $type, $is_factor) = @_;
+  my ($x1, $value, $type) = @_;
   
   my $string;
-  if ($is_factor) {
-    if (!defined $value) {
-      $string = '<NA>';
-    }
-    else {
-      $string = "$value";
-    }
+  if (!defined $value) {
+    $string = 'NA';
+  }
+  elsif ($type eq 'complex') {
+    my $re = $value->{re} || 0;
+    my $im = $value->{im} || 0;
+    $string = "$re";
+    $string .= $im >= 0 ? "+$im" : $im;
+    $string .= 'i';
+  }
+  elsif ($type eq 'character') {
+    $string = '"' . $value . '"';
+  }
+  elsif ($type eq 'logical') {
+    $string = $value ? 'TRUE' : 'FALSE';
   }
   else {
-    if (!defined $value) {
-      $string = 'NA';
-    }
-    elsif ($type eq 'complex') {
-      my $re = $value->{re} || 0;
-      my $im = $value->{im} || 0;
-      $string = "$re";
-      $string .= $im >= 0 ? "+$im" : $im;
-      $string .= 'i';
-    }
-    elsif ($type eq 'character') {
-      $string = '"' . $value . '"';
-    }
-    elsif ($type eq 'logical') {
-      $string = $value ? 'TRUE' : 'FALSE';
-    }
-    else {
-      $string = "$value";
-    }
+    $string = "$value";
   }
   
   return $string;
@@ -2632,51 +2600,25 @@ sub set_array {
   
   my $type;
   my $x1_elements;
-  if (Rstats::Func::is_factor($r, $x1)) {
-    $x1_elements = Rstats::Func::decompose($r, $x1);
-    $x2 = Rstats::Func::as_character($r, $x2) unless Rstats::Func::is_character($r, $x2);
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
-    my $levels_h = Rstats::Func::_levels_h($r, $x1);
-    for (my $i = 0; $i < @$poss; $i++) {
-      my $pos = $poss->[$i];
-      my $element = $x2_elements->[(($i + 1) % @$poss) - 1];
-      if (Rstats::Func::is_na($r, $element)) {
-        $x1_elements->[$pos] = Rstats::Func::c_logical($r, undef);
-      }
-      else {
-        my $value = Rstats::Func::value($r, $element);
-        if ($levels_h->{$value}) {
-          $x1_elements->[$pos] = $levels_h->{$value};
-        }
-        else {
-          Carp::carp "invalid factor level, NA generated";
-          $x1_elements->[$pos] = Rstats::Func::c_logical($r, undef);
-        }
-      }
-    }
-    $type = $x1->get_type;
+  # Upgrade mode if type is different
+  if ($x1->get_type ne $x2->get_type) {
+    my $x1_tmp;
+    ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};
+    Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
+    $x1->vector($x1_tmp->vector);
+    
+    $type = $x1_tmp->get_type;
   }
   else {
-    # Upgrade mode if type is different
-    if ($x1->get_type ne $x2->get_type) {
-      my $x1_tmp;
-      ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};
-      Rstats::Func::copy_attrs_to($r, $x1_tmp, $x1);
-      $x1->vector($x1_tmp->vector);
-      
-      $type = $x1_tmp->get_type;
-    }
-    else {
-      $type = $x1->get_type;
-    }
+    $type = $x1->get_type;
+  }
 
-    $x1_elements = Rstats::Func::decompose($r, $x1);
+  $x1_elements = Rstats::Func::decompose($r, $x1);
 
-    my $x2_elements = Rstats::Func::decompose($r, $x2);
-    for (my $i = 0; $i < @$poss; $i++) {
-      my $pos = $poss->[$i];
-      $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
-    }
+  my $x2_elements = Rstats::Func::decompose($r, $x2);
+  for (my $i = 0; $i < @$poss; $i++) {
+    my $pos = $poss->[$i];
+    $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
   }
   
   $DB::single = 1;

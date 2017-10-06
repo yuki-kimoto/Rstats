@@ -947,54 +947,12 @@ SV* is_logical(...)
   XSRETURN(1);
 }
 
-SV* is_data_frame(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-
-  SV* sv_x_out = Rstats::Func::is_data_frame(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* is_list(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-
-  SV* sv_x_out = Rstats::Func::is_list(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* as_vector(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
 
   SV* sv_x_out = Rstats::Func::as_vector(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* new_data_frame(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x_out = Rstats::Func::new_data_frame(sv_r);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* new_list(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x_out = Rstats::Func::new_list(sv_r);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -1130,28 +1088,6 @@ SV* class(...)
     XPUSHs(sv_x_out);
     XSRETURN(1);
   }
-}
-
-SV* is_factor(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_factor(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* is_ordered(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_ordered(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
 }
 
 SV* clone(...)

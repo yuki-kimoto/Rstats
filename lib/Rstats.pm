@@ -70,11 +70,6 @@ my @func_names = qw/
   sweep
   set_seed
   runif
-  apply
-  mapply
-  tapply
-  lapply
-  sapply
   abs
   acos
   acosh
@@ -533,8 +528,6 @@ Alias of FALSE
 
 =head2 append
 
-=head2 apply
-
 =head2 Arg
 
 =head2 array
@@ -845,8 +838,6 @@ Alias of FALSE
 
   # tanh(x1)
   $r->tanh($x1)
-
-=head2 tapply
 
 =head2 tolower
 

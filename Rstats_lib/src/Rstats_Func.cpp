@@ -3899,52 +3899,6 @@ namespace Rstats {
       }
     }
 
-    SV* is_na(SV* sv_r, SV* sv_x1) {
-      
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-
-      SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::is_na<Rstats::Character>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-      }
-      else if (strEQ(type, "complex")) {
-        Rstats::Vector<Rstats::Complex>* v1 = Rstats::Func::get_vector<Rstats::Complex>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::is_na<Rstats::Complex>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::is_na<Rstats::Double>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-      }
-      else if (strEQ(type, "integer")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::is_na<Rstats::Integer>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-      }
-      else if (strEQ(type, "logical")) {
-        Rstats::Vector<Rstats::Logical>* v1 = Rstats::Func::get_vector<Rstats::Logical>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Logical>* v_out = Rstats::VectorFunc::is_na<Rstats::Logical>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-      }
-      else if (strEQ(type, "NULL")) {
-        Rstats::Vector<Rstats::Logical>* v_out = new Rstats::Vector<Rstats::Logical>(0, 0);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Logical>(sv_r, v_out);
-        warn("Warning message:\nIn is->na(NULL) : is->na() applied to non-(list or vector) of type 'NULL'\n");
-      }
-      else {
-        croak("Error in is->na() : default method not implemented for type '%s'", type);
-      }
-      
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
-      
-      return sv_x_out;
-    }
-
     SV* clone(SV* sv_r, SV* sv_x1) {
       
       SV* sv_x_out = Rstats::Func::as_vector(sv_r, sv_x1);

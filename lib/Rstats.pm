@@ -215,7 +215,6 @@ sub new {
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
-  $self->helper('is.na' => \&Rstats::Func::is_na);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
   $self->helper('is.null' => \&Rstats::Func::is_null);
   $self->helper('is.numeric' => \&Rstats::Func::is_numeric);

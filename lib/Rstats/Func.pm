@@ -745,13 +745,8 @@ sub nchar {
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)) {
-        push @$x2_elements, $x1_element;
-      }
-      else {
-        my $x2_element = Rstats::Func::c_integer($r, CORE::length Rstats::Func::value($r, $x1_element));
-        push @$x2_elements, $x2_element;
-      }
+      my $x2_element = Rstats::Func::c_integer($r, CORE::length Rstats::Func::value($r, $x1_element));
+      push @$x2_elements, $x2_element;
     }
     my $x2 = Rstats::Func::c($r, @$x2_elements);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -771,13 +766,8 @@ sub tolower {
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)) {
-        push @$x2_elements, $x1_element;
-      }
-      else {
-        my $x2_element = Rstats::Func::c_character($r, lc Rstats::Func::value($r, $x1_element));
-        push @$x2_elements, $x2_element;
-      }
+      my $x2_element = Rstats::Func::c_character($r, lc Rstats::Func::value($r, $x1_element));
+      push @$x2_elements, $x2_element;
     }
     my $x2 = Rstats::Func::c($r, @$x2_elements);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -797,13 +787,8 @@ sub toupper {
   if ($x1->get_type eq 'character') {
     my $x2_elements = [];
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)) {
-        push @$x2_elements, $x1_element;
-      }
-      else {
-        my $x2_element = Rstats::Func::c_character($r, uc Rstats::Func::value($r, $x1_element));
-        push @$x2_elements, $x2_element;
-      }
+      my $x2_element = Rstats::Func::c_character($r, uc Rstats::Func::value($r, $x1_element));
+      push @$x2_elements, $x2_element;
     }
     my $x2 = Rstats::Func::c($r, @$x2_elements);
     Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -983,10 +968,7 @@ sub cummax {
   push @x2_elements, $max;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)) {
-      return Rstats::Func::NA($r);
-    }
-    elsif (Rstats::Func::is_nan($r, $element)) {
+    if (Rstats::Func::is_nan($r, $element)) {
       $max = $element;
     }
     if ($element > $max && !Rstats::Func::is_nan($r, $max)) {
@@ -1013,10 +995,7 @@ sub cummin {
   my $min = shift @$x1_elements;
   push @x2_elements, $min;
   for my $element (@$x1_elements) {
-    if (Rstats::Func::is_na($r, $element)) {
-      return Rstats::Func::NA($r);
-    }
-    elsif (Rstats::Func::is_nan($r, $element)) {
+    if (Rstats::Func::is_nan($r, $element)) {
       $min = $element;
     }
     if ($element < $min && !Rstats::Func::is_nan($r, $min)) {
@@ -1196,10 +1175,7 @@ sub max {
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)) {
-      return Rstats::Func::NA($r);
-    }
-    elsif (Rstats::Func::is_nan($r, $element)) {
+    if (Rstats::Func::is_nan($r, $element)) {
       $max = $element;
     }
     if (!Rstats::Func::is_nan($r, $max) && Rstats::Func::value($r, $element > $max)) {
@@ -1236,10 +1212,7 @@ sub min {
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_na($r, $element)) {
-      return Rstats::Func::NA($r);
-    }
-    elsif (Rstats::Func::is_nan($r, $element)) {
+    if (Rstats::Func::is_nan($r, $element)) {
       $min = $element;
     }
     if (!Rstats::Func::is_nan($r, $min) && Rstats::Func::value($r, $element < $min)) {
@@ -1659,19 +1632,11 @@ sub unique {
     my $elements_count = {};
     my $na_count;
     for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      if (Rstats::Func::is_na($r, $x1_element)) {
-        unless ($na_count) {
-          push @$x2_elements, $x1_element;
-        }
-        $na_count++;
+      my $str = Rstats::Func::to_string($r, $x1_element);
+      unless ($elements_count->{$str}) {
+        push @$x2_elements, $x1_element;
       }
-      else {
-        my $str = Rstats::Func::to_string($r, $x1_element);
-        unless ($elements_count->{$str}) {
-          push @$x2_elements, $x1_element;
-        }
-        $elements_count->{$str}++;
-      }
+      $elements_count->{$str}++;
     }
 
     return Rstats::Func::c($r, @$x2_elements);
@@ -2488,7 +2453,6 @@ sub set_array {
     $x1_elements->[$pos] = $x2_elements->[(($i + 1) % @$poss) - 1];
   }
   
-  $DB::single = 1;
   my $x1_tmp = Rstats::Func::compose($r, $type, $x1_elements);
   $x1->vector($x1_tmp->vector);
   $x1->{type} = $x1_tmp->{type};
@@ -2504,7 +2468,7 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @x2_elements = grep { !Rstats::Func::is_na($r, $_) && !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = grep { !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
     ? [reverse sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements]

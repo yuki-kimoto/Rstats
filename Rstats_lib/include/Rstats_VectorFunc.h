@@ -116,8 +116,6 @@ namespace Rstats {
     Rstats::Vector<T_OUT>* Im(Rstats::Vector<T_IN>*);
     
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* is_na(Rstats::Vector<T_IN>*);
-    template <class T_IN>
     Rstats::Vector<Rstats::Logical>* is_infinite(Rstats::Vector<T_IN>*);
     template <class T_IN>
     Rstats::Vector<Rstats::Logical>* is_nan(Rstats::Vector<T_IN>*);

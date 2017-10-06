@@ -275,25 +275,6 @@ namespace Rstats {
       return v_out;
     }
 
-    template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* is_na(Rstats::Vector<T_IN>* v1) {
-      
-      Rstats::Integer length = v1->get_length();
-      
-      Rstats::Vector<Rstats::Logical>* v_out = new Rstats::Vector<Rstats::Logical>(length);
-      
-      for (Rstats::Integer i = 0; i < length; i++) {
-        if (v1->exists_na_position(i)) {
-          v_out->set_value(i, 1);
-        }
-        else {
-          v_out->set_value(i, 0);
-        }
-      }
-      
-      return v_out;
-    }
-
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* sin(Rstats::Vector<T_IN>* v1) {
       T_OUT (*func)(T_IN) = &Rstats::ElementFunc::sin;

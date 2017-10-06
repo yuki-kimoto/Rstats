@@ -155,24 +155,6 @@ my $r = Rstats->new;
   }
 }
 
-# is->na
-{
-  # is->na - dim
-  {
-    my $x1 = $r->array($r->c(1.1, 1.2));
-    my $x2 = $r->is->na($x1);
-    is_deeply($x2->dim->values, [2]);
-  }
-  
-  # is->na - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, []);
-  }
-}
-
 # is->integer
 {
   # is->integer, as_integer, typeof - integer

@@ -163,23 +163,6 @@ sub t {
   return $x2;
 }
 
-sub na_omit {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my @poss;
-  for my $v (@{$x1->list}) {
-    for (my $index = 1; $index <= $x1->{row_length}; $index++) {
-      push @poss, $index unless defined $v->value($index);
-    }
-  }
-  
-  my $x2 = $x1->get(-$r->c(@poss), NULL($r));
-  
-  return $x2;
-}
-
 my $type_level = {
   character => 6,
   complex => 5,
@@ -2508,94 +2491,6 @@ sub nlevels {
   
   return Rstats::Func::c($r, Rstats::Func::get_length($r, Rstats::Func::levels($r, $x1)));
 }
-
-sub getin_list {
-  my ($r, $x1, $_index) = @_;
-  
-  unless (defined $_index) {
-    $_index = $x1->at;
-  }
-  $x1->at($_index);
-  
-  my $x1_index = Rstats::Func::to_object($r, $_index);
-  my $index;
-  if (Rstats::Func::is_character($r, $x1_index)) {
-    $index = Rstats::Func::_name_to_index($r, $x1, $x1_index);
-  }
-  else {
-    $index = $x1_index->values->[0];
-  }
-  my $elements = $x1->list;
-  my $element = $elements->[$index - 1];
-  
-  return $element;
-}
-
-sub get_list {
-  my $r = shift;
-  my $x1 = shift;
-  my $x_index = Rstats::Func::to_object($r, shift);
-  
-  my $elements = $x1->list;
-  
-  my $class = ref $x1;
-  my $list = Rstats::Func::list($r);;
-  my $list_elements = $list->list;
-  
-  my $index_values;
-  if (Rstats::Func::is_character($r, $x_index)) {
-    $index_values = [];
-    for my $value (@{$x_index->values}) {
-      push @$index_values, Rstats::Func::_name_to_index($r, $x1, $value);
-    }
-  }
-  else {
-    $index_values = $x_index->values;
-  }
-  for my $i (@{$index_values}) {
-    push @$list_elements, $elements->[$i - 1];
-  }
-  
-  Rstats::Func::copy_attrs_to(
-    $r, $x1, $list, {new_indexes => [Rstats::Func::c($r, @$index_values)]}
-  );
-
-  return $list;
-}
-
-sub to_string_list {
-  my $r = shift;
-  my $x1 = shift;
-  
-  my $poses = [];
-  my $str = '';
-  _to_string_list($r, $x1, $poses, \$str);
-  
-  return $str;
-}
-
-sub _to_string_list {
-  my ($r, $list, $poses, $str_ref) = @_;
-  
-  my $elements = $list->list;
-  for (my $i = 0; $i < @$elements; $i++) {
-    push @$poses, $i + 1;
-    $$str_ref .= join('', map { "[[$_]]" } @$poses) . "\n";
-    
-    my $element = $elements->[$i];
-    if ($element->{object_type} eq 'list') {
-      _to_string_list($r, $element, $poses, $str_ref);
-    }
-    else {
-      $$str_ref .= Rstats::Func::to_string($r, $element) . "\n";
-    }
-    pop @$poses;
-  }
-}
-
-sub set_dataframe { Rstats::Func::set_list(@_) }
-
-sub getin_dataframe { Rstats::Func::getin_list(@_) }
 
 sub sweep {
   my $r = shift;

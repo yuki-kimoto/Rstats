@@ -9,15 +9,6 @@ my $r = Rstats->new;
 
 # get
 {
-  # get - have names
-  {
-    my $x1 = $r->c(4, 5, 6);
-    $r->names($x1, $r->c("a", "b", "c"));
-    my $x2 = $x1->get($r->c(1, 3));
-    is_deeply($x2->values, [4, 6]);
-    is_deeply($r->names($x2)->values, ["a", "c"]);
-  }
-
   # get - logical
   {
     my $x1 = $r->c(1, 3, 5, 7);
@@ -69,14 +60,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [5, 7]);
   }
   
-  # get - character
-  {
-    my $x1 = $r->c(1, 2, 3, 4);
-    $r->names($x1 => $r->c('a', 'b', 'c', 'd'));
-    my $x2 = $x1->get($r->c('b', 'd'));
-    is_deeply($x2->values, [2, 4]);
-  }
-
   # get - grep
   {
     my $x1 = $r->c(1, 2, 3, 4, 5);

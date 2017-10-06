@@ -1580,7 +1580,6 @@ my $r = Rstats->new;
     my $x1 = $r->C('0:100');
     my $x2 = $r->quantile($x1);
     is_deeply($x2->values, [0, 25, 50, 75, 100]);
-    is_deeply($r->names($x2)->values, [qw/0%  25%  50%  75% 100% /]);
   }
   
   # quantile - even number
@@ -1798,15 +1797,6 @@ my $r = Rstats->new;
 
 # clone
 {
-  
-  # clone - vector
-  {
-    my $x1 = $r->matrix($r->C('1:24'), 3, 2);
-    $r->names($x1 => $r->c('r1', 'r2', 'r3'));
-    my $x2 = $r->clone($x1);
-    is_deeply($r->names($x2)->values, ['r1', 'r2', 'r3']);
-  }
-  
   # clone - $r->matrix
   {
     my $x1 = $r->matrix($r->C('1:24'), 3, 2);
@@ -1910,25 +1900,5 @@ my $r = Rstats->new;
   # create element - character
   {
     my $x1 = $r->c("a", "b", "c");
-  }
-}
-
-# names
-{
-  # names - get
-  {
-    my $x1 = $r->c(1, 2, 3, 4);
-    is_deeply($x1->values, [1, 2, 3, 4]);
-    
-    $r->names($x1 => $r->c('a', 'b', 'c', 'd'));
-    my $x2 = $x1->get($r->c('b', 'd'));
-    is_deeply($x2->values, [2, 4]);
-  }
-  
-  # names - to_string
-  {
-    my $x1 = $r->c(1, 2, 3);
-    $r->names($x1 => $r->c('a', 'b', 'c'));
-    is("$x1", "a b c\n[1] 1 2 3\n");
   }
 }

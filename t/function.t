@@ -115,27 +115,6 @@ my $r = Rstats->new;
   }
 }
 
-# class
-{
-  # class - $r->matrix
-  {
-    my $x1 = $r->matrix(2, 2);
-    is_deeply($x1->class->values, ['matrix']);
-  }
-
-  # class - vector, numeric
-  {
-    my $x1 = $r->c(1, 2);
-    is_deeply($x1->class->values, ['numeric']);
-  }
-  
-  # class - $r->array
-  {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    is_deeply($x1->class->values, ['array']);
-  }
-}
-
 # $r->C
 {
   # $r->C('1:3')

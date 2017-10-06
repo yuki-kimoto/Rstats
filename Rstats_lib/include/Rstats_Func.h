@@ -65,9 +65,6 @@ namespace Rstats {
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);
     SV* as_array(SV*, SV*);
-    // class
-    SV* Class(SV*, SV*);
-    SV* Class(SV*, SV*, SV*);
     SV* mode(SV*, SV*);
     SV* mode(SV*, SV*, SV*);
     

@@ -1071,25 +1071,6 @@ SV* is_na(...)
   XSRETURN(1);
 }
 
-SV* class(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  if (items > 2) {
-    SV* sv_x2 = ST(2);
-    Rstats::Func::Class(sv_r, sv_x1, sv_x2);
-
-    XPUSHs(sv_r);
-    XSRETURN(1);
-  }
-  else {
-    SV* sv_x_out = Rstats::Func::Class(sv_r, sv_x1);
-    XPUSHs(sv_x_out);
-    XSRETURN(1);
-  }
-}
-
 SV* clone(...)
   PPCODE:
 {

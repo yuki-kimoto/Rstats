@@ -3897,11 +3897,6 @@ namespace Rstats {
       if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "dim")) && Rstats::pl_hv_exists(sv_x1, "dim")) {
         Rstats::pl_hv_store(sv_x2, "dim", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim")));
       }
-
-      // class
-      if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "class")) && Rstats::pl_hv_exists(sv_x1, "class")) {
-        Rstats::pl_hv_store(sv_x2, "class", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class")));
-      }
     }
 
     SV* is_na(SV* sv_r, SV* sv_x1) {
@@ -3948,89 +3943,6 @@ namespace Rstats {
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
       return sv_x_out;
-    }
-
-    SV* Class(SV* sv_r, SV* sv_x1, SV* sv_x2) {
-      
-      // Set class
-      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
-      Rstats::pl_hv_store(sv_x1, "class", Rstats::Func::as_vector(sv_r, sv_x2));
-      
-      return sv_x1;
-    }
-
-    SV* Class(SV* sv_r, SV* sv_x1) {
-      
-      // Get class
-      SV* sv_x_class;
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      if (Rstats::pl_hv_exists(sv_x1, "class")) {
-        sv_x_class = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class"));
-      }
-      else {
-        char* class_name;
-        if (strEQ(type, "NULL")) {
-          class_name = "NULL";
-        }
-        else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_vector(sv_r, sv_x1))) {
-          if (strEQ(type, "double") || strEQ(type, "integer")) {
-            class_name = "numeric";
-          }
-          else {
-            class_name = type; 
-          }
-        }
-        else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_matrix(sv_r, sv_x1))) {
-          class_name = "matrix";
-        }
-        else if (Rstats::Func::to_bool(sv_r, Rstats::Func::is_array(sv_r, sv_x1))) {
-          class_name = "array";
-        }
-        else {
-          croak("Error in class() : Invalid class");
-        }
-        Rstats::Vector<Rstats::Character>* v_class = new Rstats::Vector<Rstats::Character>(1, Rstats::pl_new_sv_pv(class_name));
-        sv_x_class = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_class);
-      }
-      
-      return sv_x_class;
-    }
-
-    SV* is_factor(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
-      Rstats::Vector<Rstats::Character>* v_classes = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_classes);
-      Rstats::Integer v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
-      
-      Rstats::Logical match = 0;
-      for (Rstats::Integer i = 0; i < v_classes_length; i++) {
-        SV* sv_class = v_classes->get_value(i);
-        if (strEQ(SvPV_nolen(sv_class), "factor")) {
-          match = 1;
-          break;
-        }
-      }
-      
-      return match ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-    }
-
-    SV* is_ordered(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_classes = Rstats::Func::Class(sv_r, sv_x1);
-      Rstats::Vector<Rstats::Character>* v_classes = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_classes);
-      Rstats::Integer v_classes_length = Rstats::Func::get_length(sv_r, sv_classes);
-      
-      Rstats::Logical match = 0;
-      for (Rstats::Integer i = 0; i < v_classes_length; i++) {
-        SV* sv_class = v_classes->get_value(i);
-        if (strEQ(SvPV_nolen(sv_class), "ordered")) {
-          match = 1;
-          break;
-        }
-      }
-      
-      return match ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
     }
 
     SV* clone(SV* sv_r, SV* sv_x1) {

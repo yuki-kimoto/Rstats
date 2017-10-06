@@ -124,7 +124,6 @@ sub I {
   
   my $x2 = Rstats::Func::c($r, $x1);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  $x2->class('AsIs');
   
   return $x2;
 }

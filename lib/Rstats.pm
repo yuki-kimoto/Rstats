@@ -193,7 +193,6 @@ my @func_names = qw/
   value
   values
   dim_as_array
-  class
   type
   get_type
   at

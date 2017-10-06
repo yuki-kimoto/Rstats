@@ -182,18 +182,6 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x3->value), '-1.570796');
   }
 
-  # atan2 - y is NA
-  {
-    my $x1 = $r->atan2($r->NA, 0);
-    ok(!defined $x1->value);
-  }  
-
-  # atan2 - x is NA
-  {
-    my $x1 = $r->atan2(0, $r->NA);
-    ok(!defined $x1->value);
-  }
-
   # atan2 - y is NaN
   {
     my $x1 = $r->atan2($r->NaN, 0);
@@ -307,13 +295,6 @@ my $r = Rstats->new;
     is($x2->value, '-1');
   }
 
-  # tanh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->tanh($x1);
-    ok(!defined $x2->value);
-  }  
-
   # tanh - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -391,13 +372,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->atanh($x1);
     is($x2->value, 'NaN');
-  }
-
-  # atanh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->atanh($x1);
-    ok(!defined $x2->value);
   }
 
   # atanh - NaN
@@ -492,13 +466,6 @@ my $r = Rstats->new;
     is($x2->value, 'NaN');
   }
 
-  # acosh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->acosh($x1);
-    ok(!defined $x2->value);
-  }
-
   # acosh - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -550,13 +517,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->asinh($x1);
     ok($x2->value, '-Inf');
-  }
-
-  # asinh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->asinh($x1);
-    ok(!defined $x2->value);
   }
 
   # asinh - NaN
@@ -620,13 +580,6 @@ my $r = Rstats->new;
     is($x2->value, 'Inf');
   }
 
-  # cosh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->cosh($x1);
-    ok(!defined $x2->value);
-  }  
-
   # cosh - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -687,13 +640,6 @@ my $r = Rstats->new;
     my $x2 = $r->sinh($x1);
     is($x2->value, '-Inf');
   }
-
-  # sinh - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->sinh($x1);
-    ok(!defined $x2->value);
-  }  
 
   # sinh - NaN
   {
@@ -763,13 +709,6 @@ my $r = Rstats->new;
     my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->value), '-1.570796');
   }
-
-  # atan - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->atan($x1);
-    ok(!defined $x2->value);
-  }  
 
   # atan - NaN
   {
@@ -883,13 +822,6 @@ my $r = Rstats->new;
     is($x2->value, 'NaN');
   }
 
-  # acos - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->acos($x1);
-    ok(!defined $x2->value);
-  }  
-
   # acos - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -991,13 +923,6 @@ my $r = Rstats->new;
     is($x2->value, 'NaN');
   }
 
-  # asin - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->asin($x1);
-    ok(!defined $x2->value);
-  }  
-
   # asin - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -1044,13 +969,6 @@ my $r = Rstats->new;
     my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '-1.570796');
   }
-
-  # atan - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->atan($x1);
-    ok(!defined $x2->value);
-  }  
 
   # atan - NaN
   {
@@ -1130,13 +1048,6 @@ my $r = Rstats->new;
     is($x2->value, 'NaN');
   }
 
-  # cos - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->cos($x1);
-    ok(!defined $x2->value);
-  }  
-
   # cos - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -1183,13 +1094,6 @@ my $r = Rstats->new;
     my $x2 = $r->sin($x1);
     is($x2->value, 'NaN');
   }
-
-  # sin - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->sin($x1);
-    ok(!defined $x2->value);
-  }  
 
   # sin - NaN
   {

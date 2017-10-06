@@ -25,14 +25,6 @@ my $r = Rstats->new;
 
 # as->integer
 {
-  # as->integer - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is_deeply($x2->values, [undef]);
-  }
-
   # as->integer - $r->Inf
   {
     my $x1 = $r->Inf;
@@ -202,14 +194,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, ['Inf']);
   }
 
-  # as->double - NA
-  {
-    my $x1 = $r->array($r->NA);
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [undef]);
-  }
-
   # as->double - NaN
   {
     my $x1 = $r->NaN;
@@ -357,14 +341,6 @@ my $r = Rstats->new;
     my $x2 = $r->as->logical($x1);
     ok($r->is->logical($x2));
     is_deeply($x2->values, [1]);
-  }
-
-  # as->logical - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [undef]);
   }
 
   # as->logical - doubke,NaN
@@ -526,14 +502,6 @@ my $r = Rstats->new;
     is($x2->values->[0], "1+2i");
   }
 
-  # as->character - NA
-  {
-    my $x1 = $r->array($r->NA);
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is_deeply($x2->values, [undef]);
-  }
-
   # as->character - $r->Inf
   {
     my $x1 = $r->Inf;
@@ -613,14 +581,6 @@ my $r = Rstats->new;
     ok($r->is->complex($x2));
     is($x2->values->[0]->{re}, 'Inf');
     is($x2->values->[0]->{im}, 0);
-  }
-
-  # as->complex - NA
-  {
-    my $x1 = $r->array($r->NA);
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, [undef]);
   }
 
   # as->complex - NaN
@@ -837,13 +797,6 @@ my $r = Rstats->new;
     my $x1 = $r->NaN;
     is_deeply($x1->values, ['NaN']);
     ok($r->is->numeric($x1));
-  }
-
-  # array decide type - NA
-  {
-    my $x1 = $r->array($r->NA);
-    is_deeply($x1->values, [undef]);
-    ok($r->is->logical($x1));
   }
 }
 

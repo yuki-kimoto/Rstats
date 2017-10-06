@@ -726,14 +726,6 @@ my $r = Rstats->new;
     ok($r->is->integer($x2));
     is($x2->value, 0);
   }
-  
-  # negate - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->negate($x1);
-    ok($r->is->integer($x2));
-    ok($r->is->na($x2));
-  }
 }
 
 # logical operator

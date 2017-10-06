@@ -128,7 +128,6 @@ my @func_names = qw/
   median
   merge
   Mod
-  NA
   NaN
   na_omit
   ncol
@@ -213,7 +212,6 @@ my @func_names = qw/
   dim
   Inf
   NaN
-  NA
   to_string
   get
   set
@@ -340,7 +338,6 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   # Special value
   my $true = $r->TRUE;
   my $false = $r->FALSE;
-  my $na = $r->NA;
   my $nan = $r->NaN;
   my $inf = $r->Inf;
   my $null = $r->NULL;
@@ -479,11 +476,6 @@ Alias of TRUE
   $r->F
 
 Alias of FALSE
-
-=head2 NA
-
-  # NA
-  $r->NA
 
 =head2 NaN
   
@@ -686,8 +678,6 @@ Alias of FALSE
 =head2 merge
 
 =head2 Mod
-
-=head2 NA
 
 =head2 NaN
 

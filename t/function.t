@@ -399,18 +399,18 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c("a");
     my $x2 = $r->c("b");
-    my $x3 = $r->c("ad1ad1", $r->NA, "ad2ad2");
+    my $x3 = $r->c("ad1ad1", "ad2ad2");
     my $x4 = $r->sub($x1, $x2, $x3);
-    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
+    is_deeply($x4->values, ["bd1ad1", "bd2ad2"]);
   }
 
   # sub - case ignore
   {
     my $x1 = $r->c("a");
     my $x2 = $r->c("b");
-    my $x3 = $r->c("Ad1ad1", $r->NA, "ad2ad2");
+    my $x3 = $r->c("Ad1ad1", "ad2ad2");
     my $x4 = $r->sub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
-    is_deeply($x4->values, ["bd1ad1", undef, "bd2ad2"]);
+    is_deeply($x4->values, ["bd1ad1", "bd2ad2"]);
   }
 }
 
@@ -483,9 +483,9 @@ my $r = Rstats->new;
 
 # Method
 {
-  # sort - contain NA or NaN
+  # sort - contain NaN
   {
-    my $x1 = $r->c(2, 1, 5, $r->NA, $r->NaN);
+    my $x1 = $r->c(2, 1, 5, $r->NaN);
     my $x1_sorted = $r->sort($x1);
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
@@ -544,13 +544,6 @@ my $r = Rstats->new;
 
 # min
 {
-  # min - contain NA
-  {
-    my $x_tmp = $r->c(1, 2, $r->NaN, $r->NA);
-    my $x1 = $r->min($r->c(1, 2, $r->NaN, $r->NA));
-    is_deeply($x1->values, [undef]);
-  }
-  
   # min - no argument
   {
     my $x1 = $r->min($r->NULL);
@@ -630,13 +623,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(-$r->Inf);
     my $x2 = $r->expm1($x1);
     is($x2->value, -1);
-  }
-
-  # expm1 - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->expm1($x1);
-    ok(!defined $x2->value);
   }
 
   # expm1 - NaN
@@ -844,13 +830,6 @@ my $r = Rstats->new;
     is($x2->value, 0);
   }
 
-  # exp - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->exp($x1);
-    ok(!defined $x2->value);
-  }  
-
   # exp - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -996,13 +975,6 @@ my $r = Rstats->new;
     is($x2->value, 'NaN');
   }
 
-  # log - NA
-  {
-    my $x1 = $r->c($r->NA);
-    my $x2 = $r->log($x1);
-    ok(!defined $x2->value);
-  }  
-
   # log - NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -1017,18 +989,18 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c("a");
     my $x2 = $r->c("b");
-    my $x3 = $r->c("ad1ad1", $r->NA, "ad2ad2");
+    my $x3 = $r->c("ad1ad1", "ad2ad2");
     my $x4 = $r->gsub($x1, $x2, $x3);
-    is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
+    is_deeply($x4->values, ["bd1bd1", "bd2bd2"]);
   }
 
   # sub - case ignore
   {
     my $x1 = $r->c("a");
     my $x2 = $r->c("b");
-    my $x3 = $r->c("Ad1Ad1", $r->NA, "Ad2Ad2");
+    my $x3 = $r->c("Ad1Ad1", "Ad2Ad2");
     my $x4 = $r->gsub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
-    is_deeply($x4->values, ["bd1bd1", undef, "bd2bd2"]);
+    is_deeply($x4->values, ["bd1bd1", "bd2bd2"]);
   }
 }
 
@@ -1037,7 +1009,7 @@ my $r = Rstats->new;
   # grep - case not ignore
   {
     my $x1 = $r->c("abc");
-    my $x2 = $r->c("abc", $r->NA, "ABC");
+    my $x2 = $r->c("abc", "ABC");
     my $x3 = $r->grep($x1, $x2);
     is_deeply($x3->values, [1]);
   }
@@ -1045,9 +1017,9 @@ my $r = Rstats->new;
   # grep - case ignore
   {
     my $x1 = $r->c("abc");
-    my $x2 = $r->c("abc", $r->NA, "ABC");
+    my $x2 = $r->c("abc", "ABC");
     my $x3 = $r->grep($x1, $x2, {'ignore.case' => $r->TRUE});
-    is_deeply($x3->values, [1, 3]);
+    is_deeply($x3->values, [1, 2]);
   }
 }
 
@@ -1055,9 +1027,9 @@ my $r = Rstats->new;
 {
   my $x1 = $r->c("a-z");
   my $x2 = $r->c("A-Z");
-  my $x3 = $r->c("abc", "def", $r->NA);
+  my $x3 = $r->c("abc", "def");
   my $x4 = $r->chartr($x1, $x2, $x3);
-  is_deeply($x4->values, ["ABC", "DEF", undef]);
+  is_deeply($x4->values, ["ABC", "DEF"]);
 }
 
 # charmatch
@@ -1425,16 +1397,16 @@ my $r = Rstats->new;
 {
   # diff - numeric
   {
-    my $x1 = $r->c(1, 5, 10, $r->NA);
+    my $x1 = $r->c(1, 5, 10);
     my $x2 = $r->diff($x1);
-    is_deeply($x2->values, [4, 5, undef]);
+    is_deeply($x2->values, [4, 5]);
   }
   
   # diff - complex
   {
-    my $x1 = $r->c(1 + 2*$r->i, 5 + 3*$r->i, $r->NA);
+    my $x1 = $r->c(1 + 2*$r->i, 5 + 3*$r->i);
     my $x2 = $r->diff($x1);
-    is_deeply($x2->values, [{re => 4, im => 1}, undef]);
+    is_deeply($x2->values, [{re => 4, im => 1}]);
   }
 }
 
@@ -1454,23 +1426,23 @@ my $r = Rstats->new;
 
 # nchar
 {
-  my $x1 = $r->c("AAA", "BB", $r->NA);
+  my $x1 = $r->c("AAA", "BB");
   my $x2 = $r->nchar($x1);
-  is_deeply($x2->values, [3, 2, undef])
+  is_deeply($x2->values, [3, 2])
 }
 
 # tolower
 {
-  my $x1 = $r->c("AA", "BB", $r->NA);
+  my $x1 = $r->c("AA", "BB");
   my $x2 = $r->tolower($x1);
-  is_deeply($x2->values, ["aa", "bb", undef])
+  is_deeply($x2->values, ["aa", "bb"])
 }
 
 # toupper
 {
-  my $x1 = $r->c("aa", "bb", $r->NA);
+  my $x1 = $r->c("aa", "bb");
   my $x2 = $r->toupper($x1);
-  is_deeply($x2->values, ["AA", "BB", undef])
+  is_deeply($x2->values, ["AA", "BB"])
 }
 
 # match
@@ -1578,12 +1550,6 @@ my $r = Rstats->new;
     is_deeply($x1->values, ['-Inf']);
   }
   
-  # max - contain NA
-  {
-    my $x1 = $r->max($r->c(1, 2, $r->NaN, $r->NA));
-    is_deeply($x1->values, [undef]);
-  }
-  
   # max - contain NaN
   {
     my $x1 = $r->max($r->c(1, 2, $r->NaN));
@@ -1635,18 +1601,9 @@ my $r = Rstats->new;
 # unique
 {
   # uniqeu - numeric
-  my $x1 = $r->c(1, 1, 2, 2, 3, $r->NA, $r->NA, $r->Inf, $r->Inf);
+  my $x1 = $r->c(1, 1, 2, 2, 3, $r->Inf, $r->Inf);
   my $x2 = $r->unique($x1);
-  is_deeply($x2->values, [1, 2, 3, undef, 'Inf']);
-}
-
-# NA
-{
-  my $x1 = $r->NA;
-  my $na_value = $x1->value;
-  is($na_value, undef);
-  ok($r->is->na($x1));
-  ok($r->is->logical($x1));
+  is_deeply($x2->values, [1, 2, 3, 'Inf']);
 }
 
 # round

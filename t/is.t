@@ -9,13 +9,6 @@ my $r = Rstats->new;
 
 # is->nan
 {
-  # is->nan - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->is->nan($x1);
-    is_deeply($x2->values, [0]);
-  }
-
   # is->nan - character
   {
     my $x1 = $r->c("a");
@@ -90,13 +83,6 @@ my $r = Rstats->new;
 
 # is->infinite
 {
-  # is->infinite - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->is->infinite($x1);
-    is_deeply($x2->values, [0]);
-  }
-
   # is->infinite - character
   {
     my $x1 = $r->c("a");
@@ -185,46 +171,6 @@ my $r = Rstats->new;
     ok($r->is->logical($x2));
     is_deeply($x2->values, []);
   }
-  
-  # is->na - character
-  {
-    my $x1 = $r->c("aaa", $r->NA);
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1]);
-  }
-  
-  # is->na - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i, $r->NA);
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1]);
-  }
-  
-  # is->na - double
-  {
-    my $x1 = $r->c(1.1, $r->NA);
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1]);
-  }
-  
-  # is->na - integer
-  {
-    my $x1 = $r->as->integer($r->c(1, $r->NA));
-    my $x2 = $r->is->na($r->as->integer($x1));
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1]);
-  }
-  
-  # is->na - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->NA);
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1]);
-  }
 }
 
 # is->integer
@@ -309,13 +255,6 @@ my $r = Rstats->new;
 
 # is->finite
 {
-  # is->infinite - NA
-  {
-    my $x1 = $r->NA;
-    my $x2 = $r->is->finite($x1);
-    is_deeply($x2->values, [0]);
-  }
-  
   # is->finite - Inf, false
   {
     my $x_inf = $r->Inf;

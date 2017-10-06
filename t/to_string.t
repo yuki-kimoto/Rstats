@@ -42,12 +42,6 @@ my $r = Rstats->new;
     is("$x1", "[1] FALSE\n");
   }
 
-  # to_string - NA
-  {
-    my $x1 = $r->NA;
-    is("$x1", "[1] NA\n");
-  }
-
   # to_string - NaN
   {
     my $x1 = $r->NaN;

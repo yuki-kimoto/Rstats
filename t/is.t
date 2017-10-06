@@ -225,14 +225,6 @@ my $r = Rstats->new;
     ok($r->is->logical($x2));
     is_deeply($x2->values, [0, 1]);
   }
-  
-  # is->na - $r->list
-  {
-    my $x1 = $r->list(1, 2);
-    my $x2 = $r->is->na($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0]);
-  }
 }
 
 # is->integer

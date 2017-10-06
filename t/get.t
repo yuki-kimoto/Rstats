@@ -18,15 +18,6 @@ my $r = Rstats->new;
     is_deeply($r->names($x2)->values, ["a", "c"]);
   }
 
-  # get - have dimnames
-  {
-    my $x1 = $r->matrix($r->C('1:24'), 3, 2);
-    $r->dimnames($x1 => $r->list($r->c('r1', 'r2', 'r3'), $r->c('c1', 'c2')));
-    my $x2 = $x1->get($r->c(1, 3), $r->c(2));
-    is_deeply($r->dimnames($x2)->getin(1)->values, ['r1', 'r3']);
-    is_deeply($r->dimnames($x2)->getin(2)->values, ['c2']);
-  }
-  
   # get - logical
   {
     my $x1 = $r->c(1, 3, 5, 7);

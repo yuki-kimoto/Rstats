@@ -123,12 +123,6 @@ my $r = Rstats->new;
     is_deeply($x1->class->values, ['matrix']);
   }
 
-  # class - data frame
-  {
-    my $x1 = $r->data_frame(sex => $r->c(1, 2));
-    is_deeply($x1->class->values, ['data.frame']);
-  }
-
   # class - vector, numeric
   {
     my $x1 = $r->c(1, 2);
@@ -139,24 +133,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     is_deeply($x1->class->values, ['array']);
-  }
-  
-  # class - factor
-  {
-    my $x1 = $r->factor($r->c(1, 2, 3));
-    is_deeply($x1->class->values, ['factor']);
-  }
-  
-  # class - factor, ordered
-  {
-    my $x1 = $r->ordered($r->c(1, 2, 3));
-    is_deeply($x1->class->values, ['factor', 'ordered']);
-  }
-  
-  # class - list
-  {
-    my $x1 = $r->list(1, 2);
-    is_deeply($x1->class->values, ['list']);
   }
 }
 
@@ -1877,13 +1853,9 @@ my $r = Rstats->new;
   # clone - $r->matrix
   {
     my $x1 = $r->matrix($r->C('1:24'), 3, 2);
-    $r->rownames($x1 => $r->c('r1', 'r2', 'r3'));
-    $r->colnames($x1 => $r->c('c1', 'c2'));
     my $x2 = $r->clone($x1);
     ok($r->is->matrix($x2));
     is_deeply($r->dim($x2)->values, [3, 2]);
-    is_deeply($r->rownames($x2)->values, ['r1', 'r2', 'r3']);
-    is_deeply($r->colnames($x2)->values, ['c1', 'c2']);
   }
 }
 

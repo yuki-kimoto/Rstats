@@ -10,11 +10,24 @@ has 'dim';
 has 'vector';
 has 'object_type';
 
+sub get_type { shift->type }
+
 sub to_string {
   my $x1 = shift;
   my $r = $x1->r;
   
   return Rstats::V2::Func::to_string($r, $x1, @_);
 }
+
+sub values {
+  my $x1 = shift;
+  
+  my $vector = $x1->vector;
+  
+  my $values = $vector->get_elements;
+  
+  return $values;
+}
+
 
 1;

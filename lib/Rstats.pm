@@ -106,12 +106,10 @@ my @func_names = qw/
   cummin
   cumsum
   cumprod
-  data_frame
   diag
   diff
   exp
   expm1
-  factor
   FALSE
   floor
   gl
@@ -126,7 +124,6 @@ my @func_names = qw/
   Re
   intersect
   kronecker
-  list
   log
   logb
   log2
@@ -198,9 +195,6 @@ my @func_names = qw/
   levels
   names
   nlevels
-  dimnames
-  colnames
-  rownames
   mode
   str
   typeof
@@ -254,7 +248,6 @@ sub new {
   $self->helper('is.complex' => \&Rstats::Func::is_complex);
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
-  $self->helper('is.list' => \&Rstats::Func::is_list);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
   $self->helper('is.na' => \&Rstats::Func::is_na);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
@@ -263,9 +256,7 @@ sub new {
   $self->helper('is.double' => \&Rstats::Func::is_double);
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
   $self->helper('is.vector' => \&Rstats::Func::is_vector);
-  $self->helper('is.factor' => \&Rstats::Func::is_factor);
   $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
-  $self->helper('is.data_frame' => \&Rstats::Func::is_data_frame);
   $self->helper('is.logical' => \&Rstats::Func::is_logical);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
@@ -274,13 +265,10 @@ sub new {
   $self->helper('as.complex' => \&Rstats::Func::as_complex);
   $self->helper('as.integer' => \&Rstats::Func::as_integer);
   $self->helper('as.double' => \&Rstats::Func::as_double);
-  $self->helper('as.list' => \&Rstats::Func::as_list);
   $self->helper('as.logical' => \&Rstats::Func::as_logical);
   $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
   $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
   $self->helper('as.vector' => \&Rstats::Func::as_vector);
-
-  $self->helper('read.table' => \&Rstats::Func::read_table);
 
   return $self;
 }
@@ -625,8 +613,6 @@ Alias of FALSE
 
 =head2 complex
 
-=head2 data_frame
-
 =head2 diag
 
 =head2 diff
@@ -640,8 +626,6 @@ Alias of FALSE
 
   # expm1(x1)
   $r->expm1($x1)
-
-=head2 factor
 
 =head2 F
 
@@ -679,8 +663,6 @@ Alias of FALSE
 =head2 kronecker
 
 =head2 length
-
-=head2 list
 
 =head2 log
 
@@ -911,11 +893,6 @@ Alias of FALSE
   # as.integer(x1)
   $r->as->integer($x1)
 
-=head2 as->list
-
-  # as.list
-  $r->as->list($x1)
-
 =head2 as->logical
 
   # as.logical
@@ -960,11 +937,6 @@ Alias of FALSE
 
   # is.infinite(x1)
   $r->is->infinite($x1)
-
-=head2 is->list
-
-  # is.list(x1)
-  $r->is->list($x1)
 
 =head2 is->matrix
 
@@ -1044,30 +1016,6 @@ Alias of FALSE
 
   # nlevels(x1)
   $r->nlevels($x1)
-
-=head2 dimnames
-
-  # dimnames(x1)
-  $r->dimnames($x1)
-  
-  # dimnames(x1) <- list(c("r1", "r2"), c("c1", "c2"))
-  $r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
-
-=head2 colnames
-
-  # colnames(x1)
-  $r->colnames($x1)
-  
-  # colnames(x1) <- c("r1", "r2")
-  $r->colnames($x1 => c("r1", "r2"))
-
-=head2 rownames
-
-  # rownames(x1)
-  $r->rownames($x1)
-  
-  # rownames(x1) <- c("r1", "r2")
-  $r->rownames($x1 => c("r1", "r2"))
 
 =head2 mode
 

@@ -3902,11 +3902,6 @@ namespace Rstats {
       if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "class")) && Rstats::pl_hv_exists(sv_x1, "class")) {
         Rstats::pl_hv_store(sv_x2, "class", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "class")));
       }
-      
-      // levels
-      if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "levels")) && Rstats::pl_hv_exists(sv_x1, "levels")) {
-        Rstats::pl_hv_store(sv_x2, "levels", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "levels")));
-      }
     }
 
     SV* is_na(SV* sv_r, SV* sv_x1) {
@@ -4317,31 +4312,6 @@ namespace Rstats {
       SV* sv_x_out_dim = Rstats::Func::dim_as_array(sv_r, sv_x1);
       
       return Rstats::Func::array(sv_r, sv_x_out, sv_x_out_dim);
-    }
-
-    SV* levels(SV* sv_r, SV* sv_x1, SV* sv_x_class) {
-      
-      sv_x_class = Rstats::Func::to_object(sv_r, sv_x_class);
-      if (!Rstats::Func::to_bool(sv_r, Rstats::Func::is_character(sv_r, sv_x_class))) {
-        sv_x_class = Rstats::Func::as_character(sv_r, sv_x_class);
-      }
-      
-      Rstats::pl_hv_store(sv_x1, "levels", Rstats::Func::as_vector(sv_r, sv_x_class));
-      
-      return sv_x1;
-    }
-    
-    SV* levels(SV* sv_r, SV* sv_x1) {
-      SV* sv_x_levels;
-      
-      if (Rstats::pl_hv_exists(sv_x1, "levels")) {
-        sv_x_levels = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "levels"));
-      }
-      else {
-        sv_x_levels = Rstats::Func::new_NULL(sv_r);
-      }
-      
-      return sv_x_levels;
     }
 
     SV* mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {

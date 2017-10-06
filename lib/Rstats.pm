@@ -40,30 +40,6 @@ sub get_helper {
   return $self->get_helper($name);
 }
 
-# TODO
-# logp1x
-# gamma
-# lgamma
-# complete_cases
-# cor
-# pmatch regexpr
-# substr substring
-# strsplit  strwrap
-# outer(x, y, f)
-# reorder()
-# relevel()
-# read.csv()
-# read.csv2()
-# read.delim()
-# read.delim2()
-# read.fwf()
-# merge
-# replicate
-# split
-# by
-# aggregate
-# reshape
-
 my @func_names = qw/
   sd
   sin
@@ -186,9 +162,7 @@ my @func_names = qw/
   var
   which
   labels
-  levels
   names
-  nlevels
   mode
   str
   typeof
@@ -969,14 +943,6 @@ Alias of FALSE
   # labels(x1)
   $r->labels($x1)
 
-=head2 levels
-
-  # levels(x1)
-  $r->levels($x1)
-  
-  # levels(x1) <- c("F", "M")
-  $r->levels($x1 => c("F", "M"))
-
 =head2 dim
 
   # dim(x1)
@@ -984,19 +950,6 @@ Alias of FALSE
   
   # dim(x1) <- c(1, 2)
   $r->dim($x1 => c(1, 2))
-
-=head2 names
-
-  # names(x1)
-  $r->names($x1)
-
-  # names(x1) <- c("n1", "n2")
-  $r->names($x1 =>  c("n1", "n2"))
-
-=head2 nlevels
-
-  # nlevels(x1)
-  $r->nlevels($x1)
 
 =head2 mode
 

@@ -68,8 +68,6 @@ namespace Rstats {
     // class
     SV* Class(SV*, SV*);
     SV* Class(SV*, SV*, SV*);
-    SV* levels(SV*, SV*);
-    SV* levels(SV*, SV*, SV*);
     SV* mode(SV*, SV*);
     SV* mode(SV*, SV*, SV*);
     

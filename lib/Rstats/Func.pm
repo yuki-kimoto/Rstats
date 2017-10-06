@@ -185,102 +185,6 @@ sub higher_type {
   }
 }
 
-sub interaction {
-  my $r = shift;
-  
-  my $opt;
-  $opt = ref $_[-1] eq 'HASH' ? pop : {};
-  my @xs = map { Rstats::Func::as_factor($r, to_object($r, $_)) } @_;
-  my ($x_drop, $x_sep);
-  ($x_drop, $x_sep) = args_array($r, ['drop', 'sep'], $opt);
-  
-  $x_sep = Rstats::Func::c($r, ".") unless defined $x_sep;
-  my $sep = $x_sep->value;
-  
-  $x_drop = Rstats::Func::FALSE($r) unless defined $x_drop;
-  
-  my $max_length;
-  my $values_list = [];
-  for my $x (@xs) {
-    my $length = Rstats::Func::length($r, $x)->value;
-    $max_length = $length if !defined $max_length || $length > $max_length;
-  }
-  
-  # Vector
-  my $f1_elements = [];
-  for (my $i = 0; $i < $max_length; $i++) {
-    my $chars = [];
-    for my $x (@xs) {
-      my $fix_x = Rstats::Func::as_character($r, $x);
-      my $length = Rstats::Func::get_length($r, $fix_x);
-      push @$chars, $fix_x->value(($i % $length) + 1)
-    }
-    my $value = join $sep, @$chars;
-    push @$f1_elements, $value;
-  }
-  
-  # Levels
-  my $f1;
-  my $f1_levels_elements = [];
-  if ($x_drop) {
-    $f1_levels_elements = $f1_elements;
-    $f1 = factor($r, c($r, @$f1_elements));
-  }
-  else {
-    my $levels = [];
-    for my $x (@xs) {
-      push @$levels, Rstats::Func::levels($r, $x)->values;
-    }
-    my $cps = Rstats::Util::cross_product($levels);
-    for my $cp (@$cps) {
-      my $value = join $sep, @$cp;
-      push @$f1_levels_elements, $value;
-    }
-    $f1_levels_elements = [sort {$a cmp $b} @$f1_levels_elements];
-    $f1 = factor($r, c($r, @$f1_elements), {levels => Rstats::Func::c($r, @$f1_levels_elements)});
-  }
-  
-  return $f1;
-}
-
-sub gl {
-  my $r = shift;
-  
-  my ($x_n, $x_k, $x_length, $x_labels, $x_ordered)
-    = args_array($r, [qw/n k length labels ordered/], @_);
-  
-  my $n = $x_n->value;
-  my $k = $x_k->value;
-  $x_length = Rstats::Func::c($r, $n * $k) unless defined $x_length;
-  my $length = $x_length->value;
-  
-  my $x_levels = Rstats::Func::c($r, 1 .. $n);
-  $x_levels = Rstats::Func::as_character($r, $x_levels);
-  my $levels = $x_levels->values;
-  
-  my $x1_elements = [];
-  my $level = 1;
-  my $j = 1;
-  for (my $i = 0; $i < $length; $i++) {
-    if ($j > $k) {
-      $j = 1;
-      $level++;
-    }
-    if ($level > @$levels) {
-      $level = 1;
-    }
-    push @$x1_elements, $level;
-    $j++;
-  }
-  
-  my $x1 = Rstats::Func::c($r, @$x1_elements);
-  
-  $x_labels = $x_levels unless defined $x_labels;
-  $x_ordered = Rstats::Func::FALSE($r) unless defined $x_ordered;
-  
-  return factor($r, $x1, {levels => $x_levels, labels => $x_labels, ordered => $x_ordered});
-}
-
 sub upper_tri {
   my $r = shift;
   
@@ -2145,11 +2049,9 @@ sub get_array {
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   my $dim_drop;
-  my $level_drop;
   $dim_drop = $opt->{drop};
   
   $dim_drop = 1 unless defined $dim_drop;
-  $level_drop = 0 unless defined $level_drop;
   
   my @_indexs = @_;
 
@@ -2198,12 +2100,6 @@ sub get_array {
   # Copy attributes
   Rstats::Func::copy_attrs_to($r, $x1, $x2, {new_indexes => $new_indexes, exclude => ['dim']});
 
-  # level drop
-  if ($level_drop) {
-    my $p = Rstats::Func::as_character($r, $x2);
-    $x2 = Rstats::Func::factor($r, Rstats::Func::as_character($r, $x2));
-  }
-  
   return $x2;
 }
 
@@ -2213,8 +2109,6 @@ sub to_string_array {
   my $r = shift;
   
   my $x1 = shift;
-  
-  my $levels;
   
   my $is_character = Rstats::Func::is_character($r, $x1);
 
@@ -2448,14 +2342,6 @@ sub _name_to_index {
   return $index;
 }
 
-sub nlevels {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  return Rstats::Func::c($r, Rstats::Func::get_length($r, Rstats::Func::levels($r, $x1)));
-}
-
 sub sweep {
   my $r = shift;
   
@@ -2568,20 +2454,6 @@ sub getin {
   my ($r, $x1) = @_;
   
   return Rstats::Func::getin_array(@_);
-}
-
-sub _levels_h {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $levels_h = {};
-  my $levels = Rstats::Func::levels($r, $x1)->values;
-  for (my $i = 1; $i <= @$levels; $i++) {
-    $levels_h->{$levels->[$i - 1]} = Rstats::Func::c_integer($r, $i);
-  }
-  
-  return $levels_h;
 }
 
 sub set_array {

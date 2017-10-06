@@ -1241,25 +1241,6 @@ SV* length(...)
   XSRETURN(1);
 }
 
-SV* names(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  if (items > 2) {
-    SV* sv_x_names = ST(2);
-    Rstats::Func::names(sv_r, sv_x1, sv_x_names);
-      
-    XPUSHs(sv_r);
-    XSRETURN(1);
-  }
-  else {
-    SV* sv_x_names = Rstats::Func::names(sv_r, sv_x1);
-    XPUSHs(sv_x_names);
-    XSRETURN(1);
-  }
-}
-
 SV* typeof(...)
   PPCODE:
 {

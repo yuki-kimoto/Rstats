@@ -2230,10 +2230,6 @@ sub to_string_array {
   my $str;
   if (@$values) {
     if ($dim_length == 1) {
-      my $names = Rstats::Func::names($r, $x1)->values;
-      if (@$names) {
-        $str .= join(' ', @$names) . "\n";
-      }
       my @parts = map { Rstats::Func::_value_to_string($r, $x1, $_, $type) } @$values;
       $str .= '[1] ' . join(' ', @parts) . "\n";
     }

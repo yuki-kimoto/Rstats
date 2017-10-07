@@ -93,7 +93,7 @@ my $r = Rstats->new;
   # tail - n option
   {
     my $x1 = $r->c(1, 2, 3, 4);
-    my $tail = $r->tail($x1, {n => 3});
+    my $tail = $r->tail($x1, {n => $r->c(3)});
     is_deeply($tail->values, [2, 3, 4]);
   }
 }
@@ -152,7 +152,7 @@ my $r = Rstats->new;
   # sample - replace => 0
   {
     my $x1 = $r->C('1:100');
-    my $x2 = $r->sample($x1, 50, {replace => 0});
+    my $x2 = $r->sample($x1, 50, {replace => $r->c(0)});
     is($r->length($x2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
@@ -171,7 +171,7 @@ my $r = Rstats->new;
   # sample - replace => 0
   {
     my $x1 = $r->C('1:100');
-    my $x2 = $r->sample($x1, 50, {replace => 1});
+    my $x2 = $r->sample($x1, 50, {replace => $r->c(1)});
     is($r->length($x2)->value, 50);
     my $duplicate_h = {};
     my $duplicate;
@@ -187,7 +187,7 @@ my $r = Rstats->new;
   # sample - replace => 0, (strict check)
   {
     my $x1 = $r->c(1);
-    my $x2 = $r->sample($x1, 5, {replace => 1});
+    my $x2 = $r->sample($x1, 5, {replace => $r->c(1)});
     is($r->length($x2)->value, 5);
     is_deeply($x2->values, [1, 1, 1, 1, 1]);
   }
@@ -225,7 +225,7 @@ my $r = Rstats->new;
   # head - n option
   {
     my $x1 = $r->c(1, 2, 3, 4);
-    my $head = $r->head($x1, {n => 3});
+    my $head = $r->head($x1, {n => $r->c(3)});
     is_deeply($head->values, [1, 2, 3]);
   }
 }
@@ -259,10 +259,10 @@ my $r = Rstats->new;
 
 # rep function
 {
-  # req($v, {times => $times});
+  # req($v, {times => $r->c($times)});
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->rep($x1, {times => 3});
+    my $x2 = $r->rep($x1, {times => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
   }
 }
@@ -295,19 +295,19 @@ my $r = Rstats->new;
   
   # seq($from, $to, {by => p}) n > m
   {
-    my $x1 = $r->seq(1, 3, {by => 0.5});
+    my $x1 = $r->seq(1, 3, {by => $r->c(0.5)});
     is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 
   # seq($from, $to, {by => p}) n > m
   {
-    my $x1 = $r->seq(3, 1, {by => -0.5});
+    my $x1 = $r->seq(3, 1, {by => $r->c(-0.5)});
     is_deeply($x1->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
   }
   
   # seq($from, {by => p, length => l})
   {
-    my $x1 = $r->seq(1, 3, {length => 5});
+    my $x1 = $r->seq(1, 3, {length => $r->c(5)});
     is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
   
@@ -418,7 +418,7 @@ my $r = Rstats->new;
     # sort - decreasing
     {
       my $x1 = $r->c(2, 1, 5);
-      my $x1_sorted = $r->sort($x1, {decreasing => 1});
+      my $x1_sorted = $r->sort($x1, {decreasing => $r->c(1)});
       is_deeply($x1_sorted->values, [5, 2, 1]);
     }
   }
@@ -727,7 +727,7 @@ my $r = Rstats->new;
   # append - after option
   {
     my $x1 = $r->c(1, 2, 3, 4, 5);
-    my $x2 = $r->append($x1, 1, {after => 3});
+    my $x2 = $r->append($x1, 1, {after => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 4, 5]);
   }
 
@@ -1097,7 +1097,7 @@ my $r = Rstats->new;
   # round - $r->array reference
   {
     my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($x1, {digits => -1});
+    my $x2 = $r->round($x1, {digits => $r->c(-1)});
     is_deeply(
       $x2->values,
       [-10, 20, 20, 30, 40]

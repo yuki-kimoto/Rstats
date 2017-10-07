@@ -22,7 +22,7 @@ my $r = Rstats->new;
   
   # matrix - byrow
   {
-    my $m1 = $r->matrix($r->C('1:12'), 3, 4, {byrow => 1});
+    my $m1 = $r->matrix($r->C('1:12'), 3, 4, {byrow => $r->c(1)});
     is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
     is_deeply($r->dim($m1)->values, [3, 4]);
     ok($r->is->matrix($m1));
@@ -54,7 +54,7 @@ my $r = Rstats->new;
 
   # matrix - nrow and ncol option
   {
-    my $m1 = $r->matrix($r->C('1:12'), {nrow => 4, ncol => 3});
+    my $m1 = $r->matrix($r->C('1:12'), {nrow => $r->c(4), ncol => $r->c(3)});
     is_deeply($m1->values, [1 .. 12]);
     is_deeply($r->dim($m1)->values, [4, 3]);
     ok($r->is->matrix($m1));

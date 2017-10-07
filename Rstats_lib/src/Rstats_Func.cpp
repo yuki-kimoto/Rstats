@@ -90,12 +90,7 @@ namespace Rstats {
           Rstats::Vector<double>* v1 =  Rstats::Func::get_vector<double>(sv_r, sv_element);
           int32_t v1_length = v1->get_length();
           for (int32_t k = 0; k < v1_length; k++) {
-            if (v1->exists_na_position(k)) {
-              v_out->add_na_position(pos);
-            }
-            else {
-              v_out->set_value(pos, v1->get_value(k));
-            }
+            v_out->set_value(pos, v1->get_value(k));
             pos++;
           }
         }
@@ -113,12 +108,7 @@ namespace Rstats {
           Rstats::Vector<int32_t>* v1 =  Rstats::Func::get_vector<int32_t>(sv_r, sv_element);
           int32_t v1_length = v1->get_length();
           for (int32_t k = 0; k < v1_length; k++) {
-            if (v1->exists_na_position(k)) {
-              v_out->add_na_position(pos);
-            }
-            else {
-              v_out->set_value(pos, v1->get_value(k));
-            }
+            v_out->set_value(pos, v1->get_value(k));
             pos++;
           }
         }
@@ -237,23 +227,18 @@ namespace Rstats {
       SV* sv_value;
       if (strEQ(type, "double")) {
         Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
-        if (v1->exists_na_position(pos)) {
-          sv_value = &PL_sv_undef;
+        double value = v1->get_value(pos);
+        if (std::isnan(value)) {
+          sv_value = Rstats::pl_new_sv_pv("NaN");
+        }
+        else if (std::isinf(value) && value > 0) {
+          sv_value = Rstats::pl_new_sv_pv("Inf");
+        }
+        else if (std::isinf(value) && value < 0) {
+          sv_value = Rstats::pl_new_sv_pv("-Inf");
         }
         else {
-          double value = v1->get_value(pos);
-          if (std::isnan(value)) {
-            sv_value = Rstats::pl_new_sv_pv("NaN");
-          }
-          else if (std::isinf(value) && value > 0) {
-            sv_value = Rstats::pl_new_sv_pv("Inf");
-          }
-          else if (std::isinf(value) && value < 0) {
-            sv_value = Rstats::pl_new_sv_pv("-Inf");
-          }
-          else {
-            sv_value = Rstats::pl_new_sv_nv(value);
-          }
+          sv_value = Rstats::pl_new_sv_nv(value);
         }
       }
       else if (strEQ(type, "integer")) {

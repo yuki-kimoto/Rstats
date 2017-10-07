@@ -1379,7 +1379,7 @@ sub median {
 sub quantile {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $x2 = Rstats::Func::unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
@@ -1440,7 +1440,7 @@ sub quantile {
 sub sd {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $sd = Rstats::Func::sqrt($r, var($r, $x1));
   
@@ -1470,7 +1470,7 @@ sub which {
   
   my ($_x1, $cond_cb) = @_;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   my $x1_values = $x1->values;
   my @x2_values;
   for (my $i = 0; $i < @$x1_values; $i++) {
@@ -1555,7 +1555,7 @@ sub seq {
   # Along
   my $_along = $opt->{along};
   if (defined $_along) {
-    my $along = to_object($r, $_along);
+    my $along = $_along;
     my $length = Rstats::Func::get_length($r, $along);
     return seq($r, 1, $length);
   }
@@ -1940,28 +1940,6 @@ sub at {
   }
   
   return $x1->{at};
-}
-
-sub _name_to_index {
-  my $r = shift;
-  my $x1 = shift;
-  my $x1_index = Rstats::Func::to_object($r, shift);
-  
-  my $e1_name = $x1_index->value;
-  my $found;
-  my $names = Rstats::Func::names($r, $x1)->values;
-  my $index;
-  for (my $i = 0; $i < @$names; $i++) {
-    my $name = $names->[$i];
-    if ($e1_name eq $name) {
-      $index = $i + 1;
-      $found = 1;
-      last;
-    }
-  }
-  croak "Not found $e1_name" unless $found;
-  
-  return $index;
 }
 
 sub sweep {

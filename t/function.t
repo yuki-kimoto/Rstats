@@ -541,7 +541,7 @@ my $r = Rstats->new;
 
 # ve - minus
 {
-  my $x1 = -$r->C('1:4');
+  my $x1 = $r->negate($r->C('1:4'));
   is_deeply($x1->values, [-1, -2, -3, -4]);
 }
 

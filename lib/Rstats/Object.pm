@@ -93,12 +93,6 @@ use overload
     
     return Rstats::Func::bool($r, $x1, @_);
   },
-  'neg' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-    
-    return Rstats::Func::negate($r, $x1, @_);
-  },
   fallback => 1;
 
 use Rstats::Func;

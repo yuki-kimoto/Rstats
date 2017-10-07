@@ -322,7 +322,7 @@ my $r = Rstats->new;
   # negate - dimention
   {
     my $x1 = $r->array($r->c(1, 2, 3));
-    my $x2 = -$x1;
+    my $x2 = $r->negate($x1);
     ok($r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
     is_deeply($x2->dim->values, [3]);
@@ -331,7 +331,7 @@ my $r = Rstats->new;
   # negate - double
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = -$x1;
+    my $x2 = $r->negate($x1);
     ok($r->is->double($x2));
     is_deeply($x2->values, [-1, -2, -3]);
   }

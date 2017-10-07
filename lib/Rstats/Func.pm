@@ -66,9 +66,6 @@ sub matrix {
   elsif (Rstats::Func::get_type($r, $x1)  eq "integer") {
     $x_matrix = c_integer($r, $x1_values);
   }
-  elsif (Rstats::Func::get_type($r, $x1)  eq "logical") {
-    $x_matrix = c_integer($r, $x1_values);
-  }
   else {
     croak("Invalid type " . Rstats::Func::get_type($r, $x1) . " is passed");
   }
@@ -163,7 +160,6 @@ my $type_level = {
   character => 6,
   double => 4,
   integer => 3,
-  logical => 2,
   na => 1
 };
 

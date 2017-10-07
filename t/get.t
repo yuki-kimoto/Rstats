@@ -52,14 +52,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [5, 7]);
   }
   
-  # get - grep
-  {
-    my $x1 = $r->c(1, 2, 3, 4, 5);
-    my $x2 = $x1 > 3;
-    my $x3 = $x1->get($x2);
-    is_deeply($x3->values, [4, 5]);
-  }
-  
   # get - as_vector
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));

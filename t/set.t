@@ -12,14 +12,14 @@ my $r = Rstats->new;
   # set 3-dimention
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->at(4, 3, 2)->set(25);
+    my $x2 = $x1->at(4, 3, 2)->set($r->c(25));
     is_deeply($x2->values, [1 .. 23, 25]);
   }
 
   # set 3-dimention - one and tow dimention
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->at(4, 3)->set(25);
+    my $x2 = $x1->at(4, 3)->set($r->c(25));
     is_deeply($x2->values, [1 .. 11, 25, 13 .. 23, 25]);
   }
 

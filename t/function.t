@@ -55,7 +55,7 @@ my $r = Rstats->new;
   # c_ - append to original vector
   {
     my $x1 = $r->c(1, 2, 3);
-    $x1->at($r->length($x1)->value + 1)->set(6);
+    $x1->at($r->length($x1)->value + 1)->set($r->c(6));
     is_deeply($x1->values, [1, 2, 3, 6]);
   }
 }
@@ -253,7 +253,7 @@ my $r = Rstats->new;
   my $x = $r->array($r->c(1, 2, 3));
   is_deeply($x->get(1)->values, [1]);
   is_deeply($x->get(3)->values, [3]);
-  $x->at(1)->set(5);;
+  $x->at($r->c(1))->set($r->c(5));;
   is_deeply($x->get(1)->values, [5]);
 }
 

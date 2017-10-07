@@ -22,7 +22,6 @@ namespace Rstats {
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);
     SV* c_logical(SV*, SV*);
-    SV* c_complex(SV*, SV*);
 
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
@@ -36,7 +35,6 @@ namespace Rstats {
     Rstats::Logical to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
-    SV* is_complex(SV*, SV*);
     SV* is_character(SV*, SV*);
     SV* is_logical(SV*, SV*);
     SV* is_finite(SV*, SV*);
@@ -49,7 +47,6 @@ namespace Rstats {
     SV* as_vector(SV*, SV*);
     SV* as_integer(SV*, SV*);
     SV* as_logical(SV*, SV*);
-    SV* as_complex(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
     SV* as_character(SV*, SV*);
@@ -142,8 +139,6 @@ namespace Rstats {
     template <>
     void set_vector<Rstats::Character>(SV*, SV*, Rstats::Vector<Rstats::Character>*);
     template <>
-    void set_vector<Rstats::Complex>(SV*, SV*, Rstats::Vector<Rstats::Complex>*);
-    template <>
     void set_vector<Rstats::Double>(SV*, SV*, Rstats::Vector<Rstats::Double>*);
     template <>
     void set_vector<Rstats::Integer>(SV*, SV*, Rstats::Vector<Rstats::Integer>*);
@@ -155,8 +150,6 @@ namespace Rstats {
     template <>
     Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Complex>* get_vector<Rstats::Complex>(SV*, SV*);
-    template <>
     Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV*, SV*);
     template <>
     Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV*, SV*);
@@ -167,8 +160,6 @@ namespace Rstats {
     SV* new_vector(SV*);
     template <>
     SV* new_vector<Rstats::Character>(SV*);
-    template <>
-    SV* new_vector<Rstats::Complex>(SV*);
     template <>
     SV* new_vector<Rstats::Double>(SV*);
     template <>

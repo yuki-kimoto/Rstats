@@ -60,7 +60,6 @@ my @func_names = qw/
   c_double
   c_character
   c_integer
-  c_logical
   C
   charmatch
   chartr
@@ -219,14 +218,12 @@ sub new {
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
   $self->helper('is.vector' => \&Rstats::Func::is_vector);
   $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
-  $self->helper('is.logical' => \&Rstats::Func::is_logical);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
   $self->helper('as.array' => \&Rstats::Func::as_array);
   $self->helper('as.character' => \&Rstats::Func::as_character);
   $self->helper('as.integer' => \&Rstats::Func::as_integer);
   $self->helper('as.double' => \&Rstats::Func::as_double);
-  $self->helper('as.logical' => \&Rstats::Func::as_logical);
   $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
   $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
   $self->helper('as.vector' => \&Rstats::Func::as_vector);
@@ -835,11 +832,6 @@ Alias of FALSE
   # as.integer(x1)
   $r->as->integer($x1)
 
-=head2 as->logical
-
-  # as.logical
-  $r->as->logical($x1)
-
 =head2 as->matrix
 
   # as.matrix(x1)
@@ -909,11 +901,6 @@ Alias of FALSE
 
   # is.integer(x1)
   $r->is->integer($x1)
-
-=head2 is->logical
-
-  # is.logical(x1)
-  $r->is->logical($x1)
 
 =head2 is->vector
 

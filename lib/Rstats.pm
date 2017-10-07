@@ -105,7 +105,6 @@ my @func_names = qw/
   na_omit
   ncol
   nrow
-  NULL
   numeric
   matrix
   max
@@ -302,7 +301,6 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $false = $r->FALSE;
   my $nan = $r->NaN;
   my $inf = $r->Inf;
-  my $null = $r->NULL;
   
   # all methods are called from r
   my $x1 = $r->sum($r->c(1, 2, 3));
@@ -334,7 +332,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   $x1->get(c(1,2), c(3,4))
   
   # x1[,2]
-  $x1->get(NULL, 2)
+  $x1->get(undef, 2)
   
   # x1[-1]
   $x1->get(-1)
@@ -357,7 +355,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   $x1->at(c(1,2), c(3,4))->set($x2)
   
   # x1[,2] <- x2
-  $x1->at(NULL, 2)->set($x2)
+  $x1->at(undef, 2)->set($x2)
   
   # x1[-1] <- x2
   $x1->at(-1)->set($x2)
@@ -448,11 +446,6 @@ Alias of FALSE
 
   # Inf
   $r->Inf
-
-=head2 NULL
-  
-  # NULL
-  $r->NULL
 
 =head2 matrix
 

@@ -509,7 +509,7 @@ sub setequal {
 sub setdiff {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
   
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -533,7 +533,7 @@ sub setdiff {
 sub intersect {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
   
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -554,7 +554,7 @@ sub intersect {
 sub union {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
 
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -567,7 +567,7 @@ sub union {
 sub diff {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $x2_elements = [];
   my $x1_elements = Rstats::Func::decompose($r, $x1);
@@ -586,7 +586,7 @@ sub diff {
 sub match {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -650,7 +650,7 @@ sub cbind {
   my $x2_elements = [];
   for my $_x (@xs) {
     
-    my $x1 = to_object($r, $_x);
+    my $x1 = $_x;
     my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
     
     my $row_count;
@@ -680,7 +680,7 @@ sub ceiling {
   my $r = shift;
   my $_x1 = shift;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   my @x2_elements
     = map { Rstats::Func::c_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
@@ -736,7 +736,7 @@ sub colSums {
 sub cummax {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -764,7 +764,7 @@ sub cummax {
 sub cummin {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';

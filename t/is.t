@@ -97,17 +97,6 @@ my $r = Rstats->new;
   }
 }
 
-# is->integer
-{
-  # is->integer, as_integer, typeof - integer
-  {
-    my $c = $r->c(0, 1, 2);
-    ok($r->is->integer($r->as->integer($c)));
-    is($r->mode($r->as->integer($c))->value, 'numeric');
-    is($r->typeof($r->as->integer($c))->value, 'integer');
-  }
-}
-
 # is->vector
 {
   # is->vector

@@ -886,14 +886,6 @@ Alias of FALSE
   # dim(x1) <- c(1, 2)
   $r->dim($x1 => c(1, 2))
 
-=head2 mode
-
-  # mode(x1)
-  $r->mode($x1)
-  
-  # mode(x1) <- c("r1", "r2")
-  $r->mode($x1 => c("r1", "r2"))
-
 =head2 str
 
   # str(x1)

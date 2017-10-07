@@ -106,27 +106,6 @@ my $r = Rstats->new;
   }
 }
 
-# as->numeric
-{
-  # as->numeric - from integer
-  {
-    my $x1 = $r->c(0, 1, 2);
-    $r->mode($x1 => 'integer');
-    my $x2 = $r->as->numeric($x1);
-    is($r->mode($x2)->value, 'numeric');
-    is_deeply($x2->values, [0, 1, 2]);
-  }
-  
-  # as->numeric - from numeric
-  {
-    my $x1 = $r->c(0.1, 1.1, 2.2);
-    $r->mode($x1 => 'numeric');
-    my $x2 = $r->as->numeric($x1);
-    is($r->mode($x2)->value, 'numeric');
-    is_deeply($x2->values, [0.1, 1.1, 2.2]);
-  }
-}
-
 # is_*
 {
   # is_* - is_array

@@ -12,13 +12,6 @@ my $r = Rstats->new;
 
 # c
 {
-  # $r->c()
-  {
-    my $x1 = $r->c();
-    my $x_tmp = $r->is->null($x1);
-    ok($x_tmp);
-  }
-  
   # $r->c($r->TRUE, $r->as->integer(2));
   {
     my $x1 = $r->c($r->TRUE, $r->as->integer(2));

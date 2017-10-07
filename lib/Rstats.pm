@@ -209,7 +209,6 @@ sub new {
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
-  $self->helper('is.null' => \&Rstats::Func::is_null);
   $self->helper('is.numeric' => \&Rstats::Func::is_numeric);
   $self->helper('is.double' => \&Rstats::Func::is_double);
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
@@ -859,11 +858,6 @@ Alias of FALSE
 
   # is.nan(x1)
   $r->is->nan($x1)
-
-=head2 is->null
-
-  # is.null(x1)
-  $r->is->null($x1)
 
 =head2 is->numeric
 

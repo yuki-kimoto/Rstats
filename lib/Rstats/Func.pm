@@ -879,10 +879,8 @@ sub ifelse {
 
 sub max {
   my $r = shift;
-
-  my @args = grep { !Rstats::Func::is_null($r, $_) } @_;
   
-  my $x1 = Rstats::Func::c($r, @args);
+  my $x1 = Rstats::Func::c($r, @_);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -917,9 +915,7 @@ sub mean {
 sub min {
   my $r = shift;
   
-  my @args = grep { !Rstats::Func::is_null($r, $_) } @_;
-  
-  my $x1 = Rstats::Func::c($r, @args);
+  my $x1 = Rstats::Func::c($r, @_);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to min; returning Inf';
@@ -1489,10 +1485,6 @@ sub inner_product {
   my $r = shift;
   
   my ($x1, $x2) = @_;
-  
-  if (Rstats::Func::is_null($r, $x1) || Rstats::Func::is_null($r, $x2)) {
-    Carp::croak "requires numeric matrix/vector arguments";
-  }
   
   # Convert to matrix
   $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))

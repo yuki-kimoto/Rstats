@@ -9,14 +9,6 @@ my $r = Rstats->new;
 
 # get
 {
-  # get - logical
-  {
-    my $x1 = $r->c(1, 3, 5, 7);
-    my $logical_v = $r->c($r->FALSE, $r->TRUE, $r->FALSE, $r->TRUE, $r->TRUE);
-    my $x2 = $x1->get($logical_v);
-    is_deeply($x2->values, [3, 7, undef]);
-  }
-
   # get - one value
   {
     my $x1 = $r->c(1);
@@ -68,14 +60,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [4, 5]);
   }
   
-  # get - as_logical
-  {
-    my $x1 = $r->c(1, 3, 5, 7);
-    my $logical_v = $r->as->logical($r->c(0, 1, 0, 1, 1));
-    my $x2 = $x1->get($logical_v);
-    is_deeply($x2->values, [3, 7, undef]);
-  }
-
   # get - as_vector
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
@@ -86,18 +70,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     is_deeply($r->as->vector($x1)->get(5, 1)->values, [5]);
-  }
-}
-
-# get logical $r->array
-{
-  # get logical $r->array - basic
-  {
-    my $x1 = $r->matrix($r->C('1:9'), 3, 3);
-    my $x2 = $r->matrix($r->c($r->TRUE, $r->FALSE, $r->FALSE, $r->FALSE, $r->TRUE, $r->FALSE, $r->FALSE, $r->FALSE, $r->TRUE), 3, 3);
-    my $x3 = $x1->get($x2);
-    is_deeply($x3->values, [1, 5, 9]);
-    is_deeply($r->dim($x3)->values, [3]);
   }
 }
 

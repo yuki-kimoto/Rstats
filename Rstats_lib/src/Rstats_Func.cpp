@@ -2130,7 +2130,6 @@ namespace Rstats {
 
     SV* new_NA(SV* sv_r) {
       Rstats::Vector<int32_t>* v1 = new Rstats::Vector<int32_t>(1, 0);
-      v1->add_na_position(0);
 
       SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
       

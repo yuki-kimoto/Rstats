@@ -98,30 +98,7 @@ namespace Rstats {
       }
 
       // Decide type
-      if (Rstats::pl_hv_exists(sv_type_h, "character")) {
-        Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(total_length);
-        Rstats::Integer pos = 0;
-        for (Rstats::Integer i = 0; i < length; i++) {
-          SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
-          char* type = Rstats::Func::get_type(sv_r, sv_element);
-          if (!strEQ(type, "character")) {
-            sv_element = Rstats::Func::as_character(sv_r, sv_element);
-          }
-          Rstats::Vector<Rstats::Character>* v1 =  Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_element);
-          Rstats::Integer v1_length = v1->get_length();
-          for (Rstats::Integer k = 0; k < v1_length; k++) {
-            if (v1->exists_na_position(k)) {
-              v_out->add_na_position(pos);
-            }
-            else {
-              v_out->set_value(pos, v1->get_value(k));
-            }
-            pos++;
-          }
-        }
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
+      if (Rstats::pl_hv_exists(sv_type_h, "double")) {
         Rstats::Vector<Rstats::Double>* v_out = new Rstats::Vector<Rstats::Double>(total_length);
         Rstats::Integer pos = 0;
         for (Rstats::Integer i = 0; i < length; i++) {
@@ -203,55 +180,6 @@ namespace Rstats {
 
     SV* get_length_sv (SV* sv_r, SV* sv_x1) {
       return Rstats::pl_new_sv_iv(Rstats::Func::get_length(sv_r, sv_x1));
-    }
-    
-    SV* as_character(SV* sv_r, SV* sv_x1) {
-
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-
-      SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v_out = Rstats::VectorFunc::as_character<Rstats::Character, Rstats::Character>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
-        Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          Rstats::Double value = v1->get_value(i);
-          SV* sv_str = Rstats::pl_new_sv_pv("");
-          if (std::isinf(value) && value > 0) {
-            sv_catpv(sv_str, "Inf");
-          }
-          else if (std::isinf(value) && value < 0) {
-            sv_catpv(sv_str, "-Inf");
-          }
-          else if (std::isnan(value)) {
-            sv_catpv(sv_str, "NaN");
-          }
-          else {
-            sv_catpv(sv_str, SvPV_nolen(Rstats::pl_new_sv_nv(value)));
-          }
-          v_out->set_value(i, sv_str);
-        }
-        v_out->merge_na_positions(v1->get_na_positions());
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else if (strEQ(type, "integer")) {
-        Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v_out = Rstats::VectorFunc::as_character<Rstats::Integer, Rstats::Character>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else {
-        croak("Error in as->character() : default method not implemented for type '%s'", type);
-      }
-
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
-      
-      return sv_x_out;
     }
     
     SV* as_numeric(SV* sv_r, SV* sv_x1) {
@@ -2516,15 +2444,6 @@ namespace Rstats {
       return sv_x_is;
     }
 
-    SV* is_character(SV* sv_r, SV* sv_x1) {
-      
-      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "character");
-        
-      SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_x_is;
-    }
-
     SV* new_data_frame(SV* sv_r) {
       SV* sv_data_frame = Rstats::pl_new_hvrv();
       Rstats::pl_sv_bless(sv_data_frame, "Rstats::Object");
@@ -2765,10 +2684,7 @@ namespace Rstats {
     SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {
       
       char* type = SvPV_nolen(sv_type);
-      if (strEQ(type, "character")) {
-        return Rstats::Func::as_character(sv_r, sv_x1);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         return Rstats::Func::as_double(sv_r, sv_x1);
       }
       else if (strEQ(type, "numeric")) {

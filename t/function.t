@@ -195,16 +195,16 @@ my $r = Rstats->new;
 
 # which
 {
-  my $x1 = $r->c('a', 'b', 'a');
-  my $x2 = $r->which($x1, sub { $_ eq 'a' });
+  my $x1 = $r->c(5, 7, 5);
+  my $x2 = $r->which($x1, sub { $_ eq 5 });
   is_deeply($x2->values, [1, 3]);
 }
 
 # elseif
 {
   my $x1 = $r->c(1, 0, 1);
-  my $x2 = $r->ifelse($x1, 'a', 'b');
-  is_deeply($x2->values, ['a', 'b', 'a']);
+  my $x2 = $r->ifelse($x1, 5, 7);
+  is_deeply($x2->values, [5, 7, 5]);
 }
 
 # head
@@ -713,25 +713,6 @@ my $r = Rstats->new;
   }
 }
 
-# grep
-{
-  # grep - case not ignore
-  {
-    my $x1 = $r->c("abc");
-    my $x2 = $r->c("abc", "ABC");
-    my $x3 = $r->grep($x1, $x2);
-    is_deeply($x3->values, [1]);
-  }
-
-  # grep - case ignore
-  {
-    my $x1 = $r->c("abc");
-    my $x2 = $r->c("abc", "ABC");
-    my $x3 = $r->grep($x1, $x2, {'ignore.case' => $r->TRUE});
-    is_deeply($x3->values, [1, 2]);
-  }
-}
-
 # pi
 {
   my $x1 = $r->pi;
@@ -957,20 +938,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(1, 5, 10);
     my $x2 = $r->diff($x1);
     is_deeply($x2->values, [4, 5]);
-  }
-}
-
-# paste
-{
-  # paste($str, $vector);
-  {
-    my $x1 = $r->paste('x', $r->C('1:3'));
-    is_deeply($x1->values, ['x 1', 'x 2', 'x 3']);
-  }
-  # paste($str, $vector, {sep => ''});
-  {
-    my $x1 = $r->paste('x', $r->C('1:3'), {sep => ''});
-    is_deeply($x1->values, ['x1', 'x2', 'x3']);
   }
 }
 

@@ -1209,17 +1209,6 @@ SV* DESTROY(...)
   delete v;
 }
 
-MODULE = Rstats::Vector::Complex PACKAGE = Rstats::Vector::Complex
-
-SV* DESTROY(...)
-  PPCODE:
-{
-  SV* sv_v = ST(0);
-  Rstats::Vector<Rstats::Complex>* v
-    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Complex>*>(sv_v, "Rstats::Vector::Complex");
-  delete v;
-}
-
 MODULE = Rstats::Vector::Double PACKAGE = Rstats::Vector::Double
 
 SV* DESTROY(...)

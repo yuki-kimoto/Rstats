@@ -187,7 +187,7 @@ my $r = Rstats->new;
 {
   my $x = $r->array($r->C('1:24'), $r->c(4, 3, 2));
   is_deeply($r->as->vector($x)->values, [1 .. 24]);
-  is_deeply($r->dim($r->as->vector($x))->values, []);
+  ok(!$r->dim($r->as->vector($x)));
 }
 
 # as->matrix

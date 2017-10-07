@@ -2238,7 +2238,7 @@ namespace Rstats {
         sv_x_dim = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
       }
       else {
-        sv_x_dim = Rstats::Func::new_integer_empty(sv_r);
+        sv_x_dim = &PL_sv_undef;
       }
       
       return sv_x_dim;

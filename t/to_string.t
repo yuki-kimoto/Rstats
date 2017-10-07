@@ -76,7 +76,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:4'));
     my $x2 = $r->as->vector($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -91,7 +91,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:4'));
     my $x2 = $r->as->matrix($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -125,7 +125,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = $r->as->matrix($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -144,7 +144,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = $r->as->vector($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -159,7 +159,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
     my $x2 = $r->as->matrix($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -203,7 +203,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     my $x2 = $r->as->vector($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -218,7 +218,7 @@ EOS
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     my $x2 = $r->as->matrix($x1);
-    my $x2_str = "$x2";
+    my $x2_str = $x2->to_string;
     $x2_str =~ s/[ \t]+/ /;
     my $expected = <<'EOS';
      [,1]

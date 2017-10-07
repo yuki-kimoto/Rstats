@@ -99,12 +99,6 @@ use overload
     
     return Rstats::Func::negate($r, $x1, @_);
   },
-  '""' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-    
-    return Rstats::Func::to_string($r, $x1, @_);
-  },
   fallback => 1;
 
 use Rstats::Func;

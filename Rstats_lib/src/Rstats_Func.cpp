@@ -2116,10 +2116,10 @@ namespace Rstats {
      
       // Dimention
       SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_integer_empty(sv_r);
+        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : &PL_sv_undef;
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       
-      if (!Rstats::Func::get_length(sv_r, sv_x_dim)) {
+      if (!SvOK(sv_x_dim)) {
         Rstats::Vector<Rstats::Integer>* v_dim = new Rstats::Vector<Rstats::Integer>(1, x1_length);
         sv_x_dim = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_dim);
       }

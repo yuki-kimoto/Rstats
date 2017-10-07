@@ -1896,7 +1896,7 @@ sub bool {
       $is = $value;
     }
   }
-  elsif ($type eq 'integer' || $type eq 'logical') {
+  elsif ($type eq 'integer') {
     $is = $value;
   }
   else {

@@ -1880,10 +1880,7 @@ sub str {
   
   my @str;
   
-  if (Rstats::Func::is_null($r, $x1)) {
-    push @str, "NULL";
-  }
-  elsif (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
+  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
     # Short type
     my $type = $x1->get_type;
     my $short_type;

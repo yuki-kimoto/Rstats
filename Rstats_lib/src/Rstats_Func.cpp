@@ -2297,9 +2297,6 @@ namespace Rstats {
           for (int32_t i = 0; i < length; i++) {
             Rstats::Vector<double>* v_out
               = new Rstats::Vector<double>(1, v1->get_value(i));
-            if (v1->exists_na_position(i)) {
-              v_out->add_na_position(0);
-            }
             SV* sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
             Rstats::pl_av_push(sv_elements, sv_x_out);
           }

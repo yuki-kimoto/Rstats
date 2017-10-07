@@ -890,7 +890,7 @@ sub max {
     if (Rstats::Func::is_nan($r, $element)) {
       $max = $element;
     }
-    if (!Rstats::Func::is_nan($r, $max) && Rstats::Func::value($r, $element > $max)) {
+    if (!Rstats::Func::is_nan($r, $max) && Rstats::Func::value($r, $r->more_than($element, $max))) {
       $max = $element;
     }
   }
@@ -1074,8 +1074,8 @@ sub range {
   
   my $x1 = shift;
   
-  my $min = min($r, $x1);
-  my $max = max($r, $x1);
+  my $min = $r->min($x1);
+  my $max = $r->max($x1);
   
   return Rstats::Func::c($r, $min, $max);
 }

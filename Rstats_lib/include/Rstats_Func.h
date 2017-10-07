@@ -96,9 +96,6 @@ namespace Rstats {
     SV* sum(SV*, SV*);
     SV* negate(SV*, SV*);
     
-    SV* upgrade_type_avrv(SV*, SV*);
-    void upgrade_type(SV*, int32_t, ...);
-
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
     char* get_object_type(SV*, SV*);

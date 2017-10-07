@@ -302,15 +302,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [0, 2, 3, 3]);
   }
 
-  # remainder - auto upgrade type
-  {
-    my $x1 = $r->c(5);
-    my $x2 = $r->as->integer($r->c(3));
-    my $x3 = $x1 % $x2;
-    ok($r->is->double($x3));
-    is_deeply($x3->values, [2]);
-  }
-  
   # remainder - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -402,27 +393,6 @@ my $r = Rstats->new;
     else {
       fail;
     }
-  }
-}
-
-# numeric operator auto upgrade
-{
-  # numeric operator auto upgrade - integer
-  {
-    my $x1 = $r->as->integer($r->c(3, 5));
-    my $x2 = $r->c($r->TRUE, $r->FALSE);
-    my $x3 = $x1 + $x2;
-    ok($r->is->integer($x3));
-    is_deeply($x3->values, [4, 5])
-  }
-    
-  # numeric operator auto upgrade - numeric
-  {
-    my $x1 = $r->array($r->c(1.1, 1.2));
-    my $x2 = $r->as->integer($r->array($r->c(1, 2)));
-    my $x3 = $x1 + $x2;
-    ok($r->is->numeric($x3));
-    is_deeply($x3->values, [2.1, 3.2])
   }
 }
 

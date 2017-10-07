@@ -1024,18 +1024,6 @@ SV* get_type(...)
   XSRETURN(1);
 }
 
-SV* upgrade_type(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_xs = ST(1);
-  
-  SV* sv_new_xs = Rstats::Func::upgrade_type_avrv(sv_r, sv_xs);
-
-  XPUSHs(sv_new_xs);
-  XSRETURN(1);
-}
-
 MODULE = Rstats::Vector::Double PACKAGE = Rstats::Vector::Double
 
 SV* DESTROY(...)

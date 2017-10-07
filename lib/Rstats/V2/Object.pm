@@ -8,7 +8,6 @@ has 'r';
 has 'type';
 has 'dim';
 has 'vector';
-has 'object_type';
 
 sub get_type { shift->type }
 

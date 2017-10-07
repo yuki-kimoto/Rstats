@@ -2059,15 +2059,6 @@ namespace Rstats {
       }
     }
     
-    char* get_object_type(SV* sv_r, SV* sv_x1) {
-      if (sv_isobject(sv_x1) && sv_derived_from(sv_x1, "Rstats::Object")) {
-        return SvPV_nolen(Rstats::pl_hv_fetch(sv_x1, "object_type"));
-      }
-      else {
-        return "";
-      }
-    }
-    
     SV* as_vector(SV* sv_r, SV* sv_x1) {
       
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
@@ -2276,8 +2267,7 @@ namespace Rstats {
 
     SV* is_vector (SV* sv_r, SV* sv_x1) {
       
-      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
-        && !Rstats::pl_hv_exists(sv_x1, "dim");
+      bool is = !Rstats::pl_hv_exists(sv_x1, "dim");
       
       SV* sv_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
             
@@ -2286,8 +2276,7 @@ namespace Rstats {
 
     SV* is_array(SV* sv_r, SV* sv_x1) {
 
-      bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
-        && Rstats::pl_hv_exists(sv_x1, "dim");
+      bool is = Rstats::pl_hv_exists(sv_x1, "dim");
       
       SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
       
@@ -2296,8 +2285,7 @@ namespace Rstats {
 
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
-      Rstats::Integer is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")
-        && Rstats::Func::get_length(sv_r, dim(sv_r, sv_x1)) == 2;
+      Rstats::Integer is = Rstats::Func::get_length(sv_r, dim(sv_r, sv_x1)) == 2;
       
       SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
       
@@ -2345,7 +2333,6 @@ namespace Rstats {
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("character"));
       
       return sv_x1;
@@ -2357,7 +2344,6 @@ namespace Rstats {
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("double"));
       
       return sv_x1;
@@ -2369,7 +2355,6 @@ namespace Rstats {
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("array"));
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("integer"));
       
       return sv_x1;
@@ -2581,11 +2566,6 @@ namespace Rstats {
       // type
       if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "type")) && Rstats::pl_hv_exists(sv_x1, "type")) {
         Rstats::pl_hv_store(sv_x2, "type", Rstats::pl_hv_fetch(sv_x1, "type"));
-      }
-
-      // object_type
-      if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "object_type")) && Rstats::pl_hv_exists(sv_x1, "object_type")) {
-        Rstats::pl_hv_store(sv_x2, "object_type", Rstats::pl_hv_fetch(sv_x1, "object_type"));
       }
 
       // dim

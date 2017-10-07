@@ -339,15 +339,15 @@ my $r = Rstats->new;
   # negate - double,NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = -$x1;
+    my $x2 = $r->negate($x1);
     ok($r->is->double($x2));
     ok($r->is->nan($x2)->value);
   }
   
   # negate - double,-Inf
   {
-    my $x1 = -$r->Inf;
-    my $x2 = -$x1;
+    my $x1 = $r->negate($r->Inf);
+    my $x2 = $r->negate($x1);
     ok($r->is->double($x2));
     ok($x2->value, 'Inf');
   }
@@ -355,7 +355,7 @@ my $r = Rstats->new;
   # negate - double,Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = -$x1;
+    my $x2 = $r->negate($x1);
     ok($r->is->double($x2));
     is($x2->value, '-Inf');
   }

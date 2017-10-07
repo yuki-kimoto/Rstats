@@ -70,7 +70,7 @@ my $r = Rstats->new;
   
   # is->infinite - double,-Inf
   {
-    my $x1 = -$r->Inf;
+    my $x1 = $r->negate($r->Inf);
     my $x2 = $r->is->infinite($x1);
     is_deeply($x2->values, [1]);
   }
@@ -135,7 +135,7 @@ my $r = Rstats->new;
   
   # is->finite - -Inf, false
   {
-    my $x1 = -$r->Inf;
+    my $x1 = $r->negate($r->Inf);
     ok(!$r->is->finite($x1)->value);
   }
   

@@ -488,7 +488,7 @@ my $r = Rstats->new;
   
   # expm1 - -Inf
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->expm1($x1);
     is($x2->value, -1);
   }
@@ -618,7 +618,7 @@ my $r = Rstats->new;
   
   # exp - -Inf
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->exp($x1);
     is($x2->value, 0);
   }
@@ -703,7 +703,7 @@ my $r = Rstats->new;
   
   # log - Inf()
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->log($x1);
     is($x2->value, 'NaN');
   }

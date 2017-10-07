@@ -39,38 +39,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [undef]);
   }
   
-  # as->integer - character, only real number, no sign
-  {
-    my $x1 = $r->c("1.23");
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-
-  # as->integer - character, only real number, plus
-  {
-    my $x1 = $r->c("+1");
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->integer - character, only real number, minus
-  {
-    my $x1 = $r->c("-1.23");
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], -1);
-  }
-
-  # as->integer - character, pre and trailing space
-  {
-    my $x1 = $r->c("  1  ");
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-
   # as->integer - error
   {
     my $x1 = $r->c("a");
@@ -137,38 +105,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, ['NaN']);
   }
 
-  # as->double - character, only real number, no sign
-  {
-    my $x1 = $r->array("1.23");
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], 1.23);
-  }
-
-  # as->double - character, only real number, plus
-  {
-    my $x1 = $r->array("+1.23");
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], 1.23);
-  }
-  
-  # as->double - character, only real number, minus
-  {
-    my $x1 = $r->array("-1.23");
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], -1.23);
-  }
-
-  # as->double - character, pre and trailing space
-  {
-    my $x1 = $r->array("  1  ");
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], 1);
-  }
-
   # as->double - double
   {
     my $x1 = $r->array(1.1);
@@ -205,14 +141,6 @@ my $r = Rstats->new;
     is($r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
-  
-  # as->numeric - from character
-  {
-    my $x1 = $r->as->integer($r->c(0, 1, 2));
-    my $x2 = $r->as->numeric($x1);
-    is($r->mode($x2)->value, 'numeric');
-    is_deeply($x2->values, [0, 1, 2]);
-  }
 }
 
 # is_*
@@ -247,61 +175,6 @@ my $r = Rstats->new;
   }
 }
 
-# as->character
-{
-  # as->double - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is_deeply($x2->values, []);
-  }
-  
-  # as->character - $r->Inf
-  {
-    my $x1 = $r->Inf;
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is_deeply($x2->values, ["Inf"]);
-  }
-
-  # as->character - NaN
-  {
-    my $x1 = $r->NaN;
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is_deeply($x2->values, ["NaN"]);
-  }
-  
-  # as->character - character
-  {
-    my $x1 = $r->array($r->c("a"));
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is($x2->values->[0], "a");
-  }
-  
-  # as->character - numeric
-  {
-    my $x1 = $r->array($r->c(1.1, 0));
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is($x2->values->[0], 1.1);
-    is($x2->values->[1], "0");
-  }
-}
-
-# as->numeric
-{
-  # as->numeric - character, pre and trailing space
-  {
-    my $x1 = $r->array("  1  ");
-    my $x2 = $r->as->numeric($x1);
-    ok($r->is->numeric($x2));
-    is($x2->values->[0], 1);
-  }
-}
-
 # array decide type
 {
   # array decide type - numerci
@@ -311,20 +184,6 @@ my $r = Rstats->new;
     ok($r->is->numeric($x1));
   }
   
-  # array decide type - character
-  {
-    my $x1 = $r->array($r->c("c1", "c2"));
-    is_deeply($x1->values, ["c1", "c2"]);
-    ok($r->is->character($x1));
-  }
-
-  # array decide type - character, look like number
-  {
-    my $x1 = $r->array($r->c("1", "2"));
-    is_deeply($x1->values, ["1", "2"]);
-    ok($r->is->character($x1));
-  }
-
   # array decide type - $r->Inf
   {
     my $x1 = $r->Inf;

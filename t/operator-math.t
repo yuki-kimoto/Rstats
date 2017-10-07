@@ -20,15 +20,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [25, 25]);
   }
   
-  # pow - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 ** $x2};
-    like($@, qr#\QError in ** : non-numeric argument#);
-  }
-
   # pow - double
   {
     my $x1 = $r->c(5);
@@ -90,15 +81,6 @@ my $r = Rstats->new;
 
 # add
 {
-  # add - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 + $x2};
-    like($@, qr/\QError in + : non-numeric argument/);
-  }
-  
   # add - double
   {
     my $x1 = $r->c(1);
@@ -168,15 +150,6 @@ my $r = Rstats->new;
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [-1, -1]);
-  }
-  
-  # subtract - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 - $x2};
-    like($@, qr/\QError in - : non-numeric argument/);
   }
   
   # subtract - double
@@ -250,15 +223,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [6, 6]);
   }
 
-  # multiply - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 * $x2};
-    like($@, qr/\QError in * : non-numeric argument/);
-  }
-  
   # multiply - double
   {
     my $x1 = $r->c(3);
@@ -330,15 +294,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [5/2, 5/2]);
   }
   
-  # divide - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 / $x2};
-    like($@, qr#\QError in / : non-numeric argument#);
-  }
-
   # divide - double
   {
     my $x1 = $r->c(5);
@@ -408,15 +363,6 @@ my $r = Rstats->new;
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [1, 1]);
-  }
-
-  # remainder - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3;
-    eval { $x3 = $x1 % $x2};
-    like($@, qr#\QError in % : non-numeric argument#);
   }
 
   # remainder - double
@@ -595,54 +541,6 @@ my $r = Rstats->new;
     my $x3 = $x1 + $x2;
     ok($r->is->numeric($x3));
     is_deeply($x3->values, [2.1, 3.2])
-  }
-
-  # numeric operator auto upgrade - character, +
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 + $x2 };
-    like($@, qr/non-numeric argument/);
-  }
-
-  # numeric operator auto upgrade - character, -
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 - $x2 };
-    like($@, qr/non-numeric argument/);
-  }
-
-  # numeric operator auto upgrade - character, *
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 * $x2 };
-    like($@, qr/non-numeric argument/);
-  }
-
-  # numeric operator auto upgrade - character, /
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 / $x2 };
-    like($@, qr/non-numeric argument/);
-  }
-
-  # numeric operator auto upgrade - character, ^
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 ** $x2 };
-    like($@, qr/non-numeric argument/);
-  }
-
-  # numeric operator auto upgrade - character, %
-  {
-    my $x1 = $r->array($r->c("1", "2", "3"));
-    my $x2 = $r->array($r->c(1, 2, 3));
-    eval { my $ret = $x1 % $x2 };
-    like($@, qr/non-numeric argument/);
   }
 }
 

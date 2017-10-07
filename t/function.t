@@ -57,13 +57,6 @@ my $r = Rstats->new;
     is_deeply($x1->values, [1, 2]);
   }
     
-  # $r->c("a", "b")
-  {
-    my $x1 = $r->c("a", "b");
-    ok($r->is->character($x1));
-    is_deeply($x1->values, ["a", "b"]);
-  }
-
   # $r->c([1, 2, 3])
   {
     my $x1 = $r->c([1, 2, 3]);
@@ -659,12 +652,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(1, 2));
     is($r->str($x1), 'int [1:2] 1 2');
-  }
-
-  # str - vector, character
-  {
-    my $x1 = $r->c("a", "b", "c");
-    is($r->str($x1), 'chr [1:3] "a" "b" "c"');
   }
 
   # str - vector, one element
@@ -1493,23 +1480,6 @@ my $r = Rstats->new;
   }
 }
 
-# c_character
-{
-  # c_character - arguments is list
-  {
-    my $x1 = $r->c_character("a", "b", "c");
-    ok($x1->is->character);
-    is_deeply($x1->values, [qw/a b c/]);
-  }
-
-  # c_character - arguments is $r->array reference
-  {
-    my $x1 = $r->c_character(["a", "b", "c"]);
-    ok($x1->is->character);
-    is_deeply($x1->values, [qw/a b c/]);
-  }
-}
-
 # array
 {
   # array - basic
@@ -1565,10 +1535,5 @@ my $r = Rstats->new;
   # create element - double
   {
     my $x1 = $r->c(1, 2, 3);
-  }
-  
-  # create element - character
-  {
-    my $x1 = $r->c("a", "b", "c");
   }
 }

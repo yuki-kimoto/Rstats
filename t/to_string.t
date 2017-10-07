@@ -31,60 +31,6 @@ my $r = Rstats->new;
 
 # to_string
 {
-  # to_string - character, 1 dimention
-  {
-    my $x1 = $r->array($r->c("a", "b"));
-    my $x1_str = "$x1";
-    $x1_str =~ s/[ \t]+/ /;
-    my $expected = qq/[1] "a" "b"\n/;
-    is($x1_str, $expected);
-  }
-
-  # to_string - character, 2 dimention
-  {
-    my $x1 = $r->array($r->C('1:4'), $r->c(4, 1));
-    my $x2 = $r->as->character($x1);
-    my $x2_str = "$x2";
-    $x2_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-     [,1]
-[1,] "1"
-[2,] "2"
-[3,] "3"
-[4,] "4"
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($x2_str, $expected);
-  }
-
-  # to_string - character,3 dimention
-  {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    $x1 = $r->as->character($x1);
-    my $x1_str = "$x1";
-    $x1_str =~ s/[ \t]+/ /;
-
-  my $expected = <<'EOS';
-,,1
-     [,1] [,2] [,3]
-[1,] "1" "5" "9"
-[2,] "2" "6" "10"
-[3,] "3" "7" "11"
-[4,] "4" "8" "12"
-,,2
-     [,1] [,2] [,3]
-[1,] "13" "17" "21"
-[2,] "14" "18" "22"
-[3,] "15" "19" "23"
-[4,] "16" "20" "24"
-EOS
-    $expected =~ s/[ \t]+/ /;
-    
-    is($x1_str, $expected);
-  }
-
   # to_string - one element
   {
     my $x1 = $r->array(0);

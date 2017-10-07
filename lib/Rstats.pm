@@ -456,7 +456,7 @@ Alias of FALSE
   $r->matrix($r->C("1:12"), 4, 3)
   
   # matrix(1:12, nrow=4, ncol=3)
-  $r->matrix($r->C("1:12"), {nrow => 4, ncol => 3});
+  $r->matrix($r->C("1:12"), {nrow => $r->c(4), ncol => $r->c(3)});
   
   # matrix(1:12, 4, 3, byrow=TRUE)
   $r->matrix($r->C("1:12"), 4, 3, {byrow => $r->TRUE});

@@ -888,8 +888,3 @@ Alias of FALSE
 
   # str(x1)
   $r->str($x1)
-
-=head2 typeof
-
-  # typeof(x1)
-  $r->typeof($x1);

@@ -2250,15 +2250,6 @@ namespace Rstats {
       return sv_values;
     }
 
-    SV* Typeof(SV* sv_r, SV* sv_x1) {
-      
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(1, Rstats::pl_new_sv_pv(type));
-      SV* sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      
-      return sv_x_out;
-    }
-    
     SV* type(SV* sv_r, SV* sv_x1) {
       
       return Rstats::pl_new_sv_pv(Rstats::Func::get_type(sv_r, sv_x1));

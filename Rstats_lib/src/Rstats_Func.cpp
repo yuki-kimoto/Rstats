@@ -2402,9 +2402,6 @@ namespace Rstats {
             }
           }
         }
-        for (int32_t i = 0; i < na_positions.size(); i++) {
-          v_out->add_na_position(na_positions[i]);
-        }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -2425,9 +2422,6 @@ namespace Rstats {
               v_out->set_value(i, v1->get_value(0));
             }
           }
-        }
-        for (int32_t i = 0; i < na_positions.size(); i++) {
-          v_out->add_na_position(na_positions[i]);
         }
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }

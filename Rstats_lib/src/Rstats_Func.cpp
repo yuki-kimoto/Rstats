@@ -2374,7 +2374,6 @@ namespace Rstats {
     {
       int32_t len = Rstats::pl_av_len(sv_elements);
       
-      std::vector<int32_t> na_positions;
       char* type = SvPV_nolen(sv_type);
       SV* sv_x_out;
       if (strEQ(type, "double")) {
@@ -2382,19 +2381,9 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = new Rstats::Vector<double>(len);
         for (int32_t i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
-          if (!SvOK(sv_x1)) {
-            na_positions.push_back(i);
-          }
-          else {
-            Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
+          Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
 
-            if (v1->exists_na_position(0)) {
-              na_positions.push_back(i);
-            }
-            else {
-              v_out->set_value(i, v1->get_value(0));
-            }
-          }
+          v_out->set_value(i, v1->get_value(0));
         }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
@@ -2403,19 +2392,8 @@ namespace Rstats {
         int32_t* values = v_out->get_values();
         for (int32_t i = 0; i < len; i++) {
           SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
-          if (!SvOK(sv_x1)) {
-            na_positions.push_back(i);
-          }
-          else {
-            Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
-
-            if (v1->exists_na_position(0)) {
-              na_positions.push_back(i);
-            }
-            else {
-              v_out->set_value(i, v1->get_value(0));
-            }
-          }
+          Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
+          v_out->set_value(i, v1->get_value(0));
         }
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }

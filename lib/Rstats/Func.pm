@@ -67,7 +67,7 @@ sub matrix {
     $x_matrix = c_integer($r, $x1_values);
   }
   elsif (Rstats::Func::get_type($r, $x1)  eq "logical") {
-    $x_matrix = c_logical($r, $x1_values);
+    $x_matrix = c_integer($r, $x1_values);
   }
   else {
     croak("Invalid type " . Rstats::Func::get_type($r, $x1) . " is passed");
@@ -206,7 +206,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::c_logical($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix($r, Rstats::Func::c_integer($r, @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -241,7 +241,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::c_logical($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = matrix($r, Rstats::Func::c_integer($r, @$x2_values), $rows_count, $cols_count);
     
     return $x2;
   }
@@ -623,7 +623,7 @@ sub is_element {
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::Func::c_logical($r, @$x3_values);
+  return Rstats::Func::c_integer($r, @$x3_values);
 }
 
 sub setequal {

@@ -270,7 +270,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(5), 2);
     my $x2 = $r->array($r->c(2), 2);
-    my $x3 = $x1 % $x2;
+    my $x3 = $r->remainder($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [1, 1]);
@@ -280,7 +280,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(5, 5, 2, 2);
     my $x2 = $r->c(2, 3, 2/5, 0);
-    my $x3 = $x1 % $x2;
+    my $x3 = $r->remainder($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
   }
@@ -289,7 +289,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
-    my $x3 = $x1 % $x2;
+    my $x3 = $r->remainder($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [1]);
   }
@@ -298,21 +298,21 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(24, 12, 24, 12);
     my $x2 = $r->c(3, 5, 7, 9);
-    my $x3 = $x1 % $x2;
+    my $x3 = $r->remainder($x1, $x2);
     is_deeply($x3->values, [0, 2, 3, 3]);
   }
 
   # remainder - perl number
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $x1 % $r->c(2, 2, 2);
+    my $x2 = $r->remainder($x1, $r->c(2, 2, 2));
     is_deeply($x2->values, [1, 0, 1]);
   }
 
   # remainder - perl number,reverse
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(5, 5, 5) % $x1;
+    my $x2 = $r->remainder($r->c(5, 5, 5), $x1);
     is_deeply($x2->values, [0, 1, 2]);
   }
 }

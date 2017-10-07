@@ -191,6 +191,7 @@ my @func_names = qw/
   get_length
   bool
   inner_product
+  remainder
 /;
 
 sub new {

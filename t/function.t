@@ -43,13 +43,6 @@ my $r = Rstats->new;
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # $r->c($r->TRUE, $r->FALSE);
-  {
-    my $x1 = $r->c($r->TRUE, $r->FALSE);
-    ok($r->is->logical($x1));
-    is_deeply($x1->values, [1, 0]);
-  }
-
   # $r->c($r->TRUE, $r->as->integer(2));
   {
     my $x1 = $r->c($r->TRUE, $r->as->integer(2));
@@ -410,14 +403,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [$r->pi->value]);
   }
 
-  # Arg - logical
-  {
-    my $x1 = $r->c($r->TRUE);
-    my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [0]);
-  }
-
   # Arg - double,NaN
   {
     my $x1 = $r->c($r->NaN);
@@ -602,14 +587,6 @@ my $r = Rstats->new;
     ok($r->is->double($x2));
     is_deeply($x2->values, [24]);
   }
-
-  # prod - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->TRUE, $r->TRUE);
-    my $x2 = $r->prod($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [1]);
-  }
 }
 
 # sum
@@ -636,14 +613,6 @@ my $r = Rstats->new;
     my $x2 = $r->sum($x1);
     ok($r->is->integer($x2));
     is_deeply($x2->values, [6]);
-  }
-  
-  # sum - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->TRUE, $r->FALSE);
-    my $x2 = $r->sum($x1);
-    ok($r->is->integer($x2));
-    is_deeply($x2->values, [2]);
   }
 }
 
@@ -684,12 +653,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->C('1:10');
     is($r->str($x1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
-  }
-
-  # str - vector, logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->FALSE);
-    is($r->str($x1), 'logi [1:2] TRUE FALSE');
   }
 
   # str - vector, integer
@@ -771,14 +734,6 @@ my $r = Rstats->new;
     ok($r->is->double($x2));
   }
 
-  # log10 - logical
-  {
-    my $x1 = $r->array($r->c_logical(10));
-    my $x2 = $r->log10($x1);
-    is($x2->value, 1);
-    is_deeply($r->dim($x2)->values, [1]);
-    ok($r->is->double($x2));
-  }
 }
 
 # log2
@@ -1077,14 +1032,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [2, 6, 24]);
   }
 
-  # cumprod - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->TRUE, $r->FALSE);
-    my $x2 = $r->cumprod($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [1, 1, 0]);
-  }
-  
   # cumprod - double
   {
     my $x1 = $r->c(2, 3, 4);
@@ -1102,14 +1049,6 @@ my $r = Rstats->new;
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2));
     is_deeply($x2->values, []);
-  }
-
-  # cumsum - logical
-  {
-    my $x1 = $r->c_logical(1, 0, 1);
-    my $x2 = $r->cumsum($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [1, 1, 2]);
   }
 
   # cumsum - integer

@@ -94,15 +94,6 @@ my $r = Rstats->new;
     ok($r->is->integer($x2));
     is($x2->values->[0], 1);
   }
-  
-  # as->integer - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->FALSE);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
-  }
 }
 
 # as->double
@@ -193,15 +184,6 @@ my $r = Rstats->new;
     ok($r->is->double($x2));
     is($x2->values->[0], 1);
   }
-  
-  # as->double - logical
-  {
-    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
-  }
 }
 
 # as->numeric
@@ -224,109 +206,12 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0.1, 1.1, 2.2]);
   }
   
-  # as->numeric - from logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->FALSE);
-    $r->mode($x1 => 'logical');
-    my $x2 = $r->as->numeric($x1);
-    is($r->mode($x2)->value, 'numeric');
-    is_deeply($x2->values, [1, 0]);
-  }
-
   # as->numeric - from character
   {
     my $x1 = $r->as->integer($r->c(0, 1, 2));
     my $x2 = $r->as->numeric($x1);
     is($r->mode($x2)->value, 'numeric');
     is_deeply($x2->values, [0, 1, 2]);
-  }
-}
-
-# as->logical
-{ 
-  # as->logical - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, []);
-  }
-  
-  # as->logical - dim
-  {
-    my $x1 = $r->array($r->c(1.1, 0));
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->dim->values, [2]);
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
-  }
-  
-  # as->logical - $r->Inf
-  {
-    my $x1 = $r->Inf;
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [1]);
-  }
-
-  # as->logical - doubke,NaN
-  {
-    my $x1 = $r->NaN;
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [undef]);
-  }
-  
-  # as->logical - character, double
-  {
-    my $x1 = $r->c("1.23");
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->logical - character, pre and trailing space
-  {
-    my $x1 = $r->c("  1  ");
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->logical - character
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->logical - double
-  {
-    my $x1 = $r->c(1.1, 0);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
-  }
-
-  # as->logical - integer
-  {
-    my $x1 = $r->c(2, 0);
-    my $x2 = $r->as->logical($r->as->integer($x1));
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
-  }
-    
-  # as->logical - logical
-  {
-    my $x1 = $r->c($r->TRUE, $r->FALSE);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-    is($x2->values->[1], 0);
   }
 }
 
@@ -404,15 +289,6 @@ my $r = Rstats->new;
     is($x2->values->[0], 1.1);
     is($x2->values->[1], "0");
   }
-  
-  # as->character - logical
-  {
-    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is($x2->values->[0], "TRUE");
-    is($x2->values->[1], "FALSE");
-  }
 }
 
 # as->numeric
@@ -435,13 +311,6 @@ my $r = Rstats->new;
     ok($r->is->numeric($x1));
   }
   
-  # array decide type - logical
-  {
-    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    is_deeply($x1->values, [1, 0]);
-    ok($r->is->logical($x1));
-  }
-
   # array decide type - character
   {
     my $x1 = $r->array($r->c("c1", "c2"));

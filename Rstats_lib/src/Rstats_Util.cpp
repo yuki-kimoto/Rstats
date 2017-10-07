@@ -128,51 +128,6 @@ namespace Rstats {
       return sv_pos;
     }
 
-    SV* looks_like_complex (SV* sv_value) {
-      
-      SV* sv_ret;
-      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
-        sv_ret = &PL_sv_undef;
-      }
-      else {
-        SV* sv_re;
-        SV* sv_im;
-        if (Rstats::pl_pregexec(sv_value, COMPLEX_IMAGE_ONLY_RE)) {
-          sv_re = Rstats::pl_new_sv_nv(0);
-          SV* sv_im_str = Rstats::pl_new_sv_pv("");
-          Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_IMAGE_ONLY_RE, 1, sv_im_str);
-          sv_im = Rstats::pl_new_sv_nv(SvNV(sv_im_str));
-          
-          sv_ret = Rstats::pl_new_hvrv();
-          Rstats::pl_hv_store(sv_ret, "re", sv_re);
-          Rstats::pl_hv_store(sv_ret, "im", sv_im);
-        }
-        else if(Rstats::pl_pregexec(sv_value, COMPLEX_RE)) {
-          SV* sv_re_str = Rstats::pl_new_sv_pv("");
-          Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_RE, 1, sv_re_str);
-          sv_re = Rstats::pl_new_sv_nv(SvNV(sv_re_str));
-
-          SV* sv_im_str = Rstats::pl_new_sv_pv("");
-          Perl_reg_numbered_buff_fetch(aTHX_ COMPLEX_RE, 2, sv_im_str);
-          if (SvOK(sv_im_str)) {
-            sv_im = Rstats::pl_new_sv_nv(SvNV(sv_im_str));
-          }
-          else {
-            sv_im = Rstats::pl_new_sv_nv(0);
-          }
-
-          sv_ret = Rstats::pl_new_hvrv();
-          Rstats::pl_hv_store(sv_ret, "re", sv_re);
-          Rstats::pl_hv_store(sv_ret, "im", sv_im);
-        }
-        else {
-          sv_ret = &PL_sv_undef;
-        }
-      }
-      
-      return sv_ret;
-    }
-
     SV* looks_like_logical (SV* sv_value) {
       
       SV* sv_ret;

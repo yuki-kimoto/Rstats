@@ -1894,7 +1894,7 @@ sub bool {
       $is = 1;
     }
     elsif ($value eq 'NaN') {
-      Carp::croak 'argument is not interpretable as logical';
+      Carp::croak 'argument is not interpretable in bool context';
     }
     else {
       $is = $value;
@@ -1965,9 +1965,6 @@ sub get_array {
   }
   elsif ($x1->get_type eq "integer") {
     $x_matrix = c_integer($r, \@x2_values);
-  }
-  elsif ($x1->get_type eq "logical") {
-    $x_matrix = c_logical($r, \@x2_values);
   }
   else {
     croak("Invalid type " . $x1->get_type . " is passed");

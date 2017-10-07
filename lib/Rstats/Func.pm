@@ -1703,12 +1703,7 @@ sub bool {
 sub set {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
-    return Rstats::Func::set_array(@_);
-  }
-  else {
-    croak "Error in set() : Not implemented";
-  }
+  return Rstats::Func::set_array(@_);
 }
 
 
@@ -2063,13 +2058,7 @@ sub runif {
 sub to_string {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'array') {
-    return Rstats::Func::to_string_array(@_);
-  }
-  else {
-    my $class = ref $x1;
-    croak "Error in to_string() : $class not implemented(Rstats::Func::to_string)";
-  }
+  return Rstats::Func::to_string_array(@_);
 }
 
 sub get {
@@ -2120,7 +2109,6 @@ sub set_array {
   my $x1_tmp = Rstats::Func::compose($r, $type, $x1_elements);
   $x1->vector($x1_tmp->vector);
   $x1->{type} = $x1_tmp->{type};
-  $x1->{object_type} = $x1_tmp->{object_type};
   
   return $x1;
 }

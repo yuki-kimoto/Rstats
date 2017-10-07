@@ -57,10 +57,7 @@ sub matrix {
   my $matrix;
   my $x_matrix;
 
-  if (Rstats::Func::get_type($r, $x1) eq "character") {
-    $x_matrix = c_character($r, $x1_values);
-  }
-  elsif (Rstats::Func::get_type($r, $x1)  eq "double") {
+  if (Rstats::Func::get_type($r, $x1)  eq "double") {
     $x_matrix = c_double($r, $x1_values);
   }
   elsif (Rstats::Func::get_type($r, $x1)  eq "integer") {
@@ -157,7 +154,6 @@ sub t {
 }
 
 my $type_level = {
-  character => 6,
   double => 4,
   integer => 3,
   na => 1
@@ -383,70 +379,6 @@ sub outer {
 
 
 
-sub sub {
-  my $r = shift;
-  
-  my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args_array($r, ['pattern', 'replacement', 'x', 'ignore.case'], @_);
-  
-  my $pattern = $x1_pattern->value;
-  my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
-  
-  my $x2_values = [];
-  for my $x (@{$x1_x->values}) {
-    if (!defined $x) {
-      push @$x2_values, undef;
-    }
-    else {
-      if ($ignore_case) {
-        $x =~ s/$pattern/$replacement/i;
-      }
-      else {
-        $x =~ s/$pattern/$replacement/;
-      }
-      push @$x2_values, "$x";
-    }
-  }
-  
-  my $x2 = Rstats::Func::c_character($r, @$x2_values);
-  Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
-  
-  return $x2;
-}
-
-sub gsub {
-  my $r = shift;
-  
-  my ($x1_pattern, $x1_replacement, $x1_x, $x1_ignore_case)
-    = args_array($r, ['pattern', 'replacement', 'x', 'ignore.case'], @_);
-  
-  my $pattern = $x1_pattern->value;
-  my $replacement = $x1_replacement->value;
-  my $ignore_case = defined $x1_ignore_case ? $x1_ignore_case->value : 0;
-  
-  my $x2_values = [];
-  for my $x (@{$x1_x->values}) {
-    if (!defined $x) {
-      push @$x2_values, $x;
-    }
-    else {
-      if ($ignore_case) {
-        $x =~ s/$pattern/$replacement/gi;
-      }
-      else {
-        $x =~ s/$pattern/$replacement/g;
-      }
-      push @$x2_values, $x;
-    }
-  }
-  
-  my $x2 = Rstats::Func::c_character($r, @$x2_values);
-  Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
-  
-  return $x2;
-}
-
 sub grep {
   my $r = shift;
   
@@ -515,72 +447,6 @@ sub col {
   return array($r, c($r, @values), Rstats::Func::c($r, $nrow, $ncol));
 }
 
-sub chartr {
-  my $r = shift;
-  
-  my ($x1_old, $x1_new, $x1_x) = args_array($r, ['old', 'new', 'x'], @_);
-  
-  my $old = $x1_old->value;
-  my $new = $x1_new->value;
-  
-  my $x2_values = [];
-  for my $x (@{$x1_x->values}) {
-    if (!defined $x) {
-      push @$x2_values, $x;
-    }
-    else {
-      $old =~ s#/#\/#;
-      $new =~ s#/#\/#;
-      eval "\$x =~ tr/$old/$new/";
-      Carp::croak $@ if $@;
-      push @$x2_values, "$x";
-    }
-  }
-  
-  my $x2 = Rstats::Func::c_character($r, @$x2_values);
-  Rstats::Func::copy_attrs_to($r, $x1_x, $x2);
-  
-  return $x2;
-}
-
-sub charmatch {
-  my $r = shift;
-  
-  my ($x1_x, $x1_table) = args_array($r, ['x', 'table'], @_);
-  
-  die "Error in charmatch() : Not implemented"
-    unless $x1_x->get_type eq 'character' && $x1_table->get_type eq 'character';
-  
-  my $x2_values = [];
-  for my $x1_x_value (@{$x1_x->values}) {
-    my $x1_x_char = $x1_x_value;
-    my $x1_x_char_q = quotemeta($x1_x_char);
-    my $match_count;
-    my $match_pos;
-    my $x1_table_values = $x1_table->values;
-    for (my $k = 0; $k < Rstats::Func::get_length($r, $x1_table); $k++) {
-      my $x1_table_char = $x1_table_values->[$k];
-      if ($x1_table_char =~ /$x1_x_char_q/) {
-        $match_count++;
-        $match_pos = $k;
-      }
-    }
-    if ($match_count == 0) {
-      push @$x2_values, undef;
-    }
-    elsif ($match_count == 1) {
-      push @$x2_values, $match_pos + 1;
-    }
-    elsif ($match_count > 1) {
-      push @$x2_values, 0;
-    }
-  }
-  
-  return Rstats::Func::c_double($r, @$x2_values);
-}
-
-
-
 sub nrow {
   my $r = shift;
   
@@ -603,13 +469,7 @@ sub is_element {
   for my $x1_value (@$x1_values) {
     my $match;
     for my $x2_value (@$x2_values) {
-      if ($type eq 'character') {
-        if ($x1_value eq $x2_value) {
-          $match = 1;
-          last;
-        }
-      }
-      elsif ($type eq 'double' || $type eq 'integer') {
+      if ($type eq 'double' || $type eq 'integer') {
         if ($x1_value == $x2_value) {
           $match = 1;
           last;
@@ -722,68 +582,6 @@ sub diff {
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
-}
-
-sub nchar {
-  my $r = shift;
-  my $x1 = to_object($r, shift);
-  
-  if ($x1->get_type eq 'character') {
-    my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      my $x2_element = Rstats::Func::c_integer($r, CORE::length Rstats::Func::value($r, $x1_element));
-      push @$x2_elements, $x2_element;
-    }
-    my $x2 = Rstats::Func::c($r, @$x2_elements);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    Carp::croak "Error in nchar() : Not implemented";
-  }
-}
-
-sub tolower {
-  my $r = shift;
-  
-  my $x1 = to_object($r, shift);
-  
-  if ($x1->get_type eq 'character') {
-    my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      my $x2_element = Rstats::Func::c_character($r, lc Rstats::Func::value($r, $x1_element));
-      push @$x2_elements, $x2_element;
-    }
-    my $x2 = Rstats::Func::c($r, @$x2_elements);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    return $x1;
-  }
-}
-
-sub toupper {
-  my $r = shift;
-  
-  my $x1 = to_object($r, shift);
-  
-  if ($x1->get_type eq 'character') {
-    my $x2_elements = [];
-    for my $x1_element (@{Rstats::Func::decompose($r, $x1)}) {
-      my $x2_element = Rstats::Func::c_character($r, uc Rstats::Func::value($r, $x1_element));
-      push @$x2_elements, $x2_element;
-    }
-    my $x2 = Rstats::Func::c($r, @$x2_elements);
-    Rstats::Func::copy_attrs_to($r, $x1, $x2);
-    
-    return $x2;
-  }
-  else {
-    return $x1;
-  }
 }
 
 sub match {
@@ -1953,10 +1751,7 @@ sub get_array {
   
   # array
   my $x_matrix;
-  if ($x1->get_type eq "character") {
-    $x_matrix = c_character($r, \@x2_values);
-  }
-  elsif ($x1->get_type eq "double") {
+  if ($x1->get_type eq "double") {
     $x_matrix = c_double($r, \@x2_values);
   }
   elsif ($x1->get_type eq "integer") {
@@ -1984,8 +1779,6 @@ sub to_string_array {
   my $r = shift;
   
   my $x1 = shift;
-  
-  my $is_character = Rstats::Func::is_character($r, $x1);
 
   my $values = $x1->values;
   my $type = $x1->get_type;
@@ -2076,9 +1869,6 @@ sub _value_to_string {
   if (!defined $value) {
     $string = 'NA';
   }
-  elsif ($type eq 'character') {
-    $string = '"' . $value . '"';
-  }
   else {
     $string = "$value";
   }
@@ -2100,10 +1890,7 @@ sub str {
     # Short type
     my $type = $x1->get_type;
     my $short_type;
-    if ($type eq 'character') {
-      $short_type = 'chr';
-    }
-    elsif ($type eq 'double') {
+    if ($type eq 'double') {
       $short_type = 'num';
     }
     elsif ($type eq 'integer') {
@@ -2148,7 +1935,6 @@ sub str {
     # Vector
     my @element_str;
     my $max_count = $length > 10 ? 10 : $length;
-    my $is_character = is_character($r, $x1);
     my $values = $x1->values;
     for (my $i = 0; $i < $max_count; $i++) {
       push @element_str, Rstats::Func::_value_to_string($r, $x1, $values->[$i], $type);

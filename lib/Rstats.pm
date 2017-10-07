@@ -58,7 +58,6 @@ my @func_names = qw/
   atan2
   c
   c_double
-  c_character
   c_integer
   C
   charmatch
@@ -207,7 +206,6 @@ sub new {
 
   no strict 'refs';
   $self->helper('is.array' => \&Rstats::Func::is_array);
-  $self->helper('is.character' => \&Rstats::Func::is_character);
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
@@ -221,7 +219,6 @@ sub new {
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
   $self->helper('as.array' => \&Rstats::Func::as_array);
-  $self->helper('as.character' => \&Rstats::Func::as_character);
   $self->helper('as.integer' => \&Rstats::Func::as_integer);
   $self->helper('as.double' => \&Rstats::Func::as_double);
   $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
@@ -822,11 +819,6 @@ Alias of FALSE
   # as.array(x1)
   $r->as->array($x1)
 
-=head2 as->character
-
-  # as.character(x1)
-  $r->as->character($x1)
-
 =head2 as->integer
 
   # as.integer(x1)
@@ -851,11 +843,6 @@ Alias of FALSE
 
   # is.array(x1)
   $r->is->array($x1)
-
-=head2 is->character
-
-  # is.character(x1)
-  $r->is->character($x1)
 
 =head2 is->finite
 

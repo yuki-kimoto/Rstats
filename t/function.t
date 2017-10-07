@@ -348,27 +348,6 @@ my $r = Rstats->new;
   is_deeply($x2->values, [1, 2, 3]);
 }
 
-# sub
-{
-  # sub - case not ignore
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3 = $r->c("ad1ad1", "ad2ad2");
-    my $x4 = $r->sub($x1, $x2, $x3);
-    is_deeply($x4->values, ["bd1ad1", "bd2ad2"]);
-  }
-
-  # sub - case ignore
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3 = $r->c("Ad1ad1", "ad2ad2");
-    my $x4 = $r->sub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
-    is_deeply($x4->values, ["bd1ad1", "bd2ad2"]);
-  }
-}
-
 # NaN
 {
   # NaN - type
@@ -786,27 +765,6 @@ my $r = Rstats->new;
   }
 }
 
-# gsub
-{
-  # gsub - case not ignore
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3 = $r->c("ad1ad1", "ad2ad2");
-    my $x4 = $r->gsub($x1, $x2, $x3);
-    is_deeply($x4->values, ["bd1bd1", "bd2bd2"]);
-  }
-
-  # sub - case ignore
-  {
-    my $x1 = $r->c("a");
-    my $x2 = $r->c("b");
-    my $x3 = $r->c("Ad1Ad1", "Ad2Ad2");
-    my $x4 = $r->gsub($x1, $x2, $x3, {'ignore.case' => $r->TRUE});
-    is_deeply($x4->values, ["bd1bd1", "bd2bd2"]);
-  }
-}
-
 # grep
 {
   # grep - case not ignore
@@ -823,48 +781,6 @@ my $r = Rstats->new;
     my $x2 = $r->c("abc", "ABC");
     my $x3 = $r->grep($x1, $x2, {'ignore.case' => $r->TRUE});
     is_deeply($x3->values, [1, 2]);
-  }
-}
-
-# chartr
-{
-  my $x1 = $r->c("a-z");
-  my $x2 = $r->c("A-Z");
-  my $x3 = $r->c("abc", "def");
-  my $x4 = $r->chartr($x1, $x2, $x3);
-  is_deeply($x4->values, ["ABC", "DEF"]);
-}
-
-# charmatch
-{
-  # charmatch - empty string
-  {
-    my $x1 = $r->charmatch("", "");
-    is_deeply($x1->value, 1);
-  }
-  
-  # charmatch - multiple match
-  {
-    my $x1 = $r->charmatch("m",   $r->c("mean", "median", "mode"));
-    is_deeply($x1->value, 0);
-  }
-  
-  # charmatch - multiple match
-  {
-    my $x1 = $r->charmatch("m",   $r->c("mean", "median", "mode"));
-    is_deeply($x1->value, 0);
-  }
-
-  # charmatch - one match
-  {
-    my $x1 = $r->charmatch("med",   $r->c("mean", "median", "mode"));
-    is_deeply($x1->value, 2);
-  }
-    
-  # charmatch - one match, multiple elements
-  {
-    my $x1 = $r->charmatch($r->c("med", "mod"),   $r->c("mean", "median", "mode"));
-    is_deeply($x1->values, [2, 3]);
   }
 }
 
@@ -1124,35 +1040,6 @@ my $r = Rstats->new;
     my $x1 = $r->paste('x', $r->C('1:3'), {sep => ''});
     is_deeply($x1->values, ['x1', 'x2', 'x3']);
   }
-}
-
-# nchar
-{
-  my $x1 = $r->c("AAA", "BB");
-  my $x2 = $r->nchar($x1);
-  is_deeply($x2->values, [3, 2])
-}
-
-# tolower
-{
-  my $x1 = $r->c("AA", "BB");
-  my $x2 = $r->tolower($x1);
-  is_deeply($x2->values, ["aa", "bb"])
-}
-
-# toupper
-{
-  my $x1 = $r->c("aa", "bb");
-  my $x2 = $r->toupper($x1);
-  is_deeply($x2->values, ["AA", "BB"])
-}
-
-# match
-{
-  my $x1 = $r->c("ATG", "GC", "AT", "GCGC");
-  my $x2 = $r->c("CGCA", "GC", "AT", "AT", "ATA");
-  my $x3 = $r->match($x1, $x2);
-  is_deeply($x3->values, [undef, 2, 3, undef])
 }
 
 # range

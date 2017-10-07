@@ -33,7 +33,7 @@ sub parse_index {
 
     my $index = defined $_index ? Rstats::Func::to_object($r, $_index) : Rstats::Func::NULL($r);
     my $index_values = $index->values;
-    if (@$index_values && !Rstats::Func::is_character($r, $index)) {
+    if (@$index_values) {
       my $minus_count = 0;
       for my $index_value (@$index_values) {
         if ($index_value == 0) {
@@ -51,31 +51,6 @@ sub parse_index {
     if (!@{$index->values}) {
       my $index_values_new = [1 .. $x1_dim->[$i]];
       $index = Rstats::Func::c_integer($r, @$index_values_new);
-    }
-    elsif (Rstats::Func::is_character($r, $index)) {
-      if (Rstats::Func::is_vector($r, $x1)) {
-        my $index_new_values = [];
-        for my $name (@{$index->values}) {
-          my $i = 0;
-          my $value;
-          for my $x1_name (@{Rstats::Func::names($r, $x1)->values}) {
-            if ($name eq $x1_name) {
-              $value = $x1->values->[$i];
-              last;
-            }
-            $i++;
-          }
-          croak "Can't find name" unless defined $value;
-          push @$index_new_values, $value;
-        }
-        $indexs[$i] = Rstats::Func::c_integer($r, @$index_new_values);
-      }
-      elsif (Rstats::Func::is_matrix($r, $x1)) {
-        
-      }
-      else {
-        croak "Can't support name except vector and matrix";
-      }
     }
     elsif ($index->{_minus}) {
       my $index_value_new = [];

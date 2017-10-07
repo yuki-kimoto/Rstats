@@ -1108,9 +1108,9 @@ sub rep {
 sub replace {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
-  my $x2 = to_object($r, shift);
-  my $x3 = to_object($r, shift);
+  my $x1 = shift;
+  my $x2 = shift;
+  my $x3 = shift;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);

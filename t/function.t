@@ -760,7 +760,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->C('1:10');
     my $x2 = $r->c(2, 5, 10);
-    my $x4 = $r->replace($x1, $x2, 11);
+    my $x4 = $r->replace($x1, $x2, $r->c(11));
     is_deeply($x4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
   }
   

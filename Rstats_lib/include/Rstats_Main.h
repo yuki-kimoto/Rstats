@@ -89,7 +89,6 @@ namespace Rstats {
   typedef SV* Character;
   typedef NV Double;
   typedef IV Integer;
-  typedef UV Logical;// 0 or 1
   typedef UV NaPosition;
   
   // Error constant value

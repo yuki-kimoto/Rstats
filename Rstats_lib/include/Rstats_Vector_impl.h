@@ -33,17 +33,6 @@ namespace Rstats {
   }
 
   template <class T>
-  Rstats::Logical Vector<T>::exists_na_position(Rstats::Integer position) {
-    if (this->get_na_positions() == NULL) {
-      return 0;
-    }
-    
-    return (*(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
-      & (1 << (position % Rstats::NA_POSITION_BIT_LENGTH)))
-      ? 1 : 0;
-  }
-
-  template <class T>
   void Vector<T>::merge_na_positions(Rstats::NaPosition* na_positions) {
     
     if (na_positions == NULL) {
@@ -59,6 +48,17 @@ namespace Rstats {
         *(this->get_na_positions() + i) |= *(na_positions + i);
       }
     }
+  }
+
+  template <class T>
+  Rstats::Integer Vector<T>::exists_na_position(Rstats::Integer position) {
+    if (this->get_na_positions() == NULL) {
+      return 0;
+    }
+
+    return (*(this->get_na_positions() + (position / Rstats::NA_POSITION_BIT_LENGTH))
+      & (1 << (position % Rstats::NA_POSITION_BIT_LENGTH)))
+      ? 1 : 0;
   }
 
   template <class T>

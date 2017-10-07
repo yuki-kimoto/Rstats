@@ -31,7 +31,7 @@ namespace Rstats {
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
     SV* Typeof(SV*, SV*); // $r->typeof
-    Rstats::Logical to_bool(SV*, SV*);
+    Rstats::Integer to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
     SV* is_character(SV*, SV*);
@@ -139,8 +139,6 @@ namespace Rstats {
     void set_vector<Rstats::Double>(SV*, SV*, Rstats::Vector<Rstats::Double>*);
     template <>
     void set_vector<Rstats::Integer>(SV*, SV*, Rstats::Vector<Rstats::Integer>*);
-    template <>
-    void set_vector<Rstats::Logical>(SV*, SV*, Rstats::Vector<Rstats::Logical>* v1);
     
     template <class T>
     Rstats::Vector<T>* get_vector(SV*, SV*);
@@ -150,8 +148,6 @@ namespace Rstats {
     Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV*, SV*);
     template <>
     Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV*, SV*);
-    template <>
-    Rstats::Vector<Rstats::Logical>* get_vector<Rstats::Logical>(SV*, SV*);
 
     template <class T>
     SV* new_vector(SV*);
@@ -161,8 +157,6 @@ namespace Rstats {
     SV* new_vector<Rstats::Double>(SV*);
     template <>
     SV* new_vector<Rstats::Integer>(SV*);
-    template <>
-    SV* new_vector<Rstats::Logical>(SV*);
     
     template <class T>
     SV* new_vector(SV*, Rstats::Vector<T>* v1);

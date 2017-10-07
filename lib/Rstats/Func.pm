@@ -1843,13 +1843,7 @@ sub _value_to_string {
   
   my ($x1, $value, $type) = @_;
   
-  my $string;
-  if (!defined $value) {
-    $string = 'NA';
-  }
-  else {
-    $string = "$value";
-  }
+  my $string = "$value";
   
   return $string;
 }

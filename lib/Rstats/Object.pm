@@ -51,36 +51,6 @@ use overload
 
     return Rstats::Func::more_than($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
-  '>=' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::more_than_or_equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
-  '==' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
-  '!=' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::not_equal($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
-  '&' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::and($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
-  '|' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::or($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
   bool => sub {
     my $x1 = shift;
     my $r = $x1->r;

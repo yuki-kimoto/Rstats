@@ -278,7 +278,7 @@ sub set_diag {
   my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
   my $size = $x1_dim_values->[0] < $x1_dim_values->[1] ? $x1_dim_values->[0] : $x1_dim_values->[1];
   
-  $x2 = array($r, $x2, $size);
+  $x2 = array($r, $x2, $r->c($size));
   my $x2_values = $x2->values;
   
   for (my $i = 0; $i < $size; $i++) {
@@ -1863,7 +1863,7 @@ sub str {
   
   my @str;
   
-  if ($r->bool(Rstats::Func::is_vector($r, $x1)) || is_array($r, $x1)) {
+  if ($r->bool(Rstats::Func::is_vector($r, $x1)) || $r->bool(Rstats::Func::is_array($r, $x1))) {
     # Short type
     my $type = $x1->get_type;
     my $short_type;

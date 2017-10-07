@@ -12,8 +12,8 @@ my $r = Rstats->new;
 {
   # pow - dim
   {
-    my $x1 = $r->array($r->c(5), 2);
-    my $x2 = $r->array($r->c(2), 2);
+    my $x1 = $r->array($r->c(5), $r->c(2));
+    my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->pow($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
@@ -108,8 +108,8 @@ my $r = Rstats->new;
 {
   # subtract - dim
   {
-    my $x1 = $r->array($r->c(1), 2);
-    my $x2 = $r->array($r->c(2), 2);
+    my $x1 = $r->array($r->c(1), $r->c(2));
+    my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->subtract($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
@@ -161,8 +161,8 @@ my $r = Rstats->new;
 {
   # multiply - double
   {
-    my $x1 = $r->array($r->c(3), 2);
-    my $x2 = $r->array($r->c(2), 2);
+    my $x1 = $r->array($r->c(3), $r->c(2));
+    my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->multiply($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
@@ -214,8 +214,8 @@ my $r = Rstats->new;
 {
   # divide - dim
   {
-    my $x1 = $r->array($r->c(5), 2);
-    my $x2 = $r->array($r->c(2), 2);
+    my $x1 = $r->array($r->c(5), $r->c(2));
+    my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->divide($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
@@ -268,8 +268,8 @@ my $r = Rstats->new;
 {
   # remainder - double
   {
-    my $x1 = $r->array($r->c(5), 2);
-    my $x2 = $r->array($r->c(2), 2);
+    my $x1 = $r->array($r->c(5), $r->c(2));
+    my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->remainder($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
@@ -364,7 +364,7 @@ my $r = Rstats->new;
 # bool
 {
   {
-    my $x1 = $r->array(1);
+    my $x1 = $r->array($r->c(1));
     if ($x1) {
       pass;
     }
@@ -375,7 +375,7 @@ my $r = Rstats->new;
   
   # bool - one argument, false
   {
-    my $x1 = $r->array(0);
+    my $x1 = $r->array($r->c(0));
     if ($r->bool($x1)) {
       fail;
     }
@@ -386,7 +386,7 @@ my $r = Rstats->new;
 
   # bool - two argument, true
   {
-    my $x1 = $r->array(3, 3);
+    my $x1 = $r->array($r->c(3), $r->c(3));
     if ($x1) {
       pass;
     }

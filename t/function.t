@@ -239,7 +239,7 @@ my $r = Rstats->new;
 # array
 {
   {
-    my $x = $r->array(25);
+    my $x = $r->array($r->c(25));
     is_deeply($x->values, [25]);
   }
   {
@@ -550,7 +550,7 @@ my $r = Rstats->new;
 
   # str - $r->array, one element
   {
-    my $x1 = $r->array(1, 1);
+    my $x1 = $r->array($r->c(1), $r->c(1));
     is($r->str($x1), 'num [1(1d)] 1');
   }
   

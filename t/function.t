@@ -251,10 +251,10 @@ my $r = Rstats->new;
 # Array get and set
 {
   my $x = $r->array($r->c(1, 2, 3));
-  is_deeply($x->get(1)->values, [1]);
-  is_deeply($x->get(3)->values, [3]);
+  is_deeply($x->get($r->c(1))->values, [1]);
+  is_deeply($x->get($r->c(3))->values, [3]);
   $x->at($r->c(1))->set($r->c(5));;
-  is_deeply($x->get(1)->values, [5]);
+  is_deeply($x->get($r->c(1))->values, [5]);
 }
 
 # rep function

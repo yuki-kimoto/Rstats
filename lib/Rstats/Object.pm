@@ -33,12 +33,6 @@ use overload
 
     return Rstats::Func::remainder($r, Rstats::Func::_fix_pos($r, $x1, @_));
   },
-  '**' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::pow($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
   '<' => sub {
     my $x1 = shift;
     my $r = $x1->r;

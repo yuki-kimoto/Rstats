@@ -116,59 +116,42 @@ namespace Rstats {
     Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
     Rstats::Double atan2(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer And(Rstats::Character, Rstats::Character);
     Rstats::Integer And(Rstats::Double, Rstats::Double);
     Rstats::Integer And(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer Or(Rstats::Character, Rstats::Character);
     Rstats::Integer Or(Rstats::Double, Rstats::Double);
     Rstats::Integer Or(Rstats::Integer, Rstats::Integer);
     
-    Rstats::Integer equal(Rstats::Character, Rstats::Character);
     Rstats::Integer equal(Rstats::Double, Rstats::Double);
     Rstats::Integer equal(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer not_equal(Rstats::Character, Rstats::Character);
     Rstats::Integer not_equal(Rstats::Double, Rstats::Double);
     Rstats::Integer not_equal(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer more_than(Rstats::Character, Rstats::Character);
     Rstats::Integer more_than(Rstats::Double, Rstats::Double);
     Rstats::Integer more_than(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer less_than(Rstats::Character, Rstats::Character);
     Rstats::Integer less_than(Rstats::Double, Rstats::Double);
     Rstats::Integer less_than(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer more_than_or_equal(Rstats::Character, Rstats::Character);
     Rstats::Integer more_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Integer more_than_or_equal(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer less_than_or_equal(Rstats::Character, Rstats::Character);
     Rstats::Integer less_than_or_equal(Rstats::Double, Rstats::Double);
     Rstats::Integer less_than_or_equal(Rstats::Integer, Rstats::Integer);
 
-    Rstats::Integer is_infinite(Rstats::Character);
     Rstats::Integer is_infinite(Rstats::Double);
     Rstats::Integer is_infinite(Rstats::Integer);
 
-    Rstats::Integer is_finite(Rstats::Character);
     Rstats::Integer is_finite(Rstats::Double);
     Rstats::Integer is_finite(Rstats::Integer);
 
-    Rstats::Integer is_nan(Rstats::Character);
     Rstats::Integer is_nan(Rstats::Double);
     Rstats::Integer is_nan(Rstats::Integer);
 
-    Rstats::Character as_character(Rstats::Character);
-    Rstats::Character as_character(Rstats::Double);
-    Rstats::Character as_character(Rstats::Integer);
-
-    Rstats::Double as_double(Rstats::Character);
     Rstats::Double as_double(Rstats::Double);
     Rstats::Double as_double(Rstats::Integer);
 
-    Rstats::Integer as_integer(Rstats::Character);
     Rstats::Integer as_integer(Rstats::Double);
     Rstats::Integer as_integer(Rstats::Integer);
   }

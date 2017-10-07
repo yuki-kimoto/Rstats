@@ -33,14 +33,6 @@ namespace Rstats {
     
     ~Vector();
   };
-  template <>
-  void Vector<Rstats::Character>::initialize(Rstats::Integer);
-  template<>
-  Vector<Rstats::Character>::Vector(Rstats::Integer);
-  template <>
-  void Vector<Rstats::Character>::set_value(Rstats::Integer, Rstats::Character);
-  template <>
-  Vector<Rstats::Character>::~Vector();
 }
 #include "Rstats_Vector_impl.h"
 

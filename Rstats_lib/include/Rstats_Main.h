@@ -86,7 +86,6 @@ namespace Rstats {
   }
 
   // Rstats type
-  typedef SV* Character;
   typedef NV Double;
   typedef IV Integer;
   typedef UV NaPosition;

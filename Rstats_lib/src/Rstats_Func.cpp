@@ -74,7 +74,7 @@ namespace Rstats {
     SV* c(SV* sv_r, SV* sv_elements) {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_elements);
-      
+
       SV* sv_new_elements = Rstats::pl_new_avrv();
       
       // Convert to Rstats::Object, check type and total length, and remove NULL
@@ -169,6 +169,14 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
       }
 
+      // Dimention
+      /*
+      Rstats::Vector<Rstats::Integer>* v_dim = new Rstats::Vector<Rstats::Integer>(1, length);
+      SV* sv_x_dim = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_dim);
+      Rstats::Func::dim(sv_r, sv_x_out, sv_x_dim);
+      */
+      
+      
       return sv_x_out;
     }
 

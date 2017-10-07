@@ -193,6 +193,9 @@ my @func_names = qw/
   inner_product
   remainder
   divide
+  multiply
+  subtract
+  add
 /;
 
 sub new {

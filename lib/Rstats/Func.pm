@@ -1509,7 +1509,7 @@ sub inner_product {
       for (my $row = 1; $row <= $row_max; $row++) {
         my $x1_part = Rstats::Func::get($r, $x1, $row);
         my $x2_part = Rstats::Func::get($r, $x2, undef, $col);
-        my $x3_part = sum($r, $x1 * $x2);
+        my $x3_part = sum($r, $r->multiply($x1, $x2));
         push @$x3_elements, $x3_part;
       }
     }

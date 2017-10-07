@@ -163,7 +163,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(3), 2);
     my $x2 = $r->array($r->c(2), 2);
-    my $x3 = $x1 * $x2;
+    my $x3 = $r->multiply($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [6, 6]);
@@ -173,7 +173,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(3);
     my $x2 = $r->c(2);
-    my $x3 = $x1 * $x2;
+    my $x3 = $r->multiply($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [6]);
   }
@@ -182,7 +182,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(3));
     my $x2 = $r->as->integer($r->c(2));
-    my $x3 = $x1 * $x2;
+    my $x3 = $r->multiply($x1, $x2);
     ok($r->is->integer($x3));
     is_deeply($x3->values, [6]);
   }
@@ -191,21 +191,21 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1, 2, 1, 2);
     my $x2 = $r->c(3, 4, 5, 6);
-    my $x3 = $x1 * $x2;
+    my $x3 = $r->multiply($x1, $x2);
     is_deeply($x3->values, [3, 8, 5, 12]);
   }
 
   # multiply - perl number
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $x1 * $r->c(2, 2, 2);
+    my $x2 = $r->multiply($x1, $r->c(2, 2, 2));
     is_deeply($x2->values, [2, 4, 6]);
   }
 
   # multiply - perl number,reverse
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(2, 2, 2) * $x1;
+    my $x2 = $r->multiply($r->c(2, 2, 2), $x1);
     is_deeply($x2->values, [2, 4, 6]);
   }
 }
@@ -402,7 +402,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(-0.2);
     my $x2 = $r->c(-Inf);
-    my $x3 = $x1 * $x2;
+    my $x3 = $r->multiply($x1, $x2);
     is_deeply($x3->values, ['Inf']);
   }
 }

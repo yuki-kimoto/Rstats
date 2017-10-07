@@ -157,7 +157,6 @@ my @func_names = qw/
   upper_tri
   var
   which
-  labels
   names
   mode
   str
@@ -878,11 +877,6 @@ Alias of FALSE
 
   # is.vector(x1)
   $r->is->vector($x1)
-
-=head2 labels
-
-  # labels(x1)
-  $r->labels($x1)
 
 =head2 dim
 

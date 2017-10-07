@@ -1059,17 +1059,6 @@ SV* upgrade_length(...)
   XSRETURN(1);
 }
 
-MODULE = Rstats::Vector::Character PACKAGE = Rstats::Vector::Character
-
-SV* DESTROY(...)
-  PPCODE:
-{
-  SV* sv_v = ST(0);
-  Rstats::Vector<Rstats::Character>* v
-    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_v, "Rstats::Vector::Character");
-  delete v;
-}
-
 MODULE = Rstats::Vector::Double PACKAGE = Rstats::Vector::Double
 
 SV* DESTROY(...)

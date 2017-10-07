@@ -128,8 +128,6 @@ namespace Rstats {
     template <class T>
     void set_vector(SV*, SV*, Rstats::Vector<T>*);
     template <>
-    void set_vector<Rstats::Character>(SV*, SV*, Rstats::Vector<Rstats::Character>*);
-    template <>
     void set_vector<Rstats::Double>(SV*, SV*, Rstats::Vector<Rstats::Double>*);
     template <>
     void set_vector<Rstats::Integer>(SV*, SV*, Rstats::Vector<Rstats::Integer>*);
@@ -137,16 +135,12 @@ namespace Rstats {
     template <class T>
     Rstats::Vector<T>* get_vector(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV*, SV*);
-    template <>
     Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV*, SV*);
     template <>
     Rstats::Vector<Rstats::Integer>* get_vector<Rstats::Integer>(SV*, SV*);
 
     template <class T>
     SV* new_vector(SV*);
-    template <>
-    SV* new_vector<Rstats::Character>(SV*);
     template <>
     SV* new_vector<Rstats::Double>(SV*);
     template <>

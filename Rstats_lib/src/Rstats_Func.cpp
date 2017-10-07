@@ -5,12 +5,6 @@ namespace Rstats {
   namespace Func {
 
     template <>
-    void set_vector<Rstats::Character>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Character>* v1) {
-      SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Character>*>(v1, "Rstats::Vector::Character");
-      Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
-    }
-
-    template <>
     void set_vector<Rstats::Double>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Double>* v1) {
       SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Double>*>(v1, "Rstats::Vector::Double");
       Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
@@ -20,20 +14,6 @@ namespace Rstats {
     void set_vector<Rstats::Integer>(SV* sv_r, SV* sv_x1, Rstats::Vector<Rstats::Integer>* v1) {
       SV* sv_vector = Rstats::pl_object_wrap<Rstats::Vector<Rstats::Integer>*>(v1, "Rstats::Vector::Integer");
       Rstats::pl_hv_store(sv_x1, "vector", sv_vector);
-    }
-
-    template <>
-    Rstats::Vector<Rstats::Character>* get_vector<Rstats::Character>(SV* sv_r, SV* sv_x1) {
-      SV* sv_vector = Rstats::pl_hv_fetch(sv_x1, "vector");
-      
-      if (SvOK(sv_vector)) {
-        Rstats::Vector<Rstats::Character>* vector
-          = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Character>*>(sv_vector, "Rstats::Vector::Character");
-        return vector;
-      }
-      else {
-        return NULL;
-      }
     }
 
     template <>
@@ -189,12 +169,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::as_double<Rstats::Character, Rstats::Double>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v_out = Rstats::VectorFunc::as_double<Rstats::Double, Rstats::Double>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
@@ -220,12 +195,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Character, Rstats::Integer>(v1);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::as_integer<Rstats::Double, Rstats::Integer>(v1);
         sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
@@ -265,16 +235,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
       SV* sv_value;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        if (v1->exists_na_position(pos)) {
-          sv_value = &PL_sv_undef;
-        }
-        else {
-          sv_value = v1->get_value(pos);
-        }
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         if (v1->exists_na_position(pos)) {
           sv_value = &PL_sv_undef;
@@ -492,13 +453,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::equal<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::equal<Rstats::Double>(v1, v2);
@@ -529,13 +484,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::not_equal<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::not_equal<Rstats::Double>(v1, v2);
@@ -566,13 +515,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::more_than<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::more_than<Rstats::Double>(v1, v2);
@@ -603,13 +546,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::more_than_or_equal<Rstats::Double>(v1, v2);
@@ -640,13 +577,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::less_than<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::less_than<Rstats::Double>(v1, v2);
@@ -677,13 +608,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v2 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x2);
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Character>(v1, v2);
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::less_than_or_equal<Rstats::Double>(v1, v2);
@@ -714,10 +639,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        croak("Error in & : operations are possible only for numeric, types");
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::And<Rstats::Double>(v1, v2);
@@ -748,10 +670,7 @@ namespace Rstats {
       upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type1, "character")) {
-        croak("Error in | : operations are possible only for numeric types");
-      }
-      else if (strEQ(type1, "double")) {
+      if (strEQ(type1, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v2 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x2);
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::Or<Rstats::Double>(v1, v2);
@@ -1748,14 +1667,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_infinite<Rstats::Character>(v1);
-        
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_infinite<Rstats::Double>(v1);
@@ -1784,14 +1696,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_nan<Rstats::Character>(v1);
-        
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_nan<Rstats::Double>(v1);
@@ -1820,14 +1725,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        
-        Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_finite<Rstats::Character>(v1);
-        
-        sv_x_out = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         
         Rstats::Vector<Rstats::Integer>* v_out = Rstats::VectorFunc::is_finite<Rstats::Double>(v1);
@@ -1989,16 +1887,7 @@ namespace Rstats {
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(v1->get_length());
-        for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
-          v_out->set_value(i, v1->get_value(i));
-        }
-        v_out->merge_na_positions(v1->get_na_positions());
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         Rstats::Vector<Rstats::Double>* v_out = new Rstats::Vector<Rstats::Double>(v1->get_length());
         for (Rstats::Integer i = 0; i < v1->get_length(); i++) {
@@ -2108,10 +1997,7 @@ namespace Rstats {
 
       if (type_length > 1) {
         SV* sv_to_type;
-        if (Rstats::pl_hv_exists(sv_type_h, "character")) {
-          sv_to_type = Rstats::pl_new_sv_pv("character");
-        }
-        else if (Rstats::pl_hv_exists(sv_type_h, "double")) {
+        if (Rstats::pl_hv_exists(sv_type_h, "double")) {
           sv_to_type = Rstats::pl_new_sv_pv("double");
         }
         else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
@@ -2213,43 +2099,6 @@ namespace Rstats {
       SV* sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
       
       return sv_x_out;
-    }
-
-    SV* c_character(SV* sv_r, SV* sv_values) {
-      if (!sv_derived_from(sv_values, "ARRAY")) {
-        SV* sv_values_av_ref = Rstats::pl_new_avrv();
-        Rstats::pl_av_push(sv_values_av_ref, sv_values);
-        sv_values = sv_values_av_ref;
-      }
-      
-      Rstats::Integer length = Rstats::pl_av_len(sv_values);
-      
-      Rstats::Vector<Rstats::Character>* v1 = new Rstats::Vector<Rstats::Character>(length);
-      for (Rstats::Integer i = 0; i < length; i++) {
-        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
-
-        if (SvOK(sv_value)) {
-          v1->set_value(i, Rstats::pl_new_sv_sv(sv_value));
-        }
-        else {
-          v1->add_na_position(i);
-        }
-      }
-      
-      SV* sv_x1 = Rstats::Func::new_vector<Rstats::Character>(sv_r, v1);
-      
-      return sv_x1;
-    }
-
-    template <>
-    SV* new_vector<Rstats::Character>(SV* sv_r) {
-      SV* sv_x1 = Rstats::pl_new_hvrv();
-      
-      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
-      Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("character"));
-      
-      return sv_x1;
     }
 
     template <>
@@ -2395,14 +2244,8 @@ namespace Rstats {
           }
         }
         else {
-          if (Rstats::Util::is_perl_number(sv_element)) {
-            Rstats::Vector<Rstats::Double>* v_out = new Rstats::Vector<Rstats::Double>(1, SvNV(sv_element));
-            sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
-          }
-          else {
-            Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(1, Rstats::pl_new_sv_sv(sv_element));
-            sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-          }
+          Rstats::Vector<Rstats::Double>* v_out = new Rstats::Vector<Rstats::Double>(1, SvNV(sv_element));
+          sv_x_out = Rstats::Func::new_vector<Rstats::Double>(sv_r, v_out);
         }
       }
       else {
@@ -2504,19 +2347,7 @@ namespace Rstats {
         
         char* type = Rstats::Func::get_type(sv_r, sv_x1);
 
-        if (strEQ(type, "character")) {
-          Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-          for (Rstats::Integer i = 0; i < length; i++) {
-            Rstats::Vector<Rstats::Character>* v_out
-              = new Rstats::Vector<Rstats::Character>(1, v1->get_value(i));
-            if (v1->exists_na_position(i)) {
-              v_out->add_na_position(0);
-            }
-            SV* sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-            Rstats::pl_av_push(sv_elements, sv_x_out);
-          }
-        }
-        else if (strEQ(type, "double")) {
+        if (strEQ(type, "double")) {
           Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
           for (Rstats::Integer i = 0; i < length; i++) {
             Rstats::Vector<Rstats::Double>* v_out
@@ -2552,30 +2383,7 @@ namespace Rstats {
       std::vector<Rstats::Integer> na_positions;
       char* type = SvPV_nolen(sv_type);
       SV* sv_x_out;
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v_out = new Rstats::Vector<Rstats::Character>(len);
-        for (Rstats::Integer i = 0; i < len; i++) {
-          SV* sv_x1 = Rstats::pl_av_fetch(sv_elements, i);
-          if (!SvOK(sv_x1)) {
-            na_positions.push_back(i);
-          }
-          else {
-            Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-            
-            if (v1->exists_na_position(0)) {
-              na_positions.push_back(i);
-            }
-            else {
-              v_out->set_value(i, v1->get_value(0));
-            }
-          }
-        }
-        for (Rstats::Integer i = 0; i < na_positions.size(); i++) {
-          v_out->add_na_position(na_positions[i]);
-        }
-        sv_x_out = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_out);
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         
         Rstats::Vector<Rstats::Double>* v_out = new Rstats::Vector<Rstats::Double>(len);
         for (Rstats::Integer i = 0; i < len; i++) {

@@ -189,6 +189,8 @@ my @func_names = qw/
   get_type
   at
   get_length
+  bool
+  inner_product
 /;
 
 sub new {

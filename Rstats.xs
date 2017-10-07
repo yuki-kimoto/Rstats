@@ -265,45 +265,12 @@ SV* Arg(...)
   XSRETURN(1);
 }
 
-SV* Conj(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x_out = Rstats::Func::Conj(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* acosh(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   
   SV* sv_x_out = Rstats::Func::acosh(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* Re(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x_out = Rstats::Func::Re(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* Im(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x_out = Rstats::Func::Im(sv_r, ST(1));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

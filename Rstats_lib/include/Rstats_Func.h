@@ -10,7 +10,6 @@ namespace Rstats {
 
     SV* to_object(SV*, SV*);
 
-    SV* new_integer_empty(SV*); /* $r->NULL */
     SV* new_NA(SV*); /* $r->NA */
     SV* new_NaN(SV*); /* $r->NaN */
     SV* new_Inf(SV*); /* $r->Inf */
@@ -28,7 +27,6 @@ namespace Rstats {
     SV* is_array(SV*, SV*);
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
-    SV* Typeof(SV*, SV*); // $r->typeof
     int32_t to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
@@ -67,9 +65,6 @@ namespace Rstats {
     SV* tanh(SV*, SV*);
     SV* Mod(SV*, SV*);
     SV* Arg(SV*, SV*);
-    SV* Conj(SV*, SV*);
-    SV* Re(SV*, SV*);
-    SV* Im(SV*, SV*);
     SV* abs(SV*, SV*);
     SV* acos(SV*, SV*);
     SV* acosh(SV*, SV*);
@@ -98,7 +93,6 @@ namespace Rstats {
     
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);
-    char* get_object_type(SV*, SV*);
 
     SV* add(SV*, SV*, SV*);
     SV* subtract(SV*, SV*, SV*);
@@ -136,7 +130,7 @@ namespace Rstats {
 
     template <class T>
     SV* new_vector(SV*);
-    template <>
+    template <> 
     SV* new_vector<double>(SV*);
     template <>
     SV* new_vector<int32_t>(SV*);

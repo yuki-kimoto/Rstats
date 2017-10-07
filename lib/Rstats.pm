@@ -192,6 +192,7 @@ my @func_names = qw/
   bool
   inner_product
   remainder
+  divide
 /;
 
 sub new {

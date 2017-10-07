@@ -216,7 +216,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(5), 2);
     my $x2 = $r->array($r->c(2), 2);
-    my $x3 = $x1 / $x2;
+    my $x3 = $r->divide($x1, $x2);
     ok($r->is->double($x3));
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [5/2, 5/2]);
@@ -226,7 +226,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(5);
     my $x2 = $r->c(2);
-    my $x3 = $x1 / $x2;
+    my $x3 = $r->divide($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [5/2]);
   }
@@ -235,7 +235,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
-    my $x3 = $x1 / $x2;
+    my $x3 = $r->divide($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [5/2]);
   }
@@ -244,21 +244,21 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(24, 12, 24, 12);
     my $x2 = $r->c(2, 3, 4, 6);
-    my $x3 = $x1 / $x2;
+    my $x3 = $r->divide($x1, $x2);
     is_deeply($x3->values, [12, 4, 6, 2]);
   }
 
   # divide - perl number
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $x1 / $r->c(2, 2, 2);
+    my $x2 = $r->divide($x1, $r->c(2, 2, 2));
     is_deeply($x2->values, [1/2, 1, 3/2]);
   }
 
   # divide - perl number,reverse
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(2, 2, 2) / $x1;
+    my $x2 = $r->divide($r->c(2, 2, 2), $x1);
     is_deeply($x2->values, [2, 1, 2/3]);
   }
   

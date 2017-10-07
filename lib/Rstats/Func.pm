@@ -818,7 +818,7 @@ sub floor {
   
   my $_x1 = shift;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   
   my @x2_elements
     = map { Rstats::Func::c_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
@@ -855,7 +855,7 @@ sub ifelse {
   
   my ($_x1, $value1, $value2) = @_;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   my $x1_values = $x1->values;
   my @x2_values;
   for my $x1_value (@$x1_values) {
@@ -901,7 +901,7 @@ sub max {
 sub mean {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $x2 = divide($r, sum($r, $x1), Rstats::Func::get_length($r, $x1));
   
@@ -936,7 +936,7 @@ sub min {
 sub order {
   my $r = shift;
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my @xs = map { to_object($r, $_) } @_;
+  my @xs = map { $_ } @_;
   
   my @xs_values;
   for my $x (@xs) {
@@ -981,7 +981,7 @@ sub rank {
   my $r = shift;
   
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   my $decreasing = $opt->{decreasing};
   
   my $x1_values = $x1->values;

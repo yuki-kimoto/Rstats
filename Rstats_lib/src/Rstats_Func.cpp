@@ -2771,46 +2771,6 @@ namespace Rstats {
       return Rstats::Func::array(sv_r, sv_x_out, sv_x_out_dim);
     }
 
-    SV* mode(SV* sv_r, SV* sv_x1, SV* sv_x_type) {
-      
-      sv_x_type = Rstats::Func::to_object(sv_r, sv_x_type);
-      
-      SV* sv_type = Rstats::pl_av_fetch(Rstats::Func::values(sv_r, sv_x_type), 0);
-      char* type = SvPV_nolen(sv_type);
-      
-      if (!strEQ(type, "character")
-        && !strEQ(type, "numeric")
-        && !strEQ(type, "double")
-        && !strEQ(type, "integer")
-      )
-      {
-        croak("Error in eval(expr, envir, enclos) : could not find function \"as_%s\"", type);
-      }
-      
-      sv_x1 = Rstats::Func::as(sv_r, sv_type, sv_x1);
-      
-      return sv_r;
-    }
-    
-    SV* mode(SV* sv_r, SV* sv_x1) {
-      
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      char* mode;
-      if (strEQ(type, "integer") || strEQ(type, "double")) {
-        mode = "numeric";
-      }
-      else {
-        mode = type;
-      }
-      
-      Rstats::Vector<Rstats::Character>* v_mode = new Rstats::Vector<Rstats::Character>(1, Rstats::pl_new_sv_pv(mode));
-      
-      SV* sv_mode = Rstats::Func::new_vector<Rstats::Character>(sv_r, v_mode);
-      
-      return sv_mode;
-    }
-    
     SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {
       
       char* type = SvPV_nolen(sv_type);
@@ -2827,7 +2787,7 @@ namespace Rstats {
         return Rstats::Func::as_integer(sv_r, sv_x1);
       }
       else {
-        croak("Invalid mode %s is passed", type);
+        croak("Invalid type %s is passed", type);
       }
     }
   }

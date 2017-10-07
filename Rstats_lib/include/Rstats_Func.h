@@ -57,8 +57,6 @@ namespace Rstats {
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);
     SV* as_array(SV*, SV*);
-    SV* mode(SV*, SV*);
-    SV* mode(SV*, SV*, SV*);
     
     Rstats::Integer get_length(SV*, SV*);
     SV* get_length_sv(SV*, SV*);

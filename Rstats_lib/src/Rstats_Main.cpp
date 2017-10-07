@@ -3,7 +3,7 @@
 // Rstats
 namespace Rstats {
 
-  static Rstats::Integer WARN = 0;
+  static int32_t WARN = 0;
 
   REGEXP* pl_pregcomp (SV* sv_re, IV flag) {
     return (REGEXP*)sv_2mortal((SV*)pregcomp(sv_re, flag));
@@ -213,11 +213,11 @@ namespace Rstats {
   void clear_warn() {
     WARN = 0;
   }
-  void add_warn(Rstats::Integer warn_id) {
+  void add_warn(int32_t warn_id) {
     WARN |= warn_id;
   }
   
-  Rstats::Integer get_warn() {
+  int32_t get_warn() {
     return WARN;
   }
   

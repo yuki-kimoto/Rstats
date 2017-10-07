@@ -14,10 +14,10 @@ namespace Rstats {
     Rstats::Double pi() { return M_PI; }
     Rstats::Double Inf() { return INFINITY; }
     Rstats::Double NaN() { return std::numeric_limits<Rstats::Double>::signaling_NaN(); }
-    Rstats::Integer is_Inf(Rstats::Double e1) { return std::isinf(e1); }
-    Rstats::Integer is_NaN(Rstats::Double e1) { return std::isnan(e1); }
+    int32_t is_Inf(Rstats::Double e1) { return std::isinf(e1); }
+    int32_t is_NaN(Rstats::Double e1) { return std::isnan(e1); }
     
-    Rstats::Integer is_perl_number(SV* sv_str) {
+    int32_t is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {
         return 0;
       }
@@ -32,28 +32,28 @@ namespace Rstats {
 
     SV* cross_product(SV* sv_values) {
       
-      Rstats::Integer values_length = Rstats::pl_av_len(sv_values);
+      int32_t values_length = Rstats::pl_av_len(sv_values);
       SV* sv_idxs = Rstats::pl_new_avrv();
-      for (Rstats::Integer i = 0; i < values_length; i++) {
+      for (int32_t i = 0; i < values_length; i++) {
         Rstats::pl_av_push(sv_idxs, Rstats::pl_new_sv_iv(0)); 
       }
       
       SV* sv_idx_idx = Rstats::pl_new_avrv();
-      for (Rstats::Integer i = 0; i < values_length; i++) {
+      for (int32_t i = 0; i < values_length; i++) {
         Rstats::pl_av_push(sv_idx_idx, Rstats::pl_new_sv_iv(i));
       }
       
       SV* sv_x1 = Rstats::pl_new_avrv();
-      for (Rstats::Integer i = 0; i < values_length; i++) {
+      for (int32_t i = 0; i < values_length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         Rstats::pl_av_push(sv_x1, Rstats::pl_av_fetch(sv_value, 0));
       }
 
       SV* sv_result = Rstats::pl_new_avrv();
       Rstats::pl_av_push(sv_result, Rstats::pl_av_copy(sv_x1));
-      Rstats::Integer end_loop = 0;
+      int32_t end_loop = 0;
       while (1) {
-        for (Rstats::Integer i = 0; i < values_length; i++) {
+        for (int32_t i = 0; i < values_length; i++) {
           
           if (SvIV(Rstats::pl_av_fetch(sv_idxs, i)) < Rstats::pl_av_len(Rstats::pl_av_fetch(sv_values, i)) - 1) {
             
@@ -85,20 +85,20 @@ namespace Rstats {
     SV* pos_to_index(SV* sv_pos, SV* sv_dim) {
       
       SV* sv_index = Rstats::pl_new_avrv();
-      Rstats::Integer pos = SvIV(sv_pos);
-      Rstats::Integer before_dim_product = 1;
-      for (Rstats::Integer i = 0; i < Rstats::pl_av_len(sv_dim); i++) {
+      int32_t pos = SvIV(sv_pos);
+      int32_t before_dim_product = 1;
+      for (int32_t i = 0; i < Rstats::pl_av_len(sv_dim); i++) {
         before_dim_product *= SvIV(Rstats::pl_av_fetch(sv_dim, i));
       }
       
-      for (Rstats::Integer i = Rstats::pl_av_len(sv_dim) - 1; i >= 0; i--) {
-        Rstats::Integer dim_product = 1;
-        for (Rstats::Integer k = 0; k < i; k++) {
+      for (int32_t i = Rstats::pl_av_len(sv_dim) - 1; i >= 0; i--) {
+        int32_t dim_product = 1;
+        for (int32_t k = 0; k < i; k++) {
           dim_product *= SvIV(Rstats::pl_av_fetch(sv_dim, k));
         }
         
-        Rstats::Integer reminder = pos % before_dim_product;
-        Rstats::Integer quotient = (Rstats::Integer)(reminder / dim_product);
+        int32_t reminder = pos % before_dim_product;
+        int32_t quotient = (int32_t)(reminder / dim_product);
         
         Rstats::pl_av_unshift(sv_index, Rstats::pl_new_sv_iv(quotient + 1));
         before_dim_product = dim_product;
@@ -109,11 +109,11 @@ namespace Rstats {
 
     SV* index_to_pos(SV* sv_index, SV* sv_dim_values) {
       
-      Rstats::Integer pos = 0;
-      for (Rstats::Integer i = 0; i < Rstats::pl_av_len(sv_dim_values); i++) {
+      int32_t pos = 0;
+      for (int32_t i = 0; i < Rstats::pl_av_len(sv_dim_values); i++) {
         if (i > 0) {
-          Rstats::Integer tmp = 1;
-          for (Rstats::Integer k = 0; k < i; k++) {
+          int32_t tmp = 1;
+          for (int32_t k = 0; k < i; k++) {
             tmp *= SvIV(Rstats::pl_av_fetch(sv_dim_values, k));
           }
           pos += tmp * (SvIV(Rstats::pl_av_fetch(sv_index, i)) - 1);
@@ -154,7 +154,7 @@ namespace Rstats {
         sv_ret = &PL_sv_undef;
       }
       else {
-        Rstats::Integer ret = Rstats::pl_pregexec(sv_str, INTEGER_RE);
+        int32_t ret = Rstats::pl_pregexec(sv_str, INTEGER_RE);
         if (ret) {
           SV* match1 = Rstats::pl_new_sv_pv("");
           Perl_reg_numbered_buff_fetch(aTHX_ INTEGER_RE, 1, match1);
@@ -175,7 +175,7 @@ namespace Rstats {
         sv_ret =  &PL_sv_undef;
       }
       else {
-        Rstats::Integer ret = Rstats::pl_pregexec(sv_value, DOUBLE_RE);
+        int32_t ret = Rstats::pl_pregexec(sv_value, DOUBLE_RE);
         if (ret) {
           SV* match1 = Rstats::pl_new_sv_pv("");
           Perl_reg_numbered_buff_fetch(aTHX_ DOUBLE_RE, 1, match1);

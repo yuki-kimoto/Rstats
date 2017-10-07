@@ -93,18 +93,18 @@ namespace Rstats {
   typedef UV NaPosition;
   
   // Error constant value
-  const Rstats::Integer WARN_NA_INTRODUCED = 1;
-  const Rstats::Integer WARN_NAN_PRODUCED = 2;
-  const Rstats::Integer WARN_IMAGINARY_PART_DISCARDED = 4;
+  const int32_t WARN_NA_INTRODUCED = 1;
+  const int32_t WARN_NAN_PRODUCED = 2;
+  const int32_t WARN_IMAGINARY_PART_DISCARDED = 4;
 
-  const Rstats::Integer NaException = 1;
-  const Rstats::Integer NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
+  const int32_t NaException = 1;
+  const int32_t NA_POSITION_BIT_LENGTH = 8 * sizeof(Rstats::NaPosition);
 
   char* get_warn_message();
   void print_warn_message();
   void clear_warn();
-  void add_warn(Rstats::Integer warn_id);
-  Rstats::Integer get_warn();
+  void add_warn(int32_t warn_id);
+  int32_t get_warn();
 }
 # include "Rstats_Main_impl.h"
 

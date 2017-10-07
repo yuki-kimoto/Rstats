@@ -6,14 +6,14 @@ namespace Rstats {
       croak("na_postiions is already initialized");
     }
     if (this->get_length()) {
-      Rstats::Integer length = this->get_na_positions_length();
+      int32_t length = this->get_na_positions_length();
       this->na_positions = new Rstats::NaPosition[length];
       std::fill_n(this->na_positions, length, 0);
     }
   }
   
   template <class T>
-  Rstats::Integer Vector<T>::get_na_positions_length() {
+  int32_t Vector<T>::get_na_positions_length() {
     if (this->get_length() == 0) {
       return 0;
     }
@@ -23,7 +23,7 @@ namespace Rstats {
   }
 
   template <class T>
-  void Vector<T>::add_na_position(Rstats::Integer position) {
+  void Vector<T>::add_na_position(int32_t position) {
     if (this->get_na_positions() == NULL) {
       this->init_na_positions();
     }
@@ -44,14 +44,14 @@ namespace Rstats {
     }
     
     if (this->get_length()) {
-      for (Rstats::Integer i = 0; i < this->get_na_positions_length(); i++) {
+      for (int32_t i = 0; i < this->get_na_positions_length(); i++) {
         *(this->get_na_positions() + i) |= *(na_positions + i);
       }
     }
   }
 
   template <class T>
-  Rstats::Integer Vector<T>::exists_na_position(Rstats::Integer position) {
+  int32_t Vector<T>::exists_na_position(int32_t position) {
     if (this->get_na_positions() == NULL) {
       return 0;
     }
@@ -67,33 +67,33 @@ namespace Rstats {
   }
 
   template <class T>
-  Rstats::Integer Vector<T>::get_length() {
+  int32_t Vector<T>::get_length() {
     return this->length;
   }
 
   template <class T>
-  void Vector<T>::initialize(Rstats::Integer length) {
+  void Vector<T>::initialize(int32_t length) {
     this->values = new T[length];
     this->length = length;
     this->na_positions = NULL;
   }
 
   template <class T>
-  Vector<T>::Vector(Rstats::Integer length) {
+  Vector<T>::Vector(int32_t length) {
     this->initialize(length);
   };
   
   template <class T>
-  Vector<T>::Vector(Rstats::Integer length, T value) {
+  Vector<T>::Vector(int32_t length, T value) {
     this->initialize(length);
     
-    for (Rstats::Integer i = 0; i < length; i++) {
+    for (int32_t i = 0; i < length; i++) {
       this->set_value(i, value);
     }
   };
 
   template<class T>
-  void Vector<T>::set_value(Rstats::Integer pos, T value) {
+  void Vector<T>::set_value(int32_t pos, T value) {
     *(this->get_values() + pos) = value;
   }
 
@@ -103,7 +103,7 @@ namespace Rstats {
   }
   
   template <class T>
-  T Vector<T>::get_value(Rstats::Integer pos) {
+  T Vector<T>::get_value(int32_t pos) {
     return *(this->get_values() + pos);
   }
 

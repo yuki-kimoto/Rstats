@@ -243,13 +243,8 @@ namespace Rstats {
       }
       else if (strEQ(type, "integer")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
-        if (v1->exists_na_position(pos)) {
-          sv_value = &PL_sv_undef;
-        }
-        else {
-          int32_t value = v1->get_value(pos);
-          sv_value = Rstats::pl_new_sv_iv(value);
-        }
+        int32_t value = v1->get_value(pos);
+        sv_value = Rstats::pl_new_sv_iv(value);
       }
       else {
         croak("Error in create_sv_value : default method not implemented for type '%s'", type);

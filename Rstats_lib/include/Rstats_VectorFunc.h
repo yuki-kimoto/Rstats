@@ -10,7 +10,7 @@ namespace Rstats {
     Rstats::Vector<T_OUT>* operate_unary_math(T_OUT (*func)(T_IN), Rstats::Vector<T_IN>*);
     
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* operate_unary_is(Rstats::Logical (*func)(T_IN), Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* operate_unary_is(Rstats::Integer (*func)(T_IN), Rstats::Vector<T_IN>*);
     
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* operate_unary_as(T_OUT (*func)(T_IN), Rstats::Vector<T_IN>*);
@@ -22,21 +22,21 @@ namespace Rstats {
     Rstats::Vector<T_OUT>* operate_binary_compare(T_OUT (*func)(T_IN, T_IN), Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
 
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* not_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* not_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* more_than(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* more_than(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* more_than_or_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* more_than_or_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* less_than(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* less_than(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* less_than_or_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* less_than_or_equal(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* And(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* And(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* Or(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* Or(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
 
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* add(Rstats::Vector<T_IN>*, Rstats::Vector<T_IN>*);
@@ -114,11 +114,11 @@ namespace Rstats {
     Rstats::Vector<T_OUT>* Im(Rstats::Vector<T_IN>*);
     
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* is_infinite(Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* is_infinite(Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* is_nan(Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* is_nan(Rstats::Vector<T_IN>*);
     template <class T_IN>
-    Rstats::Vector<Rstats::Logical>* is_finite(Rstats::Vector<T_IN>*);
+    Rstats::Vector<Rstats::Integer>* is_finite(Rstats::Vector<T_IN>*);
     
   }
 }

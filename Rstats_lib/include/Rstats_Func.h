@@ -21,7 +21,6 @@ namespace Rstats {
     SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);
-    SV* c_logical(SV*, SV*);
 
     SV* pi(SV*);
     SV* is_null (SV*, SV*);
@@ -36,7 +35,6 @@ namespace Rstats {
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
     SV* is_character(SV*, SV*);
-    SV* is_logical(SV*, SV*);
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
@@ -46,7 +44,6 @@ namespace Rstats {
 
     SV* as_vector(SV*, SV*);
     SV* as_integer(SV*, SV*);
-    SV* as_logical(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
     SV* as_character(SV*, SV*);

@@ -75,6 +75,11 @@ namespace Rstats {
       
       Rstats::Integer length = Rstats::pl_av_len(sv_elements);
 
+      SV* sv_x_out;
+      if (length == 0) {
+        croak("Error");
+      }
+
       SV* sv_new_elements = Rstats::pl_new_avrv();
       
       // Convert to Rstats::Object, check type and total length, and remove NULL
@@ -90,12 +95,6 @@ namespace Rstats {
         total_length += Rstats::Func::get_length(sv_r, sv_new_element);
         Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
         Rstats::pl_av_push(sv_new_elements, sv_new_element);
-      }
-      
-      SV* sv_x_out;
-      if (total_length == 0) {
-        sv_x_out = Rstats::Func::new_integer_empty(sv_r);
-        return sv_x_out;
       }
 
       // Decide type
@@ -2425,14 +2424,6 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_integer_empty(SV* sv_r) {
-      Rstats::Vector<Rstats::Integer>* v1 = new Rstats::Vector<Rstats::Integer>(0, 0);
-
-      SV* sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v1);
-      
-      return sv_x1;
-    }
-    
     SV* new_NA(SV* sv_r) {
       Rstats::Vector<Rstats::Integer>* v1 = new Rstats::Vector<Rstats::Integer>(1, 0);
       v1->add_na_position(0);

@@ -86,7 +86,7 @@ my $r = Rstats->new;
   # get 3-dimention - dimention two
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->get($r->c(), 2);
+    my $x2 = $x1->get(undef, 2);
     is_deeply($x2->values, [5, 6, 7, 8, 17, 18, 19, 20]);
     is_deeply($r->dim($x2)->values, [4, 2]);
   }
@@ -94,7 +94,7 @@ my $r = Rstats->new;
   # get 3-dimention - dimention three
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->get($r->c(), $r->c(), 2);
+    my $x2 = $x1->get(undef, undef, 2);
     is_deeply($x2->values, [13 .. 24]);
     is_deeply($r->dim($x2)->values, [4, 3]);
   }
@@ -125,7 +125,7 @@ my $r = Rstats->new;
   # get 3-dimention - dimention one and three
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->get(3, $r->c(), 2);
+    my $x2 = $x1->get(3, undef, 2);
     is_deeply($x2->values, [15, 19, 23]);
     is_deeply($r->dim($x2)->values, [3]);
   }
@@ -133,7 +133,7 @@ my $r = Rstats->new;
   # get 3-dimention - dimention two and three
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $x1->get($r->c(), 1, 2);
+    my $x2 = $x1->get(undef, 1, 2);
     is_deeply($x2->values, [13, 14, 15, 16]);
     is_deeply($r->dim($x2)->values, [4]);
   }

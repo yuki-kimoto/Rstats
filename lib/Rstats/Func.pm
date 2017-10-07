@@ -125,7 +125,7 @@ sub subset {
   my ($x1, $x_condition, $x_names)
     = args_array($r, ['x1', 'condition', 'names'], @_);
   
-  $x_names = Rstats::Func::NULL($r) unless defined $x_names;
+  $x_names = undef unless defined $x_names;
   
   my $x2 = $x1->get($x_condition, $x_names);
   
@@ -621,10 +621,10 @@ sub append {
   my ($x1, $x2, $x_after) = args_array($r, ['x1', 'x2', 'after'], @_);
   
   # Default
-  $x_after = NULL($r) unless defined $x_after;
+  $x_after = undef unless defined $x_after;
   
   my $x1_length = Rstats::Func::get_length($r, $x1);
-  $x_after = Rstats::Func::c($r, $x1_length) if Rstats::Func::is_null($r, $x_after);
+  $x_after = Rstats::Func::c($r, $x1_length) unless defined $x_after;
   my $after = $x_after->value;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
@@ -644,7 +644,7 @@ sub cbind {
   
   my @xs = @_;
 
-  return Rstats::Func::NULL($r) unless @xs;
+  return unless @xs;
   
   my $row_count_needed;
   my $col_count_total;
@@ -1092,7 +1092,7 @@ sub rbind {
   my $r = shift;
   my (@xs) = @_;
   
-  return Rstats::Func::NULL($r) unless @xs;
+  return unless @xs;
   
   my $matrix = cbind($r, @xs);
   
@@ -1514,7 +1514,7 @@ sub inner_product {
     for (my $col = 1; $col <= $col_max; $col++) {
       for (my $row = 1; $row <= $row_max; $row++) {
         my $x1_part = Rstats::Func::get($r, $x1, $row);
-        my $x2_part = Rstats::Func::get($r, $x2, Rstats::Func::NULL($r), $col);
+        my $x2_part = Rstats::Func::get($r, $x2, undef, $col);
         my $x3_part = sum($r, $x1 * $x2);
         push @$x3_elements, $x3_part;
       }
@@ -1711,7 +1711,7 @@ sub bool {
 sub set {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'NULL' || $x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
+  if ($x1->{object_type} eq 'array' || $x1->{object_type} eq 'factor') {
     return Rstats::Func::set_array(@_);
   }
   else {
@@ -1852,9 +1852,6 @@ sub to_string_array {
       };
       $code->(@$dim_values);
     }
-  }
-  else {
-    $str = 'NULL';
   }
   
   return $str;
@@ -2077,10 +2074,7 @@ sub runif {
 sub to_string {
   my ($r, $x1) = @_;
   
-  if ($x1->{object_type} eq 'NULL') {
-    return "NULL";
-  }
-  elsif ($x1->{object_type} eq 'array') {
+  if ($x1->{object_type} eq 'array') {
     return Rstats::Func::to_string_array(@_);
   }
   else {

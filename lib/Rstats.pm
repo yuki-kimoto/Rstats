@@ -653,8 +653,6 @@ Alias of FALSE
   # nrow(x1)
   $r->nrow($x1)
 
-=head2 NULL
-
 =head2 numeric
 
 =head2 matrix

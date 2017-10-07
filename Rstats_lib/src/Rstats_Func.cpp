@@ -345,12 +345,6 @@ namespace Rstats {
           v_out_total += v1->get_value(i);
         }
         v_out->set_value(0, v_out_total);
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          if (v1->exists_na_position(i)) {
-            v_out->add_na_position(0);
-            break;
-          }
-        }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -361,12 +355,6 @@ namespace Rstats {
           v_out_total += v1->get_value(i);
         }
         v_out->set_value(0, v_out_total);
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          if (v1->exists_na_position(i)) {
-            v_out->add_na_position(0);
-            break;
-          }
-        }
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
@@ -392,12 +380,6 @@ namespace Rstats {
           v_out_total *= v1->get_value(i);
         }
         v_out->set_value(0, v_out_total);
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          if (v1->exists_na_position(i)) {
-            v_out->add_na_position(0);
-            break;
-          }
-        }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -408,12 +390,6 @@ namespace Rstats {
           v_out_total *= v1->get_value(i);
         }
         v_out->set_value(0, v_out_total);
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          if (v1->exists_na_position(i)) {
-            v_out->add_na_position(0);
-            break;
-          }
-        }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
@@ -2114,24 +2090,19 @@ namespace Rstats {
       for (int32_t i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
 
-        if (SvOK(sv_value)) {
-          char* sv_value_str = SvPV_nolen(sv_value);
-          if (strEQ(sv_value_str, "NaN")) {
-            v1->set_value(i, NAN);
-          }
-          else if (strEQ(sv_value_str, "Inf")) {
-            v1->set_value(i, INFINITY);
-          }
-          else if (strEQ(sv_value_str, "-Inf")) {
-            v1->set_value(i, -(INFINITY));
-          }
-          else {
-            double value = SvNV(sv_value);
-            v1->set_value(i, value);
-          }
+        char* sv_value_str = SvPV_nolen(sv_value);
+        if (strEQ(sv_value_str, "NaN")) {
+          v1->set_value(i, NAN);
+        }
+        else if (strEQ(sv_value_str, "Inf")) {
+          v1->set_value(i, INFINITY);
+        }
+        else if (strEQ(sv_value_str, "-Inf")) {
+          v1->set_value(i, -(INFINITY));
         }
         else {
-          v1->add_na_position(i);
+          double value = SvNV(sv_value);
+          v1->set_value(i, value);
         }
       }
       
@@ -2151,15 +2122,10 @@ namespace Rstats {
       for (int32_t i = 0; i < length; i++) {
         SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
         
-        if (SvOK(sv_value)) {
-          v1->set_value(
-            i,
-            SvIV(sv_value)
-          );
-        }
-        else {
-          v1->add_na_position(i);
-        }
+        v1->set_value(
+          i,
+          SvIV(sv_value)
+        );
       }
       
       SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);

@@ -11,11 +11,11 @@ namespace Rstats {
     static REGEXP* COMPLEX_IMAGE_ONLY_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)i *$", 0), 0);
     static REGEXP* COMPLEX_RE = pregcomp(newSVpv("^ *([\\+\\-]?[0-9]+(?:\\.[0-9]+)?)(?:([\\+\\-][0-9]+(?:\\.[0-9]+)?)i)? *$", 0), 0);
 
-    Rstats::Double pi() { return M_PI; }
-    Rstats::Double Inf() { return INFINITY; }
-    Rstats::Double NaN() { return std::numeric_limits<Rstats::Double>::signaling_NaN(); }
-    int32_t is_Inf(Rstats::Double e1) { return std::isinf(e1); }
-    int32_t is_NaN(Rstats::Double e1) { return std::isnan(e1); }
+    double pi() { return M_PI; }
+    double Inf() { return INFINITY; }
+    double NaN() { return std::numeric_limits<double>::signaling_NaN(); }
+    int32_t is_Inf(double e1) { return std::isinf(e1); }
+    int32_t is_NaN(double e1) { return std::isnan(e1); }
     
     int32_t is_perl_number(SV* sv_str) {
       if (!SvOK(sv_str)) {

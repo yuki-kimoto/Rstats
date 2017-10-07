@@ -1065,8 +1065,8 @@ SV* DESTROY(...)
   PPCODE:
 {
   SV* sv_v = ST(0);
-  Rstats::Vector<Rstats::Double>* v
-    = Rstats::pl_object_unwrap<Rstats::Vector<Rstats::Double>*>(sv_v, "Rstats::Vector::Double");
+  Rstats::Vector<double>* v
+    = Rstats::pl_object_unwrap<Rstats::Vector<double>*>(sv_v, "Rstats::Vector::Double");
   delete v;
 }
 

@@ -128,21 +128,21 @@ namespace Rstats {
     template <class T>
     void set_vector(SV*, SV*, Rstats::Vector<T>*);
     template <>
-    void set_vector<Rstats::Double>(SV*, SV*, Rstats::Vector<Rstats::Double>*);
+    void set_vector<double>(SV*, SV*, Rstats::Vector<double>*);
     template <>
     void set_vector<int32_t>(SV*, SV*, Rstats::Vector<int32_t>*);
     
     template <class T>
     Rstats::Vector<T>* get_vector(SV*, SV*);
     template <>
-    Rstats::Vector<Rstats::Double>* get_vector<Rstats::Double>(SV*, SV*);
+    Rstats::Vector<double>* get_vector<double>(SV*, SV*);
     template <>
     Rstats::Vector<int32_t>* get_vector<int32_t>(SV*, SV*);
 
     template <class T>
     SV* new_vector(SV*);
     template <>
-    SV* new_vector<Rstats::Double>(SV*);
+    SV* new_vector<double>(SV*);
     template <>
     SV* new_vector<int32_t>(SV*);
     

@@ -13,11 +13,11 @@ namespace Rstats {
     SV* looks_like_na(SV*);
     SV* looks_like_integer(SV*);
     SV* looks_like_double(SV*);
-    Rstats::Double pi();
-    Rstats::Double Inf();
-    Rstats::Double NaN();
-    int32_t is_Inf(Rstats::Double);
-    int32_t is_NaN(Rstats::Double);
+    double pi();
+    double Inf();
+    double NaN();
+    int32_t is_Inf(double);
+    int32_t is_NaN(double);
   }
 }
 

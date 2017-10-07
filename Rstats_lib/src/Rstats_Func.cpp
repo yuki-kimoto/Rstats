@@ -2267,7 +2267,7 @@ namespace Rstats {
 
     SV* is_vector (SV* sv_r, SV* sv_x1) {
       
-      bool is = !Rstats::pl_hv_exists(sv_x1, "dim");
+      bool is = !Rstats::pl_hv_exists(sv_x1, "dim") || Rstats::Func::get_length(sv_r, dim(sv_r, sv_x1)) == 1;
       
       SV* sv_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
             

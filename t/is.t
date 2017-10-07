@@ -113,7 +113,7 @@ my $r = Rstats->new;
   # is->vector
   {
     my $x = $r->array($r->C('1:24'));
-    ok(!$r->is->vector($x));
+    ok($r->is->vector($x));
   }
 }
 

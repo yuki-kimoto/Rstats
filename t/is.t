@@ -110,7 +110,7 @@ my $r = Rstats->new;
 {
   # is->matrix
   {
-    my $x = $r->matrix($r->C('1:24'), 4, 3);
+    my $x = $r->matrix($r->C('1:24'), $r->c(4), $r->c(3));
     ok($r->is->matrix($x));
   }
 }

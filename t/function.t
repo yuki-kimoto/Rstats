@@ -101,7 +101,7 @@ my $r = Rstats->new;
 # matrix
 {
   {
-    my $mat = $r->matrix(0, 2, 5);
+    my $mat = $r->matrix($r->c(0), $r->c(2), $r->c(5));
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply($r->dim($mat)->values, [2, 5]);
     ok($r->is->matrix($mat));
@@ -109,7 +109,7 @@ my $r = Rstats->new;
   
   # matrix - repeat values
   {
-    my $mat = $r->matrix($r->c(1,2), 2, 5);
+    my $mat = $r->matrix($r->c(1,2), $r->c(2), $r->c(5));
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply($r->dim($mat)->values, [2, 5]);
     ok($r->is->matrix($mat));
@@ -727,14 +727,14 @@ my $r = Rstats->new;
   # append - after option
   {
     my $x1 = $r->c(1, 2, 3, 4, 5);
-    my $x2 = $r->append($x1, 1, {after => $r->c(3)});
+    my $x2 = $r->append($x1, $r->c(1), {after => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 4, 5]);
   }
 
   # append - no after option
   {
     my $x1 = $r->c(1, 2, 3, 4, 5);
-    my $x2 = $r->append($x1, 1);
+    my $x2 = $r->append($x1, $r->c(1));
     is_deeply($x2->values, [1, 2, 3, 4, 5, 1]);
   }
 
@@ -1107,7 +1107,7 @@ my $r = Rstats->new;
   # round - matrix
   {
     my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($r->matrix($x1), -1);
+    my $x2 = $r->round($r->matrix($x1), $r->c(-1));
     is_deeply(
       $x2->values,
       [-10, 20, 20, 30, 40]
@@ -1127,7 +1127,7 @@ my $r = Rstats->new;
   # round - matrix
   {
     my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $x2 = $r->round($r->matrix($x1), 1);
+    my $x2 = $r->round($r->matrix($x1), $r->c(1));
     is_deeply(
       $x2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]
@@ -1256,7 +1256,7 @@ my $r = Rstats->new;
 {
   # clone - $r->matrix
   {
-    my $x1 = $r->matrix($r->C('1:24'), 3, 2);
+    my $x1 = $r->matrix($r->C('1:24'), $r->c(3), $r->c(2));
     my $x2 = $r->clone($x1);
     ok($r->is->matrix($x2));
     is_deeply($r->dim($x2)->values, [3, 2]);

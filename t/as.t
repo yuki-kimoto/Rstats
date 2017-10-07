@@ -86,7 +86,7 @@ my $r = Rstats->new;
   }
   # is_* - is_matrix
   {
-    my $x = $r->matrix($r->C('1:12'), 4, 3);
+    my $x = $r->matrix($r->C('1:12'), $r->c(4), $r->c(3));
     ok($r->is->matrix($x));
     ok($r->is->array($x));
   }
@@ -148,7 +148,7 @@ my $r = Rstats->new;
 
   # as->matrix - from $r->matrix
   {
-    my $x = $r->matrix($r->C('1:12'), 4, 3);
+    my $x = $r->matrix($r->C('1:12'), $r->c(4), $r->c(3));
     is_deeply($r->as->matrix($x)->values, [1 .. 12]);
     is_deeply($r->dim($r->as->matrix($x))->values, [4, 3]);
   }

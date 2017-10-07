@@ -133,24 +133,6 @@ my $r = Rstats->new;
     is($x1->value, 'NaN');
   }
 
-  # atan2 - NULL, left
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->c(1);
-    my $x3;
-    eval { $x3 = $r->atan2($x1, $x2) };
-    like($@, qr#\QError in atan2() : non-numeric argument#);
-  }
-
-  # atan2 - NULL, right
-  {
-    my $x1 = $r->c(1);
-    my $x2 = $r->NULL;
-    my $x3;
-    eval { $x3 = $r->atan2($x1, $x2) };
-    like($@, qr#\QError in atan2() : non-numeric argument#);
-  }
-  
   # atan2 - different number elements
   {
     my $x1 = $r->c(1, 2);

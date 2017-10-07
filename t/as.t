@@ -16,14 +16,6 @@ my $r = Rstats->new;
     ok($r->is->integer($x2));
     is_deeply($x2->values, [undef]);
   }
-  # as->integer - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is_deeply($x2->values, []);
-  }
-  
   # as->integer - dim
   {
     my $x1 = $r->array($r->c(1, 2));
@@ -74,14 +66,6 @@ my $r = Rstats->new;
     is($x2->values->[0], undef);
   }
   
-  # as->double - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, []);
-  }
-
   # as->double - dim
   {
     my $x1 = $r->array($r->c(1.1, 1.2));

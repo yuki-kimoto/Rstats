@@ -161,11 +161,7 @@ namespace Rstats {
       sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      if (strEQ(type, "character")) {
-        Rstats::Vector<Rstats::Character>* v1 = Rstats::Func::get_vector<Rstats::Character>(sv_r, sv_x1);
-        return v1->get_length();
-      }
-      else if (strEQ(type, "double")) {
+      if (strEQ(type, "double")) {
         Rstats::Vector<Rstats::Double>* v1 = Rstats::Func::get_vector<Rstats::Double>(sv_r, sv_x1);
         return v1->get_length();
       }

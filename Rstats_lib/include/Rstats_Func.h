@@ -10,7 +10,7 @@ namespace Rstats {
 
     SV* to_object(SV*, SV*);
 
-    SV* new_NULL(SV*); /* $r->NULL */
+    SV* new_integer_empty(SV*); /* $r->NULL */
     SV* new_NA(SV*); /* $r->NA */
     SV* new_NaN(SV*); /* $r->NaN */
     SV* new_Inf(SV*); /* $r->Inf */

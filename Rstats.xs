@@ -647,17 +647,6 @@ SV* pi(...)
   XSRETURN(1);
 }
 
-SV* NULL(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x_out = Rstats::Func::new_NULL(sv_r);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* NA(...)
   PPCODE:
 {

@@ -96,7 +96,7 @@ namespace Rstats {
       
       SV* sv_x_out;
       if (total_length == 0) {
-        sv_x_out = Rstats::Func::new_NULL(sv_r);
+        sv_x_out = Rstats::Func::new_integer_empty(sv_r);
         return sv_x_out;
       }
 
@@ -2122,7 +2122,7 @@ namespace Rstats {
      
       // Dimention
       SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_NULL(sv_r);
+        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : Rstats::Func::new_integer_empty(sv_r);
       Rstats::Integer x1_length = Rstats::Func::get_length(sv_r, sv_x1);
       
       if (!Rstats::Func::get_length(sv_r, sv_x_dim)) {
@@ -2244,7 +2244,7 @@ namespace Rstats {
         sv_x_dim = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
       }
       else {
-        sv_x_dim = Rstats::Func::new_NULL(sv_r);
+        sv_x_dim = Rstats::Func::new_integer_empty(sv_r);
       }
       
       return sv_x_dim;
@@ -2437,13 +2437,10 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_NULL(SV* sv_r) {
-      
-      SV* sv_x1 = Rstats::pl_new_hvrv();
-      sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
-      Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "object_type", Rstats::pl_new_sv_pv("NULL"));
-      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("NULL"));
+    SV* new_integer_empty(SV* sv_r) {
+      Rstats::Vector<Rstats::Integer>* v1 = new Rstats::Vector<Rstats::Integer>(0, 0);
+
+      SV* sv_x1 = Rstats::Func::new_vector<Rstats::Integer>(sv_r, v1);
       
       return sv_x1;
     }

@@ -829,27 +829,6 @@ SV* c_double(...)
   XSRETURN(1);
 }
 
-SV* c_complex(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_values;
-  if (sv_derived_from(ST(1), "ARRAY")) {
-    sv_values = ST(1);
-  }
-  else {
-    sv_values = Rstats::pl_new_avrv();
-    for (IV i = 1; i < items; i++) {
-      Rstats::pl_av_push(sv_values, ST(i));
-    }
-  }
-
-  SV* sv_x_out = Rstats::Func::c_complex(sv_r, sv_values);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* c_integer(...)
   PPCODE:
 {
@@ -909,17 +888,6 @@ SV* is_integer(...)
   SV* sv_r = ST(0);
 
   SV* sv_x_out = Rstats::Func::is_integer(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* is_complex(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-
-  SV* sv_x_out = Rstats::Func::is_complex(sv_r, ST(1));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -989,17 +957,6 @@ SV* as_logical(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x_out = Rstats::Func::as_logical(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* as_complex(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::as_complex(sv_r, sv_x1);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -1341,15 +1298,6 @@ SV* looks_like_logical(...)
 {
   SV* sv_str = ST(0);
   SV* sv_ret = Rstats::Util::looks_like_logical(sv_str);
-  XPUSHs(sv_ret);
-  XSRETURN(1);
-}
-
-SV* looks_like_complex(...)
-  PPCODE:
-{
-  SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_complex(sv_str);
   XPUSHs(sv_ret);
   XSRETURN(1);
 }

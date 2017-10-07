@@ -60,9 +60,6 @@ sub matrix {
   if (Rstats::Func::get_type($r, $x1) eq "character") {
     $x_matrix = c_character($r, $x1_values);
   }
-  elsif (Rstats::Func::get_type($r, $x1)  eq "complex") {
-    $x_matrix = c_complex($r, $x1_values);
-  }
   elsif (Rstats::Func::get_type($r, $x1)  eq "double") {
     $x_matrix = c_double($r, $x1_values);
   }
@@ -164,7 +161,6 @@ sub t {
 
 my $type_level = {
   character => 6,
-  complex => 5,
   double => 4,
   integer => 3,
   logical => 2,
@@ -623,12 +619,6 @@ sub is_element {
           last;
         }
       }
-      elsif ($type eq 'complex') {
-        if ($x1_value->{re} == $x2_value->{re} && $x1_value->{im} == $x2_value->{im}) {
-          $match = 1;
-          last;
-        }
-      }
     }
     push @$x3_values, $match ? 1 : 0;
   }
@@ -1032,64 +1022,6 @@ sub args_array {
   return @args;
 }
 
-sub complex {
-  my $r = shift;
-
-  my ($x1_re, $x1_im, $x1_mod, $x1_arg) = args_array($r, ['re', 'im', 'mod', 'arg'], @_);
-  
-  $x1_mod = Rstats::Func::NULL($r) unless defined $x1_mod;
-  $x1_arg = Rstats::Func::NULL($r) unless defined $x1_arg;
-
-  my $x2_elements = [];
-  # Create complex from mod and arg
-  if (Rstats::Func::get_length($r, $x1_mod) || Rstats::Func::get_length($r, $x1_arg)) {
-    my $x1_mod_length = Rstats::Func::get_length($r, $x1_mod);
-    my $x1_arg_length = Rstats::Func::get_length($r, $x1_arg);
-    my $longer_length = $x1_mod_length > $x1_arg_length ? $x1_mod_length : $x1_arg_length;
-    
-    my $x1_mod_elements = Rstats::Func::decompose($r, $x1_mod);
-    my $x1_arg_elements = Rstats::Func::decompose($r, $x1_arg);
-    for (my $i = 0; $i < $longer_length; $i++) {
-      my $x_mod = $x1_mod_elements->[$i];
-      $x_mod = Rstats::Func::c_double($r, 1) unless defined $x_mod;
-      my $x_arg = $x1_arg_elements->[$i];
-      $x_arg = Rstats::Func::c_double($r, 0) unless defined $x_arg;
-      
-      my $x_re = $x_mod * Rstats::Func::cos($r, $x_arg);
-      my $x_im = $x_mod * Rstats::Func::sin($r, $x_arg);
-      
-      my $x2_element = Rstats::Func::complex($r, $x_re, $x_im);
-      push @$x2_elements, $x2_element;
-    }
-  }
-  # Create complex from re and im
-  else {
-    Carp::croak "mode should be numeric"
-      unless Rstats::Func::is_numeric($r, $x1_re) && Rstats::Func::is_numeric($r, $x1_im);
-    
-    my $x1_re_elements = Rstats::Func::decompose($r, $x1_re);
-    my $x1_im_elements = Rstats::Func::decompose($r, $x1_im);
-    for (my $i = 0; $i <  Rstats::Func::get_length($r, $x1_im); $i++) {
-      my $x_re;
-      if (defined $x1_re_elements->[$i]) {
-        $x_re = $x1_re_elements->[$i];
-      }
-      else {
-        $x_re = Rstats::Func::c_double($r, 0);
-      }
-      my $x_im = $x1_im_elements->[$i];
-      my $x2_element = Rstats::Func::c_complex(
-        $r,
-        {re => Rstats::Func::value($r, $x_re), im => Rstats::Func::value($r, $x_im)}
-      );
-      push @$x2_elements, $x2_element;
-    }
-  }
-  
-  return Rstats::Func::c($r, @$x2_elements);
-}
-
-
 sub floor {
   my $r = shift;
   
@@ -1126,14 +1058,6 @@ sub head {
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
 
   return $x2;
-}
-
-sub i {
-  my $r = shift;
-  
-  my $i = Rstats::Func::c_complex($r, {re => 0, im => 1});
-  
-  return Rstats::Func::c($r, $i);
 }
 
 sub ifelse {
@@ -1773,7 +1697,7 @@ sub inner_product {
   my ($x1, $x2) = @_;
   
   if (Rstats::Func::is_null($r, $x1) || Rstats::Func::is_null($r, $x2)) {
-    Carp::croak "requires numeric/complex matrix/vector arguments";
+    Carp::croak "requires numeric matrix/vector arguments";
   }
   
   # Convert to matrix
@@ -1784,7 +1708,7 @@ sub inner_product {
   # Calculate
   if (Rstats::Func::is_matrix($r, $x1) && Rstats::Func::is_matrix($r, $x2)) {
     
-    Carp::croak "requires numeric/complex matrix/vector arguments"
+    Carp::croak "requires numeric matrix/vector arguments"
       if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;
     Carp::croak "Error in a x b : non-conformable arguments"
       unless Rstats::Func::dim($r, $x1)->values->[1] == Rstats::Func::dim($r, $x2)->values->[0];
@@ -1965,10 +1889,7 @@ sub bool {
   my $value = $x1->value;
 
   my $is;
-  if ($type eq 'character' || $type eq 'complex') {
-    Carp::croak 'Error in -a : invalid argument to unary operator ';
-  }
-  elsif ($type eq 'double') {
+  if ($type eq 'double') {
     if ($value eq 'Inf' || $value eq '-Inf') {
       $is = 1;
     }
@@ -2038,9 +1959,6 @@ sub get_array {
   my $x_matrix;
   if ($x1->get_type eq "character") {
     $x_matrix = c_character($r, \@x2_values);
-  }
-  elsif ($x1->get_type eq "complex") {
-    $x_matrix = c_complex($r, \@x2_values);
   }
   elsif ($x1->get_type eq "double") {
     $x_matrix = c_double($r, \@x2_values);
@@ -2165,13 +2083,6 @@ sub _value_to_string {
   if (!defined $value) {
     $string = 'NA';
   }
-  elsif ($type eq 'complex') {
-    my $re = $value->{re} || 0;
-    my $im = $value->{im} || 0;
-    $string = "$re";
-    $string .= $im >= 0 ? "+$im" : $im;
-    $string .= 'i';
-  }
   elsif ($type eq 'character') {
     $string = '"' . $value . '"';
   }
@@ -2201,9 +2112,6 @@ sub str {
     my $short_type;
     if ($type eq 'character') {
       $short_type = 'chr';
-    }
-    elsif ($type eq 'complex') {
-      $short_type = 'cplx';
     }
     elsif ($type eq 'double') {
       $short_type = 'num';

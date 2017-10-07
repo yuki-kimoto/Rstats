@@ -10,29 +10,6 @@ use Rstats;
 
 my $r = Rstats->new;
 
-
-
-# Im
-{
-  my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = $r->Im($x1);
-  is_deeply($x2->values, [2, 3]);
-}
-
-# Re
-{
-  my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = $r->Re($x1);
-  is_deeply($x2->values, [1, 2]);
-}
-
-# Conj
-{
-  my $x1 = $r->c(1 + 2*$r->i, 2 + 3*$r->i);
-  my $x2 = $r->Conj($x1);
-  is_deeply($x2->values, [{re => 1, im => -2}, {re => 2, im => -3}]);
-}
-
 # abs
 {
   # abs - $r->array refference

@@ -1447,15 +1447,23 @@ sub sd {
   return $sd;
 }
 
+=pod
 sub var {
   my $r = shift;
   
   my $x1 = to_object($r, shift);
   
-  my $var = sum($r, ($x1 - Rstats::Func::mean($r, $x1)) ** 2) / (Rstats::Func::get_length($r, $x1) - 1);
+  my $x1_length = Rstats::Func::get_length($r, $x1);
+  
+  my $mean = Rstats::Func::mean($r, $x1);
+  
+  my $mean_length = Rstats::Func::get_length($r, $mean);
+  
+  my $var = sum($r, ($x1 - $mean) ** 2) / ($x1_length - 1);
   
   return $var;
 }
+=cut
 
 sub which {
   my $r = shift;

@@ -135,7 +135,7 @@ my $r = Rstats->new;
 
   # atan2 - different number elements
   {
-    my $x1 = $r->c(1, 2);
+    my $x1 = $r->c(1, 2, 1, 2);
     my $x2 = $r->c(3, 4, 3, 4);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');

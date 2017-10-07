@@ -402,7 +402,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -433,7 +432,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -464,7 +462,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -495,7 +492,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -526,7 +522,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -557,7 +552,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -588,7 +582,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -619,7 +612,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -650,7 +642,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -681,7 +672,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -712,7 +702,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -743,7 +732,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -774,7 +762,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -805,7 +792,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -836,7 +822,6 @@ namespace Rstats {
       
       // Upgrade type and length
       upgrade_type(sv_r, 2, &sv_x1, &sv_x2);
-      upgrade_length(sv_r, 2, &sv_x1, &sv_x2);
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type1, "double")) {
@@ -1700,79 +1685,6 @@ namespace Rstats {
       return sv_x_out;
     }
     
-    SV* upgrade_length_avrv(SV* sv_r, SV* sv_xs) {
-      
-      int32_t xs_length = Rstats::pl_av_len(sv_xs);
-      int32_t max_length = 0;
-      for (int32_t i = 0; i < xs_length; i++) {
-        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
-        
-        if (x1_length > max_length) {
-          max_length = x1_length;
-        }
-      }
-      
-      SV* sv_new_xs = Rstats::pl_new_avrv();;
-      for (int32_t i = 0; i < xs_length; i++) {
-        SV* sv_x1 = Rstats::pl_av_fetch(sv_xs, i);
-        int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
-        
-        if (x1_length != max_length) {
-          Rstats::Vector<double>* v_length = new Rstats::Vector<double>(1, max_length);
-          SV* sv_x_length = Rstats::Func::new_vector<double>(sv_r, v_length);
-          Rstats::pl_av_push(
-            sv_new_xs,
-            Rstats::Func::array(sv_r, sv_x1, sv_x_length)
-          );
-        }
-        else {
-          Rstats::pl_av_push(sv_new_xs, sv_x1);
-        }
-      }
-      
-      return sv_new_xs;
-    }
-    
-    void upgrade_length(SV* sv_r, int32_t num, ...) {
-      va_list args;
-      
-      // Optimization if args count is 2
-      va_start(args, num);
-      if (num == 2) {
-        SV* sv_x1 = *va_arg(args, SV**);
-        SV* sv_x2 = *va_arg(args, SV**);
-
-        int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
-        int32_t x2_length = Rstats::Func::get_length(sv_r, sv_x2);
-        
-        if (x1_length == x2_length) {
-          return;
-        }
-      }
-      va_end(args);
-      
-      SV* sv_args = Rstats::pl_new_avrv();
-      va_start(args, num);
-      for (int32_t i = 0; i < num; i++) {
-        SV** arg = va_arg(args, SV**);
-        SV* x = *arg;
-        Rstats::pl_av_push(sv_args, x);
-      }
-      va_end(args);
-      
-      SV* sv_result = Rstats::Func::upgrade_length_avrv(sv_r, sv_args);
-      
-      va_start(args, num);
-      for (int32_t i = 0; i < num; i++) {
-        SV** arg = va_arg(args, SV**);
-        SV* sv_x = Rstats::pl_av_fetch(sv_result, i);
-
-        *arg = sv_x;
-      }
-      va_end(args);
-    }
-        
     void upgrade_type(SV* sv_r, int32_t num, ...) {
       va_list args;
       

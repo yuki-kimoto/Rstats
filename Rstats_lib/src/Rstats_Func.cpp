@@ -2128,14 +2128,6 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* new_NA(SV* sv_r) {
-      Rstats::Vector<int32_t>* v1 = new Rstats::Vector<int32_t>(1, 0);
-
-      SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
-      
-      return sv_x1;
-    }
-
     SV* new_NaN(SV* sv_r) {
       Rstats::Vector<double>* v1 = new Rstats::Vector<double>(1, NAN);
       
@@ -2188,7 +2180,7 @@ namespace Rstats {
         }
       }
       else {
-        sv_x_out = Rstats::Func::new_NA(sv_r);
+        sv_x_out = Rstats::Func::new_FALSE(sv_r);
       }
       
       return sv_x_out;

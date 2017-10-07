@@ -157,8 +157,6 @@ my @func_names = qw/
   upper_tri
   var
   which
-  names
-  mode
   str
   typeof
   pi

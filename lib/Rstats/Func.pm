@@ -414,7 +414,6 @@ sub C {
   my $seq_str = shift;
 
   my $by;
-  my $mode;
   if ($seq_str =~ s/^(.+)\*//) {
     $by = $1;
   }
@@ -460,7 +459,7 @@ sub is_element {
   
   my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
+  Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $type = $x1->get_type;
   my $x1_values = $x1->values;
@@ -487,7 +486,7 @@ sub setequal {
   
   my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
+  Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x3 = Rstats::Func::sort($r, $x1);
   my $x4 = Rstats::Func::sort($r, $x2);
@@ -512,7 +511,7 @@ sub setdiff {
   
   my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
+  Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -536,7 +535,7 @@ sub intersect {
   
   my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
   
-  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
+  Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x1_elements = Rstats::Func::decompose($r, $x1);
   my $x2_elements = Rstats::Func::decompose($r, $x2);
@@ -557,7 +556,7 @@ sub union {
   
   my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
 
-  Carp::croak "mode is diffrence" if $x1->get_type ne $x2->get_type;
+  Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
   my $x3 = Rstats::Func::c($r, $x1, $x2);
   my $x4 = unique($r, $x3);
@@ -688,8 +687,6 @@ sub ceiling {
   
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  
-  Rstats::Func::mode($r, $x2, 'double');
   
   return $x2;
 }
@@ -829,7 +826,6 @@ sub floor {
 
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  Rstats::Func::mode($r, $x2, 'double');
   
   return $x2;
 }
@@ -1207,7 +1203,6 @@ sub round {
   my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  Rstats::Func::mode($r, $x2, 'double');
   
   return $x2;
 }
@@ -1331,7 +1326,6 @@ sub trunc {
 
   my $x2 = Rstats::Func::c($r, @x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
-  Rstats::Func::mode($r, $x2, 'double');
   
   return $x2;
 }
@@ -2085,7 +2079,7 @@ sub set_array {
   
   my $type;
   my $x1_elements;
-  # Upgrade mode if type is different
+  # Upgrade type if type is different
   if ($x1->get_type ne $x2->get_type) {
     my $x1_tmp;
     ($x1_tmp, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])};

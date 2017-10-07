@@ -128,28 +128,6 @@ namespace Rstats {
       return sv_pos;
     }
 
-    SV* looks_like_logical (SV* sv_value) {
-      
-      SV* sv_ret;
-      if (!SvOK(sv_value) || sv_len(sv_value) == 0) {
-        sv_ret = &PL_sv_undef;
-      }
-      else {
-        if (Rstats::pl_pregexec(sv_value, LOGICAL_RE)) {
-          if (Rstats::pl_pregexec(sv_value, LOGICAL_TRUE_RE)) {
-            sv_ret = Rstats::pl_new_sv_iv(1);
-          }
-          else {
-            sv_ret = Rstats::pl_new_sv_iv(0);
-          }
-        }
-        else {
-          sv_ret = &PL_sv_undef;
-        }
-      }
-      return sv_ret;
-    }
-
     SV* looks_like_na (SV* sv_value) {
       
       SV* sv_ret;

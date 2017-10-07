@@ -59,8 +59,6 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* as_integer(Rstats::Vector<T_IN>*);
     template <class T_IN, class T_OUT>
-    Rstats::Vector<T_OUT>* as_logical(Rstats::Vector<T_IN>*);
-    template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* sin(Rstats::Vector<T_IN>*);
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* tanh(Rstats::Vector<T_IN>*);

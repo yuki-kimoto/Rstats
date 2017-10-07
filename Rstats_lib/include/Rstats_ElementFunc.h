@@ -171,10 +171,6 @@ namespace Rstats {
     Rstats::Integer as_integer(Rstats::Character);
     Rstats::Integer as_integer(Rstats::Double);
     Rstats::Integer as_integer(Rstats::Integer);
-
-    Rstats::Integer as_logical(Rstats::Character);
-    Rstats::Integer as_logical(Rstats::Double);
-    Rstats::Integer as_logical(Rstats::Integer);
   }
 }
 

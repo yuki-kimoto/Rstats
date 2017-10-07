@@ -64,16 +64,6 @@ my $r = Rstats->new;
     is_deeply($x1->values, [1, 2]);
   }
     
-  # $r->c(1, 3 + 4*$r->i);
-  {
-    my $x1 =  $r->c(1, $r->complex(3, 4));
-    ok($r->is->complex($x1));
-    is($x1->values->[0]->{re}, 1);
-    is($x1->values->[0]->{im}, 0);
-    is($x1->values->[1]->{re}, 3);
-    is($x1->values->[1]->{im}, 4);
-  }
-
   # $r->c("a", "b")
   {
     my $x1 = $r->c("a", "b");
@@ -436,22 +426,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, ['NaN']);
   }
   
-  # Arg - complex, non 0 values
-  {
-    my $x1 = $r->c(1 + 1*$r->i, 2 + 2*$r->i);
-    my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [$r->pi->value / 4, $r->pi->value / 4]);
-  }
-  
-  # Arg - complex, 0 values
-  {
-    my $x1 = $r->c(0 + 0*$r->i);
-    my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
-    is_deeply($x2->values, [0]);
-  }
-
   # Arg - dim
   {
     my $x1 = $r->array($r->c($r->TRUE, $r->TRUE));
@@ -563,15 +537,6 @@ my $r = Rstats->new;
     ok($r->is->double($x2));
   }
 
-  # expm1 - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    eval {
-      my $x2 = $r->expm1($x1);
-    };
-    like($@, qr/unimplemented/);
-  }
-  
   # expm1 - double,less than 1e-5
   {
     my $x1 = $r->array($r->c(0.0000001234));
@@ -622,14 +587,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [1]);
   }
   
-  # prod - complex
-  {
-    my $x1 = $r->c(1+1*$r->i, 2+3*$r->i);
-    my $x2 = $r->prod($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, [{re => -1, im => 5}]);
-  }
-
   # prod - double
   {
     my $x1 = $r->c(2, 3, 4);
@@ -665,14 +622,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0]);
   }
 
-  # sum - complex
-  {
-    my $x1 = $r->c(1+1*$r->i, 2+2*$r->i, 3+3*$r->i);
-    my $x2 = $r->sum($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, [{re => 6, im => 6}]);
-  }
-  
   # sum - double
   {
     my $x1 = $r->c(1, 2, 3);
@@ -749,12 +698,6 @@ my $r = Rstats->new;
     is($r->str($x1), 'int [1:2] 1 2');
   }
 
-  # str - vector, complex
-  {
-    my $x1 = $r->c(1 + 1*$r->i, 1 + 2*$r->i);
-    is($r->str($x1), 'cplx [1:2] 1+1i 1+2i');
-  }
-
   # str - vector, character
   {
     my $x1 = $r->c("a", "b", "c");
@@ -776,15 +719,6 @@ my $r = Rstats->new;
 
 # exp
 {
-  # exp - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->exp($x1);
-    is(sprintf("%.6f", $x2->value->{re}), '-1.131204');
-    is(sprintf("%.6f", $x2->value->{im}), '2.471727');
-    ok($r->is->complex($x2));
-  }
-  
   # exp - double,array
   {
     my $x1 = $r->array($r->c(1, 2));
@@ -819,19 +753,6 @@ my $r = Rstats->new;
 
 # log10
 {
-  # log10 - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->log10($x1);
-    my $exp = Math::Complex->make(1, 2)->log / Math::Complex->make(10, 0)->log;
-    my $exp_re = Math::Complex::Re($exp);
-    my $exp_im = Math::Complex::Im($exp);
-    
-    is($x2->value->{re}, $exp_re);
-    is($x2->value->{im}, $exp_im);
-    ok($r->is->complex($x2));
-  }
-  
   # log10 - double,array
   {
     my $x1 = $r->array($r->c(10));
@@ -862,19 +783,6 @@ my $r = Rstats->new;
 
 # log2
 {
-  # log2 - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->log2($x1);
-    my $exp = Math::Complex->make(1, 2)->log;
-    my $exp_re = Math::Complex::Re($exp);
-    my $exp_im = Math::Complex::Im($exp);
-    
-    is($x2->value->{re}, $exp_re / log(2));
-    is($x2->value->{im}, $exp_im / log(2));
-    ok($r->is->complex($x2));
-  }
-  
   # log2 - double,array
   {
     my $x1 = $r->array($r->c(2));
@@ -887,19 +795,6 @@ my $r = Rstats->new;
 
 # logb
 {
-  # logb - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->logb($x1);
-    my $exp = Math::Complex->make(1, 2)->log;
-    my $exp_re = Math::Complex::Re($exp);
-    my $exp_im = Math::Complex::Im($exp);
-    
-    is($x2->value->{re}, $exp_re);
-    is($x2->value->{im}, $exp_im);
-    ok($r->is->complex($x2));
-  }
-  
   # logb - double,array
   {
     my $x1 = $r->array($r->c(1, 10, -1, 0));
@@ -915,19 +810,6 @@ my $r = Rstats->new;
 
 # log
 {
-  # log - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->log($x1);
-    my $exp = Math::Complex->make(1, 2)->log;
-    my $exp_re = Math::Complex::Re($exp);
-    my $exp_im = Math::Complex::Im($exp);
-    
-    is($x2->value->{re}, $exp_re);
-    is($x2->value->{im}, $exp_im);
-    ok($r->is->complex($x2));
-  }
-  
   # log - double,array
   {
     my $x1 = $r->array($r->c(1, 10, -1, 0));
@@ -1050,55 +932,6 @@ my $r = Rstats->new;
   is(sprintf('%.4f', $x1->value), 3.1416);
 }
 
-# complex
-{
-  # complex
-  {
-    my $x1 = $r->complex(1, 2);
-    is($x1->value->{re}, 1);
-    is($x1->value->{im}, 2);
-  }
-  
-  # complex - $r->array
-  {
-    my $x1 = $r->complex($r->c(1, 2), $r->c(3, 4));
-    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
-  }
-
-  # complex - $r->array, some elements lack
-  {
-    my $x1 = $r->complex($r->c(1, 2), $r->c(3, 4, 5));
-    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}, {re => 0, im => 5}]);
-  }
-
-  # complex - re and im option
-  {
-    my $x1 = $r->complex({re => $r->c(1, 2), im => $r->c(3, 4)});
-    is_deeply($x1->values, [{re => 1, im => 3}, {re => 2, im => 4}]);
-  }
-  
-  # complex - mod and arg option
-  {
-    my $x1 = $r->complex({mod => 2, arg => $r->pi});
-    is($x1->value->{re}, -2);
-    cmp_ok(abs($x1->value->{im}), '<', 1e-15);
-  }
-
-  # complex - mod and arg option, omit arg
-  {
-    my $x1 = $r->complex({mod => 2});
-    is($x1->value->{re}, 2);
-    is(sprintf("%.5f", $x1->value->{im}), '0.00000');
-  }
-
-  # complex - mod and arg option, omit mod
-  {
-    my $x1 = $r->complex({arg => $r->pi});
-    is($x1->value->{re}, -1);
-    cmp_ok(abs($x1->value->{im}), '<', 1e-15);
-  }
-}
-
 # append
 {
   # append - after option
@@ -1158,14 +991,6 @@ my $r = Rstats->new;
     my $x2 = $r->c(1, 2, 3);
     my $x3 = $r->is->element($x1, $x2);
     is_deeply($x3->values, [1, 1, 1, 0]);
-  }
-  
-  # is->element - complex
-  {
-    my $x1 = $r->c(1*$r->i, 2*$r->i, 3*$r->i, 4*$r->i);
-    my $x2 = $r->c(1*$r->i, 2*$r->i, 3*$r->i);
-    my $x3 = $r->is->element($x1, $x2);
-    is_deeply($x3->values, [1, 1, 1, 0])
   }
 }
 
@@ -1267,19 +1092,6 @@ my $r = Rstats->new;
     ok($r->is->double($x2));
     is_deeply($x2->values, [2, 6, 24]);
   }
-  
-  # cumprod - complex
-  {
-    my $x1 = $r->c(2*$r->i, 3*$r->i, 4*$r->i);
-    my $x2 = $r->cumprod($x1);
-    ok($r->is->complex($x2));
-    cmp_ok($x2->values->[0]->{re}, '==', 0);
-    cmp_ok($x2->values->[0]->{im}, '==', 2);
-    cmp_ok($x2->values->[1]->{re}, '==', -6);
-    cmp_ok($x2->values->[1]->{im}, '==', 0);
-    cmp_ok($x2->values->[2]->{re}, '==', 0);
-    cmp_ok($x2->values->[2]->{im}, '==', -24);
-  }
 }
 
 # cumsum
@@ -1314,14 +1126,6 @@ my $r = Rstats->new;
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2));
     is_deeply($x2->values, [1, 3, 6]);
-  }
-  
-  # cumsum - complex
-  {
-    my $x1 = $r->c(1*$r->i, 2*$r->i, 3*$r->i);
-    my $x2 = $r->cumsum($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, [{re => 0, im => 1}, {re => 0, im => 3}, {re => 0, im => 6}]);
   }
 }
 
@@ -1379,13 +1183,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(1, 5, 10);
     my $x2 = $r->diff($x1);
     is_deeply($x2->values, [4, 5]);
-  }
-  
-  # diff - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i, 5 + 3*$r->i);
-    my $x2 = $r->diff($x1);
-    is_deeply($x2->values, [{re => 4, im => 1}]);
   }
 }
 
@@ -1475,34 +1272,6 @@ my $r = Rstats->new;
     my $e1 = $r->c(4, 9);
     my $e2 = $r->sqrt($e1);
     is_deeply($e2->values, [2, 3]);
-  }
-
-  # sqrt - complex, 1 + 0i
-  {
-    my $e1 = $r->c(1 + 0*$r->i);
-    my $e2 = $r->sqrt($e1);
-    is_deeply($e2->value, {re => 1, im => 0});
-  }
-
-  # sqrt - complex, 4 + 0i
-  {
-    my $e1 = $r->c(4 + 0*$r->i);
-    my $e2 = $r->sqrt($e1);
-    is_deeply($e2->value, {re => 2, im => 0});
-  }
-  
-  # sqrt - complex, -1 + 0i
-  {
-    my $e1 = $r->c(-1 + 0*$r->i);
-    my $e2 = $r->sqrt($e1);
-    is_deeply($e2->value, {re => 0, im => 1});
-  }
-
-  # sqrt - complex, -4 + 0i
-  {
-    my $e1 = $r->c(-4 + 0*$r->i);
-    my $e2 = $r->sqrt($e1);
-    is_deeply($e2->value, {re => 0, im => 2});
   }
 }
 
@@ -1799,23 +1568,6 @@ my $r = Rstats->new;
     my $x1 = $r->c_character(["a", "b", "c"]);
     ok($x1->is->character);
     is_deeply($x1->values, [qw/a b c/]);
-  }
-}
-
-# c_complex
-{
-  # c_complex - arguments is list
-  {
-    my $x1 = $r->c_complex({re => 1, im => 2}, {re => 3, im => 4});
-    ok($x1->is->complex);
-    is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
-  }
-
-  # c_complex - arguments is $r->array reference
-  {
-    my $x1 = $r->c_complex([{re => 1, im => 2}, {re => 3, im => 4}]);
-    ok($x1->is->complex);
-    is_deeply($x1->values, [{re => 1, im => 2}, {re => 3, im => 4}]);
   }
 }
 

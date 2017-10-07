@@ -8,15 +8,6 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# operation - pow
-{
-  my $z1 = $r->c_complex({re => 1, im => 2});
-  my $z2 = $r->c_complex({re => 3, im => 0});
-  my $z3 = $r->pow($z1, $z2);
-  is($z3->value->{re}, -11);
-  is($z3->value->{im}, -2);
-}
-
 # pow
 {
   # pow - dim
@@ -36,15 +27,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 ** $x2};
     like($@, qr#\QError in ** : non-numeric argument#);
-  }
-
-  # pow - complex
-  {
-    my $x1 = 1 + 2*$r->i;
-    my $x2 = 3 + 0*$r->i;
-    my $x3 = $x1 ** $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => -11, im => -2}]);
   }
 
   # pow - double
@@ -100,15 +82,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [25, 9, 125, 3]);
   }
 
-  # pow - auto upgrade type
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3);
-    my $x3 = $x1 ** $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => -11, im => -2}]);
-  }
-  
   # pow - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -126,16 +99,6 @@ my $r = Rstats->new;
 
 # add
 {
-  # add - dim
-  {
-    my $x1 = $r->array($r->c(1 + 2*$r->i), 2);
-    my $x2 = $r->array($r->c(3 + 4*$r->i), 2);
-    my $x3 = $x1 + $x2;
-    ok($r->is->complex($x3));
-    ok($r->dim($x3)->values, [2]);
-    is_deeply($x3->values, [{re => 4, im => 6}, {re => 4, im => 6}]);
-  }
-  
   # add - character
   {
     my $x1 = $r->c("a");
@@ -143,15 +106,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 + $x2};
     like($@, qr/\QError in + : non-numeric argument/);
-  }
-  
-  # add - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3 + 4*$r->i);
-    my $x3 = $x1 + $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => 4, im => 6}]);
   }
   
   # add - double
@@ -207,15 +161,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
 
-  # add - auto upgrade type
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3);
-    my $x3 = $x1 + $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => 4, im => 2}]);
-  }
-  
   # add - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -250,15 +195,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 - $x2};
     like($@, qr/\QError in - : non-numeric argument/);
-  }
-  
-  # subtract - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3 + 4*$r->i);
-    my $x3 = $x1 - $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => -2, im => -2}]);
   }
   
   # subtract - double
@@ -314,15 +250,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [-2, -2, -4, -4]);
   }
 
-  # subtract - auto upgrade type
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3);
-    my $x3 = $x1 - $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => -2, im => 2}]);
-  }
-  
   # subtract - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -357,15 +284,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 * $x2};
     like($@, qr/\QError in * : non-numeric argument/);
-  }
-  
-  # multiply - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3 + 4*$r->i);
-    my $x3 = $x1 * $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => -5, im => 10}]);
   }
   
   # multiply - double
@@ -421,15 +339,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [3, 8, 5, 12]);
   }
 
-  # multiply - auto upgrade type
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3);
-    my $x3 = $x1 * $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => 3, im => 6}]);
-  }
-  
   # multiply - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -464,15 +373,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 / $x2};
     like($@, qr#\QError in / : non-numeric argument#);
-  }
-
-  # divide - complex
-  {
-    my $x1 = 5 + -6*$r->i;
-    my $x2 = 3 + 2*$r->i;
-    my $x3 = $x1 / $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => 3/13, im => -28/13}]);
   }
 
   # divide - double
@@ -528,15 +428,6 @@ my $r = Rstats->new;
     is_deeply($x3->values, [12, 4, 6, 2]);
   }
 
-  # divide - auto upgrade type
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = $r->c(3);
-    my $x3 = $x1 / $x2;
-    ok($r->is->complex($x3));
-    is_deeply($x3->values, [{re => 1/3, im => 2/3}]);
-  }
-  
   # divide - perl number
   {
     my $x1 = $r->c(1, 2, 3);
@@ -571,15 +462,6 @@ my $r = Rstats->new;
     my $x3;
     eval { $x3 = $x1 % $x2};
     like($@, qr#\QError in % : non-numeric argument#);
-  }
-
-  # remainder - complex
-  {
-    my $x1 = 5 + -6*$r->i;
-    my $x2 = 3 + 2*$r->i;
-    my $x3;
-    eval { $x3 = $x1 % $x2 };
-    like($@, qr#\QError in % : unimplemented complex operation#);
   }
 
   # remainder - double
@@ -702,15 +584,6 @@ my $r = Rstats->new;
     is($x2->value, '-Inf');
   }
 
-  # negate - complex
-  {
-    my $x1 = $r->c(1 + 2*$r->i);
-    my $x2 = -$x1;
-    ok($r->is->complex($x2));
-    is($x2->value->{re}, -1);
-    is($x2->value->{im}, -2);
-  }
-  
   # negate - logical,true
   {
     my $x1 = $r->c($r->TRUE);
@@ -814,18 +687,6 @@ my $r = Rstats->new;
 
 # numeric operator auto upgrade
 {
-  # numeric operator auto upgrade - complex
-  {
-    my $x1 = $r->array($r->c($r->complex(1,2), $r->complex(3,4)));
-    my $x2 = $r->array($r->c(1, 2));
-    my $x3 = $x1 + $x2;
-    ok($r->is->complex($x3));
-    is($x3->values->[0]->{re}, 2);
-    is($x3->values->[0]->{im}, 2);
-    is($x3->values->[1]->{re}, 5);
-    is($x3->values->[1]->{im}, 4);
-  }
-
   # numeric operator auto upgrade - integer
   {
     my $x1 = $r->as->integer($r->c(3, 5));

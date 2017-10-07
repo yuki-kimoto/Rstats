@@ -7,22 +7,6 @@ use Rstats;
 
 my $r = Rstats->new;
 
-
-# array upgrade mode
-{
-  # array decide mode - complex
-  {
-    my $x0 = $r->complex(3, 4);
-    my $x0_1 = $r->c(1, $x0);
-    my $x1 = $r->array($x0_1);
-    is($x1->values->[0]->{re}, 1);
-    is($x1->values->[0]->{im}, 0);
-    is($x1->values->[1]->{re}, 3);
-    is($x1->values->[1]->{im}, 4);
-    ok($r->is->complex($x1));
-  }
-}
-
 # as->integer
 {
   # as->integer - $r->Inf
@@ -90,46 +74,6 @@ my $r = Rstats->new;
   # as->integer - error
   {
     my $x1 = $r->c("a");
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], undef);
-  }
-  
-  # as->integer - complex, 1 + 2*i
-  {
-    my $x1 = $r->complex(1, 2);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], 1);
-  }
-
-  # as->integer - complex, $r->Inf + 1*i
-  {
-    my $x1 = $r->complex($r->Inf, 1);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->integer - complex, 1 + $r->Inf*i
-  {
-    my $x1 = $r->complex(1, $r->Inf);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->integer - complex,  NaN + 1*i
-  {
-    my $x1 = $r->complex($r->NaN, 1);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->integer - complex,  1 + NaN*i
-  {
-    my $x1 = $r->complex(1, $r->NaN);
     my $x2 = $r->as->integer($x1);
     ok($r->is->integer($x2));
     is($x2->values->[0], undef);
@@ -234,14 +178,6 @@ my $r = Rstats->new;
     is($x2->values->[0], 1);
   }
 
-  # as->double - complex
-  {
-    my $x1 = $r->array($r->complex(1, 2));
-    my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
-    is($x2->values->[0], 1);
-  }
-  
   # as->double - double
   {
     my $x1 = $r->array(1.1);
@@ -279,15 +215,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0, 1, 2]);
   }
   
-  # as->numeric - from complex
-  {
-    my $x1 = $r->c($r->complex(1, 1), $r->complex(2, 2));
-    $r->mode($x1 => 'complex');
-    my $x2 = $r->as->numeric($x1);
-    is($r->mode($x2)->value, 'numeric');
-    is_deeply($x2->values, [1, 2]);
-  }
-
   # as->numeric - from numeric
   {
     my $x1 = $r->c(0.1, 1.1, 2.2);
@@ -375,54 +302,6 @@ my $r = Rstats->new;
     is($x2->values->[0], undef);
   }
 
-  # as->logical - complex, 1 + NaN*i
-  {
-    my $x1 = $r->complex(1, $r->NaN);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->logical - complex, NaN + 1*i
-  {
-    my $x1 = $r->complex($r->NaN, 1);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], undef);
-  }
-  
-  # as->logical - complex, 1 + 0*i
-  {
-    my $x1 = $r->complex(1, 0);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-  }
-
-  # as->logical - complex, $r->Inf + 0*i
-  {
-    my $x1 = $r->complex(1, 0);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->logical - complex, 0 + 1*i
-  {
-    my $x1 = $r->complex(0, 1);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 1);
-  }
-  
-  # as->logical - complex, 0 + 0i
-  {
-    my $x1 = $r->complex(0, 0);
-    my $x2 = $r->as->logical($x1);
-    ok($r->is->logical($x2));
-    is($x2->values->[0], 0);
-  }
-  
   # as->logical - double
   {
     my $x1 = $r->c(1.1, 0);
@@ -493,15 +372,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, []);
   }
   
-  # as->character - complex
-  {
-    my $x0 = $r->complex(1, 2);
-    my $x1 = $r->array($r->complex(1, 2));
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is($x2->values->[0], "1+2i");
-  }
-
   # as->character - $r->Inf
   {
     my $x1 = $r->Inf;
@@ -524,14 +394,6 @@ my $r = Rstats->new;
     my $x2 = $r->as->character($x1);
     ok($r->is->character($x2));
     is($x2->values->[0], "a");
-  }
-  
-  # as->character - complex, 0 + 0i
-  {
-    my $x1 = $r->array($r->complex(0, 0));
-    my $x2 = $r->as->character($x1);
-    ok($r->is->character($x2));
-    is($x2->values->[0], "0+0i");
   }
   
   # as->character - numeric
@@ -564,199 +426,8 @@ my $r = Rstats->new;
   }
 }
 
-# as->complex
-{
-  # as->complex - NULL
-  {
-    my $x1 = $r->NULL;
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, []);
-  }
-
-  # as->complex - $r->Inf
-  {
-    my $x1 = $r->Inf;
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 'Inf');
-    is($x2->values->[0]->{im}, 0);
-  }
-
-  # as->complex - NaN
-  {
-    my $x1 = $r->NaN;
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is_deeply($x2->values, [{re => 'NaN', im => 0}]);
-  }
-
-  # as->complex - character, only real number, no sign
-  {
-    my $x1 = $r->array("1.23");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1.23);
-    is($x2->values->[0]->{im}, 0);
-  }
-
-  # as->complex - character, only real number, pre and trailing space
-  {
-    my $x1 = $r->array("  1.23  ");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1.23);
-    is($x2->values->[0]->{im}, 0);
-  }
-  
-  # as->complex - character, only real number, plus
-  {
-    my $x1 = $r->array("+1.23");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1.23);
-    is($x2->values->[0]->{im}, 0);
-  }
-  
-  # as->complex - character, only real number, minus
-  {
-    my $x1 = $r->array("-1.23");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, -1.23);
-    is($x2->values->[0]->{im}, 0);
-  }
-
-  # as->complex - character, only image number, no sign
-  {
-    my $x1 = $r->array("1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 0);
-    is($x2->values->[0]->{im}, 1.23);
-  }
-
-  # as->complex - character, only image number, plus
-  {
-    my $x1 = $r->array("+1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 0);
-    is($x2->values->[0]->{im}, 1.23);
-  }
-
-  # as->complex - character, only image number, minus
-  {
-    my $x1 = $r->array("-1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 0);
-    is($x2->values->[0]->{im}, -1.23);
-  }
-
-  # as->complex - character, real number and image number, no sign
-  {
-    my $x1 = $r->array("2.5+1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 2.5);
-    is($x2->values->[0]->{im}, 1.23);
-  }
-
-  # as->complex - character, real number and image number, plus
-  {
-    my $x1 = $r->array("+2.5+1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 2.5);
-    is($x2->values->[0]->{im}, 1.23);
-  }
-  
-  # as->complex - character, real number and image number, minus
-  {
-    my $x1 = $r->array("-2.5-1.23i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, -2.5);
-    is($x2->values->[0]->{im}, -1.23);
-  }
-
-  # as->complex - character, pre and trailing space
-  {
-    my $x1 = $r->array("  2.5+1.23i  ");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 2.5);
-    is($x2->values->[0]->{im}, 1.23);
-  }
-
-  # as->complex - error
-  {
-    my $x1 = $r->array("a");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0], undef);
-  }
-
-  # as->complex - error
-  {
-    my $x1 = $r->array("i");
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0], undef);
-  }
-        
-  # as->complex - complex
-  {
-    my $x1 = $r->array($r->complex(1, 2));
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1);
-    is($x2->values->[0]->{im}, 2);
-  }
-  
-  # as->complex - numeric
-  {
-    my $x1 = $r->array(1.1);
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1.1);
-    is($x2->values->[0]->{im}, 0);
-  }
-  
-  # as->complex - integer
-  {
-    my $x1 = $r->array(1);
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1);
-    is($x2->values->[0]->{im}, 0);
-  }
-  
-  # as->complex - logical
-  {
-    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
-    my $x2 = $r->as->complex($x1);
-    ok($r->is->complex($x2));
-    is($x2->values->[0]->{re}, 1);
-    is($x2->values->[0]->{im}, 0);
-    is($x2->values->[1]->{re}, 0);
-    is($x2->values->[1]->{im}, 0);
-  }
-}
-
 # array decide type
 {
-  # array decide type - complex
-  {
-    my $x1 = $r->array($r->c($r->complex(1, 2), $r->complex(3, 4)));
-    is($x1->values->[0]->{re}, 1);
-    is($x1->values->[0]->{im}, 2);
-    is($x1->values->[1]->{re}, 3);
-    is($x1->values->[1]->{im}, 4);
-    ok($r->is->complex($x1));
-  }
-
   # array decide type - numerci
   {
     my $x1 = $r->array($r->c(1, 2));

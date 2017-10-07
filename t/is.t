@@ -71,14 +71,6 @@ my $r = Rstats->new;
     my $x2 = $r->is->nan($x1);
     is_deeply($x2->dim->values, [2]);
   }
-  
-  # is->nan - complex
-  {
-    my $x1 = $r->c(1+2*$r->i, $r->complex($r->NaN, 1), $r->complex(1, $r->NaN));
-    my $x2 = $r->is->nan($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 1, 1]);
-  }
 }
 
 # is->infinite
@@ -91,14 +83,6 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0]);
   }
 
-  # is->infinite - complex
-  {
-    my $x1 = $r->c(1+2*$r->i, $r->complex($r->NaN, 1), $r->Inf + 1*$r->i, $r->complex(1, $r->Inf));
-    my $x2 = $r->is->infinite($x1);
-    ok($r->is->logical($x2));
-    is_deeply($x2->values, [0, 0, 1, 1]);
-  }
-    
   # is->infinite - double
   {
     my $x1 = $r->c(1, 2);
@@ -174,17 +158,6 @@ my $r = Rstats->new;
     ok($r->is->character($r->as->character($c)));
     is($r->mode($r->as->character($c))->value, 'character');
     is($r->typeof($r->as->character($c))->value, 'character');
-  }
-}
-
-# is->complex
-{
-  # is->complex, as_complex, typeof - complex
-  {
-    my $c = $r->c(0, 1, 2);
-    ok($r->is->complex($r->as->complex($c)));
-    is($r->mode($r->as->complex($c))->value, 'complex');
-    is($r->typeof($r->as->complex($c))->value, 'complex');
   }
 }
 

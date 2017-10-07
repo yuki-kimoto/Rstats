@@ -59,7 +59,6 @@ my @func_names = qw/
   c
   c_double
   c_character
-  c_complex
   c_integer
   c_logical
   C
@@ -167,7 +166,6 @@ my @func_names = qw/
   str
   typeof
   pi
-  complex
   array
   length
   clone
@@ -211,7 +209,6 @@ sub new {
   no strict 'refs';
   $self->helper('is.array' => \&Rstats::Func::is_array);
   $self->helper('is.character' => \&Rstats::Func::is_character);
-  $self->helper('is.complex' => \&Rstats::Func::is_complex);
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
@@ -227,7 +224,6 @@ sub new {
 
   $self->helper('as.array' => \&Rstats::Func::as_array);
   $self->helper('as.character' => \&Rstats::Func::as_character);
-  $self->helper('as.complex' => \&Rstats::Func::as_complex);
   $self->helper('as.integer' => \&Rstats::Func::as_integer);
   $self->helper('as.double' => \&Rstats::Func::as_double);
   $self->helper('as.logical' => \&Rstats::Func::as_logical);
@@ -568,8 +564,6 @@ Alias of FALSE
 
 =head2 cumprod
 
-=head2 complex
-
 =head2 diag
 
 =head2 diff
@@ -836,11 +830,6 @@ Alias of FALSE
   # as.character(x1)
   $r->as->character($x1)
 
-=head2 as->complex
-
-  # as.complex(x1)
-  $r->as->complex($x1)
-
 =head2 as->integer
 
   # as.integer(x1)
@@ -875,11 +864,6 @@ Alias of FALSE
 
   # is.character(x1)
   $r->is->character($x1)
-
-=head2 is->complex
-
-  # is.complex(x1)
-  $r->is->complex($x1)
 
 =head2 is->finite
 

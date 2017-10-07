@@ -271,8 +271,8 @@ sub diag {
 sub set_diag {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
-  my $x2 = to_object($r, shift);
+  my $x1 = shift;
+  my $x2 = shift;
   
   my $x2_elements;
   my $x1_dim_values = Rstats::Func::dim($r, $x1)->values;
@@ -292,8 +292,8 @@ sub set_diag {
 sub kronecker {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
-  my $x2 = to_object($r, shift);
+  my $x1 = shift;
+  my $x2 = shift;
   
   ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
@@ -345,8 +345,8 @@ sub kronecker {
 sub outer {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
-  my $x2 = to_object($r, shift);
+  my $x1 = shift;
+  my $x2 = shift;
   
   ($x1, $x2) = @{Rstats::Func::upgrade_type($r, [$x1, $x2])} if $x1->get_type ne $x2->get_type;
   
@@ -457,7 +457,7 @@ sub nrow {
 sub is_element {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
   
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
@@ -484,7 +484,7 @@ sub is_element {
 sub setequal {
   my $r = shift;
   
-  my ($x1, $x2) = (to_object($r, shift), to_object($r, shift));
+  my ($x1, $x2) = (shift, shift);
   
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   

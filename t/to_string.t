@@ -12,19 +12,19 @@ my $r = Rstats->new;
   # to_string - NaN
   {
     my $x1 = $r->NaN;
-    is("$x1", "[1] NaN\n");
+    is($x1->to_string, "[1] NaN\n");
   }
 
   # to_string - Inf
   {
     my $x1 = $r->Inf;
-    is("$x1", "[1] Inf\n");
+    is($x1->to_string, "[1] Inf\n");
   }
 
   # to_string - -Inf
   {
     my $x1 = -$r->Inf;
-    is("$x1", "[1] -Inf\n");
+    is($x1->to_string, "[1] -Inf\n");
   }
 }
 
@@ -34,7 +34,7 @@ my $r = Rstats->new;
   # to_string - one element
   {
     my $x1 = $r->array(0);
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
     my $expected = "[1] 0\n";
     is($x1_str, $expected);
@@ -43,7 +43,7 @@ my $r = Rstats->new;
   # to_string - 2-dimention
   {
     my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -61,7 +61,7 @@ EOS
   # to_string - 1-dimention
   {
     my $x1 = $r->array($r->C('1:4'));
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -110,7 +110,7 @@ EOS
   # to_string - 1-dimention
   {
     my $x1 = $r->array($r->c(1, 2));
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -177,7 +177,7 @@ EOS
   # to_string - 3-dimention
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
@@ -255,7 +255,7 @@ EOS
   # to_string - 4 dimention
   {
     my $x1 = $r->array($r->C('1:120'), $r->c(5, 4, 3, 2));
-    my $x1_str = "$x1";
+    my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';

@@ -1197,7 +1197,7 @@ sub round {
   $digits = $opt->{digits} unless defined $digits;
   $digits = 0 unless defined $digits;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
 
   my $ro = 10 ** $digits;
   my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
@@ -1254,7 +1254,7 @@ sub sample {
   my $opt = ref $_[-1] eq 'HASH' ? pop @_ : {};
   
   my ($_x1, $length) = @_;
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   
   # Replace
   my $replace = $opt->{replace};
@@ -1282,7 +1282,7 @@ sub sequence {
   
   my $_x1 = shift;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   my $x1_values = $x1->values;
   
   my @x2_values;
@@ -1319,7 +1319,7 @@ sub trunc {
   
   my ($_x1) = @_;
   
-  my $x1 = to_object($r, $_x1);
+  my $x1 = $_x1;
   
   my @x2_elements
     = map { Rstats::Func::c_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
@@ -1333,7 +1333,7 @@ sub trunc {
 sub unique {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   if ($r->bool(Rstats::Func::is_vector($r, $x1))) {
     my $x2_elements = [];
@@ -1357,7 +1357,7 @@ sub unique {
 sub median {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $x2 = unique($r, $x1);
   my $x3 = Rstats::Func::sort($r, $x2);
@@ -1451,7 +1451,7 @@ sub sd {
 sub var {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $x1_length = Rstats::Func::get_length($r, $x1);
   

@@ -87,11 +87,9 @@ namespace Rstats {
         
         char* type = Rstats::Func::get_type(sv_r, sv_new_element);
         
-        if (!strEQ(type, "NULL")) {
-          total_length += Rstats::Func::get_length(sv_r, sv_new_element);
-          Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
-          Rstats::pl_av_push(sv_new_elements, sv_new_element);
-        }
+        total_length += Rstats::Func::get_length(sv_r, sv_new_element);
+        Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
+        Rstats::pl_av_push(sv_new_elements, sv_new_element);
       }
       
       SV* sv_x_out;
@@ -190,9 +188,6 @@ namespace Rstats {
       else if (strEQ(type, "integer")) {
         Rstats::Vector<Rstats::Integer>* v1 = Rstats::Func::get_vector<Rstats::Integer>(sv_r, sv_x1);
         return v1->get_length();
-      }
-      else if (strEQ(type, "NULL")) {
-        return 0;
       }
       else {
         croak("Error in get_length() : default method not implemented for type '%s'", type);

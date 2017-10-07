@@ -95,18 +95,13 @@ namespace Rstats {
 
       Rstats::clear_warn();
       for (int32_t i = 0; i < length; i++) {
-        try {
-          v_out->set_value(
-            i,
-            (*func)(
-              v1->get_value(i),
-              v2->get_value(i)
-            )
-          );
-        }
-        catch (...) {
-          v_out->add_na_position(i);
-        }
+        v_out->set_value(
+          i,
+          (*func)(
+            v1->get_value(i),
+            v2->get_value(i)
+          )
+        );
       }
       if (Rstats::get_warn()) {
         Rstats::print_warn_message();

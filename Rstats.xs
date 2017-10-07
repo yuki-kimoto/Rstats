@@ -1020,25 +1020,6 @@ SV* as_character(...)
   XSRETURN(1);
 }
 
-SV* mode(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  if (items > 2) {
-    SV* sv_x_mode = ST(2);
-    Rstats::Func::mode(sv_r, sv_x1, sv_x_mode);
-
-    XPUSHs(sv_r);
-    XSRETURN(1);
-  }
-  else {
-    SV* sv_x_mode = Rstats::Func::mode(sv_r, sv_x1);
-    XPUSHs(sv_x_mode);
-    XSRETURN(1);
-  }
-}
-
 SV* as(...)
   PPCODE:
 {

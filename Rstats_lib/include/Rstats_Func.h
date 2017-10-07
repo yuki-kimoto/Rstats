@@ -98,8 +98,6 @@ namespace Rstats {
     
     SV* upgrade_type_avrv(SV*, SV*);
     void upgrade_type(SV*, int32_t, ...);
-    SV* upgrade_length_avrv(SV*, SV*);
-    void upgrade_length(SV*, int32_t, ...);
 
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);

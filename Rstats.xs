@@ -636,17 +636,6 @@ SV* is_vector(...)
   XSRETURN(1);
 }
 
-SV* is_null(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  
-  SV* sv_x_out = Rstats::Func::is_null(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* pi(...)
   PPCODE:
 {

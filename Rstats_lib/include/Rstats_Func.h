@@ -23,7 +23,6 @@ namespace Rstats {
     SV* c_integer(SV*, SV*);
 
     SV* pi(SV*);
-    SV* is_null (SV*, SV*);
     SV* is_vector(SV*, SV*);
     SV* values(SV*, SV*);
     SV* is_matrix(SV*, SV*);

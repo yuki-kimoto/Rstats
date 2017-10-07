@@ -2271,15 +2271,6 @@ namespace Rstats {
       return Rstats::pl_new_sv_pv(Rstats::Func::get_type(sv_r, sv_x1));
     }
 
-    SV* is_null (SV* sv_r, SV* sv_x1) {
-      
-      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "NULL");
-      
-      SV* sv_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_is;
-    }
-    
     SV* is_vector (SV* sv_r, SV* sv_x1) {
       
       bool is = strEQ(Rstats::Func::get_object_type(sv_r, sv_x1), "array")

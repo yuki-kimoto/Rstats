@@ -245,7 +245,7 @@ sub lower_tri {
 sub diag {
   my $r = shift;
   
-  my $x1 = to_object($r, shift);
+  my $x1 = shift;
   
   my $size;
   my $x2_values;

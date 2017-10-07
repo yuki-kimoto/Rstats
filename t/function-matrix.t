@@ -21,7 +21,7 @@ my $r = Rstats->new;
 {
   # diag - unit matrix
   {
-    my $x1 = $r->diag(3);
+    my $x1 = $r->diag($r->c(3));
     is_deeply($x1->values, [1, 0, 0, 0, 1, 0, 0, 0, 1]);
     is_deeply($r->dim($x1)->values, [3, 3]);
   }

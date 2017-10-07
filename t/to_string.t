@@ -9,18 +9,6 @@ my $r = Rstats->new;
 
 # to_string
 {
-  # to_string - TRUE
-  {
-    my $x1 = $r->TRUE;
-    is("$x1", "[1] TRUE\n");
-  }
-
-  # to_string - FALSE
-  {
-    my $x1 = $r->FALSE;
-    is("$x1", "[1] FALSE\n");
-  }
-
   # to_string - NaN
   {
     my $x1 = $r->NaN;
@@ -173,14 +161,14 @@ EOS
   }
   
 
-  # to_string - 1-dimention, TRUE, FALSE
+  # to_string - 1-dimention
   {
-    my $x1 = $r->array($r->c($r->TRUE, $r->FALSE));
+    my $x1 = $r->array($r->c(1, 2));
     my $x1_str = "$x1";
     $x1_str =~ s/[ \t]+/ /;
 
   my $expected = <<'EOS';
-[1] TRUE FALSE
+[1] 1 2
 EOS
     $expected =~ s/[ \t]+/ /;
     

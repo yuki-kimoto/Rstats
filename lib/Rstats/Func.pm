@@ -2086,9 +2086,6 @@ sub _value_to_string {
   elsif ($type eq 'character') {
     $string = '"' . $value . '"';
   }
-  elsif ($type eq 'logical') {
-    $string = $value ? 'TRUE' : 'FALSE';
-  }
   else {
     $string = "$value";
   }
@@ -2118,9 +2115,6 @@ sub str {
     }
     elsif ($type eq 'integer') {
       $short_type = 'int';
-    }
-    elsif ($type eq 'logical') {
-      $short_type = 'logi';
     }
     else {
       $short_type = 'Unkonown';

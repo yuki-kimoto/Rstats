@@ -376,7 +376,7 @@ my $r = Rstats->new;
   # bool - one argument, false
   {
     my $x1 = $r->array(0);
-    if ($x1) {
+    if ($r->bool($x1)) {
       fail;
     }
     else {

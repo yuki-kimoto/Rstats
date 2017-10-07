@@ -81,10 +81,9 @@ my $r = Rstats->new;
   {
     my $x = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     ok($r->is->array($x));
-    ok(!$r->is->vector($x));
-    ok(!$r->is->matrix($x));
+    ok(!$r->bool($r->is->vector($x)));
+    ok(!$r->bool($r->is->matrix($x)));
   }
-
   # is_* - is_matrix
   {
     my $x = $r->matrix($r->C('1:12'), 4, 3);
@@ -96,7 +95,7 @@ my $r = Rstats->new;
   {
     my $x = $r->C('1:24');
     ok($r->is->vector($x));
-    ok(!$r->is->array($x));
+    ok(!$r->bool($r->is->array($x)));
   }
 
   # is_* - is_vector

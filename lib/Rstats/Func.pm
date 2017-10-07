@@ -180,7 +180,7 @@ sub upper_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if (Rstats::Func::is_matrix($r, $x1_m)) {
+  if ($r->bool(Rstats::Func::is_matrix($r, $x1_m))) {
     my $x1_dim_values = Rstats::Func::dim($r, $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
@@ -215,7 +215,7 @@ sub lower_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if (Rstats::Func::is_matrix($r, $x1_m)) {
+  if ($r->bool(Rstats::Func::is_matrix($r, $x1_m))) {
     my $x1_dim_values = Rstats::Func::dim($r, $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
@@ -497,7 +497,7 @@ sub setequal {
   my $x3_elements = Rstats::Func::decompose($r, $x3);
   my $x4_elements = Rstats::Func::decompose($r, $x4);
   for (my $i = 0; $i < Rstats::Func::get_length($r, $x3); $i++) {
-    unless ($x3_elements->[$i] == $x4_elements->[$i]) {
+    unless ($r->bool($r->equal($x3_elements->[$i], $x4_elements->[$i]))) {
       $not_equal = 1;
       last;
     }
@@ -519,7 +519,7 @@ sub setdiff {
   for my $x1_element (@$x1_elements) {
     my $match;
     for my $x2_element (@$x2_elements) {
-      if ($x1_element == $x2_element) {
+      if ($r->bool($r->equal($x1_element, $x2_element))) {
         $match = 1;
         last;
       }
@@ -542,7 +542,7 @@ sub intersect {
   my $x3_elements = [];
   for my $x1_element (@$x1_elements) {
     for my $x2_element (@$x2_elements) {
-      if ($x1_element == $x2_element) {
+      if ($r->bool($r->equal($x1_element, $x2_element))) {
         push @$x3_elements, $x1_element;
       }
     }
@@ -654,11 +654,11 @@ sub cbind {
     my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
     
     my $row_count;
-    if (Rstats::Func::is_matrix($r, $x1)) {
+    if ($r->bool(Rstats::Func::is_matrix($r, $x1))) {
       $row_count = $x1_dim_elements->[0];
       $col_count_total += $x1_dim_elements->[1];
     }
-    elsif (Rstats::Func::is_vector($r, $x1)) {
+    elsif ($r->bool(Rstats::Func::is_vector($r, $x1))) {
       $row_count = $x1->dim_as_array->values->[0];
       $col_count_total += 1;
     }
@@ -749,10 +749,10 @@ sub cummax {
   push @x2_elements, $max;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_nan($r, $element)) {
+    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
       $max = $element;
     }
-    if ($element > $max && !Rstats::Func::is_nan($r, $max)) {
+    if ($element > $max && !$r->bool(Rstats::Func::is_nan($r, $max))) {
       $max = $element;
     }
     push @x2_elements, $max;
@@ -776,10 +776,10 @@ sub cummin {
   my $min = shift @$x1_elements;
   push @x2_elements, $min;
   for my $element (@$x1_elements) {
-    if (Rstats::Func::is_nan($r, $element)) {
+    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
       $min = $element;
     }
-    if ($element < $min && !Rstats::Func::is_nan($r, $min)) {
+    if ($element < $min && !$r->bool(Rstats::Func::is_nan($r, $min))) {
       $min = $element;
     }
     push @x2_elements, $min;
@@ -887,10 +887,10 @@ sub max {
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_nan($r, $element)) {
+    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
       $max = $element;
     }
-    if (!Rstats::Func::is_nan($r, $max) && Rstats::Func::value($r, $r->more_than($element, $max))) {
+    if (!$r->bool(Rstats::Func::is_nan($r, $max)) && Rstats::Func::value($r, $r->more_than($element, $max))) {
       $max = $element;
     }
   }
@@ -922,10 +922,10 @@ sub min {
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if (Rstats::Func::is_nan($r, $element)) {
+    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
       $min = $element;
     }
-    if (!Rstats::Func::is_nan($r, $min) && Rstats::Func::value($r, $r->less_than($element, $min))) {
+    if (!$r->bool(Rstats::Func::is_nan($r, $min)) && Rstats::Func::value($r, $r->less_than($element, $min))) {
       $min = $element;
     }
   }
@@ -1335,7 +1335,7 @@ sub unique {
   
   my $x1 = to_object($r, shift);
   
-  if (Rstats::Func::is_vector($r, $x1)) {
+  if ($r->bool(Rstats::Func::is_vector($r, $x1))) {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
@@ -1490,11 +1490,11 @@ sub inner_product {
   
   # Convert to matrix
   $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))
-    if Rstats::Func::is_vector($r, $x1);
-  $x2 = Rstats::Func::as_matrix($r, $x2) if Rstats::Func::is_vector($r, $x2);
+    if $r->bool(Rstats::Func::is_vector($r, $x1));
+  $x2 = Rstats::Func::as_matrix($r, $x2) if $r->bool(Rstats::Func::is_vector($r, $x2));
   
   # Calculate
-  if (Rstats::Func::is_matrix($r, $x1) && Rstats::Func::is_matrix($r, $x2)) {
+  if ($r->bool(Rstats::Func::is_matrix($r, $x1)) && $r->bool(Rstats::Func::is_matrix($r, $x2))) {
     
     Carp::croak "requires numeric matrix/vector arguments"
       if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;
@@ -1863,7 +1863,7 @@ sub str {
   
   my @str;
   
-  if (Rstats::Func::is_vector($r, $x1) || is_array($r, $x1)) {
+  if ($r->bool(Rstats::Func::is_vector($r, $x1)) || is_array($r, $x1)) {
     # Short type
     my $type = $x1->get_type;
     my $short_type;
@@ -2116,11 +2116,11 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @x2_elements = grep { !Rstats::Func::is_nan($r, $_) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = grep { !$r->bool(Rstats::Func::is_nan($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements]
-    : [sort { ($a > $b) ? 1 : ($a == $b) ? 0 : -1 } @x2_elements];
+    ? [reverse sort { $r->bool($r->more_than($a, $b)) ? 1 : $r->bool($r->equal($a,$b)) ? 0 : -1 } @x2_elements]
+    : [sort { $r->bool($r->more_than($a, $b)) ? 1 : $r->bool($r->more_than($a,$b)) ? 0 : -1 } @x2_elements];
 
   return Rstats::Func::c($r, @$x3_elements);
 }

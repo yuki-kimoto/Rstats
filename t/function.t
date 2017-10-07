@@ -368,7 +368,7 @@ my $r = Rstats->new;
     my $x1_sorted = $r->sort($x1);
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
-    
+  
   # c_ - append (vector)
   {
     my $x1 = $r->c(1, 2, 3);

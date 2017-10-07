@@ -18,7 +18,6 @@ namespace Rstats {
     SV* new_TRUE(SV*); /* $r->TRUE */
 
     SV* c(SV*, SV*);
-    SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);
 
@@ -33,7 +32,6 @@ namespace Rstats {
     Rstats::Integer to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);
-    SV* is_character(SV*, SV*);
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
@@ -45,7 +43,6 @@ namespace Rstats {
     SV* as_integer(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
-    SV* as_character(SV*, SV*);
     SV* as(SV*, SV*, SV*);
 
     SV* clone(SV*, SV*);

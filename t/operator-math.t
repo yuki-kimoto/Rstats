@@ -67,7 +67,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1);
     my $x2 = $r->c(2);
-    my $x3 = $x1 + $x2;
+    my $x3 = $r->add($x1, $x2);
     ok($r->is->double($x3));
     is_deeply($x3->values, [3]);
   }
@@ -76,7 +76,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(1));
     my $x2 = $r->as->integer($r->c(2));
-    my $x3 = $x1 + $x2;
+    my $x3 = $r->add($x1, $x2);
     ok($r->is->integer($x3));
     is_deeply($x3->values, [3]);
   }
@@ -85,21 +85,21 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1, 2, 1, 2);
     my $x2 = $r->c(3, 4, 5, 6);
-    my $x3 = $x1 + $x2;
+    my $x3 = $r->add($x1, $x2);
     is_deeply($x3->values, [4, 6, 6, 8]);
   }
 
   # add - perl number
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $x1 + $r->c(1, 1, 1);
+    my $x2 = $r->add($x1, $r->c(1, 1, 1));
     is_deeply($x2->values, [2, 3, 4]);
   }
 
   # add - perl number,reverse
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(1, 1, 1) + $x1;
+    my $x2 = $r->add($r->c(1, 1, 1), $x1);
     is_deeply($x2->values, [2, 3, 4]);
   }
 }

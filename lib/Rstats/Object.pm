@@ -3,12 +3,6 @@ use Object::Simple -base;
 
 
 use overload
-  '+' => sub {
-    my $x1 = shift;
-    my $r = $x1->r;
-
-    return Rstats::Func::add($r, Rstats::Func::_fix_pos($r, $x1, @_));
-  },
   '-' => sub {
     my $x1 = shift;
     my $r = $x1->r;

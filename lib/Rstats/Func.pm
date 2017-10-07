@@ -925,7 +925,7 @@ sub min {
     if (Rstats::Func::is_nan($r, $element)) {
       $min = $element;
     }
-    if (!Rstats::Func::is_nan($r, $min) && Rstats::Func::value($r, $element < $min)) {
+    if (!Rstats::Func::is_nan($r, $min) && Rstats::Func::value($r, $r->less_than($element, $min))) {
       $min = $element;
     }
   }

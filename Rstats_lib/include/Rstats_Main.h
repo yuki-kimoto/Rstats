@@ -6,6 +6,8 @@
 #define _isnan isnan
 #endif
 
+#include <stdint.h>
+
 #include <complex>
 
 /* Perl headers */
@@ -86,8 +88,8 @@ namespace Rstats {
   }
 
   // Rstats type
-  typedef NV Double;
-  typedef IV Integer;
+  typedef double Double;
+  typedef int32_t Integer;
   typedef UV NaPosition;
   
   // Error constant value

@@ -15,8 +15,6 @@ namespace Rstats {
         Rstats::print_warn_message();
       }
       
-      v_out->merge_na_positions(v1->get_na_positions());
-      
       return v_out;
     }
 
@@ -63,8 +61,6 @@ namespace Rstats {
         Rstats::print_warn_message();
       }
       
-      v_out->merge_na_positions(v1->get_na_positions());
-      
       return v_out;
     }
 
@@ -87,9 +83,6 @@ namespace Rstats {
       if (Rstats::get_warn()) {
         Rstats::print_warn_message();
       }
-      
-      v_out->merge_na_positions(v1->get_na_positions());
-      v_out->merge_na_positions(v2->get_na_positions());
       
       return v_out;
     }
@@ -118,9 +111,6 @@ namespace Rstats {
       if (Rstats::get_warn()) {
         Rstats::print_warn_message();
       }
-      
-      v_out->merge_na_positions(v1->get_na_positions());
-      v_out->merge_na_positions(v2->get_na_positions());
       
       return v_out;
     }

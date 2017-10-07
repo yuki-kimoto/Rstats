@@ -33,24 +33,6 @@ namespace Rstats {
   }
 
   template <class T>
-  void Vector<T>::merge_na_positions(Rstats::NaPosition* na_positions) {
-    
-    if (na_positions == NULL) {
-      return;
-    }
-    
-    if (this->na_positions == NULL) {
-      this->init_na_positions();
-    }
-    
-    if (this->get_length()) {
-      for (int32_t i = 0; i < this->get_na_positions_length(); i++) {
-        *(this->get_na_positions() + i) |= *(na_positions + i);
-      }
-    }
-  }
-
-  template <class T>
   int32_t Vector<T>::exists_na_position(int32_t position) {
     if (this->get_na_positions() == NULL) {
       return 0;

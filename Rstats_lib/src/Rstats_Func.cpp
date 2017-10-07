@@ -289,7 +289,6 @@ namespace Rstats {
           v_out->set_value(i, v_out_total);
         }
           
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -301,7 +300,6 @@ namespace Rstats {
           v_out->set_value(i, v_out_total);
         }
         
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
@@ -327,7 +325,6 @@ namespace Rstats {
           v_out->set_value(i, v_out_total);
         }
           
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -339,7 +336,6 @@ namespace Rstats {
           v_out->set_value(i, v_out_total);
         }
         
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
@@ -1893,7 +1889,6 @@ namespace Rstats {
         for (int32_t i = 0; i < v1->get_length(); i++) {
           v_out->set_value(i, v1->get_value(i));
         }
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "integer")) {
@@ -1902,7 +1897,6 @@ namespace Rstats {
         for (int32_t i = 0; i < v1->get_length(); i++) {
           v_out->set_value(i, v1->get_value(i));
         }
-        v_out->merge_na_positions(v1->get_na_positions());
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       return sv_x_out;

@@ -23,7 +23,6 @@ namespace Rstats {
     void init_na_positions();
     void add_na_position(int32_t);
     int32_t exists_na_position(int32_t);
-    void merge_na_positions(Rstats::NaPosition*);
     Rstats::NaPosition* get_na_positions();
     int32_t get_na_positions_length();
     

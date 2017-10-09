@@ -10,6 +10,14 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# ifelse
+{
+  my $x1 = $r->c([1, 0, 1]);
+  my $x2 = $r->ifelse($x1, $r->c(5), $r->c(7));
+  is_deeply($x2->values, [5, 7, 5]);
+}
+
+
 # $r->C
 {
   # $r->C('1:3')
@@ -132,13 +140,6 @@ my $r = Rstats->new;
   my $x1 = $r->c([5, 7, 5]);
   my $x2 = $r->which($x1, sub { $_ eq 5 });
   is_deeply($x2->values, [1, 3]);
-}
-
-# elseif
-{
-  my $x1 = $r->c([1, 0, 1]);
-  my $x2 = $r->ifelse($x1, 5, 7);
-  is_deeply($x2->values, [5, 7, 5]);
 }
 
 # head
@@ -920,7 +921,7 @@ my $r = Rstats->new;
   
   # array - dim option
   {
-    my $x1 = $r->array($r->C('1:24'), {dim => $r->c([4, 3, 2])});
+    my $x1 = $r->array($r->C('1:24'), $r->c([4, 3, 2]));
     is_deeply($x1->values, [1 .. 24]);
     is_deeply($r->dim($x1)->values, [4, 3, 2]);
   }

@@ -53,10 +53,6 @@ namespace Rstats {
 
     SV* c(SV* sv_r, SV* sv_elements) {
       
-      if (!SvROK(sv_elements)) {
-        
-      }
-      
       int32_t length = Rstats::pl_av_len(sv_elements);
 
       SV* sv_x_out;
@@ -151,28 +147,11 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* array(SV* sv_r, SV* sv_x1) {
-      SV* sv_args_h = Rstats::pl_new_hvrv();
-      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
-      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
-    }
-    
-    SV* array(SV* sv_r, SV* sv_x1, SV* sv_dim) {
+    SV* array(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       
-      SV* sv_args_h = Rstats::pl_new_hvrv();
-      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
-      Rstats::pl_hv_store(sv_args_h, "dim", sv_dim);
-      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
-    }
-    
-    SV* array_with_opt(SV* sv_r, SV* sv_args_h) {
-
-      SV* sv_x1 = Rstats::pl_hv_fetch(sv_args_h, "x");
-     
       // Dimention
-      SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : &PL_sv_undef;
       int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
+
       
       if (!SvOK(sv_x_dim)) {
         Rstats::Vector<int32_t>* v_dim = new Rstats::Vector<int32_t>(1, x1_length);
@@ -184,8 +163,6 @@ namespace Rstats {
         SV* sv_values = Rstats::Func::values(sv_r, sv_x_dim);
         dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
       }
-
-
       
       // Fix elements length
       SV* sv_elements;

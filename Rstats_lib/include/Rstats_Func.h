@@ -42,7 +42,6 @@ namespace Rstats {
     SV* dim_as_array(SV*, SV*);
     SV* decompose(SV*, SV*);
     SV* compose(SV*, SV*, SV*);
-    SV* array(SV*, SV*);
     SV* array(SV*, SV*, SV*);
     SV* array_with_opt(SV*, SV*);
     SV* args_h(SV*, SV*, SV*);

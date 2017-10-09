@@ -1911,14 +1911,6 @@ namespace Rstats {
       }
     }
 
-    SV* clone(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_x_out = Rstats::Func::as_vector(sv_r, sv_x1);
-      Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
-      
-      return sv_x_out;
-    }
-
     SV* dim_as_array(SV* sv_r, SV* sv_x1) {
       
       if (Rstats::pl_hv_exists(sv_x1, "dim")) {

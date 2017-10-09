@@ -823,17 +823,6 @@ SV* is_nan(...)
   XSRETURN(1);
 }
 
-SV* clone(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::clone(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* dim_as_array(...)
   PPCODE:
 {

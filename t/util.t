@@ -77,7 +77,7 @@ my $r = Rstats->new;
 
 # index_to_pos
 {
-  my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
+  my $x1 = $r->array($r->C('1:24'), $r->c([4, 3, 2]));
   my $dim = [4, 3, 2];
   
   {

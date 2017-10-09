@@ -268,50 +268,27 @@ namespace Rstats {
       
       SV* sv_x_out;
       Rstats::Vector<int32_t>* v_out;
-      if (SvOK(sv_elements)) {
+      if (sv_derived_from(sv_elements, "ARRAY")) { 
         int32_t length = Rstats::pl_av_len(sv_elements);
         
-        if (length < 0) {
+        if (length < 1) {
           croak("Array length must be more than 0(Rstats::Func::c_int)");
         }
 
-        SV* sv_new_elements = Rstats::pl_new_avrv();
-        
         // Convert to Rstats::Object, check type and total length, and remove NULL
         v_out = new Rstats::Vector<int32_t>(length);
         for (int32_t i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
-
-          SV* sv_new_element;
           
-          if (SvOK(sv_element)) {
-            if (SvROK(sv_element)) {
-              int32_t is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
-              if (is_object) {
-                sv_new_element = sv_element;
-              }
-              else {
-                croak("Can't receive reference value except Rstats::Object object");
-              }
-            }
-            else {
-              Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(1, SvIV(sv_element));
-              sv_new_element = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
-            }
-          }
-          else {
-            croak("Can't use undef as array element");
-          }
-          
-          int32_t value = SvIV(sv_element);
+          int32_t value = (int32_t)SvIV(sv_element);
           
           v_out->set_value(i, value);
-          
-          Rstats::pl_av_push(sv_new_elements, sv_new_element);
         }
       }
       else {
-        croak("First argument must be defined(Rstats::Func::c_int)");
+        v_out = new Rstats::Vector<int32_t>(1);
+        int32_t value = (int32_t)SvIV(sv_elements);
+        v_out->set_value(0, value);
       }
 
       sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);

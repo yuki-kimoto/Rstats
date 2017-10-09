@@ -23,6 +23,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c_int(3);
     is_deeply($x1->values, [3]);
+    ok($r->is->int($x1));
   }
 
 }

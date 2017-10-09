@@ -1753,40 +1753,17 @@ namespace Rstats {
       
       return sv_x2;
     }
-
+    
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
-      sv_x_dim = Rstats::Func::to_object(sv_r, sv_x_dim);
-      
-      int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
-      int32_t x1_length_by_dim = 1;
-      
-      SV* sv_x_dim_values = values(sv_r, sv_x_dim);
-      int32_t x_dim_values_length = Rstats::pl_av_len(sv_x_dim_values);
-      
-      for (int32_t i = 0; i < x_dim_values_length; i++) {
-        SV* sv_x_dim_value = Rstats::pl_av_fetch(sv_x_dim_values, i);
-        int32_t x_dim_value = SvIV(sv_x_dim_value);
-        x1_length_by_dim *= x_dim_value;
-      }
-      
-      if (x1_length != x1_length_by_dim) {
-        croak("dims [product %d] do not match the length of object [%d]", x1_length_by_dim, x1_length);
-      }
+      sv_x_dim = sv_x_dim;
       
       Rstats::pl_hv_store(sv_x1, "dim", Rstats::Func::as_vector(sv_r, sv_x_dim));
       
       return sv_r;
     }
-
+    
     SV* dim(SV* sv_r, SV* sv_x1) {
-      SV* sv_x_dim;
-      
-      if (Rstats::pl_hv_exists(sv_x1, "dim")) {
-        sv_x_dim = Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim"));
-      }
-      else {
-        sv_x_dim = &PL_sv_undef;
-      }
+      SV* sv_x_dim = Rstats::pl_hv_fetch(sv_x1, "dim");
       
       return sv_x_dim;
     }

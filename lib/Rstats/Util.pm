@@ -30,7 +30,9 @@ sub parse_index {
   
   for (my $i = 0; $i < @$x1_dim; $i++) {
     my $_index = $_indexs[$i];
-
+    
+    my $minus;
+    
     my $index = defined $_index ? $r->c($_index) : Rstats::c_int($r);
     my $index_values = $index->values;
     if (@$index_values) {
@@ -45,14 +47,14 @@ sub parse_index {
       }
       croak "Can't min minus sign and plus sign"
         if $minus_count > 0 && $minus_count != @$index_values;
-      $index->{_minus} = 1 if $minus_count > 0;
+      $minus = 1 if $minus_count > 0;
     }
     
     if (!@{$index->values}) {
       my $index_values_new = [1 .. $x1_dim->[$i]];
       $index = Rstats::Func::c_int($r, $index_values_new);
     }
-    elsif ($index->{_minus}) {
+    elsif ($minus) {
       my $index_value_new = [];
       
       for my $k (1 .. $x1_dim->[$i]) {

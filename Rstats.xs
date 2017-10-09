@@ -651,6 +651,7 @@ SV* c(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
+
   SV* sv_values;
   if (sv_derived_from(ST(1), "ARRAY")) {
     sv_values = ST(1);

@@ -24,7 +24,7 @@ my $r = Rstats->new;
   # atan2 - dim
   {
     my $x1 = $r->array($r->c([1, 2]));
-    my $x2 = $r->array($r->c(3, 4));
+    my $x2 = $r->array($r->c([3, 4]));
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
@@ -35,7 +35,7 @@ my $r = Rstats->new;
   # atan2 - double
   {
     my $x1 = $r->c([1, 2]);
-    my $x2 = $r->c(3, 4);
+    my $x2 = $r->c([3, 4]);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');

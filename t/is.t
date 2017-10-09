@@ -11,7 +11,7 @@ my $r = Rstats->new;
 {
   # is->nan - double
   {
-    my $x1 = $r->c(1, 2);
+    my $x1 = $r->c([1, 2]);
     my $x2 = $r->is->nan($x1);
     is_deeply($x2->values, [0, 0]);
   }
@@ -46,7 +46,7 @@ my $r = Rstats->new;
 
   # is->nan - dimention
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     my $x2 = $r->is->nan($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -56,7 +56,7 @@ my $r = Rstats->new;
 {
   # is->infinite - double
   {
-    my $x1 = $r->c(1, 2);
+    my $x1 = $r->c([1, 2]);
     my $x2 = $r->is->infinite($x1);
     is_deeply($x2->values, [0, 0]);
   }
@@ -91,7 +91,7 @@ my $r = Rstats->new;
 
   # is->infinite - dimention
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     my $x2 = $r->is->infinite($x1);
     is_deeply($x2->dim->values, [2]);
   }

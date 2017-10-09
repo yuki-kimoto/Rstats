@@ -2037,7 +2037,7 @@ namespace Rstats {
           Rstats::pl_hv_store(
             sv_new_opt,
             SvPV_nolen(sv_name),
-            Rstats::Func::to_object(sv_r, Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name)))
+            Rstats::pl_hv_delete(sv_opt, SvPV_nolen(sv_name))
           );
         }
         else if (i < names_length) {

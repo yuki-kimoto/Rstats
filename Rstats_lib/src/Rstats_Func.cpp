@@ -147,6 +147,76 @@ namespace Rstats {
       return sv_x_out;
     }
 
+    SV* array(SV* sv_r, SV* sv_x1) {
+      SV* sv_args_h = Rstats::pl_new_hvrv();
+      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
+      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
+    }
+    
+    SV* array(SV* sv_r, SV* sv_x1, SV* sv_dim) {
+      
+      SV* sv_args_h = Rstats::pl_new_hvrv();
+      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
+      Rstats::pl_hv_store(sv_args_h, "dim", sv_dim);
+      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
+    }
+    
+    SV* array_with_opt(SV* sv_r, SV* sv_args_h) {
+
+      SV* sv_x1 = Rstats::pl_hv_fetch(sv_args_h, "x");
+     
+      // Dimention
+      SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
+        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : &PL_sv_undef;
+      int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
+      
+      if (!SvOK(sv_x_dim)) {
+        Rstats::Vector<int32_t>* v_dim = new Rstats::Vector<int32_t>(1, x1_length);
+        sv_x_dim = Rstats::Func::new_vector<int32_t>(sv_r, v_dim);
+      }
+      int32_t dim_product = 1;
+      int32_t x_dim_length = Rstats::Func::get_length(sv_r, sv_x_dim);
+      for (int32_t i = 0; i < x_dim_length; i++) {
+        SV* sv_values = Rstats::Func::values(sv_r, sv_x_dim);
+        dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
+      }
+
+      
+      // Fix elements length
+      SV* sv_elements;
+      if (x1_length == dim_product) {
+        sv_elements = Rstats::Func::decompose(sv_r, sv_x1);
+      }
+      else if (x1_length > dim_product) {
+        SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
+        sv_elements = Rstats::pl_new_avrv();
+        for (int32_t i = 0; i < dim_product; i++) {
+          Rstats::pl_av_push(sv_elements, Rstats::pl_av_fetch(sv_elements_tmp, i));
+        }
+      }
+      else if (x1_length < dim_product) {
+        SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
+        int32_t elements_tmp_length = Rstats::pl_av_len(sv_elements_tmp);
+        int32_t repeat_count = (int32_t)(dim_product / elements_tmp_length) + 1;
+        SV* sv_elements_tmp2 = Rstats::pl_new_avrv();
+        int32_t elements_tmp2_length = Rstats::pl_av_len(sv_elements_tmp2);
+        for (int32_t i = 0; i < repeat_count; i++) {
+          for (int32_t k = 0; k < elements_tmp_length; k++) {
+            Rstats::pl_av_push(sv_elements_tmp2, Rstats::pl_av_fetch(sv_elements_tmp, k));
+          }
+        }
+        sv_elements = Rstats::pl_new_avrv();
+        for (int32_t i = 0; i < dim_product; i++) {
+          Rstats::pl_av_push(sv_elements, Rstats::pl_av_fetch(sv_elements_tmp2, i));
+        }
+      }
+      
+      SV* sv_x2 = Rstats::Func::c(sv_r, sv_elements);
+      Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
+      
+      return sv_x2;
+    }
+
     int32_t get_length (SV* sv_r, SV* sv_x1) {
 
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
@@ -1620,76 +1690,6 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* array(SV* sv_r, SV* sv_x1) {
-      SV* sv_args_h = Rstats::pl_new_hvrv();
-      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
-      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
-    }
-    
-    SV* array(SV* sv_r, SV* sv_x1, SV* sv_dim) {
-      
-      SV* sv_args_h = Rstats::pl_new_hvrv();
-      Rstats::pl_hv_store(sv_args_h, "x", sv_x1);
-      Rstats::pl_hv_store(sv_args_h, "dim", sv_dim);
-      return Rstats::Func::array_with_opt(sv_r, sv_args_h);
-    }
-    
-    SV* array_with_opt(SV* sv_r, SV* sv_args_h) {
-
-      SV* sv_x1 = Rstats::pl_hv_fetch(sv_args_h, "x");
-     
-      // Dimention
-      SV* sv_x_dim = Rstats::pl_hv_exists(sv_args_h, "dim")
-        ? Rstats::pl_hv_fetch(sv_args_h, "dim") : &PL_sv_undef;
-      int32_t x1_length = Rstats::Func::get_length(sv_r, sv_x1);
-      
-      if (!SvOK(sv_x_dim)) {
-        Rstats::Vector<int32_t>* v_dim = new Rstats::Vector<int32_t>(1, x1_length);
-        sv_x_dim = Rstats::Func::new_vector<int32_t>(sv_r, v_dim);
-      }
-      int32_t dim_product = 1;
-      int32_t x_dim_length = Rstats::Func::get_length(sv_r, sv_x_dim);
-      for (int32_t i = 0; i < x_dim_length; i++) {
-        SV* sv_values = Rstats::Func::values(sv_r, sv_x_dim);
-        dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
-      }
-
-      
-      // Fix elements length
-      SV* sv_elements;
-      if (x1_length == dim_product) {
-        sv_elements = Rstats::Func::decompose(sv_r, sv_x1);
-      }
-      else if (x1_length > dim_product) {
-        SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
-        sv_elements = Rstats::pl_new_avrv();
-        for (int32_t i = 0; i < dim_product; i++) {
-          Rstats::pl_av_push(sv_elements, Rstats::pl_av_fetch(sv_elements_tmp, i));
-        }
-      }
-      else if (x1_length < dim_product) {
-        SV* sv_elements_tmp = Rstats::Func::decompose(sv_r, sv_x1);
-        int32_t elements_tmp_length = Rstats::pl_av_len(sv_elements_tmp);
-        int32_t repeat_count = (int32_t)(dim_product / elements_tmp_length) + 1;
-        SV* sv_elements_tmp2 = Rstats::pl_new_avrv();
-        int32_t elements_tmp2_length = Rstats::pl_av_len(sv_elements_tmp2);
-        for (int32_t i = 0; i < repeat_count; i++) {
-          for (int32_t k = 0; k < elements_tmp_length; k++) {
-            Rstats::pl_av_push(sv_elements_tmp2, Rstats::pl_av_fetch(sv_elements_tmp, k));
-          }
-        }
-        sv_elements = Rstats::pl_new_avrv();
-        for (int32_t i = 0; i < dim_product; i++) {
-          Rstats::pl_av_push(sv_elements, Rstats::pl_av_fetch(sv_elements_tmp2, i));
-        }
-      }
-      
-      SV* sv_x2 = Rstats::Func::c(sv_r, sv_elements);
-      Rstats::Func::dim(sv_r, sv_x2, sv_x_dim);
-      
-      return sv_x2;
-    }
-    
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = sv_x_dim;
       

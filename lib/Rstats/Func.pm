@@ -333,7 +333,7 @@ sub kronecker {
     }
     my $x1_value = $x1->value(@$x1_index);
     my $x2_value = $x2->value(@$x2_index);
-    my $x3_value = multiply($r, $x1_value, $x2_value);
+    my $x3_value = $r->multiply($r->c($x1_value), $r->c($x2_value));
     push @$x3_values, $x3_value;
   }
   

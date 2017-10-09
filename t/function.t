@@ -1046,6 +1046,20 @@ my $r = Rstats->new;
   is_deeply($pmin->values, [1, 2, 3, 4]);
 }
 
+# cummin
+{
+  my $x1 = $r->c(7, 3, 5, 1);
+  my $x2 = $r->cummin($x1);
+  is_deeply($x2->values, [7, 3, 3, 1]);
+}
+
+# cummax
+{
+  my $x1 = $r->c(1, 5, 3, 7);
+  my $x2 = $r->cummax($x1);
+  is_deeply($x2->values, [1, 5, 5, 7]);
+}
+
 # sample
 {
   {
@@ -1159,21 +1173,6 @@ my $r = Rstats->new;
   my $x2 = $r->seq({along => $x1});
   is_deeply($x2->values, [1, 2, 3]);
 }
-
-# cummin
-{
-  my $x1 = $r->c(7, 3, 5, 1);
-  my $x2 = $r->cummin($x1);
-  is_deeply($x2->values, [7, 3, 3, 1]);
-}
-
-# cummax
-{
-  my $x1 = $r->c(1, 5, 3, 7);
-  my $x2 = $r->cummax($x1);
-  is_deeply($x2->values, [1, 5, 5, 7]);
-}
-
 
 # order
 {

@@ -752,7 +752,7 @@ sub cummax {
     if (Rstats::Func::is_nan($r, $element)->value) {
       $max = $element;
     }
-    if ($element > $max && !Rstats::Func::is_nan($r, $max)->value) {
+    if ($element->value > $max->value && !Rstats::Func::is_nan($r, $max)->value) {
       $max = $element;
     }
     push @x2_elements, $max;
@@ -779,7 +779,7 @@ sub cummin {
     if (Rstats::Func::is_nan($r, $element)->value) {
       $min = $element;
     }
-    if ($element < $min && !Rstats::Func::is_nan($r, $min)->value) {
+    if ($element->value < $min->value && !Rstats::Func::is_nan($r, $min)->value) {
       $min = $element;
     }
     push @x2_elements, $min;

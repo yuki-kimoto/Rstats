@@ -117,10 +117,10 @@ namespace Rstats {
       
       /*
       
-      // Dim
+      // Fix elements length
       SV* sv_dim = Rstats::pl_new_avrv();
       SV* sv_length = sv_2mortal(newSViv(length));
-      Rstats::pl_av_push(sv_dim, sv_length);
+      Rstats::pl_av_push(sv_dim, sv_length));
       Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
       
       */

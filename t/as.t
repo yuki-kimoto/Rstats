@@ -75,35 +75,6 @@ my $r = Rstats->new;
   }
 }
 
-# is_*
-{
-  # is_* - is_array
-  {
-    my $x = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    ok($r->is->array($x)->value);
-    ok(!$r->is->vector($x)->value);
-  }
-  # is_* - is_matrix
-  {
-    my $x = $r->matrix($r->C('1:12'), $r->c(4), $r->c(3));
-    ok($r->is->array($x)->value);
-  }
-
-  # is_* - is_vector
-  {
-    my $x = $r->C('1:24');
-    ok($r->is->vector($x)->value);
-    ok(!$r->is->array($x)->value);
-  }
-
-  # is_* - is_vector
-  {
-    my $x = $r->array($r->C('1:24'));
-    ok($r->is->vector($x)->value);
-    ok($r->is->array($x)->value);
-  }
-}
-
 # array decide type
 {
   # array decide type - numerci

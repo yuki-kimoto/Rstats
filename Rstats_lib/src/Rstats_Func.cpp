@@ -264,7 +264,7 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* c_int(SV* sv_r, SV* sv_elements) {
+    SV* c_int(SV* sv_r, SV* sv_elements, SV* sv_x_dim) {
       
       SV* sv_x_out;
       Rstats::Vector<int32_t>* v_out;

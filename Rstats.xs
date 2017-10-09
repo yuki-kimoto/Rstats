@@ -686,20 +686,20 @@ SV* c_double(...)
   XSRETURN(1);
 }
 
-SV* c_int(...)
+SV* c_int(sv_r, sv_values, ...)
   PPCODE:
 {
   SV* sv_r = ST(0);
-  SV* sv_values;
-  if (sv_derived_from(ST(1), "ARRAY")) {
-    sv_values = ST(1);
+  SV* sv_values = ST(1);
+  
+  SV* sv_x_out;
+  
+  if (items > 2) {
+    sv_x_out = Rstats::Func::c_int(sv_r, sv_values, ST(2));
   }
   else {
-    sv_values = Rstats::pl_new_avrv();
-    Rstats::pl_av_push(sv_values, ST(1));
+    sv_x_out = Rstats::Func::c_int(sv_r, sv_values, &PL_sv_undef);
   }
-
-  SV* sv_x_out = Rstats::Func::c_int(sv_r, sv_values);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

@@ -264,12 +264,13 @@ namespace Rstats {
       return sv_x_out;
     }
 
-    SV* c_int(SV* sv_r, SV* sv_elements, SV* sv_x_dim) {
+    SV* c_int(SV* sv_r, SV* sv_elements, SV* sv_dim) {
       
       SV* sv_x_out;
       Rstats::Vector<int32_t>* v_out;
+      int32_t length;
       if (sv_derived_from(sv_elements, "ARRAY")) { 
-        int32_t length = Rstats::pl_av_len(sv_elements);
+        length = Rstats::pl_av_len(sv_elements);
         
         if (length < 1) {
           croak("Array length must be more than 0(Rstats::Func::c_int)");
@@ -286,6 +287,7 @@ namespace Rstats {
         }
       }
       else {
+        length = 1;
         v_out = new Rstats::Vector<int32_t>(1);
         int32_t value = (int32_t)SvIV(sv_elements);
         v_out->set_value(0, value);
@@ -293,15 +295,24 @@ namespace Rstats {
 
       sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       
-      /*
-      
       // Fix elements length
-      SV* sv_dim = Rstats::pl_new_avrv();
-      SV* sv_length = sv_2mortal(newSViv(length));
-      Rstats::pl_av_push(sv_dim, sv_length));
-      Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
-      
-      */
+      if (SvOK(sv_dim)) {
+        if (sv_derived_from(sv_dim, "ARRAY")) { 
+          SV* sv_dim = Rstats::pl_new_avrv();
+          SV* sv_length = sv_2mortal(newSViv(length));
+          Rstats::pl_av_push(sv_dim, sv_length);
+          Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
+        }
+        else {
+          croak("Second argument must be array refernece");
+        }
+      }
+      else {
+        SV* sv_dim = Rstats::pl_new_avrv();
+        SV* sv_length = sv_2mortal(newSViv(length));
+        Rstats::pl_av_push(sv_dim, sv_length);
+        Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
+      }
       
       return sv_x_out;
     }

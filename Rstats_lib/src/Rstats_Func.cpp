@@ -749,7 +749,6 @@ namespace Rstats {
                             
     SV* sin(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -778,7 +777,6 @@ namespace Rstats {
 
     SV* tanh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -807,7 +805,6 @@ namespace Rstats {
 
     SV* cos(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -836,7 +833,6 @@ namespace Rstats {
 
     SV* tan(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -865,7 +861,6 @@ namespace Rstats {
 
     SV* sinh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -894,7 +889,6 @@ namespace Rstats {
 
     SV* cosh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -923,7 +917,6 @@ namespace Rstats {
 
     SV* log(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -952,7 +945,6 @@ namespace Rstats {
 
     SV* logb(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -981,7 +973,6 @@ namespace Rstats {
     
     SV* log10(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1010,7 +1001,6 @@ namespace Rstats {
 
     SV* log2(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1039,7 +1029,6 @@ namespace Rstats {
     
     SV* acos(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1068,7 +1057,6 @@ namespace Rstats {
     
     SV* acosh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1097,7 +1085,6 @@ namespace Rstats {
     
     SV* asinh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1126,7 +1113,6 @@ namespace Rstats {
 
     SV* atanh(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1155,7 +1141,6 @@ namespace Rstats {
 
     SV* Conj(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1184,7 +1169,6 @@ namespace Rstats {
 
     SV* asin(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;

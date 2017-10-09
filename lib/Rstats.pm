@@ -106,7 +106,6 @@ my @func_names = qw/
   ncol
   nrow
   numeric
-  matrix
   max
   mean
   min
@@ -283,7 +282,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $v1 = $r->C("1:3");
 
   # Matrix
-  my $m1 = $r->matrix($r->C("1:12"), 4, 3);
+  my $m1 = $r->array($r->C("1:12"), $r->c(4, 3));
   
   # Array
   my $a1 = $r->array($r->C("1:24"), $r->c(4, 3, 2));
@@ -363,7 +362,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   # x1[c("id", "title")] <- x2
   $x1->at(c("id", "title"))->set($x2);
 
-=head1 OPERATORS
+=head1 METHODS
 
   # x1 + x2
   $x1 + $x2
@@ -388,8 +387,6 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   
   # x1 %/% x2 (integer quotient)
   $r->tranc($x1 / $x2)
-
-=head1 METHODS
 
 =head2 c
 
@@ -443,17 +440,6 @@ Alias of FALSE
 
   # Inf
   $r->Inf
-
-=head2 matrix
-
-  # matrix(1:12, 4, 3)
-  $r->matrix($r->C("1:12"), 4, 3)
-  
-  # matrix(1:12, nrow=4, ncol=3)
-  $r->matrix($r->C("1:12"), {nrow => $r->c(4), ncol => $r->c(3)});
-  
-  # matrix(1:12, 4, 3, byrow=TRUE)
-  $r->matrix($r->C("1:12"), 4, 3, {byrow => $r->TRUE});
 
 =head2 abs
 
@@ -645,8 +631,6 @@ Alias of FALSE
 
 =head2 numeric
 
-=head2 matrix
-
 =head2 max
 
 =head2 mean
@@ -812,25 +796,10 @@ Alias of FALSE
   # as.integer(x1)
   $r->as->integer($x1)
 
-=head2 as->matrix
-
-  # as.matrix(x1)
-  $r->as->matrix($x1)
-
 =head2 as->numeric
 
   # as.numeric(x1)
   $r->as->numeric($x1)
-
-=head2 as->vector
-
-  # as.vector(x1)
-  $r->as->vector($x1)
-
-=head2 is->array
-
-  # is.array(x1)
-  $r->is->array($x1)
 
 =head2 is->finite
 
@@ -841,11 +810,6 @@ Alias of FALSE
 
   # is.infinite(x1)
   $r->is->infinite($x1)
-
-=head2 is->matrix
-
-  # is.matrix(x1)
-  $r->is->matrix($x1)
 
 =head2 is->na
 

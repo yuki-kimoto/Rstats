@@ -15,74 +15,6 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
-sub matrix {
-  my $r = shift;
-  
-  
-  my ($x1, $x_nrow, $x_ncol, $x_byrow, $x_dirnames)
-    = Rstats::Func::args_array($r, ['x1', 'nrow', 'ncol', 'byrow', 'dirnames'], @_);
-
-  Carp::croak "matrix method need data as frist argument"
-    unless defined $x1;
-  
-  # Row count
-  my $nrow;
-  $nrow = $x_nrow->value if defined $x_nrow;
-  
-  # Column count
-  my $ncol;
-  $ncol = $x_ncol->value if defined $x_ncol;
-  
-  # By row
-  my $byrow;
-  $byrow = $x_byrow->value if defined $x_byrow;
-  
-  my $x1_values = $x1->values;
-  my $x1_length = Rstats::Func::get_length($r, $x1);
-  if (!defined $nrow && !defined $ncol) {
-    $nrow = $x1_length;
-    $ncol = 1;
-  }
-  elsif (!defined $nrow) {
-    $nrow = int($x1_length / $ncol);
-    $nrow ||= 1;
-  }
-  elsif (!defined $ncol) {
-    $ncol = int($x1_length / $nrow);
-    $ncol ||= 1;
-  }
-  my $length = $nrow * $ncol;
-  
-  my $dim = [$nrow, $ncol];
-  my $matrix;
-  my $x_matrix;
-
-  if (Rstats::Func::get_type($r, $x1)  eq "double") {
-    $x_matrix = c_double($r, $x1_values);
-  }
-  elsif (Rstats::Func::get_type($r, $x1)  eq "integer") {
-    $x_matrix = c_integer($r, $x1_values);
-  }
-  else {
-    croak("Invalid type " . Rstats::Func::get_type($r, $x1) . " is passed");
-  }
-  
-  if ($byrow) {
-    $matrix = Rstats::Func::array(
-      $r,
-      $x_matrix,
-      Rstats::Func::c($r, $dim->[1], $dim->[0]),
-    );
-    
-    $matrix = Rstats::Func::t($r, $matrix);
-  }
-  else {
-    $matrix = Rstats::Func::array($r, $x_matrix, Rstats::Func::c($r, @$dim));
-  }
-  
-  return $matrix;
-}
-
 sub I {
   my $r = shift;
   
@@ -115,13 +47,13 @@ sub t {
   my $x1_row = Rstats::Func::dim($r, $x1)->values->[0];
   my $x1_col = Rstats::Func::dim($r, $x1)->values->[1];
   
-  my $x2 = matrix($r, 0, $x1_col, $x1_row);
+  my $x2 = $r->array($r->c(0), $r->c($x1_col, $x1_row));
   
   for my $row (1 .. $x1_row) {
     for my $col (1 .. $x1_col) {
       my $value = $x1->value($row, $col);
       $x2->at($col, $row);
-      Rstats::Func::set($r, $x2, $value);
+      Rstats::Func::set($r, $x2, $r->c($value));
     }
   }
   
@@ -192,7 +124,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::c_integer($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = array($r, Rstats::Func::c_integer($r, @$x2_values), $r->c($rows_count, $cols_count));
     
     return $x2;
   }
@@ -227,7 +159,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = matrix($r, Rstats::Func::c_integer($r, @$x2_values), $rows_count, $cols_count);
+    my $x2 = array($r, Rstats::Func::c_integer($r, @$x2_values), $r->c($rows_count, $cols_count));
     
     return $x2;
   }
@@ -253,7 +185,7 @@ sub diag {
     $x2_values = $x1->values;
   }
   
-  my $x2 = matrix($r, 0, $size, $size);
+  my $x2 = array($r, $r->c(0), $r->c($size, $size));
   for (my $i = 0; $i < $size; $i++) {
     $x2->at($i + 1, $i + 1);
     $x2->set($x2_values->[$i]);
@@ -668,7 +600,7 @@ sub cbind {
     
     push @$x2_elements, @{Rstats::Func::decompose($r, $x1)};
   }
-  my $matrix = matrix($r, c($r, @$x2_elements), $row_count_needed, $col_count_total);
+  my $matrix = array($r, c($r, @$x2_elements), $r->c($row_count_needed, $col_count_total));
   
   return $matrix;
 }
@@ -1506,7 +1438,7 @@ sub inner_product {
       }
     }
     
-    my $x3 = Rstats::Func::matrix($r, c($r, @$x3_elements), $row_max, $col_max);
+    my $x3 = Rstats::Func::array($r, c($r, @$x3_elements), $r->c($row_max, $col_max));
     
     return $x3;
   }

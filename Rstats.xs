@@ -785,17 +785,6 @@ SV* is_integer(...)
   XSRETURN(1);
 }
 
-SV* as_vector(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-
-  SV* sv_x_out = Rstats::Func::as_vector(sv_r, ST(1));
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* copy_attrs_to(...)
   PPCODE:
 {

@@ -83,31 +83,6 @@ sub matrix {
   return $matrix;
 }
 
-sub as_matrix {
-  my $r = shift;
-  
-  my $x1 = shift;
-  
-  my $x1_dim_elements = $x1->dim_as_array->values;
-  my $x1_dim_count = @$x1_dim_elements;
-  my $x2_dim_elements = [];
-  my $row;
-  my $col;
-  if ($x1_dim_count == 2) {
-    $row = $x1_dim_elements->[0];
-    $col = $x1_dim_elements->[1];
-  }
-  else {
-    $row = 1;
-    $row *= $_ for @$x1_dim_elements;
-    $col = 1;
-  }
-  
-  my $x2 = Rstats::Func::as_vector($r, $x1);
-  
-  return Rstats::Func::matrix($r, $x2, $row, $col);
-}
-
 sub I {
   my $r = shift;
   
@@ -1490,11 +1465,6 @@ sub inner_product {
   my $r = shift;
   
   my ($x1, $x2) = @_;
-  
-  # Convert to matrix
-  $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))
-    if Rstats::Func::is_vector($r, $x1)->value;
-  $x2 = Rstats::Func::as_matrix($r, $x2) if Rstats::Func::is_vector($r, $x2)->value;
   
   # Calculate
   if (Rstats::Func::is_matrix($r, $x1)->value && Rstats::Func::is_matrix($r, $x2)->value) {

@@ -300,8 +300,6 @@ namespace Rstats {
           croak("Can't use undef as array element");
         }
         
-        char* type = Rstats::Func::get_type(sv_r, sv_new_element);
-        
         Rstats::pl_av_push(sv_new_elements, sv_new_element);
       }
 
@@ -309,10 +307,6 @@ namespace Rstats {
       int32_t pos = 0;
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
-        char* type = Rstats::Func::get_type(sv_r, sv_element);
-        if (!strEQ(type, "int")) {
-          sv_element = Rstats::Func::as_int(sv_r, sv_element);
-        }
         Rstats::Vector<int32_t>* v1 =  Rstats::Func::get_vector<int32_t>(sv_r, sv_element);
         int32_t v1_length = v1->get_length();
         for (int32_t k = 0; k < v1_length; k++) {

@@ -1197,7 +1197,6 @@ namespace Rstats {
 
     SV* atan(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1226,7 +1225,6 @@ namespace Rstats {
     
     SV* sqrt(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1255,7 +1253,6 @@ namespace Rstats {
 
     SV* expm1(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1284,7 +1281,6 @@ namespace Rstats {
 
     SV* exp(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1313,7 +1309,6 @@ namespace Rstats {
     
     SV* negate(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1342,7 +1337,6 @@ namespace Rstats {
 
     SV* Arg(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1371,7 +1365,6 @@ namespace Rstats {
 
     SV* abs(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1400,7 +1393,6 @@ namespace Rstats {
 
     SV* Mod(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1429,7 +1421,6 @@ namespace Rstats {
     
     SV* Re(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1458,7 +1449,6 @@ namespace Rstats {
     
     SV* Im(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
@@ -1487,7 +1477,6 @@ namespace Rstats {
             
     SV* is_infinite(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;

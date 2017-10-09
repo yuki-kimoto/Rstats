@@ -276,7 +276,6 @@ namespace Rstats {
       SV* sv_new_elements = Rstats::pl_new_avrv();
       
       // Convert to Rstats::Object, check type and total length, and remove NULL
-      SV* sv_type_h = Rstats::pl_new_hvrv();
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
 
@@ -303,7 +302,6 @@ namespace Rstats {
         
         char* type = Rstats::Func::get_type(sv_r, sv_new_element);
         
-        Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
         Rstats::pl_av_push(sv_new_elements, sv_new_element);
       }
 

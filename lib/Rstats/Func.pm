@@ -903,7 +903,7 @@ sub mean {
   
   my $x1 = shift;
   
-  my $x2 = divide($r, sum($r, $x1), Rstats::Func::get_length($r, $x1));
+  my $x2 = divide($r, sum($r, $x1), $r->c(Rstats::Func::get_length($r, $x1)));
   
   return $x2;
 }

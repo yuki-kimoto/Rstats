@@ -574,7 +574,7 @@ sub diff {
   for (my $i = 0; $i < Rstats::Func::get_length($r, $x1) - 1; $i++) {
     my $x1_element1 = $x1_elements->[$i];
     my $x1_element2 = $x1_elements->[$i + 1];
-    my $x2_element = $x1_element2 - $x1_element1;
+    my $x2_element = $r->subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
   my $x2 = Rstats::Func::c($r, @$x2_elements);

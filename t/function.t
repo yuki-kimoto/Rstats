@@ -1060,6 +1060,16 @@ my $r = Rstats->new;
   is_deeply($x2->values, [1, 5, 5, 7]);
 }
 
+# diff
+{
+  # diff - numeric
+  {
+    my $x1 = $r->c(1, 5, 10);
+    my $x2 = $r->diff($x1);
+    is_deeply($x2->values, [4, 5]);
+  }
+}
+
 # sample
 {
   {
@@ -1211,16 +1221,6 @@ my $r = Rstats->new;
     my $x1 = $r->c(2, 4, 3, 1);
     my $x2 = $r->order($x1);
     is_deeply($x2->values, [4, 1, 3, 2]);
-  }
-}
-
-# diff
-{
-  # diff - numeric
-  {
-    my $x1 = $r->c(1, 5, 10);
-    my $x2 = $r->diff($x1);
-    is_deeply($x2->values, [4, 5]);
   }
 }
 

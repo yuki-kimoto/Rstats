@@ -1368,7 +1368,7 @@ sub median {
     my $x4 = $x3->get($middle);
     my $x5 = $x3->get($middle + 1);
     
-    return $r->divide(($x4 + $x5), 2);
+    return $r->divide($r->add($x4, $x5), $r->c(2));
   }
   else {
     my $middle = int($x3_length / 2) + 1;

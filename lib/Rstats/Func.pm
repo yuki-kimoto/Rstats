@@ -332,7 +332,7 @@ sub grep {
     }
   }
   
-  return Rstats::Func::c_double($r, $x2_values);
+  return Rstats::Func::c($r, $x2_values);
 }
 
 sub C {
@@ -536,7 +536,7 @@ sub match {
     }
   }
   
-  return Rstats::Func::c_double($r, \@matches);
+  return Rstats::Func::c($r, \@matches);
 }
 
 
@@ -609,7 +609,7 @@ sub ceiling {
   
   my $x1 = $_x1;
   my @x2_elements
-    = map { Rstats::Func::c_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
+    = map { Rstats::Func::c($r, POSIX::ceil Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
   
   my $x2 = Rstats::Func::c($r, \@x2_elements);
@@ -748,7 +748,7 @@ sub floor {
   my $x1 = $_x1;
   
   my @x2_elements
-    = map { Rstats::Func::c_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
+    = map { Rstats::Func::c($r, POSIX::floor Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, \@x2_elements);
@@ -1055,7 +1055,7 @@ sub replace {
   my $x4_elements = [];
   my $replace_count = 0;
   for (my $i = 0; $i < @$x1_elements; $i++) {
-    my $hash = Rstats::Func::to_string($r, Rstats::Func::c_double($r, $i + 1));
+    my $hash = Rstats::Func::to_string($r, Rstats::Func::c($r, $i + 1));
     if ($x2_elements_h->{$hash}) {
       push @$x4_elements, $x3_elements->[$replace_count % $x3_length];
       $replace_count++;
@@ -1127,7 +1127,7 @@ sub round {
   my $x1 = $_x1;
 
   my $ro = 10 ** $digits;
-  my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = map { Rstats::Func::c($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
   my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
@@ -1249,7 +1249,7 @@ sub trunc {
   my $x1 = $_x1;
   
   my @x2_elements
-    = map { Rstats::Func::c_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
+    = map { Rstats::Func::c($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
 
   my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
@@ -1665,7 +1665,7 @@ sub get_array {
   # array
   my $x_array;
   if ($x1->get_type eq "double") {
-    $x_array = c_double($r, \@x2_values);
+    $x_array = c($r, \@x2_values);
   }
   elsif ($x1->get_type eq "int") {
     $x_array = SPVM::Func::c($r, \@x2_values);

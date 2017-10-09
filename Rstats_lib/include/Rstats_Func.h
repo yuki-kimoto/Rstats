@@ -17,7 +17,7 @@ namespace Rstats {
     SV* new_TRUE(SV*); /* $r->TRUE */
 
     SV* c(SV*, SV*);
-    SV* c_double(SV*, SV*);
+    SV* c_double(SV*, SV*, SV*);
     SV* c_int(SV*, SV*, SV*);
 
     SV* pi(SV*);

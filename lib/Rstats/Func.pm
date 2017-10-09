@@ -1290,7 +1290,7 @@ sub sequence {
   
   my @x2_values;
   for my $x1_value (@$x1_values) {
-    push @x2_values, @{seq($r, 1, $x1_value)->values};
+    push @x2_values, @{seq($r, $r->c(1), $r->c($x1_value))->values};
   }
   
   return Rstats::Func::c($r, @x2_values);
@@ -1560,18 +1560,22 @@ sub seq {
   if (defined $_along) {
     my $along = $_along;
     my $length = Rstats::Func::get_length($r, $along);
-    return seq($r, 1, $length);
+    return seq($r, $r->c(1), $r->c($length));
   }
   else {
-    my ($from, $to) = @_;
+    my ($x_from, $x_to) = @_;
     
     # From
-    $from = $opt->{from} unless defined $from;
-    Carp::croak "seq function need from option" unless defined $from;
+    $x_from = $opt->{from} unless defined $x_from;
+    Carp::croak "seq function need from option" unless defined $x_from;
+    
+    my $from = $x_from->value;
     
     # To
-    $to = $opt->{to} unless defined $to;
-    Carp::croak "seq function need to option" unless defined $to;
+    $x_to = $opt->{to} unless defined $x_to;
+    Carp::croak "seq function need to option" unless defined $x_to;
+
+    my $to = $x_to->value;
 
     # Length
     my $length = $opt->{length};

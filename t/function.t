@@ -1138,43 +1138,43 @@ my $r = Rstats->new;
 {
   # seq($from, $to),  n > m
   {
-    my $x1 = $r->seq(1, 3);
+    my $x1 = $r->seq($r->c(1), $r->c(3));
     is_deeply($x1->values, [1, 2, 3]);
   }
 
   # seq({from => $from, to => $to}),  n > m
   {
-    my $x1 = $r->seq({from => 1, to => 3});
+    my $x1 = $r->seq({from => $r->c(1), to => $r->c(3)});
     is_deeply($x1->values, [1, 2, 3]);
   }
   
   # seq($from, $to),  n < m
   {
-    my $x1 = $r->seq(3, 1);
+    my $x1 = $r->seq($r->c(3), $r->c(1));
     is_deeply($x1->values, [3, 2, 1]);
   }
   
   # seq($from, $to), n = m
   {
-    my $x1 = $r->seq(2, 2);
+    my $x1 = $r->seq($r->c(2), $r->c(2));
     is_deeply($x1->values, [2]);
   }
   
   # seq($from, $to, {by => p}) n > m
   {
-    my $x1 = $r->seq(1, 3, {by => $r->c(0.5)});
+    my $x1 = $r->seq($r->c(1), $r->c(3), {by => $r->c(0.5)});
     is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
 
   # seq($from, $to, {by => p}) n > m
   {
-    my $x1 = $r->seq(3, 1, {by => $r->c(-0.5)});
+    my $x1 = $r->seq($r->c(3), $r->c(1), {by => $r->c(-0.5)});
     is_deeply($x1->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
   }
   
   # seq($from, {by => p, length => l})
   {
-    my $x1 = $r->seq(1, 3, {length => $r->c(5)});
+    my $x1 = $r->seq($r->c(1), $r->c(3), {length => $r->c(5)});
     is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
   }
   

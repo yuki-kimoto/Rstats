@@ -354,7 +354,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in cumprod() : non-numeric argument to cumprod()");
+        croak("Error in cumprod() : non-double argument to cumprod()");
       }
       
       return sv_x_out;
@@ -388,7 +388,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in cumsum() : non-numeric argument to cumsum()");
+        croak("Error in cumsum() : non-double argument to cumsum()");
       }
       
       return sv_x_out;
@@ -420,7 +420,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in sum() : non-numeric argument to sum()");
+        croak("Error in sum() : non-double argument to sum()");
       }
       
       
@@ -453,7 +453,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in prod() : non-numeric argument to prod()");
+        croak("Error in prod() : non-double argument to prod()");
       }
       
       return sv_x_out;
@@ -673,7 +673,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in + : non-numeric argument to binary operator");
+        croak("Error in + : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -697,7 +697,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in - : non-numeric argument to binary operator");
+        croak("Error in - : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -721,7 +721,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in % : non-numeric argument to binary operator");
+        croak("Error in % : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -746,7 +746,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in / : non-numeric argument to binary operator");
+        croak("Error in / : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -771,7 +771,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in atan2() : non-numeric argument to mathematical function");
+        croak("Error in atan2() : non-double argument to mathematical function");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -796,7 +796,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in ** : non-numeric argument to binary operator");
+        croak("Error in ** : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -821,7 +821,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in * : non-numeric argument to binary operator");
+        croak("Error in * : non-double argument to binary operator");
       }
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
       
@@ -848,7 +848,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in sin() : non-numeric argument to sin()");
+        croak("Error in sin() : non-double argument to sin()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -876,7 +876,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in tanh() : non-numeric argument to tanh()");
+        croak("Error in tanh() : non-double argument to tanh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -904,7 +904,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in cos() : non-numeric argument to cos()");
+        croak("Error in cos() : non-double argument to cos()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -932,7 +932,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in tan() : non-numeric argument to tan()");
+        croak("Error in tan() : non-double argument to tan()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -960,7 +960,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in sinh() : non-numeric argument to sinh()");
+        croak("Error in sinh() : non-double argument to sinh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -988,7 +988,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in cosh() : non-numeric argument to cosh()");
+        croak("Error in cosh() : non-double argument to cosh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1016,7 +1016,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in log() : non-numeric argument to log()");
+        croak("Error in log() : non-double argument to log()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1044,7 +1044,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in logb() : non-numeric argument to logb()");
+        croak("Error in logb() : non-double argument to logb()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1072,7 +1072,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in log10() : non-numeric argument to log10()");
+        croak("Error in log10() : non-double argument to log10()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1100,7 +1100,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in log2() : non-numeric argument to log2()");
+        croak("Error in log2() : non-double argument to log2()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1128,7 +1128,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in acos() : non-numeric argument to acos()");
+        croak("Error in acos() : non-double argument to acos()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1156,7 +1156,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in acosh() : non-numeric argument to acosh()");
+        croak("Error in acosh() : non-double argument to acosh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1184,7 +1184,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in asinh() : non-numeric argument to asinh()");
+        croak("Error in asinh() : non-double argument to asinh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1212,7 +1212,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in atanh() : non-numeric argument to atanh()");
+        croak("Error in atanh() : non-double argument to atanh()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1240,7 +1240,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in Conj() : non-numeric argument to Conj()");
+        croak("Error in Conj() : non-double argument to Conj()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1268,7 +1268,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in asin() : non-numeric argument to asin()");
+        croak("Error in asin() : non-double argument to asin()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1296,7 +1296,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in atan() : non-numeric argument to atan()");
+        croak("Error in atan() : non-double argument to atan()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1324,7 +1324,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in sqrt() : non-numeric argument to sqrt()");
+        croak("Error in sqrt() : non-double argument to sqrt()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1352,7 +1352,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in expm1() : non-numeric argument to expm1()");
+        croak("Error in expm1() : non-double argument to expm1()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1380,7 +1380,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in exp() : non-numeric argument to exp()");
+        croak("Error in exp() : non-double argument to exp()");
       }
       
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1408,7 +1408,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in -$x : non-numeric argument to - operator");
+        croak("Error in -$x : non-double argument to - operator");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1436,7 +1436,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in Arg() : non-numeric argument to Arg()");
+        croak("Error in Arg() : non-double argument to Arg()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1464,7 +1464,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in abs() : non-numeric argument to abs()");
+        croak("Error in abs() : non-double argument to abs()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1492,7 +1492,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in Mod() : non-numeric argument to Mod()");
+        croak("Error in Mod() : non-double argument to Mod()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1520,7 +1520,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in Re() : non-numeric argument to Re()");
+        croak("Error in Re() : non-double argument to Re()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1548,7 +1548,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else {
-        croak("Error in Im() : non-numeric argument to Im()");
+        croak("Error in Im() : non-double argument to Im()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1576,7 +1576,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in is_infinite() : non-numeric argument to is_infinite()");
+        croak("Error in is_infinite() : non-double argument to is_infinite()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1604,7 +1604,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in is_nan() : non-numeric argument to is_nan()");
+        croak("Error in is_nan() : non-double argument to is_nan()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1632,7 +1632,7 @@ namespace Rstats {
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in is_finite() : non-numeric argument to is_finite()");
+        croak("Error in is_finite() : non-double argument to is_finite()");
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -1818,16 +1818,6 @@ namespace Rstats {
       SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
       
       return sv_x1;
-    }
-
-    SV* is_numeric(SV* sv_r, SV* sv_x1) {
-      
-      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")
-        || strEQ(Rstats::Func::get_type(sv_r, sv_x1), "int");
-        
-      SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_x_is;
     }
 
     SV* is_double(SV* sv_r, SV* sv_x1) {

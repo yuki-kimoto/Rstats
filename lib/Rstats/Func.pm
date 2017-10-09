@@ -800,7 +800,7 @@ sub args_array {
     my $name = $names->[$i];
     my $arg;
     if (exists $opt->{$name}) {
-      $arg = to_object($r, delete $opt->{$name});
+      $arg = delete $opt->{$name};
     }
     elsif ($i < @_) {
       $arg = to_object($r, $_[$i]);

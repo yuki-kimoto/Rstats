@@ -529,17 +529,6 @@ SV* is_numeric(...)
   XSRETURN(1);
 }
 
-SV* is_array(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_array(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* is_matrix(...)
   PPCODE:
 {

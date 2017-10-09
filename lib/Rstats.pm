@@ -208,7 +208,6 @@ sub new {
   }
 
   no strict 'refs';
-  $self->helper('is.array' => \&Rstats::Func::is_array);
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.matrix' => \&Rstats::Func::is_matrix);

@@ -1846,65 +1846,63 @@ sub str {
   
   my @str;
   
-  if (Rstats::Func::is_vector($r, $x1)->value || Rstats::Func::is_array($r, $x1)->value) {
-    # Short type
-    my $type = $x1->get_type;
-    my $short_type;
-    if ($type eq 'double') {
-      $short_type = 'num';
-    }
-    elsif ($type eq 'integer') {
-      $short_type = 'int';
-    }
-    else {
-      $short_type = 'Unkonown';
-    }
-    push @str, $short_type;
-    
-    # Dimention
-    my @dim_str;
-    my $length = Rstats::Func::get_length($r, $x1);
-    if (exists $x1->{dim}) {
-      my $dim_values = $x1->{dim}->values;
-      for (my $i = 0; $i < $x1->{dim}->get_length; $i++) {
-        my $d = $dim_values->[$i];
-        my $d_str;
-        if ($d == 1) {
-          $d_str = "1";
-        }
-        else {
-          $d_str = "1:$d";
-        }
-        
-        if ($x1->{dim}->get_length == 1) {
-          $d_str .= "(" . ($i + 1) . "d)";
-        }
-        push @dim_str, $d_str;
-      }
-    }
-    else {
-      if ($length != 1) {
-        push @dim_str, "1:$length";
-      }
-    }
-    if (@dim_str) {
-      my $dim_str = join(', ', @dim_str);
-      push @str, "[$dim_str]";
-    }
-    
-    # Vector
-    my @element_str;
-    my $max_count = $length > 10 ? 10 : $length;
-    my $values = $x1->values;
-    for (my $i = 0; $i < $max_count; $i++) {
-      push @element_str, Rstats::Func::_value_to_string($r, $x1, $values->[$i], $type);
-    }
-    if ($length > 10) {
-      push @element_str, '...';
-    }
-    my $element_str = join(' ', @element_str);
-    push @str, $element_str;
+  # Short type
+  my $type = $x1->get_type;
+  my $short_type;
+  if ($type eq 'double') {
+    $short_type = 'num';
   }
+  elsif ($type eq 'integer') {
+    $short_type = 'int';
+  }
+  else {
+    $short_type = 'Unkonown';
+  }
+  push @str, $short_type;
+  
+  # Dimention
+  my @dim_str;
+  my $length = Rstats::Func::get_length($r, $x1);
+  if (exists $x1->{dim}) {
+    my $dim_values = $x1->{dim}->values;
+    for (my $i = 0; $i < $x1->{dim}->get_length; $i++) {
+      my $d = $dim_values->[$i];
+      my $d_str;
+      if ($d == 1) {
+        $d_str = "1";
+      }
+      else {
+        $d_str = "1:$d";
+      }
+      
+      if ($x1->{dim}->get_length == 1) {
+        $d_str .= "(" . ($i + 1) . "d)";
+      }
+      push @dim_str, $d_str;
+    }
+  }
+  else {
+    if ($length != 1) {
+      push @dim_str, "1:$length";
+    }
+  }
+  if (@dim_str) {
+    my $dim_str = join(', ', @dim_str);
+    push @str, "[$dim_str]";
+  }
+  
+  # Vector
+  my @element_str;
+  my $max_count = $length > 10 ? 10 : $length;
+  my $values = $x1->values;
+  for (my $i = 0; $i < $max_count; $i++) {
+    push @element_str, Rstats::Func::_value_to_string($r, $x1, $values->[$i], $type);
+  }
+  if ($length > 10) {
+    push @element_str, '...';
+  }
+  my $element_str = join(' ', @element_str);
+  push @str, $element_str;
   
   my $str = join(' ', @str);
   

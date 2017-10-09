@@ -1673,12 +1673,12 @@ sub get_array {
   my @x2_values = map { $x1_values->[$_] } @$poss;
   
   # array
-  my $x_matrix;
+  my $x_array;
   if ($x1->get_type eq "double") {
-    $x_matrix = c_double($r, \@x2_values);
+    $x_array = c_double($r, \@x2_values);
   }
   elsif ($x1->get_type eq "integer") {
-    $x_matrix = c_integer($r, \@x2_values);
+    $x_array = c_integer($r, \@x2_values);
   }
   else {
     croak("Invalid type " . $x1->get_type . " is passed");
@@ -1686,7 +1686,7 @@ sub get_array {
   
   my $x2 = Rstats::Func::array(
     $r,
-    $x_matrix,
+    $x_array,
     Rstats::Func::c($r, @$x2_dim)
   );
   

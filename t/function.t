@@ -33,9 +33,9 @@ my $r = Rstats->new;
     is_deeply($x1->values, [1, 2, 3]);
   }
   
-  # $r->c($r->c(1, 2, 3))
+  # $r->c($r->c([1, 2, 3]))
   {
-    my $x1 = $r->c($r->c(1, 2, 3));
+    my $x1 = $r->c($r->c([1, 2, 3]));
     ok($r->is->double($x1)->value);
     is_deeply($x1->values, [1, 2, 3]);
   }
@@ -54,7 +54,7 @@ my $r = Rstats->new;
   
   # c_ - append to original vector
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     $x1->at($r->length($x1)->value + 1)->set($r->c(6));
     is_deeply($x1->values, [1, 2, 3, 6]);
   }
@@ -85,7 +85,7 @@ my $r = Rstats->new;
   
   # tail - values is low than 6
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $tail = $r->tail($x1);
     is_deeply($tail->values, [1, 2, 3]);
   }
@@ -122,7 +122,7 @@ my $r = Rstats->new;
 
 # sequence
 {
-  my $x1 = $r->c(1, 2, 3);
+  my $x1 = $r->c([1, 2, 3]);
   my $x2 = $r->sequence($x1);
   is_deeply($x2->values, [1, 1, 2, 1, 2, 3])
 }
@@ -151,7 +151,7 @@ my $r = Rstats->new;
   
   # head - values is low than 6
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $head = $r->head($x1);
     is_deeply($head->values, [1, 2, 3]);
   }
@@ -166,7 +166,7 @@ my $r = Rstats->new;
 
 # length
 {
-  my $x = $r->array($r->c(1, 2, 3));
+  my $x = $r->array($r->c([1, 2, 3]));
   is($r->length($x)->value, 3);
 }
 
@@ -177,14 +177,14 @@ my $r = Rstats->new;
     is_deeply($x->values, [25]);
   }
   {
-    my $x = $r->array($r->c(1, 2, 3));
+    my $x = $r->array($r->c([1, 2, 3]));
     is_deeply($r->dim($x)->values, [3]);
   }
 }
 
 # Array get and set
 {
-  my $x = $r->array($r->c(1, 2, 3));
+  my $x = $r->array($r->c([1, 2, 3]));
   is_deeply($x->get($r->c(1))->values, [1]);
   is_deeply($x->get($r->c(3))->values, [3]);
   $x->at($r->c(1))->set($r->c(5));;
@@ -195,7 +195,7 @@ my $r = Rstats->new;
 {
   # req($v, {times => $r->c($times)});
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->rep($x1, {times => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
   }
@@ -255,7 +255,7 @@ my $r = Rstats->new;
   
   # c_ - append (vector)
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->c($x1, 4, 5);
     is_deeply($x2->values, [1, 2, 3, 4, 5]);
   }
@@ -279,7 +279,7 @@ my $r = Rstats->new;
   
   # mean
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $mean = $r->mean($x1);
     is($mean->value, 2);
   }
@@ -306,15 +306,15 @@ my $r = Rstats->new;
 {
   # min
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->min($x1);
     is_deeply($x2->values, [1]);
   }
 
   # min - multiple $r->arrays
   {
-    my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(4, 5, 6);
+    my $x1 = $r->c([1, 2, 3]);
+    my $x2 = $r->c([4, 5, 6]);
     my $x3 = $r->min($x1, $x2);
     is_deeply($x3->values, [1]);
   }
@@ -383,7 +383,7 @@ my $r = Rstats->new;
 {
   # prod - double
   {
-    my $x1 = $r->c(2, 3, 4);
+    my $x1 = $r->c([2, 3, 4]);
     my $x2 = $r->prod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [24]);
@@ -391,7 +391,7 @@ my $r = Rstats->new;
 
   # prod - int
   {
-    my $x1 = $r->as->int($r->c(2, 3, 4));
+    my $x1 = $r->as->int($r->c([2, 3, 4]));
     my $x2 = $r->prod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [24]);
@@ -402,7 +402,7 @@ my $r = Rstats->new;
 {
   # sum - double
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->sum($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [6]);
@@ -410,7 +410,7 @@ my $r = Rstats->new;
   
   # sum - int
   {
-    my $x1 = $r->as->int($r->c(1, 2, 3));
+    my $x1 = $r->as->int($r->c([1, 2, 3]));
     my $x2 = $r->sum($x1);
     ok($r->is->int($x2)->value);
     is_deeply($x2->values, [6]);
@@ -440,7 +440,7 @@ my $r = Rstats->new;
   
   # str - $r->array
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c([4, 3]));
     is($r->str($x1), 'num [1:4, 1:3] 1 2 3 4 5 6 7 8 9 10 ...');
   }
   
@@ -470,7 +470,7 @@ my $r = Rstats->new;
 
   # str - vector, double
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     is($r->str($x1), 'num [1:3] 1 2 3');
   }
 }
@@ -604,21 +604,21 @@ my $r = Rstats->new;
 {
   # append - after option
   {
-    my $x1 = $r->c(1, 2, 3, 4, 5);
+    my $x1 = $r->c([1, 2, 3, 4, 5]);
     my $x2 = $r->append($x1, $r->c(1), {after => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 4, 5]);
   }
 
   # append - no after option
   {
-    my $x1 = $r->c(1, 2, 3, 4, 5);
+    my $x1 = $r->c([1, 2, 3, 4, 5]);
     my $x2 = $r->append($x1, $r->c(1));
     is_deeply($x2->values, [1, 2, 3, 4, 5, 1]);
   }
 
   # append - vector
   {
-    my $x1 = $r->c(1, 2, 3, 4, 5);
+    my $x1 = $r->c([1, 2, 3, 4, 5]);
     my $x2 = $r->append($x1, $r->c(6, 7));
     is_deeply($x2->values, [1, 2, 3, 4, 5, 6, 7]);
   }
@@ -628,8 +628,8 @@ my $r = Rstats->new;
 {
   {
     my $x1 = $r->C('1:10');
-    my $x2 = $r->c(2, 5, 10);
-    my $x3 = $r->c(12, 15, 20);
+    my $x2 = $r->c([2, 5, 10]);
+    my $x3 = $r->c([12, 15, 20]);
     my $x4 = $r->replace($x1, $x2, $x3);
     is_deeply($x4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 20]);
   }
@@ -637,7 +637,7 @@ my $r = Rstats->new;
   # replace - single value
   {
     my $x1 = $r->C('1:10');
-    my $x2 = $r->c(2, 5, 10);
+    my $x2 = $r->c([2, 5, 10]);
     my $x4 = $r->replace($x1, $x2, $r->c(11));
     is_deeply($x4->values, [1, 11, 3, 4, 11, 6, 7, 8, 9, 11]);
   }
@@ -645,7 +645,7 @@ my $r = Rstats->new;
   # replace - few values
   {
     my $x1 = $r->C('1:10');
-    my $x2 = $r->c(2, 5, 10);
+    my $x2 = $r->c([2, 5, 10]);
     my $x4 = $r->replace($x1, $x2, $r->c(12, 15));
     is_deeply($x4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
   }
@@ -655,8 +655,8 @@ my $r = Rstats->new;
 {
   # is->element - double
   {
-    my $x1 = $r->c(1, 2, 3, 4);
-    my $x2 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3, 4]);
+    my $x2 = $r->c([1, 2, 3]);
     my $x3 = $r->is->element($x1, $x2);
     is_deeply($x3->values, [1, 1, 1, 0]);
   }
@@ -666,24 +666,24 @@ my $r = Rstats->new;
 {
   # setequal - equal
   {
-    my $x1 = $r->c(2, 3, 1);
-    my $x2 = $r->c(3, 2, 1);
+    my $x1 = $r->c([2, 3, 1]);
+    my $x2 = $r->c([3, 2, 1]);
     my $x3 = $r->setequal($x1, $x2);
     is_deeply($x3->value, 1);
   }
 
   # setequal - not equal
   {
-    my $x1 = $r->c(2, 3, 1);
-    my $x2 = $r->c(2, 3, 4);
+    my $x1 = $r->c([2, 3, 1]);
+    my $x2 = $r->c([2, 3, 4]);
     my $x3 = $r->setequal($x1, $x2);
     is_deeply($x3->value, 0);
   }
     
   # setequal - not equal, element count is diffrent
   {
-    my $x1 = $r->c(2, 3, 1);
-    my $x2 = $r->c(2, 3, 1, 5);
+    my $x1 = $r->c([2, 3, 1]);
+    my $x2 = $r->c([2, 3, 1, 5]);
     my $x3 = $r->setequal($x1, $x2);
     is_deeply($x3->value, 0);
   }
@@ -691,24 +691,24 @@ my $r = Rstats->new;
 
 # setdiff
 {
-  my $x1 = $r->c(1, 2, 3, 4);
-  my $x2 = $r->c(3, 4);
+  my $x1 = $r->c([1, 2, 3, 4]);
+  my $x2 = $r->c([3, 4]);
   my $x3 = $r->setdiff($x1, $x2);
   is_deeply($x3->values, [1, 2]);
 }
 
 # intersect
 {
-  my $x1 = $r->c(1, 2, 3, 4);
-  my $x2 = $r->c(3, 4, 5, 6);
+  my $x1 = $r->c([1, 2, 3, 4]);
+  my $x2 = $r->c([3, 4, 5, 6]);
   my $x3 = $r->intersect($x1, $x2);
   is_deeply($x3->values, [3, 4]);
 }
 
 # union
 {
-  my $x1 = $r->c(1, 2, 3, 4);
-  my $x2 = $r->c(3, 4, 5, 6);
+  my $x1 = $r->c([1, 2, 3, 4]);
+  my $x2 = $r->c([3, 4, 5, 6]);
   my $x3 = $r->union($x1, $x2);
   is_deeply($x3->values, [1, 2, 3, 4, 5, 6]);
 }
@@ -717,7 +717,7 @@ my $r = Rstats->new;
 {
   # cumprod - int
   {
-    my $x1 = $r->c_int(2, 3, 4);
+    my $x1 = $r->c_int([2, 3, 4]);
     my $x2 = $r->cumprod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [2, 6, 24]);
@@ -725,7 +725,7 @@ my $r = Rstats->new;
 
   # cumprod - double
   {
-    my $x1 = $r->c(2, 3, 4);
+    my $x1 = $r->c([2, 3, 4]);
     my $x2 = $r->cumprod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [2, 6, 24]);
@@ -736,7 +736,7 @@ my $r = Rstats->new;
 {
   # cumsum - int
   {
-    my $x1 = $r->c_int(1, 2, 3);
+    my $x1 = $r->c_int([1, 2, 3]);
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);
@@ -744,7 +744,7 @@ my $r = Rstats->new;
 
   # cumsum - double
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);
@@ -753,28 +753,28 @@ my $r = Rstats->new;
 
 # rank
 {
-  my $x1 = $r->c(1, 5, 5, 5, 3, 3, 7);
+  my $x1 = $r->c([1, 5, 5, 5, 3, 3, 7]);
   my $x2 = $r->rank($x1);
   is_deeply($x2->values, [1, 5, 5, 5, 2.5, 2.5, 7]);
 }
 
 # range
 {
-  my $x1 = $r->c(1, 2, 3);
+  my $x1 = $r->c([1, 2, 3]);
   my $x2 = $r->range($x1);
   is_deeply($x2->values, [1, 3]);
 }
 
 # rev
 {
-  my $x1 = $r->c(2, 4, 3, 1);
+  my $x1 = $r->c([2, 4, 3, 1]);
   my $x2 = $r->rev($x1);
   is_deeply($x2->values, [1, 3, 4, 2]);
 }
 
 # T, F
 {
-  my $x1 = $r->c($r->TRUE, $r->FALSE);
+  my $x1 = $r->c([$r->TRUE, $r->FALSE]);
   is_deeply($x1->values, [1, 0]);
 }
 
@@ -782,7 +782,7 @@ my $r = Rstats->new;
 {
   # sqrt - double
   {
-    my $e1 = $r->c(4, 9);
+    my $e1 = $r->c([4, 9]);
     my $e2 = $r->sqrt($e1);
     is_deeply($e2->values, [2, 3]);
   }
@@ -792,22 +792,22 @@ my $r = Rstats->new;
 {
   # max
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->max($x1);
     is_deeply($x2->values, [3]);
   }
 
   # max - multiple $r->arrays
   {
-    my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->c(4, 5, 6);
+    my $x1 = $r->c([1, 2, 3]);
+    my $x2 = $r->c([4, 5, 6]);
     my $x3 = $r->max($x1, $x2);
     is_deeply($x3->values, [6]);
   }
   
   # max - contain NaN
   {
-    my $x1 = $r->max($r->c(1, 2, $r->NaN));
+    my $x1 = $r->max($r->c([1, 2, $r->NaN]));
     is_deeply($x1->values, ['NaN']);
   }
 }
@@ -816,13 +816,13 @@ my $r = Rstats->new;
 {
   # median - odd number
   {
-    my $x1 = $r->c(2, 3, 3, 4, 5, 1);
+    my $x1 = $r->c([2, 3, 3, 4, 5, 1]);
     my $x2 = $r->median($x1);
     is_deeply($x2->values, [3]);
   }
   # median - even number
   {
-    my $x1 = $r->c(2, 3, 3, 4, 5, 1, 6);
+    my $x1 = $r->c([2, 3, 3, 4, 5, 1, 6]);
     my $x2 = $r->median($x1);
     is_deeply($x2->values, [3.5]);
   }
@@ -831,7 +831,7 @@ my $r = Rstats->new;
 # unique
 {
   # uniqeu - double
-  my $x1 = $r->c(1, 1, 2, 2, 3, $r->Inf, $r->Inf);
+  my $x1 = $r->c([1, 1, 2, 2, 3, $r->Inf, $r->Inf]);
   my $x2 = $r->unique($x1);
   is_deeply($x2->values, [1, 2, 3, 'Inf']);
 }
@@ -840,7 +840,7 @@ my $r = Rstats->new;
 {
   # trunc - $r->array reference
   {
-    my $x1 = $r->c(-1.2, -1, 1, 1.2);
+    my $x1 = $r->c([-1.2, -1, 1, 1.2]);
     my $x2 = $r->trunc($x1);
     is_deeply(
       $x2->values,
@@ -853,7 +853,7 @@ my $r = Rstats->new;
 {
   # floor - $r->array reference
   {
-    my $x1 = $r->c(2.5, 2.0, -1.0, -1.3);
+    my $x1 = $r->c([2.5, 2.0, -1.0, -1.3]);
     my $x2 = $r->floor($x1);
     is_deeply(
       $x2->values,
@@ -866,7 +866,7 @@ my $r = Rstats->new;
 {
   # ceiling - $r->array reference
   {
-    my $x1 = $r->c(2.5, 2.0, -1.0, -1.3);
+    my $x1 = $r->c([2.5, 2.0, -1.0, -1.3]);
     my $x2 = $r->ceiling($x1);
     is_deeply(
       $x2->values,
@@ -879,7 +879,7 @@ my $r = Rstats->new;
 {
   # sqrt - $r->array reference
   {
-    my $x1 = $r->c(2, 3, 4);
+    my $x1 = $r->c([2, 3, 4]);
     my $x2 = $r->sqrt($x1);
     is_deeply(
       $x2->values,
@@ -913,14 +913,14 @@ my $r = Rstats->new;
 {
   # array - basic
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
+    my $x1 = $r->array($r->C('1:24'), $r->c([4, 3, 2]));
     is_deeply($x1->values, [1 .. 24]);
     is_deeply($r->dim($x1)->values, [4, 3, 2]);
   }
   
   # array - dim option
   {
-    my $x1 = $r->array($r->C('1:24'), {dim => $r->c(4, 3, 2)});
+    my $x1 = $r->array($r->C('1:24'), {dim => $r->c([4, 3, 2])});
     is_deeply($x1->values, [1 .. 24]);
     is_deeply($r->dim($x1)->values, [4, 3, 2]);
   }
@@ -942,13 +942,13 @@ my $r = Rstats->new;
   
   # value - two-dimention
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
+    my $x1 = $r->array($r->C('1:12'), $r->c([4, 3]));
     is($x1->value(3, 2), 7);
   }
 
   # value - three-dimention
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 1));
+    my $x1 = $r->array($r->C('1:24'), $r->c([4, 3, 1]));
     is($x1->value(3, 2, 1), 7);
   }
 }
@@ -957,7 +957,7 @@ my $r = Rstats->new;
 {
   # create element - double
   {
-    my $x1 = $r->c(1, 2, 3);
+    my $x1 = $r->c([1, 2, 3]);
   }
 }
 

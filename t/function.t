@@ -15,28 +15,28 @@ my $r = Rstats->new;
   # $r->c($r->TRUE, $r->as->integer(2));
   {
     my $x1 = $r->c($r->TRUE, $r->as->integer($r->c(2)));
-    ok($r->is->integer($x1));
+    ok($r->is->integer($x1)->value);
     is_deeply($x1->values, [1, 2]);
   }
 
   # $r->c(1, $r->as->integer(2));
   {
     my $x1 = $r->c($r->c(1), $r->as->integer($r->c(2)));
-    ok($r->is->double($x1));
+    ok($r->is->double($x1)->value);
     is_deeply($x1->values, [1, 2]);
   }
     
   # $r->c([1, 2, 3])
   {
     my $x1 = $r->c([1, 2, 3]);
-    ok($r->is->double($x1));
+    ok($r->is->double($x1)->value);
     is_deeply($x1->values, [1, 2, 3]);
   }
   
   # $r->c($r->c(1, 2, 3))
   {
     my $x1 = $r->c($r->c(1, 2, 3));
-    ok($r->is->double($x1));
+    ok($r->is->double($x1)->value);
     is_deeply($x1->values, [1, 2, 3]);
   }
   
@@ -104,7 +104,7 @@ my $r = Rstats->new;
     my $mat = $r->matrix($r->c(0), $r->c(2), $r->c(5));
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply($r->dim($mat)->values, [2, 5]);
-    ok($r->is->matrix($mat));
+    ok($r->is->matrix($mat)->value);
   }
   
   # matrix - repeat values
@@ -112,7 +112,7 @@ my $r = Rstats->new;
     my $mat = $r->matrix($r->c(1,2), $r->c(2), $r->c(5));
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply($r->dim($mat)->values, [2, 5]);
-    ok($r->is->matrix($mat));
+    ok($r->is->matrix($mat)->value);
   }
 }
 
@@ -322,7 +322,7 @@ my $r = Rstats->new;
   # NaN - type
   {
     my $x_nan = $r->NaN;
-    ok($r->is->double($x_nan));
+    ok($r->is->double($x_nan)->value);
   }
 }
 
@@ -332,7 +332,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1.2);
     my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [0]);
   }
 
@@ -340,7 +340,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(-3));
     my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [$r->pi->value]);
   }
 
@@ -348,7 +348,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c($r->NaN);
     my $x2 = $r->Arg($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, ['NaN']);
   }
   
@@ -458,7 +458,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[0]), '1.718282');
     is(sprintf("%.6f", $x2->values->[1]), '6.389056');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # expm1 - double,less than 1e-5
@@ -468,7 +468,7 @@ my $r = Rstats->new;
     my $x2_value_str = sprintf("%.13e", $x2->value);
     $x2_value_str =~ s/e-0+/e-/;
     is($x2_value_str, '1.2340000761378e-7');
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # expm1 - integer
@@ -476,7 +476,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->array($r->c(2)));
     my $x2 = $r->expm1($x1);
     is(sprintf("%.6f", $x2->value), '6.389056');
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
     
   # expm1 - Inf
@@ -507,7 +507,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(2, 3, 4);
     my $x2 = $r->prod($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [24]);
   }
 
@@ -515,7 +515,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(2, 3, 4));
     my $x2 = $r->prod($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [24]);
   }
 }
@@ -526,7 +526,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1, 2, 3);
     my $x2 = $r->sum($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [6]);
   }
   
@@ -606,7 +606,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[0]), '2.718282');
     is(sprintf("%.6f", $x2->values->[1]), '7.389056');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # exp - Inf
@@ -639,7 +639,7 @@ my $r = Rstats->new;
     my $x2 = $r->log10($x1);
     is($x2->value, 1);
     is_deeply($r->dim($x2)->values, [1]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # log10 - integer
@@ -648,7 +648,7 @@ my $r = Rstats->new;
     my $x2 = $r->log10($x1);
     is($x2->value, 1);
     is_deeply($r->dim($x2)->values, [1]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
 }
@@ -661,7 +661,7 @@ my $r = Rstats->new;
     my $x2 = $r->log2($x1);
     is($x2->values->[0], 1);
     is_deeply($r->dim($x2)->values, [1]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 }
 
@@ -676,7 +676,7 @@ my $r = Rstats->new;
     is($x2->values->[2], 'NaN');
     ok($x2->values->[3], '-Inf');
     is_deeply($r->dim($x2)->values, [4]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 }
 
@@ -691,7 +691,7 @@ my $r = Rstats->new;
     ok($x2->values->[2], 'NaN');
     ok($x2->values->[3], '-Inf');
     is_deeply($r->dim($x2)->values, [4]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # log - Inf
@@ -855,7 +855,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c_integer(2, 3, 4);
     my $x2 = $r->cumprod($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [2, 6, 24]);
   }
 
@@ -863,7 +863,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(2, 3, 4);
     my $x2 = $r->cumprod($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [2, 6, 24]);
   }
 }
@@ -874,7 +874,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c_integer(1, 2, 3);
     my $x2 = $r->cumsum($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);
   }
 
@@ -882,7 +882,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1, 2, 3);
     my $x2 = $r->cumsum($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);
   }
 }
@@ -1240,14 +1240,14 @@ my $r = Rstats->new;
   # c_double - arguments is list
   {
     my $x1 = $r->c_double(1.1, 1.2, 1.3);
-    ok($x1->is->double);
+    ok($x1->is->double->value);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 
   # c_double - arguments is $r->array reference
   {
     my $x1 = $r->c_double([1.1, 1.2, 1.3]);
-    ok($x1->is->double);
+    ok($x1->is->double->value);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
   }
 }

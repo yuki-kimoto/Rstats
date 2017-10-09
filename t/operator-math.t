@@ -15,7 +15,7 @@ my $r = Rstats->new;
     my $x1 = $r->array($r->c(5), $r->c(2));
     my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->pow($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [25, 25]);
   }
@@ -25,7 +25,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(5);
     my $x2 = $r->c(2);
     my $x3 = $r->pow($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [25]);
   }
 
@@ -34,7 +34,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->pow($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [25]);
   }
 
@@ -68,7 +68,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(1);
     my $x2 = $r->c(2);
     my $x3 = $r->add($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [3]);
   }
 
@@ -77,7 +77,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(1));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->add($x1, $x2);
-    ok($r->is->integer($x3));
+    ok($r->is->integer($x3)->value);
     is_deeply($x3->values, [3]);
   }
 
@@ -111,7 +111,7 @@ my $r = Rstats->new;
     my $x1 = $r->array($r->c(1), $r->c(2));
     my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->subtract($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [-1, -1]);
   }
@@ -121,7 +121,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(1);
     my $x2 = $r->c(2);
     my $x3 = $r->subtract($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [-1]);
   }
 
@@ -130,7 +130,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(1));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->subtract($x1, $x2);
-    ok($r->is->integer($x3));
+    ok($r->is->integer($x3)->value);
     is_deeply($x3->values, [-1]);
   }
 
@@ -164,7 +164,7 @@ my $r = Rstats->new;
     my $x1 = $r->array($r->c(3), $r->c(2));
     my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->multiply($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [6, 6]);
   }
@@ -174,7 +174,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(3);
     my $x2 = $r->c(2);
     my $x3 = $r->multiply($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [6]);
   }
 
@@ -183,7 +183,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(3));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->multiply($x1, $x2);
-    ok($r->is->integer($x3));
+    ok($r->is->integer($x3)->value);
     is_deeply($x3->values, [6]);
   }
 
@@ -217,7 +217,7 @@ my $r = Rstats->new;
     my $x1 = $r->array($r->c(5), $r->c(2));
     my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->divide($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [5/2, 5/2]);
   }
@@ -227,7 +227,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(5);
     my $x2 = $r->c(2);
     my $x3 = $r->divide($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [5/2]);
   }
 
@@ -236,7 +236,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->divide($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [5/2]);
   }
 
@@ -271,7 +271,7 @@ my $r = Rstats->new;
     my $x1 = $r->array($r->c(5), $r->c(2));
     my $x2 = $r->array($r->c(2), $r->c(2));
     my $x3 = $r->remainder($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     ok($r->dim($x3)->values, [2]);
     is_deeply($x3->values, [1, 1]);
   }
@@ -281,7 +281,7 @@ my $r = Rstats->new;
     my $x1 = $r->c(5, 5, 2, 2);
     my $x2 = $r->c(2, 3, 2/5, 0);
     my $x3 = $r->remainder($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
   }
 
@@ -290,7 +290,7 @@ my $r = Rstats->new;
     my $x1 = $r->as->integer($r->c(5));
     my $x2 = $r->as->integer($r->c(2));
     my $x3 = $r->remainder($x1, $x2);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
     is_deeply($x3->values, [1]);
   }
 
@@ -323,7 +323,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(1, 2, 3));
     my $x2 = $r->negate($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [-1, -2, -3]);
     is_deeply($x2->dim->values, [3]);
   }
@@ -332,7 +332,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1, 2, 3);
     my $x2 = $r->negate($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, [-1, -2, -3]);
   }
 
@@ -340,7 +340,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->NaN;
     my $x2 = $r->negate($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     ok($r->is->nan($x2)->value);
   }
   
@@ -348,7 +348,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->negate($r->Inf);
     my $x2 = $r->negate($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     ok($x2->value, 'Inf');
   }
 
@@ -356,7 +356,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->Inf;
     my $x2 = $r->negate($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is($x2->value, '-Inf');
   }
 }
@@ -365,7 +365,7 @@ my $r = Rstats->new;
 {
   {
     my $x1 = $r->array($r->c(1));
-    if ($x1) {
+    if ($x1->value) {
       pass;
     }
     else {
@@ -376,7 +376,7 @@ my $r = Rstats->new;
   # bool - one argument, false
   {
     my $x1 = $r->array($r->c(0));
-    if ($r->bool($x1)) {
+    if ($x1->value) {
       fail;
     }
     else {
@@ -387,7 +387,7 @@ my $r = Rstats->new;
   # bool - two argument, true
   {
     my $x1 = $r->array($r->c(3), $r->c(3));
-    if ($x1) {
+    if ($x1->value) {
       pass;
     }
     else {

@@ -1663,6 +1663,8 @@ sub _fix_pos {
 sub bool {
   my $r = shift;
   
+  # croak("Bool");
+  
   my $x1 = shift;
   
   my $length = Rstats::Func::get_length($r, $x1);

@@ -33,7 +33,7 @@ my $r = Rstats->new;
 {
   # to_string - one element
   {
-    my $x1 = $r->array(0);
+    my $x1 = $r->array($r->c(0));
     my $x1_str = $x1->to_string;
     $x1_str =~ s/[ \t]+/ /;
     my $expected = "[1] 0\n";

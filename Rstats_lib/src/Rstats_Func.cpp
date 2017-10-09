@@ -2047,7 +2047,7 @@ namespace Rstats {
             Rstats::pl_hv_store(
               sv_new_opt,
               SvPV_nolen(sv_name),
-              Rstats::Func::to_object(sv_r, sv_arg)
+              sv_arg
             );
           }
         }

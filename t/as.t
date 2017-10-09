@@ -60,7 +60,7 @@ my $r = Rstats->new;
 
   # as->double - double
   {
-    my $x1 = $r->array(1.1);
+    my $x1 = $r->array($r->c(1.1));
     my $x2 = $r->as->double($x1);
     ok($r->is->double($x2));
     is($x2->values->[0], 1.1);
@@ -68,7 +68,7 @@ my $r = Rstats->new;
   
   # as->double - integer
   {
-    my $x1 = $r->array(1);
+    my $x1 = $r->array($r->c(1));
     my $x2 = $r->as->double($r->as->integer($x1));
     ok($r->is->double($x2));
     is($x2->values->[0], 1);

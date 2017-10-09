@@ -50,7 +50,7 @@ sub parse_index {
       $minus = 1 if $minus_count > 0;
     }
     
-    if (!@{$index->values}) {
+    if (!@$index_values) {
       my $index_values_new = [1 .. $x1_dim->[$i]];
       $index = Rstats::Func::c_int($r, $index_values_new);
     }

@@ -404,8 +404,8 @@ namespace Rstats {
     }
 
     template <class T_IN, class T_OUT>
-    Rstats::Vector<T_OUT>* negate(Rstats::Vector<T_IN>* v1) {
-      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::negate;
+    Rstats::Vector<T_OUT>* neg(Rstats::Vector<T_IN>* v1) {
+      T_OUT (*func)(T_IN) = &Rstats::ElementFunc::neg;
       
       Rstats::Vector<T_OUT>* v_out = Rstats::VectorFunc::operate_unary_math(func, v1);
       

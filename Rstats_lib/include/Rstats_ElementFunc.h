@@ -109,8 +109,8 @@ namespace Rstats {
     double atanh(double);
     double atanh(int32_t);
     
-    double negate(double);
-    int32_t negate(int32_t);
+    double neg(double);
+    int32_t neg(int32_t);
 
     double atan2(double, double);
     double atan2(int32_t, int32_t);

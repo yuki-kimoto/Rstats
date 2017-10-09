@@ -507,12 +507,12 @@ SV* sum(...)
   XSRETURN(1);
 }
 
-SV* negate(...)
+SV* neg(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   
-  SV* sv_x_out = Rstats::Func::negate(sv_r, ST(1));
+  SV* sv_x_out = Rstats::Func::neg(sv_r, ST(1));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

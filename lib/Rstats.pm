@@ -172,7 +172,7 @@ my @func_names = qw/
   multiply
   divide
   pow
-  negate
+  neg
   dim
   Inf
   NaN

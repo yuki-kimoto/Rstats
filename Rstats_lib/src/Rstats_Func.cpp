@@ -1388,7 +1388,7 @@ namespace Rstats {
       return sv_x_out;
     }
     
-    SV* negate(SV* sv_r, SV* sv_x1) {
+    SV* neg(SV* sv_r, SV* sv_x1) {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
@@ -1396,14 +1396,14 @@ namespace Rstats {
       if (strEQ(type, "double")) {
         Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
         
-        Rstats::Vector<double>* v_out = Rstats::VectorFunc::negate<double, double>(v1);
+        Rstats::Vector<double>* v_out = Rstats::VectorFunc::neg<double, double>(v1);
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
       else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
-        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::negate<int32_t, int32_t>(v1);
+        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::neg<int32_t, int32_t>(v1);
         
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }

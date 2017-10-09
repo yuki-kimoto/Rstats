@@ -83,7 +83,7 @@ namespace Rstats {
     SV* tan(SV*, SV*);
     SV* sin(SV*, SV*);
     SV* sum(SV*, SV*);
-    SV* negate(SV*, SV*);
+    SV* neg(SV*, SV*);
     
     char* get_type(SV*, SV*);
     SV* get_type_sv(SV*, SV*);

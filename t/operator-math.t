@@ -317,45 +317,45 @@ my $r = Rstats->new;
   }
 }
 
-# negate
+# neg
 {
-  # negate - dimention
+  # neg - dimention
   {
     my $x1 = $r->array($r->c(1, 2, 3));
-    my $x2 = $r->negate($x1);
+    my $x2 = $r->neg($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [-1, -2, -3]);
     is_deeply($x2->dim->values, [3]);
   }
   
-  # negate - double
+  # neg - double
   {
     my $x1 = $r->c(1, 2, 3);
-    my $x2 = $r->negate($x1);
+    my $x2 = $r->neg($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [-1, -2, -3]);
   }
 
-  # negate - double,NaN
+  # neg - double,NaN
   {
     my $x1 = $r->NaN;
-    my $x2 = $r->negate($x1);
+    my $x2 = $r->neg($x1);
     ok($r->is->double($x2)->value);
     ok($r->is->nan($x2)->value);
   }
   
-  # negate - double,-Inf
+  # neg - double,-Inf
   {
-    my $x1 = $r->negate($r->Inf);
-    my $x2 = $r->negate($x1);
+    my $x1 = $r->neg($r->Inf);
+    my $x2 = $r->neg($x1);
     ok($r->is->double($x2)->value);
     ok($x2->value, 'Inf');
   }
 
-  # negate - double,Inf
+  # neg - double,Inf
   {
     my $x1 = $r->Inf;
-    my $x2 = $r->negate($x1);
+    my $x2 = $r->neg($x1);
     ok($r->is->double($x2)->value);
     is($x2->value, '-Inf');
   }

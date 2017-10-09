@@ -23,7 +23,7 @@ my $r = Rstats->new;
 
   # to_string - -Inf
   {
-    my $x1 = $r->negate($r->Inf);
+    my $x1 = $r->neg($r->Inf);
     is($x1->to_string, "[1] -Inf\n");
   }
 }

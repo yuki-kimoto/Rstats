@@ -97,7 +97,7 @@ namespace Rstats {
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* exp(Rstats::Vector<T_IN>*);
     template <class T_IN, class T_OUT>
-    Rstats::Vector<T_OUT>* negate(Rstats::Vector<T_IN>*);
+    Rstats::Vector<T_OUT>* neg(Rstats::Vector<T_IN>*);
     template <class T_IN, class T_OUT>
     Rstats::Vector<T_OUT>* Arg(Rstats::Vector<T_IN>*);
     template <class T_IN, class T_OUT>

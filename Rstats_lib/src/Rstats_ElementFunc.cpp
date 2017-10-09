@@ -206,9 +206,9 @@ namespace Rstats {
     }
     double atanh(int32_t e1) { return Rstats::ElementFunc::atanh((double)e1); }
 
-    // negate
-    double negate(double e1) { return -e1; }
-    int32_t negate(int32_t e1) { return -e1; }
+    // neg
+    double neg(double e1) { return -e1; }
+    int32_t neg(int32_t e1) { return -e1; }
 
     // atan2
     double atan2(double e1, double e2) {

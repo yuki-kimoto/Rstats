@@ -129,70 +129,6 @@ my $r = Rstats->new;
   is_deeply($x2->values, [1, 1, 2, 1, 2, 3])
 }
   
-# sample
-{
-  {
-    my $x1 = $r->C('1:100');
-    my $x2 = $r->sample($x1, 50);
-    is($r->length($x2)->value, 50);
-    my $duplicate_h = {};
-    my $duplicate;
-    my $invalid_value;
-    for my $x2_value (@{$x2->values}) {
-      $duplicate_h->{$x2_value}++;
-      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
-      unless (grep { $_ eq $x2_value } (1 .. 100)) {
-        $invalid_value = 1;
-      }
-    }
-    ok(!$duplicate);
-    ok(!$invalid_value);
-  }
-  
-  # sample - replace => 0
-  {
-    my $x1 = $r->C('1:100');
-    my $x2 = $r->sample($x1, 50, {replace => $r->c(0)});
-    is($r->length($x2)->value, 50);
-    my $duplicate_h = {};
-    my $duplicate;
-    my $invalid_value;
-    for my $x2_value (@{$x2->values}) {
-      $duplicate_h->{$x2_value}++;
-      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
-      unless (grep { $_ eq $x2_value } (1 .. 100)) {
-        $invalid_value = 1;
-      }
-    }
-    ok(!$duplicate);
-    ok(!$invalid_value);
-  }
-
-  # sample - replace => 0
-  {
-    my $x1 = $r->C('1:100');
-    my $x2 = $r->sample($x1, 50, {replace => $r->c(1)});
-    is($r->length($x2)->value, 50);
-    my $duplicate_h = {};
-    my $duplicate;
-    my $invalid_value;
-    for my $x2_value (@{$x2->values}) {
-      unless (grep { $_ eq $x2_value } (1 .. 100)) {
-        $invalid_value = 1;
-      }
-    }
-    ok(!$invalid_value);
-  }
-  
-  # sample - replace => 0, (strict check)
-  {
-    my $x1 = $r->c(1);
-    my $x2 = $r->sample($x1, 5, {replace => $r->c(1)});
-    is($r->length($x2)->value, 5);
-    is_deeply($x2->values, [1, 1, 1, 1, 1]);
-  }
-}
-
 # which
 {
   my $x1 = $r->c(5, 7, 5);
@@ -265,56 +201,6 @@ my $r = Rstats->new;
     my $x2 = $r->rep($x1, {times => $r->c(3)});
     is_deeply($x2->values, [1, 2, 3, 1, 2, 3, 1, 2, 3]);
   }
-}
-
-# seq function
-{
-  # seq($from, $to),  n > m
-  {
-    my $x1 = $r->seq(1, 3);
-    is_deeply($x1->values, [1, 2, 3]);
-  }
-
-  # seq({from => $from, to => $to}),  n > m
-  {
-    my $x1 = $r->seq({from => 1, to => 3});
-    is_deeply($x1->values, [1, 2, 3]);
-  }
-  
-  # seq($from, $to),  n < m
-  {
-    my $x1 = $r->seq(3, 1);
-    is_deeply($x1->values, [3, 2, 1]);
-  }
-  
-  # seq($from, $to), n = m
-  {
-    my $x1 = $r->seq(2, 2);
-    is_deeply($x1->values, [2]);
-  }
-  
-  # seq($from, $to, {by => p}) n > m
-  {
-    my $x1 = $r->seq(1, 3, {by => $r->c(0.5)});
-    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
-  }
-
-  # seq($from, $to, {by => p}) n > m
-  {
-    my $x1 = $r->seq(3, 1, {by => $r->c(-0.5)});
-    is_deeply($x1->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
-  }
-  
-  # seq($from, {by => p, length => l})
-  {
-    my $x1 = $r->seq(1, 3, {length => $r->c(5)});
-    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
-  }
-  
-  # seq(along => $v);
-  my $x1 = $r->c(3, 4, 5);
-  my $x2 = $r->seq({along => $x1});
-  is_deeply($x2->values, [1, 2, 3]);
 }
 
 # NaN
@@ -534,7 +420,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->as->integer($r->c(1, 2, 3));
     my $x2 = $r->sum($x1);
-    ok($r->is->integer($x2));
+    ok($r->is->integer($x2)->value);
     is_deeply($x2->values, [6]);
   }
 }
@@ -835,20 +721,6 @@ my $r = Rstats->new;
   is_deeply($x3->values, [1, 2, 3, 4, 5, 6]);
 }
 
-# cummin
-{
-  my $x1 = $r->c(7, 3, 5, 1);
-  my $x2 = $r->cummin($x1);
-  is_deeply($x2->values, [7, 3, 3, 1]);
-}
-
-# cummax
-{
-  my $x1 = $r->c(1, 5, 3, 7);
-  my $x2 = $r->cummax($x1);
-  is_deeply($x2->values, [1, 5, 5, 7]);
-}
-
 # cumprod
 {
   # cumprod - integer
@@ -894,56 +766,6 @@ my $r = Rstats->new;
   is_deeply($x2->values, [1, 5, 5, 5, 2.5, 2.5, 7]);
 }
 
-# order
-{
-  # order - 2 condition,decreasing TRUE
-  {
-    my $x1 = $r->c(4, 3, 3, 3, 1, 5);
-    my $x2 = $r->c(1, 2, 3, 1, 1, 1);
-    my $x3 = $r->order($x1, $x2, {decreasing => $r->TRUE});
-    is_deeply($x3->values, [6, 1, 3, 2, 4, 5]);
-  }
-  
-  # order - 2 condition,decreasing FALSE
-  {
-    my $x1 = $r->c(4, 3, 3, 3, 1, 5);
-    my $x2 = $r->c(1, 2, 3, 1, 1, 1);
-    my $x3 = $r->order($x1, $x2);
-    is_deeply($x3->values, [5, 4, 2, 3, 1, 6]);
-  }
-  
-  # order - decreasing FALSE
-  {
-    my $x1 = $r->c(2, 4, 3, 1);
-    my $x2 = $r->order($x1, {decreasing => $r->FALSE});
-    is_deeply($x2->values, [4, 1, 3, 2]);
-  }
-  
-  # order - decreasing TRUE
-  {
-    my $x1 = $r->c(2, 4, 3, 1);
-    my $x2 = $r->order($x1, {decreasing => $r->TRUE});
-    is_deeply($x2->values, [2, 3, 1, 4]);
-  }
-
-  # order - decreasing FALSE
-  {
-    my $x1 = $r->c(2, 4, 3, 1);
-    my $x2 = $r->order($x1);
-    is_deeply($x2->values, [4, 1, 3, 2]);
-  }
-}
-
-# diff
-{
-  # diff - numeric
-  {
-    my $x1 = $r->c(1, 5, 10);
-    my $x2 = $r->diff($x1);
-    is_deeply($x2->values, [4, 5]);
-  }
-}
-
 # range
 {
   my $x1 = $r->c(1, 2, 3);
@@ -951,22 +773,6 @@ my $r = Rstats->new;
   is_deeply($x2->values, [1, 3]);
 }
 
-# pmax
-{
-  my $x1 = $r->c(1, 6, 3, 8);
-  my $x2 = $r->c(5, 2, 7, 4);
-  my $pmax = $r->pmax($x1, $x2);
-  is_deeply($pmax->values, [5, 6, 7, 8]);
-}
-
-# pmin
-{
-  my $x1 = $r->c(1, 6, 3, 8);
-  my $x2 = $r->c(5, 2, 7, 4);
-  my $pmin = $r->pmin($x1, $x2);
-  is_deeply($pmin->values, [1, 2, 3, 4]);
-}
-  
 # rev
 {
   my $x1 = $r->c(2, 4, 3, 1);
@@ -1030,109 +836,12 @@ my $r = Rstats->new;
   }
 }
 
-# quantile
-{
-  # quantile - odd number
-  {
-    my $x1 = $r->C('0:100');
-    my $x2 = $r->quantile($x1);
-    is_deeply($x2->values, [0, 25, 50, 75, 100]);
-  }
-  
-  # quantile - even number
-  {
-    my $x1 = $r->C('1:100');
-    my $x2 = $r->quantile($x1);
-    is_deeply($x2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
-  }
-
-  # quantile - one element
-  {
-    my $x1 = $r->c(1);
-    my $x2 = $r->quantile($x1);
-    is_deeply($x2->values, [1, 1, 1, 1, 1]);
-  }
-}
-
 # unique
 {
   # uniqeu - numeric
   my $x1 = $r->c(1, 1, 2, 2, 3, $r->Inf, $r->Inf);
   my $x2 = $r->unique($x1);
   is_deeply($x2->values, [1, 2, 3, 'Inf']);
-}
-
-# round
-{
-  # round - $r->array reference
-  {
-    my $x1 = $r->c(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $x2 = $r->round($x1);
-    is_deeply(
-      $x2->values,
-      [-1, 2, 2, 3, 4]
-    );
-  }
-
-  # round - matrix
-  {
-    my $x1 = $r->c(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $x2 = $r->round($r->matrix($x1));
-    is_deeply(
-      $x2->values,
-      [-1, 2, 2, 3, 4]
-    );
-  }
-
-  # round - $r->array reference
-  {
-    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($x1, -1);
-    is_deeply(
-      $x2->values,
-      [-10, 20, 20, 30, 40]
-    );
-  }
-
-  # round - $r->array reference
-  {
-    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($x1, {digits => $r->c(-1)});
-    is_deeply(
-      $x2->values,
-      [-10, 20, 20, 30, 40]
-    );
-  }
-  
-  # round - matrix
-  {
-    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($r->matrix($x1), $r->c(-1));
-    is_deeply(
-      $x2->values,
-      [-10, 20, 20, 30, 40]
-    );
-  }
-  
-  # round - $r->array reference
-  {
-    my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $x2 = $r->round($x1, 1);
-    is_deeply(
-      $x2->values,
-      [-0.1, 0.2, 0.2, 0.3, 0.4]
-    );
-  }
-
-  # round - matrix
-  {
-    my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $x2 = $r->round($r->matrix($x1), $r->c(1));
-    is_deeply(
-      $x2->values,
-      [-0.1, 0.2, 0.2, 0.3, 0.4]
-    );
-  }
 }
 
 # trunc
@@ -1258,7 +967,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->matrix($r->C('1:24'), $r->c(3), $r->c(2));
     my $x2 = $r->clone($x1);
-    ok($r->is->matrix($x2));
+    ok($r->is->matrix($x2)->value);
     is_deeply($r->dim($x2)->values, [3, 2]);
   }
 }
@@ -1320,3 +1029,297 @@ my $r = Rstats->new;
     my $x1 = $r->c(1, 2, 3);
   }
 }
+
+# sample
+{
+  {
+    my $x1 = $r->C('1:100');
+    my $x2 = $r->sample($x1, 50);
+    is($r->length($x2)->value, 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $x2_value (@{$x2->values}) {
+      $duplicate_h->{$x2_value}++;
+      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$duplicate);
+    ok(!$invalid_value);
+  }
+  
+  # sample - replace => 0
+  {
+    my $x1 = $r->C('1:100');
+    my $x2 = $r->sample($x1, 50, {replace => $r->c(0)});
+    is($r->length($x2)->value, 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $x2_value (@{$x2->values}) {
+      $duplicate_h->{$x2_value}++;
+      $duplicate = 1 if $duplicate_h->{$x2_value} > 2;
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$duplicate);
+    ok(!$invalid_value);
+  }
+
+  # sample - replace => 0
+  {
+    my $x1 = $r->C('1:100');
+    my $x2 = $r->sample($x1, 50, {replace => $r->c(1)});
+    is($r->length($x2)->value, 50);
+    my $duplicate_h = {};
+    my $duplicate;
+    my $invalid_value;
+    for my $x2_value (@{$x2->values}) {
+      unless (grep { $_ eq $x2_value } (1 .. 100)) {
+        $invalid_value = 1;
+      }
+    }
+    ok(!$invalid_value);
+  }
+  
+  # sample - replace => 0, (strict check)
+  {
+    my $x1 = $r->c(1);
+    my $x2 = $r->sample($x1, 5, {replace => $r->c(1)});
+    is($r->length($x2)->value, 5);
+    is_deeply($x2->values, [1, 1, 1, 1, 1]);
+  }
+}
+
+# seq function
+{
+  # seq($from, $to),  n > m
+  {
+    my $x1 = $r->seq(1, 3);
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+
+  # seq({from => $from, to => $to}),  n > m
+  {
+    my $x1 = $r->seq({from => 1, to => 3});
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # seq($from, $to),  n < m
+  {
+    my $x1 = $r->seq(3, 1);
+    is_deeply($x1->values, [3, 2, 1]);
+  }
+  
+  # seq($from, $to), n = m
+  {
+    my $x1 = $r->seq(2, 2);
+    is_deeply($x1->values, [2]);
+  }
+  
+  # seq($from, $to, {by => p}) n > m
+  {
+    my $x1 = $r->seq(1, 3, {by => $r->c(0.5)});
+    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
+  }
+
+  # seq($from, $to, {by => p}) n > m
+  {
+    my $x1 = $r->seq(3, 1, {by => $r->c(-0.5)});
+    is_deeply($x1->values, [3.0, 2.5, 2.0, 1.5, 1.0]);
+  }
+  
+  # seq($from, {by => p, length => l})
+  {
+    my $x1 = $r->seq(1, 3, {length => $r->c(5)});
+    is_deeply($x1->values, [1, 1.5, 2.0, 2.5, 3.0]);
+  }
+  
+  # seq(along => $v);
+  my $x1 = $r->c(3, 4, 5);
+  my $x2 = $r->seq({along => $x1});
+  is_deeply($x2->values, [1, 2, 3]);
+}
+
+# cummin
+{
+  my $x1 = $r->c(7, 3, 5, 1);
+  my $x2 = $r->cummin($x1);
+  is_deeply($x2->values, [7, 3, 3, 1]);
+}
+
+# cummax
+{
+  my $x1 = $r->c(1, 5, 3, 7);
+  my $x2 = $r->cummax($x1);
+  is_deeply($x2->values, [1, 5, 5, 7]);
+}
+
+
+# order
+{
+  # order - 2 condition,decreasing TRUE
+  {
+    my $x1 = $r->c(4, 3, 3, 3, 1, 5);
+    my $x2 = $r->c(1, 2, 3, 1, 1, 1);
+    my $x3 = $r->order($x1, $x2, {decreasing => $r->TRUE});
+    is_deeply($x3->values, [6, 1, 3, 2, 4, 5]);
+  }
+  
+  # order - 2 condition,decreasing FALSE
+  {
+    my $x1 = $r->c(4, 3, 3, 3, 1, 5);
+    my $x2 = $r->c(1, 2, 3, 1, 1, 1);
+    my $x3 = $r->order($x1, $x2);
+    is_deeply($x3->values, [5, 4, 2, 3, 1, 6]);
+  }
+  
+  # order - decreasing FALSE
+  {
+    my $x1 = $r->c(2, 4, 3, 1);
+    my $x2 = $r->order($x1, {decreasing => $r->FALSE});
+    is_deeply($x2->values, [4, 1, 3, 2]);
+  }
+  
+  # order - decreasing TRUE
+  {
+    my $x1 = $r->c(2, 4, 3, 1);
+    my $x2 = $r->order($x1, {decreasing => $r->TRUE});
+    is_deeply($x2->values, [2, 3, 1, 4]);
+  }
+
+  # order - decreasing FALSE
+  {
+    my $x1 = $r->c(2, 4, 3, 1);
+    my $x2 = $r->order($x1);
+    is_deeply($x2->values, [4, 1, 3, 2]);
+  }
+}
+
+# diff
+{
+  # diff - numeric
+  {
+    my $x1 = $r->c(1, 5, 10);
+    my $x2 = $r->diff($x1);
+    is_deeply($x2->values, [4, 5]);
+  }
+}
+
+# pmax
+{
+  my $x1 = $r->c(1, 6, 3, 8);
+  my $x2 = $r->c(5, 2, 7, 4);
+  my $pmax = $r->pmax($x1, $x2);
+  is_deeply($pmax->values, [5, 6, 7, 8]);
+}
+
+# pmin
+{
+  my $x1 = $r->c(1, 6, 3, 8);
+  my $x2 = $r->c(5, 2, 7, 4);
+  my $pmin = $r->pmin($x1, $x2);
+  is_deeply($pmin->values, [1, 2, 3, 4]);
+}
+
+# quantile
+{
+  # quantile - odd number
+  {
+    my $x1 = $r->C('0:100');
+    my $x2 = $r->quantile($x1);
+    is_deeply($x2->values, [0, 25, 50, 75, 100]);
+  }
+  
+  # quantile - even number
+  {
+    my $x1 = $r->C('1:100');
+    my $x2 = $r->quantile($x1);
+    is_deeply($x2->values, [1.00, 25.75, 50.50, 75.25, 100.00]);
+  }
+
+  # quantile - one element
+  {
+    my $x1 = $r->c(1);
+    my $x2 = $r->quantile($x1);
+    is_deeply($x2->values, [1, 1, 1, 1, 1]);
+  }
+}
+
+
+# round
+{
+  # round - $r->array reference
+  {
+    my $x1 = $r->c(-1.3, 2.4, 2.5, 2.51, 3.51);
+    my $x2 = $r->round($x1);
+    is_deeply(
+      $x2->values,
+      [-1, 2, 2, 3, 4]
+    );
+  }
+
+  # round - matrix
+  {
+    my $x1 = $r->c(-1.3, 2.4, 2.5, 2.51, 3.51);
+    my $x2 = $r->round($r->matrix($x1));
+    is_deeply(
+      $x2->values,
+      [-1, 2, 2, 3, 4]
+    );
+  }
+
+  # round - $r->array reference
+  {
+    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = $r->round($x1, -1);
+    is_deeply(
+      $x2->values,
+      [-10, 20, 20, 30, 40]
+    );
+  }
+
+  # round - $r->array reference
+  {
+    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = $r->round($x1, {digits => $r->c(-1)});
+    is_deeply(
+      $x2->values,
+      [-10, 20, 20, 30, 40]
+    );
+  }
+  
+  # round - matrix
+  {
+    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
+    my $x2 = $r->round($r->matrix($x1), $r->c(-1));
+    is_deeply(
+      $x2->values,
+      [-10, 20, 20, 30, 40]
+    );
+  }
+  
+  # round - $r->array reference
+  {
+    my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
+    my $x2 = $r->round($x1, 1);
+    is_deeply(
+      $x2->values,
+      [-0.1, 0.2, 0.2, 0.3, 0.4]
+    );
+  }
+
+  # round - matrix
+  {
+    my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
+    my $x2 = $r->round($r->matrix($x1), $r->c(1));
+    is_deeply(
+      $x2->values,
+      [-0.1, 0.2, 0.2, 0.3, 0.4]
+    );
+  }
+}
+

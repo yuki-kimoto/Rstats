@@ -53,7 +53,7 @@ sub parse_index {
     
     if (!@$index_values) {
       my $index_values_new = [1 .. $x1_dim->[$i]];
-      $index = Rstats::Func::c_int($r, $index_values_new);
+      $index = Rstats::Func::c($r, $index_values_new);
     }
     elsif ($minus) {
       my $index_value_new = [];
@@ -61,7 +61,7 @@ sub parse_index {
       for my $k (1 .. $x1_dim->[$i]) {
         push @$index_value_new, $k unless grep { $_ == -$k } @$index_values;
       }
-      $index = Rstats::Func::c_int($r, $index_value_new);
+      $index = Rstats::Func::c($r, $index_value_new);
     }
 
     push @indexs, $index;

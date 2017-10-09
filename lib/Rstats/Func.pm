@@ -124,7 +124,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, $x2_values), $r->c([$rows_count, $cols_count]));
+    my $x2 = array($r, Rstats::Func::c($r, $x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }
@@ -159,7 +159,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, $x2_values), $r->c([$rows_count, $cols_count]));
+    my $x2 = array($r, Rstats::Func::c($r, $x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }
@@ -397,17 +397,15 @@ sub is_element {
   for my $x1_value (@$x1_values) {
     my $match;
     for my $x2_value (@$x2_values) {
-      if ($type eq 'double' || $type eq 'int') {
-        if ($x1_value == $x2_value) {
-          $match = 1;
-          last;
-        }
+      if ($x1_value == $x2_value) {
+        $match = 1;
+        last;
       }
     }
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::Func::c_int($r, $x3_values);
+  return Rstats::Func::c($r, $x3_values);
 }
 
 sub setequal {
@@ -1670,7 +1668,7 @@ sub get_array {
     $x_array = c_double($r, \@x2_values);
   }
   elsif ($x1->get_type eq "int") {
-    $x_array = c_int($r, \@x2_values);
+    $x_array = SPVM::Func::c($r, \@x2_values);
   }
   else {
     croak("Invalid type " . $x1->get_type . " is passed");

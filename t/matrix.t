@@ -15,7 +15,7 @@ my $r = Rstats->new;
   
   # matrix - $r->array(2, 2);
   {
-    my $x1 = $r->array($r->c([2]), $r->c([2, 1]));
+    my $x1 = $r->array($r->c(2), $r->c([2, 1]));
     is_deeply($x1->values, [2, 2]);
     is_deeply($x1->dim->values, [2, 1]);
   }

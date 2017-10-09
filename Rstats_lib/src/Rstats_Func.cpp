@@ -53,6 +53,10 @@ namespace Rstats {
 
     SV* c(SV* sv_r, SV* sv_elements) {
       
+      if (!SvROK(sv_elements)) {
+        
+      }
+      
       int32_t length = Rstats::pl_av_len(sv_elements);
 
       SV* sv_x_out;

@@ -85,7 +85,7 @@ my $r = Rstats->new;
   # atan2 - y >= 0, x is -$r->Inf
   {
     my $x1 = $r->c([0, 1]);
-    my $x2 = $r->c($r->neg($r->Inf), $r->neg($r->Inf));
+    my $x2 = $r->c([$r->neg($r->Inf), $r->neg($r->Inf)]);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), 3.141593);
     is(sprintf("%.6f", $x3->values->[1]), 3.141593);

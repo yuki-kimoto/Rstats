@@ -49,14 +49,14 @@ my $r = Rstats->new;
   # pow - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->pow($x1, $r->c(2, 2, 2));
+    my $x2 = $r->pow($x1, $r->c([2, 2, 2]));
     is_deeply($x2->values, [1, 4, 9]);
   }
 
   # pow - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->pow($r->c(2, 2, 2), $x1);
+    my $x2 = $r->pow($r->c([2, 2, 2]), $x1);
     is_deeply($x2->values, [2, 4, 8]);
   }
 }

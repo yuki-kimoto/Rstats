@@ -48,7 +48,7 @@ my $r = Rstats->new;
   # get - minus number + $r->array
   {
     my $x1 = $r->c([1, 3, 5, 7]);
-    my $x2 = $x1->get($r->c(-1, -2));
+    my $x2 = $x1->get($r->c([-1, -2]));
     is_deeply($x2->values, [5, 7]);
   }
 }
@@ -136,7 +136,7 @@ my $r = Rstats->new;
 
   # get 3-dimention - all values 2
   {
-    my $x1 = $r->array($r->c(map { $_ * 2 } (1 .. 24)), $r->c([4, 3, 2]));
+    my $x1 = $r->array($r->c([map { $_ * 2 } (1 .. 24)]), $r->c([4, 3, 2]));
     my $x2 = $x1->get($r->c([1, 2, 3, 4]), $r->c([1, 2, 3]), $r->c([1, 2]));
     is_deeply($x2->values, [map { $_ * 2 } (1 .. 24)]);
     is_deeply($r->dim($x2)->values, [4, 3, 2]);

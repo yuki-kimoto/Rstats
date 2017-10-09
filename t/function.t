@@ -57,7 +57,7 @@ my $r = Rstats->new;
   
   # $r->c(1, 2, $r->c([3, 4, 5]))
   {
-    my $x1 = $r->c(1, 2, $r->c([3, 4, 5]));
+    my $x1 = $r->c([1, 2, $r->c([3, 4, 5])]);
     is_deeply($x1->values, [1, 2, 3, 4, 5]);
   }
 
@@ -92,7 +92,7 @@ my $r = Rstats->new;
   
   # tail - n option
   {
-    my $x1 = $r->c(1, 2, 3, 4);
+    my $x1 = $r->c([1, 2, 3, 4]);
     my $tail = $r->tail($x1, {n => $r->c(3)});
     is_deeply($tail->values, [2, 3, 4]);
   }
@@ -129,7 +129,7 @@ my $r = Rstats->new;
   
 # which
 {
-  my $x1 = $r->c(5, 7, 5);
+  my $x1 = $r->c([5, 7, 5]);
   my $x2 = $r->which($x1, sub { $_ eq 5 });
   is_deeply($x2->values, [1, 3]);
 }
@@ -248,7 +248,7 @@ my $r = Rstats->new;
 {
   # sort - contain NaN
   {
-    my $x1 = $r->c(2, 1, 5, $r->NaN);
+    my $x1 = $r->c([2, 1, 5, $r->NaN]);
     my $x1_sorted = $r->sort($x1);
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
@@ -256,7 +256,7 @@ my $r = Rstats->new;
   # c_ - append (vector)
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->c($x1, 4, 5);
+    my $x2 = $r->c([$x1, 4, 5]);
     is_deeply($x2->values, [1, 2, 3, 4, 5]);
   }
 
@@ -321,7 +321,7 @@ my $r = Rstats->new;
   
   # min - contain NaN
   {
-    my $x1 = $r->min($r->c(1, 2, $r->NaN));
+    my $x1 = $r->min($r->c([1, 2, $r->NaN]));
     is_deeply($x1->values, ['NaN']);
   }
 }
@@ -619,7 +619,7 @@ my $r = Rstats->new;
   # append - vector
   {
     my $x1 = $r->c([1, 2, 3, 4, 5]);
-    my $x2 = $r->append($x1, $r->c(6, 7));
+    my $x2 = $r->append($x1, $r->c([6, 7]));
     is_deeply($x2->values, [1, 2, 3, 4, 5, 6, 7]);
   }
 }
@@ -646,7 +646,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->C('1:10');
     my $x2 = $r->c([2, 5, 10]);
-    my $x4 = $r->replace($x1, $x2, $r->c(12, 15));
+    my $x4 = $r->replace($x1, $x2, $r->c([12, 15]));
     is_deeply($x4->values, [1, 12, 3, 4, 15, 6, 7, 8, 9, 12]);
   }
 }

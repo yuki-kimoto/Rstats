@@ -35,7 +35,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     is_deeply($r->dim($x3)->values, [2]);
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
   }
 
   # atan2 - double
@@ -45,7 +45,7 @@ my $r = Rstats->new;
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
   }
   
   # atan2 - y is -$r->Inf, x is Inf
@@ -115,7 +115,7 @@ my $r = Rstats->new;
   
   # atan2 - y is -$r->Inf
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->c(0);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->value), '-1.570796');
@@ -142,7 +142,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
     is(sprintf("%.6f", $x3->values->[2]), '0.321751');
     is(sprintf("%.6f", $x3->values->[3]), '0.463648');
-    ok($r->is->double($x3));
+    ok($r->is->double($x3)->value);
   }
 }
 
@@ -155,7 +155,7 @@ my $r = Rstats->new;
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.964028');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # tanh - Inf
@@ -194,7 +194,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[5]), '-0.549306');
     is($x2->values->[6], 'NaN');
     is_deeply($r->dim($x2)->values, [7]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # atanh - integer
@@ -207,7 +207,7 @@ my $r = Rstats->new;
     is($x2->values->[3], '-Inf');
     is($x2->values->[4], 'NaN');
     is_deeply($r->dim($x2)->values, [5]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # atanh - Inf
@@ -242,7 +242,7 @@ my $r = Rstats->new;
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
     is_deeply($r->dim($x2)->values, [3]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # acosh - integer
@@ -253,7 +253,7 @@ my $r = Rstats->new;
     is($x2->values->[1], 0);
     is(sprintf("%.6f", $x2->values->[2]), '1.316958');
     is_deeply($r->dim($x2)->values, [3]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # acosh - Inf
@@ -265,7 +265,7 @@ my $r = Rstats->new;
   
   # acosh - -$r->Inf
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->acosh($x1);
     is($x2->value, 'NaN');
   }
@@ -287,7 +287,7 @@ my $r = Rstats->new;
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # asinh - integer
@@ -297,7 +297,7 @@ my $r = Rstats->new;
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # asinh - Inf
@@ -309,7 +309,7 @@ my $r = Rstats->new;
   
   # asinh - -$r->Inf
   {
-    my $x1 = $r->c(-$r->Inf);
+    my $x1 = $r->c($r->negate($r->Inf));
     my $x2 = $r->asinh($x1);
     ok($x2->value, '-Inf');
   }
@@ -333,7 +333,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[2]), '3.762196');
     is($x2->values->[3], 'Inf');
     is_deeply($r->dim($x2)->values, [4]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # cosh - Inf
@@ -369,7 +369,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[2]), '3.626860');
     is($x2->values->[3], '-Inf');
     is_deeply($r->dim($x2)->values, [4]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # sinh - Inf
@@ -403,7 +403,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[0]), '0.463648');
     is(sprintf("%.6f", $x2->values->[1]), '0.540420');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # atan - Inf
@@ -438,7 +438,7 @@ my $r = Rstats->new;
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
     is_deeply($r->dim($x2)->values, [3]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # acos - Inf
@@ -473,7 +473,7 @@ my $r = Rstats->new;
     is($x2->values->[1], 'NaN');
     is($x2->values->[2], 'NaN');
     is_deeply($r->dim($x2)->values, [3]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # asin - Inf
@@ -507,7 +507,7 @@ my $r = Rstats->new;
     is(sprintf("%.6f", $x2->values->[0]), '0.785398');
     is(sprintf("%.6f", $x2->values->[1]), '1.107149');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # atan - Inf
@@ -546,7 +546,7 @@ my $r = Rstats->new;
       ]
     );
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 }
 
@@ -554,12 +554,12 @@ my $r = Rstats->new;
 {
   # cos - double,array
   {
-    my $x1 = $r->array($r->c($r->pi/2, $r->pi/3));
+    my $x1 = $r->array($r->c($r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(3))));
     my $x2 = $r->cos($x1);
     cmp_ok(abs($x2->values->[0]), '<', 1e-15);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # cos - Inf
@@ -588,12 +588,12 @@ my $r = Rstats->new;
 {
   # sin - double
   {
-    my $x1 = $r->array($r->c($r->pi/2, $r->pi/6));
+    my $x1 = $r->array($r->c($r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(6))));
     my $x2 = $r->sin($x1);
     is(sprintf("%.5f", $x2->values->[0]), '1.00000');
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
     is_deeply($r->dim($x2)->values, [2]);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
   }
 
   # sin - Inf

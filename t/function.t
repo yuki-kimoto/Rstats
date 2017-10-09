@@ -101,14 +101,14 @@ my $r = Rstats->new;
 # matrix
 {
   {
-    my $mat = $r->matrix($r->c(0), $r->c(2), $r->c(5));
+    my $mat = $r->array($r->c(0), $r->c(2, 5));
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply($r->dim($mat)->values, [2, 5]);
   }
   
   # matrix - repeat values
   {
-    my $mat = $r->matrix($r->c(1,2), $r->c(2), $r->c(5));
+    my $mat = $r->array($r->c(1,2), $r->c(2, 5));
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply($r->dim($mat)->values, [2, 5]);
   }
@@ -853,16 +853,6 @@ my $r = Rstats->new;
       [-1, -1, 1, 1]
     );
   }
-
-  # trunc - matrix
-  {
-    my $x1 = $r->c(-1.2, -1, 1, 1.2);
-    my $x2 = $r->trunc($r->matrix($x1));
-    is_deeply(
-      $x2->values,
-      [-1, -1, 1, 1]
-    );
-  }
 }
 
 # floor
@@ -871,16 +861,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(2.5, 2.0, -1.0, -1.3);
     my $x2 = $r->floor($x1);
-    is_deeply(
-      $x2->values,
-      [2, 2, -1, -2]
-    );
-  }
-
-  # floor - matrix
-  {
-    my $x1 = $r->c(2.5, 2.0, -1.0, -1.3);
-    my $x2 = $r->floor($r->matrix($x1));
     is_deeply(
       $x2->values,
       [2, 2, -1, -2]
@@ -899,16 +879,6 @@ my $r = Rstats->new;
       [3, 2, -1, -1]
     );
   }
-
-  # ceiling - $r->matrix
-  {
-    my $x1 = $r->c(2.5, 2.0, -1.0, -1.3);
-    my $x2 = $r->ceiling($r->matrix($x1));
-    is_deeply(
-      $x2->values,
-      [3, 2, -1, -1]
-    );
-  }
 }
 
 # sqrt
@@ -917,20 +887,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(2, 3, 4);
     my $x2 = $r->sqrt($x1);
-    is_deeply(
-      $x2->values,
-      [
-        sqrt $x1->values->[0],
-        sqrt $x1->values->[1],
-        sqrt $x1->values->[2]
-      ]
-    );
-  }
-
-  # sqrt - $r->matrix
-  {
-    my $x1 = $r->c(2, 3, 4);
-    my $x2 = $r->sqrt($r->matrix($x1));
     is_deeply(
       $x2->values,
       [
@@ -956,16 +912,6 @@ my $r = Rstats->new;
     my $x1 = $r->c_double([1.1, 1.2, 1.3]);
     ok($x1->is->double->value);
     is_deeply($x1->values, [1.1, 1.2, 1.3]);
-  }
-}
-
-# clone
-{
-  # clone - $r->matrix
-  {
-    my $x1 = $r->matrix($r->C('1:24'), $r->c(3), $r->c(2));
-    my $x2 = $r->clone($x1);
-    is_deeply($r->dim($x2)->values, [3, 2]);
   }
 }
 
@@ -1252,16 +1198,6 @@ my $r = Rstats->new;
     );
   }
 
-  # round - matrix
-  {
-    my $x1 = $r->c(-1.3, 2.4, 2.5, 2.51, 3.51);
-    my $x2 = $r->round($r->matrix($x1));
-    is_deeply(
-      $x2->values,
-      [-1, 2, 2, 3, 4]
-    );
-  }
-
   # round - $r->array reference
   {
     my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
@@ -1282,30 +1218,10 @@ my $r = Rstats->new;
     );
   }
   
-  # round - matrix
-  {
-    my $x1 = $r->c(-13, 24, 25, 25.1, 35.1);
-    my $x2 = $r->round($r->matrix($x1), $r->c(-1));
-    is_deeply(
-      $x2->values,
-      [-10, 20, 20, 30, 40]
-    );
-  }
-  
   # round - $r->array reference
   {
     my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
     my $x2 = $r->round($x1, 1);
-    is_deeply(
-      $x2->values,
-      [-0.1, 0.2, 0.2, 0.3, 0.4]
-    );
-  }
-
-  # round - matrix
-  {
-    my $x1 = $r->c(-0.13, 0.24, 0.25, 0.251, 0.351);
-    my $x2 = $r->round($r->matrix($x1), $r->c(1));
     is_deeply(
       $x2->values,
       [-0.1, 0.2, 0.2, 0.3, 0.4]

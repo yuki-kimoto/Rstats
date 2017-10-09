@@ -17,12 +17,6 @@ my $r = Rstats->new;
     my $x1 = $r->abs($r->c(-3, 4));
     is_deeply($x1->values, [3, 4]);
   }
-
-  # abs - matrix
-  {
-    my $x1 = $r->abs($r->matrix($r->c(-3, 4)));
-    is_deeply($x1->values, [3, 4]);
-  }
 }
 
 # atan2

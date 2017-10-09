@@ -1332,7 +1332,7 @@ sub unique {
   
   my $x1 = shift;
   
-  if (Rstats::Func::is_vector($r, $x1)->value) {
+  if ($x1->get_dim_length == 1) {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;

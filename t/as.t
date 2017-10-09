@@ -20,7 +20,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1.1);
     my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2));
+    ok($r->is->integer($x2)->value);
     is($x2->values->[0], 1);
   }
   
@@ -28,7 +28,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->c(1);
     my $x2 = $r->as->integer($r->as->integer($x1));
-    ok($r->is->integer($x2));
+    ok($r->is->integer($x2)->value);
     is($x2->values->[0], 1);
   }
 }
@@ -46,7 +46,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->Inf;
     my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, ['Inf']);
   }
 
@@ -54,7 +54,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->NaN;
     my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is_deeply($x2->values, ['NaN']);
   }
 
@@ -62,7 +62,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(1.1));
     my $x2 = $r->as->double($x1);
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is($x2->values->[0], 1.1);
   }
   
@@ -70,7 +70,7 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(1));
     my $x2 = $r->as->double($r->as->integer($x1));
-    ok($r->is->double($x2));
+    ok($r->is->double($x2)->value);
     is($x2->values->[0], 1);
   }
 }
@@ -80,29 +80,29 @@ my $r = Rstats->new;
   # is_* - is_array
   {
     my $x = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    ok($r->is->array($x));
-    ok(!$r->bool($r->is->vector($x)));
-    ok(!$r->bool($r->is->matrix($x)));
+    ok($r->is->array($x)->value);
+    ok(!$r->is->vector($x)->value);
+    ok(!$r->is->matrix($x)->value);
   }
   # is_* - is_matrix
   {
     my $x = $r->matrix($r->C('1:12'), $r->c(4), $r->c(3));
-    ok($r->is->matrix($x));
-    ok($r->is->array($x));
+    ok($r->is->matrix($x)->value);
+    ok($r->is->array($x)->value);
   }
 
   # is_* - is_vector
   {
     my $x = $r->C('1:24');
-    ok($r->is->vector($x));
-    ok(!$r->bool($r->is->array($x)));
+    ok($r->is->vector($x)->value);
+    ok(!$r->is->array($x)->value);
   }
 
   # is_* - is_vector
   {
     my $x = $r->array($r->C('1:24'));
-    ok($r->is->vector($x));
-    ok($r->is->array($x));
+    ok($r->is->vector($x)->value);
+    ok($r->is->array($x)->value);
   }
 }
 
@@ -112,21 +112,21 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(1, 2));
     is_deeply($x1->values, [1, 2]);
-    ok($r->is->numeric($x1));
+    ok($r->is->numeric($x1)->value);
   }
   
   # array decide type - $r->Inf
   {
     my $x1 = $r->Inf;
     is_deeply($x1->values, ['Inf']);
-    ok($r->is->numeric($x1));
+    ok($r->is->numeric($x1)->value);
   }
 
   # array decide type - NaN
   {
     my $x1 = $r->NaN;
     is_deeply($x1->values, ['NaN']);
-    ok($r->is->numeric($x1));
+    ok($r->is->numeric($x1)->value);
   }
 }
 

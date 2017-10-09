@@ -102,7 +102,7 @@ my $r = Rstats->new;
   # is->vector
   {
     my $x = $r->array($r->C('1:24'));
-    ok($r->is->vector($x));
+    ok($r->is->vector($x)->value);
   }
 }
 
@@ -111,7 +111,7 @@ my $r = Rstats->new;
   # is->matrix
   {
     my $x = $r->matrix($r->C('1:24'), $r->c(4), $r->c(3));
-    ok($r->is->matrix($x));
+    ok($r->is->matrix($x)->value);
   }
 }
 
@@ -121,7 +121,7 @@ my $r = Rstats->new;
   {
     
     my $x = $r->array($r->C('1:12'), $r->c(4, 3, 2));
-    ok($r->is->array($x));
+    ok($r->is->array($x)->value);
   }
 }
 

@@ -899,30 +899,6 @@ SV* array(...)
   XSRETURN(1);
 }
 
-SV* as_array(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  
-  SV* sv_x_out = Rstats::Func::as_array(sv_r, sv_x1);
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* as(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_type = ST(1);
-  SV* sv_x1 = ST(2);
-  
-  SV* sv_x_out = Rstats::Func::as(sv_r, sv_type, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* length(...)
   PPCODE:
 {

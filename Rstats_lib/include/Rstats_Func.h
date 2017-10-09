@@ -39,7 +39,6 @@ namespace Rstats {
     SV* as_integer(SV*, SV*);
     SV* as_double(SV*, SV*);
     SV* as_numeric(SV*, SV*);
-    SV* as(SV*, SV*, SV*);
 
     SV* clone(SV*, SV*);
     SV* dim_as_array(SV*, SV*);

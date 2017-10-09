@@ -130,8 +130,6 @@ namespace Rstats {
 
     int32_t get_length (SV* sv_r, SV* sv_x1) {
 
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       if (strEQ(type, "double")) {
         Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
@@ -2047,31 +2045,6 @@ namespace Rstats {
       }
 
       return sv_new_opt;
-    }
-    
-    SV* as_array(SV* sv_r, SV* sv_x1) {
-      
-      SV* sv_x_out = Rstats::Func::as_vector(sv_r, sv_x1);
-      SV* sv_x_out_dim = Rstats::Func::dim_as_array(sv_r, sv_x1);
-      
-      return Rstats::Func::array(sv_r, sv_x_out, sv_x_out_dim);
-    }
-
-    SV* as(SV* sv_r, SV* sv_type, SV* sv_x1) {
-      
-      char* type = SvPV_nolen(sv_type);
-      if (strEQ(type, "double")) {
-        return Rstats::Func::as_double(sv_r, sv_x1);
-      }
-      else if (strEQ(type, "numeric")) {
-        return Rstats::Func::as_numeric(sv_r, sv_x1);
-      }
-      else if (strEQ(type, "integer")) {
-        return Rstats::Func::as_integer(sv_r, sv_x1);
-      }
-      else {
-        croak("Invalid type %s is passed", type);
-      }
     }
   }
 }

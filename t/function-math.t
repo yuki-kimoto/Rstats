@@ -461,7 +461,7 @@ my $r = Rstats->new;
 {
   # asin - double,array
   {
-    my $x1 = $r->array($r->c(1, 1.1, -1.1));
+    my $x1 = $r->array($r->c([1, 1.1, -1.1]));
     my $x2 = $r->asin($x1);
     is(sprintf("%.6f", $x2->values->[0]), '1.570796');
     is($x2->values->[1], 'NaN');

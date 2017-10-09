@@ -92,14 +92,14 @@ my $r = Rstats->new;
   # add - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->add($x1, $r->c(1, 1, 1));
+    my $x2 = $r->add($x1, $r->c([1, 1, 1]));
     is_deeply($x2->values, [2, 3, 4]);
   }
 
   # add - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->add($r->c(1, 1, 1), $x1);
+    my $x2 = $r->add($r->c([1, 1, 1]), $x1);
     is_deeply($x2->values, [2, 3, 4]);
   }
 }
@@ -145,14 +145,14 @@ my $r = Rstats->new;
   # subtract - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->subtract($x1, $r->c(1, 1, 1));
+    my $x2 = $r->subtract($x1, $r->c([1, 1, 1]));
     is_deeply($x2->values, [0, 1, 2]);
   }
 
   # subtract - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->subtract($r->c(1, 1, 1), $x1);
+    my $x2 = $r->subtract($r->c([1, 1, 1]), $x1);
     is_deeply($x2->values, [0, -1, -2]);
   }
 }
@@ -198,14 +198,14 @@ my $r = Rstats->new;
   # multiply - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->multiply($x1, $r->c(2, 2, 2));
+    my $x2 = $r->multiply($x1, $r->c([2, 2, 2]));
     is_deeply($x2->values, [2, 4, 6]);
   }
 
   # multiply - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->multiply($r->c(2, 2, 2), $x1);
+    my $x2 = $r->multiply($r->c([2, 2, 2]), $x1);
     is_deeply($x2->values, [2, 4, 6]);
   }
 }
@@ -251,14 +251,14 @@ my $r = Rstats->new;
   # divide - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->divide($x1, $r->c(2, 2, 2));
+    my $x2 = $r->divide($x1, $r->c([2, 2, 2]));
     is_deeply($x2->values, [1/2, 1, 3/2]);
   }
 
   # divide - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->divide($r->c(2, 2, 2), $x1);
+    my $x2 = $r->divide($r->c([2, 2, 2]), $x1);
     is_deeply($x2->values, [2, 1, 2/3]);
   }
   
@@ -305,14 +305,14 @@ my $r = Rstats->new;
   # remainder - perl number
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->remainder($x1, $r->c(2, 2, 2));
+    my $x2 = $r->remainder($x1, $r->c([2, 2, 2]));
     is_deeply($x2->values, [1, 0, 1]);
   }
 
   # remainder - perl number,reverse
   {
     my $x1 = $r->c([1, 2, 3]);
-    my $x2 = $r->remainder($r->c(5, 5, 5), $x1);
+    my $x2 = $r->remainder($r->c([5, 5, 5]), $x1);
     is_deeply($x2->values, [0, 1, 2]);
   }
 }

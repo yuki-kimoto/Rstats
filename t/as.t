@@ -37,7 +37,7 @@ my $r = Rstats->new;
 {
   # as->double - dim
   {
-    my $x1 = $r->array($r->c(1.1, 1.2));
+    my $x1 = $r->array($r->c([1.1, 1.2]));
     my $x2 = $r->as->double($x1);
     is_deeply($x2->dim->values, [2]);
   }

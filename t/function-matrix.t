@@ -28,7 +28,7 @@ my $r = Rstats->new;
 
   # diag - basic
   {
-    my $x1 = $r->diag($r->c(1, 2, 3));
+    my $x1 = $r->diag($r->c([1, 2, 3]));
     is_deeply($x1->values, [1, 0, 0, 0, 2, 0, 0, 0, 3]);
     is_deeply($r->dim($x1)->values, [3, 3]);
   }  

@@ -263,7 +263,7 @@ sub kronecker {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, @$x3_dim_values));
+  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, $x3_dim_values));
   
   return $x3;
 }
@@ -298,7 +298,7 @@ sub outer {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, @$x3_dim));
+  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, $x3_dim));
   
   return $x3;
 }
@@ -372,7 +372,7 @@ sub col {
     push @values, ($col) x $nrow;
   }
   
-  return array($r, c($r, \@values), Rstats::Func::c($r, $nrow, $ncol));
+  return array($r, c($r, \@values), Rstats::Func::c($r, [$nrow, $ncol]));
 }
 
 sub nrow {
@@ -456,7 +456,7 @@ sub setdiff {
     push @$x3_elements, $x1_element unless $match;
   }
 
-  return Rstats::Func::c($r, @$x3_elements);
+  return Rstats::Func::c($r, $x3_elements);
 }
 
 sub intersect {
@@ -477,7 +477,7 @@ sub intersect {
     }
   }
   
-  return Rstats::Func::c($r, @$x3_elements);
+  return Rstats::Func::c($r, $x3_elements);
 }
 
 sub union {
@@ -487,7 +487,7 @@ sub union {
 
   Carp::croak "type is diffrence" if $x1->get_type ne $x2->get_type;
   
-  my $x3 = Rstats::Func::c($r, $x1, $x2);
+  my $x3 = Rstats::Func::c($r, [$x1, $x2]);
   my $x4 = unique($r, $x3);
   
   return $x4;
@@ -506,7 +506,7 @@ sub diff {
     my $x2_element = $r->subtract($x1_element2, $x1_element1);
     push @$x2_elements, $x2_element;
   }
-  my $x2 = Rstats::Func::c($r, @$x2_elements);
+  my $x2 = Rstats::Func::c($r, $x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -560,7 +560,7 @@ sub append {
   my @x3_elements = @$x1_elements;
   splice @x3_elements, $after, 0, @$x2_elements;
   
-  my $x3 = Rstats::Func::c($r, @x3_elements);
+  my $x3 = Rstats::Func::c($r, \@x3_elements);
   
   return $x3;
 }
@@ -614,7 +614,7 @@ sub ceiling {
     = map { Rstats::Func::c_double($r, POSIX::ceil Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
   
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -632,7 +632,7 @@ sub colMeans {
       $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$x1_values, $x1_value / $dim_values->[1];
     }
-    return Rstats::Func::c($r, @$x1_values);
+    return Rstats::Func::c($r, $x1_values);
   }
   else {
     Carp::croak "Can't culculate colSums";
@@ -651,7 +651,7 @@ sub colSums {
       $x1_value += $x1->value($row, $_) for (1 .. $dim_values->[1]);
       push @$x1_values, $x1_value;
     }
-    return Rstats::Func::c($r, @$x1_values);
+    return Rstats::Func::c($r, $x1_values);
   }
   else {
     Carp::croak "Can't culculate colSums";
@@ -687,7 +687,7 @@ sub cummax {
     push @x2_elements, $max;
   }
   
-  return Rstats::Func::c($r, @x2_elements);
+  return Rstats::Func::c($r, \@x2_elements);
 }
 
 sub cummin {
@@ -714,7 +714,7 @@ sub cummin {
     push @x2_elements, $min;
   }
   
-  return Rstats::Func::c($r, @x2_elements);
+  return Rstats::Func::c($r, \@x2_elements);
 }
 
 
@@ -753,7 +753,7 @@ sub floor {
     = map { Rstats::Func::c_double($r, POSIX::floor Rstats::Func::value($r, $_)) }
     @{Rstats::Func::decompose($r, $x1)};
 
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -773,7 +773,7 @@ sub head {
     push @x2_elements, $x1_elements->[$i];
   }
   
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
 
   return $x2;
@@ -805,7 +805,7 @@ sub ifelse {
 sub max {
   my $r = shift;
   
-  my $x1 = Rstats::Func::c($r, @_);
+  my $x1 = Rstats::Func::c($r, [@_]);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to max; returning -Inf';
@@ -840,7 +840,7 @@ sub mean {
 sub min {
   my $r = shift;
   
-  my $x1 = Rstats::Func::c($r, @_);
+  my $x1 = Rstats::Func::c($r, [@_]);
   
   unless (Rstats::Func::get_length($r, $x1)) {
     Carp::carp 'no non-missing arguments to min; returning Inf';
@@ -901,7 +901,7 @@ sub order {
       } @pos_vals;
   my @orders = map { $_->{pos} } @sorted_pos_values;
   
-  return Rstats::Func::c($r, @orders);
+  return Rstats::Func::c($r, \@orders);
 }
 
 # TODO
@@ -942,7 +942,7 @@ sub rank {
   my @sorted_pos_values2 = sort { $a->{pos} <=> $b->{pos} } @sorted_pos_values;
   my @rank = map { $_->{rank_average} } @sorted_pos_values2;
   
-  return Rstats::Func::c($r, @rank);
+  return Rstats::Func::c($r, \@rank);
 }
 
 sub paste {
@@ -959,7 +959,7 @@ sub paste {
   my $x2_values = [];
   push @$x2_values, "$str$sep$_" for @$x1_values;
   
-  return Rstats::Func::c($r, @$x2_values);
+  return Rstats::Func::c($r, $x2_values);
 }
 
 sub pmax {
@@ -976,7 +976,7 @@ sub pmax {
     }
   }
   
-  return  Rstats::Func::c($r, @maxs);
+  return  Rstats::Func::c($r, \@maxs);
 }
 
 sub pmin {
@@ -993,7 +993,7 @@ sub pmin {
     }
   }
   
-  return Rstats::Func::c($r, @mins);
+  return Rstats::Func::c($r, \@mins);
 }
 
 
@@ -1006,7 +1006,7 @@ sub range {
   my $min = $r->min($x1);
   my $max = $r->max($x1);
   
-  return Rstats::Func::c($r, $min, $max);
+  return Rstats::Func::c($r, [$min, $max]);
 }
 
 sub rbind {
@@ -1029,7 +1029,7 @@ sub rep {
   
   my $elements = [];
   push @$elements, @{Rstats::Func::decompose($r, $x1)} for 1 .. $times;
-  my $x2 = Rstats::Func::c($r, @$elements);
+  my $x2 = Rstats::Func::c($r, $elements);
   
   return $x2;
 }
@@ -1077,7 +1077,7 @@ sub rev {
   
   # Reverse elements
   my @x2_elements = reverse @{Rstats::Func::decompose($r, $x1)};
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -1115,7 +1115,7 @@ sub rnorm {
     push @x1_elements, $rnorm;
   }
   
-  return Rstats::Func::c($r, @x1_elements);
+  return Rstats::Func::c($r, \@x1_elements);
 }
 
 sub round {
@@ -1130,7 +1130,7 @@ sub round {
 
   my $ro = 10 ** $digits;
   my @x2_elements = map { Rstats::Func::c_double($r, Math::Round::round_even(Rstats::Func::value($r, $_) * $ro) / $ro) } @{Rstats::Func::decompose($r, $x1)};
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -1149,7 +1149,7 @@ sub rowMeans {
       $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$x1_values, $x1_value / $dim_values->[0];
     }
-    return Rstats::Func::c($r, @$x1_values);
+    return Rstats::Func::c($r, $x1_values);
   }
   else {
     Carp::croak "Can't culculate rowMeans";
@@ -1169,7 +1169,7 @@ sub rowSums {
       $x1_value += $x1->value($_, $col) for (1 .. $dim_values->[0]);
       push @$x1_values, $x1_value;
     }
-    return Rstats::Func::c($r, @$x1_values);
+    return Rstats::Func::c($r, $x1_values);
   }
   else {
     Carp::croak "Can't culculate rowSums";
@@ -1203,7 +1203,7 @@ sub sample {
     push @$x1_elements, $rand_element if $replace;
   }
   
-  return Rstats::Func::c($r, @x2_elements);
+  return Rstats::Func::c($r, \@x2_elements);
 }
 
 sub sequence {
@@ -1219,7 +1219,7 @@ sub sequence {
     push @x2_values, @{seq($r, $r->c(1), $r->c($x1_value))->values};
   }
   
-  return Rstats::Func::c($r, @x2_values);
+  return Rstats::Func::c($r, \@x2_values);
 }
 
 
@@ -1237,7 +1237,7 @@ sub tail {
     unshift @e2, $e1->[Rstats::Func::get_length($r, $x1) - ($i  + 1)];
   }
   
-  my $x2 = Rstats::Func::c($r, @e2);
+  my $x2 = Rstats::Func::c($r, \@e2);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -1253,7 +1253,7 @@ sub trunc {
   my @x2_elements
     = map { Rstats::Func::c_double($r, int Rstats::Func::value($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
 
-  my $x2 = Rstats::Func::c($r, @x2_elements);
+  my $x2 = Rstats::Func::c($r, \@x2_elements);
   Rstats::Func::copy_attrs_to($r, $x1, $x2);
   
   return $x2;
@@ -1276,7 +1276,7 @@ sub unique {
       $elements_count->{$str}++;
     }
 
-    return Rstats::Func::c($r, @$x2_elements);
+    return Rstats::Func::c($r, $x2_elements);
   }
   else {
     return $x1;
@@ -1361,7 +1361,7 @@ sub quantile {
   # Max
   push @$quantile_elements , $x3->get($x3_length);
   
-  my $x4 = Rstats::Func::c($r, @$quantile_elements);
+  my $x4 = Rstats::Func::c($r, $quantile_elements);
   
   return $x4;
 }
@@ -1409,7 +1409,7 @@ sub which {
     }
   }
   
-  return Rstats::Func::c($r, @x2_values);
+  return Rstats::Func::c($r, \@x2_values);
 }
 
 sub inner_product {
@@ -1457,7 +1457,7 @@ sub row {
   
   my @values = (1 .. $nrow) x $ncol;
   
-  return Rstats::Func::array($r, Rstats::Func::c($r, @values), Rstats::Func::c($r, $nrow, $ncol));
+  return Rstats::Func::array($r, Rstats::Func::c($r, \@values), Rstats::Func::c($r, [$nrow, $ncol]));
 }
 
 
@@ -1555,7 +1555,7 @@ sub seq {
       }
     }
     
-    return Rstats::Func::c($r, @$elements);
+    return Rstats::Func::c($r, $elements);
   }
 }
 
@@ -1679,7 +1679,7 @@ sub get_array {
   my $x2 = Rstats::Func::array(
     $r,
     $x_array,
-    Rstats::Func::c($r, @$x2_dim)
+    Rstats::Func::c($r, $x2_dim)
   );
   
   # Copy attributes
@@ -1892,7 +1892,7 @@ sub sweep {
     my $e1 = $x2->value(@{$new_index});
     push @$x_result_elements, $e1;
   }
-  my $x3 = Rstats::Func::c($r, @$x_result_elements);
+  my $x3 = Rstats::Func::c($r, $x_result_elements);
   
   my $x4;
   if ($func eq '+') {
@@ -1950,7 +1950,7 @@ sub runif {
   
   $r->{seed} = undef;
   
-  return Rstats::Func::c($r, @x1_elements);
+  return Rstats::Func::c($r, \@x1_elements);
 }
 
 sub to_string {
@@ -2024,7 +2024,7 @@ sub sort {
     ? [reverse sort { $r->more_than($a, $b)->value ? 1 : $r->equal($a,$b)->value ? 0 : -1 } @x2_elements]
     : [sort { $r->more_than($a, $b)->value ? 1 : $r->more_than($a,$b)->value ? 0 : -1 } @x2_elements];
 
-  return Rstats::Func::c($r, @$x3_elements);
+  return Rstats::Func::c($r, $x3_elements);
 }
 
 sub value {

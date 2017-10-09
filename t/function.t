@@ -10,6 +10,21 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# $r->C
+{
+  # $r->C('1:3')
+  {
+    my $x1 = $r->C('1:3');
+    is_deeply($x1->values, [1, 2, 3]);
+  }
+  
+  # $r->C('0.5*1:3')
+  {
+    my $x1 = $r->C('0.5*1:3');
+    is_deeply($x1->values, [1, 1.5, 2, 2.5, 3]);
+  }
+}
+
 # c
 {
   # $r->c([$r->TRUE, $r->as->int(2)]);
@@ -57,21 +72,6 @@ my $r = Rstats->new;
     my $x1 = $r->c([1, 2, 3]);
     $x1->at($r->length($x1)->value + 1)->set($r->c(6));
     is_deeply($x1->values, [1, 2, 3, 6]);
-  }
-}
-
-# $r->C
-{
-  # $r->C('1:3')
-  {
-    my $x1 = $r->C('1:3');
-    is_deeply($x1->values, [1, 2, 3]);
-  }
-  
-  # $r->C('0.5*1:3')
-  {
-    my $x1 = $r->C('0.5*1:3');
-    is_deeply($x1->values, [1, 1.5, 2, 2.5, 3]);
   }
 }
 

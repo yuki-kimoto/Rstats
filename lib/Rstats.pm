@@ -211,12 +211,10 @@ sub new {
   no strict 'refs';
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
-  $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
   $self->helper('is.numeric' => \&Rstats::Func::is_numeric);
   $self->helper('is.double' => \&Rstats::Func::is_double);
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
-  $self->helper('is.vector' => \&Rstats::Func::is_vector);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
   $self->helper('as.integer' => \&Rstats::Func::as_integer);

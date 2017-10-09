@@ -677,9 +677,7 @@ SV* c_double(...)
   }
   else {
     sv_values = Rstats::pl_new_avrv();
-    for (IV i = 1; i < items; i++) {
-      Rstats::pl_av_push(sv_values, ST(i));
-    }
+    Rstats::pl_av_push(sv_values, ST(1));
   }
 
   SV* sv_x_out = Rstats::Func::c_double(sv_r, sv_values);

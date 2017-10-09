@@ -147,6 +147,25 @@ sub higher_type {
   }
 }
 
+sub get_dim_length {
+  my ($r, $x1) = @_;
+  
+  my $length;
+  if (defined $x1->{dim}) {
+    if (ref $x1->{dim} eq 'ARRAY') {
+      $length = @{$x1->{dim}};
+    }
+    else {
+      $length = $x1->{dim}->get_length;
+    }
+  }
+  else {
+    $length = 1;
+  }
+  
+  return $length;
+}
+
 sub upper_tri {
   my $r = shift;
   
@@ -155,7 +174,7 @@ sub upper_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if (Rstats::Func::is_matrix($r, $x1_m)->value) {
+  if ($r->get_dim_length($x1_m) == 2) {
     my $x1_dim_values = Rstats::Func::dim($r, $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];

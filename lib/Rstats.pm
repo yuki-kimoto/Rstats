@@ -196,6 +196,7 @@ my @func_names = qw/
   multiply
   subtract
   add
+  get_dim_length
 /;
 
 sub new {

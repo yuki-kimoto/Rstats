@@ -658,15 +658,6 @@ SV* args_h(...)
   XSRETURN(1);
 }
 
-SV* to_object(...)
-  PPCODE:
-{
-  SV* sv_x = Rstats::Func::to_object(ST(0), ST(1));
-
-  XPUSHs(sv_x);
-  XSRETURN(1);
-}
-
 SV* c(...)
   PPCODE:
 {

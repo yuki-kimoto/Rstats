@@ -188,7 +188,7 @@ sub diag {
   my $x2 = array($r, $r->c(0), $r->c($size, $size));
   for (my $i = 0; $i < $size; $i++) {
     $x2->at($i + 1, $i + 1);
-    $x2->set($x2_values->[$i]);
+    $x2->set($r->c($x2_values->[$i]));
   }
 
   return $x2;
@@ -209,7 +209,7 @@ sub set_diag {
   
   for (my $i = 0; $i < $size; $i++) {
     $x1->at($i + 1, $i + 1);
-    $x1->set($x2_values->[$i]);
+    $x1->set($r->c($x2_values->[$i]));
   }
   
   return $x1;
@@ -1983,7 +1983,7 @@ sub set_array {
   my $r = shift;
   
   my $x1 = shift;
-  my $x2 = Rstats::Func::to_object($r, shift);
+  my $x2 = shift;
   
   my $at = $x1->at;
   my $_indexs = ref $at eq 'ARRAY' ? $at : [$at];

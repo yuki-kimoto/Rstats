@@ -1757,7 +1757,7 @@ namespace Rstats {
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = sv_x_dim;
       
-      Rstats::pl_hv_store(sv_x1, "dim", Rstats::Func::as_vector(sv_r, sv_x_dim));
+      Rstats::pl_hv_store(sv_x1, "dim", sv_x_dim);
       
       return sv_r;
     }

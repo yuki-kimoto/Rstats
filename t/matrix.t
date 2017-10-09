@@ -25,7 +25,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:12'), $r->c(3), $r->c(4), {byrow => $r->c(1)});
     is_deeply($m1->values, [(1, 5, 9), (2, 6, 10), (3, 7,11), (4, 8, 12)]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
 
   # matrix - basic
@@ -33,7 +32,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:12'), $r->c(3), $r->c(4));
     is_deeply($m1->values, [1 .. 12]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
   
   # matrix - omit row
@@ -41,7 +39,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:12'), $r->c(3));
     is_deeply($m1->values, [1 .. 12]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
   
   # matrix - omit col
@@ -49,7 +46,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:12'));
     is_deeply($m1->values, [1 .. 12]);
     is_deeply($r->dim($m1)->values, [12, 1]);
-    ok($r->is->matrix($m1)->value);
   }
 
   # matrix - nrow and ncol option
@@ -57,7 +53,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:12'), {nrow => $r->c(4), ncol => $r->c(3)});
     is_deeply($m1->values, [1 .. 12]);
     is_deeply($r->dim($m1)->values, [4, 3]);
-    ok($r->is->matrix($m1)->value);
   }
   
   # matrix - repeat
@@ -65,7 +60,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:3'), $r->c(3), $r->c(4));
     is_deeply($m1->values, [(1 .. 3) x 4]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
 
   # matrix - repeat 2
@@ -73,7 +67,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->C('1:10'), $r->c(3), $r->c(4));
     is_deeply($m1->values, [1 .. 10, 1, 2]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
   
   # matrix - repeat 3
@@ -81,7 +74,6 @@ my $r = Rstats->new;
     my $m1 = $r->matrix($r->c(0), $r->c(3), $r->c(4));
     is_deeply($m1->values, [(0) x 12]);
     is_deeply($r->dim($m1)->values, [3, 4]);
-    ok($r->is->matrix($m1)->value);
   }
 }
 

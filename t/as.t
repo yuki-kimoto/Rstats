@@ -82,12 +82,10 @@ my $r = Rstats->new;
     my $x = $r->array($r->C('1:24'), $r->c(4, 3, 2));
     ok($r->is->array($x)->value);
     ok(!$r->is->vector($x)->value);
-    ok(!$r->is->matrix($x)->value);
   }
   # is_* - is_matrix
   {
     my $x = $r->matrix($r->C('1:12'), $r->c(4), $r->c(3));
-    ok($r->is->matrix($x)->value);
     ok($r->is->array($x)->value);
   }
 

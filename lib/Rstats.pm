@@ -217,7 +217,6 @@ sub new {
   $self->helper('is.double' => \&Rstats::Func::is_double);
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
   $self->helper('is.vector' => \&Rstats::Func::is_vector);
-  $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
   $self->helper('as.integer' => \&Rstats::Func::as_integer);

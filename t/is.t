@@ -96,35 +96,6 @@ my $r = Rstats->new;
     is_deeply($x2->dim->values, [2]);
   }
 }
-
-# is->vector
-{
-  # is->vector
-  {
-    my $x = $r->array($r->C('1:24'));
-    ok($r->is->vector($x)->value);
-  }
-}
-
-# is->matrix
-{
-  # is->matrix
-  {
-    my $x = $r->matrix($r->C('1:24'), $r->c(4), $r->c(3));
-    ok($r->is->matrix($x)->value);
-  }
-}
-
-# is->array
-{
-  # is->array
-  {
-    
-    my $x = $r->array($r->C('1:12'), $r->c(4, 3, 2));
-    ok($r->is->array($x)->value);
-  }
-}
-
 # is->finite
 {
   # is->finite - Inf, false

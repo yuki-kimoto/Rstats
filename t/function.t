@@ -104,7 +104,6 @@ my $r = Rstats->new;
     my $mat = $r->matrix($r->c(0), $r->c(2), $r->c(5));
     is_deeply($mat->values, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     is_deeply($r->dim($mat)->values, [2, 5]);
-    ok($r->is->matrix($mat)->value);
   }
   
   # matrix - repeat values
@@ -112,7 +111,6 @@ my $r = Rstats->new;
     my $mat = $r->matrix($r->c(1,2), $r->c(2), $r->c(5));
     is_deeply($mat->values, [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
     is_deeply($r->dim($mat)->values, [2, 5]);
-    ok($r->is->matrix($mat)->value);
   }
 }
 
@@ -967,7 +965,6 @@ my $r = Rstats->new;
   {
     my $x1 = $r->matrix($r->C('1:24'), $r->c(3), $r->c(2));
     my $x2 = $r->clone($x1);
-    ok($r->is->matrix($x2)->value);
     is_deeply($r->dim($x2)->values, [3, 2]);
   }
 }

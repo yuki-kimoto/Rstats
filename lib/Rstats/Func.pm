@@ -209,7 +209,7 @@ sub lower_tri {
   my $diag = defined $x1_diag ? $x1_diag->value : 0;
   
   my $x2_values = [];
-  if (Rstats::Func::is_matrix($r, $x1_m)->value) {
+  if ($x1_m->get_dim_length == 2) {
     my $x1_dim_values = Rstats::Func::dim($r, $x1_m)->values;
     my $rows_count = $x1_dim_values->[0];
     my $cols_count = $x1_dim_values->[1];
@@ -651,11 +651,11 @@ sub cbind {
     my $x1_dim_elements = Rstats::Func::dim($r, $x1);
     
     my $row_count;
-    if (Rstats::Func::is_matrix($r, $x1)->value) {
+    if ($x1->get_dim_length == 2) {
       $row_count = $x1_dim_elements->[0];
       $col_count_total += $x1_dim_elements->[1];
     }
-    elsif (Rstats::Func::is_vector($r, $x1)->value) {
+    elsif ($x1->get_dim_length == 1) {
       $row_count = $x1->dim_as_array->values->[0];
       $col_count_total += 1;
     }
@@ -1486,7 +1486,7 @@ sub inner_product {
   my ($x1, $x2) = @_;
   
   # Calculate
-  if (Rstats::Func::is_matrix($r, $x1)->value && Rstats::Func::is_matrix($r, $x2)->value) {
+  if ($x1->get_dim_length == 2 && $x2->get_dim_length == 2) {
     
     Carp::croak "requires numeric matrix/vector arguments"
       if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;

@@ -199,61 +199,145 @@ namespace Rstats {
       return sv_x2;
     }
 
-    SV* c_double(SV* sv_r, SV* sv_values) {
+    SV* c_double(SV* sv_r, SV* sv_elements) {
       
-      if (!sv_derived_from(sv_values, "ARRAY")) {
-        croak("Invalid argment(c_double()");
-      }
-      
-      int32_t length = Rstats::pl_av_len(sv_values);
-      
-      Rstats::Vector<double>* v1 = new Rstats::Vector<double>(length);
-      for (int32_t i = 0; i < length; i++) {
-        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+      int32_t length = Rstats::pl_av_len(sv_elements);
 
-        char* sv_value_str = SvPV_nolen(sv_value);
-        if (strEQ(sv_value_str, "NaN")) {
-          v1->set_value(i, NAN);
-        }
-        else if (strEQ(sv_value_str, "Inf")) {
-          v1->set_value(i, INFINITY);
-        }
-        else if (strEQ(sv_value_str, "-Inf")) {
-          v1->set_value(i, -(INFINITY));
+      SV* sv_x_out;
+      if (length == 0) {
+        croak("Error");
+      }
+
+      SV* sv_new_elements = Rstats::pl_new_avrv();
+      
+      // Convert to Rstats::Object, check type and total length, and remove NULL
+      SV* sv_type_h = Rstats::pl_new_hvrv();
+      int32_t total_length = 0;
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+
+        SV* sv_new_element;
+        
+        if (SvOK(sv_element)) {
+          if (SvROK(sv_element)) {
+            int32_t is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
+            if (is_object) {
+              sv_new_element = sv_element;
+            }
+            else {
+              croak("Can't receive reference value except Rstats::Object object");
+            }
+          }
+          else {
+            Rstats::Vector<double>* v_out = new Rstats::Vector<double>(1, SvNV(sv_element));
+            sv_new_element = Rstats::Func::new_vector<double>(sv_r, v_out);
+          }
         }
         else {
-          double value = SvNV(sv_value);
-          v1->set_value(i, value);
+          croak("Can't use undef as array element");
+        }
+        
+        char* type = Rstats::Func::get_type(sv_r, sv_new_element);
+        
+        total_length += Rstats::Func::get_length(sv_r, sv_new_element);
+        Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
+        Rstats::pl_av_push(sv_new_elements, sv_new_element);
+      }
+
+      Rstats::Vector<double>* v_out = new Rstats::Vector<double>(total_length);
+      int32_t pos = 0;
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
+        char* type = Rstats::Func::get_type(sv_r, sv_element);
+        if (!strEQ(type, "double")) {
+          sv_element = Rstats::Func::as_double(sv_r, sv_element);
+        }
+        Rstats::Vector<double>* v1 =  Rstats::Func::get_vector<double>(sv_r, sv_element);
+        int32_t v1_length = v1->get_length();
+        for (int32_t k = 0; k < v1_length; k++) {
+          v_out->set_value(pos, v1->get_value(k));
+          pos++;
         }
       }
-      
-      SV* sv_x1 = Rstats::Func::new_vector<double>(sv_r, v1);
-      
-      return sv_x1;
-    }
-
-    SV* c_int(SV* sv_r, SV* sv_values) {
-      if (!sv_derived_from(sv_values, "ARRAY")) {
-        croak("Invalid argment(c_int()");
-      }
-      
-      int32_t length = Rstats::pl_av_len(sv_values);
-      
-      Rstats::Vector<int32_t>* v1 = new Rstats::Vector<int32_t>(length);
-      for (int32_t i = 0; i < length; i++) {
-        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+      sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
         
-        v1->set_value(
-          i,
-          SvIV(sv_value)
-        );
-      }
-      
-      SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
-      
-      return sv_x1;
+      return sv_x_out;
     }
 
+    SV* c_int(SV* sv_r, SV* sv_elements) {
+      
+      int32_t length = Rstats::pl_av_len(sv_elements);
+
+      SV* sv_x_out;
+      if (length == 0) {
+        croak("Error");
+      }
+
+      SV* sv_new_elements = Rstats::pl_new_avrv();
+      
+      // Convert to Rstats::Object, check type and total length, and remove NULL
+      SV* sv_type_h = Rstats::pl_new_hvrv();
+      int32_t total_length = 0;
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+
+        SV* sv_new_element;
+        
+        if (SvOK(sv_element)) {
+          if (SvROK(sv_element)) {
+            int32_t is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
+            if (is_object) {
+              sv_new_element = sv_element;
+            }
+            else {
+              croak("Can't receive reference value except Rstats::Object object");
+            }
+          }
+          else {
+            Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(1, SvIV(sv_element));
+            sv_new_element = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
+          }
+        }
+        else {
+          croak("Can't use undef as array element");
+        }
+        
+        char* type = Rstats::Func::get_type(sv_r, sv_new_element);
+        
+        total_length += Rstats::Func::get_length(sv_r, sv_new_element);
+        Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
+        Rstats::pl_av_push(sv_new_elements, sv_new_element);
+      }
+
+      Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(total_length);
+      int32_t pos = 0;
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
+        char* type = Rstats::Func::get_type(sv_r, sv_element);
+        if (!strEQ(type, "int")) {
+          sv_element = Rstats::Func::as_int(sv_r, sv_element);
+        }
+        Rstats::Vector<int32_t>* v1 =  Rstats::Func::get_vector<int32_t>(sv_r, sv_element);
+        int32_t v1_length = v1->get_length();
+        for (int32_t k = 0; k < v1_length; k++) {
+          v_out->set_value(pos, v1->get_value(k));
+          pos++;
+        }
+      }
+      sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
+      
+      /*
+      
+      // Fix elements length
+      SV* sv_dim = Rstats::pl_new_avrv();
+      SV* sv_length = sv_2mortal(newSViv(length));
+      Rstats::pl_av_push(sv_dim, sv_length));
+      Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
+      
+      */
+      
+      return sv_x_out;
+    }
 
     int32_t get_length (SV* sv_r, SV* sv_x1) {
 

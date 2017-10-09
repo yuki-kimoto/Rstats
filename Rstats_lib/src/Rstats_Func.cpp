@@ -114,14 +114,16 @@ namespace Rstats {
         }
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-
-      // Dimention
-      /*
-      Rstats::Vector<int32_t>* v_dim = new Rstats::Vector<int32_t>(1, length);
-      SV* sv_x_dim = Rstats::Func::new_vector<int32_t>(sv_r, v_dim);
-      Rstats::Func::dim(sv_r, sv_x_out, sv_x_dim);
-      */
       
+      /*
+      
+      // Dim
+      SV* sv_dim = Rstats::pl_new_avrv();
+      SV* sv_length = sv_2mortal(newSViv(length));
+      Rstats::pl_av_push(sv_dim, sv_length);
+      Rstats::Func::dim(sv_r, sv_x_out, sv_dim);
+      
+      */
       
       return sv_x_out;
     }

@@ -14,14 +14,14 @@ my $r = Rstats->new;
 {
   # $r->c($r->TRUE, $r->as->integer(2));
   {
-    my $x1 = $r->c($r->TRUE, $r->as->integer(2));
+    my $x1 = $r->c($r->TRUE, $r->as->integer($r->c(2)));
     ok($r->is->integer($x1));
     is_deeply($x1->values, [1, 2]);
   }
 
   # $r->c(1, $r->as->integer(2));
   {
-    my $x1 = $r->c(1, $r->as->integer(2));
+    my $x1 = $r->c($r->c(1), $r->as->integer($r->c(2)));
     ok($r->is->double($x1));
     is_deeply($x1->values, [1, 2]);
   }

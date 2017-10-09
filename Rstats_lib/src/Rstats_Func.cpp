@@ -178,8 +178,6 @@ namespace Rstats {
         
     SV* as_integer(SV* sv_r, SV* sv_x1) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;

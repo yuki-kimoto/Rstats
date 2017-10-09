@@ -90,7 +90,7 @@ namespace Rstats {
           }
         }
         else {
-          sv_new_element = Rstats::Func::new_FALSE(sv_r);
+          croak("Can't use undef as array element");
         }
         
         char* type = Rstats::Func::get_type(sv_r, sv_new_element);

@@ -181,6 +181,7 @@ namespace Rstats {
         dim_product *= SvIV(Rstats::pl_av_fetch(sv_values, i));
       }
 
+
       
       // Fix elements length
       SV* sv_elements;
@@ -216,6 +217,62 @@ namespace Rstats {
       
       return sv_x2;
     }
+
+    SV* c_double(SV* sv_r, SV* sv_values) {
+      
+      if (!sv_derived_from(sv_values, "ARRAY")) {
+        croak("Invalid argment(c_double()");
+      }
+      
+      int32_t length = Rstats::pl_av_len(sv_values);
+      
+      Rstats::Vector<double>* v1 = new Rstats::Vector<double>(length);
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+
+        char* sv_value_str = SvPV_nolen(sv_value);
+        if (strEQ(sv_value_str, "NaN")) {
+          v1->set_value(i, NAN);
+        }
+        else if (strEQ(sv_value_str, "Inf")) {
+          v1->set_value(i, INFINITY);
+        }
+        else if (strEQ(sv_value_str, "-Inf")) {
+          v1->set_value(i, -(INFINITY));
+        }
+        else {
+          double value = SvNV(sv_value);
+          v1->set_value(i, value);
+        }
+      }
+      
+      SV* sv_x1 = Rstats::Func::new_vector<double>(sv_r, v1);
+      
+      return sv_x1;
+    }
+
+    SV* c_int(SV* sv_r, SV* sv_values) {
+      if (!sv_derived_from(sv_values, "ARRAY")) {
+        croak("Invalid argment(c_int()");
+      }
+      
+      int32_t length = Rstats::pl_av_len(sv_values);
+      
+      Rstats::Vector<int32_t>* v1 = new Rstats::Vector<int32_t>(length);
+      for (int32_t i = 0; i < length; i++) {
+        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
+        
+        v1->set_value(
+          i,
+          SvIV(sv_value)
+        );
+      }
+      
+      SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
+      
+      return sv_x1;
+    }
+
 
     int32_t get_length (SV* sv_r, SV* sv_x1) {
 
@@ -1729,61 +1786,6 @@ namespace Rstats {
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
       Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("int"));
-      
-      return sv_x1;
-    }
-
-    SV* c_double(SV* sv_r, SV* sv_values) {
-      
-      if (!sv_derived_from(sv_values, "ARRAY")) {
-        croak("Invalid argment(c_double()");
-      }
-      
-      int32_t length = Rstats::pl_av_len(sv_values);
-      
-      Rstats::Vector<double>* v1 = new Rstats::Vector<double>(length);
-      for (int32_t i = 0; i < length; i++) {
-        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
-
-        char* sv_value_str = SvPV_nolen(sv_value);
-        if (strEQ(sv_value_str, "NaN")) {
-          v1->set_value(i, NAN);
-        }
-        else if (strEQ(sv_value_str, "Inf")) {
-          v1->set_value(i, INFINITY);
-        }
-        else if (strEQ(sv_value_str, "-Inf")) {
-          v1->set_value(i, -(INFINITY));
-        }
-        else {
-          double value = SvNV(sv_value);
-          v1->set_value(i, value);
-        }
-      }
-      
-      SV* sv_x1 = Rstats::Func::new_vector<double>(sv_r, v1);
-      
-      return sv_x1;
-    }
-
-    SV* c_int(SV* sv_r, SV* sv_values) {
-      if (!sv_derived_from(sv_values, "ARRAY")) {
-        croak("Invalid argment(c_int()");
-      }
-      
-      int32_t length = Rstats::pl_av_len(sv_values);
-      
-      Rstats::Vector<int32_t>* v1 = new Rstats::Vector<int32_t>(length);
-      for (int32_t i = 0; i < length; i++) {
-        SV* sv_value = Rstats::pl_av_fetch(sv_values, i);
-        
-        v1->set_value(
-          i,
-          SvIV(sv_value)
-        );
-      }
-      
-      SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
       
       return sv_x1;
     }

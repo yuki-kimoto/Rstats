@@ -1666,30 +1666,6 @@ namespace Rstats {
       }
     }
     
-    SV* as_vector(SV* sv_r, SV* sv_x1) {
-      
-      char* type = Rstats::Func::get_type(sv_r, sv_x1);
-      
-      SV* sv_x_out;
-      if (strEQ(type, "double")) {
-        Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
-        Rstats::Vector<double>* v_out = new Rstats::Vector<double>(v1->get_length());
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          v_out->set_value(i, v1->get_value(i));
-        }
-        sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
-      }
-      else if (strEQ(type, "integer")) {
-        Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
-        Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(v1->get_length());
-        for (int32_t i = 0; i < v1->get_length(); i++) {
-          v_out->set_value(i, v1->get_value(i));
-        }
-        sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
-      }
-      return sv_x_out;
-    }
-
     SV* dim(SV* sv_r, SV* sv_x1, SV* sv_x_dim) {
       sv_x_dim = sv_x_dim;
       

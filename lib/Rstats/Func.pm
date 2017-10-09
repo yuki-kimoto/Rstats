@@ -651,7 +651,7 @@ sub cbind {
   for my $_x (@xs) {
     
     my $x1 = $_x;
-    my $x1_dim_elements = Rstats::Func::decompose($r, Rstats::Func::dim($r, $x1));
+    my $x1_dim_elements = Rstats::Func::dim($r, $x1);
     
     my $row_count;
     if ($r->bool(Rstats::Func::is_matrix($r, $x1))) {

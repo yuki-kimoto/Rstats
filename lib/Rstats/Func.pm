@@ -732,7 +732,7 @@ sub args_array {
       $arg = delete $opt->{$name};
     }
     elsif ($i < @_) {
-      $arg = to_object($r, $_[$i]);
+      $arg = $_[$i];
     }
     push @args, $arg;
   }

@@ -887,10 +887,10 @@ sub max {
   my $max = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
+    if (Rstats::Func::is_nan($r, $element)->value) {
       $max = $element;
     }
-    if (!$r->bool(Rstats::Func::is_nan($r, $max)) && Rstats::Func::value($r, $r->more_than($element, $max))) {
+    if (!Rstats::Func::is_nan($r, $max)->value && Rstats::Func::value($r, $r->more_than($element, $max))) {
       $max = $element;
     }
   }
@@ -922,10 +922,10 @@ sub min {
   my $min = shift @$x1_elements;
   for my $element (@$x1_elements) {
     
-    if ($r->bool(Rstats::Func::is_nan($r, $element))) {
+    if (Rstats::Func::is_nan($r, $element)->value) {
       $min = $element;
     }
-    if (!$r->bool(Rstats::Func::is_nan($r, $min)) && Rstats::Func::value($r, $r->less_than($element, $min))) {
+    if (!Rstats::Func::is_nan($r, $min)->value && Rstats::Func::value($r, $r->less_than($element, $min))) {
       $min = $element;
     }
   }
@@ -1335,7 +1335,7 @@ sub unique {
   
   my $x1 = shift;
   
-  if ($r->bool(Rstats::Func::is_vector($r, $x1))) {
+  if (Rstats::Func::is_vector($r, $x1)->value) {
     my $x2_elements = [];
     my $elements_count = {};
     my $na_count;
@@ -1490,11 +1490,11 @@ sub inner_product {
   
   # Convert to matrix
   $x1 = Rstats::Func::t($r, Rstats::Func::as_matrix($r, $x1))
-    if $r->bool(Rstats::Func::is_vector($r, $x1));
-  $x2 = Rstats::Func::as_matrix($r, $x2) if $r->bool(Rstats::Func::is_vector($r, $x2));
+    if Rstats::Func::is_vector($r, $x1)->value;
+  $x2 = Rstats::Func::as_matrix($r, $x2) if Rstats::Func::is_vector($r, $x2)->value;
   
   # Calculate
-  if ($r->bool(Rstats::Func::is_matrix($r, $x1)) && $r->bool(Rstats::Func::is_matrix($r, $x2))) {
+  if (Rstats::Func::is_matrix($r, $x1)->value && Rstats::Func::is_matrix($r, $x2)->value) {
     
     Carp::croak "requires numeric matrix/vector arguments"
       if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;
@@ -1863,7 +1863,7 @@ sub str {
   
   my @str;
   
-  if ($r->bool(Rstats::Func::is_vector($r, $x1)) || $r->bool(Rstats::Func::is_array($r, $x1))) {
+  if (Rstats::Func::is_vector($r, $x1)->value || Rstats::Func::is_array($r, $x1)->value) {
     # Short type
     my $type = $x1->get_type;
     my $short_type;
@@ -2094,11 +2094,11 @@ sub sort {
   
   my $decreasing = defined $x_decreasing ? $x_decreasing->value : 0;
   
-  my @x2_elements = grep { !$r->bool(Rstats::Func::is_nan($r, $_)) } @{Rstats::Func::decompose($r, $x1)};
+  my @x2_elements = grep { !Rstats::Func::is_nan($r, $_)->value } @{Rstats::Func::decompose($r, $x1)};
   
   my $x3_elements = $decreasing
-    ? [reverse sort { $r->bool($r->more_than($a, $b)) ? 1 : $r->bool($r->equal($a,$b)) ? 0 : -1 } @x2_elements]
-    : [sort { $r->bool($r->more_than($a, $b)) ? 1 : $r->bool($r->more_than($a,$b)) ? 0 : -1 } @x2_elements];
+    ? [reverse sort { $r->more_than($a, $b)->value ? 1 : $r->equal($a,$b)->value ? 0 : -1 } @x2_elements]
+    : [sort { $r->more_than($a, $b)->value ? 1 : $r->more_than($a,$b)->value ? 0 : -1 } @x2_elements];
 
   return Rstats::Func::c($r, @$x3_elements);
 }

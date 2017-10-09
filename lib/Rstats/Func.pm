@@ -124,7 +124,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c([$rows_count, $cols_count]));
+    my $x2 = array($r, Rstats::Func::c_int($r, $x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }
@@ -159,7 +159,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c([$rows_count, $cols_count]));
+    my $x2 = array($r, Rstats::Func::c_int($r, $x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }
@@ -332,7 +332,7 @@ sub grep {
     }
   }
   
-  return Rstats::Func::c_double($r, @$x2_values);
+  return Rstats::Func::c_double($r, $x2_values);
 }
 
 sub C {
@@ -407,7 +407,7 @@ sub is_element {
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::Func::c_int($r, @$x3_values);
+  return Rstats::Func::c_int($r, $x3_values);
 }
 
 sub setequal {
@@ -538,7 +538,7 @@ sub match {
     }
   }
   
-  return Rstats::Func::c_double($r, @matches);
+  return Rstats::Func::c_double($r, \@matches);
 }
 
 

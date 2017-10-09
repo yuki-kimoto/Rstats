@@ -1030,6 +1030,22 @@ my $r = Rstats->new;
   }
 }
 
+# pmax
+{
+  my $x1 = $r->c(1, 6, 3, 8);
+  my $x2 = $r->c(5, 2, 7, 4);
+  my $pmax = $r->pmax($x1, $x2);
+  is_deeply($pmax->values, [5, 6, 7, 8]);
+}
+
+# pmin
+{
+  my $x1 = $r->c(1, 6, 3, 8);
+  my $x2 = $r->c(5, 2, 7, 4);
+  my $pmin = $r->pmin($x1, $x2);
+  is_deeply($pmin->values, [1, 2, 3, 4]);
+}
+
 # sample
 {
   {
@@ -1207,22 +1223,6 @@ my $r = Rstats->new;
     my $x2 = $r->diff($x1);
     is_deeply($x2->values, [4, 5]);
   }
-}
-
-# pmax
-{
-  my $x1 = $r->c(1, 6, 3, 8);
-  my $x2 = $r->c(5, 2, 7, 4);
-  my $pmax = $r->pmax($x1, $x2);
-  is_deeply($pmax->values, [5, 6, 7, 8]);
-}
-
-# pmin
-{
-  my $x1 = $r->c(1, 6, 3, 8);
-  my $x2 = $r->c(5, 2, 7, 4);
-  my $pmin = $r->pmin($x1, $x2);
-  is_deeply($pmin->values, [1, 2, 3, 4]);
 }
 
 # quantile

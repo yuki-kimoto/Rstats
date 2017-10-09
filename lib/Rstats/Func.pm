@@ -1043,7 +1043,7 @@ sub pmax {
     my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $maxs[$i] = $elements->[$i]
-        if !defined $maxs[$i] || $elements->[$i] > $maxs[$i]
+        if !defined $maxs[$i] || $elements->[$i]->value > $maxs[$i]->value
     }
   }
   
@@ -1060,7 +1060,7 @@ sub pmin {
     my $elements = Rstats::Func::decompose($r, $v);
     for (my $i = 0; $i <@$elements; $i++) {
       $mins[$i] = $elements->[$i]
-        if !defined $mins[$i] || $elements->[$i] < $mins[$i];
+        if !defined $mins[$i] || $elements->[$i]->value < $mins[$i]->value;
     }
   }
   

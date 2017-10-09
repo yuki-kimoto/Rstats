@@ -63,7 +63,7 @@ sub parse_index {
 
     push @indexs, $index;
 
-    my $count = Rstats::Func::get_length($r, $index);
+    my $count = Rstats::Func::get_length($r, $r->c($index));
     push @x2_dim, $count unless $count == 1 && $drop;
   }
   @x2_dim = (1) unless @x2_dim;

@@ -10,6 +10,23 @@ use Rstats;
 
 my $r = Rstats->new;
 
+# c_int
+{
+  # c_int - array reference
+  {
+    my $x1 = $r->c_int([1, 0, 1]);
+    is_deeply($x1->values, [1, 0, 1]);
+    ok($r->is->int($x1));
+  }
+
+  # c_int - sclara perl value
+  {
+    my $x1 = $r->c_int(3);
+    is_deeply($x1->values, [3]);
+  }
+
+}
+
 # ifelse
 {
   my $x1 = $r->c([1, 0, 1]);
@@ -254,7 +271,7 @@ my $r = Rstats->new;
     is_deeply($x1_sorted->values, [1, 2, 5]);
   }
   
-  # c_ - append (vector)
+  # c - append (vector)
   {
     my $x1 = $r->c([1, 2, 3]);
     my $x2 = $r->c([$x1, 4, 5]);

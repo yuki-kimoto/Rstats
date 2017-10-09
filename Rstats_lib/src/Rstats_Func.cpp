@@ -276,6 +276,7 @@ namespace Rstats {
       SV* sv_new_elements = Rstats::pl_new_avrv();
       
       // Convert to Rstats::Object, check type and total length, and remove NULL
+      Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(length);
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
 
@@ -300,20 +301,13 @@ namespace Rstats {
           croak("Can't use undef as array element");
         }
         
+        int32_t value = SvIV(sv_element);
+        
+        v_out->set_value(i, value);
+        
         Rstats::pl_av_push(sv_new_elements, sv_new_element);
       }
 
-      Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(length);
-      int32_t pos = 0;
-      for (int32_t i = 0; i < length; i++) {
-        SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
-        Rstats::Vector<int32_t>* v1 =  Rstats::Func::get_vector<int32_t>(sv_r, sv_element);
-        int32_t v1_length = v1->get_length();
-        for (int32_t k = 0; k < v1_length; k++) {
-          v_out->set_value(pos, v1->get_value(k));
-          pos++;
-        }
-      }
       sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       
       /*

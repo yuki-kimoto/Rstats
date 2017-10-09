@@ -233,14 +233,6 @@ namespace Rstats {
       }
     }
 
-    SV* get_length_sv (SV* sv_r, SV* sv_x1) {
-      return Rstats::pl_new_sv_iv(Rstats::Func::get_length(sv_r, sv_x1));
-    }
-    
-    SV* as_numeric(SV* sv_r, SV* sv_x1) {
-      return Rstats::Func::as_double(sv_r, sv_x1);
-    }
-    
     SV* as_double(SV* sv_r, SV* sv_x1) {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);

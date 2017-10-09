@@ -218,7 +218,6 @@ sub new {
 
   $self->helper('as.integer' => \&Rstats::Func::as_integer);
   $self->helper('as.double' => \&Rstats::Func::as_double);
-  $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
 
   return $self;
 }

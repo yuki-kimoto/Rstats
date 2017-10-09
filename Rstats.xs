@@ -564,7 +564,7 @@ SV* get_length(...)
 {
   SV* sv_r = ST(0);
 
-  SV* sv_x_out = Rstats::Func::get_length_sv(sv_r, ST(1));
+  SV* sv_x_out = sv_2mortal(newSViv(Rstats::Func::get_length(sv_r, ST(1))));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -774,17 +774,6 @@ SV* as_double(...)
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
   SV* sv_x_out = Rstats::Func::as_double(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
-SV* as_numeric(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::as_numeric(sv_r, sv_x1);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);

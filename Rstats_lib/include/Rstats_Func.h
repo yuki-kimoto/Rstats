@@ -38,7 +38,6 @@ namespace Rstats {
     SV* as_vector(SV*, SV*);
     SV* as_integer(SV*, SV*);
     SV* as_double(SV*, SV*);
-    SV* as_numeric(SV*, SV*);
 
     SV* clone(SV*, SV*);
     SV* dim_as_array(SV*, SV*);
@@ -51,7 +50,6 @@ namespace Rstats {
     SV* as_array(SV*, SV*);
     
     int32_t get_length(SV*, SV*);
-    SV* get_length_sv(SV*, SV*);
     
     // dim
     SV* dim(SV*, SV*, SV*);

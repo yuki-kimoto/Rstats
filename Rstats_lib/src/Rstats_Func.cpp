@@ -67,8 +67,27 @@ namespace Rstats {
       int32_t total_length = 0;
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
+
+        SV* sv_new_element;
         
-        SV* sv_new_element = Rstats::Func::to_object(sv_r, sv_element);
+        if (SvOK(sv_element)) {
+          if (SvROK(sv_element)) {
+            int32_t is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
+            if (is_object) {
+              sv_new_element = sv_element;
+            }
+            else {
+              croak("Can't receive reference value except Rstats::Object object");
+            }
+          }
+          else {
+            Rstats::Vector<double>* v_out = new Rstats::Vector<double>(1, SvNV(sv_element));
+            sv_new_element = Rstats::Func::new_vector<double>(sv_r, v_out);
+          }
+        }
+        else {
+          sv_new_element = Rstats::Func::new_FALSE(sv_r);
+        }
         
         char* type = Rstats::Func::get_type(sv_r, sv_new_element);
         
@@ -1831,32 +1850,6 @@ namespace Rstats {
       SV* sv_x1 = Rstats::Func::new_vector<int32_t>(sv_r, v1);
       
       return sv_x1;
-    }
-
-    SV* to_object(SV* sv_r, SV* sv_element) {
-      
-      
-      SV* sv_x_out;
-      if (SvOK(sv_element)) {
-        if (SvROK(sv_element)) {
-          int32_t is_object = sv_isobject(sv_element) && sv_derived_from(sv_element, "Rstats::Object");
-          if (is_object) {
-            sv_x_out = sv_element;
-          }
-          else {
-            croak("Can't receive reference value except Rstats::Object object");
-          }
-        }
-        else {
-          Rstats::Vector<double>* v_out = new Rstats::Vector<double>(1, SvNV(sv_element));
-          sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
-        }
-      }
-      else {
-        sv_x_out = Rstats::Func::new_FALSE(sv_r);
-      }
-      
-      return sv_x_out;
     }
 
     SV* is_numeric(SV* sv_r, SV* sv_x1) {

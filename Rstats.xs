@@ -689,7 +689,7 @@ SV* c_double(...)
   XSRETURN(1);
 }
 
-SV* c_integer(...)
+SV* c_int(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
@@ -704,7 +704,7 @@ SV* c_integer(...)
     }
   }
 
-  SV* sv_x_out = Rstats::Func::c_integer(sv_r, sv_values);
+  SV* sv_x_out = Rstats::Func::c_int(sv_r, sv_values);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -721,12 +721,12 @@ SV* is_double(...)
   XSRETURN(1);
 }
 
-SV* is_integer(...)
+SV* is_int(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
 
-  SV* sv_x_out = Rstats::Func::is_integer(sv_r, ST(1));
+  SV* sv_x_out = Rstats::Func::is_int(sv_r, ST(1));
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -746,12 +746,12 @@ SV* copy_attrs_to(...)
   XSRETURN(1);
 }
 
-SV* as_integer(...)
+SV* as_int(...)
   PPCODE:
 {
   SV* sv_r = ST(0);
   SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::as_integer(sv_r, sv_x1);
+  SV* sv_x_out = Rstats::Func::as_int(sv_r, sv_x1);
   
   XPUSHs(sv_x_out);
   XSRETURN(1);
@@ -915,11 +915,11 @@ SV* is_perl_number(...)
   XSRETURN(1);
 }
 
-SV* looks_like_integer(...)
+SV* looks_like_int(...)
   PPCODE:
 {
   SV* sv_str = ST(0);
-  SV* sv_ret = Rstats::Util::looks_like_integer(sv_str);
+  SV* sv_ret = Rstats::Util::looks_like_int(sv_str);
   XPUSHs(sv_ret);
   XSRETURN(1);
 }

@@ -37,9 +37,9 @@ my $r = Rstats->new;
     is_deeply($x2->values, [1]);
   }
 
-  # is->nan - integer
+  # is->nan - int
   {
-    my $x1 = $r->as->integer($r->c(1));
+    my $x1 = $r->as->int($r->c(1));
     my $x2 = $r->is->nan($x1);
     is_deeply($x2->values, [0]);
   }
@@ -82,9 +82,9 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0]);
   }
 
-  # is->infinite - integer
+  # is->infinite - int
   {
-    my $x1 = $r->as->integer($r->c(1));
+    my $x1 = $r->as->int($r->c(1));
     my $x2 = $r->is->infinite($x1);
     is_deeply($x2->values, [0]);
   }

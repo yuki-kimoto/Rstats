@@ -191,7 +191,7 @@ my $r = Rstats->new;
     ok($r->is->double($x2)->value);
   }
 
-  # atanh - integer
+  # atanh - int
   {
     my $x1 = $r->array($r->c(0, 1, 2, -1, -2));
     my $x2 = $r->atanh($x1);
@@ -239,9 +239,9 @@ my $r = Rstats->new;
     ok($r->is->double($x2)->value);
   }
 
-  # acosh - integer
+  # acosh - int
   {
-    my $x1 = $r->as->integer($r->array($r->c(0, 1, 2)));
+    my $x1 = $r->as->int($r->array($r->c(0, 1, 2)));
     my $x2 = $r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
@@ -284,9 +284,9 @@ my $r = Rstats->new;
     ok($r->is->double($x2)->value);
   }
 
-  # asinh - integer
+  # asinh - int
   {
-    my $x1 = $r->as->integer($r->array($r->c(0, 1)));
+    my $x1 = $r->as->int($r->array($r->c(0, 1)));
     my $x2 = $r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');

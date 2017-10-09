@@ -115,14 +115,14 @@ namespace Rstats {
         }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (Rstats::pl_hv_exists(sv_type_h, "integer")) {
+      else if (Rstats::pl_hv_exists(sv_type_h, "int")) {
         Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(total_length);
         int32_t pos = 0;
         for (int32_t i = 0; i < length; i++) {
           SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);
           char* type = Rstats::Func::get_type(sv_r, sv_element);
-          if (!strEQ(type, "integer")) {
-            sv_element = Rstats::Func::as_integer(sv_r, sv_element);
+          if (!strEQ(type, "int")) {
+            sv_element = Rstats::Func::as_int(sv_r, sv_element);
           }
           Rstats::Vector<int32_t>* v1 =  Rstats::Func::get_vector<int32_t>(sv_r, sv_element);
           int32_t v1_length = v1->get_length();
@@ -224,7 +224,7 @@ namespace Rstats {
         Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
         return v1->get_length();
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         return v1->get_length();
       }
@@ -243,7 +243,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::as_double<double, double>(v1);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::as_double<int32_t, double>(v1);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
@@ -257,23 +257,23 @@ namespace Rstats {
       return sv_x_out;
     }
         
-    SV* as_integer(SV* sv_r, SV* sv_x1) {
+    SV* as_int(SV* sv_r, SV* sv_x1) {
       
       char* type = Rstats::Func::get_type(sv_r, sv_x1);
       
       SV* sv_x_out;
       if (strEQ(type, "double")) {
         Rstats::Vector<double>* v1 = Rstats::Func::get_vector<double>(sv_r, sv_x1);
-        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::as_integer<double, int32_t>(v1);
+        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::as_int<double, int32_t>(v1);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
-        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::as_integer<int32_t, int32_t>(v1);
+        Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::as_int<int32_t, int32_t>(v1);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
       else {
-        croak("Error in as->integer() : default method not implemented for type '%s'", type);
+        croak("Error in as->int() : default method not implemented for type '%s'", type);
       }
 
       Rstats::Func::copy_attrs_to(sv_r, sv_x1, sv_x_out);
@@ -314,7 +314,7 @@ namespace Rstats {
           sv_value = Rstats::pl_new_sv_nv(value);
         }
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         int32_t value = v1->get_value(pos);
         sv_value = Rstats::pl_new_sv_iv(value);
@@ -342,7 +342,7 @@ namespace Rstats {
           
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<double>* v_out = new Rstats::Vector<double>(v1->get_length());
         double v_out_total(1);
@@ -376,7 +376,7 @@ namespace Rstats {
           
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<double>* v_out = new Rstats::Vector<double>(v1->get_length());
         double v_out_total(0);
@@ -409,7 +409,7 @@ namespace Rstats {
         v_out->set_value(0, v_out_total);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(1);
         int32_t v_out_total(0);
@@ -442,7 +442,7 @@ namespace Rstats {
         v_out->set_value(0, v_out_total);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<double>* v_out = new Rstats::Vector<double>(1);
         double v_out_total(1);
@@ -470,7 +470,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::equal<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::equal<int32_t>(v1, v2);
@@ -495,7 +495,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::not_equal<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::not_equal<int32_t>(v1, v2);
@@ -520,7 +520,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::more_than<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::more_than<int32_t>(v1, v2);
@@ -545,7 +545,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::more_than_or_equal<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::more_than_or_equal<int32_t>(v1, v2);
@@ -570,7 +570,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::less_than<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::less_than<int32_t>(v1, v2);
@@ -594,7 +594,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::less_than_or_equal<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::less_than_or_equal<int32_t>(v1, v2);
@@ -618,7 +618,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::And<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::And<int32_t>(v1, v2);
@@ -642,7 +642,7 @@ namespace Rstats {
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::Or<double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::Or<int32_t>(v1, v2);
@@ -666,7 +666,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::add<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::add<int32_t, int32_t>(v1, v2);
@@ -690,7 +690,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::subtract<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::subtract<int32_t, int32_t>(v1, v2);
@@ -714,7 +714,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::remainder<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::remainder<int32_t, double>(v1, v2);
@@ -739,7 +739,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::divide<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::divide<int32_t, double>(v1, v2);
@@ -764,7 +764,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::atan2<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::atan2<int32_t, double>(v1, v2);
@@ -789,7 +789,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::pow<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::pow<int32_t, double>(v1, v2);
@@ -814,7 +814,7 @@ namespace Rstats {
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::multiply<double, double>(v1, v2);
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type1, "integer")) {
+      else if (strEQ(type1, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         Rstats::Vector<int32_t>* v2 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x2);
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::multiply<int32_t, int32_t>(v1, v2);
@@ -840,7 +840,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::sin<int32_t, double>(v1);
@@ -868,7 +868,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::tanh<int32_t, double>(v1);
@@ -896,7 +896,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::cos<int32_t, double>(v1);
@@ -924,7 +924,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::tan<int32_t, double>(v1);
@@ -952,7 +952,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::sinh<int32_t, double>(v1);
@@ -980,7 +980,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::cosh<int32_t, double>(v1);
@@ -1008,7 +1008,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::log<int32_t, double>(v1);
@@ -1036,7 +1036,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::logb<int32_t, double>(v1);
@@ -1064,7 +1064,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::log10<int32_t, double>(v1);
@@ -1092,7 +1092,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::log2<int32_t, double>(v1);
@@ -1120,7 +1120,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::acos<int32_t, double>(v1);
@@ -1148,7 +1148,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::acosh<int32_t, double>(v1);
@@ -1176,7 +1176,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::asinh<int32_t, double>(v1);
@@ -1204,7 +1204,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::atanh<int32_t, double>(v1);
@@ -1232,7 +1232,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::Conj<int32_t, double>(v1);
@@ -1260,7 +1260,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::asin<int32_t, double>(v1);
@@ -1288,7 +1288,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::atan<int32_t, double>(v1);
@@ -1316,7 +1316,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::sqrt<int32_t, double>(v1);
@@ -1344,7 +1344,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::expm1<int32_t, double>(v1);
@@ -1372,7 +1372,7 @@ namespace Rstats {
 
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
 
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::exp<int32_t, double>(v1);
@@ -1400,7 +1400,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::negate<int32_t, int32_t>(v1);
@@ -1428,7 +1428,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::Arg<int32_t, double>(v1);
@@ -1456,7 +1456,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::abs<int32_t, double>(v1);
@@ -1484,7 +1484,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::Mod<int32_t, double>(v1);
@@ -1512,7 +1512,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::Re<int32_t, double>(v1);
@@ -1540,7 +1540,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<double>* v_out = Rstats::VectorFunc::Im<int32_t, double>(v1);
@@ -1568,7 +1568,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::is_infinite<int32_t>(v1);
@@ -1596,7 +1596,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::is_nan<int32_t>(v1);
@@ -1624,7 +1624,7 @@ namespace Rstats {
         
         sv_x_out = Rstats::Func::new_vector<int32_t>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
         
         Rstats::Vector<int32_t>* v_out = Rstats::VectorFunc::is_finite<int32_t>(v1);
@@ -1728,7 +1728,7 @@ namespace Rstats {
       
       sv_bless(sv_x1, gv_stashpv("Rstats::Object", 1));
       Rstats::pl_hv_store(sv_x1, "r", sv_r);
-      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("integer"));
+      Rstats::pl_hv_store(sv_x1, "type", Rstats::pl_new_sv_pv("int"));
       
       return sv_x1;
     }
@@ -1766,9 +1766,9 @@ namespace Rstats {
       return sv_x1;
     }
 
-    SV* c_integer(SV* sv_r, SV* sv_values) {
+    SV* c_int(SV* sv_r, SV* sv_values) {
       if (!sv_derived_from(sv_values, "ARRAY")) {
-        croak("Invalid argment(c_integer()");
+        croak("Invalid argment(c_int()");
       }
       
       int32_t length = Rstats::pl_av_len(sv_values);
@@ -1823,7 +1823,7 @@ namespace Rstats {
     SV* is_numeric(SV* sv_r, SV* sv_x1) {
       
       bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "double")
-        || strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
+        || strEQ(Rstats::Func::get_type(sv_r, sv_x1), "int");
         
       SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
       
@@ -1839,9 +1839,9 @@ namespace Rstats {
       return sv_x_is;
     }
 
-    SV* is_integer(SV* sv_r, SV* sv_x1) {
+    SV* is_int(SV* sv_r, SV* sv_x1) {
       
-      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "integer");
+      bool is = strEQ(Rstats::Func::get_type(sv_r, sv_x1), "int");
         
       SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
       
@@ -1911,7 +1911,7 @@ namespace Rstats {
             Rstats::pl_av_push(sv_elements, sv_x_out);
           }
         }
-        else if (strEQ(type, "integer")) {
+        else if (strEQ(type, "int")) {
           Rstats::Vector<int32_t>* v1 = Rstats::Func::get_vector<int32_t>(sv_r, sv_x1);
           for (int32_t i = 0; i < length; i++) {
             Rstats::Vector<int32_t>* v_out
@@ -1942,7 +1942,7 @@ namespace Rstats {
         }
         sv_x_out = Rstats::Func::new_vector<double>(sv_r, v_out);
       }
-      else if (strEQ(type, "integer")) {
+      else if (strEQ(type, "int")) {
         Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(len);
         int32_t* values = v_out->get_values();
         for (int32_t i = 0; i < len; i++) {

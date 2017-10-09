@@ -62,7 +62,7 @@ sub t {
 
 my $type_level = {
   double => 4,
-  integer => 3,
+  int => 3,
   na => 1
 };
 
@@ -124,7 +124,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_integer($r, @$x2_values), $r->c($rows_count, $cols_count));
+    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c($rows_count, $cols_count));
     
     return $x2;
   }
@@ -159,7 +159,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_integer($r, @$x2_values), $r->c($rows_count, $cols_count));
+    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c($rows_count, $cols_count));
     
     return $x2;
   }
@@ -397,7 +397,7 @@ sub is_element {
   for my $x1_value (@$x1_values) {
     my $match;
     for my $x2_value (@$x2_values) {
-      if ($type eq 'double' || $type eq 'integer') {
+      if ($type eq 'double' || $type eq 'int') {
         if ($x1_value == $x2_value) {
           $match = 1;
           last;
@@ -407,7 +407,7 @@ sub is_element {
     push @$x3_values, $match ? 1 : 0;
   }
   
-  return Rstats::Func::c_integer($r, @$x3_values);
+  return Rstats::Func::c_int($r, @$x3_values);
 }
 
 sub setequal {
@@ -1614,7 +1614,7 @@ sub bool {
       $is = $value;
     }
   }
-  elsif ($type eq 'integer') {
+  elsif ($type eq 'int') {
     $is = $value;
   }
   else {
@@ -1669,8 +1669,8 @@ sub get_array {
   if ($x1->get_type eq "double") {
     $x_array = c_double($r, \@x2_values);
   }
-  elsif ($x1->get_type eq "integer") {
-    $x_array = c_integer($r, \@x2_values);
+  elsif ($x1->get_type eq "int") {
+    $x_array = c_int($r, \@x2_values);
   }
   else {
     croak("Invalid type " . $x1->get_type . " is passed");
@@ -1795,7 +1795,7 @@ sub str {
   if ($type eq 'double') {
     $short_type = 'num';
   }
-  elsif ($type eq 'integer') {
+  elsif ($type eq 'int') {
     $short_type = 'int';
   }
   else {

@@ -29,10 +29,10 @@ my $r = Rstats->new;
     is_deeply($x3->values, [25]);
   }
 
-  # pow - integer
+  # pow - int
   {
-    my $x1 = $r->as->integer($r->c(5));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(5));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->pow($x1, $x2);
     ok($r->is->double($x3)->value);
     is_deeply($x3->values, [25]);
@@ -72,12 +72,12 @@ my $r = Rstats->new;
     is_deeply($x3->values, [3]);
   }
 
-  # add - integer
+  # add - int
   {
-    my $x1 = $r->as->integer($r->c(1));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(1));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->add($x1, $x2);
-    ok($r->is->integer($x3)->value);
+    ok($r->is->int($x3)->value);
     is_deeply($x3->values, [3]);
   }
 
@@ -125,12 +125,12 @@ my $r = Rstats->new;
     is_deeply($x3->values, [-1]);
   }
 
-  # subtract - integer
+  # subtract - int
   {
-    my $x1 = $r->as->integer($r->c(1));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(1));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->subtract($x1, $x2);
-    ok($r->is->integer($x3)->value);
+    ok($r->is->int($x3)->value);
     is_deeply($x3->values, [-1]);
   }
 
@@ -178,12 +178,12 @@ my $r = Rstats->new;
     is_deeply($x3->values, [6]);
   }
 
-  # multiply - integer
+  # multiply - int
   {
-    my $x1 = $r->as->integer($r->c(3));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(3));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->multiply($x1, $x2);
-    ok($r->is->integer($x3)->value);
+    ok($r->is->int($x3)->value);
     is_deeply($x3->values, [6]);
   }
 
@@ -231,10 +231,10 @@ my $r = Rstats->new;
     is_deeply($x3->values, [5/2]);
   }
 
-  # divide - integer
+  # divide - int
   {
-    my $x1 = $r->as->integer($r->c(5));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(5));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->divide($x1, $x2);
     ok($r->is->double($x3)->value);
     is_deeply($x3->values, [5/2]);
@@ -285,10 +285,10 @@ my $r = Rstats->new;
     is_deeply($x3->values, [1, 2, POSIX::fmod(2, 2/5), "NaN"]);
   }
 
-  # remainder - integer
+  # remainder - int
   {
-    my $x1 = $r->as->integer($r->c(5));
-    my $x2 = $r->as->integer($r->c(2));
+    my $x1 = $r->as->int($r->c(5));
+    my $x2 = $r->as->int($r->c(2));
     my $x3 = $r->remainder($x1, $x2);
     ok($r->is->double($x3)->value);
     is_deeply($x3->values, [1]);

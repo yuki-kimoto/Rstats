@@ -31,7 +31,7 @@ sub parse_index {
   for (my $i = 0; $i < @$x1_dim; $i++) {
     my $_index = $_indexs[$i];
 
-    my $index = defined $_index ? $r->c($_index) : Rstats::c_integer($r);
+    my $index = defined $_index ? $r->c($_index) : Rstats::c_int($r);
     my $index_values = $index->values;
     if (@$index_values) {
       my $minus_count = 0;
@@ -50,7 +50,7 @@ sub parse_index {
     
     if (!@{$index->values}) {
       my $index_values_new = [1 .. $x1_dim->[$i]];
-      $index = Rstats::Func::c_integer($r, @$index_values_new);
+      $index = Rstats::Func::c_int($r, @$index_values_new);
     }
     elsif ($index->{_minus}) {
       my $index_value_new = [];
@@ -58,7 +58,7 @@ sub parse_index {
       for my $k (1 .. $x1_dim->[$i]) {
         push @$index_value_new, $k unless grep { $_ == -$k } @{$index->values};
       }
-      $index = Rstats::Func::c_integer($r, @$index_value_new);
+      $index = Rstats::Func::c_int($r, @$index_value_new);
     }
 
     push @indexs, $index;
@@ -85,7 +85,7 @@ Rstats::Util - Utility class
 
 =head2 looks_like_double (xs)
 
-=head2 looks_like_integer (xs)
+=head2 looks_like_int (xs)
 
 =head2 index_to_pos (xs)
 

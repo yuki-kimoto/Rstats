@@ -18,7 +18,7 @@ namespace Rstats {
 
     SV* c(SV*, SV*);
     SV* c_double(SV*, SV*);
-    SV* c_integer(SV*, SV*);
+    SV* c_int(SV*, SV*);
 
     SV* pi(SV*);
     SV* is_vector(SV*, SV*);
@@ -26,7 +26,7 @@ namespace Rstats {
     SV* type(SV*, SV*);
     int32_t to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
-    SV* is_integer(SV*, SV*);
+    SV* is_int(SV*, SV*);
     SV* is_finite(SV*, SV*);
     SV* is_infinite(SV*, SV*);
     SV* is_nan(SV*, SV*);
@@ -35,7 +35,7 @@ namespace Rstats {
     SV* copy_attrs_to(SV*, SV*, SV*, SV*);
 
     SV* as_vector(SV*, SV*);
-    SV* as_integer(SV*, SV*);
+    SV* as_int(SV*, SV*);
     SV* as_double(SV*, SV*);
 
     SV* clone(SV*, SV*);

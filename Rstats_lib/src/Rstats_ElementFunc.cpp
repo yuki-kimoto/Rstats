@@ -306,8 +306,8 @@ namespace Rstats {
     double as_double(double e1) { return e1; }
     double as_double(int32_t e1) { return (double)e1; }
 
-    // as_integer
-    int32_t as_integer(double e1) {
+    // as_int
+    int32_t as_int(double e1) {
       if (Rstats::Util::is_NaN(e1) || Rstats::Util::is_Inf(e1)) {
         Rstats::add_warn(WARN_NA_INTRODUCED);
         throw Rstats::NaException;
@@ -316,6 +316,6 @@ namespace Rstats {
         return (int32_t)e1;
       }
     }
-    int32_t as_integer(int32_t e1) { return e1; }
+    int32_t as_int(int32_t e1) { return e1; }
   }
 }

@@ -7,28 +7,28 @@ use Rstats;
 
 my $r = Rstats->new;
 
-# as->integer
+# as->int
 {
-  # as->integer - dim
+  # as->int - dim
   {
     my $x1 = $r->array($r->c(1, 2));
-    my $x2 = $r->as->integer($x1);
+    my $x2 = $r->as->int($x1);
     is_deeply($x2->dim->values, [2]);
   }
 
-  # as->integer - double
+  # as->int - double
   {
     my $x1 = $r->c(1.1);
-    my $x2 = $r->as->integer($x1);
-    ok($r->is->integer($x2)->value);
+    my $x2 = $r->as->int($x1);
+    ok($r->is->int($x2)->value);
     is($x2->values->[0], 1);
   }
   
-  # as->integer - integer
+  # as->int - int
   {
     my $x1 = $r->c(1);
-    my $x2 = $r->as->integer($r->as->integer($x1));
-    ok($r->is->integer($x2)->value);
+    my $x2 = $r->as->int($r->as->int($x1));
+    ok($r->is->int($x2)->value);
     is($x2->values->[0], 1);
   }
 }
@@ -66,10 +66,10 @@ my $r = Rstats->new;
     is($x2->values->[0], 1.1);
   }
   
-  # as->double - integer
+  # as->double - int
   {
     my $x1 = $r->array($r->c(1));
-    my $x2 = $r->as->double($r->as->integer($x1));
+    my $x2 = $r->as->double($r->as->int($x1));
     ok($r->is->double($x2)->value);
     is($x2->values->[0], 1);
   }

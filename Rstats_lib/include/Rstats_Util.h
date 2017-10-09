@@ -11,7 +11,7 @@ namespace Rstats {
     SV* pos_to_index(SV*, SV*);
     SV* index_to_pos(SV*, SV*);
     SV* looks_like_na(SV*);
-    SV* looks_like_integer(SV*);
+    SV* looks_like_int(SV*);
     SV* looks_like_double(SV*);
     double pi();
     double Inf();

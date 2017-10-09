@@ -58,7 +58,7 @@ my @func_names = qw/
   atan2
   c
   c_double
-  c_integer
+  c_int
   C
   charmatch
   chartr
@@ -211,10 +211,10 @@ sub new {
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
   $self->helper('is.double' => \&Rstats::Func::is_double);
-  $self->helper('is.integer' => \&Rstats::Func::is_integer);
+  $self->helper('is.int' => \&Rstats::Func::is_int);
   $self->helper('is.element' => \&Rstats::Func::is_element);
 
-  $self->helper('as.integer' => \&Rstats::Func::as_integer);
+  $self->helper('as.int' => \&Rstats::Func::as_int);
   $self->helper('as.double' => \&Rstats::Func::as_double);
 
   return $self;
@@ -382,7 +382,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   # x1 %*% x2 (vector inner product or matrix product)
   $x1 x $x2
   
-  # x1 %/% x2 (integer quotient)
+  # x1 %/% x2 (int quotient)
   $r->tranc($x1 / $x2)
 
 =head2 c
@@ -786,10 +786,10 @@ Alias of FALSE
   # as.array(x1)
   $r->as->array($x1)
 
-=head2 as->integer
+=head2 as->int
 
-  # as.integer(x1)
-  $r->as->integer($x1)
+  # as.int(x1)
+  $r->as->int($x1)
 
 =head2 is->finite
 
@@ -816,10 +816,10 @@ Alias of FALSE
   # is.double(x1)
   $r->is->double($x1)
 
-=head2 is->integer
+=head2 is->int
 
-  # is.integer(x1)
-  $r->is->integer($x1)
+  # is.int(x1)
+  $r->is->int($x1)
 
 =head2 is->vector
 

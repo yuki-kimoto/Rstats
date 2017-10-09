@@ -152,8 +152,8 @@ namespace Rstats {
     double as_double(double);
     double as_double(int32_t);
 
-    int32_t as_integer(double);
-    int32_t as_integer(int32_t);
+    int32_t as_int(double);
+    int32_t as_int(int32_t);
   }
 }
 

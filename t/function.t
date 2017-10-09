@@ -12,16 +12,16 @@ my $r = Rstats->new;
 
 # c
 {
-  # $r->c($r->TRUE, $r->as->integer(2));
+  # $r->c($r->TRUE, $r->as->int(2));
   {
-    my $x1 = $r->c($r->TRUE, $r->as->integer($r->c(2)));
-    ok($r->is->integer($x1)->value);
+    my $x1 = $r->c($r->TRUE, $r->as->int($r->c(2)));
+    ok($r->is->int($x1)->value);
     is_deeply($x1->values, [1, 2]);
   }
 
-  # $r->c(1, $r->as->integer(2));
+  # $r->c(1, $r->as->int(2));
   {
-    my $x1 = $r->c($r->c(1), $r->as->integer($r->c(2)));
+    my $x1 = $r->c($r->c(1), $r->as->int($r->c(2)));
     ok($r->is->double($x1)->value);
     is_deeply($x1->values, [1, 2]);
   }
@@ -220,9 +220,9 @@ my $r = Rstats->new;
     is_deeply($x2->values, [0]);
   }
 
-  # Arg - integer
+  # Arg - int
   {
-    my $x1 = $r->as->integer($r->c(-3));
+    my $x1 = $r->as->int($r->c(-3));
     my $x2 = $r->Arg($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [$r->pi->value]);
@@ -349,9 +349,9 @@ my $r = Rstats->new;
     ok($r->is->double($x2)->value);
   }
 
-  # expm1 - integer
+  # expm1 - int
   {
-    my $x1 = $r->as->integer($r->array($r->c(2)));
+    my $x1 = $r->as->int($r->array($r->c(2)));
     my $x2 = $r->expm1($x1);
     is(sprintf("%.6f", $x2->value), '6.389056');
     ok($r->is->double($x2)->value);
@@ -389,9 +389,9 @@ my $r = Rstats->new;
     is_deeply($x2->values, [24]);
   }
 
-  # prod - integer
+  # prod - int
   {
-    my $x1 = $r->as->integer($r->c(2, 3, 4));
+    my $x1 = $r->as->int($r->c(2, 3, 4));
     my $x2 = $r->prod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [24]);
@@ -408,11 +408,11 @@ my $r = Rstats->new;
     is_deeply($x2->values, [6]);
   }
   
-  # sum - integer
+  # sum - int
   {
-    my $x1 = $r->as->integer($r->c(1, 2, 3));
+    my $x1 = $r->as->int($r->c(1, 2, 3));
     my $x2 = $r->sum($x1);
-    ok($r->is->integer($x2)->value);
+    ok($r->is->int($x2)->value);
     is_deeply($x2->values, [6]);
   }
 }
@@ -456,9 +456,9 @@ my $r = Rstats->new;
     is($r->str($x1), 'num [1:10] 1 2 3 4 5 6 7 8 9 10');
   }
 
-  # str - vector, integer
+  # str - vector, int
   {
-    my $x1 = $r->as->integer($r->c(1, 2));
+    my $x1 = $r->as->int($r->c(1, 2));
     is($r->str($x1), 'int [1:2] 1 2');
   }
 
@@ -520,9 +520,9 @@ my $r = Rstats->new;
     ok($r->is->double($x2)->value);
   }
 
-  # log10 - integer
+  # log10 - int
   {
-    my $x1 = $r->array($r->c_integer(10));
+    my $x1 = $r->array($r->c_int(10));
     my $x2 = $r->log10($x1);
     is($x2->value, 1);
     is_deeply($r->dim($x2)->values, [1]);
@@ -715,9 +715,9 @@ my $r = Rstats->new;
 
 # cumprod
 {
-  # cumprod - integer
+  # cumprod - int
   {
-    my $x1 = $r->c_integer(2, 3, 4);
+    my $x1 = $r->c_int(2, 3, 4);
     my $x2 = $r->cumprod($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [2, 6, 24]);
@@ -734,9 +734,9 @@ my $r = Rstats->new;
 
 # cumsum
 {
-  # cumsum - integer
+  # cumsum - int
   {
-    my $x1 = $r->c_integer(1, 2, 3);
+    my $x1 = $r->c_int(1, 2, 3);
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);

@@ -147,7 +147,7 @@ namespace Rstats {
       return sv_ret;
     }
 
-    SV* looks_like_integer(SV* sv_str) {
+    SV* looks_like_int(SV* sv_str) {
       
       SV* sv_ret;
       if (!SvOK(sv_str) || sv_len(sv_str) == 0) {

@@ -25,7 +25,7 @@ my $r = Rstats->new;
   
   # is->nan - double,-Inf
   {
-    my $x1 = -$r->Inf;
+    my $x1 = $r->negate($r->Inf);
     my $x2 = $r->is->nan($x1);
     is_deeply($x2->values, [0]);
   }

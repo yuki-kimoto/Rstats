@@ -267,17 +267,16 @@ namespace Rstats {
     SV* c_int(SV* sv_r, SV* sv_elements) {
       
       int32_t length = Rstats::pl_av_len(sv_elements);
-
+      
       SV* sv_x_out;
-      if (length == 0) {
-        croak("Error");
+      if (length < 0) {
+        croak("Array length must be more than 0(Rstats::Func::c_int)");
       }
 
       SV* sv_new_elements = Rstats::pl_new_avrv();
       
       // Convert to Rstats::Object, check type and total length, and remove NULL
       SV* sv_type_h = Rstats::pl_new_hvrv();
-      int32_t total_length = 0;
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_elements, i);
 
@@ -304,12 +303,11 @@ namespace Rstats {
         
         char* type = Rstats::Func::get_type(sv_r, sv_new_element);
         
-        total_length += Rstats::Func::get_length(sv_r, sv_new_element);
         Rstats::pl_hv_store(sv_type_h, type, Rstats::pl_new_sv_iv(1));
         Rstats::pl_av_push(sv_new_elements, sv_new_element);
       }
 
-      Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(total_length);
+      Rstats::Vector<int32_t>* v_out = new Rstats::Vector<int32_t>(length);
       int32_t pos = 0;
       for (int32_t i = 0; i < length; i++) {
         SV* sv_element = Rstats::pl_av_fetch(sv_new_elements, i);

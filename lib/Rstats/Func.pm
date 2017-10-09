@@ -47,7 +47,7 @@ sub t {
   my $x1_row = Rstats::Func::dim($r, $x1)->values->[0];
   my $x1_col = Rstats::Func::dim($r, $x1)->values->[1];
   
-  my $x2 = $r->array($r->c(0), $r->c($x1_col, $x1_row));
+  my $x2 = $r->array($r->c(0), $r->c([$x1_col, $x1_row]));
   
   for my $row (1 .. $x1_row) {
     for my $col (1 .. $x1_col) {
@@ -124,7 +124,7 @@ sub upper_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c($rows_count, $cols_count));
+    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }
@@ -185,7 +185,7 @@ sub diag {
     $x2_values = $x1->values;
   }
   
-  my $x2 = array($r, $r->c(0), $r->c($size, $size));
+  my $x2 = array($r, $r->c(0), $r->c([$size, $size]));
   for (my $i = 0; $i < $size; $i++) {
     $x2->at($i + 1, $i + 1);
     $x2->set($r->c($x2_values->[$i]));
@@ -263,7 +263,7 @@ sub kronecker {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($r, c($r, @$x3_values), Rstats::Func::c($r, @$x3_dim_values));
+  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, @$x3_dim_values));
   
   return $x3;
 }
@@ -298,7 +298,7 @@ sub outer {
     push @$x3_values, $x3_value;
   }
   
-  my $x3 = array($r, c($r, @$x3_values), Rstats::Func::c($r, @$x3_dim));
+  my $x3 = array($r, c($r, $x3_values), Rstats::Func::c($r, @$x3_dim));
   
   return $x3;
 }
@@ -372,7 +372,7 @@ sub col {
     push @values, ($col) x $nrow;
   }
   
-  return array($r, c($r, @values), Rstats::Func::c($r, $nrow, $ncol));
+  return array($r, c($r, \@values), Rstats::Func::c($r, $nrow, $ncol));
 }
 
 sub nrow {
@@ -600,7 +600,7 @@ sub cbind {
     
     push @$x2_elements, @{Rstats::Func::decompose($r, $x1)};
   }
-  my $matrix = array($r, c($r, @$x2_elements), $r->c($row_count_needed, $col_count_total));
+  my $matrix = array($r, c($r, $x2_elements), $r->c([$row_count_needed, $col_count_total]));
   
   return $matrix;
 }
@@ -797,7 +797,7 @@ sub ifelse {
     }
   }
   
-  return Rstats::Func::array($r, c($r, @x2_values));
+  return Rstats::Func::array($r, c($r, \@x2_values));
 }
 
 
@@ -1067,7 +1067,7 @@ sub replace {
     }
   }
   
-  return Rstats::Func::array($r, c($r, @$x4_elements));
+  return Rstats::Func::array($r, c($r, $x4_elements));
 }
 
 sub rev {
@@ -1438,7 +1438,7 @@ sub inner_product {
       }
     }
     
-    my $x3 = Rstats::Func::array($r, c($r, @$x3_elements), $r->c($row_max, $col_max));
+    my $x3 = Rstats::Func::array($r, c($r, $x3_elements), $r->c([$row_max, $col_max]));
     
     return $x3;
   }

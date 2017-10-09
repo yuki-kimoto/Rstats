@@ -140,7 +140,6 @@ my @func_names = qw/
   sqrt
   sort
   sub
-  subset
   t
   tail
   tan
@@ -168,7 +167,6 @@ my @func_names = qw/
   more_than
   more_than_or_equal
   add
-  subtract
   multiply
   divide
   pow
@@ -192,9 +190,9 @@ my @func_names = qw/
   remainder
   divide
   multiply
-  subtract
   add
   get_dim_length
+  subtract
 /;
 
 sub new {
@@ -269,8 +267,9 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   use Rstats;
   
   # Vector
-  my $v1 = $r->c(1, 2, 3);
-  my $v2 = $r->c(3, 4, 5);
+  my $v1 = $r->c(5);
+  my $v1 = $r->c([1, 2, 3]);
+  my $v2 = $r->c([3, 4, 5]);
   
   my $v3 = $v1 + v2;
   print $v3;
@@ -279,10 +278,10 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $v1 = $r->C("1:3");
 
   # Matrix
-  my $m1 = $r->array($r->C("1:12"), $r->c(4, 3));
+  my $m1 = $r->array($r->C("1:12"), $r->c([4, 3]));
   
   # Array
-  my $a1 = $r->array($r->C("1:24"), $r->c(4, 3, 2));
+  my $a1 = $r->array($r->C("1:24"), $r->c([4, 3, 2]));
 
   # Complex
   my $z1 = 1 + 2 * $r->i;
@@ -296,7 +295,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $inf = $r->Inf;
   
   # all methods are called from r
-  my $x1 = $r->sum($r->c(1, 2, 3));
+  my $x1 = $r->sum($r->c([1, 2, 3]));
   
   # Register helper
   $r->helper(my_sum => sub {
@@ -309,7 +308,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
     
     return $r->c($total);
   });
-  my $x2 = $r->my_sum($r->c(1, 2, 3));
+  my $x2 = $r->my_sum($r->c([1, 2, 3]));
 
 =head1 VECTOR ACCESS
 
@@ -388,7 +387,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
 =head2 c
 
   # c(1, 2, 3)
-  $r->c(1, 2, 3)
+  $r->c([1, 2, 3])
 
 Create vector. C<c> method is equal to C<c> of R.
 
@@ -402,7 +401,7 @@ C function is equal to C<m:n> of R.
 =head2 array
 
   # array(1:24, c(4, 3, 2))
-  $r->array($r->C("1:24"), $r->c(4, 3, 2))
+  $r->array($r->C("1:24"), $r->c([4, 3, 2]))
 
 =head2 TRUE
 

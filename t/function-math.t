@@ -14,7 +14,7 @@ my $r = Rstats->new;
 {
   # abs - $r->array refference
   {
-    my $x1 = $r->abs($r->c(-3, 4));
+    my $x1 = $r->abs($r->c([-3, 4]));
     is_deeply($x1->values, [3, 4]);
   }
 }
@@ -23,7 +23,7 @@ my $r = Rstats->new;
 {
   # atan2 - dim
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     my $x2 = $r->array($r->c(3, 4));
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
@@ -34,7 +34,7 @@ my $r = Rstats->new;
 
   # atan2 - double
   {
-    my $x1 = $r->c(1, 2);
+    my $x1 = $r->c([1, 2]);
     my $x2 = $r->c(3, 4);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
@@ -84,7 +84,7 @@ my $r = Rstats->new;
   
   # atan2 - y >= 0, x is -$r->Inf
   {
-    my $x1 = $r->c(0, 1);
+    my $x1 = $r->c([0, 1]);
     my $x2 = $r->c($r->neg($r->Inf), $r->neg($r->Inf));
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), 3.141593);
@@ -129,8 +129,8 @@ my $r = Rstats->new;
 
   # atan2 - different number elements
   {
-    my $x1 = $r->c(1, 2, 1, 2);
-    my $x2 = $r->c(3, 4, 3, 4);
+    my $x1 = $r->c([1, 2, 1, 2]);
+    my $x2 = $r->c([3, 4, 3, 4]);
     my $x3 = $r->atan2($x1, $x2);
     is(sprintf("%.6f", $x3->values->[0]), '0.321751');
     is(sprintf("%.6f", $x3->values->[1]), '0.463648');
@@ -144,7 +144,7 @@ my $r = Rstats->new;
 {
   # tanh - double,array
   {
-    my $x1 = $r->array($r->c(0, 2));
+    my $x1 = $r->array($r->c([0, 2]));
     my $x2 = $r->tanh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.964028');
@@ -178,7 +178,7 @@ my $r = Rstats->new;
 {
   # atanh - double,array
   {
-    my $x1 = $r->array($r->c(0, 0.5, 1, 2, -1, -0.5, -2));
+    my $x1 = $r->array($r->c([0, 0.5, 1, 2, -1, -0.5, -2]));
     my $x2 = $r->atanh($x1);
     is($x2->values->[0], 0);
     is(sprintf("%.6f", $x2->values->[1]), '0.549306');
@@ -193,7 +193,7 @@ my $r = Rstats->new;
 
   # atanh - int
   {
-    my $x1 = $r->array($r->c(0, 1, 2, -1, -2));
+    my $x1 = $r->array($r->c([0, 1, 2, -1, -2]));
     my $x2 = $r->atanh($x1);
     is($x2->values->[0], 0);
     is($x2->values->[1], 'Inf');
@@ -230,7 +230,7 @@ my $r = Rstats->new;
 {
   # acosh - double,array
   {
-    my $x1 = $r->array($r->c(0, 1, 2));
+    my $x1 = $r->array($r->c([0, 1, 2]));
     my $x2 = $r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
@@ -241,7 +241,7 @@ my $r = Rstats->new;
 
   # acosh - int
   {
-    my $x1 = $r->as->int($r->array($r->c(0, 1, 2)));
+    my $x1 = $r->as->int($r->array($r->c([0, 1, 2])));
     my $x2 = $r->acosh($x1);
     is($x2->values->[0], 'NaN');
     is($x2->values->[1], 0);
@@ -276,7 +276,7 @@ my $r = Rstats->new;
 {
   # asinh - double
   {
-    my $x1 = $r->array($r->c(0, 1));
+    my $x1 = $r->array($r->c([0, 1]));
     my $x2 = $r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
@@ -286,7 +286,7 @@ my $r = Rstats->new;
 
   # asinh - int
   {
-    my $x1 = $r->as->int($r->array($r->c(0, 1)));
+    my $x1 = $r->as->int($r->array($r->c([0, 1])));
     my $x2 = $r->asinh($x1);
     is($x2->values->[0], '0');
     is(sprintf("%.6f", $x2->values->[1]), '0.881374');
@@ -320,7 +320,7 @@ my $r = Rstats->new;
 {
   # cosh - double,array
   {
-    my $x1 = $r->array($r->c(0, $r->Inf, 2, $r->neg($r->Inf)));
+    my $x1 = $r->array($r->c([0, $r->Inf, 2, $r->neg($r->Inf)]));
     my $x2 = $r->cosh($x1);
     is($x2->values->[0], '1');
     is($x2->values->[1], 'Inf');
@@ -356,7 +356,7 @@ my $r = Rstats->new;
 {
   # sinh - double,array
   {
-    my $x1 = $r->array($r->c(0, $r->Inf, 2, $r->neg($r->Inf)));
+    my $x1 = $r->array($r->c([0, $r->Inf, 2, $r->neg($r->Inf)]));
     my $x2 = $r->sinh($x1);
     is($x2->values->[0], '0');
     is($x2->values->[1], 'Inf');
@@ -392,7 +392,7 @@ my $r = Rstats->new;
 {
   # atan - double,array
   {
-    my $x1 = $r->array($r->c(0.5, 0.6));
+    my $x1 = $r->array($r->c([0.5, 0.6]));
     my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '0.463648');
     is(sprintf("%.6f", $x2->values->[1]), '0.540420');
@@ -426,7 +426,7 @@ my $r = Rstats->new;
 {
   # acos - double,array
   {
-    my $x1 = $r->array($r->c(1, 1.1, -1.1));
+    my $x1 = $r->array($r->c([1, 1.1, -1.1]));
     my $x2 = $r->acos($x1);
     is($x2->values->[0], 0);
     is($x2->values->[1], 'NaN');
@@ -496,7 +496,7 @@ my $r = Rstats->new;
 {
   # atan - double,array
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     my $x2 = $r->atan($x1);
     is(sprintf("%.6f", $x2->values->[0]), '0.785398');
     is(sprintf("%.6f", $x2->values->[1]), '1.107149');
@@ -530,7 +530,7 @@ my $r = Rstats->new;
 {
   # tan - double, $r->array
   {
-    my $x1 = $r->array($r->c(2, 3));
+    my $x1 = $r->array($r->c([2, 3]));
     my $x2 = $r->tan($x1);
     is_deeply(
       $x2->values,
@@ -548,7 +548,7 @@ my $r = Rstats->new;
 {
   # cos - double,array
   {
-    my $x1 = $r->array($r->c($r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(3))));
+    my $x1 = $r->array($r->c([$r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(3))]));
     my $x2 = $r->cos($x1);
     cmp_ok(abs($x2->values->[0]), '<', 1e-15);
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');
@@ -582,7 +582,7 @@ my $r = Rstats->new;
 {
   # sin - double
   {
-    my $x1 = $r->array($r->c($r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(6))));
+    my $x1 = $r->array($r->c([$r->divide($r->pi, $r->c(2)), $r->divide($r->pi, $r->c(6))]));
     my $x2 = $r->sin($x1);
     is(sprintf("%.5f", $x2->values->[0]), '1.00000');
     is(sprintf("%.5f", $x2->values->[1]), '0.50000');

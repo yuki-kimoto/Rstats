@@ -11,7 +11,7 @@ my $r = Rstats->new;
 {
   # as->int - dim
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     my $x2 = $r->as->int($x1);
     is_deeply($x2->dim->values, [2]);
   }
@@ -79,7 +79,7 @@ my $r = Rstats->new;
 {
   # array decide type - numerci
   {
-    my $x1 = $r->array($r->c(1, 2));
+    my $x1 = $r->array($r->c([1, 2]));
     is_deeply($x1->values, [1, 2]);
     ok($r->is->double($x1)->value);
   }

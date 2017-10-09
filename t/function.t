@@ -270,12 +270,6 @@ my $r = Rstats->new;
   }
 =cut
 
-  # numeric
-  {
-    my $x1 = $r->numeric(3);
-    is_deeply($x1->values, [0, 0, 0]);
-  }
-
   # length
   {
     my $x1 = $r->c(1, 2, 4);
@@ -659,7 +653,7 @@ my $r = Rstats->new;
 
 # is->element
 {
-  # is->element - numeric
+  # is->element - double
   {
     my $x1 = $r->c(1, 2, 3, 4);
     my $x2 = $r->c(1, 2, 3);
@@ -786,7 +780,7 @@ my $r = Rstats->new;
 
 # sqrt
 {
-  # sqrt - numeric
+  # sqrt - double
   {
     my $e1 = $r->c(4, 9);
     my $e2 = $r->sqrt($e1);
@@ -836,7 +830,7 @@ my $r = Rstats->new;
 
 # unique
 {
-  # uniqeu - numeric
+  # uniqeu - double
   my $x1 = $r->c(1, 1, 2, 2, 3, $r->Inf, $r->Inf);
   my $x2 = $r->unique($x1);
   is_deeply($x2->values, [1, 2, 3, 'Inf']);
@@ -999,7 +993,7 @@ my $r = Rstats->new;
 
 # diff
 {
-  # diff - numeric
+  # diff - double
   {
     my $x1 = $r->c(1, 5, 10);
     my $x2 = $r->diff($x1);

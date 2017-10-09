@@ -23,7 +23,6 @@ namespace Rstats {
     SV* pi(SV*);
     SV* is_vector(SV*, SV*);
     SV* values(SV*, SV*);
-    SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
     int32_t to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);

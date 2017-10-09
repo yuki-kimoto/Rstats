@@ -518,17 +518,6 @@ SV* negate(...)
   XSRETURN(1);
 }
 
-SV* is_numeric(...)
-  PPCODE:
-{
-  SV* sv_r = ST(0);
-  SV* sv_x1 = ST(1);
-  SV* sv_x_out = Rstats::Func::is_numeric(sv_r, sv_x1);
-  
-  XPUSHs(sv_x_out);
-  XSRETURN(1);
-}
-
 SV* dim(...)
   PPCODE:
 {

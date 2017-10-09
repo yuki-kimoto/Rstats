@@ -105,7 +105,6 @@ my @func_names = qw/
   na_omit
   ncol
   nrow
-  numeric
   max
   mean
   min
@@ -211,7 +210,6 @@ sub new {
   $self->helper('is.finite' => \&Rstats::Func::is_finite);
   $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
   $self->helper('is.nan' => \&Rstats::Func::is_nan);
-  $self->helper('is.numeric' => \&Rstats::Func::is_numeric);
   $self->helper('is.double' => \&Rstats::Func::is_double);
   $self->helper('is.integer' => \&Rstats::Func::is_integer);
   $self->helper('is.element' => \&Rstats::Func::is_element);
@@ -628,8 +626,6 @@ Alias of FALSE
   # nrow(x1)
   $r->nrow($x1)
 
-=head2 numeric
-
 =head2 max
 
 =head2 mean
@@ -795,11 +791,6 @@ Alias of FALSE
   # as.integer(x1)
   $r->as->integer($x1)
 
-=head2 as->numeric
-
-  # as.numeric(x1)
-  $r->as->numeric($x1)
-
 =head2 is->finite
 
   # is.finite(x1)
@@ -819,11 +810,6 @@ Alias of FALSE
 
   # is.nan(x1)
   $r->is->nan($x1)
-
-=head2 is->numeric
-
-  # is.numeric(x1)
-  $r->is->numeric($x1)
 
 =head2 is->double
 

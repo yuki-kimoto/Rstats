@@ -81,20 +81,20 @@ my $r = Rstats->new;
   {
     my $x1 = $r->array($r->c(1, 2));
     is_deeply($x1->values, [1, 2]);
-    ok($r->is->numeric($x1)->value);
+    ok($r->is->double($x1)->value);
   }
   
   # array decide type - $r->Inf
   {
     my $x1 = $r->Inf;
     is_deeply($x1->values, ['Inf']);
-    ok($r->is->numeric($x1)->value);
+    ok($r->is->double($x1)->value);
   }
 
   # array decide type - NaN
   {
     my $x1 = $r->NaN;
     is_deeply($x1->values, ['NaN']);
-    ok($r->is->numeric($x1)->value);
+    ok($r->is->double($x1)->value);
   }
 }

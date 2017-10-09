@@ -1420,7 +1420,7 @@ sub inner_product {
   # Calculate
   if ($x1->get_dim_length == 2 && $x2->get_dim_length == 2) {
     
-    Carp::croak "requires numeric matrix/vector arguments"
+    Carp::croak "requires arguments"
       if Rstats::Func::get_length($r, $x1) == 0 || Rstats::Func::get_length($r, $x2) == 0;
     Carp::croak "Error in a x b : non-conformable arguments"
       unless Rstats::Func::dim($r, $x1)->values->[1] == Rstats::Func::dim($r, $x2)->values->[0];
@@ -1557,14 +1557,6 @@ sub seq {
     
     return Rstats::Func::c($r, @$elements);
   }
-}
-
-sub numeric {
-  my $r = shift;
-  
-  my $num = shift;
-  
-  return Rstats::Func::c($r, (0) x $num);
 }
 
 sub _fix_pos {

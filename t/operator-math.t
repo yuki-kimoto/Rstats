@@ -396,9 +396,9 @@ my $r = Rstats->new;
   }
 }
 
-# numeric operator
+# double operator
 {
-  # numeric operator - -0.2 * -Inf
+  # double operator - -0.2 * -Inf
   {
     my $x1 = $r->c(-0.2);
     my $x2 = $r->c(-Inf);

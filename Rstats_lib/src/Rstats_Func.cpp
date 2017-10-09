@@ -1898,8 +1898,6 @@ namespace Rstats {
         sv_opt = Rstats::pl_new_hvrv();
       }
       
-      SV* sv_new_indexes = Rstats::pl_hv_fetch(sv_opt, "new_indexes");
-      
       // type
       if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "type")) && Rstats::pl_hv_exists(sv_x1, "type")) {
         Rstats::pl_hv_store(sv_x2, "type", Rstats::pl_hv_fetch(sv_x1, "type"));
@@ -1907,7 +1905,7 @@ namespace Rstats {
 
       // dim
       if (!SvOK(Rstats::pl_hv_fetch(sv_x2, "dim")) && Rstats::pl_hv_exists(sv_x1, "dim")) {
-        Rstats::pl_hv_store(sv_x2, "dim", Rstats::Func::as_vector(sv_r, Rstats::pl_hv_fetch(sv_x1, "dim")));
+        Rstats::pl_hv_store(sv_x2, "dim", Rstats::pl_hv_fetch(sv_x1, "dim"));
       }
     }
 

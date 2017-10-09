@@ -417,6 +417,9 @@ sub C {
   if ($seq_str =~ s/^(.+)\*//) {
     $by = $1;
   }
+  else {
+    $by = 1;
+  }
   
   my $from;
   my $to;
@@ -426,7 +429,7 @@ sub C {
     $to = $from unless defined $to;
   }
   
-  my $vector = seq($r,{from => $from, to => $to, by => $by});
+  my $vector = seq($r,{from => $r->c($from), to => $r->c($to), by => $r->c($by)});
   
   return $vector;
 }
@@ -1574,13 +1577,17 @@ sub seq {
     my $length = $opt->{length};
     
     # By
-    my $by = $opt->{by};
+    my $x_by = $opt->{by};
     
-    if (defined $length && defined $by) {
+    if (defined $length && defined $x_by) {
       Carp::croak "Can't use by option and length option as same time";
     }
     
-    unless (defined $by) {
+    my $by;
+    if (defined $x_by) {
+      $by = $x_by->value;
+    }
+    else {
       if ($to >= $from) {
         $by = 1;
       }

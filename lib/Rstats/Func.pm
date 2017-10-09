@@ -159,7 +159,7 @@ sub lower_tri {
       }
     }
     
-    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c($rows_count, $cols_count));
+    my $x2 = array($r, Rstats::Func::c_int($r, @$x2_values), $r->c([$rows_count, $cols_count]));
     
     return $x2;
   }

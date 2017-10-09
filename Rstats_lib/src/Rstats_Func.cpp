@@ -1708,15 +1708,6 @@ namespace Rstats {
       return sv_is;
     }
 
-    SV* is_array(SV* sv_r, SV* sv_x1) {
-
-      bool is = Rstats::pl_hv_exists(sv_x1, "dim");
-      
-      SV* sv_x_is = is ? Rstats::Func::new_TRUE(sv_r) : Rstats::Func::new_FALSE(sv_r);
-      
-      return sv_x_is;
-    }
-
     SV* is_matrix(SV* sv_r, SV* sv_x1) {
 
       int32_t is = Rstats::Func::get_length(sv_r, dim(sv_r, sv_x1)) == 2;

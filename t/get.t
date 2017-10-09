@@ -51,18 +51,6 @@ my $r = Rstats->new;
     my $x2 = $x1->get($r->c(-1, -2));
     is_deeply($x2->values, [5, 7]);
   }
-  
-  # get - as_vector
-  {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    is_deeply($r->as->vector($x1)->get($r->c(5))->values, [5]);
-  }
-
-  # get - as_matrix
-  {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    is_deeply($r->as->vector($x1)->get($r->c(5), $r->c(1))->values, [5]);
-  }
 }
 
 # get 3-dimention

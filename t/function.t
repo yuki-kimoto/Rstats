@@ -1009,12 +1009,6 @@ my $r = Rstats->new;
     is($x1->value(3, 2), 7);
   }
 
-  # value - two-dimention, as_vector
-  {
-    my $x1 = $r->array($r->C('1:12'), $r->c(4, 3));
-    is($r->as->vector($x1)->value(5), 5);
-  }
-  
   # value - three-dimention
   {
     my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 1));

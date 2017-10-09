@@ -674,8 +674,6 @@ namespace Rstats {
 
     SV* atan2(SV* sv_r, SV* sv_x1, SV* sv_x2) {
       
-      sv_x1 = Rstats::Func::to_object(sv_r, sv_x1);
-      sv_x2 = Rstats::Func::to_object(sv_r, sv_x2);
       SV* sv_x_out;
       
       char* type1 = Rstats::Func::get_type(sv_r, sv_x1);

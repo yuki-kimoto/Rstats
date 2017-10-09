@@ -123,13 +123,13 @@ my $r = Rstats->new;
 
   # atan2 - y is NaN
   {
-    my $x1 = $r->atan2($r->NaN, 0);
+    my $x1 = $r->atan2($r->NaN, $r->c(0));
     is($x1->value, 'NaN');
   }
   
   # atan2 - x is NaN
   {
-    my $x1 = $r->atan2(0, $r->NaN);
+    my $x1 = $r->atan2($r->c(0), $r->NaN);
     is($x1->value, 'NaN');
   }
 

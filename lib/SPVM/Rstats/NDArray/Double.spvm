@@ -1,3 +1,5 @@
+use Arrays;
+
 package Rstats::NDArray::Double {
   has values : double[];
   has shape : int[];
@@ -13,8 +15,17 @@ package Rstats::NDArray::Double {
     }
     
     my $shape_length = 1;
-    for (my $i = 0; $i < @$shape; $i++) {
-      $shape_length *= $shape->[$i];
+    if ($shape) {
+      $shape = Arrays::copy_of_int($shape, len $shape);
+      
+      for (my $i = 0; $i < @$shape; $i++) {
+        $shape_length *= $shape->[$i];
+      }
+    }
+    else {
+      $shape = new int[1];
+      $shape->[0] = $length;
+      $shape_length = $length;
     }
     
     # Check shape length
@@ -29,6 +40,7 @@ package Rstats::NDArray::Double {
     return $ndarray;
   }
 
+=pod
   sub new_len($length : int, $shape : int[]) : Rstats::NDArray::Double {
     
     my $ndarray = new Rstats::NDArray::Double;
@@ -55,4 +67,5 @@ package Rstats::NDArray::Double {
     
     return $ndarray;
   }
+=cut
 }

@@ -19,6 +19,8 @@ use Rstats::NDArray;
 use SPVM 'Rstats::NDArray::Double';
 use SPVM 'Rstats::NDArray::Integer';
 
+use SPVM;
+
 ### V2 function
 
 sub double {
@@ -28,7 +30,11 @@ sub double {
   
   $ndarray->type('double');
   
-  my $sp_ndarray = SPVM::Rstats::NDArray::Double::new($values, $shape);
+  my $sp_values = SPVM::new_double_array($values);
+  
+  my $sp_shape = SPVM::new_int_array($shape);
+  
+  my $sp_ndarray = SPVM::Rstats::NDArray::Double::new($sp_values, $sp_shape);
   
   $ndarray->ndarray($sp_ndarray);
   

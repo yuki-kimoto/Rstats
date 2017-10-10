@@ -18,6 +18,7 @@ use Encode ();
 use Rstats::NDArray;
 use SPVM 'Rstats::NDArray::Double';
 use SPVM 'Rstats::NDArray::Integer';
+use SPVM 'Rstats::Func';
 
 use SPVM;
 
@@ -42,17 +43,16 @@ sub double {
 }
 
 sub v2_sin {
-  my ($r, $array_in) = @_;
+  my ($r, $ndarray_in, $ndarray_out) = @_;
   
-  my $vector_in = $array_in->vector;
+  my $type = $ndarray_in->type;
   
-  my $vector_out = SPVM::Rstats::Vector::sin($vector_in);
-  
-  my $array_out = $r->new_array;
-  $array_out->type('double');
-  $array_out->vector($vector_out);
-  
-  return $array_out;
+  if ($type eq 'double') {
+    SPVM::Rstats::Func::sin_double($ndarray_in->ndarray, $ndarray_out->ndarray);
+  }
+  else {
+    croak "Error";
+  }
 }
 
 sub v2_pi {

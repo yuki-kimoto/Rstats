@@ -2,10 +2,10 @@ use Math;
 
 package Rstats::Func {
   
-  sub sin_double($array_in : double[], $array_out : double[]) : void {
+  sub sin_double($ndarray_in : Rstats::NDArray::Double, $ndarray_out : Rstats::NDArray::Double) : void {
     
-    my $values_in = $array_in->{values};
-    my $values_out = $array_out->{values};
+    my $values_in = $ndarray_in->{values};
+    my $values_out = $ndarray_out->{values};
     
     if (len $values_in != len $values_out) {
       die "Elements count must be same";
@@ -16,4 +16,3 @@ package Rstats::Func {
     }
   }
 }
-

@@ -15,61 +15,52 @@ use POSIX ();
 use Math::Round ();
 use Encode ();
 
+use Rstats::NDArray;
 use SPVM 'Rstats::NDArray::Double';
 use SPVM 'Rstats::NDArray::Integer';
 
 ### V2 function
 
-sub new_object {
-  my $r = shift;
-  
-  my $object = Rstats::V2::Object->new;
-  
-  $object->r($r);
-  
-  return $object;
-}
-
 sub double {
-  my ($r, $values) = @_;
+  my ($r, $values, $shape) = @_;
   
-  my $object = $r->new_object;
+  my $ndarray = Rstats::NDArray->new;
   
-  $object->type('double');
+  $ndarray->type('double');
   
-  my $sp_vector = SPVM::new_double_array($values);
+  my $sp_ndarray = SPVM::Rstats::NDArray::Double::new($values, $shape);
   
-  $object->vector($sp_vector);
+  $ndarray->ndarray($sp_ndarray);
   
-  return $object;
+  return $ndarray;
 }
 
 sub v2_sin {
-  my ($r, $object_in) = @_;
+  my ($r, $array_in) = @_;
   
-  my $vector_in = $object_in->vector;
+  my $vector_in = $array_in->vector;
   
   my $vector_out = SPVM::Rstats::Vector::sin($vector_in);
   
-  my $object_out = $r->new_object;
-  $object_out->type('double');
-  $object_out->vector($vector_out);
+  my $array_out = $r->new_array;
+  $array_out->type('double');
+  $array_out->vector($vector_out);
   
-  return $object_out;
+  return $array_out;
 }
 
 sub v2_pi {
   my ($r, $values) = @_;
   
-  my $r_object = SPVM::new_object("Rstats::Object");
+  my $r_array = SPVM::new_array("Rstats::Object");
   
-  $r_object->set(type => SPVM::Rstats::Object::TYPE_DOUBLE());
+  $r_array->set(type => SPVM::Rstats::Object::TYPE_DOUBLE());
   
   my $sp_values = SPVM::new_double_array([SPVM::Math::PI()]);
   
-  $r_object->set(double_values => $sp_values);
+  $r_array->set(double_values => $sp_values);
   
-  return $r_object;
+  return $r_array;
 }
 
 ### V2 functions END

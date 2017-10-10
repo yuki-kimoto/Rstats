@@ -1,6 +1,58 @@
-use Math;
-
 package Rstats::NDArray::Double {
   has values : double[];
   has shape : int[];
+
+  sub new($values : double[], $shape : int[]) : Rstats::NDArray::Double {
+    
+    my $ndarray = new Rstats::NDArray::Double;
+
+    my $length = @$values;
+    
+    if ($length < 1) {
+      die "Array length must be more than 0(SPVM::Rstats::NDArray::Double::new())";
+    }
+    
+    my $shape_length = 1;
+    for (my $i = 0; $i < @$shape; $i++) {
+      $shape_length *= $shape->[$i];
+    }
+    
+    # Check shape length
+    if ($length != $shape_length) {
+      die "Invalid dimension(SPVM::Rstats::NDArray::Double::new())";
+    }
+
+    # Set field
+    $ndarray->{values} = $values;
+    $ndarray->{shape} = $shape;
+    
+    return $ndarray;
+  }
+
+  sub new_len($length : int, $shape : int[]) : Rstats::NDArray::Double {
+    
+    my $ndarray = new Rstats::NDArray::Double;
+
+    if ($length < 1) {
+      die "Array length must be more than 0(SPVM::Rstats::NDArray::Double::new())";
+    }
+    
+    my $values = new double[$length];
+    
+    my $shape_length = 1;
+    for (my $i = 0; $i < @$shape; $i++) {
+      $shape_length *= $shape->[$i];
+    }
+    
+    # Check shape length
+    if ($length != $shape_length) {
+      die "Invalid dimension(SPVM::Rstats::NDArray::Double::new())";
+    }
+
+    # Set field
+    $ndarray->{values} = $values;
+    $ndarray->{shape} = $shape;
+    
+    return $ndarray;
+  }
 }

@@ -195,7 +195,6 @@ my @func_names = qw/
   subtract
   
   
-  new_object
   double
   v2_sin
   v2_to_string

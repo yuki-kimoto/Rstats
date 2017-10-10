@@ -18,6 +18,8 @@ use Encode ();
 use SPVM 'Rstats::NDArray::Double';
 use SPVM 'Rstats::NDArray::Integer';
 
+### V2 function
+
 sub new_object {
   my $r = shift;
   
@@ -28,7 +30,7 @@ sub new_object {
   return $object;
 }
 
-sub v2_double {
+sub double {
   my ($r, $values) = @_;
   
   my $object = $r->new_object;
@@ -69,6 +71,8 @@ sub v2_pi {
   
   return $r_object;
 }
+
+### V2 functions END
 
 sub I {
   my $r = shift;

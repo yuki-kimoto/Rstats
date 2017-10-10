@@ -193,6 +193,13 @@ my @func_names = qw/
   add
   get_dim_length
   subtract
+  
+  
+  new_object
+  double
+  v2_sin
+  v2_to_string
+  v2_pi
 /;
 
 sub new {

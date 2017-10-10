@@ -1,4 +1,4 @@
-package Rstats::V2::Object;
+package Rstats::NDArray;
 
 use Object::Simple -base;
 
@@ -6,10 +6,7 @@ use Rstats::V2::Func;
 
 has 'r';
 has 'type';
-has 'dim';
-has 'vector';
-
-sub get_type { shift->type }
+has 'ndarray';
 
 sub to_string {
   my $x1 = shift;
@@ -27,6 +24,5 @@ sub values {
   
   return $values;
 }
-
 
 1;

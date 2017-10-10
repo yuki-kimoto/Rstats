@@ -20,7 +20,7 @@ else {
   {
     srand 100;
     my $rands = [rand 1, rand 1, rand 1, rand 1, rand 1];
-    $r->set_seed(100);
+    $r->set_seed($r->c(100));
     my $x1 = $r->runif($r->c(5));
     is_deeply($x1->values, $rands);
     

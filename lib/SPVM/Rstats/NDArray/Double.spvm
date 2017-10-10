@@ -1,0 +1,6 @@
+use Math;
+
+package Rstats::NDArray::Double {
+  has values : double[];
+  has shape : int[];
+}

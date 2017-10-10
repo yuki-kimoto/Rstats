@@ -25,7 +25,6 @@ my $r = Rstats->new;
     is_deeply($x1->values, [3]);
     ok($r->is->int($x1));
   }
-
 }
 
 # ifelse
@@ -763,7 +762,7 @@ my $r = Rstats->new;
 
   # cumsum - double
   {
-    my $x1 = $r->c([1, 2, 3]);
+    my $x1 = $r->c_double([1, 2, 3]);
     my $x2 = $r->cumsum($x1);
     ok($r->is->double($x2)->value);
     is_deeply($x2->values, [1, 3, 6]);

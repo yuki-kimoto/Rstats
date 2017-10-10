@@ -1,0 +1,6 @@
+use Math;
+
+package Rstats::NDArray::Integer {
+  has values : int[];
+  has shape : int[];
+}

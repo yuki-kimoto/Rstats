@@ -1,0 +1,19 @@
+use Math;
+
+package Rstats::Func {
+  
+  sub sin_double($array_in : double[], $array_out : double[]) : void {
+    
+    my $values_in = $array_in->{values};
+    my $values_out = $array_out->{values};
+    
+    if (len $values_in != len $values_out) {
+      die "Elements count must be same";
+    }
+    
+    for (my $i = 0; $i < @$values_in; $i++) {
+      $values_out->[$i] = Math::sin($values_in->[$i]);
+    }
+  }
+}
+

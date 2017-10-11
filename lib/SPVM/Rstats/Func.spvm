@@ -1,6 +1,34 @@
 use Math;
 
 package Rstats::Func {
+
+=pod
+  sub add_double($x_in1 : Rstats::NDArray::Double, $x_in2 : Rstats::NDArray::Double) : Rstats::NDArray::Double {
+    
+    # Input 1
+    my $x_in1_values = $x_in->{values};
+    my $x_in1_length = @$x_in_values;
+    my $x_in1_shape = $x_in->{shape};
+    
+    # Input 2
+    my $x_in2_values = $x_in->{values};
+    my $x_in2_length = @$x_in_values;
+    my $x_in2_shape = $x_in->{shape};
+    
+    if ($x_in1_length != $x_in2_length) {
+      croak "tow operand length must be same";
+    }
+    
+    # Output
+    my $x_out = Rstats::NDArray::Double->new_len($x_in_length, $x_in_shape);
+    my $x_out_values = $x_out->{values};
+    
+    # Culcurate sin
+    for (my $i = 0; $i < @$x_in_values; $i++) {
+      $x_out_values->[$i] = Math::sin($x_in_values->[$i]);
+    }
+  }
+=cut
   
   sub sin_double($x_in : Rstats::NDArray::Double) : Rstats::NDArray::Double {
     

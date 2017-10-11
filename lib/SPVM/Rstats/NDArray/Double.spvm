@@ -40,32 +40,37 @@ package Rstats::NDArray::Double {
     return $ndarray;
   }
 
-=pod
   sub new_len($length : int, $shape : int[]) : Rstats::NDArray::Double {
     
     my $ndarray = new Rstats::NDArray::Double;
-
+    
     if ($length < 1) {
       die "Array length must be more than 0(SPVM::Rstats::NDArray::Double::new())";
     }
     
-    my $values = new double[$length];
-    
     my $shape_length = 1;
-    for (my $i = 0; $i < @$shape; $i++) {
-      $shape_length *= $shape->[$i];
+    if ($shape) {
+      $shape = Arrays::copy_of_int($shape, len $shape);
+      
+      for (my $i = 0; $i < @$shape; $i++) {
+        $shape_length *= $shape->[$i];
+      }
+    }
+    else {
+      $shape = new int[1];
+      $shape->[0] = $length;
+      $shape_length = $length;
     }
     
     # Check shape length
     if ($length != $shape_length) {
       die "Invalid dimension(SPVM::Rstats::NDArray::Double::new())";
     }
-
+    
     # Set field
-    $ndarray->{values} = $values;
+    $ndarray->{values} = new double[$length];
     $ndarray->{shape} = $shape;
     
     return $ndarray;
   }
-=cut
 }

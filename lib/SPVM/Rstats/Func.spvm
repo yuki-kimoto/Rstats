@@ -2,17 +2,22 @@ use Math;
 
 package Rstats::Func {
   
-  sub sin_double($ndarray_in : Rstats::NDArray::Double, $ndarray_out : Rstats::NDArray::Double) : void {
+  sub sin_double($x_in : Rstats::NDArray::Double) : Rstats::NDArray::Double {
     
-    my $values_in = $ndarray_in->{values};
-    my $values_out = $ndarray_out->{values};
+    # Input
+    my $x_in_values = $x_in->{values};
+    my $x_in_length = @$x_in_values;
+    my $x_in_shape = $x_in->{shape};
     
-    if (len $values_in != len $values_out) {
-      die "Elements count must be same";
+    # Output
+    my $x_out = Rstats::NDArray::Double->new_len($x_in_length, $x_in_shape);
+    my $x_out_values = $x_out->{values};
+    
+    # Culcurate sin
+    for (my $i = 0; $i < @$x_in_values; $i++) {
+      $x_out_values->[$i] = Math::sin($x_in_values->[$i]);
     }
     
-    for (my $i = 0; $i < @$values_in; $i++) {
-      $values_out->[$i] = Math::sin($values_in->[$i]);
-    }
+    return $x_out;
   }
 }

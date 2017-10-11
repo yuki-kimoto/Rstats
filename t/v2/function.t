@@ -16,7 +16,7 @@ my $r = Rstats->new;
 {
   my $x1 = $r->double([1.6, 1.6, 1.6]);
   
-  $r->v2_sin($x1 => $x1);
+  my $x2 = $r->v2_sin($x1);
 }
 
 ok(1);

@@ -43,12 +43,13 @@ sub double {
 }
 
 sub v2_sin {
-  my ($r, $ndarray_in, $ndarray_out) = @_;
+  my ($r, $ndarray_in) = @_;
   
   my $type = $ndarray_in->type;
   
+  my $ndarray_out;
   if ($type eq 'double') {
-    SPVM::Rstats::Func::sin_double($ndarray_in->ndarray, $ndarray_out->ndarray);
+    $ndarray_out = SPVM::Rstats::Func::sin_double($ndarray_in->ndarray);
   }
   else {
     croak "Error";

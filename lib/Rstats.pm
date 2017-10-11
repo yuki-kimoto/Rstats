@@ -199,6 +199,7 @@ my @func_names = qw/
   v2_sin
   v2_to_string
   v2_pi
+  v2_add
 /;
 
 sub new {

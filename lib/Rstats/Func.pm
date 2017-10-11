@@ -42,18 +42,36 @@ sub double {
   return $ndarray;
 }
 
-sub v2_sin {
-  my ($r, $ndarray_in) = @_;
+sub v2_add {
+  my ($r, $x_in1, $x_in2) = @_;
   
-  my $type = $ndarray_in->type;
+  my $type = $x_in1->type;
   
-  my $ndarray_out;
+  my $x_out;
   if ($type eq 'double') {
-    $ndarray_out = SPVM::Rstats::Func::sin_double($ndarray_in->ndarray);
+    $x_out = SPVM::Rstats::Func::add_double($x_in1->ndarray, $x_in2->ndarray);
   }
   else {
     croak "Error";
   }
+  
+  return $x_out;
+}
+
+sub v2_sin {
+  my ($r, $x_in) = @_;
+  
+  my $type = $x_in->type;
+  
+  my $x_out;
+  if ($type eq 'double') {
+    $x_out = SPVM::Rstats::Func::sin_double($x_in->ndarray);
+  }
+  else {
+    croak "Error";
+  }
+  
+  return $x_out;
 }
 
 sub v2_pi {

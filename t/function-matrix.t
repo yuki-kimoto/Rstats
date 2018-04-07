@@ -3,34 +3,31 @@ use strict;
 use warnings;
 
 use Rstats;
-use Rstats;
-
-my $r = Rstats->new;
 
 # outer
 {
   # outer - basic
-  my $x1 = $r->array($r->C('1:2'), $r->c(1, 2));
-  my $x2 = $r->array($r->C('1:24'), $r->c(3, 4));
-  my $x3 = $r->outer($x1, $x2);
+  my $x1 = array(C_('1:2'), c_(1, 2));
+  my $x2 = array(C_('1:24'), c_(3, 4));
+  my $x3 = r->outer($x1, $x2);
   is_deeply($x3->values, [qw/1  2  2  4  3  6  4  8  5 10  6 12  7 14  8 16  9 18 10 20 11 22 12 24/]);
-  is_deeply($r->dim($x3)->values, [1, 2, 3, 4]);
+  is_deeply(r->dim($x3)->values, [1, 2, 3, 4]);
 }
 
 # diag
 {
   # diag - unit matrix
   {
-    my $x1 = $r->diag(3);
+    my $x1 = r->diag(3);
     is_deeply($x1->values, [1, 0, 0, 0, 1, 0, 0, 0, 1]);
-    is_deeply($r->dim($x1)->values, [3, 3]);
+    is_deeply(r->dim($x1)->values, [3, 3]);
   }
 
   # diag - basic
   {
-    my $x1 = $r->diag($r->c(1, 2, 3));
+    my $x1 = r->diag(c_(1, 2, 3));
     is_deeply($x1->values, [1, 0, 0, 0, 2, 0, 0, 0, 3]);
-    is_deeply($r->dim($x1)->values, [3, 3]);
+    is_deeply(r->dim($x1)->values, [3, 3]);
   }  
 }
 
@@ -38,9 +35,9 @@ my $r = Rstats->new;
 {
   # kronecker - basic
   {
-    my $x1 = $r->array($r->C('1:12'), $r->c(3, 4));
-    my $x2 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x3 = $r->kronecker($x1, $x2);
+    my $x1 = array(C_('1:12'), c_(3, 4));
+    my $x2 = array(C_('1:24'), c_(4, 3, 2));
+    my $x3 = r->kronecker($x1, $x2);
     is_deeply($x3->values, [
       qw/
      1   2   3   4   2   4   6   8   3   6   9  12   5   6   7   8  10  12  14  16  15  18  21
@@ -57,14 +54,14 @@ my $r = Rstats->new;
    140 150 160 143 154 165 176 156 168 180 192 170 180 190 200 187 198 209 220 204 216 228 240
    210 220 230 240 231 242 253 264 252 264 276 288
       /]);
-    is_deeply($r->dim($x3)->values, [12, 12, 2]);
+    is_deeply(r->dim($x3)->values, [12, 12, 2]);
   }
 
   # kronecker - reverse
   {
-    my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
-    my $x2 = $r->array($r->C('1:12'), $r->c(3, 4));
-    my $x3 = $r->kronecker($x1, $x2);
+    my $x1 = array(C_('1:24'), c_(4, 3, 2));
+    my $x2 = array(C_('1:12'), c_(3, 4));
+    my $x3 = r->kronecker($x1, $x2);
     is_deeply($x3->values, [
       qw/
  1   2   3   2   4   6   3   6   9   4   8  12   4   5   6   8  10  12  12  15  18  16  20
@@ -81,6 +78,6 @@ my $r = Rstats->new;
 105 126  88 110 132  92 115 138  96 120 144 147 168 189 154 176 198 161 184 207 168 192 216
 210 231 252 220 242 264 230 253 276 240 264 288
       /]);
-    is_deeply($r->dim($x3)->values, [12, 12, 2]);
+    is_deeply(r->dim($x3)->values, [12, 12, 2]);
   }
 }

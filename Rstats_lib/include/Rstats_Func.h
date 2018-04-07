@@ -10,17 +10,17 @@ namespace Rstats {
 
     SV* to_object(SV*, SV*);
 
-    SV* new_NULL(SV*); /* $r->NULL */
-    SV* new_NA(SV*); /* $r->NA */
-    SV* new_NaN(SV*); /* $r->NaN */
-    SV* new_Inf(SV*); /* $r->Inf */
-    SV* new_FALSE(SV*); /* $r->FALSE */
-    SV* new_TRUE(SV*); /* $r->TRUE */
+    SV* new_NULL(SV*); /* r->NULL */
+    SV* new_NA(SV*); /* r->NA */
+    SV* new_NaN(SV*); /* r->NaN */
+    SV* new_Inf(SV*); /* r->Inf */
+    SV* new_FALSE(SV*); /* r->FALSE */
+    SV* new_TRUE(SV*); /* r->TRUE */
 
     SV* new_data_frame(SV*);
     SV* new_list(SV*);
 
-    SV* c(SV*, SV*);
+    SV* c_(SV*, SV*);
     SV* c_character(SV*, SV*);
     SV* c_double(SV*, SV*);
     SV* c_integer(SV*, SV*);
@@ -35,7 +35,7 @@ namespace Rstats {
     SV* is_array(SV*, SV*);
     SV* is_numeric(SV*, SV*);
     SV* type(SV*, SV*);
-    SV* Typeof(SV*, SV*); // $r->typeof
+    SV* Typeof(SV*, SV*); // r->typeof
     Rstats::Logical to_bool(SV*, SV*);
     SV* is_double(SV*, SV*);
     SV* is_integer(SV*, SV*);

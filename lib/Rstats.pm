@@ -2,320 +2,38 @@ package Rstats;
 use strict;
 use warnings;
 
-our $VERSION = '0.0148';
+our $VERSION = '0.0149';
 
-use Object::Simple -base;
-require Rstats::Func;
-use Carp 'croak';
-use Rstats::Util ();
-use Digest::MD5 'md5_hex';
-use Rstats::Object;
+use Rstats::Class;
 
-has helpers => sub { {} };
-
-sub get_helper {
-  my ($self, $name,) = @_;
+sub import {
+  my $self = shift;
   
-  if ($self->{proxy}{$name}) {
-    return bless {r => $self}, $self->{proxy}{$name};
-  }
-  elsif (my $h = $self->helpers->{$name}) {
-    return $h;
-  }
-
-  my $found;
-  my $class = 'Rstats::Helpers::' . md5_hex "$name:$self";
-  my $re = $name eq '' ? qr/^(([^.]+))/ : qr/^(\Q$name\E\.([^.]+))/;
-  for my $key (keys %{$self->helpers}) {
-    $key =~ $re ? ($found, my $method) = (1, $2) : next;
-    my $sub = $self->get_helper($1);
-    Rstats::Util::monkey_patch $class, $method => sub {
-      my $proxy = shift;
-      return $sub->($proxy->{r}, @{$proxy->{args} || []}, @_);
-    }
-  }
-
-  $found ? push @{$self->{namespaces}}, $class : return undef;
-  $self->{proxy}{$name} = $class;
-  return $self->get_helper($name);
-}
-
-# TODO
-# logp1x
-# gamma
-# lgamma
-# complete_cases
-# cor
-# pmatch regexpr
-# substr substring
-# strsplit  strwrap
-# outer(x, y, f)
-# reorder()
-# relevel()
-# read.csv()
-# read.csv2()
-# read.delim()
-# read.delim2()
-# read.fwf()
-# merge
-# replicate
-# split
-# by
-# aggregate
-# reshape
-
-my @func_names = qw/
-  sd
-  sin
-  sweep
-  set_seed
-  runif
-  apply
-  mapply
-  tapply
-  lapply
-  sapply
-  abs
-  acos
-  acosh
-  append
-  Arg
-  asin
-  asinh
-  atan
-  atanh
-  atan2
-  c
-  c_double
-  c_character
-  c_complex
-  c_integer
-  c_logical
-  C
-  charmatch
-  chartr
-  cbind
-  ceiling
-  col
-  colMeans
-  colSums
-  Conj
-  cos
-  cosh
-  cummax
-  cummin
-  cumsum
-  cumprod
-  data_frame
-  diag
-  diff
-  exp
-  expm1
-  factor
-  FALSE
-  floor
-  gl
-  grep
-  gsub
-  head
-  i
-  ifelse
-  interaction
-  I
-  Im
-  Re
-  intersect
-  kronecker
-  list
-  log
-  logb
-  log2
-  log10
-  lower_tri
-  match
-  median
-  merge
-  Mod
-  NA
-  NaN
-  na_omit
-  ncol
-  nrow
-  NULL
-  numeric
-  matrix
-  max
-  mean
-  min
-  nchar
-  order
-  ordered
-  outer
-  paste
-  pi
-  pmax
-  pmin
-  prod
-  range
-  rank
-  rbind
-  quantile
-  rep
-  replace
-  rev
-  rnorm
-  round
-  row
-  rowMeans
-  rowSums
-  sample
-  seq
-  sequence
-  set_diag
-  setdiff
-  setequal
-  sinh
-  sum
-  sqrt
-  sort
-  sub
-  subset
-  t
-  tail
-  tan
-  tanh
-  tolower
-  toupper
-  TRUE
-  transform
-  trunc
-  unique
-  union
-  upper_tri
-  var
-  which
-  labels
-  levels
-  names
-  nlevels
-  dimnames
-  colnames
-  rownames
-  mode
-  str
-  typeof
-  pi
-  complex
-  array
-  length
-  clone
-  equal
-  not_equal
-  less_than
-  less_than_or_equal
-  more_than
-  more_than_or_equal
-  add
-  subtract
-  multiply
-  divide
-  pow
-  negate
-  dim
-  Inf
-  NaN
-  NA
-  to_string
-  get
-  set
-  getin
-  value
-  values
-  dim_as_array
-  class
-  type
-  get_type
-  at
-  get_length
-/;
-
-sub new {
-  my $self = shift->SUPER::new(@_);
+  my $class = caller;
   
-  for my $func_name (@func_names) {
-    no strict 'refs';
-    my $func = \&{"Rstats::Func::$func_name"};
-    $self->helper($func_name => $func);
-  }
-
+  my $r = Rstats::Class->new;
+  
+  # Export primary methods
   no strict 'refs';
-  $self->helper('is.array' => \&Rstats::Func::is_array);
-  $self->helper('is.character' => \&Rstats::Func::is_character);
-  $self->helper('is.complex' => \&Rstats::Func::is_complex);
-  $self->helper('is.finite' => \&Rstats::Func::is_finite);
-  $self->helper('is.infinite' => \&Rstats::Func::is_infinite);
-  $self->helper('is.list' => \&Rstats::Func::is_list);
-  $self->helper('is.matrix' => \&Rstats::Func::is_matrix);
-  $self->helper('is.na' => \&Rstats::Func::is_na);
-  $self->helper('is.nan' => \&Rstats::Func::is_nan);
-  $self->helper('is.null' => \&Rstats::Func::is_null);
-  $self->helper('is.numeric' => \&Rstats::Func::is_numeric);
-  $self->helper('is.double' => \&Rstats::Func::is_double);
-  $self->helper('is.integer' => \&Rstats::Func::is_integer);
-  $self->helper('is.vector' => \&Rstats::Func::is_vector);
-  $self->helper('is.factor' => \&Rstats::Func::is_factor);
-  $self->helper('is.ordered' => \&Rstats::Func::is_ordered);
-  $self->helper('is.data_frame' => \&Rstats::Func::is_data_frame);
-  $self->helper('is.logical' => \&Rstats::Func::is_logical);
-  $self->helper('is.element' => \&Rstats::Func::is_element);
+  my @methods = qw/c_ C_ array matrix list data_frame factor ordered/;
+  for my $method (@methods) {
+    no strict 'refs';
+    my $func = \&{"Rstats::Func::$method"};
 
-  $self->helper('as.array' => \&Rstats::Func::as_array);
-  $self->helper('as.character' => \&Rstats::Func::as_character);
-  $self->helper('as.complex' => \&Rstats::Func::as_complex);
-  $self->helper('as.integer' => \&Rstats::Func::as_integer);
-  $self->helper('as.double' => \&Rstats::Func::as_double);
-  $self->helper('as.list' => \&Rstats::Func::as_list);
-  $self->helper('as.logical' => \&Rstats::Func::as_logical);
-  $self->helper('as.matrix' => \&Rstats::Func::as_matrix);
-  $self->helper('as.numeric' => \&Rstats::Func::as_numeric);
-  $self->helper('as.vector' => \&Rstats::Func::as_vector);
-
-  $self->helper('read.table' => \&Rstats::Func::read_table);
-
-  return $self;
-}
-
-sub AUTOLOAD {
-  my $self = shift;
-
-  my ($package, $method) = split /::(\w+)$/, our $AUTOLOAD;
-  Carp::croak "Undefined subroutine &${package}::$method called"
-    unless Scalar::Util::blessed $self && $self->isa(__PACKAGE__);
-
-  # Call helper with current controller
-  Carp::croak qq{Can't locate object method "$method" via package "$package"}
-    unless my $helper = $self->get_helper($method);
-  
-  # Helper
-  if (ref $helper eq 'CODE') {
-    return $helper->($self, @_);
+    *{"${class}::$method"} = sub { $func->($r, @_) }
   }
-  #Proxy
-  else {
-    return $helper;
+  *{"${class}::r"} = sub { $r };
+  
+  # Export none argument methods
+  my @methods_no_args = qw/i_ T_ F_ TRUE FALSE NA NaN Inf NULL pi/;
+  for my $method (@methods_no_args) {
+    no strict 'refs';
+    my $func = \&{"Rstats::Func::$method"};
+
+    *{"${class}::$method"} = sub () { $func->($r, @_) };
   }
-}
-
-sub DESTROY { }
-
-sub helper {
-  my $self = shift;
   
-  # Merge
-  my $helpers = ref $_[0] eq 'HASH' ? $_[0] : {@_};
-  $self->helpers({%{$self->helpers}, %$helpers});
-  
-  return $self;
+  warnings->unimport('ambiguous');
 }
 
 require XSLoader;
@@ -327,15 +45,15 @@ XSLoader::load('Rstats', $VERSION);
 
 Rstats - R language build on Perl
 
-B<Rstats is yet experimental release. Incompatible change will occur without warning.>
+B<Rstats is an experimental project, started to implement R language API in Perl, but stopped development on April 7, 2018.>
 
 =head1 SYNOPSYS
   
   use Rstats;
   
   # Vector
-  my $v1 = c(1, 2, 3);
-  my $v2 = c(3, 4, 5);
+  my $v1 = c_(1, 2, 3);
+  my $v2 = c_(3, 4, 5);
   
   my $v3 = $v1 + v2;
   print $v3;
@@ -347,7 +65,7 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $m1 = matrix(C_("1:12"), 4, 3);
   
   # Array
-  my $a1 = array(C_("1:24"), c(4, 3, 2));
+  my $a1 = array(C_("1:24"), c_(4, 3, 2));
 
   # Complex
   my $z1 = 1 + 2 * i_;
@@ -363,10 +81,10 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
   my $null = NULL;
   
   # all methods are called from r
-  my $x1 = $r->sum(c(1, 2, 3));
+  my $x1 = r->sum(c_(1, 2, 3));
   
   # Register helper
-  $r->helper(my_sum => sub {
+  r->helper(my_sum => sub {
     my ($r, $x1) = @_;
     
     my $total = 0;
@@ -374,16 +92,16 @@ B<Rstats is yet experimental release. Incompatible change will occur without war
       $total += $value;
     }
     
-    return c($total);
+    return c_($total);
   });
-  my $x2 = $r->my_sum(c(1, 2, 3));
+  my $x2 = r->my_sum(c_(1, 2, 3));
 
 =head1 FUNCTIONS
 
 =head2 c_
 
   # c(1, 2, 3)
-  c(1, 2, 3)
+  c_(1, 2, 3)
 
 Create vector. C<c_> function is equal to C<c> of R.
 
@@ -397,7 +115,7 @@ C_ function is equal to C<m:n> of R.
 =head2 array
 
   # array(1:24, c(4, 3, 2))
-  array(C_("1:24"), c(4, 3, 2))
+  array(C_("1:24"), c_(4, 3, 2))
 
 =head2 TRUE
 
@@ -465,7 +183,7 @@ Alias of FALSE
   $x1->get(1, 2)
   
   # x1[c(1,2), c(3,4)]
-  $x1->get(c(1,2), c(3,4))
+  $x1->get(c_(1,2), c_(3,4))
   
   # x1[,2]
   $x1->get(NULL, 2)
@@ -477,7 +195,7 @@ Alias of FALSE
   $x1->get(TRUE, FALSE)
   
   # x1[c("id", "title")]
-  $x1->get(c("id", "title"))
+  $x1->get(c_("id", "title"))
 
 =head2 Setter
 
@@ -488,7 +206,7 @@ Alias of FALSE
   $x1->at(1, 2)->set($x2)
   
   # x1[c(1,2), c(3,4)] <- x2
-  $x1->at(c(1,2), c(3,4))->set($x2)
+  $x1->at(c_(1,2), c_(3,4))->set($x2)
   
   # x1[,2] <- x2
   $x1->at(NULL, 2)->set($x2)
@@ -500,7 +218,7 @@ Alias of FALSE
   $x1->at(TRUE, FALSE)->set($x2);
   
   # x1[c("id", "title")] <- x2
-  $x1->at(c("id", "title"))->set($x2);
+  $x1->at(c_("id", "title"))->set($x2);
 
 =head1 OPERATORS
 
@@ -526,24 +244,24 @@ Alias of FALSE
   $x1 x $x2
   
   # x1 %/% x2 (integer quotient)
-  $r->tranc($x1 / $x2)
+  r->tranc($x1 / $x2)
 
 =head1 METHODS
 
 =head2 abs
 
   # abs(x1)
-  $r->abs($x1)
+  r->abs($x1)
 
 =head2 acos
 
   # acos(x1)
-  $r->acos($x1)
+  r->acos($x1)
 
 =head2 acosh
 
   # acosh(x1)
-  $r->acosh($x1)
+  r->acosh($x1)
 
 =head2 append
 
@@ -556,24 +274,24 @@ Alias of FALSE
 =head2 asin
 
   # asin(x1)
-  $r->asin($x1)
+  r->asin($x1)
 
 =head2 asinh
 
   # asinh(x1)
-  $r->asinh($x1)
+  r->asinh($x1)
 
 =head2 atan2
 
 =head2 atan
 
   # atan(x1)
-  $r->atan($x1)
+  r->atan($x1)
 
 =head2 atanh
 
   # atanh(x1)
-  $r->atanh($x1)
+  r->atanh($x1)
 
 =head2 c
 
@@ -586,22 +304,22 @@ Alias of FALSE
 =head2 cbind
 
   # cbind(c(1, 2), c(3, 4), c(5, 6))
-  $r->cbind(c(1, 2), c(3, 4), c(5, 6));
+  r->cbind(c_(1, 2), c_(3, 4), c_(5, 6));
 
 =head2 ceiling
 
   # ceiling(x1)
-  $r->ceiling($x1)
+  r->ceiling($x1)
 
 =head2 col
 
   # col(x1)
-  $r->col($x1)
+  r->col($x1)
 
 =head2 colMeans
 
   # colMeans(x1)
-  $r->colMeans($x1)
+  r->colMeans($x1)
 
 =head2 colSums
 
@@ -610,12 +328,12 @@ Alias of FALSE
 =head2 cos
 
   # cos(x1)
-  $r->cos($x1)
+  r->cos($x1)
 
 =head2 cosh
 
   # cosh(x1)
-  $r->cosh($x1)
+  r->cosh($x1)
 
 =head2 cummax
 
@@ -636,12 +354,12 @@ Alias of FALSE
 =head2 exp
 
   # exp(x1)
-  $r->exp($x1)
+  r->exp($x1)
 
 =head2 expm1
 
   # expm1(x1)
-  $r->expm1($x1)
+  r->expm1($x1)
 
 =head2 factor
 
@@ -652,7 +370,7 @@ Alias of FALSE
 =head2 floor
 
   # floor(x1)
-  $r->floor($x1)
+  r->floor($x1)
 
 =head2 gl
 
@@ -687,22 +405,22 @@ Alias of FALSE
 =head2 log
 
   # log(x1)
-  $r->log($x1)
+  r->log($x1)
 
 =head2 logb
 
   # logb(x1)
-  $r->logb($x1)
+  r->logb($x1)
 
 =head2 log2
 
   # log2(x1)
-  $r->log2($x1)
+  r->log2($x1)
 
 =head2 log10
 
   # log10(x1)
-  $r->log10($x1)
+  r->log10($x1)
 
 =head2 lower_tri
 
@@ -723,12 +441,12 @@ Alias of FALSE
 =head2 ncol
 
   # ncol(x1)
-  $r->ncol($x1)
+  r->ncol($x1)
 
 =head2 nrow
 
   # nrow(x1)
-  $r->nrow($x1)
+  r->nrow($x1)
 
 =head2 NULL
 
@@ -767,7 +485,7 @@ Alias of FALSE
 =head2 rbind
 
   # rbind(c(1, 2), c(3, 4), c(5, 6))
-  $r->rbind(c(1, 2), c(3, 4), c(5, 6))
+  r->rbind(c_(1, 2), c_(3, 4), c_(5, 6))
 
 =head2 Re
 
@@ -776,7 +494,7 @@ Alias of FALSE
 =head2 read->table
 
   # read.table(...)
-  $r->read->table(...)
+  r->read->table(...)
 
 =head2 rep
 
@@ -789,28 +507,28 @@ Alias of FALSE
 =head2 round
 
   # round(x1)
-  $r->round($x1)
+  r->round($x1)
 
   # round(x1, digit)
-  $r->round($x1, $digits)
+  r->round($x1, $digits)
   
   # round(x1, digits=1)
-  $r->round($x1, {digits => TRUE});
+  r->round($x1, {digits => TRUE});
 
 =head2 row
 
   # row(x1)
-  $r->row($x1)
+  r->row($x1)
 
 =head2 rowMeans
 
   # rowMeans(x1)
-  $r->rowMeans($x1)
+  r->rowMeans($x1)
 
 =head2 rowSums
 
   # rowSums(x1)
-  $r->rowSums($x1)
+  r->rowSums($x1)
 
 =head2 sample
 
@@ -827,19 +545,19 @@ Alias of FALSE
 =head2 sin
 
   # sin(x1)
-  $r->sin($x1)
+  r->sin($x1)
 
 =head2 sinh
 
   # sinh(x1)
-  $r->sinh($x1)
+  r->sinh($x1)
 
 =head2 sum
 
 =head2 sqrt
 
   # sqrt(x1)
-  $r->sqrt($x1)
+  r->sqrt($x1)
 
 =head2 sort
 
@@ -852,19 +570,19 @@ Alias of FALSE
 =head2 t
 
   # t
-  $r->t($x1)
+  r->t($x1)
 
 =head2 tail
 
 =head2 tan
 
   # tan(x1)
-  $r->tan($x1)
+  r->tan($x1)
 
 =head2 tanh
 
   # tanh(x1)
-  $r->tanh($x1)
+  r->tanh($x1)
 
 =head2 tapply
 
@@ -881,7 +599,7 @@ Alias of FALSE
 =head2 trunc
 
   # trunc(x1)
-  $r->trunc($x1)
+  r->trunc($x1)
 
 =head2 unique
 
@@ -896,195 +614,195 @@ Alias of FALSE
 =head2 as->array
 
   # as.array(x1)
-  $r->as->array($x1)
+  r->as->array($x1)
 
 =head2 as->character
 
   # as.character(x1)
-  $r->as->character($x1)
+  r->as->character($x1)
 
 =head2 as->complex
 
   # as.complex(x1)
-  $r->as->complex($x1)
+  r->as->complex($x1)
 
 =head2 as->integer
 
   # as.integer(x1)
-  $r->as->integer($x1)
+  r->as->integer($x1)
 
 =head2 as->list
 
   # as.list
-  $r->as->list($x1)
+  r->as->list($x1)
 
 =head2 as->logical
 
   # as.logical
-  $r->as->logical($x1)
+  r->as->logical($x1)
 
 =head2 as->matrix
 
   # as.matrix(x1)
-  $r->as->matrix($x1)
+  r->as->matrix($x1)
 
 =head2 as->numeric
 
   # as.numeric(x1)
-  $r->as->numeric($x1)
+  r->as->numeric($x1)
 
 =head2 as->vector
 
   # as.vector(x1)
-  $r->as->vector($x1)
+  r->as->vector($x1)
 
 =head2 is->array
 
   # is.array(x1)
-  $r->is->array($x1)
+  r->is->array($x1)
 
 =head2 is->character
 
   # is.character(x1)
-  $r->is->character($x1)
+  r->is->character($x1)
 
 =head2 is->complex
 
   # is.complex(x1)
-  $r->is->complex($x1)
+  r->is->complex($x1)
 
 =head2 is->finite
 
   # is.finite(x1)
-  $r->is->finite($x1)
+  r->is->finite($x1)
 
 =head2 is->infinite
 
   # is.infinite(x1)
-  $r->is->infinite($x1)
+  r->is->infinite($x1)
 
 =head2 is->list
 
   # is.list(x1)
-  $r->is->list($x1)
+  r->is->list($x1)
 
 =head2 is->matrix
 
   # is.matrix(x1)
-  $r->is->matrix($x1)
+  r->is->matrix($x1)
 
 =head2 is->na
 
   # is.na(x1)
-  $r->is->na($x1)
+  r->is->na($x1)
 
 =head2 is->nan
 
   # is.nan(x1)
-  $r->is->nan($x1)
+  r->is->nan($x1)
 
 =head2 is->null
 
   # is.null(x1)
-  $r->is->null($x1)
+  r->is->null($x1)
 
 =head2 is->numeric
 
   # is.numeric(x1)
-  $r->is->numeric($x1)
+  r->is->numeric($x1)
 
 =head2 is->double
 
   # is.double(x1)
-  $r->is->double($x1)
+  r->is->double($x1)
 
 =head2 is->integer
 
   # is.integer(x1)
-  $r->is->integer($x1)
+  r->is->integer($x1)
 
 =head2 is->logical
 
   # is.logical(x1)
-  $r->is->logical($x1)
+  r->is->logical($x1)
 
 =head2 is->vector
 
   # is.vector(x1)
-  $r->is->vector($x1)
+  r->is->vector($x1)
 
 =head2 labels
 
   # labels(x1)
-  $r->labels($x1)
+  r->labels($x1)
 
 =head2 levels
 
   # levels(x1)
-  $r->levels($x1)
+  r->levels($x1)
   
   # levels(x1) <- c("F", "M")
-  $r->levels($x1 => c("F", "M"))
+  r->levels($x1 => c_("F", "M"))
 
 =head2 dim
 
   # dim(x1)
-  $r->dim($x1)
+  r->dim($x1)
   
   # dim(x1) <- c(1, 2)
-  $r->dim($x1 => c(1, 2))
+  r->dim($x1 => c_(1, 2))
 
 =head2 names
 
   # names(x1)
-  $r->names($x1)
+  r->names($x1)
 
   # names(x1) <- c("n1", "n2")
-  $r->names($x1 =>  c("n1", "n2"))
+  r->names($x1 =>  c_("n1", "n2"))
 
 =head2 nlevels
 
   # nlevels(x1)
-  $r->nlevels($x1)
+  r->nlevels($x1)
 
 =head2 dimnames
 
   # dimnames(x1)
-  $r->dimnames($x1)
+  r->dimnames($x1)
   
   # dimnames(x1) <- list(c("r1", "r2"), c("c1", "c2"))
-  $r->dimnames($x1 => list(c("r1", "r2"), c("c1", "c2")))
+  r->dimnames($x1 => list(c_("r1", "r2"), c_("c1", "c2")))
 
 =head2 colnames
 
   # colnames(x1)
-  $r->colnames($x1)
+  r->colnames($x1)
   
   # colnames(x1) <- c("r1", "r2")
-  $r->colnames($x1 => c("r1", "r2"))
+  r->colnames($x1 => c_("r1", "r2"))
 
 =head2 rownames
 
   # rownames(x1)
-  $r->rownames($x1)
+  r->rownames($x1)
   
   # rownames(x1) <- c("r1", "r2")
-  $r->rownames($x1 => c("r1", "r2"))
+  r->rownames($x1 => c_("r1", "r2"))
 
 =head2 mode
 
   # mode(x1)
-  $r->mode($x1)
+  r->mode($x1)
   
   # mode(x1) <- c("r1", "r2")
-  $r->mode($x1 => c("r1", "r2"))
+  r->mode($x1 => c_("r1", "r2"))
 
 =head2 str
 
   # str(x1)
-  $r->str($x1)
+  r->str($x1)
 
 =head2 typeof
 
   # typeof(x1)
-  $r->typeof($x1);
+  r->typeof($x1);

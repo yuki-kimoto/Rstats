@@ -4,9 +4,6 @@ use warnings;
 
 use Rstats;
 use Rstats::Util;
-use Rstats;
-
-my $r = Rstats->new;
 
 # TODO
 #   which
@@ -156,7 +153,7 @@ my $r = Rstats->new;
     ['c1', 'c2']
   ];
   
-  my $x1 = $r->array($r->C('1:3'));
+  my $x1 = array(C_('1:3'));
   my $result =  Rstats::Util::cross_product($values);
   is_deeply($result, [
     ['a1', 'b1', 'c1'],
@@ -197,7 +194,7 @@ my $r = Rstats->new;
 
 # index_to_pos
 {
-  my $x1 = $r->array($r->C('1:24'), $r->c(4, 3, 2));
+  my $x1 = array(C_('1:24'), c_(4, 3, 2));
   my $dim = [4, 3, 2];
   
   {

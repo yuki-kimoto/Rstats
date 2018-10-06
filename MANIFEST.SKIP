@@ -1,6 +1,7 @@
+^Rstats.bs$
+^Rstats.c$
 \bRCS\b
 \bCVS\b
-^MANIFEST\.
 ^Makefile$
 ^Build$
 ^Build.bat$
@@ -10,8 +11,10 @@
 ^blib/
 ^pm_to_blib
 \.cvsignore
+\.gitignore
+\.o$
 \.gz$
-^\.git
+^\.git/
 ^cover_db/
 ^MYMETA.yml$
 ^MYMETA.json$
